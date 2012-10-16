@@ -215,31 +215,37 @@ SitesUtil.addPortletBreadcrumbEntries(group, pagesName, redirectURL, request, re
 			function(event) {
 				event.preventDefault();
 
-				var hash = location.hash;
+				var link = event.currentTarget.ancestor().one('a');
 
-				var prefix = '#_LFR_FN_<portlet:namespace />';
-				var historyKey = '';
+				if (link) {
+					var href = link.attr('href');
 
-				if (hash.indexOf(prefix) != -1) {
-					historyKey = hash.replace(prefix, '');
-				}
+					var hash = location.hash;
 
-				var requestUri = A.Lang.sub(
-					event.currentTarget.get('href'),
-					{
-						historyKey: historyKey
+					var prefix = '#_LFR_FN_<portlet:namespace />';
+					var historyKey = '';
+
+					if (hash.indexOf(prefix) != -1) {
+						historyKey = hash.replace(prefix, '');
 					}
-				);
 
-				layoutsContainer.io.set('uri', requestUri);
+					var requestUri = A.Lang.sub(
+						href,
+						{
+							historyKey: historyKey
+						}
+					);
 
-				if (layoutsContainer.ParseContent) {
-					layoutsContainer.ParseContent.get('queue').stop();
+					layoutsContainer.io.set('uri', requestUri);
+
+					if (layoutsContainer.ParseContent) {
+						layoutsContainer.ParseContent.get('queue').stop();
+					}
+
+					layoutsContainer.io.start();
 				}
-
-				layoutsContainer.io.start();
 			},
-			'.layout-tree'
+			'.aui-tree-icon, .aui-tree-label'
 		);
 	</aui:script>
 </c:if>

@@ -159,6 +159,8 @@ public class DDMStructureCacheModel implements CacheModel<DDMStructure>,
 
 		ddmStructureImpl.setLocalizedFieldsMap(_localizedFieldsMap);
 
+		ddmStructureImpl.setLocalizedTransientFieldsMap(_localizedTransientFieldsMap);
+
 		return ddmStructureImpl;
 	}
 
@@ -183,6 +185,7 @@ public class DDMStructureCacheModel implements CacheModel<DDMStructure>,
 
 		_document = (com.liferay.portal.kernel.xml.Document)objectInput.readObject();
 		_localizedFieldsMap = (java.util.Map<java.lang.String, java.util.Map<java.lang.String, java.util.Map<java.lang.String, java.lang.String>>>)objectInput.readObject();
+		_localizedTransientFieldsMap = (java.util.Map<java.lang.String, java.util.Map<java.lang.String, java.util.Map<java.lang.String, java.lang.String>>>)objectInput.readObject();
 	}
 
 	public void writeExternal(ObjectOutput objectOutput)
@@ -250,6 +253,7 @@ public class DDMStructureCacheModel implements CacheModel<DDMStructure>,
 
 		objectOutput.writeObject(_document);
 		objectOutput.writeObject(_localizedFieldsMap);
+		objectOutput.writeObject(_localizedTransientFieldsMap);
 	}
 
 	public String uuid;
@@ -270,4 +274,5 @@ public class DDMStructureCacheModel implements CacheModel<DDMStructure>,
 	public int type;
 	public com.liferay.portal.kernel.xml.Document _document;
 	public java.util.Map<java.lang.String, java.util.Map<java.lang.String, java.util.Map<java.lang.String, java.lang.String>>> _localizedFieldsMap;
+	public java.util.Map<java.lang.String, java.util.Map<java.lang.String, java.util.Map<java.lang.String, java.lang.String>>> _localizedTransientFieldsMap;
 }
