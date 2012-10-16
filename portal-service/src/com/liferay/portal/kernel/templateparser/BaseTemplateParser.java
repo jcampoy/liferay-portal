@@ -15,6 +15,8 @@
 package com.liferay.portal.kernel.templateparser;
 
 import com.liferay.portal.kernel.io.unsync.UnsyncStringWriter;
+import com.liferay.portal.kernel.mobile.device.Device;
+import com.liferay.portal.kernel.mobile.device.UnknownDevice;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -30,7 +32,6 @@ import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 
 import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -160,37 +161,43 @@ public abstract class BaseTemplateParser implements TemplateParser {
 	}
 
 	protected Company getCompany() throws Exception {
-		if (_themeDisplay!=null) {
+		if (_themeDisplay != null) {
 			return _themeDisplay.getCompany();
-		} else {
-			long companyId = getCompanyId();
-
-			return CompanyLocalServiceUtil.getCompany(companyId);
 		}
+
+		return CompanyLocalServiceUtil.getCompany(getCompanyId());
 	}
 
 	protected long getCompanyId() {
-		if (_themeDisplay!=null) {
+		if (_themeDisplay != null) {
 			return _themeDisplay.getCompanyId();
-		} else {
-			return GetterUtil.getLong(_tokens.get("company_id"));
 		}
+
+		return GetterUtil.getLong(_tokens.get("company_id"));
+	}
+
+	protected Device getDevice() {
+		if (_themeDisplay != null) {
+			return _themeDisplay.getDevice();
+		}
+
+		return UnknownDevice.getInstance();
 	}
 
 	protected long getGroupId() {
-		if (_themeDisplay!=null) {
+		if (_themeDisplay != null) {
 			return _themeDisplay.getScopeGroupId();
-		} else {
-			return GetterUtil.getLong(_tokens.get("group_id"));
 		}
+
+		return GetterUtil.getLong(_tokens.get("group_id"));
 	}
 
 	protected long getCompanyGroupId() {
-		if (_themeDisplay!=null) {
+		if (_themeDisplay != null) {
 			return _themeDisplay.getCompanyGroupId();
-		} else {
-			return GetterUtil.getLong(_tokens.get("company_group_id"));
 		}
+
+		return GetterUtil.getLong(_tokens.get("company_group_id"));
 	}
 
 	protected abstract TemplateContext getTemplateContext() throws Exception;
@@ -286,11 +293,7 @@ public abstract class BaseTemplateParser implements TemplateParser {
 
 		templateContext.put("company", getCompany());
 		templateContext.put("companyId", getCompanyId());
-
-		if (_themeDisplay != null) {
-			templateContext.put("device", _themeDisplay.getDevice());
-		}
-
+		templateContext.put("device", getDevice());
 		templateContext.put("groupId", getGroupId());
 
 		Locale locale = LocaleUtil.fromLanguageId(_languageId);
