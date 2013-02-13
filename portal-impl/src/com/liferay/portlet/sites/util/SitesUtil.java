@@ -739,7 +739,8 @@ public class SitesUtil {
 			return false;
 		}
 
-		long lastMergeTime = GetterUtil.getLong(layout.getTypeSettingsProperty(LAST_MERGE_TIME));
+		long lastMergeTime = GetterUtil.getLong(
+			layout.getTypeSettingsProperty(LAST_MERGE_TIME));
 
 		Date existingLayoutModifiedDate = layout.getModifiedDate();
 

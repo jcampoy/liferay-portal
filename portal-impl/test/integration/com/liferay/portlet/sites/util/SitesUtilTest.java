@@ -134,33 +134,60 @@ public class SitesUtilTest {
 
 		// modify the page (moving the porlet)
 
-		movePortlet(TestPropsValues.getUserId(), siteLayout1, _layoutSetPrototypeJournalContentPortletId1, "column-2");
+		movePortlet(TestPropsValues.getUserId(),
+				siteLayout1, _layoutSetPrototypeJournalContentPortletId1,
+				"column-2");
 
-		// refresh layouts (merge)
+		// refresh layouts
 
-		siteLayout1 = LayoutLocalServiceUtil.getLayout(siteLayout1.getPlid());
-		siteLayout2 = LayoutLocalServiceUtil.getLayout(siteLayout2.getPlid());
+		siteLayout1 = LayoutLocalServiceUtil.getFriendlyURLLayout(
+				_group.getGroupId(), false,
+				_layoutSetPrototypeLayout1.getFriendlyURL());
 
-		Assert.assertEquals(SitesUtil.isLayoutModifiedSinceLastMerge(siteLayout1), true);
-		Assert.assertEquals(SitesUtil.isLayoutModifiedSinceLastMerge(siteLayout2), false);
+		Assert.assertEquals(
+			SitesUtil.isLayoutModifiedSinceLastMerge(siteLayout1), true);
 
-		movePortlet(TestPropsValues.getUserId(), siteLayout2, _layoutSetPrototypeJournalContentPortletId2, "column-2");
+		siteLayout2 = LayoutLocalServiceUtil.getFriendlyURLLayout(
+			_group.getGroupId(), false,
+			_layoutSetPrototypeLayout2.getFriendlyURL());
 
-		siteLayout1 = LayoutLocalServiceUtil.getLayout(siteLayout1.getPlid());
-		siteLayout2 = LayoutLocalServiceUtil.getLayout(siteLayout2.getPlid());
+		Assert.assertEquals(
+			SitesUtil.isLayoutModifiedSinceLastMerge(siteLayout2), false);
 
-		Assert.assertEquals(SitesUtil.isLayoutModifiedSinceLastMerge(siteLayout1), true);
-		Assert.assertEquals(SitesUtil.isLayoutModifiedSinceLastMerge(siteLayout2), true);
+		movePortlet(TestPropsValues.getUserId(), siteLayout2,
+			_layoutSetPrototypeJournalContentPortletId2, "column-2");
 
-		// reset prototype for siteLayout1
+		siteLayout1 = LayoutLocalServiceUtil.getFriendlyURLLayout(
+			_group.getGroupId(), false,
+			_layoutSetPrototypeLayout1.getFriendlyURL());
+
+		Assert.assertEquals(
+				SitesUtil.isLayoutModifiedSinceLastMerge(siteLayout1), true);
+
+		siteLayout2 = LayoutLocalServiceUtil.getFriendlyURLLayout(
+			_group.getGroupId(), false,
+			_layoutSetPrototypeLayout2.getFriendlyURL());
+
+		Assert.assertEquals(
+			SitesUtil.isLayoutModifiedSinceLastMerge(siteLayout2), true);
 
 		SitesUtil.resetPrototype(siteLayout1);
 
-		siteLayout1 = LayoutLocalServiceUtil.getLayout(siteLayout1.getPlid());
-		siteLayout2 = LayoutLocalServiceUtil.getLayout(siteLayout2.getPlid());
+		propagateChanges(_group);
 
-		Assert.assertEquals(SitesUtil.isLayoutModifiedSinceLastMerge(siteLayout1), false);
-		Assert.assertEquals(SitesUtil.isLayoutModifiedSinceLastMerge(siteLayout2), true);
+		siteLayout1 = LayoutLocalServiceUtil.getFriendlyURLLayout(
+				_group.getGroupId(), false,
+				_layoutSetPrototypeLayout1.getFriendlyURL());
+
+		Assert.assertEquals(
+				SitesUtil.isLayoutModifiedSinceLastMerge(siteLayout1), false);
+
+		siteLayout2 = LayoutLocalServiceUtil.getFriendlyURLLayout(
+				_group.getGroupId(), false,
+				_layoutSetPrototypeLayout2.getFriendlyURL());
+
+		Assert.assertEquals(
+				SitesUtil.isLayoutModifiedSinceLastMerge(siteLayout2), true);
 	}
 
 	protected JournalArticle addJournalArticle(
@@ -250,8 +277,8 @@ public class SitesUtilTest {
 		layoutTypePortlet.movePortletId(userId, portletId, columnId, -1);
 
 		LayoutLocalServiceUtil.updateLayout(
-				layout.getGroupId(), layout.isPrivateLayout(), layout.getLayoutId(),
-				layout.getTypeSettings());
+				layout.getGroupId(), layout.isPrivateLayout(),
+				layout.getLayoutId(), layout.getTypeSettings());
 
 	}
 

@@ -801,7 +801,8 @@ public class LayoutImporter {
 
 		GroupLocalServiceUtil.updateSite(groupId, true);
 
-		boolean importModeCreatedFromPrototype = layoutsImportMode.equals(PortletDataHandlerKeys.LAYOUTS_IMPORT_MODE_CREATED_FROM_PROTOTYPE);
+		boolean importModeCreatedFromPrototype = layoutsImportMode.equals(
+			PortletDataHandlerKeys.LAYOUTS_IMPORT_MODE_CREATED_FROM_PROTOTYPE);
 
 		// Update type settings of Web content layout type, or layout prototype
 
