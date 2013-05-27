@@ -48,14 +48,21 @@ if (!selectableTree) {
 
 	var STR_CHILDREN = 'children';
 
+	var TREE_CSS_CLASSES = {
+		pages: {
+			iconCheck: 'tree-icon icon-check',
+			iconCollapsed: 'icon-file',
+			iconExpanded: 'icon-file',
+			iconHitAreaCollapsed: 'tree-hitarea icon-plus',
+			iconHitAreaExpanded: 'tree-hitarea icon-minus',
+			iconLeaf: 'icon-leaf',
+			iconLoading: 'icon-refresh',
+			iconUncheck: 'icon-check'
+		}
+	};
+
 	var TreeUtil = {
 		DEFAULT_PARENT_LAYOUT_ID: <%= LayoutConstants.DEFAULT_PARENT_LAYOUT_ID %>,
-
-		<%
-		String openNodes = SessionTreeJSClicks.getOpenNodes(request, treeId);
-		%>
-
-		OPEN_NODES: '<%= openNodes %>'.split(','),
 		PAGINATION_LIMIT: <%= PropsValues.LAYOUT_MANAGE_PAGES_INITIAL_CHILDREN %>,
 		PREFIX_GROUP_ID: '_groupId_',
 		PREFIX_LAYOUT: '_layout_',
@@ -196,6 +203,8 @@ if (!selectableTree) {
 										TreeUtil.updateSelectedNodes(target, true);
 									}
 
+									target.set('alwaysShowHitArea', event.newVal.length > 0);
+
 									TreeUtil.restoreNodeState(target);
 								},
 
@@ -213,6 +222,7 @@ if (!selectableTree) {
 							checked: true,
 						</c:if>
 
+						cssClasses: TREE_CSS_CLASSES,
 						draggable: node.sortable,
 						expanded: expanded,
 						id: TreeUtil.createListItemId(node.groupId, node.layoutId, node.plid),
@@ -520,10 +530,13 @@ if (!selectableTree) {
 			</c:if>
 
 			<%
-			JSONObject layoutsJSON = JSONFactoryUtil.createJSONObject(LayoutsTreeUtil.getLayoutsJSON(request, groupId, privateLayout, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, StringUtil.split(openNodes, 0L), true));
+			long[] openNodes = StringUtil.split(SessionTreeJSClicks.getOpenNodes(request, treeId), 0L);
+
+			JSONObject layoutsJSON = JSONFactoryUtil.createJSONObject(LayoutsTreeUtil.getLayoutsJSON(request, groupId, privateLayout, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, openNodes, true));
 			%>
 
 			children: TreeUtil.formatJSONResults(<%= layoutsJSON %>),
+			cssClasses: TREE_CSS_CLASSES,
 			draggable: false,
 
 			<c:choose>
@@ -577,7 +590,7 @@ if (!selectableTree) {
 							treeId: '<%= HtmlUtil.escape(treeId) %>'
 						};
 					},
-					method: AUI.defaults.io.method,
+					method: A.config.io.method,
 					on: {
 						success: function(event, id, xhr) {
 							var instance = this;
@@ -769,7 +782,7 @@ if (!selectableTree) {
 </aui:script>
 
 <div class="lfr-tree-loading" id="<portlet:namespace />treeLoading<%= treeLoading %>">
-	<span class="aui-icon aui-icon-loading lfr-tree-loading-icon"></span>
+	<span class="icon icon-loading lfr-tree-loading-icon"></span>
 </div>
 
 <div class="lfr-tree" id="<portlet:namespace /><%= HtmlUtil.escape(treeId) %>Output"></div>

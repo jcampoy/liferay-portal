@@ -37,6 +37,7 @@ import java.util.Map;
 public class DLFileEntryMetadataLocalServiceImpl
 	extends DLFileEntryMetadataLocalServiceBaseImpl {
 
+	@Override
 	public void deleteFileEntryMetadata(long fileEntryId)
 		throws PortalException, SystemException {
 
@@ -48,6 +49,7 @@ public class DLFileEntryMetadataLocalServiceImpl
 		}
 	}
 
+	@Override
 	public void deleteFileVersionFileEntryMetadata(long fileVersionId)
 		throws PortalException, SystemException {
 
@@ -59,6 +61,24 @@ public class DLFileEntryMetadataLocalServiceImpl
 		}
 	}
 
+	@Override
+	public DLFileEntryMetadata fetchFileEntryMetadata(long fileEntryMetadataId)
+		throws SystemException {
+
+		return dlFileEntryMetadataPersistence.fetchByPrimaryKey(
+			fileEntryMetadataId);
+	}
+
+	@Override
+	public DLFileEntryMetadata fetchFileEntryMetadata(
+			long ddmStructureId, long fileVersionId)
+		throws SystemException {
+
+		return dlFileEntryMetadataPersistence.fetchByD_F(
+			ddmStructureId, fileVersionId);
+	}
+
+	@Override
 	public DLFileEntryMetadata getFileEntryMetadata(long fileEntryMetadataId)
 		throws PortalException, SystemException {
 
@@ -66,6 +86,7 @@ public class DLFileEntryMetadataLocalServiceImpl
 			fileEntryMetadataId);
 	}
 
+	@Override
 	public DLFileEntryMetadata getFileEntryMetadata(
 			long ddmStructureId, long fileVersionId)
 		throws PortalException, SystemException {
@@ -78,12 +99,14 @@ public class DLFileEntryMetadataLocalServiceImpl
 	 * @deprecated As of 6.2.0, replaced by {@link
 	 *             #getFileVersionFileEntryMetadatasCount(long)}
 	 */
+	@Override
 	public long getFileEntryMetadataCount(long fileEntryId, long fileVersionId)
 		throws SystemException {
 
 		return getFileVersionFileEntryMetadatasCount(fileVersionId);
 	}
 
+	@Override
 	public List<DLFileEntryMetadata> getFileVersionFileEntryMetadatas(
 			long fileVersionId)
 		throws SystemException {
@@ -92,6 +115,7 @@ public class DLFileEntryMetadataLocalServiceImpl
 			fileVersionId);
 	}
 
+	@Override
 	public long getFileVersionFileEntryMetadatasCount(long fileVersionId)
 		throws SystemException {
 
@@ -99,6 +123,7 @@ public class DLFileEntryMetadataLocalServiceImpl
 			fileVersionId);
 	}
 
+	@Override
 	public void updateFileEntryMetadata(
 			long companyId, List<DDMStructure> ddmStructures,
 			long fileEntryTypeId, long fileEntryId, long fileVersionId,
@@ -116,6 +141,7 @@ public class DLFileEntryMetadataLocalServiceImpl
 		}
 	}
 
+	@Override
 	public void updateFileEntryMetadata(
 			long fileEntryTypeId, long fileEntryId, long fileVersionId,
 			Map<String, Fields> fieldsMap, ServiceContext serviceContext)

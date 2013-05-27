@@ -17,9 +17,7 @@ package com.liferay.portlet.journal.service;
 import com.liferay.portal.service.ServiceWrapper;
 
 /**
- * <p>
- * This class is a wrapper for {@link JournalTemplateLocalService}.
- * </p>
+ * Provides a wrapper for {@link JournalTemplateLocalService}.
  *
  * @author    Brian Wing Shun Chan
  * @see       JournalTemplateLocalService
@@ -40,6 +38,7 @@ public class JournalTemplateLocalServiceWrapper
 	* @return the journal template that was added
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalTemplate addJournalTemplate(
 		com.liferay.portlet.journal.model.JournalTemplate journalTemplate)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -52,6 +51,7 @@ public class JournalTemplateLocalServiceWrapper
 	* @param id the primary key for the new journal template
 	* @return the new journal template
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalTemplate createJournalTemplate(
 		long id) {
 		return _journalTemplateLocalService.createJournalTemplate(id);
@@ -65,6 +65,7 @@ public class JournalTemplateLocalServiceWrapper
 	* @throws PortalException if a journal template with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalTemplate deleteJournalTemplate(
 		long id)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -79,12 +80,14 @@ public class JournalTemplateLocalServiceWrapper
 	* @return the journal template that was removed
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalTemplate deleteJournalTemplate(
 		com.liferay.portlet.journal.model.JournalTemplate journalTemplate)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _journalTemplateLocalService.deleteJournalTemplate(journalTemplate);
 	}
 
+	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		return _journalTemplateLocalService.dynamicQuery();
 	}
@@ -96,6 +99,7 @@ public class JournalTemplateLocalServiceWrapper
 	* @return the matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
@@ -116,6 +120,7 @@ public class JournalTemplateLocalServiceWrapper
 	* @return the range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -138,6 +143,7 @@ public class JournalTemplateLocalServiceWrapper
 	* @return the ordered range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -155,12 +161,14 @@ public class JournalTemplateLocalServiceWrapper
 	* @return the number of rows that match the dynamic query
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _journalTemplateLocalService.dynamicQueryCount(dynamicQuery);
 	}
 
+	@Override
 	public com.liferay.portlet.journal.model.JournalTemplate fetchJournalTemplate(
 		long id) throws com.liferay.portal.kernel.exception.SystemException {
 		return _journalTemplateLocalService.fetchJournalTemplate(id);
@@ -174,6 +182,7 @@ public class JournalTemplateLocalServiceWrapper
 	* @throws PortalException if a journal template with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalTemplate getJournalTemplate(
 		long id)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -181,6 +190,7 @@ public class JournalTemplateLocalServiceWrapper
 		return _journalTemplateLocalService.getJournalTemplate(id);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -197,6 +207,7 @@ public class JournalTemplateLocalServiceWrapper
 	* @throws PortalException if a matching journal template could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalTemplate getJournalTemplateByUuidAndGroupId(
 		java.lang.String uuid, long groupId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -217,6 +228,7 @@ public class JournalTemplateLocalServiceWrapper
 	* @return the range of journal templates
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.journal.model.JournalTemplate> getJournalTemplates(
 		int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -229,6 +241,7 @@ public class JournalTemplateLocalServiceWrapper
 	* @return the number of journal templates
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getJournalTemplatesCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _journalTemplateLocalService.getJournalTemplatesCount();
@@ -241,6 +254,7 @@ public class JournalTemplateLocalServiceWrapper
 	* @return the journal template that was updated
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalTemplate updateJournalTemplate(
 		com.liferay.portlet.journal.model.JournalTemplate journalTemplate)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -252,6 +266,7 @@ public class JournalTemplateLocalServiceWrapper
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _journalTemplateLocalService.getBeanIdentifier();
 	}
@@ -261,10 +276,12 @@ public class JournalTemplateLocalServiceWrapper
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_journalTemplateLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
+	@Override
 	public com.liferay.portlet.journal.model.JournalTemplate addTemplate(
 		long userId, long groupId, java.lang.String templateId,
 		boolean autoTemplateId, java.lang.String structureId,
@@ -282,6 +299,7 @@ public class JournalTemplateLocalServiceWrapper
 			smallImageFile, serviceContext);
 	}
 
+	@Override
 	public void addTemplateResources(
 		com.liferay.portlet.journal.model.JournalTemplate template,
 		boolean addGroupPermissions, boolean addGuestPermissions)
@@ -291,6 +309,7 @@ public class JournalTemplateLocalServiceWrapper
 			addGroupPermissions, addGuestPermissions);
 	}
 
+	@Override
 	public void addTemplateResources(
 		com.liferay.portlet.journal.model.JournalTemplate template,
 		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
@@ -300,6 +319,7 @@ public class JournalTemplateLocalServiceWrapper
 			groupPermissions, guestPermissions);
 	}
 
+	@Override
 	public void addTemplateResources(long groupId, java.lang.String templateId,
 		boolean addGroupPermissions, boolean addGuestPermissions)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -308,6 +328,7 @@ public class JournalTemplateLocalServiceWrapper
 			addGroupPermissions, addGuestPermissions);
 	}
 
+	@Override
 	public void addTemplateResources(long groupId, java.lang.String templateId,
 		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -316,12 +337,14 @@ public class JournalTemplateLocalServiceWrapper
 			groupPermissions, guestPermissions);
 	}
 
+	@Override
 	public void checkNewLine(long groupId, java.lang.String templateId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		_journalTemplateLocalService.checkNewLine(groupId, templateId);
 	}
 
+	@Override
 	public com.liferay.portlet.journal.model.JournalTemplate copyTemplate(
 		long userId, long groupId, java.lang.String oldTemplateId,
 		java.lang.String newTemplateId, boolean autoTemplateId)
@@ -331,6 +354,7 @@ public class JournalTemplateLocalServiceWrapper
 			oldTemplateId, newTemplateId, autoTemplateId);
 	}
 
+	@Override
 	public void deleteTemplate(
 		com.liferay.portlet.journal.model.JournalTemplate template)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -338,18 +362,21 @@ public class JournalTemplateLocalServiceWrapper
 		_journalTemplateLocalService.deleteTemplate(template);
 	}
 
+	@Override
 	public void deleteTemplate(long groupId, java.lang.String templateId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		_journalTemplateLocalService.deleteTemplate(groupId, templateId);
 	}
 
+	@Override
 	public void deleteTemplates(long groupId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		_journalTemplateLocalService.deleteTemplates(groupId);
 	}
 
+	@Override
 	public java.util.List<com.liferay.portlet.journal.model.JournalTemplate> getStructureTemplates(
 		long groupId, java.lang.String structureId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -357,6 +384,17 @@ public class JournalTemplateLocalServiceWrapper
 			structureId);
 	}
 
+	@Override
+	public java.util.List<com.liferay.portlet.journal.model.JournalTemplate> getStructureTemplates(
+		long groupId, java.lang.String structureId,
+		boolean includeGlobalTemplates)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _journalTemplateLocalService.getStructureTemplates(groupId,
+			structureId, includeGlobalTemplates);
+	}
+
+	@Override
 	public java.util.List<com.liferay.portlet.journal.model.JournalTemplate> getStructureTemplates(
 		long groupId, java.lang.String structureId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -364,6 +402,7 @@ public class JournalTemplateLocalServiceWrapper
 			structureId, start, end);
 	}
 
+	@Override
 	public int getStructureTemplatesCount(long groupId,
 		java.lang.String structureId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -371,6 +410,7 @@ public class JournalTemplateLocalServiceWrapper
 			structureId);
 	}
 
+	@Override
 	public com.liferay.portlet.journal.model.JournalTemplate getTemplate(
 		long id)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -378,6 +418,7 @@ public class JournalTemplateLocalServiceWrapper
 		return _journalTemplateLocalService.getTemplate(id);
 	}
 
+	@Override
 	public com.liferay.portlet.journal.model.JournalTemplate getTemplate(
 		long groupId, java.lang.String templateId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -385,6 +426,7 @@ public class JournalTemplateLocalServiceWrapper
 		return _journalTemplateLocalService.getTemplate(groupId, templateId);
 	}
 
+	@Override
 	public com.liferay.portlet.journal.model.JournalTemplate getTemplate(
 		long groupId, java.lang.String templateId,
 		boolean includeGlobalTemplates)
@@ -394,6 +436,7 @@ public class JournalTemplateLocalServiceWrapper
 			includeGlobalTemplates);
 	}
 
+	@Override
 	public com.liferay.portlet.journal.model.JournalTemplate getTemplateBySmallImageId(
 		long smallImageId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -401,33 +444,39 @@ public class JournalTemplateLocalServiceWrapper
 		return _journalTemplateLocalService.getTemplateBySmallImageId(smallImageId);
 	}
 
+	@Override
 	public java.util.List<com.liferay.portlet.journal.model.JournalTemplate> getTemplates()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _journalTemplateLocalService.getTemplates();
 	}
 
+	@Override
 	public java.util.List<com.liferay.portlet.journal.model.JournalTemplate> getTemplates(
 		long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _journalTemplateLocalService.getTemplates(groupId);
 	}
 
+	@Override
 	public java.util.List<com.liferay.portlet.journal.model.JournalTemplate> getTemplates(
 		long groupId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _journalTemplateLocalService.getTemplates(groupId, start, end);
 	}
 
+	@Override
 	public int getTemplatesCount(long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _journalTemplateLocalService.getTemplatesCount(groupId);
 	}
 
+	@Override
 	public boolean hasTemplate(long groupId, java.lang.String templateId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _journalTemplateLocalService.hasTemplate(groupId, templateId);
 	}
 
+	@Override
 	public java.util.List<com.liferay.portlet.journal.model.JournalTemplate> search(
 		long companyId, long[] groupIds, java.lang.String keywords,
 		java.lang.String structureId, java.lang.String structureIdComparator,
@@ -437,6 +486,7 @@ public class JournalTemplateLocalServiceWrapper
 			keywords, structureId, structureIdComparator, start, end, obc);
 	}
 
+	@Override
 	public java.util.List<com.liferay.portlet.journal.model.JournalTemplate> search(
 		long companyId, long[] groupIds, java.lang.String templateId,
 		java.lang.String structureId, java.lang.String structureIdComparator,
@@ -449,6 +499,7 @@ public class JournalTemplateLocalServiceWrapper
 			andOperator, start, end, obc);
 	}
 
+	@Override
 	public int searchCount(long companyId, long[] groupIds,
 		java.lang.String keywords, java.lang.String structureId,
 		java.lang.String structureIdComparator)
@@ -457,6 +508,7 @@ public class JournalTemplateLocalServiceWrapper
 			keywords, structureId, structureIdComparator);
 	}
 
+	@Override
 	public int searchCount(long companyId, long[] groupIds,
 		java.lang.String templateId, java.lang.String structureId,
 		java.lang.String structureIdComparator, java.lang.String name,
@@ -467,6 +519,7 @@ public class JournalTemplateLocalServiceWrapper
 			andOperator);
 	}
 
+	@Override
 	public com.liferay.portlet.journal.model.JournalTemplate updateTemplate(
 		long groupId, java.lang.String templateId,
 		java.lang.String structureId,
@@ -498,10 +551,12 @@ public class JournalTemplateLocalServiceWrapper
 		_journalTemplateLocalService = journalTemplateLocalService;
 	}
 
+	@Override
 	public JournalTemplateLocalService getWrappedService() {
 		return _journalTemplateLocalService;
 	}
 
+	@Override
 	public void setWrappedService(
 		JournalTemplateLocalService journalTemplateLocalService) {
 		_journalTemplateLocalService = journalTemplateLocalService;

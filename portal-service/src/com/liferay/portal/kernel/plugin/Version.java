@@ -104,6 +104,7 @@ public class Version implements Comparable<Version>, Serializable {
 				version.getBuildNumber()));
 	}
 
+	@Override
 	public int compareTo(Version version) {
 		if (version == null) {
 			return 1;
@@ -142,7 +143,11 @@ public class Version implements Comparable<Version>, Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
-		if ((obj == null) || !(obj instanceof Version)) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof Version)) {
 			return false;
 		}
 

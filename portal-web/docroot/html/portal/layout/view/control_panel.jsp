@@ -21,14 +21,31 @@ String ppid = ParamUtil.getString(request, "p_p_id");
 
 String controlPanelCategory = themeDisplay.getControlPanelCategory();
 
-if (controlPanelCategory.equals(PortletCategoryKeys.CONTENT) && Validator.isNull(ppid)) {
-	List<Portlet> portlets = PortalUtil.getControlPanelPortlets(PortletCategoryKeys.CONTENT, themeDisplay);
+boolean showControlPanelMenu = true;
 
-	for (Portlet portlet : portlets) {
-		if (PortletPermissionUtil.hasControlPanelAccessPermission(permissionChecker, scopeGroupId, portlet)) {
-			ppid = portlet.getPortletId();
+if (controlPanelCategory.equals(PortletCategoryKeys.CURRENT_SITE)) {
+	showControlPanelMenu = false;
+}
 
-			break;
+if (controlPanelCategory.equals(PortletCategoryKeys.CURRENT_SITE)) {
+	controlPanelCategory = PortletCategoryKeys.SITE_ADMINISTRATION;
+}
+
+List<Portlet> portlets = PortalUtil.getControlPanelPortlets(controlPanelCategory, themeDisplay);
+
+if (Validator.isNull(ppid)) {
+	if (controlPanelCategory.equals(PortletCategoryKeys.SITE_ADMINISTRATION)) {
+		Portlet firstPortlet = PortalUtil.getFirstSiteAdministrationPortlet(themeDisplay);
+
+		ppid = firstPortlet.getPortletId();
+	}
+	else {
+		for (Portlet portlet : portlets) {
+			if (PortletPermissionUtil.hasControlPanelAccessPermission(permissionChecker, scopeGroupId, portlet)) {
+				ppid = portlet.getPortletId();
+
+				break;
+			}
 		}
 	}
 }
@@ -92,22 +109,21 @@ request.setAttribute("control_panel.jsp-ppid", ppid);
 			panelBodyCssClass += " panel-page-application";
 		}
 
-		if (category.equals(PortletCategoryKeys.CONTENT)) {
-			panelCategory += " panel-manage-content";
+		if (category.equals(PortletCategoryKeys.CONFIGURATION)) {
+			panelCategory += " panel-manage-configuration";
 		}
 		else if (category.equals(PortletCategoryKeys.MY)) {
 			panelCategory += " panel-manage-my";
 			categoryTitle = user.getFullName();
 		}
-		else if (category.equals(PortletCategoryKeys.PORTAL)) {
-			panelCategory += " panel-manage-portal";
-
-			if (CompanyLocalServiceUtil.getCompaniesCount(false) > 1) {
-				categoryTitle += " " + company.getName();
-			}
-		}
 		else if (category.equals(PortletCategoryKeys.SERVER)) {
 			panelCategory += " panel-manage-server";
+		}
+		else if (category.equals(PortletCategoryKeys.SITES)) {
+			panelCategory += " panel-manage-sites";
+		}
+		else if (category.equals(PortletCategoryKeys.USERS)) {
+			panelCategory += " panel-manage-users";
 		}
 		else {
 			panelCategory += " panel-manage-frontpage";
@@ -121,21 +137,44 @@ request.setAttribute("control_panel.jsp-ppid", ppid);
 			curGroup = scopeLayout.getGroup();
 		}
 
-		if (Validator.isNotNull(categoryTitle) && !category.equals(PortletCategoryKeys.CONTENT)) {
+		if (Validator.isNotNull(categoryTitle) && !category.startsWith(PortletCategoryKeys.SITE_ADMINISTRATION)) {
 			PortalUtil.addPortletBreadcrumbEntry(request, categoryTitle, null);
 		}
 		%>
 
 		<div id="content-wrapper">
-			<aui:layout cssClass="<%= panelCategory %>">
-				<aui:column columnWidth="<%= 25 %>" cssClass="panel-page-menu" first="<%= true %>">
-					<liferay-portlet:runtime portletName="160" />
-				</aui:column>
+			<div class="<%= panelCategory %>">
+				<c:if test="<%= showControlPanelMenu %>">
+					<%@ include file="/html/portal/layout/view/control_panel_nav_main.jspf" %>
+				</c:if>
 
-				<aui:column columnWidth="<%= 75 %>" cssClass="<%= panelBodyCssClass %>" last="<%= true %>">
-					<%@ include file="/html/portal/layout/view/panel_content.jspf" %>
-				</aui:column>
-			</aui:layout>
+				<div class="<%= panelBodyCssClass %>">
+					<c:choose>
+						<c:when test="<%= Validator.isNull(controlPanelCategory) %>">
+							<%@ include file="/html/portal/layout/view/control_panel_home.jspf" %>
+						</c:when>
+						<c:when test="<%= ((portlet != null) && !portlet.getControlPanelEntryCategory().startsWith(PortletCategoryKeys.SITE_ADMINISTRATION)) %>">
+							<%@ include file="/html/portal/layout/view/panel_content.jspf" %>
+						</c:when>
+						<c:otherwise>
+							<aui:container cssClass="<%= panelCategory %>">
+								<aui:row>
+									<h1><%= curGroup.getDescriptiveName(themeDisplay.getLocale()) %></h1>
+								</aui:row>
+								<aui:row>
+									<aui:col cssClass="panel-page-menu" width="<%= 25 %>">
+										<liferay-portlet:runtime portletName="160" />
+									</aui:col>
+
+									<aui:col cssClass="<%= panelBodyCssClass %>"  width="<%= 75 %>">
+										<%@ include file="/html/portal/layout/view/panel_content.jspf" %>
+									</aui:col>
+								</aui:row>
+							</aui:container>
+						</c:otherwise>
+					</c:choose>
+				</div>
+			</div>
 		</div>
 	</c:when>
 	<c:otherwise>

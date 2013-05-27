@@ -114,18 +114,18 @@ if (Validator.isNotNull(script)) {
 		<aui:input name="name" />
 
 		<liferay-ui:panel-container cssClass="lfr-structure-entry-details-container" extended="<%= false %>" id="structureDetailsPanelContainer" persistState="<%= true %>">
-			<liferay-ui:panel collapsible="<%= true %>" extended="<%= false %>" id="structureDetailsSectionPanel" persistState="<%= true %>" title='<%= LanguageUtil.get(pageContext, "details") %>'>
-				<aui:layout cssClass="lfr-ddm-types-form-column">
+			<liferay-ui:panel collapsible="<%= true %>" defaultState="closed" extended="<%= false %>" id="structureDetailsSectionPanel" persistState="<%= true %>" title='<%= LanguageUtil.get(pageContext, "details") %>'>
+				<aui:row cssClass="lfr-ddm-types-form-column">
 					<c:choose>
 						<c:when test="<%= scopeClassNameId == 0 %>">
-							<aui:column first="<%= true %>">
+							<aui:col width="<%= 50 %>">
 								<aui:field-wrapper>
 									<aui:select disabled="<%= structure != null %>" label="type" name="scopeClassNameId">
 										<aui:option label="<%= ResourceActionsUtil.getModelResource(locale, DDLRecordSet.class.getName()) %>" value="<%= PortalUtil.getClassNameId(DDLRecordSet.class.getName()) %>" />
 										<aui:option label="<%= ResourceActionsUtil.getModelResource(locale, DLFileEntryMetadata.class.getName()) %>" value="<%= PortalUtil.getClassNameId(DLFileEntryMetadata.class.getName()) %>" />
 									</aui:select>
 								</aui:field-wrapper>
-							</aui:column>
+							</aui:col>
 						</c:when>
 						<c:otherwise>
 							<aui:input name="scopeClassNameId" type="hidden" value="<%= scopeClassNameId %>" />
@@ -134,7 +134,7 @@ if (Validator.isNotNull(script)) {
 
 					<c:choose>
 						<c:when test="<%= Validator.isNull(storageTypeValue) %>">
-							<aui:column>
+							<aui:col width="<%= 50 %>">
 								<aui:field-wrapper>
 									<aui:select disabled="<%= structure != null %>" name="storageType">
 
@@ -150,17 +150,17 @@ if (Validator.isNotNull(script)) {
 
 									</aui:select>
 								</aui:field-wrapper>
-							</aui:column>
+							</aui:col>
 						</c:when>
 						<c:otherwise>
 							<aui:input name="storageType" type="hidden" value="<%= storageTypeValue %>" />
 						</c:otherwise>
 					</c:choose>
-				</aui:layout>
+				</aui:row>
 
 				<aui:input name="description" />
 
-				<aui:field-wrapper label='<%= LanguageUtil.format(pageContext, "parent-x", scopeStructureName) %>'>
+				<aui:field-wrapper label='<%= LanguageUtil.format(pageContext, "parent-x", HtmlUtil.escape(scopeStructureName)) %>'>
 					<aui:input name="parentStructureId" type="hidden" value="<%= parentStructureId %>" />
 
 					<c:choose>
@@ -204,7 +204,7 @@ if (Validator.isNotNull(script)) {
 <%@ include file="/html/portlet/dynamic_data_mapping/form_builder.jspf" %>
 
 <aui:button-row>
-	<aui:button onClick='<%= renderResponse.getNamespace() + "saveStructure();" %>' value='<%= LanguageUtil.get(pageContext, "save") %>' />
+	<aui:button onClick='<%= renderResponse.getNamespace() + "saveStructure();" %>' primary="<%= true %>" value='<%= LanguageUtil.get(pageContext, "save") %>' />
 
 	<aui:button href="<%= redirect %>" type="cancel" />
 </aui:button-row>
@@ -215,18 +215,18 @@ if (Validator.isNotNull(script)) {
 			{
 				availableFields: 'Liferay.FormBuilder.AVAILABLE_FIELDS.WCM_STRUCTURE',
 				classPK: <%= (structure != null) ? structure.getPrimaryKey() : 0 %>,
-				ddmResource: '<%= ddmResource %>',
 				dialog: {
-					width: 820
+					destroyOnHide: true,
+					zIndex: Liferay.zIndex.WINDOW + 2
 				},
 				eventName: '<portlet:namespace />selectParentStructure',
 				showGlobalScope: true,
 				showManageTemplates: false,
-				storageType: '<%= scopeStorageType %>',
-				structureName: '<%= scopeStructureName %>',
-				structureType: '<%= scopeStructureType %>',
+				storageType: '<%= HtmlUtil.escapeJS(scopeStorageType) %>',
+				structureName: '<%= HtmlUtil.escapeJS(scopeStructureName) %>',
+				structureType: '<%= HtmlUtil.escapeJS(scopeStructureType) %>',
 				struts_action: '/dynamic_data_mapping/select_structure',
-				title: '<%= scopeTitle %>'
+				title: '<%= HtmlUtil.escapeJS(scopeTitle) %>'
 			},
 			function(event){
 				document.<portlet:namespace />fm.<portlet:namespace />parentStructureId.value = event.ddmstructureid;

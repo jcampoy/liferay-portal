@@ -36,10 +36,12 @@ import java.util.Map;
  */
 public class JournalTemplateHandler extends BaseDDMTemplateHandler {
 
+	@Override
 	public String getClassName() {
 		return JournalArticle.class.getName();
 	}
 
+	@Override
 	public String getName(Locale locale) {
 		String portletTitle = PortalUtil.getPortletTitle(
 			PortletKeys.JOURNAL, locale);
@@ -48,17 +50,18 @@ public class JournalTemplateHandler extends BaseDDMTemplateHandler {
 			LanguageUtil.get(locale, "template"));
 	}
 
+	@Override
 	public String getResourceName() {
 		return "com.liferay.portlet.journal";
 	}
 
 	@Override
 	public Map<String, TemplateVariableGroup> getTemplateVariableGroups(
-			long classPK, Locale locale)
+			long classPK, String language, Locale locale)
 		throws Exception {
 
 		Map<String, TemplateVariableGroup> templateVariableGroups =
-			super.getTemplateVariableGroups(classPK, locale);
+			super.getTemplateVariableGroups(classPK, language, locale);
 
 		TemplateVariableGroup journalServicesTemplateVariableGroup =
 			new TemplateVariableGroup("web-content-services");
@@ -75,6 +78,17 @@ public class JournalTemplateHandler extends BaseDDMTemplateHandler {
 			journalServicesTemplateVariableGroup);
 
 		return templateVariableGroups;
+	}
+
+	@Override
+	protected TemplateVariableGroup getUtilTemplateVariableGroup() {
+		TemplateVariableGroup utilTemplateVariableGroup =
+			super.getUtilTemplateVariableGroup();
+
+		utilTemplateVariableGroup.addVariable(
+			"xml-request", String.class, "xmlRequest");
+
+		return utilTemplateVariableGroup;
 	}
 
 }

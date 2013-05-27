@@ -648,6 +648,9 @@ public interface Portal {
 
 	public String getFirstPageLayoutTypes(PageContext pageContext);
 
+	public Portlet getFirstSiteAdministrationPortlet(ThemeDisplay themeDisplay)
+		throws SystemException;
+
 	public String getFullName(
 		String firstName, String middleName, String lastName);
 
@@ -776,6 +779,10 @@ public interface Portal {
 		PortletResponse portletResponse);
 
 	public Locale getLocale(HttpServletRequest request);
+
+	public Locale getLocale(
+		HttpServletRequest request, HttpServletResponse response,
+		boolean initialize);
 
 	public Locale getLocale(RenderRequest renderRequest);
 
@@ -964,6 +971,14 @@ public interface Portal {
 			PortletRequest portletRequest, boolean checkPermission)
 		throws PortalException, SystemException;
 
+	public PortletURL getSiteAdministrationURL(
+			PortletResponse portletResponse, ThemeDisplay themeDisplay)
+		throws SystemException;
+
+	public PortletURL getSiteAdministrationURL(
+		PortletResponse portletResponse, ThemeDisplay themeDisplay,
+		String portletName);
+
 	public long[] getSiteAndCompanyGroupIds(long groupId)
 		throws PortalException, SystemException;
 
@@ -1072,6 +1087,8 @@ public interface Portal {
 		throws PortalException, SystemException;
 
 	public void initCustomSQL();
+
+	public User initUser(HttpServletRequest request) throws Exception;
 
 	public void invokeTaglibDiscussion(
 			PortletConfig portletConfig, ActionRequest actionRequest,

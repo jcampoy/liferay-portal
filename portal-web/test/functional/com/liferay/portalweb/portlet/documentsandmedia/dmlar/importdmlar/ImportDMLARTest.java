@@ -38,7 +38,7 @@ public class ImportDMLARTest extends BaseTestCase {
 		selenium.waitForElementPresent("//iframe[@id='manageContentDialog']");
 		selenium.selectFrame("//iframe[@id='manageContentDialog']");
 		selenium.waitForElementPresent(
-			"//script[contains(@src,'/aui/aui-live-search/aui-live-search-min.js')]");
+			"//script[contains(@src,'/autocomplete-filters/autocomplete-filters-min.js')]");
 		selenium.waitForVisible("//ul[@class='category-portlets']/li[3]/a");
 		assertEquals(RuntimeVariables.replace("Documents and Media"),
 			selenium.getText("//ul[@class='category-portlets']/li[3]/a"));
@@ -51,11 +51,11 @@ public class ImportDMLARTest extends BaseTestCase {
 		selenium.clickAt("//strong/a", RuntimeVariables.replace("Options"));
 		Thread.sleep(1000);
 		selenium.waitForVisible(
-			"//div[@class='lfr-component lfr-menu-list']/ul/li/a[contains(.,'Export / Import')]");
+			"//div[@class='lfr-menu-list unstyled']/ul/li/a[contains(.,'Export / Import')]");
 		assertEquals(RuntimeVariables.replace("Export / Import"),
 			selenium.getText(
-				"//div[@class='lfr-component lfr-menu-list']/ul/li/a[contains(.,'Export / Import')]"));
-		selenium.clickAt("//div[@class='lfr-component lfr-menu-list']/ul/li/a[contains(.,'Export / Import')]",
+				"//div[@class='lfr-menu-list unstyled']/ul/li/a[contains(.,'Export / Import')]"));
+		selenium.clickAt("//div[@class='lfr-menu-list unstyled']/ul/li/a[contains(.,'Export / Import')]",
 			RuntimeVariables.replace("Export / Import"));
 		selenium.waitForPageToLoad("30000");
 		selenium.clickAt("link=Import", RuntimeVariables.replace("Import"));

@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.dao.orm.Property;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.lar.DataLevel;
 import com.liferay.portal.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.lar.StagedModelDataHandlerUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
@@ -37,6 +38,7 @@ import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.service.DLFolderLocalServiceUtil;
+import com.liferay.portlet.documentlibrary.service.permission.DLPermission;
 import com.liferay.portlet.documentlibrary.service.persistence.DLFileEntryActionableDynamicQuery;
 import com.liferay.portlet.documentlibrary.service.persistence.DLFolderActionableDynamicQuery;
 
@@ -52,7 +54,7 @@ import javax.portlet.PortletPreferences;
 public class DLDisplayPortletDataHandler extends DLPortletDataHandler {
 
 	public DLDisplayPortletDataHandler() {
-		setAlwaysExportable(false);
+		setDataLevel(DataLevel.PORTLET_INSTANCE);
 	}
 
 	@Override
@@ -84,8 +86,7 @@ public class DLDisplayPortletDataHandler extends DLPortletDataHandler {
 		throws Exception {
 
 		portletDataContext.addPermissions(
-			"com.liferay.portlet.documentlibrary",
-			portletDataContext.getScopeGroupId());
+			DLPermission.RESOURCE_NAME, portletDataContext.getScopeGroupId());
 
 		Element rootElement = addExportDataRootElement(portletDataContext);
 
@@ -225,8 +226,7 @@ public class DLDisplayPortletDataHandler extends DLPortletDataHandler {
 		throws Exception {
 
 		portletDataContext.importPermissions(
-			"com.liferay.portlet.documentlibrary",
-			portletDataContext.getSourceGroupId(),
+			DLPermission.RESOURCE_NAME, portletDataContext.getSourceGroupId(),
 			portletDataContext.getScopeGroupId());
 
 		Element fileEntryTypesElement =
@@ -296,26 +296,27 @@ public class DLDisplayPortletDataHandler extends DLPortletDataHandler {
 		boolean defaultRepository = GetterUtil.getBoolean(
 			rootElement.attributeValue("default-repository"), true);
 
-		if (rootFolderId > 0) {
-			Map<Long, Long> folderIds = null;
-
-			if (defaultRepository) {
-				folderIds =
-					(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
-						Folder.class);
-			}
-			else {
-				folderIds =
-					(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
-						RepositoryEntry.class);
-			}
-
-			rootFolderId = MapUtil.getLong(
-				folderIds, rootFolderId, rootFolderId);
-
-			portletPreferences.setValue(
-				"rootFolderId", String.valueOf(rootFolderId));
+		if (rootFolderId <= 0) {
+			return portletPreferences;
 		}
+
+		Map<Long, Long> folderIds = null;
+
+		if (defaultRepository) {
+			folderIds =
+				(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
+					Folder.class);
+		}
+		else {
+			folderIds =
+				(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
+					RepositoryEntry.class);
+		}
+
+		rootFolderId = MapUtil.getLong(folderIds, rootFolderId, rootFolderId);
+
+		portletPreferences.setValue(
+			"rootFolderId", String.valueOf(rootFolderId));
 
 		return portletPreferences;
 	}

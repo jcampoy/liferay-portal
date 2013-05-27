@@ -11,7 +11,7 @@
 	<property name="manifest.bundle.symbolic.name" value="portal-impl;singleton:=true" />
 	<property name="service.file" value="service.xml" />
 
-	<target name="build-alloy-taglib">
+	<target name="build-alloy-taglib-jar">
 		<if>
 			<not>
 				<isset property="alloy.taglibs.dir" />
@@ -112,7 +112,7 @@ public class Creole10Parser]]></replacevalue>
 		<ant dir="../sql" target="build-db" />
 	</target>
 
-	<target name="build-icu4j">
+	<target name="build-icu4j-jar">
 		<tstamp>
 			<format property="tstamp.value" pattern="yyyyMMddkkmmssSSS" />
 		</tstamp>
@@ -160,7 +160,7 @@ public class Creole10Parser]]></replacevalue>
 		</java>
 	</target>
 
-	<target name="build-json-java">
+	<target name="build-json-java-jar">
 		<get
 			dest="json-java.zip"
 			src="https://github.com/douglascrockford/JSON-java/zipball/master"
@@ -332,7 +332,7 @@ public class Creole10Parser]]></replacevalue>
 		</java>
 	</target>
 
-	<target name="build-ruby-gems">
+	<target name="build-ruby-gems-jar">
 		<tstamp>
 			<format property="tstamp.value" pattern="yyyyMMddkkmmssSSS" />
 		</tstamp>
@@ -391,7 +391,7 @@ public class Creole10Parser]]></replacevalue>
 		<ant dir="../portal-web" target="build-selenium-new-test-suite" />
 	</target>
 
-	<target name="build-selenium-server">
+	<target name="build-selenium-server-jar">
 		<tstamp>
 			<format property="tstamp.value" pattern="yyyyMMddkkmmssSSS" />
 		</tstamp>
@@ -605,6 +605,12 @@ public class Creole10Parser]]></replacevalue>
 		</antcall>
 	</target>
 
+	<target name="build-service-portlet-backgroundtask">
+		<antcall target="build-service">
+			<param name="service.file" value="${basedir}/src/com/liferay/portlet/backgroundtask/service.xml" />
+		</antcall>
+	</target>
+
 	<target name="build-service-portlet-blogs">
 		<antcall target="build-service">
 			<param name="service.file" value="${basedir}/src/com/liferay/portlet/blogs/service.xml" />
@@ -716,6 +722,7 @@ public class Creole10Parser]]></replacevalue>
 	<target name="build-service-portlets">
 		<antcall target="build-service-portlet-announcements" />
 		<antcall target="build-service-portlet-asset" />
+		<antcall target="build-service-portlet-backgroundtask" />
 		<antcall target="build-service-portlet-blogs" />
 		<antcall target="build-service-portlet-bookmarks" />
 		<antcall target="build-service-portlet-calendar" />
@@ -742,7 +749,7 @@ public class Creole10Parser]]></replacevalue>
 		<antcall target="build-service-portlets" />
 	</target>
 
-	<target name="build-struts">
+	<target name="build-struts-jar">
 		<get
 			dest="struts-1.2.9-bin.zip"
 			src="http://archive.apache.org/dist/struts/binaries/struts-1.2.9-bin.zip"
@@ -881,7 +888,7 @@ public class Creole10Parser]]></replacevalue>
 		</if>
 	</target>
 
-	<target name="build-velocity">
+	<target name="build-velocity-jar">
 		<tstamp>
 			<format property="tstamp.value" pattern="yyyyMMddkkmmssSSS" />
 		</tstamp>
@@ -940,6 +947,12 @@ public class Creole10Parser]]></replacevalue>
 	<target name="build-wsdd-portlet-asset">
 		<antcall target="build-wsdd">
 			<param name="service.file" value="${basedir}/src/com/liferay/portlet/asset/service.xml" />
+		</antcall>
+	</target>
+
+	<target name="build-wsdd-portlet-backgroundtask">
+		<antcall target="build-wsdd">
+			<param name="service.file" value="${basedir}/src/com/liferay/portlet/backgroundtask/service.xml" />
 		</antcall>
 	</target>
 
@@ -1054,6 +1067,7 @@ public class Creole10Parser]]></replacevalue>
 	<target name="build-wsdd-portlets">
 		<antcall target="build-wsdd-portlet-announcements" />
 		<antcall target="build-wsdd-portlet-asset" />
+		<antcall target="build-wsdd-portlet-backgroundtask" />
 		<antcall target="build-wsdd-portlet-blogs" />
 		<antcall target="build-wsdd-portlet-bookmarks" />
 		<antcall target="build-wsdd-portlet-calendar" />
@@ -1079,7 +1093,7 @@ public class Creole10Parser]]></replacevalue>
 		<antcall target="build-wsdd-portlets" />
 	</target>
 
-	<target name="build-yui-compressor">
+	<target name="build-yui-compressor-jar">
 		<jarjar jarfile="${project.dir}/lib/portal/liferay-yui-compressor.jar.new">
 			<rule pattern="org.mozilla.**" result="com.yahoo.platform.yui.mozilla.@1" />
 			<zipfileset src="${project.dir}/tools/yuicompressor-2.4.7.jar" />
@@ -1270,7 +1284,7 @@ public class Creole10Parser]]></replacevalue>
 		</copy>
 
 		<java
-			classname="com.liferay.portal.tools.SourceFormatter"
+			classname="com.liferay.portal.tools.sourceformatter.SourceFormatter"
 			classpathref="project.classpath"
 			dir="${project.dir}"
 			fork="true"
@@ -1580,7 +1594,7 @@ security-manager-sockets-accept=\</replacevalue>
 
 		<replace file="test/integration/com/liferay/portal/security/pacl/test/dependencies/WEB-INF/classes/META-INF/hibernate-spring.xml">
 			<replacetoken><![CDATA[<bean id="liferayHibernateSessionFactory" class="com.liferay.portal.kernel.spring.util.SpringFactoryUtil" factory-method="newBean">]]></replacetoken>
-			<replacevalue><![CDATA[<bean id="liferayHibernateSessionFactory" class="com.liferay.portal.spring.hibernate.PortalHibernateConfiguration">
+			<replacevalue><![CDATA[<bean id="liferayHibernateSessionFactory" class="com.liferay.portal.spring.hibernate.PortletHibernateConfiguration">
 		<property name="dataSource" ref="liferayDataSource" />
 	</bean>]]></replacevalue>
 		</replace>

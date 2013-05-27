@@ -148,15 +148,14 @@
 	<td>${addTagsVisible}</td>
 	<td>AddTagsVisible</td>
 </tr>
-<!--The spelling "Cateogrization" in the following target is due to the actual target being spelled this way in portal.  Please do not correct the spelling of the target in the test unless the test begins to fail at this point-->
 <tr>
 	<td>assertText</td>
-	<td>//div[@id='calendarEventCateogrizationPanel']/div/div/span</td>
+	<td>//span[contains(.,'Categorization')]</td>
 	<td>Categorization</td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//div[@id='calendarEventCateogrizationPanel']/div/div/span</td>
+	<td>//span[contains(.,'Categorization')]</td>
 	<td>Categorization</td>
 </tr>
 <tr>
@@ -181,12 +180,12 @@
 </tr>
 <tr>
 	<td>waitForVisible</td>
-	<td>xPath=(//span[@class='aui-textboxlistentry-text'])[1]</td>
+	<td>xPath=(//span[@class='textboxlistentry-text'])[1]</td>
 	<td>tag1</td>
 </tr>
 <tr>
 	<td>assertText</td>
-	<td>xPath=(//span[@class='aui-textboxlistentry-text'])[1]</td>
+	<td>xPath=(//span[@class='textboxlistentry-text'])[1]</td>
 	<td>tag1</td>
 </tr>
 <tr>
@@ -201,12 +200,12 @@
 </tr>
 <tr>
 	<td>waitForVisible</td>
-	<td>xPath=(//span[@class='aui-textboxlistentry-text'])[2]</td>
+	<td>xPath=(//span[@class='textboxlistentry-text'])[2]</td>
 	<td>tag2</td>
 </tr>
 <tr>
 	<td>assertText</td>
-	<td>xPath=(//span[@class='aui-textboxlistentry-text'])[2]</td>
+	<td>xPath=(//span[@class='textboxlistentry-text'])[2]</td>
 	<td>tag2</td>
 </tr>
 <tr>

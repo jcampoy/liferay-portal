@@ -34,6 +34,7 @@ import java.util.List;
  */
 public abstract class BaseControlPanelEntry implements ControlPanelEntry {
 
+	@Override
 	public boolean hasAccessPermission(
 			PermissionChecker permissionChecker, Group group, Portlet portlet)
 		throws Exception {
@@ -63,6 +64,7 @@ public abstract class BaseControlPanelEntry implements ControlPanelEntry {
 	 *             #hasAccessPermission} to determine if a portlet should be
 	 *             displayed in the Control Panel.</p>
 	 */
+	@Override
 	public boolean isVisible(
 			PermissionChecker permissionChecker, Portlet portlet)
 		throws Exception {
@@ -81,6 +83,7 @@ public abstract class BaseControlPanelEntry implements ControlPanelEntry {
 	 *             #hasAccessPermission} to determine if a portlet should be
 	 *             displayed in the Control Panel.</p>
 	 */
+	@Override
 	public boolean isVisible(
 			Portlet portlet, String category, ThemeDisplay themeDisplay)
 		throws Exception {
@@ -91,7 +94,7 @@ public abstract class BaseControlPanelEntry implements ControlPanelEntry {
 	protected long getDefaultPlid(Group group, String category) {
 		long plid = LayoutConstants.DEFAULT_PLID;
 
-		if (category.equals(PortletCategoryKeys.CONTENT)) {
+		if (category.startsWith(PortletCategoryKeys.SITE_ADMINISTRATION)) {
 			plid = group.getDefaultPublicPlid();
 
 			if (plid == LayoutConstants.DEFAULT_PLID) {
@@ -123,7 +126,7 @@ public abstract class BaseControlPanelEntry implements ControlPanelEntry {
 			category = StringPool.BLANK;
 		}
 
-		if (category.equals(PortletCategoryKeys.CONTENT)) {
+		if (category.startsWith(PortletCategoryKeys.SITE_ADMINISTRATION)) {
 			if (group.isLayout() && !portlet.isScopeable()) {
 				return false;
 			}
@@ -137,8 +140,11 @@ public abstract class BaseControlPanelEntry implements ControlPanelEntry {
 
 		long groupId = group.getGroupId();
 
-		if (category.equals(PortletCategoryKeys.PORTAL) ||
-			category.equals(PortletCategoryKeys.SERVER)) {
+		if (category.equals(PortletCategoryKeys.CONFIGURATION) ||
+			category.equals(PortletCategoryKeys.MARKETPLACE) ||
+			category.equals(PortletCategoryKeys.SERVER) ||
+			category.equals(PortletCategoryKeys.SITES) ||
+			category.equals(PortletCategoryKeys.USERS)) {
 
 			groupId = 0;
 		}

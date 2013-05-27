@@ -102,6 +102,7 @@ public class JournalConverterImpl implements JournalConverter {
 		_journalTypesToDDMTypes.put("text_box", "textarea");
 	}
 
+	@Override
 	public String getContent(DDMStructure ddmStructure, Fields ddmFields)
 		throws Exception {
 
@@ -129,6 +130,7 @@ public class JournalConverterImpl implements JournalConverter {
 					"dynamic-element");
 
 				dynamicElementElement.addAttribute("name", fieldName);
+				dynamicElementElement.addAttribute("index", String.valueOf(i));
 
 				updateContentDynamicElement(
 					dynamicElementElement, ddmStructure, ddmFields,
@@ -139,6 +141,7 @@ public class JournalConverterImpl implements JournalConverter {
 		return DDMXMLUtil.formatXML(document.asXML());
 	}
 
+	@Override
 	public Fields getDDMFields(DDMStructure ddmStructure, String content)
 		throws Exception {
 
@@ -167,6 +170,7 @@ public class JournalConverterImpl implements JournalConverter {
 		return ddmFields;
 	}
 
+	@Override
 	public String getDDMXSD(String journalXSD) throws Exception {
 		Document document = SAXReaderUtil.read(journalXSD);
 
@@ -473,6 +477,8 @@ public class JournalConverterImpl implements JournalConverter {
 					dynamicElementElement.addElement("dynamic-element");
 
 				childDynamicElementElement.addAttribute("name", childFieldName);
+				childDynamicElementElement.addAttribute(
+					"index", String.valueOf(i));
 
 				updateContentDynamicElement(
 					childDynamicElementElement, ddmStructure, ddmFields,

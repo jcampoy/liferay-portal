@@ -541,6 +541,13 @@ public class PortalUtil {
 		return getPortal().getFirstPageLayoutTypes(pageContext);
 	}
 
+	public static Portlet getFirstSiteAdministrationPortlet(
+			ThemeDisplay themeDisplay)
+		throws SystemException {
+
+		return getPortal().getFirstSiteAdministrationPortlet(themeDisplay);
+	}
+
 	public static String getFullName(
 		String firstName, String middleName, String lastName) {
 
@@ -791,6 +798,13 @@ public class PortalUtil {
 
 	public static Locale getLocale(HttpServletRequest request) {
 		return getPortal().getLocale(request);
+	}
+
+	public static Locale getLocale(
+		HttpServletRequest request, HttpServletResponse response,
+		boolean initialize) {
+
+		return getPortal().getLocale(request, response, initialize);
 	}
 
 	public static Locale getLocale(RenderRequest renderRequest) {
@@ -1209,6 +1223,22 @@ public class PortalUtil {
 		return getPortal().getSelectedUser(portletRequest, checkPermission);
 	}
 
+	public static PortletURL getSiteAdministrationURL(
+			PortletResponse portletResponse, ThemeDisplay themeDisplay)
+		throws SystemException {
+
+		return getPortal().getSiteAdministrationURL(
+			portletResponse, themeDisplay);
+	}
+
+	public static PortletURL getSiteAdministrationURL(
+		PortletResponse portletResponse, ThemeDisplay themeDisplay,
+		String portletName) {
+
+		return getPortal().getSiteAdministrationURL(
+			portletResponse, themeDisplay, portletName);
+	}
+
 	public static long[] getSiteAndCompanyGroupIds(long groupId)
 		throws PortalException, SystemException {
 
@@ -1410,6 +1440,10 @@ public class PortalUtil {
 
 	public static void initCustomSQL() {
 		getPortal().initCustomSQL();
+	}
+
+	public static User initUser(HttpServletRequest request) throws Exception {
+		return getPortal().initUser(request);
 	}
 
 	public static void invokeTaglibDiscussion(

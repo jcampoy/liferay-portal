@@ -99,6 +99,7 @@ import javax.servlet.http.HttpSession;
 @DoPrivileged
 public class PortletContainerImpl implements PortletContainer {
 
+	@Override
 	public void preparePortlet(HttpServletRequest request, Portlet portlet)
 		throws PortletContainerException {
 
@@ -110,6 +111,7 @@ public class PortletContainerImpl implements PortletContainer {
 		}
 	}
 
+	@Override
 	public ActionResult processAction(
 			HttpServletRequest request, HttpServletResponse response,
 			Portlet portlet)
@@ -123,6 +125,7 @@ public class PortletContainerImpl implements PortletContainer {
 		}
 	}
 
+	@Override
 	public List<Event> processEvent(
 			HttpServletRequest request, HttpServletResponse response,
 			Portlet portlet, Layout layout, Event event)
@@ -136,6 +139,7 @@ public class PortletContainerImpl implements PortletContainer {
 		}
 	}
 
+	@Override
 	public void render(
 			HttpServletRequest request, HttpServletResponse response,
 			Portlet portlet)
@@ -149,6 +153,7 @@ public class PortletContainerImpl implements PortletContainer {
 		}
 	}
 
+	@Override
 	public void serveResource(
 			HttpServletRequest request, HttpServletResponse response,
 			Portlet portlet)
@@ -166,7 +171,9 @@ public class PortletContainerImpl implements PortletContainer {
 			HttpServletRequest request, Portlet portlet)
 		throws Exception {
 
-		if (!PropsValues.PORTLET_EVENT_DISTRIBUTION_LAYOUT_SET) {
+		if (!PropsValues.PORTLET_EVENT_DISTRIBUTION_LAYOUT_SET ||
+			PropsValues.PORTLET_CROSS_LAYOUT_INVOCATION_MODE.equals("render")) {
+
 			return request;
 		}
 
@@ -903,13 +910,15 @@ public class PortletContainerImpl implements PortletContainer {
 		String portletPrimaryKey = PortletPermissionUtil.getPrimaryKey(
 			layout.getPlid(), portlet.getPortletId());
 
+		portletDisplay.setControlPanelCategory(
+			portlet.getControlPanelEntryCategory());
 		portletDisplay.setId(portlet.getPortletId());
-		portletDisplay.setRootPortletId(portlet.getRootPortletId());
 		portletDisplay.setInstanceId(portlet.getInstanceId());
-		portletDisplay.setResourcePK(portletPrimaryKey);
-		portletDisplay.setPortletName(portletConfig.getPortletName());
 		portletDisplay.setNamespace(
 			PortalUtil.getPortletNamespace(portlet.getPortletId()));
+		portletDisplay.setPortletName(portletConfig.getPortletName());
+		portletDisplay.setResourcePK(portletPrimaryKey);
+		portletDisplay.setRootPortletId(portlet.getRootPortletId());
 
 		WebDAVStorage webDAVStorage = portlet.getWebDAVStorageInstance();
 

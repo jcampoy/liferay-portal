@@ -55,17 +55,17 @@
 </tr>
 <tr>
 	<td>waitForVisible</td>
-	<td>//div[@class='lfr-component lfr-menu-list']/ul/li/a[contains(.,'User')]</td>
+	<td>//div[@class='lfr-menu-list unstyled']/ul/li/a[contains(.,'User')]</td>
 	<td>User</td>
 </tr>
 <tr>
 	<td>assertText</td>
-	<td>//div[@class='lfr-component lfr-menu-list']/ul/li/a[contains(.,'User')]</td>
+	<td>//div[@class='lfr-menu-list unstyled']/ul/li/a[contains(.,'User')]</td>
 	<td>User</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//div[@class='lfr-component lfr-menu-list']/ul/li/a[contains(.,'User')]</td>
+	<td>//div[@class='lfr-menu-list unstyled']/ul/li/a[contains(.,'User')]</td>
 	<td>User</td>
 </tr>
 <tr>
@@ -105,17 +105,17 @@
 </tr>
 <tr>
 	<td>select</td>
-	<td>//select[@id='_125_birthdayMonth']</td>
+	<td>//select[@name='_125_birthdayMonth']</td>
 	<td>label=April</td>
 </tr>
 <tr>
 	<td>select</td>
-	<td>//select[@id='_125_birthdayDay']</td>
+	<td>//select[@name='_125_birthdayDay']</td>
 	<td>label=10</td>
 </tr>
 <tr>
 	<td>select</td>
-	<td>//select[@id='_125_birthdayYear']</td>
+	<td>//select[@name='_125_birthdayYear']</td>
 	<td>label=1986</td>
 </tr>
 <tr>
@@ -229,24 +229,24 @@
 	<td></td>
 </tr>
 <tr>
-	<td>selectWindow</td>
-	<td>title=Users and Organizations</td>
+	<td>selectFrame</td>
+	<td>//iframe</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForVisible</td>
-	<td>//td/a</td>
+	<td>//tr/td[contains(.,'Administrator')]</td>
 	<td>Administrator</td>
 </tr>
 <tr>
 	<td>assertText</td>
-	<td>//td/a</td>
+	<td>//tr/td[contains(.,'Administrator')]</td>
 	<td>Administrator</td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//td/a</td>
-	<td>Administrator</td>
+	<td>//input[@value='Choose']</td>
+	<td>Choose</td>
 </tr>
 <tr>
 	<td>pause</td>
@@ -254,13 +254,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>selectWindow</td>
-	<td>null</td>
+	<td>selectFrame</td>
+	<td>relative=top</td>
 	<td></td>
 </tr>
 <tr>
 	<td>assertText</td>
-	<td>//table/tr/td[1]</td>
+	<td>//tr/td[contains(.,'Administrator')]</td>
 	<td>Administrator</td>
 </tr>
 <tr>
@@ -274,8 +274,13 @@
 	<td>Your request completed successfully.</td>
 </tr>
 <tr>
+	<td>waitForVisible</td>
+	<td>//tr/td[contains(.,'Administrator')]</td>
+	<td>Administrator</td>
+</tr>
+<tr>
 	<td>assertText</td>
-	<td>//tr[3]/td[1]</td>
+	<td>//tr/td[contains(.,'Administrator')]</td>
 	<td>Administrator</td>
 </tr>
 <tr>

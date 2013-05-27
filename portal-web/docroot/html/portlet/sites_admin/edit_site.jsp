@@ -103,14 +103,24 @@ if (!trashEnabled && ArrayUtil.contains(advancedSections, "recycle-bin")) {
 	advancedSections = ArrayUtil.remove(advancedSections, "recycle-bin");
 }
 
+if ((group != null) && group.isCompany()) {
+	mainSections = ArrayUtil.remove(mainSections, "categorization");
+	mainSections = ArrayUtil.remove(mainSections, "site-url");
+	mainSections = ArrayUtil.remove(mainSections, "site-template");
+
+	seoSections = new String[0];
+
+	advancedSections = ArrayUtil.remove(advancedSections, "default-user-associations");
+	advancedSections = ArrayUtil.remove(advancedSections, "analytics");
+	advancedSections = ArrayUtil.remove(advancedSections, "content-sharing");
+}
+
 String[][] categorySections = {mainSections, seoSections, advancedSections, miscellaneousSections};
 %>
 
-<c:if test="<%= portletName.equals(PortletKeys.SITES_ADMIN) %>">
-	<liferay-util:include page="/html/portlet/sites_admin/toolbar.jsp">
-		<liferay-util:param name="toolbarItem" value='<%= (group == null) ? "add" : "browse" %>' />
-	</liferay-util:include>
-</c:if>
+<liferay-util:include page="/html/portlet/sites_admin/toolbar.jsp">
+	<liferay-util:param name="toolbarItem" value='<%= (group == null) ? "add" : "browse" %>' />
+</liferay-util:include>
 
 <%
 boolean localizeTitle = true;
@@ -170,12 +180,6 @@ else if (layoutSetPrototype != null) {
 <aui:script>
 	function <portlet:namespace />saveGroup() {
 		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = "<%= (group == null) ? Constants.ADD : Constants.UPDATE %>";
-
-		var redirect = "<portlet:renderURL><portlet:param name="struts_action" value="/sites_admin/edit_site" /><portlet:param name="backURL" value="<%= backURL %>"></portlet:param></portlet:renderURL>";
-
-		redirect += Liferay.Util.getHistoryParam('<portlet:namespace />');
-
-		document.<portlet:namespace />fm.<portlet:namespace />redirect.value = redirect;
 
 		var ok = true;
 

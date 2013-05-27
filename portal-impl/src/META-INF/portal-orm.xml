@@ -51,6 +51,9 @@
 	<mapped-superclass class="com.liferay.portal.model.impl.AddressModelImpl">
 		<attributes>
 			<id name="addressId" />
+			<basic name="uuid">
+				<column name="UUID_" />
+			</basic>
 			<basic name="companyId" />
 			<basic name="userId" />
 			<basic name="userName" />
@@ -208,6 +211,9 @@
 	<mapped-superclass class="com.liferay.portal.model.impl.EmailAddressModelImpl">
 		<attributes>
 			<id name="emailAddressId" />
+			<basic name="uuid">
+				<column name="UUID_" />
+			</basic>
 			<basic name="companyId" />
 			<basic name="userId" />
 			<basic name="userName" />
@@ -289,6 +295,8 @@
 			</basic>
 			<basic name="groupId" />
 			<basic name="companyId" />
+			<basic name="userId" />
+			<basic name="userName" />
 			<basic name="createDate">
 				<temporal>TIMESTAMP</temporal>
 			</basic>
@@ -335,6 +343,7 @@
 			<transient name="robotsMap" />
 			<transient name="titleCurrentLanguageId" />
 			<transient name="titleMap" />
+			<transient name="userUuid" />
 		</attributes>
 	</mapped-superclass>
 	<mapped-superclass class="com.liferay.portal.model.impl.LayoutBranchModelImpl">
@@ -353,6 +362,23 @@
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
 			<transient name="userUuid" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="com.liferay.portal.model.impl.LayoutFriendlyURLModelImpl">
+		<attributes>
+			<id name="layoutFriendlyURLId" />
+			<basic name="uuid">
+				<column name="UUID_" />
+			</basic>
+			<basic name="groupId" />
+			<basic name="companyId" />
+			<basic name="plid" />
+			<basic name="privateLayout" />
+			<basic name="friendlyURL" />
+			<basic name="languageId" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
 		</attributes>
 	</mapped-superclass>
 	<mapped-superclass class="com.liferay.portal.model.impl.LayoutPrototypeModelImpl">
@@ -747,6 +773,9 @@
 	<mapped-superclass class="com.liferay.portal.model.impl.PhoneModelImpl">
 		<attributes>
 			<id name="phoneId" />
+			<basic name="uuid">
+				<column name="UUID_" />
+			</basic>
 			<basic name="companyId" />
 			<basic name="userId" />
 			<basic name="userName" />
@@ -1351,6 +1380,9 @@
 	<mapped-superclass class="com.liferay.portal.model.impl.WebsiteModelImpl">
 		<attributes>
 			<id name="websiteId" />
+			<basic name="uuid">
+				<column name="UUID_" />
+			</basic>
 			<basic name="companyId" />
 			<basic name="userId" />
 			<basic name="userName" />
@@ -1707,6 +1739,34 @@
 			<transient name="primaryKeyObj" />
 			<transient name="titleCurrentLanguageId" />
 			<transient name="titleMap" />
+			<transient name="userUuid" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="com.liferay.portlet.backgroundtask.model.impl.BTEntryModelImpl">
+		<attributes>
+			<id name="btEntryId" />
+			<basic name="groupId" />
+			<basic name="companyId" />
+			<basic name="userId" />
+			<basic name="userName" />
+			<basic name="createDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="modifiedDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="name" />
+			<basic name="servletContextNames" />
+			<basic name="taskExecutorClassName" />
+			<basic name="taskContext" />
+			<basic name="completed" />
+			<basic name="completionDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="status" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
 			<transient name="userUuid" />
 		</attributes>
 	</mapped-superclass>
@@ -2141,28 +2201,6 @@
 			<transient name="primaryKeyObj" />
 			<transient name="statusByUserUuid" />
 			<transient name="userUuid" />
-		</attributes>
-	</mapped-superclass>
-	<mapped-superclass class="com.liferay.portlet.documentlibrary.model.impl.DLSyncModelImpl">
-		<attributes>
-			<id name="syncId" />
-			<basic name="companyId" />
-			<basic name="createDate" />
-			<basic name="modifiedDate" />
-			<basic name="fileId" />
-			<basic name="fileUuid" />
-			<basic name="repositoryId" />
-			<basic name="parentFolderId" />
-			<basic name="name" />
-			<basic name="description" />
-			<basic name="event" />
-			<basic name="type">
-				<column name="TYPE_" />
-			</basic>
-			<basic name="version" />
-			<transient name="modelAttributes" />
-			<transient name="primaryKey" />
-			<transient name="primaryKeyObj" />
 		</attributes>
 	</mapped-superclass>
 	<mapped-superclass class="com.liferay.portlet.dynamicdatalists.model.impl.DDLRecordModelImpl">
@@ -3925,6 +3963,10 @@
 		<table name="LayoutBranch" />
 		<attributes />
 	</entity>
+	<entity class="com.liferay.portal.model.impl.LayoutFriendlyURLImpl" name="LayoutFriendlyURL">
+		<table name="LayoutFriendlyURL" />
+		<attributes />
+	</entity>
 	<entity class="com.liferay.portal.model.impl.LayoutPrototypeImpl" name="LayoutPrototype">
 		<table name="LayoutPrototype" />
 		<attributes />
@@ -4007,6 +4049,7 @@
 	<entity class="com.liferay.portal.model.impl.PortletImpl" name="Portlet">
 		<table name="Portlet" />
 		<attributes>
+			<transient name="DDMDisplayClass" />
 			<transient name="URLEncoderClass" />
 			<transient name="actionTimeout" />
 			<transient name="actionURLRedirect" />
@@ -4276,6 +4319,10 @@
 			<transient name="settingsProperties" />
 		</attributes>
 	</entity>
+	<entity class="com.liferay.portlet.backgroundtask.model.impl.BTEntryImpl" name="BTEntry">
+		<table name="BTEntry" />
+		<attributes />
+	</entity>
 	<entity class="com.liferay.portlet.blogs.model.impl.BlogsEntryImpl" name="BlogsEntry">
 		<table name="BlogsEntry" />
 		<attributes>
@@ -4334,10 +4381,6 @@
 	</entity>
 	<entity class="com.liferay.portlet.documentlibrary.model.impl.DLFolderImpl" name="DLFolder">
 		<table name="DLFolder" />
-		<attributes />
-	</entity>
-	<entity class="com.liferay.portlet.documentlibrary.model.impl.DLSyncImpl" name="DLSync">
-		<table name="DLSync" />
 		<attributes />
 	</entity>
 	<entity class="com.liferay.portlet.dynamicdatalists.model.impl.DDLRecordImpl" name="DDLRecord">

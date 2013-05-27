@@ -44,6 +44,7 @@ public class Entity {
 	public static final Accessor<Entity, String> NAME_ACCESSOR =
 		new Accessor<Entity, String>() {
 
+			@Override
 			public String get(Entity entity) {
 				return entity.getName();
 			}
@@ -171,6 +172,14 @@ public class Entity {
 
 	@Override
 	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof Entity)) {
+			return false;
+		}
+
 		Entity entity = (Entity)obj;
 
 		String name = entity.getName();

@@ -38,10 +38,12 @@ import java.util.Map;
  */
 public class DDLTemplateHandler extends BaseDDMTemplateHandler {
 
+	@Override
 	public String getClassName() {
 		return DDLRecordSet.class.getName();
 	}
 
+	@Override
 	public String getName(Locale locale) {
 		String portletTitle = PortalUtil.getPortletTitle(
 			PortletKeys.DYNAMIC_DATA_LISTS, locale);
@@ -50,17 +52,18 @@ public class DDLTemplateHandler extends BaseDDMTemplateHandler {
 			LanguageUtil.get(locale, "template"));
 	}
 
+	@Override
 	public String getResourceName() {
 		return "com.liferay.portlet.dynamicdatalists";
 	}
 
 	@Override
 	public Map<String, TemplateVariableGroup> getTemplateVariableGroups(
-			long classPK, Locale locale)
+			long classPK, String language, Locale locale)
 		throws Exception {
 
 		Map<String, TemplateVariableGroup> templateVariableGroups =
-			super.getTemplateVariableGroups(classPK, locale);
+			super.getTemplateVariableGroups(classPK, language, locale);
 
 		TemplateVariableGroup ddlServicesTemplateVariableGroup =
 			new TemplateVariableGroup("data-list-services");

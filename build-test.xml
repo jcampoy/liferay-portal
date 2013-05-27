@@ -337,6 +337,16 @@
 		</if>
 
 		<if>
+			<equals arg1="${test.ant.script.selenium.logger.enabled}" arg2="true" />
+			<then>
+				<property name="test.ant.script.file.selenium.logger.enabled" value="&lt;property name=&quot;test.selenium.logger.enabled&quot; value=&quot;true&quot; /&gt;" />
+			</then>
+			<else>
+				<property name="test.ant.script.file.selenium.logger.enabled" value=" " />
+			</else>
+		</if>
+
+		<if>
 			<not>
 				<isset property="test.ant.script.template" />
 			</not>
@@ -369,6 +379,16 @@
 			</then>
 			<else>
 				<property name="test.ant.script.file.selenium.implementation" value="&lt;param name=&quot;test.selenium.implementation&quot; value=&quot;selenium&quot; /&gt;" />
+			</else>
+		</if>
+
+		<if>
+			<equals arg1="${test.ant.script.selenium.logger.enabled}" arg2="true" />
+			<then>
+				<property name="test.ant.script.file.selenium.logger.enabled" value="&lt;param name=&quot;test.selenium.logger.enabled&quot; value=&quot;true&quot; /&gt;" />
+			</then>
+			<else>
+				<property name="test.ant.script.file.selenium.logger.enabled" value=" " />
 			</else>
 		</if>
 
@@ -427,7 +447,7 @@
 	</target>
 
 	<target name="build-test-ant-scripts">
-		<property name="build-test-ant-scripts.version" value="8" />
+		<property name="build-test-ant-scripts.version" value="0" />
 
 		<if>
 			<available file="portal-web/test-ant-scripts/version" />
@@ -2298,6 +2318,7 @@
 
 		<antcall target="build-test-ant-script">
 			<param name="test.ant.script.command" value="smoke-test" />
+			<param name="test.ant.script.selenium.logger.enabled" value="true" />
 			<param name="test.ant.script.suite" value="SmokeTestSuite" />
 		</antcall>
 
@@ -3094,7 +3115,9 @@
 	</target>
 
 	<target name="prepare-portal-ext-properties" depends="generate-test-properties">
-		<echo file="portal-impl/src/portal-ext.properties">plugin.notifications.enabled=false
+		<echo file="portal-impl/src/portal-ext.properties">liferay.home=$${user.home}/liferay
+
+plugin.notifications.enabled=false
 
 jdbc.default.jndi.name=
 
@@ -3115,9 +3138,7 @@ mail.session.jndi.name=
 
 axis.servlet.hosts.allowed=
 
-tunnel.servlet.hosts.allowed=
-
-resource.repositories.root=$${user.home}/liferay</echo>
+tunnel.servlet.hosts.allowed=</echo>
 
 		<if>
 			<contains string="${database}" substring="db2" />
@@ -3176,15 +3197,15 @@ organizations.assignment.auto=true
 organizations.assignment.strict=false
 organizations.membership.strict=true
 
-lucene.dir=$${resource.repositories.root}/lucene/
+lucene.dir=$${liferay.home}/lucene/
 
-jcr.jackrabbit.repository.root=$${resource.repositories.root}/jackrabbit
+jcr.jackrabbit.repository.root=$${liferay.home}/jackrabbit
 
 discussion.thread.view=combination
 
 dl.hook.impl=com.liferay.documentlibrary.util.JCRHook
 
-dl.hook.file.system.root.dir=$${resource.repositories.root}/document_library
+dl.hook.file.system.root.dir=$${liferay.home}/document_library
 
 ##
 ## From portal-legacy-5.2.properties
@@ -3376,8 +3397,8 @@ message.boards.subscribe.by.default=false</echo>
 			<then>
 				<replace
 					file="portal-impl/src/portal-ext.properties"
-					token="resource.repositories.root=$${user.home}/liferay"
-					value="resource.repositories.root=C:/WINDOWS/system32/config/systemprofile/liferay"
+					token="liferay.home=$${user.home}/liferay"
+					value="liferay.home=C:/WINDOWS/system32/config/systemprofile/liferay"
 				/>
 
 				<echo file="portal-impl/src/portal-ext.properties" append="true">
@@ -3440,8 +3461,8 @@ auto.deploy.dest.dir=C:/WINDOWS/system32/config/systemprofile/liferay/websphere-
 			</then>
 		</if>
 
-		<exec dir="${project.dir}" executable="cmd.exe" os="${os.windows}" outputproperty="svn.info.output">
-			<arg line="/c svn info" />
+		<exec dir="${project.dir}" executable="svn" outputproperty="svn.info.output">
+			<arg line="info" />
 		</exec>
 
 		<script classpathref="project.classpath" language="beanshell">
@@ -3587,6 +3608,17 @@ svn --username ${svn.username} --password ${svn.password} update -r ${svn.info.r
 		</if>
 
 		<if>
+			<equals arg1="${test.selenium.logger.enabled}" arg2="true" />
+			<then>
+				<replace
+					file="portal-web/test/test-portal-web.properties"
+					token="selenium.logger.enabled=false"
+					value="selenium.logger.enabled=true"
+				/>
+			</then>
+		</if>
+
+		<if>
 			<isset property="test.database.minimal" />
 			<then>
 				<replace
@@ -3598,7 +3630,7 @@ svn --username ${svn.username} --password ${svn.password} update -r ${svn.info.r
 		</if>
 	</target>
 
-	<target name="prepare-test-properties">
+	<target name="prepare-test-properties" depends="generate-test-properties">
 		<echo file="portal-impl/test/portal-test-ext.properties">
 jdbc.default.driverClassName=${database.driver}
 jdbc.default.url=${database.url}
@@ -3837,16 +3869,16 @@ custom.sql.function.isnotnull=CONVERT(VARCHAR,?) IS NOT NULL</echo>
 				<echo>Portal GIT ID:</echo>
 				<echo />
 
-				<exec dir="${project.dir}" executable="cmd.exe" os="${os.windows}">
-					<arg line="/c git log -n 1" />
+				<exec dir="${project.dir}" executable="git">
+					<arg line="log -n 1" />
 				</exec>
 
 				<echo />
 				<echo>Plugins GIT ID:</echo>
 				<echo />
 
-				<exec dir="${lp.plugins.dir}" executable="cmd.exe" os="${os.windows}">
-					<arg line="/c git log -n 1" />
+				<exec dir="${lp.plugins.dir}" executable="git">
+					<arg line="log -n 1" />
 				</exec>
 
 				<echo />
@@ -3855,16 +3887,16 @@ custom.sql.function.isnotnull=CONVERT(VARCHAR,?) IS NOT NULL</echo>
 				<echo>Portal SVN Revision:</echo>
 				<echo />
 
-				<exec dir="${project.dir}" executable="cmd.exe" os="${os.windows}">
-					<arg line="/c svn info" />
+				<exec dir="${project.dir}" executable="svn">
+					<arg line="info" />
 				</exec>
 
 				<echo />
 				<echo>Plugins SVN Revision:</echo>
 				<echo />
 
-				<exec dir="${lp.plugins.dir}" executable="cmd.exe" os="${os.windows}">
-					<arg line="/c svn info" />
+				<exec dir="${lp.plugins.dir}" executable="svn">
+					<arg line="info" />
 				</exec>
 			</else>
 		</if>

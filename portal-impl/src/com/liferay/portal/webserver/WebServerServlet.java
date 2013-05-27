@@ -31,7 +31,6 @@ import com.liferay.portal.kernel.servlet.Range;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.template.Template;
 import com.liferay.portal.kernel.template.TemplateConstants;
-import com.liferay.portal.kernel.template.TemplateContextType;
 import com.liferay.portal.kernel.template.TemplateManagerUtil;
 import com.liferay.portal.kernel.template.TemplateResource;
 import com.liferay.portal.kernel.template.URLTemplateResource;
@@ -693,33 +692,34 @@ public class WebServerServlet extends HttpServlet {
 			String[] pathArray)
 		throws Exception {
 
-		if (pathArray.length == 5) {
-			String className = GetterUtil.getString(pathArray[1]);
-			long classPK = GetterUtil.getLong(pathArray[2]);
-			String fieldName = GetterUtil.getString(pathArray[3]);
-			int valueIndex = GetterUtil.getInteger(pathArray[4]);
+		if (pathArray.length != 5) {
+			return;
+		}
 
-			Field field = null;
+		String className = GetterUtil.getString(pathArray[1]);
+		long classPK = GetterUtil.getLong(pathArray[2]);
+		String fieldName = GetterUtil.getString(pathArray[3]);
+		int valueIndex = GetterUtil.getInteger(pathArray[4]);
 
-			if (className.equals(DDLRecord.class.getName())) {
-				DDLRecord ddlRecord = DDLRecordLocalServiceUtil.getRecord(
+		Field field = null;
+
+		if (className.equals(DDLRecord.class.getName())) {
+			DDLRecord ddlRecord = DDLRecordLocalServiceUtil.getRecord(classPK);
+
+			field = ddlRecord.getField(fieldName);
+		}
+		else if (className.equals(DLFileEntryMetadata.class.getName())) {
+			DLFileEntryMetadata fileEntryMetadata =
+				DLFileEntryMetadataLocalServiceUtil.getDLFileEntryMetadata(
 					classPK);
 
-				field = ddlRecord.getField(fieldName);
-			}
-			else if (className.equals(DLFileEntryMetadata.class.getName())) {
-				DLFileEntryMetadata fileEntryMetadata =
-					DLFileEntryMetadataLocalServiceUtil.getDLFileEntryMetadata(
-						classPK);
+			Fields fields = StorageEngineUtil.getFields(
+				fileEntryMetadata.getDDMStorageId());
 
-				Fields fields = StorageEngineUtil.getFields(
-					fileEntryMetadata.getDDMStorageId());
-
-				field = fields.get(fieldName);
-			}
-
-			DDMUtil.sendFieldFile(request, response, field, valueIndex);
+			field = fields.get(fieldName);
 		}
+
+		DDMUtil.sendFieldFile(request, response, field, valueIndex);
 	}
 
 	protected void sendDocumentLibrary(
@@ -1137,8 +1137,7 @@ public class WebServerServlet extends HttpServlet {
 		throws Exception {
 
 		Template template = TemplateManagerUtil.getTemplate(
-			TemplateConstants.LANG_TYPE_FTL, _templateResource,
-			TemplateContextType.RESTRICTED);
+			TemplateConstants.LANG_TYPE_FTL, _templateResource, true);
 
 		template.put("dateFormat", _dateFormat);
 		template.put("entries", webServerEntries);

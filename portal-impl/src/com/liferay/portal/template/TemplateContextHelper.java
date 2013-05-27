@@ -25,7 +25,6 @@ import com.liferay.portal.kernel.portlet.PortletModeFactory_IW;
 import com.liferay.portal.kernel.portlet.WindowStateFactory_IW;
 import com.liferay.portal.kernel.servlet.BrowserSnifferUtil;
 import com.liferay.portal.kernel.template.Template;
-import com.liferay.portal.kernel.template.TemplateContextType;
 import com.liferay.portal.kernel.template.TemplateHandler;
 import com.liferay.portal.kernel.template.TemplateHandlerRegistryUtil;
 import com.liferay.portal.kernel.template.TemplateVariableGroup;
@@ -95,7 +94,6 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 
 import java.util.Collections;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -121,7 +119,7 @@ import org.apache.struts.tiles.ComponentContext;
 public class TemplateContextHelper {
 
 	public static Map<String, TemplateVariableGroup> getTemplateVariableGroups(
-			long classNameId, long classPK, Locale locale)
+			long classNameId, long classPK, String language, Locale locale)
 		throws Exception {
 
 		TemplateHandler templateHandler =
@@ -132,13 +130,8 @@ public class TemplateContextHelper {
 		}
 
 		Map<String, TemplateVariableGroup> templateVariableGroups =
-			templateHandler.getTemplateVariableGroups(classPK, locale);
-
-		TemplateVariableGroup utilTemplateVariableGroup =
-			templateVariableGroups.get("util");
-
-		utilTemplateVariableGroup.addVariable(
-			"http-request", HttpServletRequest.class, "request");
+			templateHandler.getTemplateVariableGroups(
+				classPK, language, locale);
 
 		TemplateVariableGroup portalServicesTemplateVariableGroup =
 			new TemplateVariableGroup("portal-services");
@@ -158,9 +151,7 @@ public class TemplateContextHelper {
 		return templateVariableGroups;
 	}
 
-	public Map<String, Object> getHelperUtilities(
-		TemplateContextType templateContextType) {
-
+	public Map<String, Object> getHelperUtilities(boolean restricted) {
 		TemplateControlContext templateControlContext =
 			getTemplateControlContext();
 
@@ -169,12 +160,11 @@ public class TemplateContextHelper {
 		ClassLoader classLoader = templateControlContext.getClassLoader();
 
 		if (accessControlContext == null) {
-			return doGetHelperUtilities(classLoader, templateContextType);
+			return doGetHelperUtilities(classLoader, restricted);
 		}
 
 		return AccessController.doPrivileged(
-			new DoGetHelperUtilitiesPrivilegedAction(
-				classLoader, templateContextType),
+			new DoGetHelperUtilitiesPrivilegedAction(classLoader, restricted),
 			accessControlContext);
 	}
 
@@ -332,23 +322,29 @@ public class TemplateContextHelper {
 	}
 
 	protected Map<String, Object> doGetHelperUtilities(
-		ClassLoader classLoader, TemplateContextType templateContextType) {
+		ClassLoader classLoader, boolean restricted) {
 
-		HelperUtilitiesMap helperUtilitiesMap = _helperUtilitiesMaps.get(
+		Map<String, Object> helperUtilities = null;
+
+		Map<String, Object>[] helperUtilitiesArray = _helperUtilitiesMaps.get(
 			classLoader);
 
-		if (helperUtilitiesMap == null) {
-			helperUtilitiesMap = new HelperUtilitiesMap(
-				TemplateContextType.class);
+		if (helperUtilitiesArray == null) {
+			helperUtilitiesArray = (Map<String, Object>[])new Map<?, ?>[2];
 
-			_helperUtilitiesMaps.put(classLoader, helperUtilitiesMap);
+			_helperUtilitiesMaps.put(classLoader, helperUtilitiesArray);
 		}
+		else {
+			if (restricted) {
+				helperUtilities = helperUtilitiesArray[1];
+			}
+			else {
+				helperUtilities = helperUtilitiesArray[0];
+			}
 
-		Map<String, Object> helperUtilities = helperUtilitiesMap.get(
-			templateContextType);
-
-		if (helperUtilities != null) {
-			return helperUtilities;
+			if (helperUtilities != null) {
+				return helperUtilities;
+			}
 		}
 
 		helperUtilities = new HashMap<String, Object>();
@@ -356,17 +352,18 @@ public class TemplateContextHelper {
 		populateCommonHelperUtilities(helperUtilities);
 		populateExtraHelperUtilities(helperUtilities);
 
-		if (templateContextType.equals(TemplateContextType.RESTRICTED)) {
+		if (restricted) {
 			Set<String> restrictedVariables = getRestrictedVariables();
 
 			for (String restrictedVariable : restrictedVariables) {
 				helperUtilities.remove(restrictedVariable);
 			}
+
+			helperUtilitiesArray[1] = helperUtilities;
 		}
-
-		helperUtilities = Collections.unmodifiableMap(helperUtilities);
-
-		helperUtilitiesMap.put(templateContextType, helperUtilities);
+		else {
+			helperUtilitiesArray[0] = helperUtilities;
+		}
 
 		return helperUtilities;
 	}
@@ -677,7 +674,7 @@ public class TemplateContextHelper {
 			Method method = clazz.getMethod(
 				"layoutIcon", new Class[] {Layout.class});
 
-			variables.put("velocityTaglib#layoutIcon", method);
+			variables.put("velocityTaglib_layoutIcon", method);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -864,12 +861,12 @@ public class TemplateContextHelper {
 
 	private static PACL _pacl = new NoPACL();
 
-	private Map<ClassLoader, HelperUtilitiesMap>
-		_helperUtilitiesMaps = new ConcurrentHashMap
-			<ClassLoader, HelperUtilitiesMap>();
+	private Map<ClassLoader, Map<String, Object>[]> _helperUtilitiesMaps =
+		new ConcurrentHashMap<ClassLoader, Map<String, Object>[]>();
 
 	private static class NoPACL implements PACL {
 
+		@Override
 		public TemplateControlContext getTemplateControlContext() {
 			ClassLoader contextClassLoader =
 				ClassLoaderUtil.getContextClassLoader();
@@ -889,27 +886,19 @@ public class TemplateContextHelper {
 		implements PrivilegedAction<Map<String, Object>> {
 
 		public DoGetHelperUtilitiesPrivilegedAction(
-			ClassLoader classLoader, TemplateContextType templateContextType) {
+			ClassLoader classLoader, boolean restricted) {
 
 			_classLoader = classLoader;
-			_templateContextType = templateContextType;
+			_restricted = restricted;
 		}
 
+		@Override
 		public Map<String, Object> run() {
-			return doGetHelperUtilities(_classLoader, _templateContextType);
+			return doGetHelperUtilities(_classLoader, _restricted);
 		}
 
 		private ClassLoader _classLoader;
-		private TemplateContextType _templateContextType;
-
-	}
-
-	private class HelperUtilitiesMap
-		extends EnumMap<TemplateContextType, Map<String, Object>> {
-
-		public HelperUtilitiesMap(Class<TemplateContextType> keyClazz) {
-			super(keyClazz);
-		}
+		private boolean _restricted;
 
 	}
 

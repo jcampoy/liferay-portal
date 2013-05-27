@@ -44,10 +44,15 @@
 	<bean id="com.liferay.portal.kernel.cache.MultiVMPoolUtil" class="com.liferay.portal.kernel.cache.MultiVMPoolUtil">
 		<property name="multiVMPool" ref="com.liferay.portal.kernel.cache.MultiVMPool" />
 	</bean>
-	<bean id="com.liferay.portal.kernel.cache.MultiVMPortalCacheManager" class="com.liferay.portal.cache.ehcache.EhcachePortalCacheManager">
-		<property name="clusterAware" value="true" />
-		<property name="configPropertyKey" value="ehcache.multi.vm.config.location" />
-		<property name="MBeanServer" ref="registryAwareMBeanServer" />
+	<bean id="com.liferay.portal.kernel.cache.MultiVMPortalCacheManager" class="com.liferay.portal.resiliency.spi.cache.SPIPortalCacheManagerConfigurator" factory-method="createSPIPortalCacheManager">
+		<constructor-arg name="portalCacheManager">
+			<bean class="com.liferay.portal.cache.ehcache.EhcachePortalCacheManager">
+				<property name="clusterAware" value="true" />
+				<property name="configPropertyKey" value="ehcache.multi.vm.config.location" />
+				<property name="MBeanServer" ref="registryAwareMBeanServer" />
+				<property name="mpiOnly" value="true" />
+			</bean>
+		</constructor-arg>
 	</bean>
 	<!--<bean id="com.liferay.kernel.portal.cache.MultiVMPortalCacheManager" class="com.liferay.portal.cache.memory.MemoryPortalCacheManager" />-->
 	<bean id="com.liferay.portal.kernel.cache.SingleVMPool" class="com.liferay.portal.cache.SingleVMPoolImpl">
@@ -208,6 +213,10 @@
 		<property name="unicodeLanguage">
 			<bean class="com.liferay.portal.language.UnicodeLanguageImpl" />
 		</property>
+	</bean>
+	<bean id="com.liferay.portal.kernel.lar.ExportImport" class="com.liferay.portal.lar.ExportImportImpl" />
+	<bean id="com.liferay.portal.kernel.lar.ExportImportUtil" class="com.liferay.portal.kernel.lar.ExportImportUtil">
+		<property name="exportImport" ref="com.liferay.portal.kernel.lar.ExportImport" />
 	</bean>
 	<bean id="com.liferay.portal.kernel.lar.StagedModelDataHandlerRegistry" class="com.liferay.portal.lar.StagedModelDataHandlerRegistryImpl" />
 	<bean id="com.liferay.portal.kernel.lar.StagedModelDataHandlerRegistryUtil" class="com.liferay.portal.kernel.lar.StagedModelDataHandlerRegistryUtil">
@@ -640,6 +649,11 @@
 			<bean class="com.liferay.portal.security.permission.PermissionCheckerFactoryImpl" />
 		</property>
 	</bean>
+	<bean id="com.liferay.portal.security.permission.PermissionConverterUtil" class="com.liferay.portal.security.permission.PermissionConverterUtil">
+		<property name="permissionConverter">
+			<bean class="com.liferay.portal.security.permission.PermissionConverterImpl" />
+		</property>
+	</bean>
 	<bean id="com.liferay.portal.security.permission.ResourceActionsUtil" class="com.liferay.portal.security.permission.ResourceActionsUtil">
 		<property name="resourceActions">
 			<bean class="com.liferay.portal.security.permission.ResourceActionsImpl" />
@@ -910,6 +924,11 @@
 	<bean id="com.liferay.portlet.dynamicdatamapping.storage.query.ConditionFactoryUtil" class="com.liferay.portlet.dynamicdatamapping.storage.query.ConditionFactoryUtil">
 		<property name="conditionFactory">
 			<bean class="com.liferay.portlet.dynamicdatamapping.storage.query.ConditionFactoryImpl" />
+		</property>
+	</bean>
+		<bean id="com.liferay.portlet.dynamicdatamapping.util.DDMDisplayRegistryUtil" class="com.liferay.portlet.dynamicdatamapping.util.DDMDisplayRegistryUtil">
+		<property name="DDMDisplayRegistry">
+			<bean class="com.liferay.portlet.dynamicdatamapping.util.DDMDisplayRegistryImpl" />
 		</property>
 	</bean>
 	<bean id="com.liferay.portlet.dynamicdatamapping.util.DDMIndexerUtil" class="com.liferay.portlet.dynamicdatamapping.util.DDMIndexerUtil">

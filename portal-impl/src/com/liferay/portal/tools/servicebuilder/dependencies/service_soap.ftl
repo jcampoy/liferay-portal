@@ -14,13 +14,11 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * <p>
- * This class provides a SOAP utility for the
+ * Provides the SOAP utility for the
  * {@link ${packagePath}.service.${entity.name}ServiceUtil} service utility. The
  * static methods of this class calls the same methods of the service utility.
  * However, the signatures are different because it is difficult for SOAP to
  * support certain types.
- * </p>
 <#if entity.hasColumns()>
  *
  * <p>
@@ -103,7 +101,7 @@ public class ${entity.name}ServiceSoap {
 					com.liferay.portal.kernel.repository.model.FileEntrySoap[]
 				<#elseif returnTypeGenericsName == "java.util.List<com.liferay.portal.kernel.repository.model.Folder>">
 					com.liferay.portal.kernel.repository.model.FolderSoap[]
-				<#elseif entity.hasColumns() && serviceBuilder.hasEntityByGenericsName(serviceBuilder.getListActualTypeArguments(method.getReturns()))>
+				<#elseif entity.hasColumns() && (extendedModelName == serviceBuilder.getListActualTypeArguments(method.getReturns()))>
 					${soapModelName}[]
 				<#else>
 					${serviceBuilder.getListActualTypeArguments(method.getReturns())}[]
@@ -230,7 +228,7 @@ public class ${entity.name}ServiceSoap {
 								return com.liferay.portal.kernel.repository.model.FileEntrySoap.toSoapModels(returnValue);
 							<#elseif returnTypeGenericsName == "java.util.List<com.liferay.portal.kernel.repository.model.Folder>">
 								return com.liferay.portal.kernel.repository.model.FolderSoap.toSoapModels(returnValue);
-							<#elseif entity.hasColumns() && serviceBuilder.hasEntityByGenericsName(serviceBuilder.getListActualTypeArguments(method.getReturns()))>
+							<#elseif entity.hasColumns() && (extendedModelName == serviceBuilder.getListActualTypeArguments(method.getReturns()))>
 								return ${soapModelName}.toSoapModels(returnValue);
 							<#else>
 								return returnValue.toArray(new ${serviceBuilder.getListActualTypeArguments(method.getReturns())}[returnValue.size()]);

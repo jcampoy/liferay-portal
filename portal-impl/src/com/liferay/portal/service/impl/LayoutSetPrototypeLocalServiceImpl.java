@@ -42,6 +42,7 @@ import java.util.Map;
 public class LayoutSetPrototypeLocalServiceImpl
 	extends LayoutSetPrototypeLocalServiceBaseImpl {
 
+	@Override
 	public LayoutSetPrototype addLayoutSetPrototype(
 			long userId, long companyId, Map<Locale, String> nameMap,
 			String description, boolean active, boolean layoutsUpdateable,
@@ -156,6 +157,23 @@ public class LayoutSetPrototypeLocalServiceImpl
 		return deleteLayoutSetPrototype(layoutSetPrototype);
 	}
 
+	@Override
+	public void deleteNondefaultLayoutSetPrototypes(long companyId)
+		throws PortalException, SystemException {
+
+		long defaultUserId = userLocalService.getDefaultUserId(companyId);
+
+		List<LayoutSetPrototype> layoutSetPrototypes =
+			layoutSetPrototypePersistence.findByCompanyId(companyId);
+
+		for (LayoutSetPrototype layoutSetPrototype : layoutSetPrototypes) {
+			if (layoutSetPrototype.getUserId() != defaultUserId) {
+				deleteLayoutSetPrototype(layoutSetPrototype);
+			}
+		}
+	}
+
+	@Override
 	public LayoutSetPrototype fetchLayoutSetPrototypeByUuidAndCompanyId(
 			String uuid, long companyId)
 		throws SystemException {
@@ -168,12 +186,14 @@ public class LayoutSetPrototypeLocalServiceImpl
 	 * @deprecated As of 6.2.0, replaced by {@link
 	 *             #getLayoutSetPrototypeByUuidAndCompanyId(String, long)}
 	 */
+	@Override
 	public LayoutSetPrototype getLayoutSetPrototypeByUuid(String uuid)
 		throws PortalException, SystemException {
 
 		return layoutSetPrototypePersistence.findByUuid_First(uuid, null);
 	}
 
+	@Override
 	public LayoutSetPrototype getLayoutSetPrototypeByUuidAndCompanyId(
 			String uuid, long companyId)
 		throws PortalException, SystemException {
@@ -182,6 +202,7 @@ public class LayoutSetPrototypeLocalServiceImpl
 			uuid, companyId, null);
 	}
 
+	@Override
 	public List<LayoutSetPrototype> search(
 			long companyId, Boolean active, int start, int end,
 			OrderByComparator obc)
@@ -197,6 +218,7 @@ public class LayoutSetPrototypeLocalServiceImpl
 		}
 	}
 
+	@Override
 	public int searchCount(long companyId, Boolean active)
 		throws SystemException {
 
@@ -208,6 +230,7 @@ public class LayoutSetPrototypeLocalServiceImpl
 		}
 	}
 
+	@Override
 	public LayoutSetPrototype updateLayoutSetPrototype(
 			long layoutSetPrototypeId, Map<Locale, String> nameMap,
 			String description, boolean active, boolean layoutsUpdateable,
@@ -248,6 +271,7 @@ public class LayoutSetPrototypeLocalServiceImpl
 		return layoutSetPrototype;
 	}
 
+	@Override
 	public LayoutSetPrototype updateLayoutSetPrototype(
 			long layoutSetPrototypeId, String settings)
 		throws PortalException, SystemException {

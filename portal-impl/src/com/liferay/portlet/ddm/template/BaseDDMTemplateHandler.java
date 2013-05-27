@@ -36,8 +36,9 @@ import java.util.Map;
  */
 public abstract class BaseDDMTemplateHandler extends BaseTemplateHandler {
 
+	@Override
 	public Map<String, TemplateVariableGroup> getTemplateVariableGroups(
-			long classPK, Locale locale)
+			long classPK, String language, Locale locale)
 		throws Exception {
 
 		Map<String, TemplateVariableGroup> templateVariableGroups =
@@ -113,8 +114,6 @@ public abstract class BaseDDMTemplateHandler extends BaseTemplateHandler {
 			"random-namespace", String.class, "randomNamespace");
 		templateVariableGroup.addVariable(
 			"templates-path", String.class, "templatesPath");
-		templateVariableGroup.addVariable(
-			"xml-request", String.class, "xmlRequest");
 
 		return templateVariableGroup;
 	}

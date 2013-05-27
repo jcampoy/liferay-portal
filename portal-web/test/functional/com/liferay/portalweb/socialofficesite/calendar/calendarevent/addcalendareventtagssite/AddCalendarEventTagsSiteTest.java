@@ -90,9 +90,8 @@ public class AddCalendarEventTagsSiteTest extends BaseTestCase {
 				}
 
 				assertEquals(RuntimeVariables.replace("Categorization"),
-					selenium.getText(
-						"//div[@id='calendarEventCateogrizationPanel']/div/div/span"));
-				selenium.clickAt("//div[@id='calendarEventCateogrizationPanel']/div/div/span",
+					selenium.getText("//span[contains(.,'Categorization')]"));
+				selenium.clickAt("//span[contains(.,'Categorization')]",
 					RuntimeVariables.replace("Categorization"));
 				selenium.waitForVisible("//input[@title='Add Tags']");
 
@@ -102,19 +101,19 @@ public class AddCalendarEventTagsSiteTest extends BaseTestCase {
 				selenium.clickAt("//button[@id='add']",
 					RuntimeVariables.replace("Add"));
 				selenium.waitForVisible(
-					"xPath=(//span[@class='aui-textboxlistentry-text'])[1]");
+					"xPath=(//span[@class='textboxlistentry-text'])[1]");
 				assertEquals(RuntimeVariables.replace("tag1"),
 					selenium.getText(
-						"xPath=(//span[@class='aui-textboxlistentry-text'])[1]"));
+						"xPath=(//span[@class='textboxlistentry-text'])[1]"));
 				selenium.type("//input[@title='Add Tags']",
 					RuntimeVariables.replace("tag2"));
 				selenium.clickAt("//button[@id='add']",
 					RuntimeVariables.replace("Add"));
 				selenium.waitForVisible(
-					"xPath=(//span[@class='aui-textboxlistentry-text'])[2]");
+					"xPath=(//span[@class='textboxlistentry-text'])[2]");
 				assertEquals(RuntimeVariables.replace("tag2"),
 					selenium.getText(
-						"xPath=(//span[@class='aui-textboxlistentry-text'])[2]"));
+						"xPath=(//span[@class='textboxlistentry-text'])[2]"));
 				selenium.clickAt("//input[@value='Save']",
 					RuntimeVariables.replace("Save"));
 				selenium.waitForPageToLoad("30000");

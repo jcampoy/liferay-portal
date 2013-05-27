@@ -25,6 +25,7 @@ AUI.add(
 					currentUserIdNode: defaultConfig,
 					deleteMissingLayoutsNode: defaultConfig,
 					deletePortletDataNode: defaultConfig,
+					form: defaultConfig,
 					layoutSetSettingsNode: defaultConfig,
 					logoNode: defaultConfig,
 					mirrorNode: defaultConfig,
@@ -33,6 +34,12 @@ AUI.add(
 					rangeDateRangeNode: defaultConfig,
 					rangeLastNode: defaultConfig,
 					rangeLastPublishNode: defaultConfig,
+					remoteAddressNode: defaultConfig,
+					remoteDeletePortletDataNode: defaultConfig,
+					remotePortNode: defaultConfig,
+					remotePathContextNode: defaultConfig,
+					remoteGroupIdNode: defaultConfig,
+					secureConnectionNode: defaultConfig,
 					themeNode: defaultConfig,
 					themeReferenceNode: defaultConfig,
 					userPreferencesNode: defaultConfig
@@ -48,7 +55,11 @@ AUI.add(
 					initializer: function(config) {
 						var instance = this;
 
+						instance._dialogTitle = config.dialogTitle;
+
 						instance._bindUI();
+
+						instance._initLabels();
 					},
 
 					destructor: function() {
@@ -69,12 +80,20 @@ AUI.add(
 						if (instance._rangeDialog) {
 							instance._rangeDialog.destroy();
 						}
+
+						if (instance._remoteDialog) {
+							instance._remoteDialog.destroy();
+						}
+
+						if (instance._scheduledPublishingEventsDialog) {
+							instance._scheduledPublishingEventsDialog.destroy();
+						}
 					},
 
 					_bindUI: function() {
 						var instance = this;
 
-						instance.byId('fm1').delegate(
+						instance.get('form').delegate(
 							STR_CLICK,
 							function(event) {
 								var portletId = event.currentTarget.attr('data-portletid');
@@ -86,40 +105,80 @@ AUI.add(
 							'.content-link'
 						);
 
-						instance.byId('globalConfigurationLink').on(
-							STR_CLICK,
-							function(event) {
-								var globalConfigurationDialog = instance._getGlobalConfigurationDialog();
+						var globalConfigurationLink = instance.byId('globalConfigurationLink');
 
-								globalConfigurationDialog.show();
-							}
-						);
+						if (globalConfigurationLink) {
+							globalConfigurationLink.on(
+								STR_CLICK,
+								function(event) {
+									var globalConfigurationDialog = instance._getGlobalConfigurationDialog();
 
-						instance.byId('globalContentLink').on(
-							STR_CLICK,
-							function(event) {
-								var globalContentDialog = instance._getGlobalContentDialog();
+									globalConfigurationDialog.show();
+								}
+							);
+						}
 
-								globalContentDialog.show();
-							}
-						);
+						var globalContentLink = instance.byId('globalContentLink');
 
-						instance.byId('pagesLink').on(
-							STR_CLICK,
-							function(event) {
-								var pagesDialog = instance._getPagesDialog();
+						if (globalContentLink) {
+							globalContentLink.on(
+								STR_CLICK,
+								function(event) {
+									var globalContentDialog = instance._getGlobalContentDialog();
 
-								pagesDialog.show();
-							}
-						);
+									globalContentDialog.show();
+								}
+							);
+						}
 
-						if (instance.byId('rangeLink')) {
-							instance.byId('rangeLink').on(
+						var pagesLink = instance.byId('pagesLink');
+
+						if (pagesLink) {
+							pagesLink.on(
+								STR_CLICK,
+								function(event) {
+									var pagesDialog = instance._getPagesDialog();
+
+									pagesDialog.show();
+								}
+							);
+						}
+
+						var rangeLink = instance.byId('rangeLink');
+
+						if (rangeLink) {
+							rangeLink.on(
 								STR_CLICK,
 								function(event) {
 									var rangeDialog = instance._getRangeDialog();
 
 									rangeDialog.show();
+								}
+							);
+						}
+
+						var remoteLink = instance.byId('remoteLink');
+
+						if (remoteLink) {
+							remoteLink.on(
+								STR_CLICK,
+								function(event) {
+									var remoteDialog = instance._getRemoteDialog();
+
+									remoteDialog.show();
+								}
+							);
+						}
+
+						var scheduledPublishingEventsLink = instance.byId('scheduledPublishingEventsLink');
+
+						if (scheduledPublishingEventsLink) {
+							scheduledPublishingEventsLink.on(
+								STR_CLICK,
+								function(event) {
+									var scheduledPublishingEventsDialog = instance._getScheduledPublishingEventsDialog();
+
+									scheduledPublishingEventsDialog.show();
 								}
 							);
 						}
@@ -135,32 +194,46 @@ AUI.add(
 						if (!contentDialog) {
 							contentNode.show();
 
-							contentDialog = new A.Dialog(
+							contentDialog = Liferay.Util.Window.getWindow(
 								{
-									align: Liferay.Util.Window.ALIGN_CENTER,
-									bodyContent: contentNode,
-									centered: true,
-									modal: true,
-									title: Liferay.Language.get('content-to-export'),
-									width: 400,
-									buttons: [
-										{
-											handler: function() {
-												instance._handleContent(portletId);
+									dialog: {
+										bodyContent: contentNode,
+										centered: true,
+										height: 300,
+										modal: true,
+										render: instance.get('form'),
+										toolbars: {
+											footer: [
+												{
+													on: {
+														click: function(event) {
+															event.domEvent.preventDefault();
 
-												this.hide();
-											},
-											label: Liferay.Language.get('ok')
+															instance._setContentLabels(portletId);
+
+															contentDialog.hide();
+														}
+													},
+													label: Liferay.Language.get('ok'),
+													primary: true
+												},
+												{
+													on: {
+														click: function(event) {
+															event.domEvent.preventDefault();
+
+															contentDialog.hide();
+														}
+													},
+													label: Liferay.Language.get('cancel')
+												}
+											]
 										},
-										{
-											handler: function() {
-												this.hide();
-											},
-											label: Liferay.Language.get('cancel')
-										}
-									]
+										width: 400
+									},
+									title: instance._dialogTitle
 								}
-							).render(instance.rootNode);
+							);
 
 							contentNode.setData('contentDialog', contentDialog);
 						}
@@ -178,32 +251,46 @@ AUI.add(
 
 							globalConfigurationNode.show();
 
-							globalConfigurationDialog = new A.Dialog(
+							globalConfigurationDialog = Liferay.Util.Window.getWindow(
 								{
-									align: Liferay.Util.Window.ALIGN_CENTER,
-									bodyContent: globalConfigurationNode,
-									buttons: [
-										{
-											handler: function() {
-												instance._handleGlobalConfiguration();
+									dialog: {
+										bodyContent: globalConfigurationNode,
+										centered: true,
+										height: 300,
+										modal: true,
+										render: instance.get('form'),
+										toolbars: {
+											footer: [
+												{
+													on: {
+														click: function(event) {
+															event.domEvent.preventDefault();
 
-												this.hide();
-											},
-											label: Liferay.Language.get('ok')
+															instance._setGlobalConfigurationLabels();
+
+															globalConfigurationDialog.hide();
+														}
+													},
+													label: Liferay.Language.get('ok'),
+													primary: true
+												},
+												{
+													on: {
+														click: function(event) {
+															event.domEvent.preventDefault();
+
+															globalConfigurationDialog.hide();
+														}
+													},
+													label: Liferay.Language.get('cancel')
+												}
+											]
 										},
-										{
-											handler: function() {
-												this.hide();
-											},
-											label: Liferay.Language.get('cancel')
-										}
-									],
-									centered: true,
-									modal: true,
-									title: Liferay.Language.get('application-configuration'),
-									width: 400
+										width: 400
+									},
+									title: Liferay.Language.get('application-configuration')
 								}
-							).render(instance.rootNode);
+							);
 
 							instance._globalConfigurationDialog = globalConfigurationDialog;
 						}
@@ -221,32 +308,46 @@ AUI.add(
 
 							globalContentNode.show();
 
-							globalContentDialog = new A.Dialog(
+							globalContentDialog = Liferay.Util.Window.getWindow(
 								{
-									align: Liferay.Util.Window.ALIGN_CENTER,
-									buttons: [
-										{
-											handler: function() {
-												instance._handleGlobalContent();
+									dialog: {
+										bodyContent: globalContentNode,
+										centered: true,
+										height: 300,
+										modal: true,
+										render: instance.get('form'),
+										toolbars: {
+											footer: [
+												{
+													on: {
+														click: function(event) {
+															event.domEvent.preventDefault();
 
-												this.hide();
-											},
-											label: Liferay.Language.get('ok')
+															instance._setGlobalContentLabels();
+
+															globalContentDialog.hide();
+														}
+													},
+													label: Liferay.Language.get('ok'),
+													primary: true
+												},
+												{
+													on: {
+														click: function(event) {
+															event.domEvent.preventDefault();
+
+															globalContentDialog.hide();
+														}
+													},
+													label: Liferay.Language.get('cancel')
+												}
+											]
 										},
-										{
-											handler: function() {
-												this.hide();
-											},
-											label: Liferay.Language.get('cancel')
-										}
-									],
-									bodyContent: globalContentNode,
-									centered: true,
-									modal: true,
-									title: Liferay.Language.get('content-to-export'),
-									width: 400
+										width: 400
+									},
+									title: instance._dialogTitle
 								}
-							).render(instance.rootNode);
+							);
 
 							instance._globalContentDialog = globalContentDialog;
 						}
@@ -264,31 +365,45 @@ AUI.add(
 
 							pagesNode.show();
 
-							pagesDialog = new A.Dialog(
+							pagesDialog = Liferay.Util.Window.getWindow(
 								{
-									align: Liferay.Util.Window.ALIGN_CENTER,
-									bodyContent: pagesNode,
-									buttons: [
-										{
-											handler: function() {
-												instance._handlePages();
+									dialog: {
+										bodyContent: pagesNode,
+										height: 300,
+										modal: true,
+										render: instance.get('form'),
+										toolbars: {
+											footer: [
+												{
+													on: {
+														click: function(event) {
+															event.domEvent.preventDefault();
 
-												this.hide();
-											},
-											label: Liferay.Language.get('ok')
+															instance._setPageLabels();
+
+															pagesDialog.hide();
+														}
+													},
+													label: Liferay.Language.get('ok'),
+													primary: true
+												},
+												{
+													on: {
+														click: function(event) {
+															event.domEvent.preventDefault();
+
+															pagesDialog.hide();
+														}
+													},
+													label: Liferay.Language.get('cancel')
+												}
+											]
 										},
-										{
-											handler: function() {
-												this.hide();
-											},
-											label: Liferay.Language.get('cancel')
-										}
-									],
-									modal: true,
-									title: Liferay.Language.get('pages'),
-									width: 400
+										width: 400
+									},
+									title: Liferay.Language.get('pages')
 								}
-							).render(instance.rootNode);
+							);
 
 							instance._pagesDialog = pagesDialog;
 						}
@@ -306,32 +421,46 @@ AUI.add(
 
 							rangeNode.show();
 
-							rangeDialog = new A.Dialog(
+							rangeDialog = Liferay.Util.Window.getWindow(
 								{
-									align: Liferay.Util.Window.ALIGN_CENTER,
-									bodyContent: rangeNode,
-									buttons: [
-										{
-											handler: function() {
-												instance._handleRange();
+									dialog: {
+										bodyContent: rangeNode,
+										centered: true,
+										height: 300,
+										modal: true,
+										render: instance.get('form'),
+										toolbars: {
+											footer: [
+												{
+													on: {
+														click: function(event) {
+															event.domEvent.preventDefault();
 
-												this.hide();
-											},
-											label: Liferay.Language.get('ok')
+															instance._reloadForm();
+
+															rangeDialog.hide();
+														}
+													},
+													label: Liferay.Language.get('ok'),
+													primary: true
+												},
+												{
+													on: {
+														click: function(event) {
+															event.domEvent.preventDefault();
+
+															rangeDialog.hide();
+														}
+													},
+													label: Liferay.Language.get('cancel')
+												}
+											]
 										},
-										{
-											handler: function() {
-												this.hide();
-											},
-											label: Liferay.Language.get('cancel')
-										}
-									],
-									centered: true,
-									modal: true,
-									title: Liferay.Language.get('content-to-export'),
-									width: 400
+										width: 400
+									},
+									title: instance._dialogTitle
 								}
-							).render(instance.rootNode);
+							);
 
 							instance._rangeDialog = rangeDialog;
 						}
@@ -339,12 +468,159 @@ AUI.add(
 						return rangeDialog;
 					},
 
-					_handleContent: function(portletId) {
+					_getRemoteDialog: function() {
+						var instance = this;
+
+						var remoteDialog = instance._remoteDialog;
+
+						if (!remoteDialog) {
+							var remoteNode = instance.byId('remote');
+
+							remoteNode.show();
+
+							remoteDialog = Liferay.Util.Window.getWindow(
+								{
+									dialog: {
+										bodyContent: remoteNode,
+										centered: true,
+										height: 300,
+										modal: true,
+										render: instance.get('form'),
+										toolbars: {
+											footer: [
+												{
+													on: {
+														click: function(event) {
+															event.domEvent.preventDefault();
+
+															instance._setRemoteLabels();
+
+															remoteDialog.hide();
+														}
+													},
+													label: Liferay.Language.get('ok'),
+													primary: true
+												},
+												{
+													on: {
+														click: function(event) {
+															event.domEvent.preventDefault();
+
+															remoteDialog.hide();
+														},
+														label: Liferay.Language.get('cancel')
+													}
+												}
+											]
+										},
+										width: 400
+									},
+									title: instance._dialogTitle
+								}
+							);
+
+							instance._remoteDialog = remoteDialog;
+						}
+
+						return remoteDialog;
+					},
+
+					_getScheduledPublishingEventsDialog: function() {
+						var instance = this;
+
+						var scheduledPublishingEventsDialog = instance._scheduledPublishingEventsDialog;
+
+						if (!scheduledPublishingEventsDialog) {
+							var scheduledPublishingEventsNode = instance.byId('scheduledPublishingEvents');
+
+							scheduledPublishingEventsNode.show();
+
+							scheduledPublishingEventsDialog = Liferay.Util.Window.getWindow(
+								{
+									dialog: {
+										bodyContent: scheduledPublishingEventsNode,
+										centered: true,
+										height: 300,
+										modal: true,
+										render: instance.get('form'),
+										toolbars: {
+											footer: [
+												{
+													on: {
+														click: function(event) {
+															event.domEvent.preventDefault();
+
+															scheduledPublishingEventsDialog.hide();
+														}
+													},
+													label: Liferay.Language.get('close')
+												}
+											]
+										},
+										width: 400
+									},
+									title: Liferay.Language.get('scheduled-events')
+								}
+							);
+
+							instance._scheduledPublishingEventsDialog = scheduledPublishingEventsDialog;
+						}
+
+						return scheduledPublishingEventsDialog;
+					},
+
+					_getValue: function(nodeName) {
+						var instance = this;
+
+						var value = STR_EMPTY;
+
+						var node = instance.get(nodeName);
+
+						if (node) {
+							value = node.val();
+						}
+
+						return value;
+					},
+
+					_initLabels: function() {
+						var instance = this;
+
+						instance.all('.content-link').each(
+							function(item, index, collection) {
+								instance._setContentLabels(item.attr('data-portletid'));
+							}
+						);
+
+						instance._setGlobalConfigurationLabels();
+						instance._setGlobalContentLabels();
+						instance._setPageLabels();
+						instance._setRangeLabels();
+						instance._setRemoteLabels();
+					},
+
+					_isChecked: function(nodeName) {
+						var instance = this;
+
+						var node = instance.get(nodeName);
+
+						return (node && node.attr(STR_CHECKED));
+					},
+
+					_reloadForm: function() {
+						var instance = this;
+
+						instance.byId('cmd').val(STR_EMPTY);
+
+						submitForm(instance.get('form'));
+					},
+
+					_setContentLabels: function(portletId) {
 						var instance = this;
 
 						var contentNode = instance.byId('content_' + portletId);
 
-						var inputs = contentNode.all('.aui-field-input-choice');
+						var inputs = contentNode.all('.field');
 
 						var selectedContent = [];
 
@@ -358,10 +634,10 @@ AUI.add(
 							}
 						);
 
-						instance._refreshSelectedLabel('selectedContent_' + portletId, selectedContent.join(', '));
+						instance._setLabels('selectedContent_' + portletId, selectedContent.join(', '));
 					},
 
-					_handleGlobalConfiguration: function() {
+					_setGlobalConfigurationLabels: function() {
 						var instance = this;
 
 						var selectedGlobalConfiguration = [];
@@ -374,10 +650,10 @@ AUI.add(
 							selectedGlobalConfiguration.push(Liferay.Language.get('user-preferences'));
 						}
 
-						instance._refreshSelectedLabel('selectedGlobalConfiguration', selectedGlobalConfiguration.join(', '));
+						instance._setLabels('selectedGlobalConfiguration', selectedGlobalConfiguration.join(', '));
 					},
 
-					_handleGlobalContent: function() {
+					_setGlobalContentLabels: function() {
 						var instance = this;
 
 						var selectedGlobalContent = [];
@@ -410,10 +686,33 @@ AUI.add(
 							selectedGlobalContent.push(Liferay.Language.get('use-the-current-user-as-author'));
 						}
 
-						instance._refreshSelectedLabel('selectedGlobalContent', selectedGlobalContent.join(', '));
+						instance._setLabels('selectedGlobalContent', selectedGlobalContent.join(', '));
 					},
 
-					_handlePages: function() {
+					_setLabels: function(labelDivId, label) {
+						var instance = this;
+
+						var labelNode = instance.byId(labelDivId);
+
+						if (labelNode) {
+							labelNode.html(label);
+						}
+					},
+
+					_setNode: function(val) {
+						var instance = this;
+
+						if (Lang.isString(val)) {
+							val = instance.one(val);
+						}
+						else {
+							val = A.one(val);
+						}
+
+						return val;
+					},
+
+					_setPageLabels: function() {
 						var instance = this;
 
 						var selectedPages = [];
@@ -481,10 +780,10 @@ AUI.add(
 							selectedPages.push(Liferay.Language.get('logo'));
 						}
 
-						instance._refreshSelectedLabel('selectedPages', selectedPages.join(', '));
+						instance._setLabels('selectedPages', selectedPages.join(', '));
 					},
 
-					_handleRange: function() {
+					_setRangeLabels: function() {
 						var instance = this;
 
 						var selectedRange = STR_EMPTY;
@@ -502,35 +801,47 @@ AUI.add(
 							selectedRange = Liferay.Language.get('last');
 						}
 
-						instance._refreshSelectedLabel('selectedRange', selectedRange);
+						instance._setLabels('selectedRange', selectedRange);
 					},
 
-					_isChecked: function(nodeName) {
+					_setRemoteLabels: function() {
 						var instance = this;
 
-						var node = instance.get(nodeName);
+						var selectedRemote = [];
 
-						return (node && node.attr(STR_CHECKED));
-					},
+						var remoteAddressValue = instance._getValue('remoteAddressNode');
 
-					_refreshSelectedLabel: function(labelDivId, label) {
-						var instance = this;
-
-						var labelNode = instance.byId(labelDivId);
-
-						if (labelNode) {
-							labelNode.html(label);
-						}
-					},
-
-					_setNode: function(val) {
-						var instance = this;
-
-						if (Lang.isString(val)) {
-							val = instance.one(val);
+						if (remoteAddressValue !== STR_EMPTY) {
+							selectedRemote.push(remoteAddressValue);
 						}
 
-						return val;
+						var remotePortValue = instance._getValue('remotePortNode');
+
+						if (remotePortValue !== STR_EMPTY) {
+							selectedRemote.push(remotePortValue);
+						}
+
+						var remotePathContextValue = instance._getValue('remotePathContextNode');
+
+						if (remotePathContextValue !== STR_EMPTY) {
+							selectedRemote.push(remotePathContextValue);
+						}
+
+						var remoteGroupIdValue = instance._getValue('remoteGroupIdNode');
+
+						if (remoteGroupIdValue !== STR_EMPTY) {
+							selectedRemote.push(remoteGroupIdValue);
+						}
+
+						if (instance._isChecked('secureConnectionNode')) {
+							selectedRemote.push(Liferay.Language.get('use-a-secure-network-connection'));
+						}
+
+						if (instance._isChecked('remoteDeletePortletDataNode')) {
+							selectedRemote.push(Liferay.Language.get('delete-portlet-data-before-importing'));
+						}
+
+						instance._setLabels('selectedRemote', selectedRemote.join(', '));
 					}
 				}
 			}
@@ -540,6 +851,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-dialog', 'liferay-portlet-base']
+		requires: ['aui-dialog-iframe-deprecated', 'aui-modal', 'aui-tree-view', 'liferay-portlet-base','liferay-util-window']
 	}
 );

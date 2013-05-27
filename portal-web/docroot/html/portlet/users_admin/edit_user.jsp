@@ -162,9 +162,11 @@ String[][] categorySections = {mainSections, identificationSections, miscellaneo
 <liferay-ui:error exception="<%= CompanyMaxUsersException.class %>" message="unable-to-create-user-account-because-the-maximum-number-of-users-has-been-reached" />
 
 <c:if test="<%= !portletName.equals(PortletKeys.MY_ACCOUNT) %>">
-	<liferay-util:include page="/html/portlet/users_admin/toolbar.jsp">
-		<liferay-util:param name="toolbarItem" value='<%= (selUser == null) ? "add" : "view" %>' />
-	</liferay-util:include>
+	<aui:nav-bar>
+		<liferay-util:include page="/html/portlet/users_admin/toolbar.jsp">
+			<liferay-util:param name="toolbarItem" value='<%= (selUser == null) ? "add" : "view" %>' />
+		</liferay-util:include>
+	</aui:nav-bar>
 </c:if>
 
 <liferay-ui:header
@@ -229,7 +231,7 @@ String taglibOnSubmit = "event.preventDefault(); " + renderResponse.getNamespace
 	<liferay-util:buffer var="htmlBottom">
 		<c:if test="<%= (selUser != null) && (passwordPolicy != null) && selUser.getLockout() %>">
 			<aui:button-row>
-				<div class="portlet-msg-alert"><liferay-ui:message key="this-user-account-has-been-locked-due-to-excessive-failed-login-attempts" /></div>
+				<div class="alert alert-block"><liferay-ui:message key="this-user-account-has-been-locked-due-to-excessive-failed-login-attempts" /></div>
 
 				<%
 				String taglibOnClick = renderResponse.getNamespace() + "saveUser('unlock');";
@@ -265,8 +267,6 @@ if (selUser != null) {
 		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = cmd;
 
 		var redirect = "<portlet:renderURL><portlet:param name="struts_action" value="/users_admin/edit_user" /><portlet:param name="backURL" value="<%= backURL %>"></portlet:param></portlet:renderURL>";
-
-		redirect += Liferay.Util.getHistoryParam('<portlet:namespace />');
 
 		document.<portlet:namespace />fm.<portlet:namespace />redirect.value = redirect;
 

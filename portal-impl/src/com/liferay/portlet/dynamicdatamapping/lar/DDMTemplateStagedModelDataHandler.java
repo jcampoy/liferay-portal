@@ -16,6 +16,7 @@ package com.liferay.portlet.dynamicdatamapping.lar;
 
 import com.liferay.portal.kernel.lar.BaseStagedModelDataHandler;
 import com.liferay.portal.kernel.lar.ExportImportPathUtil;
+import com.liferay.portal.kernel.lar.ExportImportUtil;
 import com.liferay.portal.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.lar.StagedModelDataHandlerUtil;
 import com.liferay.portal.kernel.log.Log;
@@ -27,21 +28,14 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.model.Image;
-import com.liferay.portal.model.Repository;
-import com.liferay.portal.model.RepositoryEntry;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.persistence.ImageUtil;
-import com.liferay.portlet.documentlibrary.model.DLFileEntry;
-import com.liferay.portlet.documentlibrary.model.DLFileEntryType;
-import com.liferay.portlet.documentlibrary.model.DLFileRank;
-import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.dynamicdatamapping.TemplateDuplicateTemplateKeyException;
 import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
 import com.liferay.portlet.dynamicdatamapping.model.DDMTemplate;
 import com.liferay.portlet.dynamicdatamapping.service.DDMStructureLocalServiceUtil;
 import com.liferay.portlet.dynamicdatamapping.service.DDMTemplateLocalServiceUtil;
 import com.liferay.portlet.dynamicdatamapping.service.persistence.DDMTemplateUtil;
-import com.liferay.portlet.journal.lar.JournalPortletDataHandler;
 
 import java.io.File;
 
@@ -59,6 +53,11 @@ public class DDMTemplateStagedModelDataHandler
 	@Override
 	public String[] getClassNames() {
 		return CLASS_NAMES;
+	}
+
+	@Override
+	public String getDisplayName(DDMTemplate template) {
+		return template.getNameCurrentValue();
 	}
 
 	protected DDMTemplate addTemplate(
@@ -115,19 +114,6 @@ public class DDMTemplateStagedModelDataHandler
 				portletDataContext, structure);
 		}
 
-		Element dlFileEntryTypesElement =
-			portletDataContext.getExportDataGroupElement(DLFileEntryType.class);
-		Element dlFoldersElement = portletDataContext.getExportDataGroupElement(
-			DLFolder.class);
-		Element dlFileEntriesElement =
-			portletDataContext.getExportDataGroupElement(DLFileEntry.class);
-		Element dlFileRanksElement =
-			portletDataContext.getExportDataGroupElement(DLFileRank.class);
-		Element dlRepositoriesElement =
-			portletDataContext.getExportDataGroupElement(Repository.class);
-		Element dlRepositoryEntriesElement =
-			portletDataContext.getExportDataGroupElement(RepositoryEntry.class);
-
 		Element templateElement = portletDataContext.getExportDataElement(
 			template);
 
@@ -137,12 +123,10 @@ public class DDMTemplateStagedModelDataHandler
 
 			if (Validator.isNotNull(template.getSmallImageURL())) {
 				String smallImageURL =
-					DDMPortletDataHandler.exportReferenceContent(
-						portletDataContext, dlFileEntryTypesElement,
-						dlFoldersElement, dlFileEntriesElement,
-						dlFileRanksElement, dlRepositoriesElement,
-						dlRepositoryEntriesElement, templateElement,
-						template.getSmallImageURL().concat(StringPool.SPACE));
+					ExportImportUtil.replaceExportContentReferences(
+						portletDataContext, template, templateElement,
+						template.getSmallImageURL().concat(StringPool.SPACE),
+						true);
 
 				template.setSmallImageURL(smallImageURL);
 			}
@@ -164,11 +148,9 @@ public class DDMTemplateStagedModelDataHandler
 		if (portletDataContext.getBooleanParameter(
 				DDMPortletDataHandler.NAMESPACE, "embedded-assets")) {
 
-			String content = DDMPortletDataHandler.exportReferenceContent(
-				portletDataContext, dlFileEntryTypesElement, dlFoldersElement,
-				dlFileEntriesElement, dlFileRanksElement, dlRepositoriesElement,
-				dlRepositoryEntriesElement, templateElement,
-				template.getScript());
+			String content = ExportImportUtil.replaceExportContentReferences(
+				portletDataContext, template, templateElement,
+				template.getScript(), true);
 
 			template.setScript(content);
 		}
@@ -196,8 +178,10 @@ public class DDMTemplateStagedModelDataHandler
 		DDMStructure structure =
 			(DDMStructure)portletDataContext.getZipEntryAsObject(structurePath);
 
-		StagedModelDataHandlerUtil.importStagedModel(
-			portletDataContext, structure);
+		if (structure != null) {
+			StagedModelDataHandlerUtil.importStagedModel(
+				portletDataContext, structure);
+		}
 
 		long classPK = MapUtil.getLong(
 			structureIds, template.getClassPK(), template.getClassPK());
@@ -212,9 +196,9 @@ public class DDMTemplateStagedModelDataHandler
 
 			if (Validator.isNotNull(template.getSmallImageURL())) {
 				String smallImageURL =
-					JournalPortletDataHandler.importReferenceContent(
+					ExportImportUtil.replaceImportContentReferences(
 						portletDataContext, element,
-						template.getSmallImageURL());
+						template.getSmallImageURL(), true);
 
 				template.setSmallImageURL(smallImageURL);
 			}
