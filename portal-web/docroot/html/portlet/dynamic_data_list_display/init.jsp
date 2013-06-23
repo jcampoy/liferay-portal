@@ -31,27 +31,23 @@ page import="com.liferay.portlet.dynamicdatamapping.model.DDMTemplate" %><%@
 page import="com.liferay.portlet.dynamicdatamapping.model.DDMTemplateConstants" %><%@
 page import="com.liferay.portlet.dynamicdatamapping.service.DDMTemplateLocalServiceUtil" %><%@
 page import="com.liferay.portlet.dynamicdatamapping.service.permission.DDMPermission" %><%@
-page import="com.liferay.portlet.dynamicdatamapping.service.permission.DDMTemplatePermission" %>
+page import="com.liferay.portlet.dynamicdatamapping.service.permission.DDMTemplatePermission" %><%@
+page import="com.liferay.portlet.dynamicdatamapping.util.DDMDisplay" %><%@
+page import="com.liferay.portlet.dynamicdatamapping.util.DDMDisplayRegistryUtil" %>
 
 <%
-PortletPreferences preferences = renderRequest.getPreferences();
-
 String portletResource = ParamUtil.getString(request, "portletResource");
 
-if (Validator.isNotNull(portletResource)) {
-	preferences = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource);
-}
+long recordSetId = GetterUtil.getLong(portletPreferences.getValue("recordSetId", StringPool.BLANK));
 
-long recordSetId = GetterUtil.getLong(preferences.getValue("recordSetId", StringPool.BLANK));
+long displayDDMTemplateId = GetterUtil.getLong(portletPreferences.getValue("displayDDMTemplateId", StringPool.BLANK));
+long formDDMTemplateId = GetterUtil.getLong(portletPreferences.getValue("formDDMTemplateId", StringPool.BLANK));
 
-long displayDDMTemplateId = GetterUtil.getLong(preferences.getValue("displayDDMTemplateId", StringPool.BLANK));
-long formDDMTemplateId = GetterUtil.getLong(preferences.getValue("formDDMTemplateId", StringPool.BLANK));
+boolean editable = DDLUtil.isEditable(portletPreferences, portletDisplay.getId(), themeDisplay.getScopeGroupId());
 
-boolean editable = DDLUtil.isEditable(preferences, portletDisplay.getId(), themeDisplay.getScopeGroupId());
+boolean spreadsheet = GetterUtil.getBoolean(portletPreferences.getValue("spreadsheet", Boolean.FALSE.toString()));
 
-boolean spreadsheet = GetterUtil.getBoolean(preferences.getValue("spreadsheet", Boolean.FALSE.toString()));
-
-String ddmResource = portletConfig.getInitParameter("ddm-resource");
+DDMDisplay ddmDisplay = DDMDisplayRegistryUtil.getDDMDisplay(PortletKeys.DYNAMIC_DATA_LISTS);
 
 Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZone);
 %>

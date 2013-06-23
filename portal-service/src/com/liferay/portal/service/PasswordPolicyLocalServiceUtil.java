@@ -18,11 +18,12 @@ import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
 
 /**
- * The utility for the password policy local service. This utility wraps {@link com.liferay.portal.service.impl.PasswordPolicyLocalServiceImpl} and is the primary access point for service operations in application layer code running on the local server.
- *
- * <p>
- * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
- * </p>
+ * Provides the local service utility for PasswordPolicy. This utility wraps
+ * {@link com.liferay.portal.service.impl.PasswordPolicyLocalServiceImpl} and is the
+ * primary access point for service operations in application layer code running
+ * on the local server. Methods of this service will not have security checks
+ * based on the propagated JAAS credentials because this service can only be
+ * accessed from within the same VM.
  *
  * @author Brian Wing Shun Chan
  * @see PasswordPolicyLocalService
@@ -166,10 +167,40 @@ public class PasswordPolicyLocalServiceUtil {
 		return getService().dynamicQueryCount(dynamicQuery);
 	}
 
+	/**
+	* Returns the number of rows that match the dynamic query.
+	*
+	* @param dynamicQuery the dynamic query
+	* @param projection the projection to apply to the query
+	* @return the number of rows that match the dynamic query
+	* @throws SystemException if a system exception occurred
+	*/
+	public static long dynamicQueryCount(
+		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery,
+		com.liferay.portal.kernel.dao.orm.Projection projection)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().dynamicQueryCount(dynamicQuery, projection);
+	}
+
 	public static com.liferay.portal.model.PasswordPolicy fetchPasswordPolicy(
 		long passwordPolicyId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService().fetchPasswordPolicy(passwordPolicyId);
+	}
+
+	/**
+	* Returns the password policy with the matching UUID and company.
+	*
+	* @param uuid the password policy's UUID
+	* @param companyId the primary key of the company
+	* @return the matching password policy, or <code>null</code> if a matching password policy could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PasswordPolicy fetchPasswordPolicyByUuidAndCompanyId(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .fetchPasswordPolicyByUuidAndCompanyId(uuid, companyId);
 	}
 
 	/**
@@ -192,6 +223,22 @@ public class PasswordPolicyLocalServiceUtil {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService().getPersistedModel(primaryKeyObj);
+	}
+
+	/**
+	* Returns the password policy with the matching UUID and company.
+	*
+	* @param uuid the password policy's UUID
+	* @param companyId the primary key of the company
+	* @return the matching password policy
+	* @throws PortalException if a matching password policy could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PasswordPolicy getPasswordPolicyByUuidAndCompanyId(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().getPasswordPolicyByUuidAndCompanyId(uuid, companyId);
 	}
 
 	/**
@@ -310,17 +357,16 @@ public class PasswordPolicyLocalServiceUtil {
 		getService().checkDefaultPasswordPolicy(companyId);
 	}
 
+	public static void deleteNondefaultPasswordPolicies(long companyId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService().deleteNondefaultPasswordPolicies(companyId);
+	}
+
 	public static com.liferay.portal.model.PasswordPolicy fetchPasswordPolicy(
 		long companyId, java.lang.String name)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService().fetchPasswordPolicy(companyId, name);
-	}
-
-	public static com.liferay.portal.model.PasswordPolicy fetchPasswordPolicyByUuidAndCompanyId(
-		java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService()
-				   .fetchPasswordPolicyByUuidAndCompanyId(uuid, companyId);
 	}
 
 	public static com.liferay.portal.model.PasswordPolicy getDefaultPasswordPolicy(

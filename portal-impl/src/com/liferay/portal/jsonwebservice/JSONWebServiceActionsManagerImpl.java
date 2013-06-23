@@ -53,6 +53,7 @@ import javax.servlet.http.HttpSession;
 public class JSONWebServiceActionsManagerImpl
 	implements JSONWebServiceActionsManager {
 
+	@Override
 	public Set<String> getContextPaths() {
 		Set<String> contextPaths = new TreeSet<String>();
 
@@ -67,6 +68,7 @@ public class JSONWebServiceActionsManagerImpl
 		return contextPaths;
 	}
 
+	@Override
 	public JSONWebServiceAction getJSONWebServiceAction(
 		HttpServletRequest request) {
 
@@ -135,6 +137,7 @@ public class JSONWebServiceActionsManagerImpl
 			jsonWebServiceActionConfig, jsonWebServiceActionParameters);
 	}
 
+	@Override
 	public JSONWebServiceAction getJSONWebServiceAction(
 		HttpServletRequest request, String path, String method,
 		Map<String, Object> parameterMap) {
@@ -177,6 +180,7 @@ public class JSONWebServiceActionsManagerImpl
 			jsonWebServiceActionConfig, jsonWebServiceActionParameters);
 	}
 
+	@Override
 	public JSONWebServiceActionMapping getJSONWebServiceActionMapping(
 		String signature) {
 
@@ -191,6 +195,7 @@ public class JSONWebServiceActionsManagerImpl
 		return null;
 	}
 
+	@Override
 	public List<JSONWebServiceActionMapping> getJSONWebServiceActionMappings(
 		String contextPath) {
 
@@ -212,6 +217,7 @@ public class JSONWebServiceActionsManagerImpl
 		return jsonWebServiceActionMappings;
 	}
 
+	@Override
 	public int getJSONWebServiceActionsCount(String contextPath) {
 		int count = 0;
 
@@ -228,6 +234,7 @@ public class JSONWebServiceActionsManagerImpl
 		return count;
 	}
 
+	@Override
 	public void registerJSONWebServiceAction(
 		String contextPath, Class<?> actionClass, Method actionMethod,
 		String path, String method) {
@@ -249,6 +256,53 @@ public class JSONWebServiceActionsManagerImpl
 		_jsonWebServiceActionConfigs.add(jsonWebServiceActionConfig);
 	}
 
+	@Override
+	public void registerJSONWebServiceAction(
+		String contextPath, Object actionObject, Class<?> actionClass,
+		Method actionMethod, String path, String method) {
+
+		JSONWebServiceActionConfig jsonWebServiceActionConfig =
+			new JSONWebServiceActionConfig(
+				contextPath, actionObject, actionClass, actionMethod, path,
+				method);
+
+		if (_jsonWebServiceActionConfigs.contains(jsonWebServiceActionConfig)) {
+			if (_log.isDebugEnabled()) {
+				_log.debug(
+					"A JSON web service action is already registered at " +
+						path);
+			}
+
+			return;
+		}
+
+		_jsonWebServiceActionConfigs.add(jsonWebServiceActionConfig);
+	}
+
+	@Override
+	public int unregisterJSONWebServiceActions(Object actionObject) {
+		int count = 0;
+
+		Iterator<JSONWebServiceActionConfig> iterator =
+			_jsonWebServiceActionConfigs.iterator();
+
+		while (iterator.hasNext()) {
+			JSONWebServiceActionConfig jsonWebServiceActionConfig =
+				iterator.next();
+
+			if (actionObject.equals(
+					jsonWebServiceActionConfig.getActionObject())) {
+
+				iterator.remove();
+
+				count++;
+			}
+		}
+
+		return count;
+	}
+
+	@Override
 	public int unregisterJSONWebServiceActions(String contextPath) {
 		int count = 0;
 
@@ -429,7 +483,7 @@ public class JSONWebServiceActionsManagerImpl
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(
-		JSONWebServiceActionParameters.class);
+		JSONWebServiceActionsManagerImpl.class);
 
 	private SortedArrayList<JSONWebServiceActionConfig>
 		_jsonWebServiceActionConfigs =

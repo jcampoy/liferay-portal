@@ -249,7 +249,9 @@ ArticleSearch searchContainer = new ArticleSearch(liferayPortletRequest, entryEn
 
 						total = hits.getLength();
 
-						if (searchContainer.recalculateCur(total)) {
+						searchContainer.setTotal(total);
+
+						if (searchContainer.isRecalculateCur()) {
 							searchContext.setEnd(searchContainer.getEnd());
 							searchContext.setStart(searchContainer.getStart());
 
@@ -383,6 +385,8 @@ ArticleSearch searchContainer = new ArticleSearch(liferayPortletRequest, entryEn
 								<c:when test="<%= (curArticle != null) && JournalArticlePermission.contains(permissionChecker, curArticle, ActionKeys.VIEW) %>">
 
 									<%
+									String articleImageURL = curArticle.getArticleImageURL(themeDisplay);
+
 									PortletURL rowURL = liferayPortletResponse.createRenderURL();
 
 									rowURL.setParameter("struts_action", "/journal/edit_article");
@@ -404,7 +408,7 @@ ArticleSearch searchContainer = new ArticleSearch(liferayPortletRequest, entryEn
 										rowCheckerName="<%= JournalArticle.class.getSimpleName() %>"
 										showCheckbox="<%= JournalArticlePermission.contains(permissionChecker, curArticle, ActionKeys.DELETE) || JournalArticlePermission.contains(permissionChecker, curArticle, ActionKeys.UPDATE) %>"
 										status="<%= curArticle.getStatus() %>"
-										thumbnailSrc='<%= themeDisplay.getPathThemeImages() + "/file_system/large/article.png" %>'
+										thumbnailSrc='<%= Validator.isNotNull(articleImageURL) ? articleImageURL : themeDisplay.getPathThemeImages() + "/file_system/large/article.png" %>'
 										title="<%= curArticle.getTitle(locale) %>"
 										url="<%= rowURL.toString() %>"
 									/>
@@ -425,7 +429,7 @@ ArticleSearch searchContainer = new ArticleSearch(liferayPortletRequest, entryEn
 				</c:choose>
 
 				<c:if test="<%= emptySearchResults %>">
-					<div class="portlet-msg-info">
+					<div class="alert alert-info">
 
 						<%
 						String message = LanguageUtil.get(pageContext, "no-articles-were-found-that-matched-the-specified-filters");
@@ -460,8 +464,8 @@ ArticleSearch searchContainer = new ArticleSearch(liferayPortletRequest, entryEn
 		Liferay.fire(
 			'<portlet:namespace />pageLoaded',
 			{
-				paginator: {
-					name: 'entryPaginator',
+				pagination: {
+					name: 'entryPagination',
 					state: {
 						page: <%= searchContainer.getCur() %>,
 						rowsPerPage: <%= searchContainer.getDelta() %>,

@@ -19,7 +19,7 @@
 <%
 String tabs1 = ParamUtil.getString(request, "tabs1", "structures");
 
-long groupId = ParamUtil.getLong(request, "groupId", scopeGroupId);
+long groupId = ParamUtil.getLong(request, "groupId", themeDisplay.getSiteGroupId());
 
 PortletURL portletURL = renderResponse.createRenderURL();
 
@@ -39,12 +39,6 @@ portletURL.setParameter("tabs1", tabs1);
 		<liferay-ui:message key="they-are-referenced-by-templates" />
 	</c:if>
 </liferay-ui:error>
-
-<c:if test="<%= showToolbar %>">
-	<liferay-util:include page="/html/portlet/dynamic_data_mapping/toolbar.jsp">
-		<liferay-util:param name="toolbarItem" value="view-all" />
-	</liferay-util:include>
-</c:if>
 
 <aui:form action="<%= portletURL.toString() %>" method="post" name="fm">
 	<aui:input name="<%= Constants.CMD %>" type="hidden" />
@@ -75,9 +69,11 @@ portletURL.setParameter("tabs1", tabs1);
 		searchContainer="<%= new StructureSearch(renderRequest, portletURL) %>"
 	>
 
-		<liferay-ui:search-form
-			page="/html/portlet/dynamic_data_mapping/structure_search.jsp"
-		/>
+		<c:if test="<%= showToolbar %>">
+			<liferay-util:include page="/html/portlet/dynamic_data_mapping/toolbar.jsp">
+				<liferay-util:param name="toolbarItem" value="view-all" />
+			</liferay-util:include>
+		</c:if>
 
 		<liferay-ui:search-container-results>
 			<%@ include file="/html/portlet/dynamic_data_mapping/structure_search_results.jspf" %>
@@ -179,9 +175,7 @@ portletURL.setParameter("tabs1", tabs1);
 		Liferay.Util.openWindow(
 			{
 				dialog: {
-					align: Liferay.Util.Window.ALIGN_CENTER,
-					constrain: true,
-					width: 600
+					zIndex: Liferay.zIndex.WINDOW + 2
 				},
 				id: '<portlet:namespace />copyStructure',
 				refreshWindow: window,
@@ -213,7 +207,7 @@ portletURL.setParameter("tabs1", tabs1);
 	if (buttons.size()) {
 		var toggleDisabled = A.bind('toggleDisabled', Liferay.Util, ':button');
 
-		var resultsGrid = A.one('.results-grid');
+		var resultsGrid = A.one('.searchcontainer-content');
 
 		if (resultsGrid) {
 			resultsGrid.delegate(

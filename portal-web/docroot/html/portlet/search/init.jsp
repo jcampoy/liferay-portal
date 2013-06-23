@@ -67,12 +67,6 @@ page import="java.util.LinkedList" %>
 <%
 PortalPreferences portalPreferences = PortletPreferencesFactoryUtil.getPortalPreferences(request);
 
-String portletResource = ParamUtil.getString(request, "portletResource");
-
-if (Validator.isNotNull(portletResource)) {
-	portletPreferences = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource);
-}
-
 boolean advancedConfiguration = GetterUtil.getBoolean(portletPreferences.getValue("advancedConfiguration", null));
 boolean displayScopeFacet = GetterUtil.getBoolean(portletPreferences.getValue("displayScopeFacet", null), true);
 boolean displayAssetTypeFacet = GetterUtil.getBoolean(portletPreferences.getValue("displayAssetTypeFacet", null), true);
@@ -153,14 +147,16 @@ private PortletURL _getViewFullContentURL(HttpServletRequest request, ThemeDispl
 		scopeGroupId = themeDisplay.getScopeGroupId();
 	}
 
-	long plid = LayoutServiceUtil.getDefaultPlid(groupId, scopeGroupId, portletId);
+	long plid = LayoutConstants.DEFAULT_PLID;
+
+	Layout layout = (Layout)request.getAttribute(WebKeys.LAYOUT);
+
+	if (layout != null) {
+		plid = layout.getPlid();
+	}
 
 	if (plid == 0) {
-		Layout layout = (Layout)request.getAttribute(WebKeys.LAYOUT);
-
-		if (layout != null) {
-			plid = layout.getPlid();
-		}
+		plid = LayoutServiceUtil.getDefaultPlid(groupId, scopeGroupId, portletId);
 	}
 
 	PortletURL portletURL = PortletURLFactoryUtil.create(request, portletId, plid, PortletRequest.RENDER_PHASE);

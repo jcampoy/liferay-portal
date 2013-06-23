@@ -17,12 +17,10 @@ package com.liferay.portlet.journal.service;
 import com.liferay.portal.service.ServiceWrapper;
 
 /**
- * <p>
- * This class is a wrapper for {@link JournalArticleLocalService}.
- * </p>
+ * Provides a wrapper for {@link JournalArticleLocalService}.
  *
- * @author    Brian Wing Shun Chan
- * @see       JournalArticleLocalService
+ * @author Brian Wing Shun Chan
+ * @see JournalArticleLocalService
  * @generated
  */
 public class JournalArticleLocalServiceWrapper
@@ -40,6 +38,7 @@ public class JournalArticleLocalServiceWrapper
 	* @return the journal article that was added
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle addJournalArticle(
 		com.liferay.portlet.journal.model.JournalArticle journalArticle)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -52,6 +51,7 @@ public class JournalArticleLocalServiceWrapper
 	* @param id the primary key for the new journal article
 	* @return the new journal article
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle createJournalArticle(
 		long id) {
 		return _journalArticleLocalService.createJournalArticle(id);
@@ -65,6 +65,7 @@ public class JournalArticleLocalServiceWrapper
 	* @throws PortalException if a journal article with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle deleteJournalArticle(
 		long id)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -79,12 +80,14 @@ public class JournalArticleLocalServiceWrapper
 	* @return the journal article that was removed
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle deleteJournalArticle(
 		com.liferay.portlet.journal.model.JournalArticle journalArticle)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _journalArticleLocalService.deleteJournalArticle(journalArticle);
 	}
 
+	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		return _journalArticleLocalService.dynamicQuery();
 	}
@@ -96,6 +99,7 @@ public class JournalArticleLocalServiceWrapper
 	* @return the matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
@@ -116,6 +120,7 @@ public class JournalArticleLocalServiceWrapper
 	* @return the range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -137,6 +142,7 @@ public class JournalArticleLocalServiceWrapper
 	* @return the ordered range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -154,15 +160,66 @@ public class JournalArticleLocalServiceWrapper
 	* @return the number of rows that match the dynamic query
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _journalArticleLocalService.dynamicQueryCount(dynamicQuery);
 	}
 
+	/**
+	* Returns the number of rows that match the dynamic query.
+	*
+	* @param dynamicQuery the dynamic query
+	* @param projection the projection to apply to the query
+	* @return the number of rows that match the dynamic query
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public long dynamicQueryCount(
+		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery,
+		com.liferay.portal.kernel.dao.orm.Projection projection)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _journalArticleLocalService.dynamicQueryCount(dynamicQuery,
+			projection);
+	}
+
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle fetchJournalArticle(
 		long id) throws com.liferay.portal.kernel.exception.SystemException {
 		return _journalArticleLocalService.fetchJournalArticle(id);
+	}
+
+	/**
+	* Returns the journal article with the matching UUID and company.
+	*
+	* @param uuid the journal article's UUID
+	* @param companyId the primary key of the company
+	* @return the matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public com.liferay.portlet.journal.model.JournalArticle fetchJournalArticleByUuidAndCompanyId(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _journalArticleLocalService.fetchJournalArticleByUuidAndCompanyId(uuid,
+			companyId);
+	}
+
+	/**
+	* Returns the journal article matching the UUID and group.
+	*
+	* @param uuid the journal article's UUID
+	* @param groupId the primary key of the group
+	* @return the matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public com.liferay.portlet.journal.model.JournalArticle fetchJournalArticleByUuidAndGroupId(
+		java.lang.String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _journalArticleLocalService.fetchJournalArticleByUuidAndGroupId(uuid,
+			groupId);
 	}
 
 	/**
@@ -173,6 +230,7 @@ public class JournalArticleLocalServiceWrapper
 	* @throws PortalException if a journal article with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle getJournalArticle(
 		long id)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -180,11 +238,30 @@ public class JournalArticleLocalServiceWrapper
 		return _journalArticleLocalService.getJournalArticle(id);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _journalArticleLocalService.getPersistedModel(primaryKeyObj);
+	}
+
+	/**
+	* Returns the journal article with the matching UUID and company.
+	*
+	* @param uuid the journal article's UUID
+	* @param companyId the primary key of the company
+	* @return the matching journal article
+	* @throws PortalException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public com.liferay.portlet.journal.model.JournalArticle getJournalArticleByUuidAndCompanyId(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _journalArticleLocalService.getJournalArticleByUuidAndCompanyId(uuid,
+			companyId);
 	}
 
 	/**
@@ -196,6 +273,7 @@ public class JournalArticleLocalServiceWrapper
 	* @throws PortalException if a matching journal article could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle getJournalArticleByUuidAndGroupId(
 		java.lang.String uuid, long groupId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -216,6 +294,7 @@ public class JournalArticleLocalServiceWrapper
 	* @return the range of journal articles
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.journal.model.JournalArticle> getJournalArticles(
 		int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -228,6 +307,7 @@ public class JournalArticleLocalServiceWrapper
 	* @return the number of journal articles
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getJournalArticlesCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _journalArticleLocalService.getJournalArticlesCount();
@@ -240,6 +320,7 @@ public class JournalArticleLocalServiceWrapper
 	* @return the journal article that was updated
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle updateJournalArticle(
 		com.liferay.portlet.journal.model.JournalArticle journalArticle)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -251,6 +332,7 @@ public class JournalArticleLocalServiceWrapper
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _journalArticleLocalService.getBeanIdentifier();
 	}
@@ -260,6 +342,7 @@ public class JournalArticleLocalServiceWrapper
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_journalArticleLocalService.setBeanIdentifier(beanIdentifier);
 	}
@@ -347,6 +430,7 @@ public class JournalArticleLocalServiceWrapper
 	* @throws PortalException if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle addArticle(
 		long userId, long groupId, long folderId, long classNameId,
 		long classPK, java.lang.String articleId, boolean autoArticleId,
@@ -409,6 +493,7 @@ public class JournalArticleLocalServiceWrapper
 	* @throws PortalException if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle addArticle(
 		long userId, long groupId, long folderId,
 		java.util.Map<java.util.Locale, java.lang.String> titleMap,
@@ -433,6 +518,7 @@ public class JournalArticleLocalServiceWrapper
 	with the web content article or if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void addArticleResources(
 		com.liferay.portlet.journal.model.JournalArticle article,
 		boolean addGroupPermissions, boolean addGuestPermissions)
@@ -451,6 +537,7 @@ public class JournalArticleLocalServiceWrapper
 	* @throws PortalException if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void addArticleResources(
 		com.liferay.portlet.journal.model.JournalArticle article,
 		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
@@ -470,6 +557,7 @@ public class JournalArticleLocalServiceWrapper
 	* @throws PortalException if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void addArticleResources(long groupId, java.lang.String articleId,
 		boolean addGroupPermissions, boolean addGuestPermissions)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -489,6 +577,7 @@ public class JournalArticleLocalServiceWrapper
 	* @throws PortalException if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void addArticleResources(long groupId, java.lang.String articleId,
 		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -510,6 +599,7 @@ public class JournalArticleLocalServiceWrapper
 	found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle checkArticleResourcePrimKey(
 		long groupId, java.lang.String articleId, double version)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -525,6 +615,7 @@ public class JournalArticleLocalServiceWrapper
 	* @throws PortalException if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void checkArticles()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -543,6 +634,7 @@ public class JournalArticleLocalServiceWrapper
 	found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void checkNewLine(long groupId, java.lang.String articleId,
 		double version)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -563,6 +655,7 @@ public class JournalArticleLocalServiceWrapper
 	portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void checkStructure(long groupId, java.lang.String articleId,
 		double version)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -586,6 +679,7 @@ public class JournalArticleLocalServiceWrapper
 	found or if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle copyArticle(
 		long userId, long groupId, java.lang.String oldArticleId,
 		java.lang.String newArticleId, boolean autoArticleId, double version)
@@ -602,6 +696,7 @@ public class JournalArticleLocalServiceWrapper
 	* @throws PortalException if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void deleteArticle(
 		com.liferay.portlet.journal.model.JournalArticle article)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -623,6 +718,7 @@ public class JournalArticleLocalServiceWrapper
 	* @throws PortalException if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void deleteArticle(
 		com.liferay.portlet.journal.model.JournalArticle article,
 		java.lang.String articleURL,
@@ -649,6 +745,7 @@ public class JournalArticleLocalServiceWrapper
 	found or if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void deleteArticle(long groupId, java.lang.String articleId,
 		double version, java.lang.String articleURL,
 		com.liferay.portal.service.ServiceContext serviceContext)
@@ -671,6 +768,7 @@ public class JournalArticleLocalServiceWrapper
 	* @throws PortalException if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void deleteArticle(long groupId, java.lang.String articleId,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -686,6 +784,7 @@ public class JournalArticleLocalServiceWrapper
 	* @throws PortalException if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void deleteArticles(long groupId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -701,6 +800,7 @@ public class JournalArticleLocalServiceWrapper
 	* @throws PortalException if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void deleteArticles(long groupId, long folderId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -718,6 +818,7 @@ public class JournalArticleLocalServiceWrapper
 	* @throws PortalException if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void deleteArticles(long groupId, long folderId,
 		boolean includeTrashedEntries)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -735,6 +836,7 @@ public class JournalArticleLocalServiceWrapper
 	article's display page
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void deleteLayoutArticleReferences(long groupId,
 		java.lang.String layoutUuid)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -765,6 +867,7 @@ public class JournalArticleLocalServiceWrapper
 	found or if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle expireArticle(
 		long userId, long groupId, java.lang.String articleId, double version,
 		java.lang.String articleURL,
@@ -798,6 +901,7 @@ public class JournalArticleLocalServiceWrapper
 	found or if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void expireArticle(long userId, long groupId,
 		java.lang.String articleId, java.lang.String articleURL,
 		com.liferay.portal.service.ServiceContext serviceContext)
@@ -805,20 +909,6 @@ public class JournalArticleLocalServiceWrapper
 			com.liferay.portal.kernel.exception.SystemException {
 		_journalArticleLocalService.expireArticle(userId, groupId, articleId,
 			articleURL, serviceContext);
-	}
-
-	/**
-	* Returns the web content article matching the UUID and group.
-	*
-	* @param uuid the web content article's UUID
-	* @param groupId the primary key of the web content article's group
-	* @return the matching web content article
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.journal.model.JournalArticle fetchArticle(
-		java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _journalArticleLocalService.fetchArticle(uuid, groupId);
 	}
 
 	/**
@@ -830,6 +920,7 @@ public class JournalArticleLocalServiceWrapper
 	found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle getArticle(long id)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -848,6 +939,7 @@ public class JournalArticleLocalServiceWrapper
 	found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle getArticle(
 		long groupId, java.lang.String articleId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -867,6 +959,7 @@ public class JournalArticleLocalServiceWrapper
 	found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle getArticle(
 		long groupId, java.lang.String articleId, double version)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -893,6 +986,7 @@ public class JournalArticleLocalServiceWrapper
 	found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle getArticle(
 		long groupId, java.lang.String className, long classPK)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -912,6 +1006,7 @@ public class JournalArticleLocalServiceWrapper
 	* @throws PortalException if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle getArticleByUrlTitle(
 		long groupId, java.lang.String urlTitle)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -937,6 +1032,7 @@ public class JournalArticleLocalServiceWrapper
 	if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.lang.String getArticleContent(
 		com.liferay.portlet.journal.model.JournalArticle article,
 		java.lang.String ddmTemplateKey, java.lang.String viewMode,
@@ -967,6 +1063,7 @@ public class JournalArticleLocalServiceWrapper
 	could not be found, or if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.lang.String getArticleContent(long groupId,
 		java.lang.String articleId, double version, java.lang.String viewMode,
 		java.lang.String ddmTemplateKey, java.lang.String languageId,
@@ -992,6 +1089,7 @@ public class JournalArticleLocalServiceWrapper
 	could not be found, or if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.lang.String getArticleContent(long groupId,
 		java.lang.String articleId, double version, java.lang.String viewMode,
 		java.lang.String languageId,
@@ -1020,6 +1118,7 @@ public class JournalArticleLocalServiceWrapper
 	could not be found, or if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.lang.String getArticleContent(long groupId,
 		java.lang.String articleId, java.lang.String viewMode,
 		java.lang.String ddmTemplateKey, java.lang.String languageId,
@@ -1043,6 +1142,7 @@ public class JournalArticleLocalServiceWrapper
 	could not be found, or if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.lang.String getArticleContent(long groupId,
 		java.lang.String articleId, java.lang.String viewMode,
 		java.lang.String languageId,
@@ -1077,6 +1177,7 @@ public class JournalArticleLocalServiceWrapper
 	if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticleDisplay getArticleDisplay(
 		com.liferay.portlet.journal.model.JournalArticle article,
 		java.lang.String ddmTemplateKey, java.lang.String viewMode,
@@ -1115,6 +1216,7 @@ public class JournalArticleLocalServiceWrapper
 	could not be found, or if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticleDisplay getArticleDisplay(
 		long groupId, java.lang.String articleId, double version,
 		java.lang.String ddmTemplateKey, java.lang.String viewMode,
@@ -1151,6 +1253,7 @@ public class JournalArticleLocalServiceWrapper
 	could not be found, or if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticleDisplay getArticleDisplay(
 		long groupId, java.lang.String articleId, double version,
 		java.lang.String ddmTemplateKey, java.lang.String viewMode,
@@ -1185,6 +1288,7 @@ public class JournalArticleLocalServiceWrapper
 	could not be found, or if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticleDisplay getArticleDisplay(
 		long groupId, java.lang.String articleId, java.lang.String viewMode,
 		java.lang.String languageId, int page, java.lang.String xmlRequest,
@@ -1222,6 +1326,7 @@ public class JournalArticleLocalServiceWrapper
 	could not be found, or if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticleDisplay getArticleDisplay(
 		long groupId, java.lang.String articleId,
 		java.lang.String ddmTemplateKey, java.lang.String viewMode,
@@ -1257,6 +1362,7 @@ public class JournalArticleLocalServiceWrapper
 	could not be found, or if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticleDisplay getArticleDisplay(
 		long groupId, java.lang.String articleId,
 		java.lang.String ddmTemplateKey, java.lang.String viewMode,
@@ -1286,6 +1392,7 @@ public class JournalArticleLocalServiceWrapper
 	could not be found, or if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticleDisplay getArticleDisplay(
 		long groupId, java.lang.String articleId, java.lang.String viewMode,
 		java.lang.String languageId,
@@ -1302,6 +1409,7 @@ public class JournalArticleLocalServiceWrapper
 	* @return the web content articles present in the system
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.journal.model.JournalArticle> getArticles()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _journalArticleLocalService.getArticles();
@@ -1314,6 +1422,7 @@ public class JournalArticleLocalServiceWrapper
 	* @return the web content articles belonging to the group
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.journal.model.JournalArticle> getArticles(
 		long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -1340,6 +1449,7 @@ public class JournalArticleLocalServiceWrapper
 	* @return the range of matching web content articles
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.journal.model.JournalArticle> getArticles(
 		long groupId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -1369,6 +1479,7 @@ public class JournalArticleLocalServiceWrapper
 	comparator
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.journal.model.JournalArticle> getArticles(
 		long groupId, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator obc)
@@ -1384,6 +1495,7 @@ public class JournalArticleLocalServiceWrapper
 	* @return the matching web content articles
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.journal.model.JournalArticle> getArticles(
 		long groupId, long folderId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -1412,6 +1524,7 @@ public class JournalArticleLocalServiceWrapper
 	* @return the range of matching web content articles
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.journal.model.JournalArticle> getArticles(
 		long groupId, long folderId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -1444,6 +1557,7 @@ public class JournalArticleLocalServiceWrapper
 	comparator
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.journal.model.JournalArticle> getArticles(
 		long groupId, long folderId, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
@@ -1460,6 +1574,7 @@ public class JournalArticleLocalServiceWrapper
 	* @return the matching web content articles
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.journal.model.JournalArticle> getArticles(
 		long groupId, java.lang.String articleId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -1474,6 +1589,7 @@ public class JournalArticleLocalServiceWrapper
 	* @return the web content articles matching the small image ID
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.journal.model.JournalArticle> getArticlesBySmallImageId(
 		long smallImageId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -1487,6 +1603,7 @@ public class JournalArticleLocalServiceWrapper
 	* @return the number of web content articles belonging to the group
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getArticlesCount(long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _journalArticleLocalService.getArticlesCount(groupId);
@@ -1500,6 +1617,7 @@ public class JournalArticleLocalServiceWrapper
 	* @return the number of matching web content articles
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getArticlesCount(long groupId, long folderId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _journalArticleLocalService.getArticlesCount(groupId, folderId);
@@ -1530,6 +1648,7 @@ public class JournalArticleLocalServiceWrapper
 	* @return the range of matching web content articles ordered by article ID
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.journal.model.JournalArticle> getCompanyArticles(
 		long companyId, double version, int status, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -1561,6 +1680,7 @@ public class JournalArticleLocalServiceWrapper
 	* @return the range of matching web content articles ordered by article ID
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.journal.model.JournalArticle> getCompanyArticles(
 		long companyId, int status, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -1593,6 +1713,7 @@ public class JournalArticleLocalServiceWrapper
 	* @return the number of matching web content articles
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getCompanyArticlesCount(long companyId, double version,
 		int status, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -1611,6 +1732,7 @@ public class JournalArticleLocalServiceWrapper
 	* @return the number of matching web content articles
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getCompanyArticlesCount(long companyId, int status)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _journalArticleLocalService.getCompanyArticlesCount(companyId,
@@ -1630,6 +1752,7 @@ public class JournalArticleLocalServiceWrapper
 	could be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle getDisplayArticle(
 		long groupId, java.lang.String articleId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -1650,6 +1773,7 @@ public class JournalArticleLocalServiceWrapper
 	could be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle getDisplayArticleByUrlTitle(
 		long groupId, java.lang.String urlTitle)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -1669,6 +1793,7 @@ public class JournalArticleLocalServiceWrapper
 	found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle getLatestArticle(
 		long resourcePrimKey)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -1691,6 +1816,7 @@ public class JournalArticleLocalServiceWrapper
 	found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle getLatestArticle(
 		long resourcePrimKey, int status)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -1719,6 +1845,7 @@ public class JournalArticleLocalServiceWrapper
 	found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle getLatestArticle(
 		long resourcePrimKey, int status, boolean preferApproved)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -1737,6 +1864,7 @@ public class JournalArticleLocalServiceWrapper
 	found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle getLatestArticle(
 		long groupId, java.lang.String articleId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -1758,6 +1886,7 @@ public class JournalArticleLocalServiceWrapper
 	found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle getLatestArticle(
 		long groupId, java.lang.String articleId, int status)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -1784,6 +1913,7 @@ public class JournalArticleLocalServiceWrapper
 	found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle getLatestArticle(
 		long groupId, java.lang.String className, long classPK)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -1806,6 +1936,7 @@ public class JournalArticleLocalServiceWrapper
 	found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle getLatestArticleByUrlTitle(
 		long groupId, java.lang.String urlTitle, int status)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -1825,6 +1956,7 @@ public class JournalArticleLocalServiceWrapper
 	found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public double getLatestVersion(long groupId, java.lang.String articleId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -1845,6 +1977,7 @@ public class JournalArticleLocalServiceWrapper
 	found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public double getLatestVersion(long groupId, java.lang.String articleId,
 		int status)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -1861,6 +1994,7 @@ public class JournalArticleLocalServiceWrapper
 	* @return the number of web content articles that are not recycled
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getNotInTrashArticlesCount(long groupId, long folderId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _journalArticleLocalService.getNotInTrashArticlesCount(groupId,
@@ -1877,6 +2011,7 @@ public class JournalArticleLocalServiceWrapper
 	* @return the matching web content articles
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.journal.model.JournalArticle> getStructureArticles(
 		long groupId, java.lang.String ddmStructureKey)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -1909,6 +2044,7 @@ public class JournalArticleLocalServiceWrapper
 	comparator
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.journal.model.JournalArticle> getStructureArticles(
 		long groupId, java.lang.String ddmStructureKey, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator obc)
@@ -1917,6 +2053,7 @@ public class JournalArticleLocalServiceWrapper
 			ddmStructureKey, start, end, obc);
 	}
 
+	@Override
 	public java.util.List<com.liferay.portlet.journal.model.JournalArticle> getStructureArticles(
 		java.lang.String[] ddmStructureKeys)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -1933,6 +2070,7 @@ public class JournalArticleLocalServiceWrapper
 	* @return the number of matching web content articles
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getStructureArticlesCount(long groupId,
 		java.lang.String ddmStructureKey)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -1951,6 +2089,7 @@ public class JournalArticleLocalServiceWrapper
 	* @return the matching web content articles
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.journal.model.JournalArticle> getTemplateArticles(
 		long groupId, java.lang.String ddmTemplateKey)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -1985,6 +2124,7 @@ public class JournalArticleLocalServiceWrapper
 	comparator
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.journal.model.JournalArticle> getTemplateArticles(
 		long groupId, java.lang.String ddmTemplateKey, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator obc)
@@ -2005,6 +2145,7 @@ public class JournalArticleLocalServiceWrapper
 	* @return the number of matching web content articles
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getTemplateArticlesCount(long groupId,
 		java.lang.String ddmTemplateKey)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -2021,6 +2162,7 @@ public class JournalArticleLocalServiceWrapper
 	<code>false</code> otherwise
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public boolean hasArticle(long groupId, java.lang.String articleId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _journalArticleLocalService.hasArticle(groupId, articleId);
@@ -2039,6 +2181,7 @@ public class JournalArticleLocalServiceWrapper
 	found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public boolean isLatestVersion(long groupId, java.lang.String articleId,
 		double version)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -2063,6 +2206,7 @@ public class JournalArticleLocalServiceWrapper
 	found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public boolean isLatestVersion(long groupId, java.lang.String articleId,
 		double version, int status)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -2084,6 +2228,7 @@ public class JournalArticleLocalServiceWrapper
 	found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle moveArticle(
 		long groupId, java.lang.String articleId, long newFolderId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -2115,6 +2260,7 @@ public class JournalArticleLocalServiceWrapper
 	key could not be found or if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle moveArticleFromTrash(
 		long userId, long groupId,
 		com.liferay.portlet.journal.model.JournalArticle article,
@@ -2139,6 +2285,7 @@ public class JournalArticleLocalServiceWrapper
 	article to the Recycle Bin or if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle moveArticleToTrash(
 		long userId, com.liferay.portlet.journal.model.JournalArticle article)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -2160,6 +2307,7 @@ public class JournalArticleLocalServiceWrapper
 	article to the Recycle Bin or if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle moveArticleToTrash(
 		long userId, long groupId, java.lang.String articleId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -2181,6 +2329,7 @@ public class JournalArticleLocalServiceWrapper
 	found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle removeArticleLocale(
 		long groupId, java.lang.String articleId, double version,
 		java.lang.String languageId)
@@ -2202,6 +2351,7 @@ public class JournalArticleLocalServiceWrapper
 	occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void restoreArticleFromTrash(long userId,
 		com.liferay.portlet.journal.model.JournalArticle article)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -2271,6 +2421,7 @@ public class JournalArticleLocalServiceWrapper
 	comparator
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.journal.model.JournalArticle> search(
 		long companyId, long groupId, java.util.List<java.lang.Long> folderIds,
 		long classNameId, java.lang.String keywords, java.lang.Double version,
@@ -2354,6 +2505,7 @@ public class JournalArticleLocalServiceWrapper
 	comparator
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.journal.model.JournalArticle> search(
 		long companyId, long groupId, java.util.List<java.lang.Long> folderIds,
 		long classNameId, java.lang.String articleId, java.lang.Double version,
@@ -2436,6 +2588,7 @@ public class JournalArticleLocalServiceWrapper
 	comparator
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.journal.model.JournalArticle> search(
 		long companyId, long groupId, java.util.List<java.lang.Long> folderIds,
 		long classNameId, java.lang.String articleId, java.lang.Double version,
@@ -2500,6 +2653,7 @@ public class JournalArticleLocalServiceWrapper
 	* @return the matching web content articles ordered by <code>sort</code>
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.kernel.search.Hits search(long companyId,
 		long groupId, java.util.List<java.lang.Long> folderIds,
 		long classNameId, java.lang.String ddmStructureKey,
@@ -2573,6 +2727,7 @@ public class JournalArticleLocalServiceWrapper
 	* @return the matching web content articles ordered by <code>sort</code>
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.kernel.search.Hits search(long companyId,
 		long groupId, java.util.List<java.lang.Long> folderIds,
 		long classNameId, java.lang.String articleId, java.lang.String title,
@@ -2633,6 +2788,7 @@ public class JournalArticleLocalServiceWrapper
 	* @return the number of matching web content articles
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int searchCount(long companyId, long groupId,
 		java.util.List<java.lang.Long> folderIds, long classNameId,
 		java.lang.String keywords, java.lang.Double version,
@@ -2695,6 +2851,7 @@ public class JournalArticleLocalServiceWrapper
 	* @return the number of matching web content articles
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int searchCount(long companyId, long groupId,
 		java.util.List<java.lang.Long> folderIds, long classNameId,
 		java.lang.String articleId, java.lang.Double version,
@@ -2760,6 +2917,7 @@ public class JournalArticleLocalServiceWrapper
 	* @return the number of matching web content articles
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int searchCount(long companyId, long groupId,
 		java.util.List<java.lang.Long> folderIds, long classNameId,
 		java.lang.String articleId, java.lang.Double version,
@@ -2786,6 +2944,7 @@ public class JournalArticleLocalServiceWrapper
 	* @throws PortalException if a matching user or group could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void subscribe(long userId, long groupId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -2802,6 +2961,7 @@ public class JournalArticleLocalServiceWrapper
 	found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void unsubscribe(long userId, long groupId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -2842,6 +3002,7 @@ public class JournalArticleLocalServiceWrapper
 	occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle updateArticle(
 		long userId, long groupId, long folderId, java.lang.String articleId,
 		double version,
@@ -2943,6 +3104,7 @@ public class JournalArticleLocalServiceWrapper
 	occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle updateArticle(
 		long userId, long groupId, long folderId, java.lang.String articleId,
 		double version,
@@ -3004,6 +3166,7 @@ public class JournalArticleLocalServiceWrapper
 	occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle updateArticle(
 		long userId, long groupId, long folderId, java.lang.String articleId,
 		double version, java.lang.String content,
@@ -3019,6 +3182,7 @@ public class JournalArticleLocalServiceWrapper
 	#updateArticleTranslation(long, String, double, Locale,
 	String, String, String, Map, ServiceContext)}
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle updateArticleTranslation(
 		long groupId, java.lang.String articleId, double version,
 		java.util.Locale locale, java.lang.String title,
@@ -3052,6 +3216,7 @@ public class JournalArticleLocalServiceWrapper
 	occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle updateArticleTranslation(
 		long groupId, java.lang.String articleId, double version,
 		java.util.Locale locale, java.lang.String title,
@@ -3078,6 +3243,7 @@ public class JournalArticleLocalServiceWrapper
 	* @throws PortalException if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void updateAsset(long userId,
 		com.liferay.portlet.journal.model.JournalArticle article,
 		long[] assetCategoryIds, java.lang.String[] assetTagNames,
@@ -3103,6 +3269,7 @@ public class JournalArticleLocalServiceWrapper
 	found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle updateContent(
 		long groupId, java.lang.String articleId, double version,
 		java.lang.String content)
@@ -3135,6 +3302,7 @@ public class JournalArticleLocalServiceWrapper
 	* @throws PortalException if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle updateStatus(
 		long userId, com.liferay.portlet.journal.model.JournalArticle article,
 		int status, java.lang.String articleURL,
@@ -3167,6 +3335,7 @@ public class JournalArticleLocalServiceWrapper
 	found or if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle updateStatus(
 		long userId, long classPK, int status,
 		java.util.Map<java.lang.String, java.io.Serializable> workflowContext,
@@ -3199,6 +3368,7 @@ public class JournalArticleLocalServiceWrapper
 	found or if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.journal.model.JournalArticle updateStatus(
 		long userId, long groupId, java.lang.String articleId, double version,
 		int status, java.lang.String articleURL,
@@ -3226,6 +3396,7 @@ public class JournalArticleLocalServiceWrapper
 	new DDM template
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void updateTemplateId(long groupId, long classNameId,
 		java.lang.String oldDDMTemplateKey, java.lang.String newDDMTemplateKey)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -3248,10 +3419,12 @@ public class JournalArticleLocalServiceWrapper
 		_journalArticleLocalService = journalArticleLocalService;
 	}
 
+	@Override
 	public JournalArticleLocalService getWrappedService() {
 		return _journalArticleLocalService;
 	}
 
+	@Override
 	public void setWrappedService(
 		JournalArticleLocalService journalArticleLocalService) {
 		_journalArticleLocalService = journalArticleLocalService;

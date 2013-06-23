@@ -7,30 +7,48 @@
 		<var name="wikiNodeDescription" value="Wiki Node Description" />
 		<var name="wikiNodeName" value="Wiki Node Name" />
 
-		<execute macro="WikiNode#cpAdd" />
+		<execute macro="WikiNode#addCP">
+			<var name="wikiNodeDescription" value="${wikiNodeDescription}" />
+			<var name="wikiNodeName" value="${wikiNodeName}" />
+		</execute>
 	</command>
 
 	<command name="DeleteWikiNode">
 		<var name="wikiNodeDescription" value="Wiki Node Description" />
 		<var name="wikiNodeName" value="Wiki Node Name" />
 
-		<execute macro="WikiNode#cpAdd" />
-		<execute macro="WikiNode#cpDelete" />
+		<execute macro="WikiNode#addCP">
+			<var name="wikiNodeDescription" value="${wikiNodeDescription}" />
+			<var name="wikiNodeName" value="${wikiNodeName}" />
+		</execute>
+
+		<execute macro="WikiNode#deleteCP">
+			<var name="wikiNodeName" value="${wikiNodeName}" />
+		</execute>
 	</command>
 
 	<command name="EditWikiNode">
 		<var name="wikiNodeDescription" value="Wiki Node Description" />
-		<var name="wikiNodeDescriptionNew" value="Wiki Node Description Edit" />
+		<var name="wikiNodeDescriptionEdit" value="Wiki Node Description Edit" />
 		<var name="wikiNodeName" value="Wiki Node Name" />
-		<var name="wikiNodeNameNew" value="Wiki Node Name Edit" />
+		<var name="wikiNodeNameEdit" value="Wiki Node Name Edit" />
 
-		<execute macro="WikiNode#cpAdd" />
-		<execute macro="WikiNode#cpEdit" />
+		<execute macro="WikiNode#addCP">
+			<var name="wikiNodeDescription" value="${wikiNodeDescription}" />
+			<var name="wikiNodeName" value="${wikiNodeName}" />
+		</execute>
+
+		<execute macro="WikiNode#editCP">
+			<var name="wikiNodeDescription" value="${wikiNodeDescription}" />
+			<var name="wikiNodeDescriptionEdit" value="${wikiNodeDescriptionEdit}" />
+			<var name="wikiNodeName" value="${wikiNodeName}" />
+			<var name="wikiNodeNameEdit" value="${wikiNodeNameEdit}" />
+		</execute>
 	</command>
 
 	<tear-down>
-		<execute macro="WikiNode#cpTearDown" />
+		<execute macro="WikiNode#tearDownCP" />
 
-		<execute macro="WikiPage#cpTearDown" />
+		<execute macro="WikiPage#tearDownCP" />
 	</tear-down>
 </definition>
