@@ -29,6 +29,8 @@ long vocabularyId = BeanParamUtil.getLong(vocabulary, request, "vocabularyId");
 </portlet:actionURL>
 
 <aui:form action="<%= editVocabularyURL %>" cssClass="update-vocabulary-form" method="get" name='<%= randomNamespace + "fm" %>'>
+	<div class="hide lfr-message-response" id="vocabularyMessagesEdit"></div>
+
 	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= vocabulary == null ? Constants.ADD : Constants.UPDATE %>" />
 	<aui:input name="vocabularyId" type="hidden" value="<%= vocabularyId %>" />
 
@@ -80,3 +82,7 @@ long vocabularyId = BeanParamUtil.getLong(vocabulary, request, "vocabularyId");
 		</div>
 	</aui:fieldset>
 </aui:form>
+
+<aui:script>
+	Liferay.Util.focusFormField(document.<portlet:namespace /><%= randomNamespace %>fm.<portlet:namespace />title);
+</aui:script>

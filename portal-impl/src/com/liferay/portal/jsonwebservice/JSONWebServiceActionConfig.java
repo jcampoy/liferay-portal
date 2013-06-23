@@ -59,6 +59,28 @@ public class JSONWebServiceActionConfig
 		_signature = sb.toString();
 	}
 
+	public JSONWebServiceActionConfig(
+		String contextPath, Object actionObject, Class<?> actionClass,
+		Method actionMethod, String path, String method) {
+
+		this(contextPath, actionClass, actionMethod, path, method);
+
+		_actionObject = actionObject;
+
+		try {
+			Class<?> actionObjectClass = actionObject.getClass();
+
+			Method actionObjectClassActionMethod = actionObjectClass.getMethod(
+				actionMethod.getName(), actionMethod.getParameterTypes());
+
+			_actionMethod = actionObjectClassActionMethod;
+		}
+		catch (NoSuchMethodException nsme) {
+			throw new IllegalArgumentException(nsme);
+		}
+	}
+
+	@Override
 	public int compareTo(
 		JSONWebServiceActionConfig jsonWebServiceActionConfig) {
 
@@ -87,14 +109,22 @@ public class JSONWebServiceActionConfig
 		return false;
 	}
 
+	@Override
 	public Class<?> getActionClass() {
 		return _actionClass;
 	}
 
+	@Override
 	public Method getActionMethod() {
 		return _actionMethod;
 	}
 
+	@Override
+	public Object getActionObject() {
+		return _actionObject;
+	}
+
+	@Override
 	public String getContextPath() {
 		return _contextPath;
 	}
@@ -103,18 +133,22 @@ public class JSONWebServiceActionConfig
 		return _fullPath;
 	}
 
+	@Override
 	public String getMethod() {
 		return _method;
 	}
 
+	@Override
 	public MethodParameter[] getMethodParameters() {
 		return _methodParameters;
 	}
 
+	@Override
 	public String getPath() {
 		return _path;
 	}
 
+	@Override
 	public String getSignature() {
 		return _signature;
 	}
@@ -151,6 +185,7 @@ public class JSONWebServiceActionConfig
 
 	private Class<?> _actionClass;
 	private Method _actionMethod;
+	private Object _actionObject;
 	private String _contextPath;
 	private String _fullPath;
 	private String _method;

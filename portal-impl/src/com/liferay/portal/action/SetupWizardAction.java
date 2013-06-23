@@ -16,7 +16,6 @@ package com.liferay.portal.action;
 
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.servlet.HttpHeaders;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
@@ -49,8 +48,8 @@ public class SetupWizardAction extends Action {
 
 	@Override
 	public ActionForward execute(
-			ActionMapping mapping, ActionForm form, HttpServletRequest request,
-			HttpServletResponse response)
+			ActionMapping actionMapping, ActionForm actionForm,
+			HttpServletRequest request, HttpServletResponse response)
 		throws Exception {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
@@ -64,12 +63,12 @@ public class SetupWizardAction extends Action {
 
 		try {
 			if (Validator.isNull(cmd)) {
-				return mapping.findForward("portal.setup_wizard");
+				return actionMapping.findForward("portal.setup_wizard");
 			}
 			else if (cmd.equals(Constants.TRANSLATE)) {
 				SetupWizardUtil.updateLanguage(request, response);
 
-				return mapping.findForward("portal.setup_wizard");
+				return actionMapping.findForward("portal.setup_wizard");
 			}
 			else if (cmd.equals(Constants.TEST)) {
 				testDatabase(request, response);
@@ -89,7 +88,7 @@ public class SetupWizardAction extends Action {
 			if (e instanceof PrincipalException) {
 				SessionErrors.add(request, e.getClass());
 
-				return mapping.findForward("portal.setup_wizard");
+				return actionMapping.findForward("portal.setup_wizard");
 			}
 			else {
 				PortalUtil.sendError(e, request, response);
@@ -106,8 +105,7 @@ public class SetupWizardAction extends Action {
 		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
-		String message = LanguageUtil.format(
-			themeDisplay.getLocale(), key, arguments);
+		String message = themeDisplay.translate(key, arguments);
 
 		jsonObject.put("message", message);
 	}

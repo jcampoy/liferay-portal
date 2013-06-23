@@ -19,13 +19,33 @@
 	<td></td>
 </tr>
 <tr>
+	<td>PORTLET_TITLE</td>
+	<td>//h1[@class='portlet-title']/span[@class='portlet-title-text']</td>
+	<td></td>
+</tr>
+<tr>
 	<td>ADD_ENTRY_BUTTON</td>
-	<td>//input[@value='Add Blog Entry']</td>
+	<td>//button[@id='_33_addEntryButton']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>PERMISSIONS_BUTTON</td>
+	<td>//button[contains(.,'Permissions')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SUBSCRIBE_LINK</td>
+	<td>//div[@class='subscribe']/span/a[contains(.,'Subscribe')]/span</td>
+	<td></td>
+</tr>
+<tr>
+	<td>RSS_LINK</td>
+	<td>//div[@class='subscribe']/span/a[contains(.,'RSS')]/span</td>
 	<td></td>
 </tr>
 <tr>
 	<td>SUCCESS_MESSAGE</td>
-	<td>//div[@class='portlet-msg-success']</td>
+	<td>//div[@class='alert alert-success']</td>
 	<td></td>
 </tr>
 <tr>
@@ -52,6 +72,11 @@
 <tr>
 	<td>ENTRY_TITLE_3</td>
 	<td>xpath=(//div[@class='entry-title']/h2/a)[3]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>ENTRY_WORKFLOW_STATUS_1</td>
+	<td>xpath=(//div[@class='entry-content']/h3)[1]</td>
 	<td></td>
 </tr>
 <tr>

@@ -17,6 +17,7 @@ package com.liferay.portal.lar;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
 import com.liferay.portal.kernel.lar.ExportImportPathUtil;
 import com.liferay.portal.kernel.lar.PortletDataContext;
+import com.liferay.portal.kernel.lar.PortletDataContextFactoryUtil;
 import com.liferay.portal.kernel.lar.PortletDataHandlerKeys;
 import com.liferay.portal.kernel.lar.StagedModelDataHandlerUtil;
 import com.liferay.portal.kernel.lar.UserIdStrategy;
@@ -32,13 +33,14 @@ import com.liferay.portal.kernel.zip.ZipWriterFactoryUtil;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.StagedModel;
 import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.ServiceContextThreadLocal;
 import com.liferay.portal.util.GroupTestUtil;
 import com.liferay.portal.util.TestPropsValues;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -63,12 +65,16 @@ public abstract class BaseStagedModelDataHandlerTestCase extends PowerMockito {
 
 		liveGroup = GroupTestUtil.addGroup();
 		stagingGroup = GroupTestUtil.addGroup();
+
+		ServiceContextThreadLocal.pushServiceContext(new ServiceContext());
 	}
 
 	@After
 	public void tearDown() throws Exception {
 		GroupLocalServiceUtil.deleteGroup(liveGroup);
 		GroupLocalServiceUtil.deleteGroup(stagingGroup);
+
+		ServiceContextThreadLocal.popServiceContext();
 	}
 
 	@Test
@@ -77,16 +83,7 @@ public abstract class BaseStagedModelDataHandlerTestCase extends PowerMockito {
 
 		// Export
 
-		ZipWriter zipWriter = ZipWriterFactoryUtil.getZipWriter();
-
-		PortletDataContext portletDataContext = new PortletDataContextImpl(
-			stagingGroup.getCompanyId(), stagingGroup.getGroupId(),
-			getParameterMap(), new HashSet<String>(), getStartDate(),
-			getEndDate(), zipWriter);
-
-		Element rootElement = SAXReaderUtil.createElement("root");
-
-		portletDataContext.setExportDataRootElement(rootElement);
+		initExport();
 
 		Map<String, List<StagedModel>> dependentStagedModelsMap =
 			addDependentStagedModelsMap(stagingGroup);
@@ -102,28 +99,13 @@ public abstract class BaseStagedModelDataHandlerTestCase extends PowerMockito {
 
 		// Import
 
-		UserIdStrategy userIdStrategy = new CurrentUserIdStrategy(
-			TestPropsValues.getUser());
+		initImport();
 
-		ZipReader zipReader = ZipReaderFactoryUtil.getZipReader(
-			zipWriter.getFile());
-
-		portletDataContext = new PortletDataContextImpl(
-			liveGroup.getCompanyId(), liveGroup.getGroupId(), getParameterMap(),
-			new HashSet<String>(), userIdStrategy, zipReader);
-
-		portletDataContext.setSourceGroupId(stagingGroup.getGroupId());
-
-		portletDataContext.setImportDataRootElement(rootElement);
+		deleteStagedModel(stagedModel, dependentStagedModelsMap, stagingGroup);
 
 		// Reread the staged model for import from ZIP for true testing
 
-		String stagedModelPath = getStagedModelPath(
-			stagingGroup.getGroupId(), stagedModel);
-
-		StagedModel exportedStagedModel =
-			(StagedModel)portletDataContext.getZipEntryAsObject(
-				stagedModelPath);
+		StagedModel exportedStagedModel = readExportedStagedModel(stagedModel);
 
 		Assert.assertNotNull(exportedStagedModel);
 
@@ -164,6 +146,13 @@ public abstract class BaseStagedModelDataHandlerTestCase extends PowerMockito {
 			Map<String, List<StagedModel>> dependentStagedModelsMap)
 		throws Exception;
 
+	protected void deleteStagedModel(
+			StagedModel stagedModel,
+			Map<String, List<StagedModel>> dependentStagedModelsMap,
+			Group group)
+		throws Exception {
+	}
+
 	protected Date getEndDate() {
 		return new Date();
 	}
@@ -180,10 +169,19 @@ public abstract class BaseStagedModelDataHandlerTestCase extends PowerMockito {
 			PortletDataHandlerKeys.IGNORE_LAST_PUBLISH_DATE,
 			new String[] {Boolean.TRUE.toString()});
 		parameterMap.put(
+			PortletDataHandlerKeys.PORTLET_CONFIGURATION,
+			new String[] {Boolean.TRUE.toString()});
+		parameterMap.put(
+			PortletDataHandlerKeys.PORTLET_CONFIGURATION_ALL,
+			new String[] {Boolean.TRUE.toString()});
+		parameterMap.put(
 			PortletDataHandlerKeys.PORTLET_DATA,
 			new String[] {Boolean.TRUE.toString()});
 		parameterMap.put(
 			PortletDataHandlerKeys.PORTLET_DATA_ALL,
+			new String[] {Boolean.TRUE.toString()});
+		parameterMap.put(
+			PortletDataHandlerKeys.PORTLET_SETUP_ALL,
 			new String[] {Boolean.TRUE.toString()});
 
 		return parameterMap;
@@ -199,6 +197,49 @@ public abstract class BaseStagedModelDataHandlerTestCase extends PowerMockito {
 
 	protected Date getStartDate() {
 		return new Date(System.currentTimeMillis() - Time.HOUR);
+	}
+
+	protected void initExport() throws Exception {
+		zipWriter = ZipWriterFactoryUtil.getZipWriter();
+
+		portletDataContext =
+			PortletDataContextFactoryUtil.createExportPortletDataContext(
+				stagingGroup.getCompanyId(), stagingGroup.getGroupId(),
+				getParameterMap(), getStartDate(), getEndDate(), zipWriter);
+
+		rootElement = SAXReaderUtil.createElement("root");
+
+		portletDataContext.setExportDataRootElement(rootElement);
+
+		missingReferencesElement = SAXReaderUtil.createElement(
+			"missing-references");
+
+		portletDataContext.setMissingReferencesElement(
+			missingReferencesElement);
+	}
+
+	protected void initImport() throws Exception {
+		userIdStrategy = new CurrentUserIdStrategy(TestPropsValues.getUser());
+		zipReader = ZipReaderFactoryUtil.getZipReader(zipWriter.getFile());
+
+		portletDataContext =
+			PortletDataContextFactoryUtil.createImportPortletDataContext(
+				liveGroup.getCompanyId(), liveGroup.getGroupId(),
+				getParameterMap(), userIdStrategy, zipReader);
+
+		portletDataContext.setImportDataRootElement(rootElement);
+		portletDataContext.setSourceGroupId(stagingGroup.getGroupId());
+	}
+
+	protected StagedModel readExportedStagedModel(StagedModel stagedModel) {
+		String stagedModelPath = getStagedModelPath(
+			stagingGroup.getGroupId(), stagedModel);
+
+		StagedModel exportedStagedModel =
+			(StagedModel)portletDataContext.getZipEntryAsObject(
+				stagedModelPath);
+
+		return exportedStagedModel;
 	}
 
 	protected void validateExport(
@@ -223,10 +264,9 @@ public abstract class BaseStagedModelDataHandlerTestCase extends PowerMockito {
 				dependentStagedModels = ListUtil.copy(dependentStagedModels);
 			}
 
-			String stagedModelClassSimpleName =
-				getStagedModelClass().getSimpleName();
+			Class<?> stagedModelClass = getStagedModelClass();
 
-			if (className.equals(stagedModelClassSimpleName)) {
+			if (className.equals(stagedModelClass.getSimpleName())) {
 				dependentStagedModels.add(stagedModel);
 			}
 
@@ -281,6 +321,12 @@ public abstract class BaseStagedModelDataHandlerTestCase extends PowerMockito {
 	}
 
 	protected Group liveGroup;
+	protected Element missingReferencesElement;
+	protected PortletDataContext portletDataContext;
+	protected Element rootElement;
 	protected Group stagingGroup;
+	protected UserIdStrategy userIdStrategy;
+	protected ZipReader zipReader;
+	protected ZipWriter zipWriter;
 
 }

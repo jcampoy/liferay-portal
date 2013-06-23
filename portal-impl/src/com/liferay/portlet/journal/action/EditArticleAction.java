@@ -30,6 +30,7 @@ import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UnicodeFormatter;
@@ -70,6 +71,7 @@ import com.liferay.portlet.journal.ArticleTypeException;
 import com.liferay.portlet.journal.ArticleVersionException;
 import com.liferay.portlet.journal.DuplicateArticleIdException;
 import com.liferay.portlet.journal.NoSuchArticleException;
+import com.liferay.portlet.journal.asset.JournalArticleAssetRenderer;
 import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.service.JournalArticleServiceUtil;
 import com.liferay.portlet.journal.service.JournalContentSearchLocalServiceUtil;
@@ -77,10 +79,12 @@ import com.liferay.portlet.journal.util.JournalConverterUtil;
 import com.liferay.portlet.journal.util.JournalUtil;
 
 import java.io.File;
+import java.io.Serializable;
 
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -115,8 +119,9 @@ public class EditArticleAction extends PortletAction {
 
 	@Override
 	public void processAction(
-			ActionMapping mapping, ActionForm form, PortletConfig portletConfig,
-			ActionRequest actionRequest, ActionResponse actionResponse)
+			ActionMapping actionMapping, ActionForm actionForm,
+			PortletConfig portletConfig, ActionRequest actionRequest,
+			ActionResponse actionResponse)
 		throws Exception {
 
 		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
@@ -237,11 +242,8 @@ public class EditArticleAction extends PortletAction {
 					actionRequest,
 					"portlet.journal.update_translation_redirect");
 			}
-
-			if (!cmd.equals(Constants.DELETE_TRANSLATION) &&
-				!cmd.equals(Constants.TRANSLATE) &&
-				(article != null) &&
-				(workflowAction == WorkflowConstants.ACTION_SAVE_DRAFT)) {
+			else if ((article != null) &&
+					 (workflowAction == WorkflowConstants.ACTION_SAVE_DRAFT)) {
 
 				redirect = getSaveAndContinueRedirect(
 					portletConfig, actionRequest, article, redirect);
@@ -262,6 +264,16 @@ public class EditArticleAction extends PortletAction {
 					redirect = PortalUtil.escapeRedirect(redirect);
 
 					if (Validator.isNotNull(redirect)) {
+						if (cmd.equals(Constants.ADD) && (article != null)) {
+							redirect = HttpUtil.addParameter(
+								redirect, "className",
+								JournalArticle.class.getName());
+							redirect = HttpUtil.addParameter(
+								redirect, "classPK",
+								JournalArticleAssetRenderer.getClassPK(
+									article));
+						}
+
 						actionResponse.sendRedirect(redirect);
 					}
 				}
@@ -305,8 +317,9 @@ public class EditArticleAction extends PortletAction {
 
 	@Override
 	public ActionForward render(
-			ActionMapping mapping, ActionForm form, PortletConfig portletConfig,
-			RenderRequest renderRequest, RenderResponse renderResponse)
+			ActionMapping actionMapping, ActionForm actionForm,
+			PortletConfig portletConfig, RenderRequest renderRequest,
+			RenderResponse renderResponse)
 		throws Exception {
 
 		try {
@@ -324,21 +337,22 @@ public class EditArticleAction extends PortletAction {
 
 				SessionErrors.add(renderRequest, e.getClass());
 
-				return mapping.findForward("portlet.journal.error");
+				return actionMapping.findForward("portlet.journal.error");
 			}
 			else {
 				throw e;
 			}
 		}
 
-		return mapping.findForward(
+		return actionMapping.findForward(
 			getForward(renderRequest, "portlet.journal.edit_article"));
 	}
 
 	@Override
 	public void serveResource(
-			ActionMapping mapping, ActionForm form, PortletConfig portletConfig,
-			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
+			ActionMapping actionMapping, ActionForm actionForm,
+			PortletConfig portletConfig, ResourceRequest resourceRequest,
+			ResourceResponse resourceResponse)
 		throws Exception {
 
 		PortletContext portletContext = portletConfig.getPortletContext();
@@ -441,11 +455,26 @@ public class EditArticleAction extends PortletAction {
 				continue;
 			}
 
-			String content = (String)field.getValue(locale);
+			List<Serializable> values = field.getValues(locale);
 
-			images.put(
-				"_" + name + "_" + LanguageUtil.getLanguageId(locale),
-				UnicodeFormatter.hexToBytes(content));
+			for (int i = 0; i < values.size(); i++) {
+				String content = (String)values.get(i);
+
+				if (content.equals("update")) {
+					continue;
+				}
+
+				StringBundler sb = new StringBundler(6);
+
+				sb.append(StringPool.UNDERLINE);
+				sb.append(name);
+				sb.append(StringPool.UNDERLINE);
+				sb.append(i);
+				sb.append(StringPool.UNDERLINE);
+				sb.append(LanguageUtil.getLanguageId(locale));
+
+				images.put(sb.toString(), UnicodeFormatter.hexToBytes(content));
+			}
 		}
 
 		return images;
@@ -886,15 +915,15 @@ public class EditArticleAction extends PortletAction {
 			uploadPortletRequest, "portletResource");
 
 		if (Validator.isNotNull(portletResource)) {
-			PortletPreferences preferences =
+			PortletPreferences portletPreferences =
 				PortletPreferencesFactoryUtil.getPortletSetup(
 					uploadPortletRequest, portletResource);
 
-			preferences.setValue(
+			portletPreferences.setValue(
 				"groupId", String.valueOf(article.getGroupId()));
-			preferences.setValue("articleId", article.getArticleId());
+			portletPreferences.setValue("articleId", article.getArticleId());
 
-			preferences.store();
+			portletPreferences.store();
 
 			updateContentSearch(
 				actionRequest, portletResource, article.getArticleId());

@@ -74,6 +74,8 @@ else {
 </portlet:actionURL>
 
 <aui:form action="<%= editCategoryURL %>" cssClass="update-category-form" method="get" name='<%= randomNamespace + "fm" %>'>
+	<div class="hide lfr-message-response" id="categoryMessagesEdit"></div>
+
 	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= category == null ? Constants.ADD : Constants.UPDATE %>" />
 
 	<aui:model-context bean="<%= category %>" model="<%= AssetCategory.class %>" />
@@ -90,7 +92,7 @@ else {
 
 				<c:choose>
 					<c:when test="<%= parentCategoryId == 0 %>">
-						<aui:select inputCssClass="vocabulary-select-list" label="to-vocabulary" name="vocabularyId">
+						<aui:select cssClass="vocabulary-select-list" label="to-vocabulary" name="vocabularyId">
 
 							<%
 							for (AssetVocabulary vocabulary : vocabularies) {
@@ -174,6 +176,10 @@ else {
 		</div>
 	</aui:fieldset>
 </aui:form>
+
+<aui:script>
+	Liferay.Util.focusFormField(document.<portlet:namespace /><%= randomNamespace %>fm.<portlet:namespace />title);
+</aui:script>
 
 <aui:script use="liferay-auto-fields">
 	var autoFields = new Liferay.AutoFields(
