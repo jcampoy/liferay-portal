@@ -17,7 +17,6 @@ package com.liferay.portlet.wiki.action;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.servlet.ServletResponseConstants;
@@ -76,8 +75,9 @@ public class EditPageAttachmentsAction extends EditFileEntryAction {
 
 	@Override
 	public void processAction(
-			ActionMapping mapping, ActionForm form, PortletConfig portletConfig,
-			ActionRequest actionRequest, ActionResponse actionResponse)
+			ActionMapping actionMapping, ActionForm actionForm,
+			PortletConfig portletConfig, ActionRequest actionRequest,
+			ActionResponse actionResponse)
 		throws Exception {
 
 		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
@@ -174,8 +174,9 @@ public class EditPageAttachmentsAction extends EditFileEntryAction {
 
 	@Override
 	public ActionForward render(
-			ActionMapping mapping, ActionForm form, PortletConfig portletConfig,
-			RenderRequest renderRequest, RenderResponse renderResponse)
+			ActionMapping actionMapping, ActionForm actionForm,
+			PortletConfig portletConfig, RenderRequest renderRequest,
+			RenderResponse renderResponse)
 		throws Exception {
 
 		try {
@@ -189,14 +190,14 @@ public class EditPageAttachmentsAction extends EditFileEntryAction {
 
 				SessionErrors.add(renderRequest, e.getClass());
 
-				return mapping.findForward("portlet.wiki.error");
+				return actionMapping.findForward("portlet.wiki.error");
 			}
 			else {
 				throw e;
 			}
 		}
 
-		return mapping.findForward(
+		return actionMapping.findForward(
 			getForward(renderRequest, "portlet.wiki.edit_page_attachment"));
 	}
 
@@ -385,8 +386,7 @@ public class EditPageAttachmentsAction extends EditFileEntryAction {
 			jsonObject.put("deleted", Boolean.TRUE);
 		}
 		catch (Exception e) {
-			String errorMessage = LanguageUtil.get(
-				themeDisplay.getLocale(),
+			String errorMessage = themeDisplay.translate(
 				"an-unexpected-error-occurred-while-deleting-the-file");
 
 			jsonObject.put("deleted", Boolean.FALSE);

@@ -17,12 +17,10 @@ package com.liferay.portlet.social.service;
 import com.liferay.portal.service.ServiceWrapper;
 
 /**
- * <p>
- * This class is a wrapper for {@link SocialActivityLocalService}.
- * </p>
+ * Provides a wrapper for {@link SocialActivityLocalService}.
  *
- * @author    Brian Wing Shun Chan
- * @see       SocialActivityLocalService
+ * @author Brian Wing Shun Chan
+ * @see SocialActivityLocalService
  * @generated
  */
 public class SocialActivityLocalServiceWrapper
@@ -40,6 +38,7 @@ public class SocialActivityLocalServiceWrapper
 	* @return the social activity that was added
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.social.model.SocialActivity addSocialActivity(
 		com.liferay.portlet.social.model.SocialActivity socialActivity)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -52,6 +51,7 @@ public class SocialActivityLocalServiceWrapper
 	* @param activityId the primary key for the new social activity
 	* @return the new social activity
 	*/
+	@Override
 	public com.liferay.portlet.social.model.SocialActivity createSocialActivity(
 		long activityId) {
 		return _socialActivityLocalService.createSocialActivity(activityId);
@@ -65,6 +65,7 @@ public class SocialActivityLocalServiceWrapper
 	* @throws PortalException if a social activity with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.social.model.SocialActivity deleteSocialActivity(
 		long activityId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -79,12 +80,14 @@ public class SocialActivityLocalServiceWrapper
 	* @return the social activity that was removed
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.social.model.SocialActivity deleteSocialActivity(
 		com.liferay.portlet.social.model.SocialActivity socialActivity)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _socialActivityLocalService.deleteSocialActivity(socialActivity);
 	}
 
+	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		return _socialActivityLocalService.dynamicQuery();
 	}
@@ -96,6 +99,7 @@ public class SocialActivityLocalServiceWrapper
 	* @return the matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
@@ -116,6 +120,7 @@ public class SocialActivityLocalServiceWrapper
 	* @return the range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -137,6 +142,7 @@ public class SocialActivityLocalServiceWrapper
 	* @return the ordered range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -154,12 +160,31 @@ public class SocialActivityLocalServiceWrapper
 	* @return the number of rows that match the dynamic query
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _socialActivityLocalService.dynamicQueryCount(dynamicQuery);
 	}
 
+	/**
+	* Returns the number of rows that match the dynamic query.
+	*
+	* @param dynamicQuery the dynamic query
+	* @param projection the projection to apply to the query
+	* @return the number of rows that match the dynamic query
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public long dynamicQueryCount(
+		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery,
+		com.liferay.portal.kernel.dao.orm.Projection projection)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _socialActivityLocalService.dynamicQueryCount(dynamicQuery,
+			projection);
+	}
+
+	@Override
 	public com.liferay.portlet.social.model.SocialActivity fetchSocialActivity(
 		long activityId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -174,6 +199,7 @@ public class SocialActivityLocalServiceWrapper
 	* @throws PortalException if a social activity with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.social.model.SocialActivity getSocialActivity(
 		long activityId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -181,6 +207,7 @@ public class SocialActivityLocalServiceWrapper
 		return _socialActivityLocalService.getSocialActivity(activityId);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -200,6 +227,7 @@ public class SocialActivityLocalServiceWrapper
 	* @return the range of social activities
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.social.model.SocialActivity> getSocialActivities(
 		int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -212,6 +240,7 @@ public class SocialActivityLocalServiceWrapper
 	* @return the number of social activities
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getSocialActivitiesCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _socialActivityLocalService.getSocialActivitiesCount();
@@ -224,6 +253,7 @@ public class SocialActivityLocalServiceWrapper
 	* @return the social activity that was updated
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.social.model.SocialActivity updateSocialActivity(
 		com.liferay.portlet.social.model.SocialActivity socialActivity)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -235,6 +265,7 @@ public class SocialActivityLocalServiceWrapper
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _socialActivityLocalService.getBeanIdentifier();
 	}
@@ -244,6 +275,7 @@ public class SocialActivityLocalServiceWrapper
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_socialActivityLocalService.setBeanIdentifier(beanIdentifier);
 	}
@@ -287,6 +319,7 @@ public class SocialActivityLocalServiceWrapper
 	* @throws PortalException if the user or group could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void addActivity(long userId, long groupId,
 		java.util.Date createDate, java.lang.String className, long classPK,
 		int type, java.lang.String extraData, long receiverUserId)
@@ -310,6 +343,7 @@ public class SocialActivityLocalServiceWrapper
 	* @throws PortalException if the user or group could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void addActivity(long userId, long groupId,
 		java.lang.String className, long classPK, int type,
 		java.lang.String extraData, long receiverUserId)
@@ -319,6 +353,7 @@ public class SocialActivityLocalServiceWrapper
 			classPK, type, extraData, receiverUserId);
 	}
 
+	@Override
 	public void addActivity(
 		com.liferay.portlet.social.model.SocialActivity activity,
 		com.liferay.portlet.social.model.SocialActivity mirrorActivity)
@@ -347,6 +382,7 @@ public class SocialActivityLocalServiceWrapper
 	* @throws PortalException if the user or group could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void addUniqueActivity(long userId, long groupId,
 		java.util.Date createDate, java.lang.String className, long classPK,
 		int type, java.lang.String extraData, long receiverUserId)
@@ -375,6 +411,7 @@ public class SocialActivityLocalServiceWrapper
 	* @throws PortalException if the user or group could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void addUniqueActivity(long userId, long groupId,
 		java.lang.String className, long classPK, int type,
 		java.lang.String extraData, long receiverUserId)
@@ -390,12 +427,20 @@ public class SocialActivityLocalServiceWrapper
 	* @param assetEntry the asset from which to remove stored activities
 	* @throws PortalException if a portal exception occurred
 	* @throws SystemException if a system exception occurred
+	* @deprecated As of 6.2.0, replaced by {@link #deleteActivities(long)}
 	*/
+	@Override
 	public void deleteActivities(
 		com.liferay.portlet.asset.model.AssetEntry assetEntry)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		_socialActivityLocalService.deleteActivities(assetEntry);
+	}
+
+	@Override
+	public void deleteActivities(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_socialActivityLocalService.deleteActivities(groupId);
 	}
 
 	/**
@@ -405,7 +450,9 @@ public class SocialActivityLocalServiceWrapper
 	* @param className the target asset's class name
 	* @param classPK the primary key of the target asset
 	* @throws SystemException if a system exception occurred
+	* @deprecated As of 6.2.0, replaced by {@link #deleteActivities(long)}
 	*/
+	@Override
 	public void deleteActivities(java.lang.String className, long classPK)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -418,7 +465,9 @@ public class SocialActivityLocalServiceWrapper
 	* @param activityId the primary key of the stored activity
 	* @throws PortalException if the activity could not be found
 	* @throws SystemException if a system exception occurred
+	* @deprecated As of 6.2.0, replaced by {@link #deleteActivities(long)}
 	*/
+	@Override
 	public void deleteActivity(long activityId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -430,7 +479,9 @@ public class SocialActivityLocalServiceWrapper
 	*
 	* @param activity the activity to be removed
 	* @throws SystemException if a system exception occurred
+	* @deprecated As of 6.2.0, replaced by {@link #deleteActivities(long)}
 	*/
+	@Override
 	public void deleteActivity(
 		com.liferay.portlet.social.model.SocialActivity activity)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -451,12 +502,14 @@ public class SocialActivityLocalServiceWrapper
 	deleted
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void deleteUserActivities(long userId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		_socialActivityLocalService.deleteUserActivities(userId);
 	}
 
+	@Override
 	public com.liferay.portlet.social.model.SocialActivity fetchFirstActivity(
 		java.lang.String className, long classPK, int type)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -484,6 +537,7 @@ public class SocialActivityLocalServiceWrapper
 	* @return the range of matching activities
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.social.model.SocialActivity> getActivities(
 		long classNameId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -513,6 +567,7 @@ public class SocialActivityLocalServiceWrapper
 	* @return the range of matching activities
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.social.model.SocialActivity> getActivities(
 		long mirrorActivityId, long classNameId, long classPK, int start,
 		int end) throws com.liferay.portal.kernel.exception.SystemException {
@@ -543,6 +598,7 @@ public class SocialActivityLocalServiceWrapper
 	* @return the range of matching activities
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.social.model.SocialActivity> getActivities(
 		long mirrorActivityId, java.lang.String className, long classPK,
 		int start, int end)
@@ -571,6 +627,7 @@ public class SocialActivityLocalServiceWrapper
 	* @return the range of matching activities
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.social.model.SocialActivity> getActivities(
 		java.lang.String className, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -585,6 +642,7 @@ public class SocialActivityLocalServiceWrapper
 	* @return the number of matching activities
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getActivitiesCount(long classNameId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _socialActivityLocalService.getActivitiesCount(classNameId);
@@ -601,6 +659,7 @@ public class SocialActivityLocalServiceWrapper
 	* @return the number of matching activities
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getActivitiesCount(long mirrorActivityId, long classNameId,
 		long classPK)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -619,6 +678,7 @@ public class SocialActivityLocalServiceWrapper
 	* @return the number of matching activities
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getActivitiesCount(long mirrorActivityId,
 		java.lang.String className, long classPK)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -633,6 +693,7 @@ public class SocialActivityLocalServiceWrapper
 	* @return the number of matching activities
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getActivitiesCount(java.lang.String className)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _socialActivityLocalService.getActivitiesCount(className);
@@ -646,6 +707,7 @@ public class SocialActivityLocalServiceWrapper
 	* @throws PortalException if the activity could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.social.model.SocialActivity getActivity(
 		long activityId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -653,6 +715,7 @@ public class SocialActivityLocalServiceWrapper
 		return _socialActivityLocalService.getActivity(activityId);
 	}
 
+	@Override
 	public java.util.List<com.liferay.portlet.social.model.SocialActivity> getActivitySetActivities(
 		long activitySetId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -683,6 +746,7 @@ public class SocialActivityLocalServiceWrapper
 	* @return the range of matching activities
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.social.model.SocialActivity> getGroupActivities(
 		long groupId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -701,6 +765,7 @@ public class SocialActivityLocalServiceWrapper
 	* @return the number of matching activities
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getGroupActivitiesCount(long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _socialActivityLocalService.getGroupActivitiesCount(groupId);
@@ -730,6 +795,7 @@ public class SocialActivityLocalServiceWrapper
 	* @return the range of matching activities
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.social.model.SocialActivity> getGroupUsersActivities(
 		long groupId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -749,6 +815,7 @@ public class SocialActivityLocalServiceWrapper
 	* @return the number of matching activities
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getGroupUsersActivitiesCount(long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _socialActivityLocalService.getGroupUsersActivitiesCount(groupId);
@@ -762,6 +829,7 @@ public class SocialActivityLocalServiceWrapper
 	* @throws PortalException if the mirror activity could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.social.model.SocialActivity getMirrorActivity(
 		long mirrorActivityId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -789,6 +857,7 @@ public class SocialActivityLocalServiceWrapper
 	* @return the range of matching activities
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.social.model.SocialActivity> getOrganizationActivities(
 		long organizationId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -804,6 +873,7 @@ public class SocialActivityLocalServiceWrapper
 	* @return the number of matching activities
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getOrganizationActivitiesCount(long organizationId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _socialActivityLocalService.getOrganizationActivitiesCount(organizationId);
@@ -829,6 +899,7 @@ public class SocialActivityLocalServiceWrapper
 	* @return the range of matching activities
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.social.model.SocialActivity> getOrganizationUsersActivities(
 		long organizationId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -844,6 +915,7 @@ public class SocialActivityLocalServiceWrapper
 	* @return the number of matching activities
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getOrganizationUsersActivitiesCount(long organizationId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _socialActivityLocalService.getOrganizationUsersActivitiesCount(organizationId);
@@ -869,6 +941,7 @@ public class SocialActivityLocalServiceWrapper
 	* @return the range of matching activities
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.social.model.SocialActivity> getRelationActivities(
 		long userId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -898,6 +971,7 @@ public class SocialActivityLocalServiceWrapper
 	* @return the range of matching activities
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.social.model.SocialActivity> getRelationActivities(
 		long userId, int type, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -913,6 +987,7 @@ public class SocialActivityLocalServiceWrapper
 	* @return the number of matching activities
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getRelationActivitiesCount(long userId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _socialActivityLocalService.getRelationActivitiesCount(userId);
@@ -928,6 +1003,7 @@ public class SocialActivityLocalServiceWrapper
 	* @return the number of matching activities
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getRelationActivitiesCount(long userId, int type)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _socialActivityLocalService.getRelationActivitiesCount(userId,
@@ -953,6 +1029,7 @@ public class SocialActivityLocalServiceWrapper
 	* @return the range of matching activities
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.social.model.SocialActivity> getUserActivities(
 		long userId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -966,6 +1043,7 @@ public class SocialActivityLocalServiceWrapper
 	* @return the number of matching activities
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getUserActivitiesCount(long userId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _socialActivityLocalService.getUserActivitiesCount(userId);
@@ -991,6 +1069,7 @@ public class SocialActivityLocalServiceWrapper
 	* @return the range of matching activities
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.social.model.SocialActivity> getUserGroupsActivities(
 		long userId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -1006,6 +1085,7 @@ public class SocialActivityLocalServiceWrapper
 	* @return the number of matching activities
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getUserGroupsActivitiesCount(long userId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _socialActivityLocalService.getUserGroupsActivitiesCount(userId);
@@ -1031,6 +1111,7 @@ public class SocialActivityLocalServiceWrapper
 	* @return the range of matching activities
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.social.model.SocialActivity> getUserGroupsAndOrganizationsActivities(
 		long userId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -1046,6 +1127,7 @@ public class SocialActivityLocalServiceWrapper
 	* @return the number of matching activities
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getUserGroupsAndOrganizationsActivitiesCount(long userId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _socialActivityLocalService.getUserGroupsAndOrganizationsActivitiesCount(userId);
@@ -1071,6 +1153,7 @@ public class SocialActivityLocalServiceWrapper
 	* @return the range of matching activities
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.social.model.SocialActivity> getUserOrganizationsActivities(
 		long userId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -1086,6 +1169,7 @@ public class SocialActivityLocalServiceWrapper
 	* @return the number of matching activities
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getUserOrganizationsActivitiesCount(long userId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _socialActivityLocalService.getUserOrganizationsActivitiesCount(userId);
@@ -1106,10 +1190,12 @@ public class SocialActivityLocalServiceWrapper
 		_socialActivityLocalService = socialActivityLocalService;
 	}
 
+	@Override
 	public SocialActivityLocalService getWrappedService() {
 		return _socialActivityLocalService;
 	}
 
+	@Override
 	public void setWrappedService(
 		SocialActivityLocalService socialActivityLocalService) {
 		_socialActivityLocalService = socialActivityLocalService;

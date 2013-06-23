@@ -91,7 +91,7 @@ portletURL.setParameter("fileShortcutId", String.valueOf(fileShortcutId));
 	<liferay-ui:error exception="<%= NoSuchFileEntryException.class %>" message="the-document-could-not-be-found" />
 
 	<aui:fieldset>
-		<div class="portlet-msg-info">
+		<div class="alert alert-info">
 			<liferay-ui:message key="you-can-create-a-shortcut-to-any-document-that-you-have-read-access-for" />
 		</div>
 
@@ -146,16 +146,17 @@ portletURL.setParameter("fileShortcutId", String.valueOf(fileShortcutId));
 </portlet:renderURL>
 
 <aui:script use="aui-base,escape">
+	var selectToFileEntryButton = A.one('#<portlet:namespace />selectToFileEntryButton');
+
 	A.one('#<portlet:namespace />selectGroupButton').on(
 		'click',
 		function(event) {
 			Liferay.Util.selectEntity(
 				{
 					dialog: {
-						align: Liferay.Util.Window.ALIGN_CENTER,
 						constrain: true,
 						modal: true,
-						stack: true,
+						zIndex: Liferay.zIndex.WINDOW + 2,
 						width: 680
 					},
 					id: '<portlet:namespace />selectGroup',
@@ -176,27 +177,21 @@ portletURL.setParameter("fileShortcutId", String.valueOf(fileShortcutId));
 
 					nameEl.innerHTML = A.Escape.html(event.groupname) + "&nbsp;";
 
-					var button = A.one('#<portlet:namespace />selectToFileEntryButton');
-
-					if (button) {
-						button.set('disabled', false);
-						button.ancestor('.aui-button').removeClass('aui-button-disabled');
-					}
+					Liferay.Util.toggleDisabled(selectToFileEntryButton, false);
 				}
 			);
 		}
 	);
 
-	A.one('#<portlet:namespace />selectToFileEntryButton').on(
+	selectToFileEntryButton.on(
 		'click',
 		function(event) {
 			Liferay.Util.selectEntity(
 				{
 					dialog: {
-						align: Liferay.Util.Window.ALIGN_CENTER,
 						constrain: true,
 						modal: true,
-						stack: true,
+						zIndex: Liferay.zIndex.WINDOW + 2,
 						width: 680
 					},
 					id: <portlet:namespace />createSelectFileEntryId(),

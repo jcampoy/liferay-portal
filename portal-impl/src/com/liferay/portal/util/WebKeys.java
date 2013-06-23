@@ -14,6 +14,9 @@
 
 package com.liferay.portal.util;
 
+import com.liferay.portal.kernel.resiliency.spi.agent.annotation.Direction;
+import com.liferay.portal.kernel.resiliency.spi.agent.annotation.Distributed;
+import com.liferay.portal.kernel.resiliency.spi.agent.annotation.MatchType;
 import com.liferay.util.bridges.jsf.sun.LiferayConfigureListener;
 
 /**
@@ -75,6 +78,8 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String COMPANY_ID = "COMPANY_ID";
 
 	public static final String CONFIGURATION_ACTION_PATH = "CONFIGURATION_ACTION_PATH";
+
+	public static final String CONTROL_PANEL_CATEGORIES_MAP = "CONTROL_PANEL_CATEGORIES_MAP";
 
 	public static final String DEVICE = "DEVICE";
 
@@ -206,6 +211,7 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 
 	public static final String JOURNAL_TEMPLATE_ID = "JOURNAL_TEMPLATE_ID";
 
+	@Distributed
 	public static final String LAYOUT_ASSET_ENTRY = "LIFERAY_SHARED_LAYOUT_ASSET_ENTRY";
 
 	public static final String LAYOUT_CONTENT = "LAYOUT_CONTENT";
@@ -318,13 +324,13 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 
 	public static final String PHONE = "PHONE";
 
-	public static final String PLUGIN_REPOSITORY_REPORT = "PLUGIN_REPOSITORY_REPORT";
-
 	public static final String POLLS_QUESTION = "POLLS_QUESTION";
 
 	public static final String PORTAL_PREFERENCES = "PORTAL_PREFERENCES";
 
 	public static final String PORTAL_REQUEST_DATA_SAMPLE = "PORTAL_REQUEST_DATA_SAMPLE";
+
+	public static final String PORTAL_RESILIENCY_ACTION = "PORTAL_RESILIENCY_ACTION";
 
 	public static final String PORTLET_AJAX_RENDER = "PORTLET_AJAX_RENDER";
 
@@ -352,6 +358,7 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 
 	public static final String PORTLET_STRUTS_EXECUTE = "PORTLET_STRUTS_EXECUTE";
 
+	@Distributed(direction = Direction.DUPLEX, matchType = MatchType.POSTFIX)
 	public static final String PORTLET_STRUTS_FORWARD = "PORTLET_STRUTS_FORWARD";
 
 	public static final String PORTLET_STRUTS_PROCESSOR = "PORTLET_STRUTS_PROCESSOR";
@@ -393,6 +400,8 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String SHOPPING_ITEM = "SHOPPING_ITEM";
 
 	public static final String SHOPPING_ORDER = "SHOPPING_ORDER";
+
+	public static final String SITE_ADMINISTRATION_CATEGORIES_MAP = "SITES_ADMINISTRATION_CATEGORIES_MAP";
 
 	public static final String SOCIAL_ACTIVITY_SETTINGS_MAP = "SOCIAL_ACTIVITY_SETTINGS_MAP";
 

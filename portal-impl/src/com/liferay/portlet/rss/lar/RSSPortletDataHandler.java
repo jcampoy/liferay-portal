@@ -15,6 +15,7 @@
 package com.liferay.portlet.rss.lar;
 
 import com.liferay.portal.kernel.lar.BasePortletDataHandler;
+import com.liferay.portal.kernel.lar.DataLevel;
 import com.liferay.portal.kernel.lar.ExportImportPathUtil;
 import com.liferay.portal.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.lar.PortletDataException;
@@ -53,12 +54,16 @@ public class RSSPortletDataHandler extends BasePortletDataHandler {
 	public static final String NAMESPACE = "rss";
 
 	public RSSPortletDataHandler() {
-		setAlwaysExportable(true);
+		setDataLevel(DataLevel.PORTLET_INSTANCE);
 		setDataPortletPreferences("footerArticleValues", "headerArticleValues");
 			setExportControls(
 			new PortletDataHandlerBoolean(
-				NAMESPACE, "selected-web-content", true, true),
-			new PortletDataHandlerBoolean(NAMESPACE, "embedded-assets"));
+				NAMESPACE, "selected-web-content", true, true,
+				new PortletDataHandlerControl[] {
+					new PortletDataHandlerBoolean(
+						NAMESPACE, "referenced-content")
+				},
+				JournalArticle.class.getName()));
 
 		JournalPortletDataHandler journalPortletDataHandler =
 			new JournalPortletDataHandler();
@@ -209,7 +214,9 @@ public class RSSPortletDataHandler extends BasePortletDataHandler {
 			StagedModelDataHandlerUtil.exportStagedModel(
 				portletDataContext, article);
 
-			portletDataContext.addReferenceElement(articleElement, article);
+			portletDataContext.addReferenceElement(
+				article, articleElement, article,
+				PortletDataContext.REFERENCE_TYPE_WEAK, false);
 		}
 
 		return getExportDataRootElementString(rootElement);
@@ -221,17 +228,14 @@ public class RSSPortletDataHandler extends BasePortletDataHandler {
 			PortletPreferences portletPreferences, String data)
 		throws Exception {
 
-		Element rootElement = portletDataContext.getImportDataRootElement();
-
-		JournalPortletDataHandler.importReferenceData(
-			portletDataContext, rootElement);
-
 		Map<String, String> articleIds =
 			(Map<String, String>)portletDataContext.getNewPrimaryKeysMap(
 				JournalArticle.class + ".articleId");
 
 		Layout layout = LayoutLocalServiceUtil.getLayout(
 			portletDataContext.getPlid());
+
+		Element rootElement = portletDataContext.getImportDataRootElement();
 
 		Element footerArticleElement = rootElement.element("footer-article");
 
