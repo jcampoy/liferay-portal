@@ -1,7 +1,10 @@
 <definition>
-	<command name="click">
+	<command name="assertClick">
+		<case locator-key1="ADD_ENTRY">
+			<execute function="AssertClick#assertTextClickAtAndWait" />
+		</case>
 		<case locator-key1="RECYCLE_BIN_BUTTON">
-			<execute function="Click#valueClickAtAndWait" value1="Move to the Recycle Bin" />
+			<execute function="AssertClick#assertTextClickAtAndWait" />
 		</case>
 	</command>
 

@@ -34,6 +34,10 @@ public interface LayoutSetPrototype extends LayoutSetPrototypeModel,
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
+	public long getGroupId()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
 	public com.liferay.portal.model.LayoutSet getLayoutSet()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
@@ -41,8 +45,6 @@ public interface LayoutSetPrototype extends LayoutSetPrototypeModel,
 	public com.liferay.portal.kernel.util.UnicodeProperties getSettingsProperties();
 
 	public java.lang.String getSettingsProperty(java.lang.String key);
-
-	public void setSettings(java.lang.String settings);
 
 	public void setSettingsProperties(
 		com.liferay.portal.kernel.util.UnicodeProperties settingsProperties);

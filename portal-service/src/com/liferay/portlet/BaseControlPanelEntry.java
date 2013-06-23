@@ -34,6 +34,7 @@ import java.util.List;
  */
 public abstract class BaseControlPanelEntry implements ControlPanelEntry {
 
+	@Override
 	public boolean hasAccessPermission(
 			PermissionChecker permissionChecker, Group group, Portlet portlet)
 		throws Exception {
@@ -53,7 +54,7 @@ public abstract class BaseControlPanelEntry implements ControlPanelEntry {
 	}
 
 	/**
-	 * @deprecated As of 6.2, with no direct replacement.<p>This method was
+	 * @deprecated As of 6.2.0, with no direct replacement.<p>This method was
 	 *             originally defined to determine if a portlet should be
 	 *             displayed in the Control Panel. In this version, this method
 	 *             should always return <code>false</code> and remains only to
@@ -63,6 +64,7 @@ public abstract class BaseControlPanelEntry implements ControlPanelEntry {
 	 *             #hasAccessPermission} to determine if a portlet should be
 	 *             displayed in the Control Panel.</p>
 	 */
+	@Override
 	public boolean isVisible(
 			PermissionChecker permissionChecker, Portlet portlet)
 		throws Exception {
@@ -71,7 +73,7 @@ public abstract class BaseControlPanelEntry implements ControlPanelEntry {
 	}
 
 	/**
-	 * @deprecated As of 6.2, with no direct replacement.<p>This method was
+	 * @deprecated As of 6.2.0, with no direct replacement.<p>This method was
 	 *             originally defined to determine if a portlet should be
 	 *             displayed in the Control Panel. In this version, this method
 	 *             should always return <code>false</code> and remains only to
@@ -81,6 +83,7 @@ public abstract class BaseControlPanelEntry implements ControlPanelEntry {
 	 *             #hasAccessPermission} to determine if a portlet should be
 	 *             displayed in the Control Panel.</p>
 	 */
+	@Override
 	public boolean isVisible(
 			Portlet portlet, String category, ThemeDisplay themeDisplay)
 		throws Exception {
@@ -91,7 +94,7 @@ public abstract class BaseControlPanelEntry implements ControlPanelEntry {
 	protected long getDefaultPlid(Group group, String category) {
 		long plid = LayoutConstants.DEFAULT_PLID;
 
-		if (category.equals(PortletCategoryKeys.CONTENT)) {
+		if (category.startsWith(PortletCategoryKeys.SITE_ADMINISTRATION)) {
 			plid = group.getDefaultPublicPlid();
 
 			if (plid == LayoutConstants.DEFAULT_PLID) {
@@ -105,6 +108,14 @@ public abstract class BaseControlPanelEntry implements ControlPanelEntry {
 	protected boolean hasAccessPermissionDenied(
 			PermissionChecker permissionChecker, Group group, Portlet portlet)
 		throws Exception {
+
+		String category = portlet.getControlPanelEntryCategory();
+
+		if (category.equals(PortletCategoryKeys.SITE_ADMINISTRATION_CONTENT) &&
+			group.isLayout() && !portlet.isScopeable()) {
+
+			return true;
+		}
 
 		return false;
 	}
@@ -123,11 +134,7 @@ public abstract class BaseControlPanelEntry implements ControlPanelEntry {
 			category = StringPool.BLANK;
 		}
 
-		if (category.equals(PortletCategoryKeys.CONTENT)) {
-			if (group.isLayout() && !portlet.isScopeable()) {
-				return false;
-			}
-
+		if (category.startsWith(PortletCategoryKeys.SITE_ADMINISTRATION)) {
 			if (permissionChecker.isGroupAdmin(group.getGroupId()) &&
 				!group.isUser()) {
 
@@ -137,8 +144,10 @@ public abstract class BaseControlPanelEntry implements ControlPanelEntry {
 
 		long groupId = group.getGroupId();
 
-		if (category.equals(PortletCategoryKeys.PORTAL) ||
-			category.equals(PortletCategoryKeys.SERVER)) {
+		if (category.equals(PortletCategoryKeys.APPS) ||
+			category.equals(PortletCategoryKeys.CONFIGURATION) ||
+			category.equals(PortletCategoryKeys.SITES) ||
+			category.equals(PortletCategoryKeys.USERS)) {
 
 			groupId = 0;
 		}

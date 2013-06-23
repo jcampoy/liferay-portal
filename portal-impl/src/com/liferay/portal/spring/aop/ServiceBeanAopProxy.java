@@ -35,6 +35,7 @@ import org.aopalliance.intercept.MethodInterceptor;
 
 import org.springframework.aop.SpringProxy;
 import org.springframework.aop.TargetSource;
+import org.springframework.aop.framework.Advised;
 import org.springframework.aop.framework.AdvisedSupport;
 import org.springframework.aop.framework.AdvisorChainFactory;
 import org.springframework.aop.framework.AopProxy;
@@ -117,10 +118,12 @@ public class ServiceBeanAopProxy implements AopProxy, InvocationHandler {
 		_serviceBeanAopCacheManager = serviceBeanAopCacheManager;
 	}
 
+	@Override
 	public Object getProxy() {
 		return getProxy(ClassUtils.getDefaultClassLoader());
 	}
 
+	@Override
 	public Object getProxy(ClassLoader classLoader) {
 		Class<?>[] proxiedInterfaces = AopProxyUtils.completeProxiedInterfaces(
 			_advisedSupport);
@@ -132,8 +135,19 @@ public class ServiceBeanAopProxy implements AopProxy, InvocationHandler {
 			classLoader, proxiedInterfaces, invocationHandler);
 	}
 
+	@Override
 	public Object invoke(Object proxy, Method method, Object[] arguments)
 		throws Throwable {
+
+		String methodName = method.getName();
+
+		if (methodName.equals("getTargetSource") && (arguments == null)) {
+			Class<?> clazz = method.getDeclaringClass();
+
+			if (clazz.equals(Advised.class)) {
+				return _advisedSupport.getTargetSource();
+			}
+		}
 
 		TargetSource targetSource = _advisedSupport.getTargetSource();
 
@@ -251,6 +265,7 @@ public class ServiceBeanAopProxy implements AopProxy, InvocationHandler {
 
 	private static class NoPACL implements PACL {
 
+		@Override
 		public InvocationHandler getInvocationHandler(
 			InvocationHandler invocationHandler,
 			AdvisedSupport advisedSupport) {

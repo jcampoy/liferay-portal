@@ -20,9 +20,9 @@
 Folder folder = (Folder)request.getAttribute(WebKeys.DOCUMENT_LIBRARY_FOLDER);
 
 long folderId = BeanParamUtil.getLong(folder, request, "folderId", DLFolderConstants.DEFAULT_PARENT_FOLDER_ID);
-String eventName = ParamUtil.getString(request, "eventName", liferayPortletResponse.getNamespace() + "selectFileEntry");
 
 long groupId = BeanParamUtil.getLong(folder, request, "groupId");
+String eventName = ParamUtil.getString(request, "eventName", liferayPortletResponse.getNamespace() + "selectFileEntry_" + groupId);
 
 if (folder != null) {
 	DLUtil.addPortletBreadcrumbEntries(folder, request, renderResponse);
@@ -46,10 +46,10 @@ if (folder != null) {
 
 	<liferay-ui:search-container
 		iteratorURL="<%= portletURL %>"
+		total="<%= DLAppServiceUtil.getFoldersCount(groupId, folderId) %>"
 	>
 		<liferay-ui:search-container-results
 			results="<%= DLAppServiceUtil.getFolders(groupId, folderId, searchContainer.getStart(), searchContainer.getEnd()) %>"
-			total="<%= DLAppServiceUtil.getFoldersCount(groupId, folderId) %>"
 		/>
 
 		<liferay-ui:search-container-row
@@ -126,10 +126,10 @@ if (folder != null) {
 
 	<liferay-ui:search-container
 		iteratorURL="<%= portletURL %>"
+		total="<%= DLAppServiceUtil.getFileEntriesCount(groupId, folderId) %>"
 	>
 		<liferay-ui:search-container-results
 			results="<%= DLAppServiceUtil.getFileEntries(groupId, folderId, searchContainer.getStart(), searchContainer.getEnd()) %>"
-			total="<%= DLAppServiceUtil.getFileEntriesCount(groupId, folderId) %>"
 		/>
 
 		<liferay-ui:search-container-row
@@ -198,8 +198,8 @@ if (folder != null) {
 
 			Util.getOpener().Liferay.fire('<%= HtmlUtil.escapeJS(eventName) %>', result);
 
-			Util.getWindow().close();
+			Util.getWindow().hide();
 		},
-		'.selector-button input'
+		'.selector-button'
 	);
 </aui:script>

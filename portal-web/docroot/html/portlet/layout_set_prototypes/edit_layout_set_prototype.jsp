@@ -32,11 +32,6 @@ if (layoutSetPrototype == null) {
 long layoutSetPrototypeId = BeanParamUtil.getLong(layoutSetPrototype, request, "layoutSetPrototypeId");
 
 boolean layoutsUpdateable = GetterUtil.getBoolean(layoutSetPrototype.getSettingsProperty("layoutsUpdateable"), true);
-
-Locale defaultLocale = LocaleUtil.getDefault();
-String defaultLanguageId = LocaleUtil.toLanguageId(defaultLocale);
-
-Locale[] locales = LanguageUtil.getAvailableLocales();
 %>
 
 <liferay-util:include page="/html/portlet/layout_set_prototypes/toolbar.jsp">
@@ -76,7 +71,7 @@ request.setAttribute("edit_layout_set_prototype.jsp-redirect", currentURL);
 			<aui:field-wrapper label="configuration">
 				<liferay-portlet:actionURL portletName="<%= PortletKeys.SITE_REDIRECTOR %>" var="viewURL">
 					<portlet:param name="struts_action" value="/my_sites/view" />
-					<portlet:param name="groupId" value="<%= String.valueOf(layoutSetPrototype.getGroup().getGroupId()) %>" />
+					<portlet:param name="groupId" value="<%= String.valueOf(layoutSetPrototype.getGroupId()) %>" />
 					<portlet:param name="privateLayout" value="<%= Boolean.TRUE.toString() %>" />
 				</liferay-portlet:actionURL>
 

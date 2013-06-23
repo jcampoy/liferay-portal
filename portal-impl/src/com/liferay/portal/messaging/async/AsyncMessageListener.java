@@ -14,8 +14,13 @@
 
 package com.liferay.portal.messaging.async;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
+import com.liferay.portal.kernel.util.MethodHandler;
+import com.liferay.portal.kernel.util.Validator;
 
 /**
  * @author Shuyang Zhou
@@ -25,9 +30,35 @@ public class AsyncMessageListener extends BaseMessageListener {
 
 	@Override
 	protected void doReceive(Message message) throws Exception {
-		Runnable runnable = (Runnable)message.getPayload();
+		String responseDestinationName = message.getResponseDestinationName();
 
-		runnable.run();
+		MethodHandler methodHandler = (MethodHandler)message.getPayload();
+
+		AsyncInvokeThreadLocal.setEnabled(true);
+
+		try {
+			methodHandler.invoke(this);
+		}
+		catch (RuntimeException re) {
+			if (Validator.isNotNull(responseDestinationName)) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(re, re);
+				}
+			}
+		}
+		finally {
+			AsyncInvokeThreadLocal.setEnabled(false);
+		}
+
+		if (Validator.isNotNull(responseDestinationName)) {
+			Message responseMessage = MessageBusUtil.createResponseMessage(
+				message);
+
+			MessageBusUtil.sendMessage(
+				responseDestinationName, responseMessage);
+		}
 	}
+
+	private static Log _log = LogFactoryUtil.getLog(AsyncMessageListener.class);
 
 }

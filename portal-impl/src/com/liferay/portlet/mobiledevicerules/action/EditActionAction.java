@@ -32,9 +32,11 @@ import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.util.WebKeys;
+import com.liferay.portlet.mobiledevicerules.ActionTypeException;
 import com.liferay.portlet.mobiledevicerules.NoSuchActionException;
 import com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupException;
 import com.liferay.portlet.mobiledevicerules.model.MDRAction;
+import com.liferay.portlet.mobiledevicerules.model.MDRRuleGroup;
 import com.liferay.portlet.mobiledevicerules.model.MDRRuleGroupInstance;
 import com.liferay.portlet.mobiledevicerules.service.MDRActionServiceUtil;
 import com.liferay.portlet.mobiledevicerules.service.MDRRuleGroupInstanceLocalServiceUtil;
@@ -70,8 +72,9 @@ public class EditActionAction extends EditRuleAction {
 
 	@Override
 	public void processAction(
-			ActionMapping mapping, ActionForm form, PortletConfig portletConfig,
-			ActionRequest actionRequest, ActionResponse actionResponse)
+			ActionMapping actionMapping, ActionForm actionForm,
+			PortletConfig portletConfig, ActionRequest actionRequest,
+			ActionResponse actionResponse)
 		throws Exception {
 
 		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
@@ -92,7 +95,8 @@ public class EditActionAction extends EditRuleAction {
 
 				setForward(actionRequest, "portlet.mobile_device_rules.error");
 			}
-			else if (e instanceof NoSuchActionException ||
+			else if (e instanceof ActionTypeException ||
+					 e instanceof NoSuchActionException ||
 					 e instanceof NoSuchRuleGroupException) {
 
 				SessionErrors.add(actionRequest, e.getClass());
@@ -105,8 +109,9 @@ public class EditActionAction extends EditRuleAction {
 
 	@Override
 	public ActionForward render(
-			ActionMapping mapping, ActionForm form, PortletConfig portletConfig,
-			RenderRequest renderRequest, RenderResponse renderResponse)
+			ActionMapping actionMapping, ActionForm actionForm,
+			PortletConfig portletConfig, RenderRequest renderRequest,
+			RenderResponse renderResponse)
 		throws Exception {
 
 		long actionId = ParamUtil.getLong(renderRequest, "actionId");
@@ -137,13 +142,20 @@ public class EditActionAction extends EditRuleAction {
 		renderRequest.setAttribute(
 			WebKeys.MOBILE_DEVICE_RULES_RULE_GROUP_INSTANCE, ruleGroupInstance);
 
-		return mapping.findForward("portlet.mobile_device_rules.edit_action");
+		MDRRuleGroup ruleGroup = ruleGroupInstance.getRuleGroup();
+
+		renderRequest.setAttribute(
+			WebKeys.MOBILE_DEVICE_RULES_RULE_GROUP, ruleGroup);
+
+		return actionMapping.findForward(
+			"portlet.mobile_device_rules.edit_action");
 	}
 
 	@Override
 	public void serveResource(
-			ActionMapping mapping, ActionForm form, PortletConfig portletConfig,
-			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
+			ActionMapping actionMapping, ActionForm actionForm,
+			PortletConfig portletConfig, ResourceRequest resourceRequest,
+			ResourceResponse resourceResponse)
 		throws Exception {
 
 		long actionId = ParamUtil.getLong(resourceRequest, "actionId");
@@ -204,9 +216,7 @@ public class EditActionAction extends EditRuleAction {
 			type);
 
 		if (actionHandler == null) {
-			SessionErrors.add(actionRequest, "typeInvalid");
-
-			return;
+			throw new ActionTypeException();
 		}
 
 		UnicodeProperties typeSettingsProperties = getTypeSettingsProperties(
