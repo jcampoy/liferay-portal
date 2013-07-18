@@ -23,12 +23,13 @@ FeedDisplayTerms displayTerms = (FeedDisplayTerms)searchContainer.getDisplayTerm
 %>
 
 <liferay-ui:search-toggle
+	autoFocus="<%= (windowState.equals(WindowState.MAXIMIZED) || windowState.equals(LiferayWindowState.POP_UP)) %>"
 	buttonLabel="search"
 	displayTerms="<%= displayTerms %>"
 	id="toggle_id_journal_feed_search"
 >
 	<aui:fieldset>
-		<aui:input label="id" name="<%= displayTerms.FEED_ID %>" size="20" type="text" value="<%= displayTerms.getFeedId() %>" />
+		<aui:input autoFocus="<%= (windowState.equals(WindowState.MAXIMIZED) || windowState.equals(LiferayWindowState.POP_UP)) %>" label="id" name="<%= displayTerms.FEED_ID %>" size="20" type="text" value="<%= displayTerms.getFeedId() %>" />
 
 		<aui:input name="<%= displayTerms.NAME %>" size="20" type="text" value="<%= displayTerms.getName() %>" />
 
@@ -64,19 +65,15 @@ boolean showPermissionsButton = JournalPermission.contains(permissionChecker, sc
 	function <portlet:namespace />addFeed() {
 		var url = '<portlet:renderURL><portlet:param name="struts_action" value="/journal/edit_feed" /><portlet:param name="redirect" value="<%= currentURL %>" /></portlet:renderURL>';
 
-		if (toggle_id_journal_feed_searchcurClickValue == 'basic') {
+		if (document.<portlet:namespace />fm.<%= displayTerms.ADVANCED_SEARCH %>.value == 'false') {
 			url += '&<portlet:namespace /><%= displayTerms.NAME %>=' + document.<portlet:namespace />fm.<portlet:namespace /><%= displayTerms.KEYWORDS %>.value;
 
 			submitForm(document.hrefFm, url);
 		}
 		else {
 			document.<portlet:namespace />fm.method = 'post';
+
 			submitForm(document.<portlet:namespace />fm, url);
 		}
 	}
-
-	<c:if test="<%= windowState.equals(WindowState.MAXIMIZED) || windowState.equals(LiferayWindowState.POP_UP) %>">
-		Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace /><%= displayTerms.FEED_ID %>);
-		Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace /><%= displayTerms.KEYWORDS %>);
-	</c:if>
 </aui:script>

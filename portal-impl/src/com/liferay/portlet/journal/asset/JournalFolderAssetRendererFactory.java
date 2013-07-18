@@ -30,8 +30,9 @@ import com.liferay.portlet.journal.service.permission.JournalFolderPermission;
 public class JournalFolderAssetRendererFactory
 	extends BaseAssetRendererFactory {
 
-	public static final String TYPE = "folder";
+	public static final String TYPE = "content_folder";
 
+	@Override
 	public AssetRenderer getAssetRenderer(long classPK, int type)
 		throws PortalException, SystemException {
 
@@ -45,10 +46,12 @@ public class JournalFolderAssetRendererFactory
 		return journalFolderAssetRenderer;
 	}
 
+	@Override
 	public String getClassName() {
 		return JournalFolder.class.getName();
 	}
 
+	@Override
 	public String getType() {
 		return TYPE;
 	}

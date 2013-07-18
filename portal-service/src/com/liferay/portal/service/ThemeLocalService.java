@@ -21,11 +21,10 @@ import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
 
 /**
- * The interface for the theme local service.
- *
- * <p>
- * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
- * </p>
+ * Provides the local service interface for Theme. Methods of this
+ * service will not have security checks based on the propagated JAAS
+ * credentials because this service can only be accessed from within the same
+ * VM.
  *
  * @author Brian Wing Shun Chan
  * @see ThemeLocalServiceUtil
@@ -87,18 +86,19 @@ public interface ThemeLocalService extends BaseLocalService {
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<com.liferay.portal.model.Theme> getWARThemes();
 
-	public java.util.List<java.lang.String> init(
+	public java.util.List<com.liferay.portal.model.Theme> init(
 		javax.servlet.ServletContext servletContext,
 		java.lang.String themesPath, boolean loadFromServletContext,
 		java.lang.String[] xmls,
 		com.liferay.portal.kernel.plugin.PluginPackage pluginPackage);
 
-	public java.util.List<java.lang.String> init(
+	public java.util.List<com.liferay.portal.model.Theme> init(
 		java.lang.String servletContextName,
 		javax.servlet.ServletContext servletContext,
 		java.lang.String themesPath, boolean loadFromServletContext,
 		java.lang.String[] xmls,
 		com.liferay.portal.kernel.plugin.PluginPackage pluginPackage);
 
-	public void uninstallThemes(java.util.List<java.lang.String> themeIds);
+	public void uninstallThemes(
+		java.util.List<com.liferay.portal.model.Theme> themes);
 }

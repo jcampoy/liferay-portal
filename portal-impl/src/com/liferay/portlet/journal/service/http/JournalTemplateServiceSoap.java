@@ -26,23 +26,11 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * <p>
- * This class provides a SOAP utility for the
+ * Provides the SOAP utility for the
  * {@link com.liferay.portlet.journal.service.JournalTemplateServiceUtil} service utility. The
  * static methods of this class calls the same methods of the service utility.
  * However, the signatures are different because it is difficult for SOAP to
  * support certain types.
- * </p>
- *
- * <p>
- * ServiceBuilder follows certain rules in translating the methods. For example,
- * if the method in the service utility returns a {@link java.util.List}, that
- * is translated to an array of {@link com.liferay.portlet.journal.model.JournalTemplateSoap}.
- * If the method in the service utility returns a
- * {@link com.liferay.portlet.journal.model.JournalTemplate}, that is translated to a
- * {@link com.liferay.portlet.journal.model.JournalTemplateSoap}. Methods that SOAP cannot
- * safely wire are skipped.
- * </p>
  *
  * <p>
  * The benefits of using the SOAP utility is that it is cross platform
@@ -61,10 +49,11 @@ import java.util.Map;
  * The SOAP utility is only generated for remote services.
  * </p>
  *
- * @author    Brian Wing Shun Chan
- * @see       JournalTemplateServiceHttp
- * @see       com.liferay.portlet.journal.model.JournalTemplateSoap
- * @see       com.liferay.portlet.journal.service.JournalTemplateServiceUtil
+ * @author Brian Wing Shun Chan
+ * @see JournalTemplateServiceHttp
+ * @see com.liferay.portlet.journal.service.JournalTemplateServiceUtil
+ * @deprecated As of 6.2.0, since Web Content Administration now uses the
+            Dynamic Data Mapping framework to handle templates
  * @generated
  */
 public class JournalTemplateServiceSoap {

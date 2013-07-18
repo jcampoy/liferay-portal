@@ -85,7 +85,7 @@ boolean showAddArticleButton = JournalPermission.contains(permissionChecker, sco
 	<aui:input name="<%= displayTerms.STRUCTURE_ID %>" type="hidden" value="<%= displayTerms.getStructureId() %>" />
 
 	<c:if test="<%= showAddArticleButton %>">
-		<div class="portlet-msg-info">
+		<div class="alert alert-info">
 
 			<%
 			String structureId = StringPool.BLANK;
@@ -124,7 +124,7 @@ boolean showAddArticleButton = JournalPermission.contains(permissionChecker, sco
 	<aui:input name="<%= displayTerms.TEMPLATE_ID %>" type="hidden" value="<%= displayTerms.getTemplateId() %>" />
 
 	<c:if test="<%= showAddArticleButton %>">
-		<div class="portlet-msg-info">
+		<div class="alert alert-info">
 
 			<%
 			DDMTemplate ddmTemplate = DDMTemplateLocalServiceUtil.getTemplate(scopeGroupId, PortalUtil.getClassNameId(DDMStructure.class), displayTerms.getTemplateId());
@@ -246,7 +246,7 @@ request.setAttribute("view_entries.jsp-entryEnd", String.valueOf(searchContainer
 %>
 
 <c:if test="<%= results.isEmpty() %>">
-	<div class="entries-empty portlet-msg-info">
+	<div class="entries-empty alert alert-info">
 		<c:choose>
 			<c:when test="<%= Validator.isNotNull(displayTerms.getStructureId()) %>">
 				<c:if test="<%= total == 0 %>">
@@ -318,17 +318,10 @@ for (int i = 0; i < results.size(); i++) {
 							method="get"
 							url="<%= rowURL.toString() %>"
 						/>
+					</liferay-util:buffer>
 
-						<c:if test="<%= curArticle.isDraft() || curArticle.isPending() %>">
-
-							<%
-							String statusLabel = WorkflowConstants.toLabel(curArticle.getStatus());
-							%>
-
-							<span class="workflow-status-<%= statusLabel %>">
-								(<liferay-ui:message key="<%= statusLabel %>" />)
-							</span>
-						</c:if>
+					<liferay-util:buffer var="articleStatus">
+						<aui:workflow-status showIcon="<%= false %>" showLabel="<%= false %>" status="<%= curArticle.getStatus() %>" />
 					</liferay-util:buffer>
 
 					<%
@@ -468,8 +461,8 @@ for (int i = 0; i < results.size(); i++) {
 	Liferay.fire(
 		'<portlet:namespace />pageLoaded',
 		{
-			paginator: {
-				name: 'entryPaginator',
+			pagination: {
+				name: 'entryPagination',
 				state: {
 					page: <%= (total == 0) ? 0 : searchContainer.getCur() %>,
 					rowsPerPage: <%= searchContainer.getDelta() %>,

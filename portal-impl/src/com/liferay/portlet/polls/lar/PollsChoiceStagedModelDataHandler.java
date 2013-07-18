@@ -25,7 +25,6 @@ import com.liferay.portlet.polls.model.PollsChoice;
 import com.liferay.portlet.polls.model.PollsQuestion;
 import com.liferay.portlet.polls.service.PollsChoiceLocalServiceUtil;
 import com.liferay.portlet.polls.service.PollsQuestionLocalServiceUtil;
-import com.liferay.portlet.polls.service.persistence.PollsChoiceFinderUtil;
 
 import java.util.Map;
 
@@ -40,6 +39,11 @@ public class PollsChoiceStagedModelDataHandler
 	@Override
 	public String[] getClassNames() {
 		return CLASS_NAMES;
+	}
+
+	@Override
+	public String getDisplayName(PollsChoice choice) {
+		return choice.getName();
 	}
 
 	@Override
@@ -90,8 +94,9 @@ public class PollsChoiceStagedModelDataHandler
 			choice, PollsPortletDataHandler.NAMESPACE);
 
 		if (portletDataContext.isDataStrategyMirror()) {
-			PollsChoice existingChoice = PollsChoiceFinderUtil.fetchByUUID_G(
-				choice.getUuid(), portletDataContext.getScopeGroupId());
+			PollsChoice existingChoice =
+				PollsChoiceLocalServiceUtil.fetchPollsChoiceByUuidAndGroupId(
+					choice.getUuid(), portletDataContext.getScopeGroupId());
 
 			if (existingChoice == null) {
 				serviceContext.setUuid(choice.getUuid());

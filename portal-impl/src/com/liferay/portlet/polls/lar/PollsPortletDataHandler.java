@@ -15,20 +15,21 @@
 package com.liferay.portlet.polls.lar;
 
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
-import com.liferay.portal.kernel.dao.orm.DynamicQuery;
-import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.lar.BasePortletDataHandler;
 import com.liferay.portal.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.lar.PortletDataHandlerBoolean;
+import com.liferay.portal.kernel.lar.PortletDataHandlerControl;
 import com.liferay.portal.kernel.lar.StagedModelDataHandlerUtil;
+import com.liferay.portal.kernel.lar.StagedModelType;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portlet.polls.model.PollsChoice;
 import com.liferay.portlet.polls.model.PollsQuestion;
 import com.liferay.portlet.polls.model.PollsVote;
 import com.liferay.portlet.polls.service.PollsQuestionLocalServiceUtil;
-import com.liferay.portlet.polls.service.persistence.PollsChoiceActionableDynamicQuery;
-import com.liferay.portlet.polls.service.persistence.PollsQuestionActionableDynamicQuery;
-import com.liferay.portlet.polls.service.persistence.PollsVoteActionableDynamicQuery;
+import com.liferay.portlet.polls.service.permission.PollsPermission;
+import com.liferay.portlet.polls.service.persistence.PollsChoiceExportActionableDynamicQuery;
+import com.liferay.portlet.polls.service.persistence.PollsQuestionExportActionableDynamicQuery;
+import com.liferay.portlet.polls.service.persistence.PollsVoteExportActionableDynamicQuery;
 
 import java.util.List;
 
@@ -44,11 +45,19 @@ public class PollsPortletDataHandler extends BasePortletDataHandler {
 	public static final String NAMESPACE = "polls";
 
 	public PollsPortletDataHandler() {
-		setAlwaysExportable(true);
 		setDataLocalized(true);
+		setDeletionSystemEventStagedModelTypes(
+			new StagedModelType(PollsQuestion.class));
 		setExportControls(
-			new PortletDataHandlerBoolean(NAMESPACE, "questions", true, true),
-			new PortletDataHandlerBoolean(NAMESPACE, "votes"));
+			new PortletDataHandlerBoolean(
+				NAMESPACE, "questions", true, false,
+				new PortletDataHandlerControl[] {
+					new PortletDataHandlerBoolean(
+						NAMESPACE, "votes", true, false, null,
+						PollsVote.class.getName())
+				},
+				PollsQuestion.class.getName()));
+		setImportControls(getExportControls());
 	}
 
 	@Override
@@ -76,89 +85,37 @@ public class PollsPortletDataHandler extends BasePortletDataHandler {
 		throws Exception {
 
 		portletDataContext.addPermissions(
-			"com.liferay.portlet.polls", portletDataContext.getScopeGroupId());
+			PollsPermission.RESOURCE_NAME,
+			portletDataContext.getScopeGroupId());
 
 		Element rootElement = addExportDataRootElement(portletDataContext);
 
 		rootElement.addAttribute(
 			"group-id", String.valueOf(portletDataContext.getScopeGroupId()));
 
-		ActionableDynamicQuery questionActionableDynamicQuery =
-			new PollsQuestionActionableDynamicQuery() {
-
-			@Override
-			protected void addCriteria(DynamicQuery dynamicQuery) {
-				portletDataContext.addDateRangeCriteria(
-					dynamicQuery, "modifiedDate");
-			}
-
-			@Override
-			protected void performAction(Object object) throws PortalException {
-				PollsQuestion pollsQuestion = (PollsQuestion)object;
-
-				StagedModelDataHandlerUtil.exportStagedModel(
-					portletDataContext, pollsQuestion);
-			}
-
-		};
-
-		questionActionableDynamicQuery.setGroupId(
-			portletDataContext.getGroupId());
-
-		questionActionableDynamicQuery.performActions();
-
-		ActionableDynamicQuery choiceActionableDynamicQuery =
-			new PollsChoiceActionableDynamicQuery() {
-
-			@Override
-			protected void addCriteria(DynamicQuery dynamicQuery) {
-				portletDataContext.addDateRangeCriteria(
-					dynamicQuery, "modifiedDate");
-			}
-
-			@Override
-			protected void performAction(Object object) throws PortalException {
-				PollsChoice pollsChoice = (PollsChoice)object;
-
-				StagedModelDataHandlerUtil.exportStagedModel(
-					portletDataContext, pollsChoice);
-			}
-
-		};
-
-		choiceActionableDynamicQuery.setGroupId(
-			portletDataContext.getGroupId());
-
-		choiceActionableDynamicQuery.performActions();
-
 		if (portletDataContext.getBooleanParameter(
-				PollsPortletDataHandler.NAMESPACE, "votes")) {
+				PollsPortletDataHandler.NAMESPACE, "questions")) {
 
-			ActionableDynamicQuery voteActionableDynamicQuery =
-				new PollsVoteActionableDynamicQuery() {
+			ActionableDynamicQuery questionActionableDynamicQuery =
+				new PollsQuestionExportActionableDynamicQuery(
+					portletDataContext);
 
-				@Override
-				protected void addCriteria(DynamicQuery dynamicQuery) {
-					portletDataContext.addDateRangeCriteria(
-						dynamicQuery, "modifiedDate");
-				}
+			questionActionableDynamicQuery.performActions();
 
-				@Override
-				protected void performAction(Object object)
-					throws PortalException {
+			ActionableDynamicQuery choiceActionableDynamicQuery =
+				new PollsChoiceExportActionableDynamicQuery(portletDataContext);
 
-					PollsVote pollsVote = (PollsVote)object;
+			choiceActionableDynamicQuery.performActions();
 
-					StagedModelDataHandlerUtil.exportStagedModel(
-						portletDataContext, pollsVote);
-				}
+			if (portletDataContext.getBooleanParameter(
+					PollsPortletDataHandler.NAMESPACE, "votes")) {
 
-			};
+				ActionableDynamicQuery voteActionableDynamicQuery =
+					new PollsVoteExportActionableDynamicQuery(
+						portletDataContext);
 
-			voteActionableDynamicQuery.setGroupId(
-				portletDataContext.getGroupId());
-
-			voteActionableDynamicQuery.performActions();
+				voteActionableDynamicQuery.performActions();
+			}
 		}
 
 		return getExportDataRootElementString(rootElement);
@@ -171,27 +128,32 @@ public class PollsPortletDataHandler extends BasePortletDataHandler {
 		throws Exception {
 
 		portletDataContext.importPermissions(
-			"com.liferay.portlet.polls", portletDataContext.getSourceGroupId(),
+			PollsPermission.RESOURCE_NAME,
+			portletDataContext.getSourceGroupId(),
 			portletDataContext.getScopeGroupId());
 
 		Element questionsElement = portletDataContext.getImportDataGroupElement(
 			PollsQuestion.class);
 
-		List<Element> questionElements = questionsElement.elements();
+		if (portletDataContext.getBooleanParameter(
+				PollsPortletDataHandler.NAMESPACE, "questions")) {
 
-		for (Element questionElement : questionElements) {
-			StagedModelDataHandlerUtil.importStagedModel(
-				portletDataContext, questionElement);
-		}
+			List<Element> questionElements = questionsElement.elements();
 
-		Element choicesElement = portletDataContext.getImportDataGroupElement(
-			PollsChoice.class);
+			for (Element questionElement : questionElements) {
+				StagedModelDataHandlerUtil.importStagedModel(
+					portletDataContext, questionElement);
+			}
 
-		List<Element> choiceElements = choicesElement.elements();
+			Element choicesElement =
+				portletDataContext.getImportDataGroupElement(PollsChoice.class);
 
-		for (Element choiceElement : choiceElements) {
-			StagedModelDataHandlerUtil.importStagedModel(
-				portletDataContext, choiceElement);
+			List<Element> choiceElements = choicesElement.elements();
+
+			for (Element choiceElement : choiceElements) {
+				StagedModelDataHandlerUtil.importStagedModel(
+					portletDataContext, choiceElement);
+			}
 		}
 
 		if (portletDataContext.getBooleanParameter(NAMESPACE, "votes")) {
@@ -207,6 +169,28 @@ public class PollsPortletDataHandler extends BasePortletDataHandler {
 		}
 
 		return null;
+	}
+
+	@Override
+	protected void doPrepareManifestSummary(
+			PortletDataContext portletDataContext,
+			PortletPreferences portletPreferences)
+		throws Exception {
+
+		ActionableDynamicQuery choiceActionableDynamicQuery =
+			new PollsChoiceExportActionableDynamicQuery(portletDataContext);
+
+		choiceActionableDynamicQuery.performCount();
+
+		ActionableDynamicQuery questionActionableDynamicQuery =
+			new PollsQuestionExportActionableDynamicQuery(portletDataContext);
+
+		questionActionableDynamicQuery.performCount();
+
+		ActionableDynamicQuery voteActionableDynamicQuery =
+			new PollsVoteExportActionableDynamicQuery(portletDataContext);
+
+		voteActionableDynamicQuery.performCount();
 	}
 
 }

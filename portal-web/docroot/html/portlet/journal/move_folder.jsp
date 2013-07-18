@@ -98,10 +98,8 @@ long parentFolderId = BeanParamUtil.getLong(folder, request, "parentFolderId", J
 			Liferay.Util.selectEntity(
 				{
 					dialog: {
-						align: Liferay.Util.Window.ALIGN_CENTER,
 						constrain: true,
 						modal: true,
-						stack: true,
 						width: 680
 					},
 					id: '<portlet:namespace />selectFolder',
@@ -127,10 +125,6 @@ long parentFolderId = BeanParamUtil.getLong(folder, request, "parentFolderId", J
 	function <portlet:namespace />saveFolder() {
 		submitForm(document.<portlet:namespace />fm);
 	}
-
-	<c:if test="<%= windowState.equals(WindowState.MAXIMIZED) %>">
-		Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace />file);
-	</c:if>
 </aui:script>
 
 <%

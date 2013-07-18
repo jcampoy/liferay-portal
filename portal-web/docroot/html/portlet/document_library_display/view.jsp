@@ -23,11 +23,17 @@ String redirect = ParamUtil.getString(request, "redirect");
 
 Folder folder = (Folder)request.getAttribute(WebKeys.DOCUMENT_LIBRARY_FOLDER);
 
-long defaultFolderId = GetterUtil.getLong(preferences.getValue("rootFolderId", StringPool.BLANK), DLFolderConstants.DEFAULT_PARENT_FOLDER_ID);
+long defaultFolderId = GetterUtil.getLong(portletPreferences.getValue("rootFolderId", StringPool.BLANK), DLFolderConstants.DEFAULT_PARENT_FOLDER_ID);
 
 long folderId = BeanParamUtil.getLong(folder, request, "folderId", defaultFolderId);
 
+boolean defaultFolderView = false;
+
 if ((folder == null) && (defaultFolderId != DLFolderConstants.DEFAULT_PARENT_FOLDER_ID)) {
+	defaultFolderView = true;
+}
+
+if (defaultFolderView) {
 	try {
 		folder = DLAppLocalServiceUtil.getFolder(folderId);
 	}
@@ -95,7 +101,7 @@ request.setAttribute("view.jsp-useAssetEntryQuery", String.valueOf(useAssetEntry
 
 	</c:when>
 	<c:when test='<%= topLink.equals("home") %>'>
-		<aui:layout>
+		<aui:row>
 			<c:if test="<%= (folder != null) %>">
 				<liferay-ui:header
 					backURL="<%= redirect %>"
@@ -104,7 +110,7 @@ request.setAttribute("view.jsp-useAssetEntryQuery", String.valueOf(useAssetEntry
 				/>
 			</c:if>
 
-			<aui:column columnWidth="<%= showFolderMenu ? 75 : 100 %>" cssClass="lfr-asset-column lfr-asset-column-details" first="<%= true %>">
+			<aui:col cssClass="lfr-asset-column lfr-asset-column-details" width="<%= showFolderMenu ? 75 : 100 %>">
 				<liferay-ui:panel-container extended="<%= false %>" id='<%= renderResponse.getNamespace() + "documentLibraryDisplayInfoPanelContainer" %>' persistState="<%= true %>">
 					<c:if test="<%= folder != null %>">
 						<c:if test="<%= Validator.isNotNull(folder.getDescription()) %>">
@@ -176,10 +182,10 @@ request.setAttribute("view.jsp-useAssetEntryQuery", String.valueOf(useAssetEntry
 						<%@ include file="/html/portlet/document_library/view_file_entries.jspf" %>
 					</liferay-ui:panel>
 				</liferay-ui:panel-container>
-			</aui:column>
+			</aui:col>
 
 			<c:if test="<%= showFolderMenu %>">
-				<aui:column columnWidth="<%= 25 %>" cssClass="lfr-asset-column lfr-asset-column-actions" last="<%= true %>">
+				<aui:col cssClass="lfr-asset-column lfr-asset-column-actions" last="<%= true %>" width="<%= 25 %>">
 					<div class="lfr-asset-summary">
 						<liferay-ui:icon
 							cssClass="lfr-asset-avatar"
@@ -197,22 +203,24 @@ request.setAttribute("view.jsp-useAssetEntryQuery", String.valueOf(useAssetEntry
 					%>
 
 					<liferay-util:include page="/html/portlet/document_library/folder_action.jsp" />
-				</aui:column>
+				</aui:col>
 			</c:if>
-		</aui:layout>
+		</aui:row>
 
 		<%
 		if (folder != null) {
 			DLUtil.addPortletBreadcrumbEntries(folder, request, renderResponse);
 
-			PortalUtil.setPageSubtitle(folder.getName(), request);
-			PortalUtil.setPageDescription(folder.getDescription(), request);
+			if (!defaultFolderView) {
+				PortalUtil.setPageSubtitle(folder.getName(), request);
+				PortalUtil.setPageDescription(folder.getDescription(), request);
+			}
 		}
 		%>
 
 	</c:when>
 	<c:when test='<%= topLink.equals("mine") || topLink.equals("recent") %>'>
-		<aui:layout>
+		<aui:row>
 			<liferay-ui:header
 				backURL="<%= redirect %>"
 				title="<%= topLink %>"
@@ -266,7 +274,7 @@ request.setAttribute("view.jsp-useAssetEntryQuery", String.valueOf(useAssetEntry
 
 				<liferay-ui:search-iterator />
 			</liferay-ui:search-container>
-		</aui:layout>
+		</aui:row>
 
 		<%
 		PortalUtil.addPortletBreadcrumbEntry(request, LanguageUtil.get(pageContext, topLink), currentURL);

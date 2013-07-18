@@ -19,6 +19,8 @@ import com.liferay.portal.kernel.cache.cluster.PortalCacheClusterEventType;
 import com.liferay.portal.kernel.cache.cluster.PortalCacheClusterLinkUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 
+import java.io.Serializable;
+
 import java.util.Properties;
 
 import net.sf.ehcache.CacheException;
@@ -46,6 +48,7 @@ public class EhcachePortalCacheClusterReplicator implements CacheReplicator {
 		}
 	}
 
+	@Override
 	public boolean alive() {
 		return true;
 	}
@@ -55,23 +58,29 @@ public class EhcachePortalCacheClusterReplicator implements CacheReplicator {
 		return super.clone();
 	}
 
+	@Override
 	public void dispose() {
 	}
 
+	@Override
 	public boolean isReplicateUpdatesViaCopy() {
 		return false;
 	}
 
+	@Override
 	public boolean notAlive() {
 		return false;
 	}
 
+	@Override
 	public void notifyElementEvicted(Ehcache ehcache, Element element) {
 	}
 
+	@Override
 	public void notifyElementExpired(Ehcache ehcache, Element element) {
 	}
 
+	@Override
 	public void notifyElementPut(Ehcache ehcache, Element element)
 		throws CacheException {
 
@@ -79,18 +88,22 @@ public class EhcachePortalCacheClusterReplicator implements CacheReplicator {
 			return;
 		}
 
+		Serializable key = (Serializable)element.getObjectKey();
+
 		PortalCacheClusterEvent portalCacheClusterEvent =
 			new PortalCacheClusterEvent(
-				ehcache.getName(), element.getKey(),
-				PortalCacheClusterEventType.PUT);
+				ehcache.getName(), key, PortalCacheClusterEventType.PUT);
 
 		if (_replicatePutsViaCopy) {
-			portalCacheClusterEvent.setElementValue(element.getValue());
+			Serializable value = (Serializable)element.getObjectValue();
+
+			portalCacheClusterEvent.setElementValue(value);
 		}
 
 		PortalCacheClusterLinkUtil.sendEvent(portalCacheClusterEvent);
 	}
 
+	@Override
 	public void notifyElementRemoved(Ehcache ehcache, Element element)
 		throws CacheException {
 
@@ -98,14 +111,16 @@ public class EhcachePortalCacheClusterReplicator implements CacheReplicator {
 			return;
 		}
 
+		Serializable key = (Serializable)element.getObjectKey();
+
 		PortalCacheClusterEvent portalCacheClusterEvent =
 			new PortalCacheClusterEvent(
-				ehcache.getName(), element.getKey(),
-				PortalCacheClusterEventType.REMOVE);
+				ehcache.getName(), key, PortalCacheClusterEventType.REMOVE);
 
 		PortalCacheClusterLinkUtil.sendEvent(portalCacheClusterEvent);
 	}
 
+	@Override
 	public void notifyElementUpdated(Ehcache ehcache, Element element)
 		throws CacheException {
 
@@ -113,18 +128,22 @@ public class EhcachePortalCacheClusterReplicator implements CacheReplicator {
 			return;
 		}
 
+		Serializable key = (Serializable)element.getObjectKey();
+
 		PortalCacheClusterEvent portalCacheClusterEvent =
 			new PortalCacheClusterEvent(
-				ehcache.getName(), element.getKey(),
-				PortalCacheClusterEventType.UPDATE);
+				ehcache.getName(), key, PortalCacheClusterEventType.UPDATE);
 
 		if (_replicateUpdatesViaCopy) {
-			portalCacheClusterEvent.setElementValue(element.getValue());
+			Serializable value = (Serializable)element.getObjectValue();
+
+			portalCacheClusterEvent.setElementValue(value);
 		}
 
 		PortalCacheClusterLinkUtil.sendEvent(portalCacheClusterEvent);
 	}
 
+	@Override
 	public void notifyRemoveAll(Ehcache ehcache) {
 		if (!_replicateRemovals) {
 			return;

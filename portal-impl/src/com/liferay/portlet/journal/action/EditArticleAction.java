@@ -16,7 +16,6 @@ package com.liferay.portlet.journal.action;
 
 import com.liferay.portal.LocaleException;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.servlet.SessionErrors;
@@ -32,7 +31,6 @@ import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.UnicodeFormatter;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Layout;
@@ -54,8 +52,6 @@ import com.liferay.portlet.dynamicdatamapping.NoSuchStructureException;
 import com.liferay.portlet.dynamicdatamapping.NoSuchTemplateException;
 import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
 import com.liferay.portlet.dynamicdatamapping.service.DDMStructureLocalServiceUtil;
-import com.liferay.portlet.dynamicdatamapping.storage.Field;
-import com.liferay.portlet.dynamicdatamapping.storage.FieldConstants;
 import com.liferay.portlet.dynamicdatamapping.storage.Fields;
 import com.liferay.portlet.dynamicdatamapping.util.DDMUtil;
 import com.liferay.portlet.journal.ArticleContentException;
@@ -70,6 +66,7 @@ import com.liferay.portlet.journal.ArticleTypeException;
 import com.liferay.portlet.journal.ArticleVersionException;
 import com.liferay.portlet.journal.DuplicateArticleIdException;
 import com.liferay.portlet.journal.NoSuchArticleException;
+import com.liferay.portlet.journal.asset.JournalArticleAssetRenderer;
 import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.service.JournalArticleServiceUtil;
 import com.liferay.portlet.journal.service.JournalContentSearchLocalServiceUtil;
@@ -80,22 +77,17 @@ import java.io.File;
 
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletConfig;
-import javax.portlet.PortletContext;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
-import javax.portlet.PortletRequestDispatcher;
 import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
-import javax.portlet.ResourceRequest;
-import javax.portlet.ResourceResponse;
 import javax.portlet.WindowState;
 
 import org.apache.struts.action.ActionForm;
@@ -115,8 +107,9 @@ public class EditArticleAction extends PortletAction {
 
 	@Override
 	public void processAction(
-			ActionMapping mapping, ActionForm form, PortletConfig portletConfig,
-			ActionRequest actionRequest, ActionResponse actionResponse)
+			ActionMapping actionMapping, ActionForm actionForm,
+			PortletConfig portletConfig, ActionRequest actionRequest,
+			ActionResponse actionResponse)
 		throws Exception {
 
 		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
@@ -144,10 +137,10 @@ public class EditArticleAction extends PortletAction {
 					 cmd.equals(Constants.TRANSLATE) ||
 					 cmd.equals(Constants.UPDATE)) {
 
-				Object[] returnValue = updateArticle(actionRequest);
+				Object[] contentAndImages = updateArticle(actionRequest);
 
-				article = (JournalArticle)returnValue[0];
-				oldUrlTitle = ((String)returnValue[1]);
+				article = (JournalArticle)contentAndImages[0];
+				oldUrlTitle = ((String)contentAndImages[1]);
 			}
 			else if (cmd.equals(Constants.DELETE)) {
 				deleteArticles(
@@ -237,11 +230,8 @@ public class EditArticleAction extends PortletAction {
 					actionRequest,
 					"portlet.journal.update_translation_redirect");
 			}
-
-			if (!cmd.equals(Constants.DELETE_TRANSLATION) &&
-				!cmd.equals(Constants.TRANSLATE) &&
-				(article != null) &&
-				(workflowAction == WorkflowConstants.ACTION_SAVE_DRAFT)) {
+			else if ((article != null) &&
+					 (workflowAction == WorkflowConstants.ACTION_SAVE_DRAFT)) {
 
 				redirect = getSaveAndContinueRedirect(
 					portletConfig, actionRequest, article, redirect);
@@ -262,6 +252,16 @@ public class EditArticleAction extends PortletAction {
 					redirect = PortalUtil.escapeRedirect(redirect);
 
 					if (Validator.isNotNull(redirect)) {
+						if (cmd.equals(Constants.ADD) && (article != null)) {
+							redirect = HttpUtil.addParameter(
+								redirect, "className",
+								JournalArticle.class.getName());
+							redirect = HttpUtil.addParameter(
+								redirect, "classPK",
+								JournalArticleAssetRenderer.getClassPK(
+									article));
+						}
+
 						actionResponse.sendRedirect(redirect);
 					}
 				}
@@ -305,8 +305,9 @@ public class EditArticleAction extends PortletAction {
 
 	@Override
 	public ActionForward render(
-			ActionMapping mapping, ActionForm form, PortletConfig portletConfig,
-			RenderRequest renderRequest, RenderResponse renderResponse)
+			ActionMapping actionMapping, ActionForm actionForm,
+			PortletConfig portletConfig, RenderRequest renderRequest,
+			RenderResponse renderResponse)
 		throws Exception {
 
 		try {
@@ -324,30 +325,15 @@ public class EditArticleAction extends PortletAction {
 
 				SessionErrors.add(renderRequest, e.getClass());
 
-				return mapping.findForward("portlet.journal.error");
+				return actionMapping.findForward("portlet.journal.error");
 			}
 			else {
 				throw e;
 			}
 		}
 
-		return mapping.findForward(
+		return actionMapping.findForward(
 			getForward(renderRequest, "portlet.journal.edit_article"));
-	}
-
-	@Override
-	public void serveResource(
-			ActionMapping mapping, ActionForm form, PortletConfig portletConfig,
-			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
-		throws Exception {
-
-		PortletContext portletContext = portletConfig.getPortletContext();
-
-		PortletRequestDispatcher portletRequestDispatcher =
-			portletContext.getRequestDispatcher(
-				"/html/portlet/journal/editor.jsp");
-
-		portletRequestDispatcher.include(resourceRequest, resourceResponse);
 	}
 
 	protected void deleteArticles(
@@ -399,10 +385,7 @@ public class EditArticleAction extends PortletAction {
 				liferayPortletConfig.getPortletId() +
 					SessionMessages.KEY_SUFFIX_DELETE_SUCCESS_DATA, data);
 
-			SessionMessages.add(
-				actionRequest,
-				liferayPortletConfig.getPortletId() +
-					SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_SUCCESS_MESSAGE);
+			hideDefaultSuccessMessage(liferayPortletConfig, actionRequest);
 		}
 	}
 
@@ -422,33 +405,6 @@ public class EditArticleAction extends PortletAction {
 				ActionUtil.expireArticle(actionRequest, expireArticleId);
 			}
 		}
-	}
-
-	protected Map<String, byte[]> getImages(Fields fields, Locale locale)
-		throws Exception {
-
-		Map<String, byte[]> images = new HashMap<String, byte[]>();
-
-		Iterator<Field> iterator = fields.iterator();
-
-		while (iterator.hasNext()) {
-			Field field = iterator.next();
-
-			String dataType = field.getDataType();
-			String name = field.getName();
-
-			if (!dataType.equals(FieldConstants.IMAGE)) {
-				continue;
-			}
-
-			String content = (String)field.getValue(locale);
-
-			images.put(
-				"_" + name + "_" + LanguageUtil.getLanguageId(locale),
-				UnicodeFormatter.hexToBytes(content));
-		}
-
-		return images;
 	}
 
 	protected String getSaveAndContinueRedirect(
@@ -568,9 +524,6 @@ public class EditArticleAction extends PortletAction {
 		UploadPortletRequest uploadPortletRequest =
 			PortalUtil.getUploadPortletRequest(actionRequest);
 
-		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
-
 		String cmd = ParamUtil.getString(uploadPortletRequest, Constants.CMD);
 
 		long groupId = ParamUtil.getLong(uploadPortletRequest, "groupId");
@@ -616,7 +569,8 @@ public class EditArticleAction extends PortletAction {
 				uploadPortletRequest, "description_" + toLanguageId);
 		}
 
-		String content = ParamUtil.getString(uploadPortletRequest, "content");
+		String content = ParamUtil.getString(
+			uploadPortletRequest, "articleContent");
 
 		Map<String, byte[]> images = new HashMap<String, byte[]>();
 
@@ -635,24 +589,11 @@ public class EditArticleAction extends PortletAction {
 
 			Locale locale = LocaleUtil.fromLanguageId(languageId);
 
-			DDMStructure ddmStructure =
-				DDMStructureLocalServiceUtil.fetchStructure(
-					groupId, PortalUtil.getClassNameId(JournalArticle.class),
-					structureId);
+			Object[] contentAndImages = ActionUtil.getContentAndImages(
+				groupId, structureId, locale, serviceContext);
 
-			if (ddmStructure == null) {
-				ddmStructure = DDMStructureLocalServiceUtil.fetchStructure(
-					themeDisplay.getCompanyGroupId(),
-					PortalUtil.getClassNameId(JournalArticle.class),
-					structureId);
-			}
-
-			Fields fields = DDMUtil.getFields(
-				ddmStructure.getStructureId(), serviceContext);
-
-			images = getImages(fields, locale);
-
-			content = JournalConverterUtil.getContent(ddmStructure, fields);
+			content = (String)contentAndImages[0];
+			images = (HashMap<String, byte[]>)contentAndImages[1];
 		}
 
 		Boolean fileItemThresholdSizeExceeded =
@@ -886,15 +827,15 @@ public class EditArticleAction extends PortletAction {
 			uploadPortletRequest, "portletResource");
 
 		if (Validator.isNotNull(portletResource)) {
-			PortletPreferences preferences =
+			PortletPreferences portletPreferences =
 				PortletPreferencesFactoryUtil.getPortletSetup(
 					uploadPortletRequest, portletResource);
 
-			preferences.setValue(
+			portletPreferences.setValue(
 				"groupId", String.valueOf(article.getGroupId()));
-			preferences.setValue("articleId", article.getArticleId());
+			portletPreferences.setValue("articleId", article.getArticleId());
 
-			preferences.store();
+			portletPreferences.store();
 
 			updateContentSearch(
 				actionRequest, portletResource, article.getArticleId());

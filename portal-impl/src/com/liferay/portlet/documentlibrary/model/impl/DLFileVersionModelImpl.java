@@ -17,6 +17,7 @@ package com.liferay.portlet.documentlibrary.model.impl;
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSON;
+import com.liferay.portal.kernel.lar.StagedModelType;
 import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
@@ -188,26 +189,32 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 	public DLFileVersionModelImpl() {
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _fileVersionId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setFileVersionId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
 		return _fileVersionId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return DLFileVersion.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return DLFileVersion.class.getName();
 	}
@@ -398,6 +405,7 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 		}
 	}
 
+	@Override
 	@JSON
 	public String getUuid() {
 		if (_uuid == null) {
@@ -408,6 +416,7 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 		}
 	}
 
+	@Override
 	public void setUuid(String uuid) {
 		if (_originalUuid == null) {
 			_originalUuid = _uuid;
@@ -420,20 +429,24 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 		return GetterUtil.getString(_originalUuid);
 	}
 
+	@Override
 	@JSON
 	public long getFileVersionId() {
 		return _fileVersionId;
 	}
 
+	@Override
 	public void setFileVersionId(long fileVersionId) {
 		_fileVersionId = fileVersionId;
 	}
 
+	@Override
 	@JSON
 	public long getGroupId() {
 		return _groupId;
 	}
 
+	@Override
 	public void setGroupId(long groupId) {
 		_columnBitmask |= GROUPID_COLUMN_BITMASK;
 
@@ -450,11 +463,13 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 		return _originalGroupId;
 	}
 
+	@Override
 	@JSON
 	public long getCompanyId() {
 		return _companyId;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
 		_columnBitmask |= COMPANYID_COLUMN_BITMASK;
 
@@ -471,23 +486,28 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 		return _originalCompanyId;
 	}
 
+	@Override
 	@JSON
 	public long getUserId() {
 		return _userId;
 	}
 
+	@Override
 	public void setUserId(long userId) {
 		_userId = userId;
 	}
 
+	@Override
 	public String getUserUuid() throws SystemException {
 		return PortalUtil.getUserValue(getUserId(), "uuid", _userUuid);
 	}
 
+	@Override
 	public void setUserUuid(String userUuid) {
 		_userUuid = userUuid;
 	}
 
+	@Override
 	@JSON
 	public String getUserName() {
 		if (_userName == null) {
@@ -498,44 +518,53 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 		}
 	}
 
+	@Override
 	public void setUserName(String userName) {
 		_userName = userName;
 	}
 
+	@Override
 	@JSON
 	public Date getCreateDate() {
 		return _createDate;
 	}
 
+	@Override
 	public void setCreateDate(Date createDate) {
 		_columnBitmask = -1L;
 
 		_createDate = createDate;
 	}
 
+	@Override
 	@JSON
 	public Date getModifiedDate() {
 		return _modifiedDate;
 	}
 
+	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		_modifiedDate = modifiedDate;
 	}
 
+	@Override
 	@JSON
 	public long getRepositoryId() {
 		return _repositoryId;
 	}
 
+	@Override
 	public void setRepositoryId(long repositoryId) {
 		_repositoryId = repositoryId;
 	}
 
+	@Override
 	@JSON
 	public long getFolderId() {
 		return _folderId;
 	}
 
+	@Override
 	public void setFolderId(long folderId) {
 		_columnBitmask |= FOLDERID_COLUMN_BITMASK;
 
@@ -552,11 +581,13 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 		return _originalFolderId;
 	}
 
+	@Override
 	@JSON
 	public long getFileEntryId() {
 		return _fileEntryId;
 	}
 
+	@Override
 	public void setFileEntryId(long fileEntryId) {
 		_columnBitmask = -1L;
 
@@ -573,6 +604,7 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 		return _originalFileEntryId;
 	}
 
+	@Override
 	@JSON
 	public String getExtension() {
 		if (_extension == null) {
@@ -583,10 +615,12 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 		}
 	}
 
+	@Override
 	public void setExtension(String extension) {
 		_extension = extension;
 	}
 
+	@Override
 	@JSON
 	public String getMimeType() {
 		if (_mimeType == null) {
@@ -597,6 +631,7 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 		}
 	}
 
+	@Override
 	public void setMimeType(String mimeType) {
 		_columnBitmask |= MIMETYPE_COLUMN_BITMASK;
 
@@ -611,6 +646,7 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 		return GetterUtil.getString(_originalMimeType);
 	}
 
+	@Override
 	@JSON
 	public String getTitle() {
 		if (_title == null) {
@@ -621,6 +657,7 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 		}
 	}
 
+	@Override
 	public void setTitle(String title) {
 		_columnBitmask |= TITLE_COLUMN_BITMASK;
 
@@ -635,6 +672,7 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 		return GetterUtil.getString(_originalTitle);
 	}
 
+	@Override
 	@JSON
 	public String getDescription() {
 		if (_description == null) {
@@ -645,10 +683,12 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 		}
 	}
 
+	@Override
 	public void setDescription(String description) {
 		_description = description;
 	}
 
+	@Override
 	@JSON
 	public String getChangeLog() {
 		if (_changeLog == null) {
@@ -659,10 +699,12 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 		}
 	}
 
+	@Override
 	public void setChangeLog(String changeLog) {
 		_changeLog = changeLog;
 	}
 
+	@Override
 	@JSON
 	public String getExtraSettings() {
 		if (_extraSettings == null) {
@@ -673,19 +715,23 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 		}
 	}
 
+	@Override
 	public void setExtraSettings(String extraSettings) {
 		_extraSettings = extraSettings;
 	}
 
+	@Override
 	@JSON
 	public long getFileEntryTypeId() {
 		return _fileEntryTypeId;
 	}
 
+	@Override
 	public void setFileEntryTypeId(long fileEntryTypeId) {
 		_fileEntryTypeId = fileEntryTypeId;
 	}
 
+	@Override
 	@JSON
 	public String getVersion() {
 		if (_version == null) {
@@ -696,6 +742,7 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 		}
 	}
 
+	@Override
 	public void setVersion(String version) {
 		_columnBitmask |= VERSION_COLUMN_BITMASK;
 
@@ -710,15 +757,18 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 		return GetterUtil.getString(_originalVersion);
 	}
 
+	@Override
 	@JSON
 	public long getSize() {
 		return _size;
 	}
 
+	@Override
 	public void setSize(long size) {
 		_size = size;
 	}
 
+	@Override
 	@JSON
 	public String getChecksum() {
 		if (_checksum == null) {
@@ -729,15 +779,18 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 		}
 	}
 
+	@Override
 	public void setChecksum(String checksum) {
 		_checksum = checksum;
 	}
 
+	@Override
 	@JSON
 	public int getStatus() {
 		return _status;
 	}
 
+	@Override
 	public void setStatus(int status) {
 		_columnBitmask |= STATUS_COLUMN_BITMASK;
 
@@ -754,24 +807,29 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 		return _originalStatus;
 	}
 
+	@Override
 	@JSON
 	public long getStatusByUserId() {
 		return _statusByUserId;
 	}
 
+	@Override
 	public void setStatusByUserId(long statusByUserId) {
 		_statusByUserId = statusByUserId;
 	}
 
+	@Override
 	public String getStatusByUserUuid() throws SystemException {
 		return PortalUtil.getUserValue(getStatusByUserId(), "uuid",
 			_statusByUserUuid);
 	}
 
+	@Override
 	public void setStatusByUserUuid(String statusByUserUuid) {
 		_statusByUserUuid = statusByUserUuid;
 	}
 
+	@Override
 	@JSON
 	public String getStatusByUserName() {
 		if (_statusByUserName == null) {
@@ -782,26 +840,37 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 		}
 	}
 
+	@Override
 	public void setStatusByUserName(String statusByUserName) {
 		_statusByUserName = statusByUserName;
 	}
 
+	@Override
 	@JSON
 	public Date getStatusDate() {
 		return _statusDate;
 	}
 
+	@Override
 	public void setStatusDate(Date statusDate) {
 		_statusDate = statusDate;
+	}
+
+	@Override
+	public StagedModelType getStagedModelType() {
+		return new StagedModelType(PortalUtil.getClassNameId(
+				DLFileVersion.class.getName()));
 	}
 
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #isApproved}
 	 */
+	@Override
 	public boolean getApproved() {
 		return isApproved();
 	}
 
+	@Override
 	public boolean isApproved() {
 		if (getStatus() == WorkflowConstants.STATUS_APPROVED) {
 			return true;
@@ -811,6 +880,7 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 		}
 	}
 
+	@Override
 	public boolean isDenied() {
 		if (getStatus() == WorkflowConstants.STATUS_DENIED) {
 			return true;
@@ -820,6 +890,7 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 		}
 	}
 
+	@Override
 	public boolean isDraft() {
 		if (getStatus() == WorkflowConstants.STATUS_DRAFT) {
 			return true;
@@ -829,6 +900,7 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 		}
 	}
 
+	@Override
 	public boolean isExpired() {
 		if (getStatus() == WorkflowConstants.STATUS_EXPIRED) {
 			return true;
@@ -838,6 +910,7 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 		}
 	}
 
+	@Override
 	public boolean isInactive() {
 		if (getStatus() == WorkflowConstants.STATUS_INACTIVE) {
 			return true;
@@ -847,6 +920,7 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 		}
 	}
 
+	@Override
 	public boolean isIncomplete() {
 		if (getStatus() == WorkflowConstants.STATUS_INCOMPLETE) {
 			return true;
@@ -856,6 +930,7 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 		}
 	}
 
+	@Override
 	public boolean isInTrash() {
 		if (getStatus() == WorkflowConstants.STATUS_IN_TRASH) {
 			return true;
@@ -865,6 +940,7 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 		}
 	}
 
+	@Override
 	public boolean isPending() {
 		if (getStatus() == WorkflowConstants.STATUS_PENDING) {
 			return true;
@@ -874,6 +950,7 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 		}
 	}
 
+	@Override
 	public boolean isScheduled() {
 		if (getStatus() == WorkflowConstants.STATUS_SCHEDULED) {
 			return true;
@@ -945,6 +1022,7 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 		return dlFileVersionImpl;
 	}
 
+	@Override
 	public int compareTo(DLFileVersion dlFileVersion) {
 		int value = 0;
 
@@ -978,18 +1056,15 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof DLFileVersion)) {
 			return false;
 		}
 
-		DLFileVersion dlFileVersion = null;
-
-		try {
-			dlFileVersion = (DLFileVersion)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		DLFileVersion dlFileVersion = (DLFileVersion)obj;
 
 		long primaryKey = dlFileVersion.getPrimaryKey();
 
@@ -1244,6 +1319,7 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(79);
 

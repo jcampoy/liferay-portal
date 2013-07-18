@@ -128,10 +128,12 @@ public class DLFileEntryIndexer extends BaseIndexer {
 		document.addKeyword(Field.RELATED_ENTRY, true);
 	}
 
+	@Override
 	public String[] getClassNames() {
 		return CLASS_NAMES;
 	}
 
+	@Override
 	public String getPortletId() {
 		return PORTLET_ID;
 	}
@@ -410,6 +412,8 @@ public class DLFileEntryIndexer extends BaseIndexer {
 			document.addKeyword(
 				"fileEntryTypeId", dlFileEntry.getFileEntryTypeId());
 			document.addKeyword("path", dlFileEntry.getTitle());
+			document.addKeyword("readCount", dlFileEntry.getReadCount());
+			document.addKeyword("size", dlFileEntry.getSize());
 
 			ExpandoBridge expandoBridge =
 				ExpandoBridgeFactoryUtil.getExpandoBridge(

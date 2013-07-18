@@ -138,7 +138,7 @@ if (feed != null) {
 						<aui:input name="autoFeedId" type="hidden" value="<%= true %>" />
 					</c:when>
 					<c:otherwise>
-						<aui:input cssClass="lfr-input-text-container" field="feedId" fieldParam="newFeedId" label="id" name="newFeedId" value="<%= newFeedId %>" />
+						<aui:input autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) %>" cssClass="lfr-input-text-container" field="feedId" fieldParam="newFeedId" label="id" name="newFeedId" value="<%= newFeedId %>" />
 
 						<aui:input label="autogenerate-id" name="autoFeedId" type="checkbox" />
 					</c:otherwise>
@@ -146,12 +146,12 @@ if (feed != null) {
 			</c:when>
 			<c:otherwise>
 				<aui:field-wrapper label="id">
-					<%= feedId %>
+					<%= HtmlUtil.escape(feedId) %>
 				</aui:field-wrapper>
 			</c:otherwise>
 		</c:choose>
 
-		<aui:input cssClass="lfr-input-text-container" name="name" />
+		<aui:input autoFocus="<%= ((feed != null) && !PropsValues.JOURNAL_FEED_FORCE_AUTOGENERATE_ID && windowState.equals(WindowState.MAXIMIZED)) %>" cssClass="lfr-input-text-container" name="name" />
 
 		<aui:input cssClass="lfr-textarea-container" name="description" />
 
@@ -336,7 +336,7 @@ if (feed != null) {
 			<c:if test="<%= feed != null %>">
 
 				<%
-				String taglibPreviewButton = "Liferay.Util.openWindow({dialog: {align: Liferay.Util.Window.ALIGN_CENTER, height: 450}, id:'" + renderResponse.getNamespace() + "preview', title: '" + UnicodeLanguageUtil.get(pageContext, "feed") + "', uri: '" + feedURL + "'});";
+				String taglibPreviewButton = "Liferay.Util.openWindow(id:'" + renderResponse.getNamespace() + "preview', title: '" + UnicodeLanguageUtil.get(pageContext, "feed") + "', uri: '" + feedURL + "'});";
 				%>
 
 				<aui:button onClick="<%= taglibPreviewButton %>" value="preview" />
@@ -351,11 +351,10 @@ if (feed != null) {
 	function <portlet:namespace />openStructureSelector() {
 		Liferay.Util.openDDMPortlet(
 			{
-				classNameId: '<%= PortalUtil.getClassNameId(DDMStructure.class) %>',
+				basePortletURL: '<%= PortletURLFactoryUtil.create(request, PortletKeys.DYNAMIC_DATA_MAPPING, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>',
 				classPK: <%= (ddmStructure != null) ? ddmStructure.getPrimaryKey(): 0 %>,
-				ddmResource: '<%= ddmResource %>',
 				dialog: {
-					width: 820
+					destroyOnHide: true
 				},
 				eventName: '<portlet:namespace />selectStructure',
 				groupId: <%= groupId %>,
@@ -364,15 +363,12 @@ if (feed != null) {
 				Portlet portlet = PortletLocalServiceUtil.getPortletById(portletDisplay.getId());
 				%>
 
+				refererPortletName: '<%= PortletKeys.JOURNAL %>',
 				refererWebDAVToken: '<%= portlet.getWebDAVStorageToken() %>',
-
-				storageType: '<%= PropsValues.JOURNAL_ARTICLE_STORAGE_TYPE %>',
-				structureName: 'structure',
-				structureType: 'com.liferay.portlet.journal.model.JournalArticle',
 				struts_action: '/dynamic_data_mapping/select_structure',
 				title: '<%= UnicodeLanguageUtil.get(pageContext, "structures") %>'
 			},
-			function(event){
+			function(event) {
 				if (confirm('<%= UnicodeLanguageUtil.get(pageContext, "selecting-a-new-structure-will-change-the-available-templates-and-available-feed-item-content") %>') && (document.<portlet:namespace />fm.<portlet:namespace />structureId.value != event.structurekey)) {
 					document.<portlet:namespace />fm.<portlet:namespace />structureId.value = event.ddmstructurekey;
 					document.<portlet:namespace />fm.<portlet:namespace />templateId.value = "";
@@ -414,7 +410,7 @@ if (feed != null) {
 			document.<portlet:namespace />fm.<portlet:namespace />templateId.value = templateId;
 
 			if (dialog) {
-				dialog.close();
+				dialog.hide();
 			}
 
 			submitForm(document.<portlet:namespace />fm);
@@ -422,17 +418,6 @@ if (feed != null) {
 	}
 
 	Liferay.Util.disableToggleBoxes('<portlet:namespace />autoFeedIdCheckbox','<portlet:namespace />newFeedId', true);
-
-	<c:if test="<%= windowState.equals(WindowState.MAXIMIZED) %>">
-		<c:choose>
-			<c:when test="<%= PropsValues.JOURNAL_FEED_FORCE_AUTOGENERATE_ID %>">
-				Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace />name);
-			</c:when>
-			<c:otherwise>
-				Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace /><%= (feed == null) ? "newFeedId" : "name" %>);
-			</c:otherwise>
-		</c:choose>
-	</c:if>
 </aui:script>
 
 <aui:script use="aui-base">

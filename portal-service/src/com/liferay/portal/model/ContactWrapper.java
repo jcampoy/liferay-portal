@@ -14,6 +14,8 @@
 
 package com.liferay.portal.model;
 
+import com.liferay.portal.kernel.util.Validator;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,8 +25,8 @@ import java.util.Map;
  * This class is a wrapper for {@link Contact}.
  * </p>
  *
- * @author    Brian Wing Shun Chan
- * @see       Contact
+ * @author Brian Wing Shun Chan
+ * @see Contact
  * @generated
  */
 public class ContactWrapper implements Contact, ModelWrapper<Contact> {
@@ -32,14 +34,17 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 		_contact = contact;
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return Contact.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return Contact.class.getName();
 	}
 
+	@Override
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
@@ -80,6 +85,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 		return attributes;
 	}
 
+	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
 		Long contactId = (Long)attributes.get("contactId");
 
@@ -285,6 +291,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return the primary key of this contact
 	*/
+	@Override
 	public long getPrimaryKey() {
 		return _contact.getPrimaryKey();
 	}
@@ -294,6 +301,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @param primaryKey the primary key of this contact
 	*/
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_contact.setPrimaryKey(primaryKey);
 	}
@@ -303,6 +311,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return the contact ID of this contact
 	*/
+	@Override
 	public long getContactId() {
 		return _contact.getContactId();
 	}
@@ -312,6 +321,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @param contactId the contact ID of this contact
 	*/
+	@Override
 	public void setContactId(long contactId) {
 		_contact.setContactId(contactId);
 	}
@@ -321,6 +331,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return the company ID of this contact
 	*/
+	@Override
 	public long getCompanyId() {
 		return _contact.getCompanyId();
 	}
@@ -330,6 +341,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @param companyId the company ID of this contact
 	*/
+	@Override
 	public void setCompanyId(long companyId) {
 		_contact.setCompanyId(companyId);
 	}
@@ -339,6 +351,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return the user ID of this contact
 	*/
+	@Override
 	public long getUserId() {
 		return _contact.getUserId();
 	}
@@ -348,6 +361,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @param userId the user ID of this contact
 	*/
+	@Override
 	public void setUserId(long userId) {
 		_contact.setUserId(userId);
 	}
@@ -358,6 +372,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	* @return the user uuid of this contact
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.lang.String getUserUuid()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _contact.getUserUuid();
@@ -368,6 +383,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @param userUuid the user uuid of this contact
 	*/
+	@Override
 	public void setUserUuid(java.lang.String userUuid) {
 		_contact.setUserUuid(userUuid);
 	}
@@ -377,6 +393,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return the user name of this contact
 	*/
+	@Override
 	public java.lang.String getUserName() {
 		return _contact.getUserName();
 	}
@@ -386,6 +403,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @param userName the user name of this contact
 	*/
+	@Override
 	public void setUserName(java.lang.String userName) {
 		_contact.setUserName(userName);
 	}
@@ -395,6 +413,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return the create date of this contact
 	*/
+	@Override
 	public java.util.Date getCreateDate() {
 		return _contact.getCreateDate();
 	}
@@ -404,6 +423,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @param createDate the create date of this contact
 	*/
+	@Override
 	public void setCreateDate(java.util.Date createDate) {
 		_contact.setCreateDate(createDate);
 	}
@@ -413,6 +433,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return the modified date of this contact
 	*/
+	@Override
 	public java.util.Date getModifiedDate() {
 		return _contact.getModifiedDate();
 	}
@@ -422,6 +443,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @param modifiedDate the modified date of this contact
 	*/
+	@Override
 	public void setModifiedDate(java.util.Date modifiedDate) {
 		_contact.setModifiedDate(modifiedDate);
 	}
@@ -431,10 +453,12 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return the fully qualified class name of this contact
 	*/
+	@Override
 	public java.lang.String getClassName() {
 		return _contact.getClassName();
 	}
 
+	@Override
 	public void setClassName(java.lang.String className) {
 		_contact.setClassName(className);
 	}
@@ -444,6 +468,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return the class name ID of this contact
 	*/
+	@Override
 	public long getClassNameId() {
 		return _contact.getClassNameId();
 	}
@@ -453,6 +478,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @param classNameId the class name ID of this contact
 	*/
+	@Override
 	public void setClassNameId(long classNameId) {
 		_contact.setClassNameId(classNameId);
 	}
@@ -462,6 +488,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return the class p k of this contact
 	*/
+	@Override
 	public long getClassPK() {
 		return _contact.getClassPK();
 	}
@@ -471,6 +498,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @param classPK the class p k of this contact
 	*/
+	@Override
 	public void setClassPK(long classPK) {
 		_contact.setClassPK(classPK);
 	}
@@ -480,6 +508,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return the account ID of this contact
 	*/
+	@Override
 	public long getAccountId() {
 		return _contact.getAccountId();
 	}
@@ -489,6 +518,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @param accountId the account ID of this contact
 	*/
+	@Override
 	public void setAccountId(long accountId) {
 		_contact.setAccountId(accountId);
 	}
@@ -498,6 +528,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return the parent contact ID of this contact
 	*/
+	@Override
 	public long getParentContactId() {
 		return _contact.getParentContactId();
 	}
@@ -507,6 +538,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @param parentContactId the parent contact ID of this contact
 	*/
+	@Override
 	public void setParentContactId(long parentContactId) {
 		_contact.setParentContactId(parentContactId);
 	}
@@ -516,6 +548,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return the email address of this contact
 	*/
+	@Override
 	public java.lang.String getEmailAddress() {
 		return _contact.getEmailAddress();
 	}
@@ -525,6 +558,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @param emailAddress the email address of this contact
 	*/
+	@Override
 	public void setEmailAddress(java.lang.String emailAddress) {
 		_contact.setEmailAddress(emailAddress);
 	}
@@ -534,6 +568,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return the first name of this contact
 	*/
+	@Override
 	public java.lang.String getFirstName() {
 		return _contact.getFirstName();
 	}
@@ -543,6 +578,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @param firstName the first name of this contact
 	*/
+	@Override
 	public void setFirstName(java.lang.String firstName) {
 		_contact.setFirstName(firstName);
 	}
@@ -552,6 +588,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return the middle name of this contact
 	*/
+	@Override
 	public java.lang.String getMiddleName() {
 		return _contact.getMiddleName();
 	}
@@ -561,6 +598,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @param middleName the middle name of this contact
 	*/
+	@Override
 	public void setMiddleName(java.lang.String middleName) {
 		_contact.setMiddleName(middleName);
 	}
@@ -570,6 +608,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return the last name of this contact
 	*/
+	@Override
 	public java.lang.String getLastName() {
 		return _contact.getLastName();
 	}
@@ -579,6 +618,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @param lastName the last name of this contact
 	*/
+	@Override
 	public void setLastName(java.lang.String lastName) {
 		_contact.setLastName(lastName);
 	}
@@ -588,6 +628,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return the prefix ID of this contact
 	*/
+	@Override
 	public int getPrefixId() {
 		return _contact.getPrefixId();
 	}
@@ -597,6 +638,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @param prefixId the prefix ID of this contact
 	*/
+	@Override
 	public void setPrefixId(int prefixId) {
 		_contact.setPrefixId(prefixId);
 	}
@@ -606,6 +648,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return the suffix ID of this contact
 	*/
+	@Override
 	public int getSuffixId() {
 		return _contact.getSuffixId();
 	}
@@ -615,6 +658,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @param suffixId the suffix ID of this contact
 	*/
+	@Override
 	public void setSuffixId(int suffixId) {
 		_contact.setSuffixId(suffixId);
 	}
@@ -624,6 +668,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return the male of this contact
 	*/
+	@Override
 	public boolean getMale() {
 		return _contact.getMale();
 	}
@@ -633,6 +678,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return <code>true</code> if this contact is male; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isMale() {
 		return _contact.isMale();
 	}
@@ -642,6 +688,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @param male the male of this contact
 	*/
+	@Override
 	public void setMale(boolean male) {
 		_contact.setMale(male);
 	}
@@ -651,6 +698,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return the birthday of this contact
 	*/
+	@Override
 	public java.util.Date getBirthday() {
 		return _contact.getBirthday();
 	}
@@ -660,6 +708,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @param birthday the birthday of this contact
 	*/
+	@Override
 	public void setBirthday(java.util.Date birthday) {
 		_contact.setBirthday(birthday);
 	}
@@ -669,6 +718,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return the sms sn of this contact
 	*/
+	@Override
 	public java.lang.String getSmsSn() {
 		return _contact.getSmsSn();
 	}
@@ -678,6 +728,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @param smsSn the sms sn of this contact
 	*/
+	@Override
 	public void setSmsSn(java.lang.String smsSn) {
 		_contact.setSmsSn(smsSn);
 	}
@@ -687,6 +738,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return the aim sn of this contact
 	*/
+	@Override
 	public java.lang.String getAimSn() {
 		return _contact.getAimSn();
 	}
@@ -696,6 +748,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @param aimSn the aim sn of this contact
 	*/
+	@Override
 	public void setAimSn(java.lang.String aimSn) {
 		_contact.setAimSn(aimSn);
 	}
@@ -705,6 +758,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return the facebook sn of this contact
 	*/
+	@Override
 	public java.lang.String getFacebookSn() {
 		return _contact.getFacebookSn();
 	}
@@ -714,6 +768,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @param facebookSn the facebook sn of this contact
 	*/
+	@Override
 	public void setFacebookSn(java.lang.String facebookSn) {
 		_contact.setFacebookSn(facebookSn);
 	}
@@ -723,6 +778,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return the icq sn of this contact
 	*/
+	@Override
 	public java.lang.String getIcqSn() {
 		return _contact.getIcqSn();
 	}
@@ -732,6 +788,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @param icqSn the icq sn of this contact
 	*/
+	@Override
 	public void setIcqSn(java.lang.String icqSn) {
 		_contact.setIcqSn(icqSn);
 	}
@@ -741,6 +798,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return the jabber sn of this contact
 	*/
+	@Override
 	public java.lang.String getJabberSn() {
 		return _contact.getJabberSn();
 	}
@@ -750,6 +808,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @param jabberSn the jabber sn of this contact
 	*/
+	@Override
 	public void setJabberSn(java.lang.String jabberSn) {
 		_contact.setJabberSn(jabberSn);
 	}
@@ -759,6 +818,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return the msn sn of this contact
 	*/
+	@Override
 	public java.lang.String getMsnSn() {
 		return _contact.getMsnSn();
 	}
@@ -768,6 +828,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @param msnSn the msn sn of this contact
 	*/
+	@Override
 	public void setMsnSn(java.lang.String msnSn) {
 		_contact.setMsnSn(msnSn);
 	}
@@ -777,6 +838,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return the my space sn of this contact
 	*/
+	@Override
 	public java.lang.String getMySpaceSn() {
 		return _contact.getMySpaceSn();
 	}
@@ -786,6 +848,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @param mySpaceSn the my space sn of this contact
 	*/
+	@Override
 	public void setMySpaceSn(java.lang.String mySpaceSn) {
 		_contact.setMySpaceSn(mySpaceSn);
 	}
@@ -795,6 +858,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return the skype sn of this contact
 	*/
+	@Override
 	public java.lang.String getSkypeSn() {
 		return _contact.getSkypeSn();
 	}
@@ -804,6 +868,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @param skypeSn the skype sn of this contact
 	*/
+	@Override
 	public void setSkypeSn(java.lang.String skypeSn) {
 		_contact.setSkypeSn(skypeSn);
 	}
@@ -813,6 +878,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return the twitter sn of this contact
 	*/
+	@Override
 	public java.lang.String getTwitterSn() {
 		return _contact.getTwitterSn();
 	}
@@ -822,6 +888,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @param twitterSn the twitter sn of this contact
 	*/
+	@Override
 	public void setTwitterSn(java.lang.String twitterSn) {
 		_contact.setTwitterSn(twitterSn);
 	}
@@ -831,6 +898,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return the ym sn of this contact
 	*/
+	@Override
 	public java.lang.String getYmSn() {
 		return _contact.getYmSn();
 	}
@@ -840,6 +908,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @param ymSn the ym sn of this contact
 	*/
+	@Override
 	public void setYmSn(java.lang.String ymSn) {
 		_contact.setYmSn(ymSn);
 	}
@@ -849,6 +918,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return the employee status ID of this contact
 	*/
+	@Override
 	public java.lang.String getEmployeeStatusId() {
 		return _contact.getEmployeeStatusId();
 	}
@@ -858,6 +928,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @param employeeStatusId the employee status ID of this contact
 	*/
+	@Override
 	public void setEmployeeStatusId(java.lang.String employeeStatusId) {
 		_contact.setEmployeeStatusId(employeeStatusId);
 	}
@@ -867,6 +938,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return the employee number of this contact
 	*/
+	@Override
 	public java.lang.String getEmployeeNumber() {
 		return _contact.getEmployeeNumber();
 	}
@@ -876,6 +948,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @param employeeNumber the employee number of this contact
 	*/
+	@Override
 	public void setEmployeeNumber(java.lang.String employeeNumber) {
 		_contact.setEmployeeNumber(employeeNumber);
 	}
@@ -885,6 +958,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return the job title of this contact
 	*/
+	@Override
 	public java.lang.String getJobTitle() {
 		return _contact.getJobTitle();
 	}
@@ -894,6 +968,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @param jobTitle the job title of this contact
 	*/
+	@Override
 	public void setJobTitle(java.lang.String jobTitle) {
 		_contact.setJobTitle(jobTitle);
 	}
@@ -903,6 +978,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return the job class of this contact
 	*/
+	@Override
 	public java.lang.String getJobClass() {
 		return _contact.getJobClass();
 	}
@@ -912,6 +988,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @param jobClass the job class of this contact
 	*/
+	@Override
 	public void setJobClass(java.lang.String jobClass) {
 		_contact.setJobClass(jobClass);
 	}
@@ -921,6 +998,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @return the hours of operation of this contact
 	*/
+	@Override
 	public java.lang.String getHoursOfOperation() {
 		return _contact.getHoursOfOperation();
 	}
@@ -930,52 +1008,64 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	*
 	* @param hoursOfOperation the hours of operation of this contact
 	*/
+	@Override
 	public void setHoursOfOperation(java.lang.String hoursOfOperation) {
 		_contact.setHoursOfOperation(hoursOfOperation);
 	}
 
+	@Override
 	public boolean isNew() {
 		return _contact.isNew();
 	}
 
+	@Override
 	public void setNew(boolean n) {
 		_contact.setNew(n);
 	}
 
+	@Override
 	public boolean isCachedModel() {
 		return _contact.isCachedModel();
 	}
 
+	@Override
 	public void setCachedModel(boolean cachedModel) {
 		_contact.setCachedModel(cachedModel);
 	}
 
+	@Override
 	public boolean isEscapedModel() {
 		return _contact.isEscapedModel();
 	}
 
+	@Override
 	public java.io.Serializable getPrimaryKeyObj() {
 		return _contact.getPrimaryKeyObj();
 	}
 
+	@Override
 	public void setPrimaryKeyObj(java.io.Serializable primaryKeyObj) {
 		_contact.setPrimaryKeyObj(primaryKeyObj);
 	}
 
+	@Override
 	public com.liferay.portlet.expando.model.ExpandoBridge getExpandoBridge() {
 		return _contact.getExpandoBridge();
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.model.BaseModel<?> baseModel) {
 		_contact.setExpandoBridgeAttributes(baseModel);
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
 		_contact.setExpandoBridgeAttributes(expandoBridge);
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_contact.setExpandoBridgeAttributes(serviceContext);
@@ -986,6 +1076,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 		return new ContactWrapper((Contact)_contact.clone());
 	}
 
+	@Override
 	public int compareTo(com.liferay.portal.model.Contact contact) {
 		return _contact.compareTo(contact);
 	}
@@ -995,14 +1086,17 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 		return _contact.hashCode();
 	}
 
+	@Override
 	public com.liferay.portal.model.CacheModel<com.liferay.portal.model.Contact> toCacheModel() {
 		return _contact.toCacheModel();
 	}
 
+	@Override
 	public com.liferay.portal.model.Contact toEscapedModel() {
 		return new ContactWrapper(_contact.toEscapedModel());
 	}
 
+	@Override
 	public com.liferay.portal.model.Contact toUnescapedModel() {
 		return new ContactWrapper(_contact.toUnescapedModel());
 	}
@@ -1012,21 +1106,44 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 		return _contact.toString();
 	}
 
+	@Override
 	public java.lang.String toXmlString() {
 		return _contact.toXmlString();
 	}
 
+	@Override
 	public void persist()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_contact.persist();
 	}
 
+	@Override
 	public java.lang.String getFullName() {
 		return _contact.getFullName();
 	}
 
+	@Override
 	public boolean isUser() {
 		return _contact.isUser();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof ContactWrapper)) {
+			return false;
+		}
+
+		ContactWrapper contactWrapper = (ContactWrapper)obj;
+
+		if (Validator.equals(_contact, contactWrapper._contact)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -1036,10 +1153,12 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 		return _contact;
 	}
 
+	@Override
 	public Contact getWrappedModel() {
 		return _contact;
 	}
 
+	@Override
 	public void resetOriginalValues() {
 		_contact.resetOriginalValues();
 	}

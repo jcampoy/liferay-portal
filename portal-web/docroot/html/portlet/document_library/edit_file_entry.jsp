@@ -134,7 +134,7 @@ portletURL.setParameter("fileEntryId", String.valueOf(fileEntryId));
 <c:if test="<%= checkedOut %>">
 	<c:choose>
 		<c:when test="<%= hasLock %>">
-			<div class="portlet-msg-success">
+			<div class="alert alert-success">
 				<c:choose>
 					<c:when test="<%= lock.isNeverExpires() %>">
 						<liferay-ui:message key="you-now-have-an-indefinite-lock-on-this-document" />
@@ -151,31 +151,34 @@ portletURL.setParameter("fileEntryId", String.valueOf(fileEntryId));
 			</div>
 		</c:when>
 		<c:otherwise>
-			<div class="portlet-msg-error">
+			<div class="alert alert-error">
 				<%= LanguageUtil.format(pageContext, "you-cannot-modify-this-document-because-it-was-checked-out-by-x-on-x", new Object[] {HtmlUtil.escape(PortalUtil.getUserName(lock.getUserId(), String.valueOf(lock.getUserId()))), dateFormatDateTime.format(lock.getCreateDate())}, false) %>
 			</div>
 		</c:otherwise>
 	</c:choose>
 </c:if>
 
-<%
-boolean localizeTitle = true;
-String headerTitle = LanguageUtil.get(pageContext, "new-document");
+<c:if test="<%= showHeader %>">
 
-if (fileVersion != null) {
-	headerTitle = fileVersion.getTitle();
-	localizeTitle= false;
-}
-else if (dlFileEntryType != null) {
-	headerTitle = LanguageUtil.format(pageContext, "new-x", new Object[] {dlFileEntryType.getName()});
-}
-%>
+	<%
+	boolean localizeTitle = true;
+	String headerTitle = LanguageUtil.get(pageContext, "new-document");
 
-<liferay-ui:header
-	backURL="<%= backURL %>"
-	localizeTitle="<%= localizeTitle %>"
-	title="<%= headerTitle %>"
-/>
+	if (fileVersion != null) {
+		headerTitle = fileVersion.getTitle();
+		localizeTitle= false;
+	}
+	else if (dlFileEntryType != null) {
+		headerTitle = LanguageUtil.format(pageContext, "new-x", new Object[] {dlFileEntryType.getName(locale)});
+	}
+	%>
+
+	<liferay-ui:header
+		backURL="<%= backURL %>"
+		localizeTitle="<%= localizeTitle %>"
+		title="<%= headerTitle %>"
+	/>
+</c:if>
 
 <portlet:actionURL var="editFileEntryURL">
 	<portlet:param name="struts_action" value="/document_library/edit_file_entry" />
@@ -200,7 +203,7 @@ else if (dlFileEntryType != null) {
 	</liferay-ui:error>
 
 	<liferay-ui:error exception="<%= FileMimeTypeException.class %>">
-		<liferay-ui:message key="media-files-must-be-one-of-the-following-formats" /> <%= StringUtil.merge(DLUtil.getMediaGalleryMimeTypes(preferences, renderRequest), StringPool.COMMA_AND_SPACE) %>.
+		<liferay-ui:message key="media-files-must-be-one-of-the-following-formats" /> <%= StringUtil.merge(DLUtil.getMediaGalleryMimeTypes(portletPreferences, renderRequest), StringPool.COMMA_AND_SPACE) %>.
 	</liferay-ui:error>
 
 	<liferay-ui:error exception="<%= FileNameException.class %>" message="please-enter-a-file-with-a-valid-file-name" />
@@ -237,7 +240,7 @@ else if (dlFileEntryType != null) {
 	<aui:fieldset>
 		<aui:field-wrapper>
 			<c:if test="<%= fileMaxSize != 0 %>">
-				<div class="portlet-msg-info">
+				<div class="alert alert-info">
 					<%= LanguageUtil.format(pageContext, "upload-documents-no-larger-than-x-k", String.valueOf(fileMaxSize), false) %>
 				</div>
 			</c:if>
@@ -287,10 +290,8 @@ else if (dlFileEntryType != null) {
 							Liferay.Util.selectEntity(
 								{
 									dialog: {
-										align: Liferay.Util.Window.ALIGN_CENTER,
 										constrain: true,
 										modal: true,
-										stack: true,
 										width: 680
 									},
 									id: '<portlet:namespace />selectFolder',
@@ -314,7 +315,7 @@ else if (dlFileEntryType != null) {
 			</c:if>
 		</aui:field-wrapper>
 
-		<aui:input name="file" onChange='<%= renderResponse.getNamespace() + "validateTitle();" %>' style="width: auto;" type="file">
+		<aui:input autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) %>" name="file" onChange='<%= renderResponse.getNamespace() + "validateTitle();" %>' style="width: auto;" type="file">
 			<aui:validator name="acceptFiles">
 				'<%= StringUtil.merge(PrefsPropsUtil.getStringArray(PropsKeys.DL_FILE_EXTENSIONS, StringPool.COMMA)) %>'
 			</aui:validator>
@@ -353,7 +354,7 @@ else if (dlFileEntryType != null) {
 							for (DLFileEntryType curDLFileEntryType : dlFileEntryTypes) {
 							%>
 
-								<aui:option label="<%= HtmlUtil.escape(curDLFileEntryType.getName()) %>" selected="<%= (fileEntryTypeId == curDLFileEntryType.getPrimaryKey()) %>" value="<%= curDLFileEntryType.getPrimaryKey() %>" />
+								<aui:option label="<%= HtmlUtil.escape(curDLFileEntryType.getName(locale)) %>" selected="<%= (fileEntryTypeId == curDLFileEntryType.getPrimaryKey()) %>" value="<%= curDLFileEntryType.getPrimaryKey() %>" />
 
 							<%
 							}
@@ -440,13 +441,13 @@ else if (dlFileEntryType != null) {
 		</c:if>
 
 		<c:if test="<%= approved %>">
-			<div class="portlet-msg-info">
+			<div class="alert alert-info">
 				<liferay-ui:message key="a-new-version-will-be-created-automatically-if-this-content-is-modified" />
 			</div>
 		</c:if>
 
 		<c:if test="<%= pending %>">
-			<div class="portlet-msg-info">
+			<div class="alert alert-info">
 				<liferay-ui:message key="there-is-a-publication-workflow-in-process" />
 			</div>
 		</c:if>
@@ -506,6 +507,7 @@ else if (dlFileEntryType != null) {
 <aui:script>
 	function <portlet:namespace />changeFileEntryType() {
 		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = "<%= Constants.PREVIEW %>";
+
 		submitForm(document.<portlet:namespace />fm);
 	}
 
@@ -514,7 +516,8 @@ else if (dlFileEntryType != null) {
 	}
 
 	function <portlet:namespace />checkIn() {
-		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = "<%= Constants.UPDATE_AND_CHECKIN %>"
+		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = "<%= Constants.UPDATE_AND_CHECKIN %>";
+
 		submitForm(document.<portlet:namespace />fm);
 	}
 
@@ -530,16 +533,13 @@ else if (dlFileEntryType != null) {
 		}
 
 		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = "<%= (fileEntry == null) ? Constants.ADD : Constants.UPDATE %>";
+
 		submitForm(document.<portlet:namespace />fm);
 	}
 
 	function <portlet:namespace />validateTitle() {
 		Liferay.Form.get('<portlet:namespace />fm').formValidator.validateField('<portlet:namespace />title');
 	}
-
-	<c:if test="<%= windowState.equals(WindowState.MAXIMIZED) %>">
-		Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace />file);
-	</c:if>
 </aui:script>
 
 <%

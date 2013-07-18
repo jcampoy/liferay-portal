@@ -54,7 +54,7 @@ boolean mergeWithParentFolderDisabled = ParamUtil.getBoolean(request, "mergeWith
 			<aui:field-wrapper label="parent-folder">
 
 				<%
-				String parentFolderName = StringPool.BLANK;
+				String parentFolderName = LanguageUtil.get(pageContext, "home");
 
 				try {
 					JournalFolder parentFolder = JournalFolderServiceUtil.getFolder(parentFolderId);
@@ -86,10 +86,8 @@ boolean mergeWithParentFolderDisabled = ParamUtil.getBoolean(request, "mergeWith
 							Liferay.Util.selectEntity(
 								{
 									dialog: {
-										align: Liferay.Util.Window.ALIGN_CENTER,
 										constrain: true,
 										modal: true,
-										stack: true,
 										width: 680
 									},
 									id: '<portlet:namespace />selectFolder',
@@ -121,7 +119,7 @@ boolean mergeWithParentFolderDisabled = ParamUtil.getBoolean(request, "mergeWith
 			</aui:field-wrapper>
 		</c:if>
 
-		<aui:input name="name" />
+		<aui:input autoFocus="<%= (windowState.equals(WindowState.MAXIMIZED) || windowState.equals(LiferayWindowState.POP_UP)) %>" name="name" />
 
 		<aui:input name="description" />
 
@@ -153,12 +151,9 @@ boolean mergeWithParentFolderDisabled = ParamUtil.getBoolean(request, "mergeWith
 <aui:script>
 	function <portlet:namespace />saveFolder() {
 		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = "<%= (folder == null) ? Constants.ADD : Constants.UPDATE %>";
+
 		submitForm(document.<portlet:namespace />fm);
 	}
-
-	<c:if test="<%= windowState.equals(WindowState.MAXIMIZED) || windowState.equals(LiferayWindowState.POP_UP) %>">
-		Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace />name);
-	</c:if>
 </aui:script>
 
 <%

@@ -33,6 +33,7 @@ public interface JournalArticle extends JournalArticleModel, PersistedModel {
 	 * Never modify this interface directly. Add methods to {@link com.liferay.portlet.journal.model.impl.JournalArticleImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
 	public static final Accessor<JournalArticle, String> ARTICLE_ID_ACCESSOR = new Accessor<JournalArticle, String>() {
+			@Override
 			public String get(JournalArticle journalArticle) {
 				return journalArticle.getArticleId();
 			}
@@ -55,24 +56,25 @@ public interface JournalArticle extends JournalArticleModel, PersistedModel {
 
 	public java.lang.String getDefaultLocale();
 
-	public com.liferay.portlet.journal.model.JournalFolder getFolder();
+	public com.liferay.portlet.journal.model.JournalFolder getFolder()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	public java.lang.String getSmallImageType()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
-	public java.util.Map<java.util.Locale, java.lang.String> getTitleMap();
+	public com.liferay.portal.kernel.lar.StagedModelType getStagedModelType();
 
-	public com.liferay.portlet.journal.model.JournalFolder getTrashContainer();
+	public com.liferay.portlet.journal.model.JournalFolder getTrashContainer()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
 
-	public boolean isInTrashContainer();
+	public boolean isInTrashContainer()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	public boolean isTemplateDriven();
-
-	@java.lang.SuppressWarnings(value = "unused")
-	public void prepareLocalizedFieldsForImport(
-		java.util.Locale defaultImportLocale)
-		throws com.liferay.portal.LocaleException;
 
 	public void setSmallImageType(java.lang.String smallImageType);
 }

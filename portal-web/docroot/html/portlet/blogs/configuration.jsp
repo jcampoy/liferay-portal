@@ -21,8 +21,11 @@ String tabs2 = ParamUtil.getString(request, "tabs2", "display-settings");
 
 String redirect = ParamUtil.getString(request, "redirect");
 
-String emailFromName = ParamUtil.getString(request, "emailFromName", BlogsUtil.getEmailFromName(preferences, company.getCompanyId()));
-String emailFromAddress = ParamUtil.getString(request, "emailFromAddress", BlogsUtil.getEmailFromAddress(preferences, company.getCompanyId()));
+String emailFromName = ParamUtil.getString(request, "preferences--emailFromName--", BlogsUtil.getEmailFromName(portletPreferences, company.getCompanyId()));
+String emailFromAddress = ParamUtil.getString(request, "preferences--emailFromAddress--", BlogsUtil.getEmailFromAddress(portletPreferences, company.getCompanyId()));
+
+boolean emailEntryAddedEnabled = ParamUtil.getBoolean(request, "preferences--emailEntryAddedEnabled--", BlogsUtil.getEmailEntryAddedEnabled(portletPreferences));
+boolean emailEntryUpdatedEnabled = ParamUtil.getBoolean(request, "preferences--emailEntryUpdatedEnabled--", BlogsUtil.getEmailEntryUpdatedEnabled(portletPreferences));
 
 String emailParam = StringPool.BLANK;
 String defaultEmailSubject = StringPool.BLANK;
@@ -30,24 +33,24 @@ String defaultEmailBody = StringPool.BLANK;
 
 if (tabs2.equals("entry-added-email")) {
 	emailParam = "emailEntryAdded";
-	defaultEmailSubject = ContentUtil.get(PropsUtil.get(PropsKeys.BLOGS_EMAIL_ENTRY_ADDED_SUBJECT));
-	defaultEmailBody = ContentUtil.get(PropsUtil.get(PropsKeys.BLOGS_EMAIL_ENTRY_ADDED_BODY));
+	defaultEmailSubject = ContentUtil.get(PropsValues.BLOGS_EMAIL_ENTRY_ADDED_SUBJECT);
+	defaultEmailBody = ContentUtil.get(PropsValues.BLOGS_EMAIL_ENTRY_ADDED_BODY);
 }
 else if (tabs2.equals("entry-updated-email")) {
 	emailParam = "emailEntryUpdated";
-	defaultEmailSubject = ContentUtil.get(PropsUtil.get(PropsKeys.BLOGS_EMAIL_ENTRY_UPDATED_SUBJECT));
-	defaultEmailBody = ContentUtil.get(PropsUtil.get(PropsKeys.BLOGS_EMAIL_ENTRY_UPDATED_BODY));
+	defaultEmailSubject = ContentUtil.get(PropsValues.BLOGS_EMAIL_ENTRY_UPDATED_SUBJECT);
+	defaultEmailBody = ContentUtil.get(PropsValues.BLOGS_EMAIL_ENTRY_UPDATED_BODY);
 }
 
 String currentLanguageId = LanguageUtil.getLanguageId(request);
 
-String emailSubject = PrefsParamUtil.getString(preferences, request, emailParam + "Subject_" + currentLanguageId, defaultEmailSubject);
-String emailBody = PrefsParamUtil.getString(preferences, request, emailParam + "Body_" + currentLanguageId, defaultEmailBody);
+String emailSubjectParam = emailParam + "Subject_" + currentLanguageId;
+String emailBodyParam = emailParam + "Body_" + currentLanguageId;
 
-String editorParam = emailParam + "Body_" + currentLanguageId;
-String editorContent = emailBody;
+String emailSubject = PrefsParamUtil.getString(portletPreferences, request, emailSubjectParam, defaultEmailSubject);
+String emailBody = PrefsParamUtil.getString(portletPreferences, request, emailBodyParam, defaultEmailBody);
 
-String[] socialBookmarksTypesArray = StringUtil.split(preferences.getValue("socialBookmarksTypes", PropsUtil.get(PropsKeys.SOCIAL_BOOKMARK_TYPES)));
+String[] socialBookmarksTypesArray = StringUtil.split(portletPreferences.getValue("socialBookmarksTypes", PropsUtil.get(PropsKeys.SOCIAL_BOOKMARK_TYPES)));
 %>
 
 <liferay-portlet:renderURL portletConfiguration="true" var="portletURL">
@@ -152,10 +155,10 @@ String[] socialBookmarksTypesArray = StringUtil.split(preferences.getValue("soci
 			<aui:fieldset>
 				<c:choose>
 					<c:when test='<%= tabs2.equals("entry-added-email") %>'>
-						<aui:input label="enabled" name="preferences--emailEntryAddedEnabled--" type="checkbox" value="<%= BlogsUtil.getEmailEntryAddedEnabled(preferences) %>" />
+						<aui:input label="enabled" name="preferences--emailEntryAddedEnabled--" type="checkbox" value="<%= emailEntryAddedEnabled %>" />
 					</c:when>
 					<c:when test='<%= tabs2.equals("entry-updated-email") %>'>
-						<aui:input label="enabled" name="preferences--emailEntryUpdatedEnabled--" type="checkbox" value="<%= BlogsUtil.getEmailEntryUpdatedEnabled(preferences) %>" />
+						<aui:input label="enabled" name="preferences--emailEntryUpdatedEnabled--" type="checkbox" value="<%= emailEntryUpdatedEnabled %>" />
 					</c:when>
 				</c:choose>
 
@@ -167,8 +170,8 @@ String[] socialBookmarksTypesArray = StringUtil.split(preferences.getValue("soci
 					for (int i = 0; i < locales.length; i++) {
 						String style = StringPool.BLANK;
 
-						if (Validator.isNotNull(preferences.getValue(emailParam + "Subject_" + LocaleUtil.toLanguageId(locales[i]), StringPool.BLANK)) ||
-							Validator.isNotNull(preferences.getValue(emailParam + "Body_" + LocaleUtil.toLanguageId(locales[i]), StringPool.BLANK))) {
+						if (Validator.isNotNull(portletPreferences.getValue(emailParam + "Subject_" + LocaleUtil.toLanguageId(locales[i]), StringPool.BLANK)) ||
+							Validator.isNotNull(portletPreferences.getValue(emailParam + "Body_" + LocaleUtil.toLanguageId(locales[i]), StringPool.BLANK))) {
 
 							style = "font-weight: bold;";
 						}
@@ -182,12 +185,12 @@ String[] socialBookmarksTypesArray = StringUtil.split(preferences.getValue("soci
 
 				</aui:select>
 
-				<aui:input cssClass="lfr-input-text-container" label="subject" name='<%= "preferences--" + emailParam + "Subject_" + currentLanguageId + "--" %>' value="<%= emailSubject %>" />
+				<aui:input cssClass="lfr-input-text-container" label="subject" name='<%= "preferences--" + emailSubjectParam + "--" %>' value="<%= emailSubject %>" />
 
 				<aui:field-wrapper label="body">
 					<liferay-ui:input-editor editorImpl="<%= EDITOR_WYSIWYG_IMPL_KEY %>" />
 
-					<aui:input name='<%= "preferences--" + editorParam + "--" %>' type="hidden" />
+					<aui:input name='<%= "preferences--" + emailBodyParam + "--" %>' type="hidden" />
 				</aui:field-wrapper>
 			</aui:fieldset>
 
@@ -297,11 +300,12 @@ String[] socialBookmarksTypesArray = StringUtil.split(preferences.getValue("soci
 
 <aui:script>
 	function <portlet:namespace />initEditor() {
-		return "<%= UnicodeFormatter.toString(editorContent) %>";
+		return "<%= UnicodeFormatter.toString(emailBody) %>";
 	}
 
 	function <portlet:namespace />updateLanguage() {
 		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '';
+
 		submitForm(document.<portlet:namespace />fm);
 	}
 
@@ -310,7 +314,7 @@ String[] socialBookmarksTypesArray = StringUtil.split(preferences.getValue("soci
 		'<portlet:namespace />saveConfiguration',
 		function() {
 			<c:if test='<%= tabs2.startsWith("entry-") %>'>
-				document.<portlet:namespace />fm.<portlet:namespace /><%= editorParam %>.value = window.<portlet:namespace />editor.getHTML();
+				document.<portlet:namespace />fm.<portlet:namespace /><%= emailBodyParam %>.value = window.<portlet:namespace />editor.getHTML();
 			</c:if>
 
 			submitForm(document.<portlet:namespace />fm);

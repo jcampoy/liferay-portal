@@ -33,6 +33,10 @@ public class BaseInputTag extends com.liferay.taglib.util.IncludeTag {
 		return super.doStartTag();
 	}
 
+	public boolean getAutoFocus() {
+		return _autoFocus;
+	}
+
 	public boolean getAutoSize() {
 		return _autoSize;
 	}
@@ -59,6 +63,10 @@ public class BaseInputTag extends com.liferay.taglib.util.IncludeTag {
 
 	public java.lang.Object getData() {
 		return _data;
+	}
+
+	public java.lang.String getDateTogglerCheckboxLabel() {
+		return _dateTogglerCheckboxLabel;
 	}
 
 	public java.lang.String getDefaultLanguageId() {
@@ -89,6 +97,10 @@ public class BaseInputTag extends com.liferay.taglib.util.IncludeTag {
 		return _helpMessage;
 	}
 
+	public java.lang.String getHelpTextCssClass() {
+		return _helpTextCssClass;
+	}
+
 	public java.lang.String getId() {
 		return _id;
 	}
@@ -103,10 +115,6 @@ public class BaseInputTag extends com.liferay.taglib.util.IncludeTag {
 
 	public java.lang.String getInlineLabel() {
 		return _inlineLabel;
-	}
-
-	public java.lang.String getInputCssClass() {
-		return _inputCssClass;
 	}
 
 	public java.lang.String getLabel() {
@@ -153,6 +161,10 @@ public class BaseInputTag extends com.liferay.taglib.util.IncludeTag {
 		return _required;
 	}
 
+	public boolean getResizable() {
+		return _resizable;
+	}
+
 	public boolean getShowRequiredLabel() {
 		return _showRequiredLabel;
 	}
@@ -175,6 +187,12 @@ public class BaseInputTag extends com.liferay.taglib.util.IncludeTag {
 
 	public java.lang.Object getValue() {
 		return _value;
+	}
+
+	public void setAutoFocus(boolean autoFocus) {
+		_autoFocus = autoFocus;
+
+		setScopedAttribute("autoFocus", autoFocus);
 	}
 
 	public void setAutoSize(boolean autoSize) {
@@ -219,6 +237,12 @@ public class BaseInputTag extends com.liferay.taglib.util.IncludeTag {
 		setScopedAttribute("data", data);
 	}
 
+	public void setDateTogglerCheckboxLabel(java.lang.String dateTogglerCheckboxLabel) {
+		_dateTogglerCheckboxLabel = dateTogglerCheckboxLabel;
+
+		setScopedAttribute("dateTogglerCheckboxLabel", dateTogglerCheckboxLabel);
+	}
+
 	public void setDefaultLanguageId(java.lang.String defaultLanguageId) {
 		_defaultLanguageId = defaultLanguageId;
 
@@ -261,6 +285,12 @@ public class BaseInputTag extends com.liferay.taglib.util.IncludeTag {
 		setScopedAttribute("helpMessage", helpMessage);
 	}
 
+	public void setHelpTextCssClass(java.lang.String helpTextCssClass) {
+		_helpTextCssClass = helpTextCssClass;
+
+		setScopedAttribute("helpTextCssClass", helpTextCssClass);
+	}
+
 	public void setId(java.lang.String id) {
 		_id = id;
 
@@ -283,12 +313,6 @@ public class BaseInputTag extends com.liferay.taglib.util.IncludeTag {
 		_inlineLabel = inlineLabel;
 
 		setScopedAttribute("inlineLabel", inlineLabel);
-	}
-
-	public void setInputCssClass(java.lang.String inputCssClass) {
-		_inputCssClass = inputCssClass;
-
-		setScopedAttribute("inputCssClass", inputCssClass);
 	}
 
 	public void setLabel(java.lang.String label) {
@@ -357,6 +381,12 @@ public class BaseInputTag extends com.liferay.taglib.util.IncludeTag {
 		setScopedAttribute("required", required);
 	}
 
+	public void setResizable(boolean resizable) {
+		_resizable = resizable;
+
+		setScopedAttribute("resizable", resizable);
+	}
+
 	public void setShowRequiredLabel(boolean showRequiredLabel) {
 		_showRequiredLabel = showRequiredLabel;
 
@@ -395,6 +425,7 @@ public class BaseInputTag extends com.liferay.taglib.util.IncludeTag {
 
 	@Override
 	protected void cleanUp() {
+		_autoFocus = false;
 		_autoSize = false;
 		_bean = null;
 		_changesContext = false;
@@ -402,6 +433,7 @@ public class BaseInputTag extends com.liferay.taglib.util.IncludeTag {
 		_classPK = 0;
 		_cssClass = null;
 		_data = null;
+		_dateTogglerCheckboxLabel = null;
 		_defaultLanguageId = null;
 		_disabled = false;
 		_field = null;
@@ -409,11 +441,11 @@ public class BaseInputTag extends com.liferay.taglib.util.IncludeTag {
 		_first = false;
 		_formName = null;
 		_helpMessage = null;
+		_helpTextCssClass = null;
 		_id = null;
 		_ignoreRequestValue = false;
 		_inlineField = false;
 		_inlineLabel = null;
-		_inputCssClass = null;
 		_label = null;
 		_languageId = null;
 		_last = false;
@@ -425,6 +457,7 @@ public class BaseInputTag extends com.liferay.taglib.util.IncludeTag {
 		_placeholder = null;
 		_prefix = null;
 		_required = false;
+		_resizable = false;
 		_showRequiredLabel = true;
 		_suffix = null;
 		_title = null;
@@ -440,6 +473,7 @@ public class BaseInputTag extends com.liferay.taglib.util.IncludeTag {
 
 	@Override
 	protected void setAttributes(HttpServletRequest request) {
+		setNamespacedAttribute(request, "autoFocus", _autoFocus);
 		setNamespacedAttribute(request, "autoSize", _autoSize);
 		setNamespacedAttribute(request, "bean", _bean);
 		setNamespacedAttribute(request, "changesContext", _changesContext);
@@ -447,6 +481,7 @@ public class BaseInputTag extends com.liferay.taglib.util.IncludeTag {
 		setNamespacedAttribute(request, "classPK", _classPK);
 		setNamespacedAttribute(request, "cssClass", _cssClass);
 		setNamespacedAttribute(request, "data", _data);
+		setNamespacedAttribute(request, "dateTogglerCheckboxLabel", _dateTogglerCheckboxLabel);
 		setNamespacedAttribute(request, "defaultLanguageId", _defaultLanguageId);
 		setNamespacedAttribute(request, "disabled", _disabled);
 		setNamespacedAttribute(request, "field", _field);
@@ -454,11 +489,11 @@ public class BaseInputTag extends com.liferay.taglib.util.IncludeTag {
 		setNamespacedAttribute(request, "first", _first);
 		setNamespacedAttribute(request, "formName", _formName);
 		setNamespacedAttribute(request, "helpMessage", _helpMessage);
+		setNamespacedAttribute(request, "helpTextCssClass", _helpTextCssClass);
 		setNamespacedAttribute(request, "id", _id);
 		setNamespacedAttribute(request, "ignoreRequestValue", _ignoreRequestValue);
 		setNamespacedAttribute(request, "inlineField", _inlineField);
 		setNamespacedAttribute(request, "inlineLabel", _inlineLabel);
-		setNamespacedAttribute(request, "inputCssClass", _inputCssClass);
 		setNamespacedAttribute(request, "label", _label);
 		setNamespacedAttribute(request, "languageId", _languageId);
 		setNamespacedAttribute(request, "last", _last);
@@ -470,6 +505,7 @@ public class BaseInputTag extends com.liferay.taglib.util.IncludeTag {
 		setNamespacedAttribute(request, "placeholder", _placeholder);
 		setNamespacedAttribute(request, "prefix", _prefix);
 		setNamespacedAttribute(request, "required", _required);
+		setNamespacedAttribute(request, "resizable", _resizable);
 		setNamespacedAttribute(request, "showRequiredLabel", _showRequiredLabel);
 		setNamespacedAttribute(request, "suffix", _suffix);
 		setNamespacedAttribute(request, "title", _title);
@@ -483,13 +519,16 @@ public class BaseInputTag extends com.liferay.taglib.util.IncludeTag {
 	private static final String _PAGE =
 		"/html/taglib/aui/input/page.jsp";
 
+	private boolean _autoFocus = false;
 	private boolean _autoSize = false;
 	private java.lang.Object _bean = null;
+	private java.lang.String _helpTextCssClass = "add-on";
 	private boolean _changesContext = false;
 	private boolean _checked = false;
 	private long _classPK = 0;
 	private java.lang.String _cssClass = null;
 	private java.lang.Object _data = null;
+	private java.lang.String _dateTogglerCheckboxLabel = null;
 	private java.lang.String _defaultLanguageId = null;
 	private boolean _disabled = false;
 	private java.lang.String _field = null;
@@ -501,7 +540,6 @@ public class BaseInputTag extends com.liferay.taglib.util.IncludeTag {
 	private boolean _ignoreRequestValue = false;
 	private boolean _inlineField = false;
 	private java.lang.String _inlineLabel = null;
-	private java.lang.String _inputCssClass = null;
 	private java.lang.String _label = null;
 	private java.lang.String _languageId = null;
 	private boolean _last = false;
@@ -513,6 +551,7 @@ public class BaseInputTag extends com.liferay.taglib.util.IncludeTag {
 	private java.lang.String _placeholder = null;
 	private java.lang.String _prefix = null;
 	private boolean _required = false;
+	private boolean _resizable = false;
 	private boolean _showRequiredLabel = true;
 	private java.lang.String _suffix = null;
 	private java.lang.String _title = null;

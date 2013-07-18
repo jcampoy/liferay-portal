@@ -21,11 +21,10 @@ import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
 
 /**
- * The interface for the layout template local service.
- *
- * <p>
- * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
- * </p>
+ * Provides the local service interface for LayoutTemplate. Methods of this
+ * service will not have security checks based on the propagated JAAS
+ * credentials because this service can only be accessed from within the same
+ * VM.
  *
  * @author Brian Wing Shun Chan
  * @see LayoutTemplateLocalServiceUtil
@@ -78,18 +77,18 @@ public interface LayoutTemplateLocalService extends BaseLocalService {
 		boolean standard, java.lang.String themeId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
-	public java.util.List<com.liferay.portal.kernel.util.ObjectValuePair<java.lang.String, java.lang.Boolean>> init(
+	public java.util.List<com.liferay.portal.model.LayoutTemplate> init(
 		javax.servlet.ServletContext servletContext, java.lang.String[] xmls,
 		com.liferay.portal.kernel.plugin.PluginPackage pluginPackage);
 
-	public java.util.List<com.liferay.portal.kernel.util.ObjectValuePair<java.lang.String, java.lang.Boolean>> init(
+	public java.util.List<com.liferay.portal.model.LayoutTemplate> init(
 		java.lang.String servletContextName,
 		javax.servlet.ServletContext servletContext, java.lang.String[] xmls,
 		com.liferay.portal.kernel.plugin.PluginPackage pluginPackage);
 
 	public void readLayoutTemplate(java.lang.String servletContextName,
 		javax.servlet.ServletContext servletContext,
-		java.util.Set<com.liferay.portal.kernel.util.ObjectValuePair<java.lang.String, java.lang.Boolean>> layoutTemplateIdOVPs,
+		java.util.Set<com.liferay.portal.model.LayoutTemplate> layoutTemplates,
 		com.liferay.portal.kernel.xml.Element element, boolean standard,
 		java.lang.String themeId,
 		com.liferay.portal.kernel.plugin.PluginPackage pluginPackage);

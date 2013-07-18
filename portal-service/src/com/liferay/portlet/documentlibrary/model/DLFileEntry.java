@@ -41,10 +41,6 @@ public interface DLFileEntry extends DLFileEntryModel, PersistedModel {
 
 	public long getDataRepositoryId();
 
-	public com.liferay.portlet.expando.model.ExpandoBridge getExpandoBridge();
-
-	public java.lang.String getExtraSettings();
-
 	public com.liferay.portal.kernel.util.UnicodeProperties getExtraSettingsProperties();
 
 	public java.util.Map<java.lang.String, com.liferay.portlet.dynamicdatamapping.storage.Fields> getFieldsMap(
@@ -67,7 +63,9 @@ public interface DLFileEntry extends DLFileEntryModel, PersistedModel {
 	public int getFileVersionsCount(int status)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
-	public com.liferay.portlet.documentlibrary.model.DLFolder getFolder();
+	public com.liferay.portlet.documentlibrary.model.DLFolder getFolder()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	public java.lang.String getIcon();
 
@@ -80,7 +78,11 @@ public interface DLFileEntry extends DLFileEntryModel, PersistedModel {
 
 	public java.lang.String getLuceneProperties();
 
-	public com.liferay.portlet.documentlibrary.model.DLFolder getTrashContainer();
+	public com.liferay.portal.kernel.lar.StagedModelType getStagedModelType();
+
+	public com.liferay.portlet.documentlibrary.model.DLFolder getTrashContainer()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	public boolean hasLock();
 
@@ -88,9 +90,9 @@ public interface DLFileEntry extends DLFileEntryModel, PersistedModel {
 
 	public boolean isInHiddenFolder();
 
-	public boolean isInTrashContainer();
-
-	public void setExtraSettings(java.lang.String extraSettings);
+	public boolean isInTrashContainer()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	public void setExtraSettingsProperties(
 		com.liferay.portal.kernel.util.UnicodeProperties extraSettingsProperties);

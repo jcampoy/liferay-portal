@@ -105,10 +105,6 @@ portletURL.setParameter("eventName", eventName);
 	</liferay-ui:search-container>
 </aui:form>
 
-<aui:script>
-	Liferay.Util.focusFormField(document.<portlet:namespace />selectUserGroupFm.<portlet:namespace />name);
-</aui:script>
-
 <aui:script use="aui-base">
 	var Util = Liferay.Util;
 
@@ -119,8 +115,8 @@ portletURL.setParameter("eventName", eventName);
 
 			Util.getOpener().Liferay.fire('<%= HtmlUtil.escapeJS(eventName) %>', result);
 
-			Util.getWindow().close();
+			Util.getWindow().hide();
 		},
-		'.selector-button input'
+		'.selector-button'
 	);
 </aui:script>

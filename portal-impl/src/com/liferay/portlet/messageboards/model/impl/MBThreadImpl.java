@@ -25,6 +25,7 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
 import com.liferay.portlet.messageboards.model.MBCategory;
+import com.liferay.portlet.messageboards.model.MBCategoryConstants;
 import com.liferay.portlet.messageboards.model.MBMessage;
 import com.liferay.portlet.messageboards.model.MBThread;
 import com.liferay.portlet.messageboards.service.MBCategoryLocalServiceUtil;
@@ -39,6 +40,7 @@ public class MBThreadImpl extends MBThreadBaseImpl {
 	public MBThreadImpl() {
 	}
 
+	@Override
 	public Folder addAttachmentsFolder()
 		throws PortalException, SystemException {
 
@@ -70,6 +72,7 @@ public class MBThreadImpl extends MBThreadBaseImpl {
 		return folder;
 	}
 
+	@Override
 	public long getAttachmentsFolderId() throws SystemException {
 		if (_attachmentsFolderId !=
 				DLFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
@@ -104,6 +107,21 @@ public class MBThreadImpl extends MBThreadBaseImpl {
 		return _attachmentsFolderId;
 	}
 
+	@Override
+	public MBCategory getCategory() throws PortalException, SystemException {
+		long parentCategoryId = getCategoryId();
+
+		if ((parentCategoryId ==
+				MBCategoryConstants.DEFAULT_PARENT_CATEGORY_ID) ||
+			(parentCategoryId == MBCategoryConstants.DISCUSSION_CATEGORY_ID)) {
+
+			return null;
+		}
+
+		return MBCategoryLocalServiceUtil.getCategory(getCategoryId());
+	}
+
+	@Override
 	public Lock getLock() {
 		try {
 			return LockLocalServiceUtil.getLock(
@@ -115,6 +133,7 @@ public class MBThreadImpl extends MBThreadBaseImpl {
 		return null;
 	}
 
+	@Override
 	public MBCategory getTrashContainer() {
 		try {
 			MBCategory category = MBCategoryLocalServiceUtil.getCategory(
@@ -131,6 +150,7 @@ public class MBThreadImpl extends MBThreadBaseImpl {
 		}
 	}
 
+	@Override
 	public boolean hasLock(long userId) {
 		try {
 			return LockLocalServiceUtil.hasLock(
@@ -142,6 +162,7 @@ public class MBThreadImpl extends MBThreadBaseImpl {
 		return false;
 	}
 
+	@Override
 	public boolean isInTrashContainer() {
 		if (getTrashContainer() != null) {
 			return true;
@@ -151,6 +172,7 @@ public class MBThreadImpl extends MBThreadBaseImpl {
 		}
 	}
 
+	@Override
 	public boolean isLocked() {
 		try {
 			if (isInTrash() || isInTrashContainer()) {

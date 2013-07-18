@@ -226,7 +226,7 @@ portletURL.setParameter("tabs1", tabs1);
 
 			// Modified date
 
-			row.addText(dateFormatDateTime.format(productEntry.getModifiedDate()), rowURL);
+			row.addDate(productEntry.getModifiedDate(), rowURL);
 
 			// Action
 
@@ -429,7 +429,7 @@ portletURL.setParameter("tabs1", tabs1);
 
 			// Modified date
 
-			row.addText(dateFormatDateTime.format(productEntry.getModifiedDate()), rowURL);
+			row.addDate(productEntry.getModifiedDate(), rowURL);
 
 			// Action
 
@@ -658,20 +658,13 @@ portletURL.setParameter("tabs1", tabs1);
 		}
 
 		document.<portlet:namespace />fm.method = 'post';
+
 		submitForm(document.<portlet:namespace />fm, url);
 	}
 
 	<c:if test="<%= windowState.equals(WindowState.MAXIMIZED) %>">
 		Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace />keywords);
 	</c:if>
-</aui:script>
-
-<aui:script use="aui-base">
-	var description = A.one('#cpContextPanelTemplate');
-
-	if (description) {
-		description.append('<span class="warn"><liferay-ui:message key="warning-x-will-be-replaced-with-liferay-marketplace" arguments="<%= portletDisplay.getTitle() %>" /></span>');
-	}
 </aui:script>
 
 <%

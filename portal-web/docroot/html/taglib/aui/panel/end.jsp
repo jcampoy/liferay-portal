@@ -18,7 +18,7 @@
 
 </div>
 
-<aui:script use="anim,aui-panel">
+<aui:script use="anim,aui-panel-deprecated">
 	var container = new A.Panel(
 		{
 			bodyContent: A.one('#<%= id %>bodyContent'),
@@ -38,8 +38,10 @@
 					{
 						icon: '<%= toolTag.getIcon() %>',
 						id: '<%= toolTag.getId() %>',
-						handler: function(event, panel) {
-							<%= toolTag.getHandler() %>
+						on: {
+							click: function(event) {
+								<%= toolTag.getHandler() %>
+							}
 						}
 
 					}

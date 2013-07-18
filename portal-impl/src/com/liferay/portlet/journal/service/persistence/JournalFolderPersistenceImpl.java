@@ -117,6 +117,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the matching journal folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalFolder> findByUuid(String uuid)
 		throws SystemException {
 		return findByUuid(uuid, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
@@ -135,6 +136,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the range of matching journal folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalFolder> findByUuid(String uuid, int start, int end)
 		throws SystemException {
 		return findByUuid(uuid, start, end, null);
@@ -154,6 +156,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the ordered range of matching journal folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalFolder> findByUuid(String uuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -274,6 +277,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @throws com.liferay.portlet.journal.NoSuchFolderException if a matching journal folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder findByUuid_First(String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -303,6 +307,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the first matching journal folder, or <code>null</code> if a matching journal folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder fetchByUuid_First(String uuid,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<JournalFolder> list = findByUuid(uuid, 0, 1, orderByComparator);
@@ -323,6 +328,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @throws com.liferay.portlet.journal.NoSuchFolderException if a matching journal folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder findByUuid_Last(String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -352,6 +358,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the last matching journal folder, or <code>null</code> if a matching journal folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder fetchByUuid_Last(String uuid,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByUuid(uuid);
@@ -376,6 +383,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @throws com.liferay.portlet.journal.NoSuchFolderException if a journal folder with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder[] findByUuid_PrevAndNext(long folderId, String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -531,6 +539,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @param uuid the uuid
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByUuid(String uuid) throws SystemException {
 		for (JournalFolder journalFolder : findByUuid(uuid, QueryUtil.ALL_POS,
 				QueryUtil.ALL_POS, null)) {
@@ -545,6 +554,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the number of matching journal folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByUuid(String uuid) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID;
 
@@ -627,6 +637,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @throws com.liferay.portlet.journal.NoSuchFolderException if a matching journal folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder findByUUID_G(String uuid, long groupId)
 		throws NoSuchFolderException, SystemException {
 		JournalFolder journalFolder = fetchByUUID_G(uuid, groupId);
@@ -662,6 +673,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the matching journal folder, or <code>null</code> if a matching journal folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder fetchByUUID_G(String uuid, long groupId)
 		throws SystemException {
 		return fetchByUUID_G(uuid, groupId, true);
@@ -676,6 +688,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the matching journal folder, or <code>null</code> if a matching journal folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder fetchByUUID_G(String uuid, long groupId,
 		boolean retrieveFromCache) throws SystemException {
 		Object[] finderArgs = new Object[] { uuid, groupId };
@@ -782,6 +795,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the journal folder that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder removeByUUID_G(String uuid, long groupId)
 		throws NoSuchFolderException, SystemException {
 		JournalFolder journalFolder = findByUUID_G(uuid, groupId);
@@ -797,6 +811,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the number of matching journal folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByUUID_G(String uuid, long groupId)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_G;
@@ -898,6 +913,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the matching journal folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalFolder> findByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		return findByUuid_C(uuid, companyId, QueryUtil.ALL_POS,
@@ -918,6 +934,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the range of matching journal folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalFolder> findByUuid_C(String uuid, long companyId,
 		int start, int end) throws SystemException {
 		return findByUuid_C(uuid, companyId, start, end, null);
@@ -938,6 +955,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the ordered range of matching journal folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalFolder> findByUuid_C(String uuid, long companyId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -1069,6 +1087,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @throws com.liferay.portlet.journal.NoSuchFolderException if a matching journal folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder findByUuid_C_First(String uuid, long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -1103,6 +1122,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the first matching journal folder, or <code>null</code> if a matching journal folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder fetchByUuid_C_First(String uuid, long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<JournalFolder> list = findByUuid_C(uuid, companyId, 0, 1,
@@ -1125,6 +1145,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @throws com.liferay.portlet.journal.NoSuchFolderException if a matching journal folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder findByUuid_C_Last(String uuid, long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -1159,6 +1180,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the last matching journal folder, or <code>null</code> if a matching journal folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder fetchByUuid_C_Last(String uuid, long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByUuid_C(uuid, companyId);
@@ -1184,6 +1206,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @throws com.liferay.portlet.journal.NoSuchFolderException if a journal folder with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder[] findByUuid_C_PrevAndNext(long folderId, String uuid,
 		long companyId, OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -1344,6 +1367,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @param companyId the company ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		for (JournalFolder journalFolder : findByUuid_C(uuid, companyId,
@@ -1360,6 +1384,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the number of matching journal folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_C;
@@ -1458,6 +1483,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the matching journal folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalFolder> findByGroupId(long groupId)
 		throws SystemException {
 		return findByGroupId(groupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
@@ -1476,6 +1502,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the range of matching journal folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalFolder> findByGroupId(long groupId, int start, int end)
 		throws SystemException {
 		return findByGroupId(groupId, start, end, null);
@@ -1495,6 +1522,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the ordered range of matching journal folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalFolder> findByGroupId(long groupId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -1601,6 +1629,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @throws com.liferay.portlet.journal.NoSuchFolderException if a matching journal folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder findByGroupId_First(long groupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -1631,6 +1660,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the first matching journal folder, or <code>null</code> if a matching journal folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder fetchByGroupId_First(long groupId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<JournalFolder> list = findByGroupId(groupId, 0, 1,
@@ -1652,6 +1682,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @throws com.liferay.portlet.journal.NoSuchFolderException if a matching journal folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder findByGroupId_Last(long groupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -1682,6 +1713,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the last matching journal folder, or <code>null</code> if a matching journal folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder fetchByGroupId_Last(long groupId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByGroupId(groupId);
@@ -1706,6 +1738,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @throws com.liferay.portlet.journal.NoSuchFolderException if a journal folder with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder[] findByGroupId_PrevAndNext(long folderId,
 		long groupId, OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -1848,6 +1881,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the matching journal folders that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalFolder> filterFindByGroupId(long groupId)
 		throws SystemException {
 		return filterFindByGroupId(groupId, QueryUtil.ALL_POS,
@@ -1867,6 +1901,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the range of matching journal folders that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalFolder> filterFindByGroupId(long groupId, int start,
 		int end) throws SystemException {
 		return filterFindByGroupId(groupId, start, end, null);
@@ -1886,6 +1921,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the ordered range of matching journal folders that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalFolder> filterFindByGroupId(long groupId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
@@ -1977,6 +2013,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @throws com.liferay.portlet.journal.NoSuchFolderException if a journal folder with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder[] filterFindByGroupId_PrevAndNext(long folderId,
 		long groupId, OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -2158,6 +2195,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @param groupId the group ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByGroupId(long groupId) throws SystemException {
 		for (JournalFolder journalFolder : findByGroupId(groupId,
 				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
@@ -2172,6 +2210,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the number of matching journal folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByGroupId(long groupId) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_GROUPID;
 
@@ -2224,6 +2263,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the number of matching journal folders that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int filterCountByGroupId(long groupId) throws SystemException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return countByGroupId(groupId);
@@ -2297,6 +2337,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the matching journal folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalFolder> findByCompanyId(long companyId)
 		throws SystemException {
 		return findByCompanyId(companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
@@ -2316,6 +2357,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the range of matching journal folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalFolder> findByCompanyId(long companyId, int start,
 		int end) throws SystemException {
 		return findByCompanyId(companyId, start, end, null);
@@ -2335,6 +2377,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the ordered range of matching journal folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalFolder> findByCompanyId(long companyId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -2441,6 +2484,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @throws com.liferay.portlet.journal.NoSuchFolderException if a matching journal folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder findByCompanyId_First(long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -2471,6 +2515,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the first matching journal folder, or <code>null</code> if a matching journal folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder fetchByCompanyId_First(long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<JournalFolder> list = findByCompanyId(companyId, 0, 1,
@@ -2492,6 +2537,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @throws com.liferay.portlet.journal.NoSuchFolderException if a matching journal folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder findByCompanyId_Last(long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -2522,6 +2568,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the last matching journal folder, or <code>null</code> if a matching journal folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder fetchByCompanyId_Last(long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByCompanyId(companyId);
@@ -2546,6 +2593,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @throws com.liferay.portlet.journal.NoSuchFolderException if a journal folder with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder[] findByCompanyId_PrevAndNext(long folderId,
 		long companyId, OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -2687,6 +2735,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @param companyId the company ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByCompanyId(long companyId) throws SystemException {
 		for (JournalFolder journalFolder : findByCompanyId(companyId,
 				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
@@ -2701,6 +2750,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the number of matching journal folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByCompanyId(long companyId) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_COMPANYID;
 
@@ -2778,6 +2828,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the matching journal folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalFolder> findByG_P(long groupId, long parentFolderId)
 		throws SystemException {
 		return findByG_P(groupId, parentFolderId, QueryUtil.ALL_POS,
@@ -2798,6 +2849,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the range of matching journal folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalFolder> findByG_P(long groupId, long parentFolderId,
 		int start, int end) throws SystemException {
 		return findByG_P(groupId, parentFolderId, start, end, null);
@@ -2818,6 +2870,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the ordered range of matching journal folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalFolder> findByG_P(long groupId, long parentFolderId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -2935,6 +2988,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @throws com.liferay.portlet.journal.NoSuchFolderException if a matching journal folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder findByG_P_First(long groupId, long parentFolderId,
 		OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -2969,6 +3023,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the first matching journal folder, or <code>null</code> if a matching journal folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder fetchByG_P_First(long groupId, long parentFolderId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<JournalFolder> list = findByG_P(groupId, parentFolderId, 0, 1,
@@ -2991,6 +3046,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @throws com.liferay.portlet.journal.NoSuchFolderException if a matching journal folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder findByG_P_Last(long groupId, long parentFolderId,
 		OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -3025,6 +3081,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the last matching journal folder, or <code>null</code> if a matching journal folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder fetchByG_P_Last(long groupId, long parentFolderId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByG_P(groupId, parentFolderId);
@@ -3050,6 +3107,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @throws com.liferay.portlet.journal.NoSuchFolderException if a journal folder with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder[] findByG_P_PrevAndNext(long folderId, long groupId,
 		long parentFolderId, OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -3197,6 +3255,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the matching journal folders that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalFolder> filterFindByG_P(long groupId, long parentFolderId)
 		throws SystemException {
 		return filterFindByG_P(groupId, parentFolderId, QueryUtil.ALL_POS,
@@ -3217,6 +3276,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the range of matching journal folders that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalFolder> filterFindByG_P(long groupId,
 		long parentFolderId, int start, int end) throws SystemException {
 		return filterFindByG_P(groupId, parentFolderId, start, end, null);
@@ -3237,6 +3297,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the ordered range of matching journal folders that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalFolder> filterFindByG_P(long groupId,
 		long parentFolderId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
@@ -3335,6 +3396,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @throws com.liferay.portlet.journal.NoSuchFolderException if a journal folder with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder[] filterFindByG_P_PrevAndNext(long folderId,
 		long groupId, long parentFolderId, OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -3521,6 +3583,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @param parentFolderId the parent folder ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByG_P(long groupId, long parentFolderId)
 		throws SystemException {
 		for (JournalFolder journalFolder : findByG_P(groupId, parentFolderId,
@@ -3537,6 +3600,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the number of matching journal folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByG_P(long groupId, long parentFolderId)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_P;
@@ -3595,6 +3659,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the number of matching journal folders that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int filterCountByG_P(long groupId, long parentFolderId)
 		throws SystemException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
@@ -3663,6 +3728,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @throws com.liferay.portlet.journal.NoSuchFolderException if a matching journal folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder findByG_N(long groupId, String name)
 		throws NoSuchFolderException, SystemException {
 		JournalFolder journalFolder = fetchByG_N(groupId, name);
@@ -3698,6 +3764,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the matching journal folder, or <code>null</code> if a matching journal folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder fetchByG_N(long groupId, String name)
 		throws SystemException {
 		return fetchByG_N(groupId, name, true);
@@ -3712,6 +3779,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the matching journal folder, or <code>null</code> if a matching journal folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder fetchByG_N(long groupId, String name,
 		boolean retrieveFromCache) throws SystemException {
 		Object[] finderArgs = new Object[] { groupId, name };
@@ -3825,6 +3893,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the journal folder that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder removeByG_N(long groupId, String name)
 		throws NoSuchFolderException, SystemException {
 		JournalFolder journalFolder = findByG_N(groupId, name);
@@ -3840,6 +3909,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the number of matching journal folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByG_N(long groupId, String name) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_N;
 
@@ -3935,6 +4005,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @throws com.liferay.portlet.journal.NoSuchFolderException if a matching journal folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder findByG_P_N(long groupId, long parentFolderId,
 		String name) throws NoSuchFolderException, SystemException {
 		JournalFolder journalFolder = fetchByG_P_N(groupId, parentFolderId, name);
@@ -3974,6 +4045,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the matching journal folder, or <code>null</code> if a matching journal folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder fetchByG_P_N(long groupId, long parentFolderId,
 		String name) throws SystemException {
 		return fetchByG_P_N(groupId, parentFolderId, name, true);
@@ -3989,6 +4061,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the matching journal folder, or <code>null</code> if a matching journal folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder fetchByG_P_N(long groupId, long parentFolderId,
 		String name, boolean retrieveFromCache) throws SystemException {
 		Object[] finderArgs = new Object[] { groupId, parentFolderId, name };
@@ -4102,6 +4175,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the journal folder that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder removeByG_P_N(long groupId, long parentFolderId,
 		String name) throws NoSuchFolderException, SystemException {
 		JournalFolder journalFolder = findByG_P_N(groupId, parentFolderId, name);
@@ -4118,6 +4192,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the number of matching journal folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByG_P_N(long groupId, long parentFolderId, String name)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_P_N;
@@ -4231,6 +4306,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the matching journal folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalFolder> findByG_P_S(long groupId, long parentFolderId,
 		int status) throws SystemException {
 		return findByG_P_S(groupId, parentFolderId, status, QueryUtil.ALL_POS,
@@ -4252,6 +4328,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the range of matching journal folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalFolder> findByG_P_S(long groupId, long parentFolderId,
 		int status, int start, int end) throws SystemException {
 		return findByG_P_S(groupId, parentFolderId, status, start, end, null);
@@ -4273,6 +4350,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the ordered range of matching journal folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalFolder> findByG_P_S(long groupId, long parentFolderId,
 		int status, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -4396,6 +4474,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @throws com.liferay.portlet.journal.NoSuchFolderException if a matching journal folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder findByG_P_S_First(long groupId, long parentFolderId,
 		int status, OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -4434,6 +4513,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the first matching journal folder, or <code>null</code> if a matching journal folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder fetchByG_P_S_First(long groupId, long parentFolderId,
 		int status, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -4458,6 +4538,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @throws com.liferay.portlet.journal.NoSuchFolderException if a matching journal folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder findByG_P_S_Last(long groupId, long parentFolderId,
 		int status, OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -4496,6 +4577,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the last matching journal folder, or <code>null</code> if a matching journal folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder fetchByG_P_S_Last(long groupId, long parentFolderId,
 		int status, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -4523,6 +4605,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @throws com.liferay.portlet.journal.NoSuchFolderException if a journal folder with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder[] findByG_P_S_PrevAndNext(long folderId, long groupId,
 		long parentFolderId, int status, OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -4675,6 +4758,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the matching journal folders that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalFolder> filterFindByG_P_S(long groupId,
 		long parentFolderId, int status) throws SystemException {
 		return filterFindByG_P_S(groupId, parentFolderId, status,
@@ -4696,6 +4780,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the range of matching journal folders that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalFolder> filterFindByG_P_S(long groupId,
 		long parentFolderId, int status, int start, int end)
 		throws SystemException {
@@ -4719,6 +4804,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the ordered range of matching journal folders that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalFolder> filterFindByG_P_S(long groupId,
 		long parentFolderId, int status, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
@@ -4822,6 +4908,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @throws com.liferay.portlet.journal.NoSuchFolderException if a journal folder with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder[] filterFindByG_P_S_PrevAndNext(long folderId,
 		long groupId, long parentFolderId, int status,
 		OrderByComparator orderByComparator)
@@ -5014,6 +5101,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @param status the status
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByG_P_S(long groupId, long parentFolderId, int status)
 		throws SystemException {
 		for (JournalFolder journalFolder : findByG_P_S(groupId, parentFolderId,
@@ -5031,6 +5119,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the number of matching journal folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByG_P_S(long groupId, long parentFolderId, int status)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_P_S;
@@ -5094,6 +5183,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the number of matching journal folders that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int filterCountByG_P_S(long groupId, long parentFolderId, int status)
 		throws SystemException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
@@ -5147,12 +5237,968 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	private static final String _FINDER_COLUMN_G_P_S_GROUPID_2 = "journalFolder.groupId = ? AND ";
 	private static final String _FINDER_COLUMN_G_P_S_PARENTFOLDERID_2 = "journalFolder.parentFolderId = ? AND ";
 	private static final String _FINDER_COLUMN_G_P_S_STATUS_2 = "journalFolder.status = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_NOTS = new FinderPath(JournalFolderModelImpl.ENTITY_CACHE_ENABLED,
+			JournalFolderModelImpl.FINDER_CACHE_ENABLED,
+			JournalFolderImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByG_P_NotS",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_NOTS =
+		new FinderPath(JournalFolderModelImpl.ENTITY_CACHE_ENABLED,
+			JournalFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByG_P_NotS",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName()
+			});
+
+	/**
+	 * Returns all the journal folders where groupId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentFolderId the parent folder ID
+	 * @param status the status
+	 * @return the matching journal folders
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<JournalFolder> findByG_P_NotS(long groupId,
+		long parentFolderId, int status) throws SystemException {
+		return findByG_P_NotS(groupId, parentFolderId, status,
+			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the journal folders where groupId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.journal.model.impl.JournalFolderModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param parentFolderId the parent folder ID
+	 * @param status the status
+	 * @param start the lower bound of the range of journal folders
+	 * @param end the upper bound of the range of journal folders (not inclusive)
+	 * @return the range of matching journal folders
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<JournalFolder> findByG_P_NotS(long groupId,
+		long parentFolderId, int status, int start, int end)
+		throws SystemException {
+		return findByG_P_NotS(groupId, parentFolderId, status, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the journal folders where groupId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.journal.model.impl.JournalFolderModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param parentFolderId the parent folder ID
+	 * @param status the status
+	 * @param start the lower bound of the range of journal folders
+	 * @param end the upper bound of the range of journal folders (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching journal folders
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<JournalFolder> findByG_P_NotS(long groupId,
+		long parentFolderId, int status, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_NOTS;
+		finderArgs = new Object[] {
+				groupId, parentFolderId, status,
+				
+				start, end, orderByComparator
+			};
+
+		List<JournalFolder> list = (List<JournalFolder>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalFolder journalFolder : list) {
+				if ((groupId != journalFolder.getGroupId()) ||
+						(parentFolderId != journalFolder.getParentFolderId()) ||
+						(status != journalFolder.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(5 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(5);
+			}
+
+			query.append(_SQL_SELECT_JOURNALFOLDER_WHERE);
+
+			query.append(_FINDER_COLUMN_G_P_NOTS_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_P_NOTS_PARENTFOLDERID_2);
+
+			query.append(_FINDER_COLUMN_G_P_NOTS_STATUS_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(JournalFolderModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(parentFolderId);
+
+				qPos.add(status);
+
+				if (!pagination) {
+					list = (List<JournalFolder>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<JournalFolder>(list);
+				}
+				else {
+					list = (List<JournalFolder>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first journal folder in the ordered set where groupId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentFolderId the parent folder ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching journal folder
+	 * @throws com.liferay.portlet.journal.NoSuchFolderException if a matching journal folder could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public JournalFolder findByG_P_NotS_First(long groupId,
+		long parentFolderId, int status, OrderByComparator orderByComparator)
+		throws NoSuchFolderException, SystemException {
+		JournalFolder journalFolder = fetchByG_P_NotS_First(groupId,
+				parentFolderId, status, orderByComparator);
+
+		if (journalFolder != null) {
+			return journalFolder;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", parentFolderId=");
+		msg.append(parentFolderId);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchFolderException(msg.toString());
+	}
+
+	/**
+	 * Returns the first journal folder in the ordered set where groupId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentFolderId the parent folder ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching journal folder, or <code>null</code> if a matching journal folder could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public JournalFolder fetchByG_P_NotS_First(long groupId,
+		long parentFolderId, int status, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<JournalFolder> list = findByG_P_NotS(groupId, parentFolderId,
+				status, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last journal folder in the ordered set where groupId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentFolderId the parent folder ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching journal folder
+	 * @throws com.liferay.portlet.journal.NoSuchFolderException if a matching journal folder could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public JournalFolder findByG_P_NotS_Last(long groupId, long parentFolderId,
+		int status, OrderByComparator orderByComparator)
+		throws NoSuchFolderException, SystemException {
+		JournalFolder journalFolder = fetchByG_P_NotS_Last(groupId,
+				parentFolderId, status, orderByComparator);
+
+		if (journalFolder != null) {
+			return journalFolder;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", parentFolderId=");
+		msg.append(parentFolderId);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchFolderException(msg.toString());
+	}
+
+	/**
+	 * Returns the last journal folder in the ordered set where groupId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentFolderId the parent folder ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching journal folder, or <code>null</code> if a matching journal folder could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public JournalFolder fetchByG_P_NotS_Last(long groupId,
+		long parentFolderId, int status, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByG_P_NotS(groupId, parentFolderId, status);
+
+		List<JournalFolder> list = findByG_P_NotS(groupId, parentFolderId,
+				status, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the journal folders before and after the current journal folder in the ordered set where groupId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
+	 *
+	 * @param folderId the primary key of the current journal folder
+	 * @param groupId the group ID
+	 * @param parentFolderId the parent folder ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next journal folder
+	 * @throws com.liferay.portlet.journal.NoSuchFolderException if a journal folder with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public JournalFolder[] findByG_P_NotS_PrevAndNext(long folderId,
+		long groupId, long parentFolderId, int status,
+		OrderByComparator orderByComparator)
+		throws NoSuchFolderException, SystemException {
+		JournalFolder journalFolder = findByPrimaryKey(folderId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			JournalFolder[] array = new JournalFolderImpl[3];
+
+			array[0] = getByG_P_NotS_PrevAndNext(session, journalFolder,
+					groupId, parentFolderId, status, orderByComparator, true);
+
+			array[1] = journalFolder;
+
+			array[2] = getByG_P_NotS_PrevAndNext(session, journalFolder,
+					groupId, parentFolderId, status, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected JournalFolder getByG_P_NotS_PrevAndNext(Session session,
+		JournalFolder journalFolder, long groupId, long parentFolderId,
+		int status, OrderByComparator orderByComparator, boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_JOURNALFOLDER_WHERE);
+
+		query.append(_FINDER_COLUMN_G_P_NOTS_GROUPID_2);
+
+		query.append(_FINDER_COLUMN_G_P_NOTS_PARENTFOLDERID_2);
+
+		query.append(_FINDER_COLUMN_G_P_NOTS_STATUS_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			query.append(JournalFolderModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(groupId);
+
+		qPos.add(parentFolderId);
+
+		qPos.add(status);
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(journalFolder);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<JournalFolder> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Returns all the journal folders that the user has permission to view where groupId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentFolderId the parent folder ID
+	 * @param status the status
+	 * @return the matching journal folders that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<JournalFolder> filterFindByG_P_NotS(long groupId,
+		long parentFolderId, int status) throws SystemException {
+		return filterFindByG_P_NotS(groupId, parentFolderId, status,
+			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the journal folders that the user has permission to view where groupId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.journal.model.impl.JournalFolderModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param parentFolderId the parent folder ID
+	 * @param status the status
+	 * @param start the lower bound of the range of journal folders
+	 * @param end the upper bound of the range of journal folders (not inclusive)
+	 * @return the range of matching journal folders that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<JournalFolder> filterFindByG_P_NotS(long groupId,
+		long parentFolderId, int status, int start, int end)
+		throws SystemException {
+		return filterFindByG_P_NotS(groupId, parentFolderId, status, start,
+			end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the journal folders that the user has permissions to view where groupId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.journal.model.impl.JournalFolderModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param parentFolderId the parent folder ID
+	 * @param status the status
+	 * @param start the lower bound of the range of journal folders
+	 * @param end the upper bound of the range of journal folders (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching journal folders that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<JournalFolder> filterFindByG_P_NotS(long groupId,
+		long parentFolderId, int status, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return findByG_P_NotS(groupId, parentFolderId, status, start, end,
+				orderByComparator);
+		}
+
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(5 +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			query = new StringBundler(5);
+		}
+
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_JOURNALFOLDER_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_JOURNALFOLDER_NO_INLINE_DISTINCT_WHERE_1);
+		}
+
+		query.append(_FINDER_COLUMN_G_P_NOTS_GROUPID_2);
+
+		query.append(_FINDER_COLUMN_G_P_NOTS_PARENTFOLDERID_2);
+
+		query.append(_FINDER_COLUMN_G_P_NOTS_STATUS_2);
+
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_JOURNALFOLDER_NO_INLINE_DISTINCT_WHERE_2);
+		}
+
+		if (orderByComparator != null) {
+			if (getDB().isSupportsInlineDistinct()) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator, true);
+			}
+			else {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_TABLE,
+					orderByComparator, true);
+			}
+		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(JournalFolderModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(JournalFolderModelImpl.ORDER_BY_SQL);
+			}
+		}
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				JournalFolder.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			if (getDB().isSupportsInlineDistinct()) {
+				q.addEntity(_FILTER_ENTITY_ALIAS, JournalFolderImpl.class);
+			}
+			else {
+				q.addEntity(_FILTER_ENTITY_TABLE, JournalFolderImpl.class);
+			}
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			qPos.add(parentFolderId);
+
+			qPos.add(status);
+
+			return (List<JournalFolder>)QueryUtil.list(q, getDialect(), start,
+				end);
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	/**
+	 * Returns the journal folders before and after the current journal folder in the ordered set of journal folders that the user has permission to view where groupId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
+	 *
+	 * @param folderId the primary key of the current journal folder
+	 * @param groupId the group ID
+	 * @param parentFolderId the parent folder ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next journal folder
+	 * @throws com.liferay.portlet.journal.NoSuchFolderException if a journal folder with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public JournalFolder[] filterFindByG_P_NotS_PrevAndNext(long folderId,
+		long groupId, long parentFolderId, int status,
+		OrderByComparator orderByComparator)
+		throws NoSuchFolderException, SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return findByG_P_NotS_PrevAndNext(folderId, groupId,
+				parentFolderId, status, orderByComparator);
+		}
+
+		JournalFolder journalFolder = findByPrimaryKey(folderId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			JournalFolder[] array = new JournalFolderImpl[3];
+
+			array[0] = filterGetByG_P_NotS_PrevAndNext(session, journalFolder,
+					groupId, parentFolderId, status, orderByComparator, true);
+
+			array[1] = journalFolder;
+
+			array[2] = filterGetByG_P_NotS_PrevAndNext(session, journalFolder,
+					groupId, parentFolderId, status, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected JournalFolder filterGetByG_P_NotS_PrevAndNext(Session session,
+		JournalFolder journalFolder, long groupId, long parentFolderId,
+		int status, OrderByComparator orderByComparator, boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_JOURNALFOLDER_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_JOURNALFOLDER_NO_INLINE_DISTINCT_WHERE_1);
+		}
+
+		query.append(_FINDER_COLUMN_G_P_NOTS_GROUPID_2);
+
+		query.append(_FINDER_COLUMN_G_P_NOTS_PARENTFOLDERID_2);
+
+		query.append(_FINDER_COLUMN_G_P_NOTS_STATUS_2);
+
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_JOURNALFOLDER_NO_INLINE_DISTINCT_WHERE_2);
+		}
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				if (getDB().isSupportsInlineDistinct()) {
+					query.append(_ORDER_BY_ENTITY_ALIAS);
+				}
+				else {
+					query.append(_ORDER_BY_ENTITY_TABLE);
+				}
+
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				if (getDB().isSupportsInlineDistinct()) {
+					query.append(_ORDER_BY_ENTITY_ALIAS);
+				}
+				else {
+					query.append(_ORDER_BY_ENTITY_TABLE);
+				}
+
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(JournalFolderModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(JournalFolderModelImpl.ORDER_BY_SQL);
+			}
+		}
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				JournalFolder.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		SQLQuery q = session.createSQLQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		if (getDB().isSupportsInlineDistinct()) {
+			q.addEntity(_FILTER_ENTITY_ALIAS, JournalFolderImpl.class);
+		}
+		else {
+			q.addEntity(_FILTER_ENTITY_TABLE, JournalFolderImpl.class);
+		}
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(groupId);
+
+		qPos.add(parentFolderId);
+
+		qPos.add(status);
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(journalFolder);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<JournalFolder> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the journal folders where groupId = &#63; and parentFolderId = &#63; and status &ne; &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param parentFolderId the parent folder ID
+	 * @param status the status
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public void removeByG_P_NotS(long groupId, long parentFolderId, int status)
+		throws SystemException {
+		for (JournalFolder journalFolder : findByG_P_NotS(groupId,
+				parentFolderId, status, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+				null)) {
+			remove(journalFolder);
+		}
+	}
+
+	/**
+	 * Returns the number of journal folders where groupId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentFolderId the parent folder ID
+	 * @param status the status
+	 * @return the number of matching journal folders
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public int countByG_P_NotS(long groupId, long parentFolderId, int status)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_NOTS;
+
+		Object[] finderArgs = new Object[] { groupId, parentFolderId, status };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(4);
+
+			query.append(_SQL_COUNT_JOURNALFOLDER_WHERE);
+
+			query.append(_FINDER_COLUMN_G_P_NOTS_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_P_NOTS_PARENTFOLDERID_2);
+
+			query.append(_FINDER_COLUMN_G_P_NOTS_STATUS_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(parentFolderId);
+
+				qPos.add(status);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of journal folders that the user has permission to view where groupId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentFolderId the parent folder ID
+	 * @param status the status
+	 * @return the number of matching journal folders that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public int filterCountByG_P_NotS(long groupId, long parentFolderId,
+		int status) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByG_P_NotS(groupId, parentFolderId, status);
+		}
+
+		StringBundler query = new StringBundler(4);
+
+		query.append(_FILTER_SQL_COUNT_JOURNALFOLDER_WHERE);
+
+		query.append(_FINDER_COLUMN_G_P_NOTS_GROUPID_2);
+
+		query.append(_FINDER_COLUMN_G_P_NOTS_PARENTFOLDERID_2);
+
+		query.append(_FINDER_COLUMN_G_P_NOTS_STATUS_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				JournalFolder.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			qPos.add(parentFolderId);
+
+			qPos.add(status);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_G_P_NOTS_GROUPID_2 = "journalFolder.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_P_NOTS_PARENTFOLDERID_2 = "journalFolder.parentFolderId = ? AND ";
+	private static final String _FINDER_COLUMN_G_P_NOTS_STATUS_2 = "journalFolder.status != ?";
 
 	/**
 	 * Caches the journal folder in the entity cache if it is enabled.
 	 *
 	 * @param journalFolder the journal folder
 	 */
+	@Override
 	public void cacheResult(JournalFolder journalFolder) {
 		EntityCacheUtil.putResult(JournalFolderModelImpl.ENTITY_CACHE_ENABLED,
 			JournalFolderImpl.class, journalFolder.getPrimaryKey(),
@@ -5180,6 +6226,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 *
 	 * @param journalFolders the journal folders
 	 */
+	@Override
 	public void cacheResult(List<JournalFolder> journalFolders) {
 		for (JournalFolder journalFolder : journalFolders) {
 			if (EntityCacheUtil.getResult(
@@ -5381,6 +6428,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @param folderId the primary key for the new journal folder
 	 * @return the new journal folder
 	 */
+	@Override
 	public JournalFolder create(long folderId) {
 		JournalFolder journalFolder = new JournalFolderImpl();
 
@@ -5402,6 +6450,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @throws com.liferay.portlet.journal.NoSuchFolderException if a journal folder with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder remove(long folderId)
 		throws NoSuchFolderException, SystemException {
 		return remove((Serializable)folderId);
@@ -5716,6 +6765,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @throws com.liferay.portlet.journal.NoSuchFolderException if a journal folder with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder findByPrimaryKey(long folderId)
 		throws NoSuchFolderException, SystemException {
 		return findByPrimaryKey((Serializable)folderId);
@@ -5776,6 +6826,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the journal folder, or <code>null</code> if a journal folder with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalFolder fetchByPrimaryKey(long folderId)
 		throws SystemException {
 		return fetchByPrimaryKey((Serializable)folderId);
@@ -5787,6 +6838,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the journal folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalFolder> findAll() throws SystemException {
 		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
@@ -5803,6 +6855,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the range of journal folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalFolder> findAll(int start, int end)
 		throws SystemException {
 		return findAll(start, end, null);
@@ -5821,6 +6874,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the ordered range of journal folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalFolder> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -5906,6 +6960,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 *
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeAll() throws SystemException {
 		for (JournalFolder journalFolder : findAll()) {
 			remove(journalFolder);
@@ -5918,6 +6973,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	 * @return the number of journal folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countAll() throws SystemException {
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
 				FINDER_ARGS_EMPTY, this);
@@ -6021,6 +7077,7 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 		};
 
 	private static CacheModel<JournalFolder> _nullJournalFolderCacheModel = new CacheModel<JournalFolder>() {
+			@Override
 			public JournalFolder toEntityModel() {
 				return _nullJournalFolder;
 			}

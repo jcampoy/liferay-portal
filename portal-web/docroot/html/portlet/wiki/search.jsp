@@ -55,8 +55,8 @@ portletURL.setParameter("keywords", keywords);
 		title="search"
 	/>
 
-	<span class="aui-search-bar">
-		<aui:input inlineField="<%= true %>" label="" name="keywords" size="30" title="search-pages" type="text" value="<%= keywords %>" />
+	<span class="form-search">
+		<aui:input autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) %>" inlineField="<%= true %>" label="" name="keywords" size="30" title="search-pages" type="text" value="<%= keywords %>" />
 
 		<aui:button type="submit" value="search" />
 	</span>
@@ -88,7 +88,9 @@ portletURL.setParameter("keywords", keywords);
 
 		Hits hits = indexer.search(searchContext);
 
-		if (searchContainer.recalculateCur(hits.getLength())) {
+		searchContainer.setTotal(hits.getLength());
+
+		if (searchContainer.isRecalculateCur()) {
 			searchContext.setEnd(searchContainer.getEnd());
 			searchContext.setStart(searchContainer.getStart());
 
@@ -159,9 +161,3 @@ portletURL.setParameter("keywords", keywords);
 		<strong><aui:a cssClass="new-page" href="<%= addPageURL.toString() %>" label="create-a-new-page-on-this-topic" /></strong>
 	</c:if>
 </aui:form>
-
-<c:if test="<%= windowState.equals(WindowState.MAXIMIZED) %>">
-	<aui:script>
-		Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace />keywords);
-	</aui:script>
-</c:if>

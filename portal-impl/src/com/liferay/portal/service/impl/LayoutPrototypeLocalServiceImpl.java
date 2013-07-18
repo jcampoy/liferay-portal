@@ -17,6 +17,7 @@ package com.liferay.portal.service.impl;
 import com.liferay.portal.RequiredLayoutPrototypeException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.model.Group;
@@ -46,6 +47,7 @@ public class LayoutPrototypeLocalServiceImpl
 	 * @deprecated As of 6.2.0, replaced by {@link #addLayoutPrototype(long,
 	 *             long, Map, String, boolean, ServiceContext)}
 	 */
+	@Override
 	public LayoutPrototype addLayoutPrototype(
 			long userId, long companyId, Map<Locale, String> nameMap,
 			String description, boolean active)
@@ -56,6 +58,7 @@ public class LayoutPrototypeLocalServiceImpl
 			new ServiceContext());
 	}
 
+	@Override
 	public LayoutPrototype addLayoutPrototype(
 			long userId, long companyId, Map<Locale, String> nameMap,
 			String description, boolean active, ServiceContext serviceContext)
@@ -101,14 +104,19 @@ public class LayoutPrototypeLocalServiceImpl
 			LayoutPrototype.class.getName(),
 			layoutPrototype.getLayoutPrototypeId(),
 			GroupConstants.DEFAULT_LIVE_GROUP_ID,
-			layoutPrototype.getName(LocaleUtil.getDefault()), null, 0,
-			friendlyURL, false, true, null);
+			layoutPrototype.getName(LocaleUtil.getDefault()), null, 0, true,
+			GroupConstants.DEFAULT_MEMBERSHIP_RESTRICTION, friendlyURL, false,
+			true, null);
 
-		layoutLocalService.addLayout(
-			userId, group.getGroupId(), true,
-			LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
-			layoutPrototype.getName(LocaleUtil.getDefault()), null, null,
-			LayoutConstants.TYPE_PORTLET, false, "/layout", serviceContext);
+		if (GetterUtil.getBoolean(
+				serviceContext.getAttribute("addDefaultLayout"), true)) {
+
+			layoutLocalService.addLayout(
+				userId, group.getGroupId(), true,
+				LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+				layoutPrototype.getName(LocaleUtil.getDefault()), null, null,
+				LayoutConstants.TYPE_PORTLET, false, "/layout", serviceContext);
+		}
 
 		return layoutPrototype;
 	}
@@ -158,24 +166,34 @@ public class LayoutPrototypeLocalServiceImpl
 		return deleteLayoutPrototype(layoutPrototype);
 	}
 
-	public LayoutPrototype fetchLayoutPrototypeByUuidAndCompanyId(
-			String uuid, long companyId)
-		throws SystemException {
+	@Override
+	public void deleteNondefaultLayoutPrototypes(long companyId)
+		throws PortalException, SystemException {
 
-		return layoutPrototypePersistence.fetchByUuid_C_First(
-			uuid, companyId, null);
+		long defaultUserId = userLocalService.getDefaultUserId(companyId);
+
+		List<LayoutPrototype> layoutPrototypes =
+			layoutPrototypePersistence.findByCompanyId(companyId);
+
+		for (LayoutPrototype layoutPrototype : layoutPrototypes) {
+			if (layoutPrototype.getUserId() != defaultUserId) {
+				deleteLayoutPrototype(layoutPrototype);
+			}
+		}
 	}
 
 	/**
 	 * @deprecated As of 6.2.0, replaced by {@link
 	 *             #getLayoutPrototypeByUuidAndCompanyId(String, long)}
 	 */
+	@Override
 	public LayoutPrototype getLayoutPrototypeByUuid(String uuid)
 		throws PortalException, SystemException {
 
 		return layoutPrototypePersistence.findByUuid_First(uuid, null);
 	}
 
+	@Override
 	public LayoutPrototype getLayoutPrototypeByUuidAndCompanyId(
 			String uuid, long companyId)
 		throws PortalException, SystemException {
@@ -184,6 +202,7 @@ public class LayoutPrototypeLocalServiceImpl
 			uuid, companyId, null);
 	}
 
+	@Override
 	public List<LayoutPrototype> search(
 			long companyId, Boolean active, int start, int end,
 			OrderByComparator obc)
@@ -199,6 +218,7 @@ public class LayoutPrototypeLocalServiceImpl
 		}
 	}
 
+	@Override
 	public int searchCount(long companyId, Boolean active)
 		throws SystemException {
 
@@ -214,6 +234,7 @@ public class LayoutPrototypeLocalServiceImpl
 	 * @deprecated As of 6.2.0, replaced by {@link #updateLayoutPrototype(long,
 	 *             Map, String, boolean, ServiceContext)}
 	 */
+	@Override
 	public LayoutPrototype updateLayoutPrototype(
 			long layoutPrototypeId, Map<Locale, String> nameMap,
 			String description, boolean active)
@@ -223,6 +244,7 @@ public class LayoutPrototypeLocalServiceImpl
 			layoutPrototypeId, nameMap, description, active, null);
 	}
 
+	@Override
 	public LayoutPrototype updateLayoutPrototype(
 			long layoutPrototypeId, Map<Locale, String> nameMap,
 			String description, boolean active, ServiceContext serviceContext)

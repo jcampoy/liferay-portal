@@ -28,6 +28,8 @@ import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.Company;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
+import com.liferay.portal.model.LayoutFriendlyURLComposite;
+import com.liferay.portal.model.LayoutQueryStringComposite;
 import com.liferay.portal.model.LayoutSet;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.ResourcePermission;
@@ -194,6 +196,16 @@ public class PortalUtil {
 		return getPortal().generateRandomKey(request, input);
 	}
 
+	public static LayoutQueryStringComposite
+		getActualLayoutQueryStringComposite(
+			long groupId, boolean privateLayout, String friendlyURL,
+			Map<String, String[]> params, Map<String, Object> requestContext)
+		throws PortalException, SystemException {
+
+		return getPortal().getActualLayoutQueryStringComposite(
+			groupId, privateLayout, friendlyURL, params, requestContext);
+	}
+
 	public static String getActualURL(
 			long groupId, boolean privateLayout, String mainPath,
 			String friendlyURL, Map<String, String[]> params,
@@ -205,6 +217,11 @@ public class PortalUtil {
 			requestContext);
 	}
 
+	/**
+	 * @deprecated As of 6.2.0, replaced by {@link
+	 *             com.liferay.portal.kernel.language.LanguageUtil.getAvailableLocales(
+	 *             )}
+	 */
 	public static Locale[] getAlternateLocales(HttpServletRequest request)
 		throws PortalException, SystemException {
 
@@ -212,15 +229,27 @@ public class PortalUtil {
 	}
 
 	public static String getAlternateURL(
-		String canonicalURL, ThemeDisplay themeDisplay, Locale locale) {
+		String canonicalURL, ThemeDisplay themeDisplay, Locale locale,
+		Layout layout) {
 
-		return getPortal().getAlternateURL(canonicalURL, themeDisplay, locale);
+		return getPortal().getAlternateURL(
+			canonicalURL, themeDisplay, locale, layout);
 	}
 
+	/**
+	 * @deprecated As of 6.2.0, replaced by {@link
+	 *             com.liferay.portal.security.auth.AuthTokenWhitelistUtil#getPortletCSRFWhitelistActions(
+	 *             )}
+	 */
 	public static Set<String> getAuthTokenIgnoreActions() {
 		return getPortal().getAuthTokenIgnoreActions();
 	}
 
+	/**
+	 * @deprecated As of 6.2.0, replaced by {@link
+	 *             com.liferay.portal.security.auth.AuthTokenWhitelistUtil#getPortletCSRFWhitelist(
+	 *             )}
+	 */
 	public static Set<String> getAuthTokenIgnorePortlets() {
 		return getPortal().getAuthTokenIgnorePortlets();
 	}
@@ -338,6 +367,13 @@ public class PortalUtil {
 
 	public static String getComputerName() {
 		return getPortal().getComputerName();
+	}
+
+	public static Map<String, List<Portlet>> getControlPanelCategoriesMap(
+			HttpServletRequest request)
+		throws SystemException {
+
+		return getPortal().getControlPanelCategoriesMap(request);
 	}
 
 	public static String getControlPanelCategory(
@@ -537,8 +573,21 @@ public class PortalUtil {
 			portlet, facebookCanvasPageURL, themeDisplay);
 	}
 
+	public static Portlet getFirstMyAccountPortlet(ThemeDisplay themeDisplay)
+		throws SystemException {
+
+		return getPortal().getFirstMyAccountPortlet(themeDisplay);
+	}
+
 	public static String getFirstPageLayoutTypes(PageContext pageContext) {
 		return getPortal().getFirstPageLayoutTypes(pageContext);
+	}
+
+	public static Portlet getFirstSiteAdministrationPortlet(
+			ThemeDisplay themeDisplay)
+		throws SystemException {
+
+		return getPortal().getFirstSiteAdministrationPortlet(themeDisplay);
 	}
 
 	public static String getFullName(
@@ -573,6 +622,10 @@ public class PortalUtil {
 
 		return getPortal().getGroupFriendlyURL(
 			group, privateLayoutSet, themeDisplay, locale);
+	}
+
+	public static int[] getGroupFriendlyURLIndex(String requestURI) {
+		return getPortal().getGroupFriendlyURLIndex(requestURI);
 	}
 
 	public static String[] getGroupPermissions(HttpServletRequest request) {
@@ -641,6 +694,13 @@ public class PortalUtil {
 		return getPortal().getHttpServletResponse(portletResponse);
 	}
 
+	public static String getI18nPathLanguageId(
+		Locale locale, String defaultI18nPathLanguageId) {
+
+		return getPortal().getI18nPathLanguageId(
+			locale, defaultI18nPathLanguageId);
+	}
+
 	public static String getJournalArticleActualURL(
 			long groupId, boolean privateLayout, String mainPath,
 			String friendlyURL, Map<String, String[]> params,
@@ -650,6 +710,14 @@ public class PortalUtil {
 		return getPortal().getJournalArticleActualURL(
 			groupId, privateLayout, mainPath, friendlyURL, params,
 			requestContext);
+	}
+
+	public static Layout getJournalArticleLayout(
+			long groupId, boolean privateLayout, String friendlyURL)
+		throws PortalException, SystemException {
+
+		return getPortal().getJournalArticleLayout(
+			groupId, privateLayout, friendlyURL);
 	}
 
 	public static String getJsSafePortletId(String portletId) {
@@ -704,6 +772,15 @@ public class PortalUtil {
 		throws PortalException, SystemException {
 
 		return getPortal().getLayoutFriendlyURL(layout, themeDisplay, locale);
+	}
+
+	public static LayoutFriendlyURLComposite getLayoutFriendlyURLComposite(
+			long groupId, boolean privateLayout, String friendlyURL,
+			Map<String, String[]> params, Map<String, Object> requestContext)
+		throws PortalException, SystemException {
+
+		return getPortal().getLayoutFriendlyURLComposite(
+			groupId, privateLayout, friendlyURL, params, requestContext);
 	}
 
 	public static String getLayoutFullURL(
@@ -793,8 +870,22 @@ public class PortalUtil {
 		return getPortal().getLocale(request);
 	}
 
+	public static Locale getLocale(
+		HttpServletRequest request, HttpServletResponse response,
+		boolean initialize) {
+
+		return getPortal().getLocale(request, response, initialize);
+	}
+
 	public static Locale getLocale(RenderRequest renderRequest) {
 		return getPortal().getLocale(renderRequest);
+	}
+
+	public static String getLocalizedFriendlyURL(
+			HttpServletRequest request, Layout layout, Locale locale)
+		throws Exception {
+
+		return getPortal().getLocalizedFriendlyURL(request, layout, locale);
 	}
 
 	public static String getMailId(
@@ -844,7 +935,7 @@ public class PortalUtil {
 	}
 
 	/**
-	 * @deprecated As of 6.2 renamed to {@link #getSiteGroupId(long)}
+	 * @deprecated As of 6.2.0 renamed to {@link #getSiteGroupId(long)}
 	 */
 	public static long getParentGroupId(long scopeGroupId)
 		throws PortalException, SystemException {
@@ -971,10 +1062,20 @@ public class PortalUtil {
 		return getPortal().getPortalWebDir();
 	}
 
+	/**
+	 * @deprecated As of 6.2.0 replaced by {@link
+	 *             com.liferay.portal.security.auth.AuthTokenWhitelistUtil#getPortletInvocationWhitelist(
+	 *             )}
+	 */
 	public static Set<String> getPortletAddDefaultResourceCheckWhitelist() {
 		return getPortal().getPortletAddDefaultResourceCheckWhitelist();
 	}
 
+	/**
+	 * @deprecated As of 6.2.0 replaced by {@link
+	 *             com.liferay.portal.security.auth.AuthTokenWhitelistUtil#getPortletInvocationWhitelistActions(
+	 *             )}
+	 */
 	public static Set<String>
 		getPortletAddDefaultResourceCheckWhitelistActions() {
 
@@ -1209,6 +1310,44 @@ public class PortalUtil {
 		return getPortal().getSelectedUser(portletRequest, checkPermission);
 	}
 
+	public static Map<String, List<Portlet>> getSiteAdministrationCategoriesMap(
+			HttpServletRequest request)
+		throws SystemException {
+
+		return getPortal().getSiteAdministrationCategoriesMap(request);
+	}
+
+	public static PortletURL getSiteAdministrationURL(
+			HttpServletRequest request, ThemeDisplay themeDisplay)
+		throws SystemException {
+
+		return getPortal().getSiteAdministrationURL(request, themeDisplay);
+	}
+
+	public static PortletURL getSiteAdministrationURL(
+		HttpServletRequest request, ThemeDisplay themeDisplay,
+		String portletName) {
+
+		return getPortal().getSiteAdministrationURL(
+			request, themeDisplay, portletName);
+	}
+
+	public static PortletURL getSiteAdministrationURL(
+			PortletResponse portletResponse, ThemeDisplay themeDisplay)
+		throws SystemException {
+
+		return getPortal().getSiteAdministrationURL(
+			portletResponse, themeDisplay);
+	}
+
+	public static PortletURL getSiteAdministrationURL(
+		PortletResponse portletResponse, ThemeDisplay themeDisplay,
+		String portletName) {
+
+		return getPortal().getSiteAdministrationURL(
+			portletResponse, themeDisplay, portletName);
+	}
+
 	public static long[] getSiteAndCompanyGroupIds(long groupId)
 		throws PortalException, SystemException {
 
@@ -1401,6 +1540,16 @@ public class PortalUtil {
 			requestContext);
 	}
 
+	public static LayoutFriendlyURLComposite
+		getVirtualLayoutFriendlyURLComposite(
+			boolean privateLayout, String friendlyURL,
+			Map<String, String[]> params, Map<String, Object> requestContext)
+		throws PortalException, SystemException {
+
+		return getPortal().getVirtualLayoutFriendlyURLComposite(
+			privateLayout, friendlyURL, params, requestContext);
+	}
+
 	public static String getWidgetURL(
 			Portlet portlet, ThemeDisplay themeDisplay)
 		throws PortalException, SystemException {
@@ -1412,6 +1561,10 @@ public class PortalUtil {
 		getPortal().initCustomSQL();
 	}
 
+	public static User initUser(HttpServletRequest request) throws Exception {
+		return getPortal().initUser(request);
+	}
+
 	public static void invokeTaglibDiscussion(
 			PortletConfig portletConfig, ActionRequest actionRequest,
 			ActionResponse actionResponse)
@@ -1421,6 +1574,9 @@ public class PortalUtil {
 			portletConfig, actionRequest, actionResponse);
 	}
 
+	/**
+	 * @deprecated As of 6.2.0 with no direct replacement
+	 */
 	public static boolean isAllowAddPortletDefaultResource(
 			HttpServletRequest request, Portlet portlet)
 		throws PortalException, SystemException {
@@ -1440,7 +1596,7 @@ public class PortalUtil {
 	}
 
 	/**
-	 * @deprecated As of 6.1, renamed to {@link #isGroupAdmin(User, long)}
+	 * @deprecated As of 6.1.0, renamed to {@link #isGroupAdmin(User, long)}
 	 */
 	public static boolean isCommunityAdmin(User user, long groupId)
 		throws Exception {
@@ -1449,7 +1605,7 @@ public class PortalUtil {
 	}
 
 	/**
-	 * @deprecated As of 6.1, renamed to {@link #isGroupOwner(User, long)}
+	 * @deprecated As of 6.1.0, renamed to {@link #isGroupOwner(User, long)}
 	 */
 	public static boolean isCommunityOwner(User user, long groupId)
 		throws Exception {
@@ -1600,10 +1756,20 @@ public class PortalUtil {
 		getPortal().resetCDNHosts();
 	}
 
+	/**
+	 * @deprecated As of 6.2.0 replaced by {@link
+	 *             com.liferay.portal.security.auth.AuthTokenWhitelistUtil#resetPortletInvocationWhitelist(
+	 *             )}
+	 */
 	public static Set<String> resetPortletAddDefaultResourceCheckWhitelist() {
 		return getPortal().resetPortletAddDefaultResourceCheckWhitelist();
 	}
 
+	/**
+	 * @deprecated As of 6.2.0 replaced by {@link
+	 *             com.liferay.portal.security.auth.AuthTokenWhitelistUtil#resetPortletInvocationWhitelistActions(
+	 *             )}
+	 */
 	public static Set<String>
 		resetPortletAddDefaultResourceCheckWhitelistActions() {
 

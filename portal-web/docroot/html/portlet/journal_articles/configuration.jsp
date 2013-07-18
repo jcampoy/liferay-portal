@@ -39,10 +39,10 @@ groupId = ParamUtil.getLong(request, "groupId", groupId);
 					<aui:option label="global" selected="<%= groupId == themeDisplay.getCompanyGroupId() %>" value="<%= themeDisplay.getCompanyGroupId() %>" />
 
 					<%
-					List<Group> mySites = user.getMySites();
+					List<Group> mySiteGroups = user.getMySiteGroups();
 
-					for (int i = 0; i < mySites.size(); i++) {
-						Group group = mySites.get(i);
+					for (int i = 0; i < mySiteGroups.size(); i++) {
+						Group group = mySiteGroups.get(i);
 
 						String groupName = HtmlUtil.escape(group.getDescriptiveName(locale));
 
@@ -154,22 +154,18 @@ groupId = ParamUtil.getLong(request, "groupId", groupId);
 	function <portlet:namespace />openStructureSelector() {
 		Liferay.Util.openDDMPortlet(
 			{
-				availableFields: 'Liferay.FormBuilder.AVAILABLE_FIELDS.WCM_STRUCTURE',
-				classNameId: '<%= PortalUtil.getClassNameId(DDMStructure.class) %>',
+				basePortletURL: '<%= PortletURLFactoryUtil.create(request, PortletKeys.DYNAMIC_DATA_MAPPING, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>',
 				classPK: <%= (ddmStructure != null) ? ddmStructure.getPrimaryKey() : 0 %>,
-				ddmResource: '<%= ddmResource %>',
 				dialog: {
-					width: 820
+					destroyOnHide: true
 				},
 				eventName: '<portlet:namespace />selectStructure',
 				groupId: <%= groupId %>,
-				storageType: '<%= PropsValues.JOURNAL_ARTICLE_STORAGE_TYPE %>',
-				structureName: 'structure',
-				structureType: 'com.liferay.portlet.journal.model.JournalArticle',
+				refererPortletName: '<%= PortletKeys.JOURNAL %>',
 				struts_action: '/dynamic_data_mapping/select_structure',
 				title: '<%= UnicodeLanguageUtil.get(pageContext, "structures") %>'
 			},
-			function(event){
+			function(event) {
 				var A = AUI();
 
 				document.<portlet:namespace />fm1.<portlet:namespace />ddmStructureKey.value = event.ddmstructurekey;

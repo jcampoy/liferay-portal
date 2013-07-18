@@ -199,10 +199,6 @@ public class VerifyProperties extends VerifyProcess {
 			"com.liferay.portal.servlet.filters.gzip.GZipFilter"
 		},
 		new String[] {
-			"com.liferay.filters.doubleclick.DoubleClickFilter",
-			"com.liferay.portal.servlet.filters.doubleclick.DoubleClickFilter"
-		},
-		new String[] {
 			"com.liferay.filters.strip.StripFilter",
 			"com.liferay.portal.servlet.filters.strip.StripFilter"
 		},
@@ -266,12 +262,15 @@ public class VerifyProperties extends VerifyProcess {
 		"asset.entry.increment.view.counter.enabled", "auth.max.failures.limit",
 		"buffered.increment.parallel.queue.size",
 		"buffered.increment.serial.queue.size", "cas.validate.url",
-		"cluster.executor.heartbeat.interval", "commons.pool.enabled",
-		"dl.file.entry.read.count.enabled",
+		"cluster.executor.heartbeat.interval",
+		"com.liferay.filters.doubleclick.DoubleClickFilter",
+		"com.liferay.portal.servlet.filters.doubleclick.DoubleClickFilter",
+		"commons.pool.enabled", "dl.file.entry.read.count.enabled",
 		"dynamic.data.lists.template.language.parser[ftl]",
 		"dynamic.data.lists.template.language.parser[vm]",
 		"dynamic.data.lists.template.language.parser[xsl]",
-		"dynamic.data.mapping.template.language.types", "jbi.workflow.url",
+		"dynamic.data.mapping.template.language.types",
+		"ehcache.statistics.enabled", "jbi.workflow.url",
 		"journal.template.language.parser[css]",
 		"journal.template.language.parser[ftl]",
 		"journal.template.language.parser[vm]",
@@ -285,9 +284,10 @@ public class VerifyProperties extends VerifyProcess {
 		"lucene.store.jdbc.dialect.microsoft",
 		"lucene.store.jdbc.dialect.mysql", "lucene.store.jdbc.dialect.oracle",
 		"lucene.store.jdbc.dialect.postgresql",
-		"message.boards.thread.locking.enabled",
-		"portal.security.manager.enable", "scheduler.classes",
-		"shard.available.names", "velocity.engine.resource.manager",
+		"message.boards.thread.locking.enabled", "portal.ctx",
+		"portal.security.manager.enable", "permissions.user.check.algorithm",
+		"scheduler.classes", "shard.available.names",
+		"velocity.engine.resource.manager",
 		"velocity.engine.resource.manager.cache.enabled",
 		"webdav.storage.class", "webdav.storage.show.edit.url",
 		"webdav.storage.show.view.url", "webdav.storage.tokens", "xss.allow"

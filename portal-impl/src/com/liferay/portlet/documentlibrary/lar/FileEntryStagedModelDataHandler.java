@@ -27,33 +27,29 @@ import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.util.FileUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.xml.Element;
-import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Repository;
-import com.liferay.portal.model.StagedModel;
+import com.liferay.portal.repository.liferayrepository.LiferayRepository;
 import com.liferay.portal.repository.liferayrepository.model.LiferayFileEntry;
-import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.RepositoryLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
-import com.liferay.portal.service.persistence.RepositoryUtil;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.documentlibrary.DuplicateFileException;
 import com.liferay.portlet.documentlibrary.NoSuchFileException;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata;
 import com.liferay.portlet.documentlibrary.model.DLFileEntryType;
-import com.liferay.portlet.documentlibrary.model.DLFileRank;
 import com.liferay.portlet.documentlibrary.model.DLFileVersion;
 import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
+import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryMetadataLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryTypeLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.service.DLFileVersionLocalServiceUtil;
-import com.liferay.portlet.documentlibrary.service.persistence.DLFileEntryTypeUtil;
-import com.liferay.portlet.documentlibrary.service.persistence.DLFileRankUtil;
 import com.liferay.portlet.documentlibrary.util.DLProcessorRegistryUtil;
 import com.liferay.portlet.documentlibrary.util.DLProcessorThreadLocal;
 import com.liferay.portlet.documentlibrary.util.DLUtil;
@@ -85,6 +81,11 @@ public class FileEntryStagedModelDataHandler
 	}
 
 	@Override
+	public String getDisplayName(FileEntry fileEntry) {
+		return fileEntry.getTitle();
+	}
+
+	@Override
 	public void importStagedModel(
 			PortletDataContext portletDataContext, FileEntry fileEntry)
 		throws PortletDataException {
@@ -106,25 +107,34 @@ public class FileEntryStagedModelDataHandler
 			PortletDataContext portletDataContext, FileEntry fileEntry)
 		throws Exception {
 
-		Element fileEntryGroupElement =
-			portletDataContext.getExportDataGroupElement(FileEntry.class);
-
-		Element fileEntryElement = fileEntryGroupElement.addElement(
-			"staged-model");
+		Element fileEntryElement = portletDataContext.getExportDataElement(
+			fileEntry, FileEntry.class);
 
 		String fileEntryPath = ExportImportPathUtil.getModelPath(
 			fileEntry.getGroupId(), FileEntry.class.getName(),
 			fileEntry.getFileEntryId());
 
 		if (!fileEntry.isDefaultRepository()) {
-			Repository repository = RepositoryUtil.findByPrimaryKey(
+			Repository repository = RepositoryLocalServiceUtil.getRepository(
 				fileEntry.getRepositoryId());
 
 			StagedModelDataHandlerUtil.exportStagedModel(
 				portletDataContext, repository);
 
 			portletDataContext.addReferenceElement(
-				fileEntryElement, repository);
+				fileEntry, fileEntryElement, repository,
+				PortletDataContext.REFERENCE_TYPE_STRONG, false);
+
+			portletDataContext.addClassedModel(
+				fileEntryElement, fileEntryPath, fileEntry,
+				DLPortletDataHandler.NAMESPACE);
+
+			long liferayRepositoryClassNameId = PortalUtil.getClassNameId(
+				LiferayRepository.class.getName());
+
+			if (repository.getClassNameId() != liferayRepositoryClassNameId) {
+				return;
+			}
 		}
 
 		FileVersion fileVersion = fileEntry.getFileVersion();
@@ -184,21 +194,6 @@ public class FileEntryStagedModelDataHandler
 		}
 
 		if (portletDataContext.getBooleanParameter(
-				DLPortletDataHandler.NAMESPACE, "ranks")) {
-
-			List<DLFileRank> fileRanks = DLFileRankUtil.findByFileEntryId(
-				fileEntry.getFileEntryId());
-
-			for (DLFileRank fileRank : fileRanks) {
-				StagedModelDataHandlerUtil.exportStagedModel(
-					portletDataContext, fileRank);
-
-				portletDataContext.addReferenceElement(
-					fileEntryElement, fileRank);
-			}
-		}
-
-		if (portletDataContext.getBooleanParameter(
 				DLPortletDataHandler.NAMESPACE, "previews-and-thumbnails")) {
 
 			DLProcessorRegistryUtil.exportGeneratedFiles(
@@ -227,31 +222,18 @@ public class FileEntryStagedModelDataHandler
 			portletDataContext.getImportDataElement(
 				FileEntry.class.getSimpleName(), "path", path);
 
-		Element referencesElement = fileEntryElement.element("references");
+		Element referenceDataElement =
+			portletDataContext.getReferenceDataElement(
+				fileEntryElement, Repository.class,
+				fileEntry.getRepositoryId());
 
-		if (referencesElement != null) {
-			List<Element> referenceElements = referencesElement.elements();
-
-			for (Element referenceElement : referenceElements) {
-				String className = referenceElement.attributeValue(
-					"class-name");
-				String classPK = referenceElement.attributeValue("class-pk");
-
-				String referencePath = ExportImportPathUtil.getModelPath(
-					portletDataContext, className, GetterUtil.getLong(classPK));
-
-				StagedModel referenceStagedModel =
-					(StagedModel)portletDataContext.getZipEntryAsObject(
-						referencePath);
-
-				StagedModelDataHandlerUtil.importStagedModel(
-					portletDataContext, referenceStagedModel);
-			}
+		if (referenceDataElement != null) {
+			StagedModelDataHandlerUtil.importStagedModel(
+				portletDataContext, referenceDataElement);
 		}
 
-		if ((fileEntry.getFolderId() !=
-				DLFolderConstants.DEFAULT_PARENT_FOLDER_ID) &&
-			(fileEntry.getFolderId() == fileEntry.getFolderId())) {
+		if (fileEntry.getFolderId() !=
+				DLFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
 
 			String folderPath = ExportImportPathUtil.getModelPath(
 				portletDataContext, Folder.class.getName(),
@@ -271,22 +253,10 @@ public class FileEntryStagedModelDataHandler
 		long folderId = MapUtil.getLong(
 			folderIds, fileEntry.getFolderId(), fileEntry.getFolderId());
 
-		long[] assetCategoryIds = null;
-		String[] assetTagNames = null;
-
-		if (portletDataContext.getBooleanParameter(
-				DLPortletDataHandler.NAMESPACE, "categories")) {
-
-			assetCategoryIds = portletDataContext.getAssetCategoryIds(
-				DLFileEntry.class, fileEntry.getFileEntryId());
-		}
-
-		if (portletDataContext.getBooleanParameter(
-				DLPortletDataHandler.NAMESPACE, "tags")) {
-
-			assetTagNames = portletDataContext.getAssetTagNames(
-				DLFileEntry.class, fileEntry.getFileEntryId());
-		}
+		long[] assetCategoryIds = portletDataContext.getAssetCategoryIds(
+			DLFileEntry.class, fileEntry.getFileEntryId());
+		String[] assetTagNames = portletDataContext.getAssetTagNames(
+			DLFileEntry.class, fileEntry.getFileEntryId());
 
 		ServiceContext serviceContext = portletDataContext.createServiceContext(
 			fileEntry, DLPortletDataHandler.NAMESPACE);
@@ -322,7 +292,8 @@ public class FileEntryStagedModelDataHandler
 			return;
 		}
 
-		importMetaData(portletDataContext, fileEntryElement, serviceContext);
+		importMetaData(
+			portletDataContext, fileEntryElement, fileEntry, serviceContext);
 
 		FileEntry importedFileEntry = null;
 
@@ -533,6 +504,10 @@ public class FileEntryStagedModelDataHandler
 		StagedModelDataHandlerUtil.exportStagedModel(
 			portletDataContext, dlFileEntryType);
 
+		portletDataContext.addReferenceElement(
+			fileEntry, fileEntryElement, dlFileEntryType,
+			PortletDataContext.REFERENCE_TYPE_STRONG, false);
+
 		List<DDMStructure> ddmStructures = dlFileEntryType.getDDMStructures();
 
 		for (DDMStructure ddmStructure : ddmStructures) {
@@ -563,37 +538,70 @@ public class FileEntryStagedModelDataHandler
 
 	protected void importMetaData(
 			PortletDataContext portletDataContext, Element fileEntryElement,
-			ServiceContext serviceContext)
+			FileEntry fileEntry, ServiceContext serviceContext)
 		throws Exception {
 
-		String fileEntryTypeUuid = fileEntryElement.attributeValue(
-			"fileEntryTypeUuid");
+		LiferayFileEntry liferayFileEntry = (LiferayFileEntry)fileEntry;
 
-		if (Validator.isNull(fileEntryTypeUuid)) {
+		DLFileEntry dlFileEntry = liferayFileEntry.getDLFileEntry();
+
+		Element fileEntryTypeElement =
+			portletDataContext.getReferenceDataElement(
+				fileEntryElement, DLFileEntryType.class,
+				dlFileEntry.getFileEntryTypeId());
+
+		if (fileEntryTypeElement == null) {
 			return;
 		}
 
-		DLFileEntryType dlFileEntryType = DLFileEntryTypeUtil.fetchByUUID_G(
-			fileEntryTypeUuid, portletDataContext.getScopeGroupId());
+		String fileEntryTypePath = fileEntryTypeElement.attributeValue("path");
 
-		if (dlFileEntryType == null) {
-			Group group = GroupLocalServiceUtil.getCompanyGroup(
-				portletDataContext.getCompanyId());
+		DLFileEntryType dlFileEntryType =
+			(DLFileEntryType)portletDataContext.getZipEntryAsObject(
+				fileEntryTypePath);
 
-			dlFileEntryType = DLFileEntryTypeUtil.fetchByUUID_G(
-				fileEntryTypeUuid, group.getGroupId());
+		DLFileEntryType existingDLFileEntryType =
+			DLFileEntryTypeLocalServiceUtil.
+				fetchDLFileEntryTypeByUuidAndGroupId(
+					dlFileEntryType.getUuid(),
+					portletDataContext.getScopeGroupId());
 
-			if (dlFileEntryType == null) {
-				serviceContext.setAttribute("fileEntryTypeId", -1);
+		if (existingDLFileEntryType == null) {
+			existingDLFileEntryType =
+				DLFileEntryTypeLocalServiceUtil.
+					fetchDLFileEntryTypeByUuidAndGroupId(
+						dlFileEntryType.getUuid(),
+						portletDataContext.getCompanyGroupId());
+		}
 
-				return;
-			}
+		if (existingDLFileEntryType == null) {
+			StagedModelDataHandlerUtil.importStagedModel(
+				portletDataContext, dlFileEntryType);
+
+			Map<Long, Long> dlFileEntryTypeIds =
+				(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
+					DLFileEntryType.class);
+
+			long dlFileEntryTypeId = MapUtil.getLong(
+				dlFileEntryTypeIds, dlFileEntryType.getFileEntryTypeId(),
+				dlFileEntryType.getFileEntryTypeId());
+
+			existingDLFileEntryType =
+				DLFileEntryTypeLocalServiceUtil.fetchDLFileEntryType(
+					dlFileEntryTypeId);
+		}
+
+		if (existingDLFileEntryType == null) {
+			serviceContext.setAttribute("fileEntryTypeId", -1);
+
+			return;
 		}
 
 		serviceContext.setAttribute(
-			"fileEntryTypeId", dlFileEntryType.getFileEntryTypeId());
+			"fileEntryTypeId", existingDLFileEntryType.getFileEntryTypeId());
 
-		List<DDMStructure> ddmStructures = dlFileEntryType.getDDMStructures();
+		List<DDMStructure> ddmStructures =
+			existingDLFileEntryType.getDDMStructures();
 
 		for (DDMStructure ddmStructure : ddmStructures) {
 			Element structureFieldsElement =
@@ -613,6 +621,22 @@ public class FileEntryStagedModelDataHandler
 			serviceContext.setAttribute(
 				Fields.class.getName() + ddmStructure.getStructureId(), fields);
 		}
+	}
+
+	@Override
+	protected boolean validateMissingReference(
+			String uuid, long companyId, long groupId)
+		throws Exception {
+
+		DLFileEntry dlFileEntry =
+			DLFileEntryLocalServiceUtil.fetchDLFileEntryByUuidAndGroupId(
+				uuid, groupId);
+
+		if (dlFileEntry == null) {
+			return false;
+		}
+
+		return true;
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(

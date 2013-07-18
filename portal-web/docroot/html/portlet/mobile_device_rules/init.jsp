@@ -23,7 +23,10 @@ page import="com.liferay.portal.kernel.mobile.device.rulegroup.RuleGroupProcesso
 page import="com.liferay.portal.kernel.mobile.device.rulegroup.action.ActionHandler" %><%@
 page import="com.liferay.portal.kernel.mobile.device.rulegroup.rule.UnknownRuleHandlerException" %><%@
 page import="com.liferay.portal.kernel.plugin.PluginPackage" %><%@
+page import="com.liferay.portal.mobile.device.rulegroup.rule.impl.SimpleRuleHandler" %><%@
+page import="com.liferay.portal.plugin.PluginPackageUtil" %><%@
 page import="com.liferay.portal.plugin.PluginUtil" %><%@
+page import="com.liferay.portlet.mobiledevicerules.ActionTypeException" %><%@
 page import="com.liferay.portlet.mobiledevicerules.NoSuchActionException" %><%@
 page import="com.liferay.portlet.mobiledevicerules.NoSuchRuleException" %><%@
 page import="com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupException" %><%@
@@ -48,14 +51,8 @@ page import="com.liferay.portlet.mobiledevicerules.util.RuleGroupInstancePriorit
 <%
 long groupId = ParamUtil.getLong(request, "groupId");
 
-String category = PortalUtil.getControlPanelCategory(portletDisplay.getId(), themeDisplay);
-
-if ((groupId == 0) && !category.equals(PortletCategoryKeys.CONTENT)) {
-	groupId = themeDisplay.getCompanyGroupId();
-}
-
 if (groupId == 0) {
-	groupId = themeDisplay.getScopeGroupId();
+	groupId = themeDisplay.getSiteGroupId();
 }
 %>
 

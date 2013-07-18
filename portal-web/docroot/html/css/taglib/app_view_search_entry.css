@@ -5,8 +5,16 @@
 	position: relative;
 	text-align: left;
 
-	.aui-tabview-list {
+	.tabview-list {
 		margin-bottom: 0;
+	}
+
+	.taglib-workflow-status {
+		display: inline;
+
+		.workflow-status {
+			padding-left: .2em;
+		}
 	}
 
 	.entry-discussion, .entry-attachment {

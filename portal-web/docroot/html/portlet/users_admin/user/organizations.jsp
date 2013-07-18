@@ -131,17 +131,14 @@ List<Organization> organizations = (List<Organization>)request.getAttribute("use
 				Liferay.Util.selectEntity(
 					{
 						dialog: {
-							align: Liferay.Util.Window.ALIGN_CENTER,
 							constrain: true,
-							modal: true,
-							stack: true,
-							width: 600
+							modal: true
 						},
 						id: '<portlet:namespace />selectOrganization',
 						title: '<%= UnicodeLanguageUtil.format(pageContext, "select-x", "organization") %>',
 						uri: '<portlet:renderURL windowState="<%= LiferayWindowState.POP_UP.toString() %>"><portlet:param name="struts_action" value="/users_admin/select_organization" /><portlet:param name="p_u_i_d" value='<%= selUser == null ? "0" : String.valueOf(selUser.getUserId()) %>' /></portlet:renderURL>'
 					},
-					function(event){
+					function(event) {
 						var rowColumns = [];
 
 						rowColumns.push(event.name);

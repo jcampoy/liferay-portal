@@ -55,6 +55,7 @@ public class LiferayRequestDispatcher implements RequestDispatcher {
 		_path = path;
 	}
 
+	@Override
 	public void forward(
 			ServletRequest servletRequest, ServletResponse servletResponse)
 		throws IOException, ServletException {
@@ -83,6 +84,7 @@ public class LiferayRequestDispatcher implements RequestDispatcher {
 		forward(servletRequest, servletResponse);
 	}
 
+	@Override
 	public void include(
 			ServletRequest servletRequest, ServletResponse servletResponse)
 		throws IOException, ServletException {
@@ -204,7 +206,7 @@ public class LiferayRequestDispatcher implements RequestDispatcher {
 		boolean named = false;
 
 		PortletRequestImpl portletRequestImpl =
-			(PortletRequestImpl)portletRequest;
+			PortletRequestImpl.getPortletRequestImpl(portletRequest);
 
 		return new PortletServletRequest(
 			request, portletRequestImpl, pathInfo, queryString, requestURI,
@@ -239,7 +241,7 @@ public class LiferayRequestDispatcher implements RequestDispatcher {
 		PortletResponse portletResponse) {
 
 		PortletRequestImpl portletRequestImpl =
-			(PortletRequestImpl)portletRequest;
+			PortletRequestImpl.getPortletRequestImpl(portletRequest);
 
 		Portlet portlet = portletRequestImpl.getPortlet();
 

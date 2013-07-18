@@ -28,7 +28,7 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portlet.documentlibrary.model.DLFileShortcut;
 import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
-import com.liferay.portlet.documentlibrary.service.persistence.DLFileShortcutUtil;
+import com.liferay.portlet.documentlibrary.service.DLFileShortcutLocalServiceUtil;
 
 import java.util.Map;
 
@@ -43,6 +43,11 @@ public class DLFileShortcutStagedModelDataHandler
 	@Override
 	public String[] getClassNames() {
 		return CLASS_NAMES;
+	}
+
+	@Override
+	public String getDisplayName(DLFileShortcut shortcut) {
+		return shortcut.getToTitle();
 	}
 
 	@Override
@@ -147,9 +152,10 @@ public class DLFileShortcutStagedModelDataHandler
 
 		if (portletDataContext.isDataStrategyMirror()) {
 			DLFileShortcut existingFileShortcut =
-				DLFileShortcutUtil.fetchByUUID_G(
-					fileShortcut.getUuid(),
-					portletDataContext.getScopeGroupId());
+				DLFileShortcutLocalServiceUtil.
+					fetchDLFileShortcutByUuidAndGroupId(
+						fileShortcut.getUuid(),
+						portletDataContext.getScopeGroupId());
 
 			if (existingFileShortcut == null) {
 				serviceContext.setUuid(fileShortcut.getUuid());

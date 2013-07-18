@@ -35,8 +35,6 @@ String type = BeanParamUtil.getString(organization, request, "type", PropsValues
 long regionId = BeanParamUtil.getLong(organization, request, "regionId");
 long countryId = BeanParamUtil.getLong(organization, request, "countryId");
 
-boolean deleteLogo = ParamUtil.getBoolean(request, "deleteLogo");
-
 long groupId = 0;
 
 if (organization != null) {
@@ -62,11 +60,11 @@ User selUser = (User)request.getAttribute("user.selUser");
 
 <h3><liferay-ui:message key="details" /></h3>
 
-<aui:fieldset column="<%= true %>" cssClass="aui-w50">
+<aui:fieldset cssClass="span6">
 	<liferay-ui:error exception="<%= DuplicateOrganizationException.class %>" message="the-organization-name-is-already-taken" />
 	<liferay-ui:error exception="<%= OrganizationNameException.class %>" message="please-enter-a-valid-name" />
 
-	<aui:input name="name" />
+	<aui:input autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) %>" name="name" />
 
 	<c:choose>
 		<c:when test="<%= PropsValues.FIELD_ENABLE_COM_LIFERAY_PORTAL_MODEL_ORGANIZATION_STATUS %>">
@@ -106,7 +104,7 @@ User selUser = (User)request.getAttribute("user.selUser");
 
 	<liferay-ui:error exception="<%= NoSuchCountryException.class %>" message="please-select-a-country" />
 
-	<div class='<%= GetterUtil.getBoolean(PropsUtil.get(PropsKeys.ORGANIZATIONS_COUNTRY_ENABLED, new Filter(String.valueOf(type)))) ? StringPool.BLANK : "aui-helper-hidden" %>' id="<portlet:namespace />countryDiv">
+	<div class='<%= GetterUtil.getBoolean(PropsUtil.get(PropsKeys.ORGANIZATIONS_COUNTRY_ENABLED, new Filter(String.valueOf(type)))) ? StringPool.BLANK : "hide" %>' id="<portlet:namespace />countryDiv">
 		<aui:select label="country" name="countryId" />
 
 		<aui:select label="region" name="regionId" />
@@ -119,7 +117,7 @@ User selUser = (User)request.getAttribute("user.selUser");
 	</c:if>
 </aui:fieldset>
 
-<aui:fieldset column="<%= true %>" cssClass="aui-w50">
+<aui:fieldset cssClass="span6">
 	<div>
 		<c:if test="<%= organization != null %>">
 
@@ -288,17 +286,14 @@ if (parentOrganization != null) {
 				Liferay.Util.selectEntity(
 					{
 						dialog: {
-							align: Liferay.Util.Window.ALIGN_CENTER,
 							constrain: true,
-							modal: true,
-							stack: true,
-							width: 600
+							modal: true
 						},
 						id: '<portlet:namespace />selectOrganization',
 						title: '<%= UnicodeLanguageUtil.format(pageContext, "select-x", "organization") %>',
 						uri: '<portlet:renderURL windowState="<%= LiferayWindowState.POP_UP.toString() %>"><portlet:param name="struts_action" value="/users_admin/select_organization" /><portlet:param name="p_u_i_d" value='<%= (selUser == null) ? "0" : String.valueOf(selUser.getUserId()) %>' /></portlet:renderURL>'
 					},
-					function(event){
+					function(event) {
 						var rowColumns = [];
 
 						var href = "<portlet:renderURL><portlet:param name="struts_action" value="/users_admin/edit_organization" /><portlet:param name="redirect" value="<%= currentURL %>" /></portlet:renderURL>&<portlet:namespace />organizationId=" + event.organizationid;

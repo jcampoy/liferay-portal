@@ -16,6 +16,7 @@ package com.liferay.portal.repository.cmis.model;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.lar.StagedModelType;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.Folder;
@@ -79,6 +80,7 @@ public class CMISFolder extends CMISModel implements Folder {
 		return cmisFolder;
 	}
 
+	@Override
 	public boolean containsPermission(
 			PermissionChecker permissionChecker, String actionId)
 		throws SystemException {
@@ -106,6 +108,7 @@ public class CMISFolder extends CMISModel implements Folder {
 		}
 	}
 
+	@Override
 	public List<Long> getAncestorFolderIds()
 		throws PortalException, SystemException {
 
@@ -122,6 +125,7 @@ public class CMISFolder extends CMISModel implements Folder {
 		return folderIds;
 	}
 
+	@Override
 	public List<Folder> getAncestors() throws PortalException, SystemException {
 		List<Folder> folders = new ArrayList<Folder>();
 
@@ -136,6 +140,7 @@ public class CMISFolder extends CMISModel implements Folder {
 		return folders;
 	}
 
+	@Override
 	public Map<String, Serializable> getAttributes() {
 		return new HashMap<String, Serializable>();
 	}
@@ -145,6 +150,7 @@ public class CMISFolder extends CMISModel implements Folder {
 		return _cmisRepository.getCompanyId();
 	}
 
+	@Override
 	public Date getCreateDate() {
 		Calendar calendar = _cmisFolder.getCreationDate();
 
@@ -156,22 +162,27 @@ public class CMISFolder extends CMISModel implements Folder {
 		}
 	}
 
+	@Override
 	public long getFolderId() {
 		return _folderId;
 	}
 
+	@Override
 	public long getGroupId() {
 		return _cmisRepository.getGroupId();
 	}
 
+	@Override
 	public Date getLastPostDate() {
 		return getModifiedDate();
 	}
 
+	@Override
 	public Object getModel() {
 		return _cmisFolder;
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return CMISFolder.class;
 	}
@@ -181,6 +192,7 @@ public class CMISFolder extends CMISModel implements Folder {
 		return CMISFolder.class.getName();
 	}
 
+	@Override
 	public Date getModifiedDate() {
 		Calendar calendar = _cmisFolder.getLastModificationDate();
 
@@ -192,6 +204,7 @@ public class CMISFolder extends CMISModel implements Folder {
 		}
 	}
 
+	@Override
 	public String getName() {
 		if (_cmisFolder.isRootFolder()) {
 			try {
@@ -252,6 +265,7 @@ public class CMISFolder extends CMISModel implements Folder {
 		return parentFolder;
 	}
 
+	@Override
 	public long getParentFolderId() {
 		try {
 			Folder parentFolder = getParentFolder();
@@ -272,14 +286,22 @@ public class CMISFolder extends CMISModel implements Folder {
 		return _folderId;
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
 		return getPrimaryKey();
 	}
 
+	@Override
 	public long getRepositoryId() {
 		return _cmisRepository.getRepositoryId();
 	}
 
+	@Override
+	public StagedModelType getStagedModelType() {
+		return new StagedModelType(Folder.class);
+	}
+
+	@Override
 	public long getUserId() {
 		User user = getUser(_cmisFolder.getCreatedBy());
 
@@ -291,6 +313,7 @@ public class CMISFolder extends CMISModel implements Folder {
 		}
 	}
 
+	@Override
 	public String getUserName() {
 		User user = getUser(_cmisFolder.getCreatedBy());
 
@@ -302,6 +325,7 @@ public class CMISFolder extends CMISModel implements Folder {
 		}
 	}
 
+	@Override
 	public String getUserUuid() {
 		User user = getUser(_cmisFolder.getCreatedBy());
 
@@ -314,34 +338,42 @@ public class CMISFolder extends CMISModel implements Folder {
 		return StringPool.BLANK;
 	}
 
+	@Override
 	public String getUuid() {
 		return _uuid;
 	}
 
+	@Override
 	public boolean hasInheritableLock() {
 		return false;
 	}
 
+	@Override
 	public boolean hasLock() {
 		return false;
 	}
 
+	@Override
 	public boolean isDefaultRepository() {
 		return false;
 	}
 
+	@Override
 	public boolean isEscapedModel() {
 		return false;
 	}
 
+	@Override
 	public boolean isLocked() {
 		return false;
 	}
 
+	@Override
 	public boolean isMountPoint() {
 		return false;
 	}
 
+	@Override
 	public boolean isRoot() {
 		if (getParentFolderId() == DLFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
 			return true;
@@ -351,34 +383,42 @@ public class CMISFolder extends CMISModel implements Folder {
 		}
 	}
 
+	@Override
 	public boolean isSupportsLocking() {
 		return true;
 	}
 
+	@Override
 	public boolean isSupportsMetadata() {
 		return false;
 	}
 
+	@Override
 	public boolean isSupportsMultipleUpload() {
 		return false;
 	}
 
+	@Override
 	public boolean isSupportsShortcuts() {
 		return false;
 	}
 
+	@Override
 	public boolean isSupportsSocial() {
 		return false;
 	}
 
+	@Override
 	public boolean isSupportsSubscribing() {
 		return false;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
 		_cmisRepository.setCompanyId(companyId);
 	}
 
+	@Override
 	public void setCreateDate(Date date) {
 	}
 
@@ -386,10 +426,12 @@ public class CMISFolder extends CMISModel implements Folder {
 		_folderId = folderId;
 	}
 
+	@Override
 	public void setGroupId(long groupId) {
 		_cmisRepository.setGroupId(groupId);
 	}
 
+	@Override
 	public void setModifiedDate(Date date) {
 	}
 
@@ -397,26 +439,33 @@ public class CMISFolder extends CMISModel implements Folder {
 		setFolderId(primaryKey);
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public void setUserId(long userId) {
 	}
 
+	@Override
 	public void setUserName(String userName) {
 	}
 
+	@Override
 	public void setUserUuid(String userUuid) {
 	}
 
+	@Override
 	public void setUuid(String uuid) {
 	}
 
+	@Override
 	public Folder toEscapedModel() {
 		return this;
 	}
 
+	@Override
 	public Folder toUnescapedModel() {
 		return this;
 	}

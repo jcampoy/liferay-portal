@@ -22,6 +22,10 @@ import com.liferay.portal.kernel.lar.StagedModelDataHandler;
 import com.liferay.portal.kernel.lar.StagedModelDataHandlerRegistryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.notifications.UserNotificationDefinition;
+import com.liferay.portal.kernel.notifications.UserNotificationDeliveryType;
+import com.liferay.portal.kernel.notifications.UserNotificationHandler;
+import com.liferay.portal.kernel.notifications.UserNotificationManagerUtil;
 import com.liferay.portal.kernel.poller.PollerProcessor;
 import com.liferay.portal.kernel.pop.MessageListener;
 import com.liferay.portal.kernel.portlet.ConfigurationAction;
@@ -68,16 +72,20 @@ import com.liferay.portal.language.LanguageResources;
 import com.liferay.portal.language.LiferayResourceBundle;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.PortletApp;
+import com.liferay.portal.notifications.UserNotificationHandlerImpl;
 import com.liferay.portal.poller.PollerProcessorUtil;
 import com.liferay.portal.pop.POPServerUtil;
 import com.liferay.portal.security.permission.PermissionPropagator;
 import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.util.ClassLoaderUtil;
+import com.liferay.portal.util.JavaFieldsParser;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.xmlrpc.XmlRpcServlet;
 import com.liferay.portlet.asset.AssetRendererFactoryRegistryUtil;
 import com.liferay.portlet.asset.model.AssetRendererFactory;
+import com.liferay.portlet.dynamicdatamapping.util.DDMDisplay;
+import com.liferay.portlet.dynamicdatamapping.util.DDMDisplayRegistryUtil;
 import com.liferay.portlet.expando.model.CustomAttributesDisplay;
 import com.liferay.portlet.social.model.SocialActivityInterpreter;
 import com.liferay.portlet.social.model.SocialRequestInterpreter;
@@ -186,6 +194,11 @@ public class PortletBagFactory {
 				socialRequestInterpreterInstance);
 		}
 
+		List<UserNotificationHandler> userNotificationHandlerInstances =
+			newUserNotificationHandlerInstances(portlet);
+
+		initUserNotificationDefinition(portlet);
+
 		WebDAVStorage webDAVStorageInstance = null;
 
 		if (Validator.isNotNull(portlet.getWebDAVStorageClass())) {
@@ -238,6 +251,12 @@ public class PortletBagFactory {
 
 			customAttributesDisplayInstances.add(
 				customAttributesDisplayInstance);
+		}
+
+		DDMDisplay ddmDisplayInstance = newDDMDisplay(portlet);
+
+		if (ddmDisplayInstance != null) {
+			DDMDisplayRegistryUtil.register(ddmDisplayInstance);
 		}
 
 		PermissionPropagator permissionPropagatorInstance =
@@ -324,12 +343,13 @@ public class PortletBagFactory {
 			templateHandlerInstance, portletLayoutListenerInstance,
 			pollerProcessorInstance, popMessageListenerInstance,
 			socialActivityInterpreterInstances,
-			socialRequestInterpreterInstance, webDAVStorageInstance,
-			xmlRpcMethodInstance, controlPanelEntryInstance,
-			assetRendererFactoryInstances, atomCollectionAdapterInstances,
-			customAttributesDisplayInstances, permissionPropagatorInstance,
-			trashHandlerInstances, workflowHandlerInstances,
-			preferencesValidatorInstance, resourceBundles);
+			socialRequestInterpreterInstance, userNotificationHandlerInstances,
+			webDAVStorageInstance, xmlRpcMethodInstance,
+			controlPanelEntryInstance, assetRendererFactoryInstances,
+			atomCollectionAdapterInstances, customAttributesDisplayInstances,
+			permissionPropagatorInstance, trashHandlerInstances,
+			workflowHandlerInstances, preferencesValidatorInstance,
+			resourceBundles);
 
 		PortletBagPool.put(portlet.getRootPortletId(), portletBag);
 
@@ -544,6 +564,62 @@ public class PortletBagFactory {
 		}
 	}
 
+	protected void initUserNotificationDefinition(Portlet portlet)
+		throws Exception {
+
+		if (Validator.isNull(portlet.getUserNotificationDefinitions())) {
+			return;
+		}
+
+		String xml = getContent(portlet.getUserNotificationDefinitions());
+
+		xml = JavaFieldsParser.parse(_classLoader, xml);
+
+		Document document = SAXReaderUtil.read(xml);
+
+		Element rootElement = document.getRootElement();
+
+		for (Element definitionElement : rootElement.elements("definition")) {
+			String modelName = definitionElement.elementText("model-name");
+
+			long classNameId = 0;
+
+			if (Validator.isNotNull(modelName)) {
+				classNameId = PortalUtil.getClassNameId(modelName);
+			}
+
+			int notificationType = GetterUtil.getInteger(
+				definitionElement.elementText("notification-type"));
+
+			String description = GetterUtil.getString(
+				definitionElement.elementText("description"));
+
+			UserNotificationDefinition userNotificationDefinition =
+				new UserNotificationDefinition(
+					portlet.getPortletId(), classNameId, notificationType,
+					description);
+
+			for (Element deliveryTypeElement :
+					definitionElement.elements("delivery-type")) {
+
+				String name = deliveryTypeElement.elementText("name");
+				int type = GetterUtil.getInteger(
+					deliveryTypeElement.elementText("type"));
+				boolean defaultValue = GetterUtil.getBoolean(
+					deliveryTypeElement.elementText("default"));
+				boolean modifiable = GetterUtil.getBoolean(
+					deliveryTypeElement.elementText("modifiable"));
+
+				userNotificationDefinition.addUserNotificationDeliveryType(
+					new UserNotificationDeliveryType(
+						name, type, defaultValue, modifiable));
+			}
+
+			UserNotificationManagerUtil.addUserNotificationDefinition(
+				portlet.getPortletId(), userNotificationDefinition);
+		}
+	}
+
 	protected AssetRendererFactory newAssetRendererFactoryInstance(
 			Portlet portlet, String assetRendererFactoryClass)
 		throws Exception {
@@ -632,6 +708,15 @@ public class PortletBagFactory {
 
 		return (ConfigurationAction)newInstance(
 			ConfigurationAction.class, portlet.getConfigurationActionClass());
+	}
+
+	protected DDMDisplay newDDMDisplay(Portlet portlet) throws Exception {
+		if (Validator.isNull(portlet.getDDMDisplayClass())) {
+			return null;
+		}
+
+		return (DDMDisplay)newInstance(
+			DDMDisplay.class, portlet.getDDMDisplayClass());
 	}
 
 	protected FriendlyURLMapper newFriendlyURLMapper(Portlet portlet)
@@ -810,8 +895,13 @@ public class PortletBagFactory {
 			return null;
 		}
 
-		return (PortletDataHandler)newInstance(
-			PortletDataHandler.class, portlet.getPortletDataHandlerClass());
+		PortletDataHandler portletDataHandlerInstance =
+			(PortletDataHandler)newInstance(
+				PortletDataHandler.class, portlet.getPortletDataHandlerClass());
+
+		portletDataHandlerInstance.setPortletId(portlet.getPortletId());
+
+		return portletDataHandlerInstance;
 	}
 
 	protected PortletLayoutListener newPortletLayoutListener(Portlet portlet)
@@ -908,6 +998,44 @@ public class PortletBagFactory {
 
 		return (URLEncoder)newInstance(
 			URLEncoder.class, portlet.getURLEncoderClass());
+	}
+
+	protected UserNotificationHandler newUserNotificationHandlerInstance(
+			String userNotificationHandlerClass)
+		throws Exception {
+
+		UserNotificationHandler userNotificationHandlerInstance =
+			(UserNotificationHandler)newInstance(
+				UserNotificationHandler.class, userNotificationHandlerClass);
+
+		userNotificationHandlerInstance = new UserNotificationHandlerImpl(
+			userNotificationHandlerInstance);
+
+		UserNotificationManagerUtil.addUserNotificationHandler(
+			userNotificationHandlerInstance);
+
+		return userNotificationHandlerInstance;
+	}
+
+	protected List<UserNotificationHandler> newUserNotificationHandlerInstances(
+			Portlet portlet)
+		throws Exception {
+
+		List<UserNotificationHandler> userNotificationHandlerInstances =
+			new ArrayList<UserNotificationHandler>();
+
+		for (String userNotificationHandlerClass :
+				portlet.getUserNotificationHandlerClasses()) {
+
+			UserNotificationHandler userNotificationHandlerInstance =
+				newUserNotificationHandlerInstance(
+					userNotificationHandlerClass);
+
+			userNotificationHandlerInstances.add(
+				userNotificationHandlerInstance);
+		}
+
+		return userNotificationHandlerInstances;
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(PortletBagFactory.class);

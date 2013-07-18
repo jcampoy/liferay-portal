@@ -1,9 +1,4 @@
 .portlet-asset-publisher {
-	.add-asset-selector {
-		margin-bottom: 1em;
-		overflow: auto;
-	}
-
 	.asset-abstract {
 		.asset-content p {
 			margin-bottom: 0;
@@ -71,12 +66,6 @@
 		clear: left;
 	}
 
-	.asset-entries-group-label {
-		background-color: #DDD;
-		clear: both;
-		padding: 3px;
-	}
-
 	.asset-small-image {
 		float: right;
 		padding-left: 0.5em;
@@ -142,6 +131,10 @@
 		padding-top: 0;
 	}
 
+	.add-asset-selector {
+		margin-right: 0;
+	}
+
 	.metadata-author {
 		background: url(@theme_image_path@/portlet/edit_guest.png) no-repeat 0 0;
 		float: left;
@@ -172,11 +165,12 @@
 	}
 
 	.subscribe-action {
-		float: right;
-		margin-right: 10px;
-		margin-top: -30px;
-		text-align: right
-    }
+		text-align: right;
+
+		.taglib-rss {
+			margin-left: 10px;
+		}
+	}
 
 	.taglib-asset-categories-summary {
 		float: left;
@@ -215,7 +209,7 @@
 }
 
 .portlet-configuration {
-	.aui-form {
+	.form {
 		.queryRules fieldset {
 			padding: 0;
 
@@ -233,7 +227,7 @@
 				background-color: #DFFCCB;
 			}
 
-			.aui-field {
+			.field {
 				line-height: 2;
 
 				&.tags-selector, &.categories-selector {
@@ -243,6 +237,10 @@
 					width: 100%;
 				}
 			}
+		}
+
+		.asset-query-rule-error {
+			background-color: #fee5e2;
 		}
 
 		.general-display-settings {

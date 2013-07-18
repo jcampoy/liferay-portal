@@ -14,11 +14,13 @@
 
 package com.liferay.portal.kernel.lar;
 
+import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.model.StagedModel;
 
 /**
  * @author Mate Thurzo
  * @author Daniel Kocsis
+ * @author Zsolt Berentey
  */
 public interface StagedModelDataHandler<T extends StagedModel> {
 
@@ -28,8 +30,16 @@ public interface StagedModelDataHandler<T extends StagedModel> {
 
 	public String[] getClassNames();
 
+	public String getDisplayName(T StagedModel);
+
+	public int[] getExportableStatuses();
+
 	public void importStagedModel(
 			PortletDataContext portletDataContext, T stagedModel)
 		throws PortletDataException;
+
+	public boolean validateReference(
+		PortletDataContext portletDataContext, Element rootElement,
+		Element referenceElement);
 
 }

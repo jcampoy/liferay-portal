@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.portlet.ActionRequest;
+import javax.portlet.PortletRequest;
 import javax.portlet.RenderRequest;
 
 import javax.servlet.http.Cookie;
@@ -66,6 +67,8 @@ public interface Http {
 	public String decodeURL(String url);
 
 	public String decodeURL(String url, boolean unescapeSpaces);
+
+	public String encodeParameters(String url);
 
 	public String encodePath(String path);
 
@@ -365,6 +368,14 @@ public interface Http {
 			return _parts;
 		}
 
+		public PortletRequest getPortletRequest() {
+			return _portletRequest;
+		}
+
+		public String getProgressId() {
+			return _progressId;
+		}
+
 		public Response getResponse() {
 			return _response;
 		}
@@ -489,6 +500,10 @@ public interface Http {
 			_parts = parts;
 		}
 
+		public void setPortletRequest(PortletRequest portletRequest) {
+			_portletRequest = portletRequest;
+		}
+
 		public void setPost(boolean post) {
 			if (post) {
 				_method = Method.POST;
@@ -496,6 +511,10 @@ public interface Http {
 			else {
 				_method = Method.GET;
 			}
+		}
+
+		public void setProgressId(String progressId) {
+			_progressId = progressId;
 		}
 
 		public void setPut(boolean put) {
@@ -520,6 +539,8 @@ public interface Http {
 		private String _location;
 		private Method _method = Method.GET;
 		private Map<String, String> _parts;
+		private PortletRequest _portletRequest;
+		private String _progressId;
 		private Response _response = new Response();
 
 	}
@@ -559,6 +580,10 @@ public interface Http {
 			return _redirect;
 		}
 
+		public int getResponseCode() {
+			return _responseCode;
+		}
+
 		public void setContentLength(int contentLength) {
 			_contentLength = contentLength;
 		}
@@ -575,10 +600,15 @@ public interface Http {
 			_redirect = redirect;
 		}
 
+		public void setResponseCode(int responseCode) {
+			_responseCode = responseCode;
+		}
+
 		private int _contentLength = -1;
 		private String _contentType;
 		private Map<String, String> _headers;
 		private String _redirect;
+		private int _responseCode = -1;
 
 	}
 

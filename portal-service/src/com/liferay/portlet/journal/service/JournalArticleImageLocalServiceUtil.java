@@ -18,11 +18,12 @@ import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
 
 /**
- * The utility for the journal article image local service. This utility wraps {@link com.liferay.portlet.journal.service.impl.JournalArticleImageLocalServiceImpl} and is the primary access point for service operations in application layer code running on the local server.
- *
- * <p>
- * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
- * </p>
+ * Provides the local service utility for JournalArticleImage. This utility wraps
+ * {@link com.liferay.portlet.journal.service.impl.JournalArticleImageLocalServiceImpl} and is the
+ * primary access point for service operations in application layer code running
+ * on the local server. Methods of this service will not have security checks
+ * based on the propagated JAAS credentials because this service can only be
+ * accessed from within the same VM.
  *
  * @author Brian Wing Shun Chan
  * @see JournalArticleImageLocalService
@@ -162,6 +163,21 @@ public class JournalArticleImageLocalServiceUtil {
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService().dynamicQueryCount(dynamicQuery);
+	}
+
+	/**
+	* Returns the number of rows that match the dynamic query.
+	*
+	* @param dynamicQuery the dynamic query
+	* @param projection the projection to apply to the query
+	* @return the number of rows that match the dynamic query
+	* @throws SystemException if a system exception occurred
+	*/
+	public static long dynamicQueryCount(
+		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery,
+		com.liferay.portal.kernel.dao.orm.Projection projection)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().dynamicQueryCount(dynamicQuery, projection);
 	}
 
 	public static com.liferay.portlet.journal.model.JournalArticleImage fetchJournalArticleImage(
@@ -321,6 +337,12 @@ public class JournalArticleImageLocalServiceUtil {
 		long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService().getArticleImages(groupId);
+	}
+
+	public static java.util.List<com.liferay.portlet.journal.model.JournalArticleImage> getArticleImages(
+		long groupId, java.lang.String articleId, double version)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getArticleImages(groupId, articleId, version);
 	}
 
 	public static JournalArticleImageLocalService getService() {

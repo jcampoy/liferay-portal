@@ -24,7 +24,6 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portlet.journal.model.JournalFolder;
 import com.liferay.portlet.journal.model.JournalFolderConstants;
 import com.liferay.portlet.journal.service.JournalFolderLocalServiceUtil;
-import com.liferay.portlet.journal.service.persistence.JournalFolderUtil;
 
 import java.util.Map;
 
@@ -39,6 +38,11 @@ public class JournalFolderStagedModelDataHandler
 	@Override
 	public String[] getClassNames() {
 		return CLASS_NAMES;
+	}
+
+	@Override
+	public String getDisplayName(JournalFolder folder) {
+		return folder.getName();
 	}
 
 	@Override
@@ -96,8 +100,10 @@ public class JournalFolderStagedModelDataHandler
 		long groupId = portletDataContext.getScopeGroupId();
 
 		if (portletDataContext.isDataStrategyMirror()) {
-			JournalFolder existingFolder = JournalFolderUtil.fetchByUUID_G(
-				folder.getUuid(), groupId);
+			JournalFolder existingFolder =
+				JournalFolderLocalServiceUtil.
+					fetchJournalFolderByUuidAndGroupId(
+						folder.getUuid(), groupId);
 
 			if (existingFolder == null) {
 				serviceContext.setUuid(folder.getUuid());

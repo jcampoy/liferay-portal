@@ -146,7 +146,7 @@ AUI.add(
 
 						instance._renderIcons();
 
-						instance.inputContainer.addClass('aui-helper-hidden-accessible');
+						instance.inputContainer.addClass('hide-accessible');
 
 						instance._applyARIARoles();
 					},
@@ -287,7 +287,7 @@ AUI.add(
 										vocabularyIds: vocabularyIds,
 
 										'$categoriesCount = /assetcategory/get-vocabulary-categories-count': {
-											'groupId': themeDisplay.getScopeGroupId(),
+											'@groupId': '$vocabularies.groupId',
 											'@vocabularyId': '$vocabularies.vocabularyId'
 										}
 									}
@@ -512,12 +512,11 @@ AUI.add(
 							{
 								children: [
 									{
-										handler: {
-											context: instance,
-											fn: instance._showSelectPopup
-										},
-										icon: 'search',
+										icon: 'icon-search',
 										label: Liferay.Language.get('select'),
+										on: {
+											click: A.bind('_showSelectPopup', instance)
+										},
 										title: instance.get('title')
 									}
 								]
@@ -567,6 +566,8 @@ AUI.add(
 					_showSelectPopup: function(event) {
 						var instance = this;
 
+						event.domEvent.preventDefault();
+
 						instance._showPopup(event);
 
 						var popup = instance._popup;
@@ -615,14 +616,6 @@ AUI.add(
 
 						var treeId = 'vocabulary' + vocabularyId;
 
-						var vocabularyRootNode = {
-							alwaysShowHitArea: true,
-							id: treeId,
-							label: vocabularyTitle,
-							leaf: false,
-							type: 'io'
-						};
-
 						var paginatorConfig = {
 							offsetParam: 'start'
 						};
@@ -638,6 +631,15 @@ AUI.add(
 							paginatorConfig.end = -1;
 							paginatorConfig.start = -1;
 						}
+
+						var vocabularyRootNode = {
+							alwaysShowHitArea: true,
+							id: treeId,
+							label: vocabularyTitle,
+							leaf: false,
+							paginator: paginatorConfig,
+							type: 'io'
+						};
 
 						instance.TREEVIEWS[vocabularyId] = new A.TreeView(
 							{
@@ -663,8 +665,7 @@ AUI.add(
 									},
 									formatter: A.bind('_formatJSONResult', instance),
 									url: themeDisplay.getPathMain() + '/asset/get_categories'
-								},
-								paginator: paginatorConfig
+								}
 							}
 						).render(popup.entriesNode);
 					}

@@ -23,7 +23,6 @@ import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portlet.dynamicdatalists.model.DDLRecordSet;
 import com.liferay.portlet.dynamicdatalists.service.DDLRecordSetLocalServiceUtil;
-import com.liferay.portlet.dynamicdatalists.service.persistence.DDLRecordSetUtil;
 import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
 import com.liferay.portlet.dynamicdatamapping.model.DDMTemplate;
 
@@ -41,6 +40,11 @@ public class DDLRecordSetStagedModelDataHandler
 	@Override
 	public String[] getClassNames() {
 		return CLASS_NAMES;
+	}
+
+	@Override
+	public String getDisplayName(DDLRecordSet recordSet) {
+		return recordSet.getNameCurrentValue();
 	}
 
 	@Override
@@ -63,7 +67,8 @@ public class DDLRecordSetStagedModelDataHandler
 				portletDataContext, ddmTemplate);
 
 			portletDataContext.addReferenceElement(
-				recordSetElement, ddmTemplate);
+				recordSet, recordSetElement, ddmTemplate,
+				PortletDataContext.REFERENCE_TYPE_STRONG, false);
 		}
 
 		portletDataContext.addClassedModel(
@@ -78,10 +83,6 @@ public class DDLRecordSetStagedModelDataHandler
 
 		long userId = portletDataContext.getUserId(recordSet.getUserUuid());
 
-		Map<Long, Long> ddmStructureIds =
-			(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
-				DDMStructure.class);
-
 		String structurePath = ExportImportPathUtil.getModelPath(
 			portletDataContext, DDMStructure.class.getName(),
 			recordSet.getDDMStructureId());
@@ -91,6 +92,10 @@ public class DDLRecordSetStagedModelDataHandler
 
 		StagedModelDataHandlerUtil.importStagedModel(
 			portletDataContext, ddmStructure);
+
+		Map<Long, Long> ddmStructureIds =
+			(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
+				DDMStructure.class);
 
 		long ddmStructureId = MapUtil.getLong(
 			ddmStructureIds, recordSet.getDDMStructureId(),
@@ -111,8 +116,9 @@ public class DDLRecordSetStagedModelDataHandler
 		DDLRecordSet importedRecordSet = null;
 
 		if (portletDataContext.isDataStrategyMirror()) {
-			DDLRecordSet existingRecordSet = DDLRecordSetUtil.fetchByUUID_G(
-				recordSet.getUuid(), portletDataContext.getScopeGroupId());
+			DDLRecordSet existingRecordSet =
+				DDLRecordSetLocalServiceUtil.fetchDDLRecordSetByUuidAndGroupId(
+					recordSet.getUuid(), portletDataContext.getScopeGroupId());
 
 			if (existingRecordSet == null) {
 				serviceContext.setUuid(recordSet.getUuid());

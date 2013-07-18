@@ -25,7 +25,6 @@ import com.liferay.portlet.bookmarks.model.BookmarksEntry;
 import com.liferay.portlet.bookmarks.model.BookmarksFolder;
 import com.liferay.portlet.bookmarks.model.BookmarksFolderConstants;
 import com.liferay.portlet.bookmarks.service.BookmarksEntryLocalServiceUtil;
-import com.liferay.portlet.bookmarks.service.persistence.BookmarksEntryUtil;
 
 import java.util.Map;
 
@@ -41,6 +40,11 @@ public class BookmarksEntryStagedModelDataHandler
 	@Override
 	public String[] getClassNames() {
 		return CLASS_NAMES;
+	}
+
+	@Override
+	public String getDisplayName(BookmarksEntry entry) {
+		return entry.getName();
 	}
 
 	@Override
@@ -69,18 +73,12 @@ public class BookmarksEntryStagedModelDataHandler
 
 		long userId = portletDataContext.getUserId(entry.getUserUuid());
 
-		Map<Long, Long> folderIds =
-			(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
-				BookmarksFolder.class);
-
-		long folderId = MapUtil.getLong(
-			folderIds, entry.getFolderId(), entry.getFolderId());
-
-		if ((folderId != BookmarksFolderConstants.DEFAULT_PARENT_FOLDER_ID) &&
-			(folderId == entry.getFolderId())) {
+		if (entry.getFolderId() !=
+				BookmarksFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
 
 			String parentFolderPath = ExportImportPathUtil.getModelPath(
-				portletDataContext, BookmarksFolder.class.getName(), folderId);
+				portletDataContext, BookmarksFolder.class.getName(),
+				entry.getFolderId());
 
 			BookmarksFolder parentFolder =
 				(BookmarksFolder)portletDataContext.getZipEntryAsObject(
@@ -88,10 +86,14 @@ public class BookmarksEntryStagedModelDataHandler
 
 			StagedModelDataHandlerUtil.importStagedModel(
 				portletDataContext, parentFolder);
-
-			folderId = MapUtil.getLong(
-				folderIds, entry.getFolderId(), entry.getFolderId());
 		}
+
+		Map<Long, Long> folderIds =
+			(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
+				BookmarksFolder.class);
+
+		long folderId = MapUtil.getLong(
+			folderIds, entry.getFolderId(), entry.getFolderId());
 
 		ServiceContext serviceContext = portletDataContext.createServiceContext(
 			entry, BookmarksPortletDataHandler.NAMESPACE);
@@ -99,8 +101,10 @@ public class BookmarksEntryStagedModelDataHandler
 		BookmarksEntry importedEntry = null;
 
 		if (portletDataContext.isDataStrategyMirror()) {
-			BookmarksEntry existingEntry = BookmarksEntryUtil.fetchByUUID_G(
-				entry.getUuid(), portletDataContext.getScopeGroupId());
+			BookmarksEntry existingEntry =
+				BookmarksEntryLocalServiceUtil.
+					fetchBookmarksEntryByUuidAndGroupId(
+						entry.getUuid(), portletDataContext.getScopeGroupId());
 
 			if (existingEntry == null) {
 				serviceContext.setUuid(entry.getUuid());

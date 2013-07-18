@@ -14,6 +14,9 @@
 
 package com.liferay.portal.kernel.util;
 
+import com.liferay.portal.kernel.resiliency.spi.agent.annotation.Direction;
+import com.liferay.portal.kernel.resiliency.spi.agent.annotation.Distributed;
+
 /**
  * @author Brian Wing Shun Chan
  */
@@ -25,6 +28,7 @@ public interface WebKeys {
 
 	public static final String ASSET_RENDERER_FACTORY_CLASS_TYPE_ID = "ASSET_RENDERER_FACTORY_CLASS_TYPE_ID";
 
+	@Distributed(direction = Direction.RESPONSE)
 	public static final String AUI_SCRIPT_DATA = "LIFERAY_SHARED_AUI_SCRIPT_DATA";
 
 	public static final String AUTHENTICATION_TOKEN = "LIFERAY_SHARED_AUTHENTICATION_TOKEN";
@@ -37,6 +41,7 @@ public interface WebKeys {
 
 	public static final String CURRENT_COMPLETE_URL = "CURRENT_COMPLETE_URL";
 
+	@Distributed(direction = Direction.REQUEST)
 	public static final String CURRENT_URL = "CURRENT_URL";
 
 	public static final String EXTEND_SESSION = "EXTEND_SESSION";
@@ -75,6 +80,7 @@ public interface WebKeys {
 
 	public static final String OSGI_BUNDLE = "OSGI_BUNDLE";
 
+	@Distributed(direction = Direction.RESPONSE)
 	public static final String OUTPUT_DATA = "LIFERAY_SHARED_OUTPUT_DATA";
 
 	public static final String PAGE_BODY_BOTTOM = "PAGE_BODY_BOTTOM";
@@ -83,12 +89,16 @@ public interface WebKeys {
 
 	public static final String PAGE_BOTTOM = "PAGE_BOTTOM";
 
+	@Distributed(direction = Direction.RESPONSE)
 	public static final String PAGE_DESCRIPTION = "LIFERAY_SHARED_PAGE_DESCRIPTION";
 
+	@Distributed(direction = Direction.RESPONSE)
 	public static final String PAGE_KEYWORDS = "LIFERAY_SHARED_PAGE_KEYWORDS";
 
+	@Distributed(direction = Direction.RESPONSE)
 	public static final String PAGE_SUBTITLE = "LIFERAY_SHARED_PAGE_SUBTITLE";
 
+	@Distributed(direction = Direction.RESPONSE)
 	public static final String PAGE_TITLE = "LIFERAY_SHARED_PAGE_TITLE";
 
 	public static final String PAGE_TOP = "PAGE_TOP";
@@ -96,6 +106,16 @@ public interface WebKeys {
 	public static final String PARALLEL_RENDERING_MERGE_LOCK = "PARALLEL_RENDERING_MERGE_LOCK";
 
 	public static final String PARALLEL_RENDERING_TIMEOUT_ERROR = "PARALLEL_RENDERING_TIMEOUT_ERROR";
+
+	public static final String PLUGIN_LAYOUT_TEMPLATES = "PLUGIN_LAYOUT_TEMPLATES";
+
+	public static final String PLUGIN_PORTLETS = "PLUGIN_PORTLETS";
+
+	public static final String PLUGIN_REPOSITORY_REPORT = "PLUGIN_REPOSITORY_REPORT";
+
+	public static final String PLUGIN_THEMES = "PLUGIN_THEMES";
+
+	public static final String PORTAL_MESSAGES = "LIFERAY_SHARED_PORTAL_MESSAGES";
 
 	public static final String PORTLET_CONFIGURATOR_VISIBILITY = "PORTLET_CONFIGURATOR_VISIBILITY";
 
@@ -115,6 +135,8 @@ public interface WebKeys {
 
 	public static final String RENDER_PORTLET = "RENDER_PORTLET";
 
+	public static final String RENDER_PORTLET_BOUNDARY = "RENDER_PORTLET_BOUNDARY";
+
 	public static final String RENDER_PORTLET_COLUMN_COUNT = "RENDER_PORTLET_COLUMN_COUNT";
 
 	public static final String RENDER_PORTLET_COLUMN_ID = "RENDER_PORTLET_COLUMN_ID";
@@ -124,6 +146,8 @@ public interface WebKeys {
 	public static final String RENDER_PORTLET_RESOURCE = "RENDER_PORTLET_RESOURCE";
 
 	public static final String SEARCH_CONTAINER = "SEARCH_CONTAINER";
+
+	public static final String SEARCH_CONTAINER_REFERENCE = "LIFERAY_SHARED_SEARCH_CONTAINER_REFERENCE";
 
 	public static final String SEARCH_CONTAINER_RESULT_ROW = "SEARCH_CONTAINER_RESULT_ROW";
 
@@ -139,6 +163,33 @@ public interface WebKeys {
 
 	public static final String SERVLET_PATH = "SERVLET_PATH";
 
+	@Distributed(direction = Direction.RESPONSE)
+	public static final String SPI_AGENT_ACTION_RESULT = "SPI_AGENT_ACTION_RESULT";
+
+	@Distributed(direction = Direction.REQUEST)
+	public static final String SPI_AGENT_EVENT = "SPI_AGENT_EVENT";
+
+	@Distributed(direction = Direction.RESPONSE)
+	public static final String SPI_AGENT_EVENT_RESULT = "SPI_AGENT_EVENT_RESULT";
+
+	@Distributed(direction = Direction.REQUEST)
+	public static final String SPI_AGENT_LAYOUT = "SPI_AGENT_LAYOUT";
+
+	@Distributed(direction = Direction.RESPONSE)
+	public static final String SPI_AGENT_LAYOUT_TYPE_SETTINGS = "SPI_AGENT_LAYOUT_TYPE_SETTINGS";
+
+	@Distributed(direction = Direction.REQUEST)
+	public static final String SPI_AGENT_LIFECYCLE = "SPI_AGENT_LIFECYCLE";
+
+	public static final String SPI_AGENT_ORIGINAL_RESPONSE = "SPI_AGENT_ORIGINAL_RESPONSE";
+
+	@Distributed(direction = Direction.REQUEST)
+	public static final String SPI_AGENT_PORTLET = "SPI_AGENT_PORTLET";
+
+	public static final String SPI_AGENT_REQUEST = "SPI_AGENT_REQUEST";
+
+	public static final String SPI_AGENT_RESPONSE = "SPI_AGENT_RESPONSE";
+
 	public static final String THEME = "THEME";
 
 	public static final String THEME_DISPLAY = "LIFERAY_SHARED_THEME_DISPLAY";
@@ -147,8 +198,10 @@ public interface WebKeys {
 
 	public static final String UPLOAD_EXCEPTION = "UPLOAD_EXCEPTION";
 
+	@Distributed(direction = Direction.REQUEST)
 	public static final String USER = "USER";
 
+	@Distributed(direction = Direction.REQUEST)
 	public static final String USER_ID = "USER_ID";
 
 	public static final String USER_PASSWORD = "USER_PASSWORD";

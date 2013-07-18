@@ -70,8 +70,9 @@ public class EditPageAction extends PortletAction {
 
 	@Override
 	public void processAction(
-			ActionMapping mapping, ActionForm form, PortletConfig portletConfig,
-			ActionRequest actionRequest, ActionResponse actionResponse)
+			ActionMapping actionMapping, ActionForm actionForm,
+			PortletConfig portletConfig, ActionRequest actionRequest,
+			ActionResponse actionResponse)
 		throws Exception {
 
 		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
@@ -161,8 +162,9 @@ public class EditPageAction extends PortletAction {
 
 	@Override
 	public ActionForward render(
-			ActionMapping mapping, ActionForm form, PortletConfig portletConfig,
-			RenderRequest renderRequest, RenderResponse renderResponse)
+			ActionMapping actionMapping, ActionForm actionForm,
+			PortletConfig portletConfig, RenderRequest renderRequest,
+			RenderResponse renderResponse)
 		throws Exception {
 
 		try {
@@ -181,7 +183,7 @@ public class EditPageAction extends PortletAction {
 
 				SessionErrors.add(renderRequest, e.getClass());
 
-				return mapping.findForward("portlet.wiki.error");
+				return actionMapping.findForward("portlet.wiki.error");
 			}
 			else if (e instanceof NoSuchPageException) {
 
@@ -193,7 +195,7 @@ public class EditPageAction extends PortletAction {
 			}
 		}
 
-		return mapping.findForward(
+		return actionMapping.findForward(
 			getForward(renderRequest, "portlet.wiki.edit_page"));
 	}
 
@@ -242,10 +244,7 @@ public class EditPageAction extends PortletAction {
 				liferayPortletConfig.getPortletId() +
 					SessionMessages.KEY_SUFFIX_DELETE_SUCCESS_DATA, data);
 
-			SessionMessages.add(
-				actionRequest,
-				liferayPortletConfig.getPortletId() +
-					SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_SUCCESS_MESSAGE);
+			hideDefaultSuccessMessage(liferayPortletConfig, actionRequest);
 		}
 	}
 
@@ -267,39 +266,43 @@ public class EditPageAction extends PortletAction {
 
 		WikiPage page = null;
 
-		if (Validator.isNotNull(title)) {
+		if (Validator.isNull(title)) {
+			renderRequest.setAttribute(WebKeys.WIKI_PAGE, page);
+
+			return;
+		}
+
+		try {
+			if (version == 0) {
+				page = WikiPageServiceUtil.getPage(nodeId, title, null);
+			}
+			else {
+				page = WikiPageServiceUtil.getPage(nodeId, title, version);
+			}
+		}
+		catch (NoSuchPageException nspe1) {
 			try {
-				if (version == 0) {
-					page = WikiPageServiceUtil.getPage(nodeId, title, null);
+				page = WikiPageServiceUtil.getPage(nodeId, title, false);
+			}
+			catch (NoSuchPageException nspe2) {
+				if (title.equals(WikiPageConstants.FRONT_PAGE) &&
+					(version == 0)) {
+
+					ServiceContext serviceContext = new ServiceContext();
+
+					page = WikiPageServiceUtil.addPage(
+						nodeId, title, null, WikiPageConstants.NEW, true,
+						serviceContext);
 				}
 				else {
-					page = WikiPageServiceUtil.getPage(nodeId, title, version);
+					throw nspe2;
 				}
 			}
-			catch (NoSuchPageException nspe1) {
-				try {
-					page = WikiPageServiceUtil.getPage(nodeId, title, false);
-				}
-				catch (NoSuchPageException nspe2) {
-					if (title.equals(WikiPageConstants.FRONT_PAGE) &&
-						(version == 0)) {
+		}
 
-						ServiceContext serviceContext = new ServiceContext();
-
-						page = WikiPageServiceUtil.addPage(
-							nodeId, title, null, WikiPageConstants.NEW, true,
-							serviceContext);
-					}
-					else {
-						throw nspe2;
-					}
-				}
-			}
-
-			if (removeRedirect) {
-				page.setContent(StringPool.BLANK);
-				page.setRedirectTitle(StringPool.BLANK);
-			}
+		if (removeRedirect) {
+			page.setContent(StringPool.BLANK);
+			page.setRedirectTitle(StringPool.BLANK);
 		}
 
 		renderRequest.setAttribute(WebKeys.WIKI_PAGE, page);

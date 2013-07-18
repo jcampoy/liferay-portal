@@ -34,12 +34,14 @@ if (group.isOrganization()) {
 }
 %>
 
-<liferay-ui:header
-	backURL="<%= redirect %>"
-	escapeXml="<%= false %>"
-	localizeTitle="<%= false %>"
-	title='<%= HtmlUtil.escape(group.getDescriptiveName(locale)) + ": " + ((team == null) ? LanguageUtil.get(pageContext, "new-team") : HtmlUtil.escape(team.getName())) %>'
-/>
+<c:if test="<%= !layout.isTypeControlPanel() %>">
+	<liferay-ui:header
+		backURL="<%= redirect %>"
+		escapeXml="<%= false %>"
+		localizeTitle="<%= false %>"
+		title='<%= HtmlUtil.escape(group.getDescriptiveName(locale)) + ": " + ((team == null) ? LanguageUtil.get(pageContext, "new-team") : HtmlUtil.escape(team.getName())) %>'
+	/>
+</c:if>
 
 <portlet:actionURL var="editTeamURL">
 	<portlet:param name="struts_action" value="/sites_admin/edit_team" />
@@ -63,7 +65,7 @@ if (group.isOrganization()) {
 			</aui:field-wrapper>
 		</c:if>
 
-		<aui:input name="name" />
+		<aui:input autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) %>" name="name" />
 
 		<aui:input name="description" />
 	</aui:fieldset>
@@ -78,12 +80,9 @@ if (group.isOrganization()) {
 <aui:script>
 	function <portlet:namespace />saveTeam() {
 		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = "<%= (team == null) ? Constants.ADD : Constants.UPDATE %>";
+
 		submitForm(document.<portlet:namespace />fm);
 	}
-
-	<c:if test="<%= windowState.equals(WindowState.MAXIMIZED) %>">
-		Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace />name);
-	</c:if>
 </aui:script>
 
 <%

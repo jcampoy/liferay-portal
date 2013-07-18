@@ -23,8 +23,8 @@ if (GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:input-date:di
 	namespace = StringPool.BLANK;
 }
 
+boolean autoFocus = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:input-date:autoFocus"));
 String cssClass = GetterUtil.getString((String)request.getAttribute("liferay-ui:input-date:cssClass"));
-String formName = namespace + request.getAttribute("liferay-ui:input-date:name");
 String name = GetterUtil.getString((String)request.getAttribute("liferay-ui:input-date:name"));
 String monthParam = namespace + request.getAttribute("liferay-ui:input-date:monthParam");
 String monthParamId = namespace + request.getAttribute("liferay-ui:input-date:monthParamId");
@@ -41,7 +41,6 @@ boolean yearNullable = GetterUtil.getBoolean((String)request.getAttribute("lifer
 int yearRangeStart = GetterUtil.getInteger((String)request.getAttribute("liferay-ui:input-date:yearRangeStart"));
 int yearRangeEnd = GetterUtil.getInteger((String)request.getAttribute("liferay-ui:input-date:yearRangeEnd"));
 String monthAndYearParam = namespace + request.getAttribute("liferay-ui:input-date:monthAndYearParam");
-boolean monthAndYearNullable = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:input-date:monthAndYearNullable"));
 int firstDayOfWeek = GetterUtil.getInteger((String)request.getAttribute("liferay-ui:input-date:firstDayOfWeek"));
 String imageInputId = GetterUtil.getString((String)request.getAttribute("liferay-ui:input-date:imageInputId"));
 boolean disabled = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:input-date:disabled"));
@@ -98,19 +97,26 @@ else if (yearNullable) {
 }
 %>
 
-<div class="aui-datepicker aui-datepicker-display aui-helper-clearfix <%= cssClass %>" id="<%= randomNamespace %>displayDate">
-	<div class="aui-datepicker-content" id="<%= randomNamespace %>displayDateContent">
-		<div class="aui-datepicker-select-wrapper">
+<div class="datepicker datepicker-display helper-clearfix <%= cssClass %> lfr-input-date" id="<%= randomNamespace %>displayDate">
+	<div class="datepicker-content" id="<%= randomNamespace %>displayDateContent">
+		<div class="datepicker-select-wrapper">
 			<c:choose>
 				<c:when test="<%= monthAndYearParam.equals(namespace) %>">
 
 					<%
 					int[] monthIds = CalendarUtil.getMonthIds();
 					String[] months = CalendarUtil.getMonths(locale);
+
+					String autoFocusParam = dayParamId;
 					%>
 
 					<c:choose>
 						<c:when test="<%= dateFormatOrder.equals(_DATE_FORMAT_ORDER_MDY) %>">
+
+							<%
+								autoFocusParam = monthParamId;
+							%>
+
 							<%@ include file="/html/taglib/ui/input_date/select_month.jspf" %>
 
 							<%@ include file="/html/taglib/ui/input_date/select_day.jspf" %>
@@ -118,6 +124,11 @@ else if (yearNullable) {
 							<%@ include file="/html/taglib/ui/input_date/select_year.jspf" %>
 						</c:when>
 						<c:when test="<%= dateFormatOrder.equals(_DATE_FORMAT_ORDER_YMD) %>">
+
+							<%
+								autoFocusParam = yearParamId;
+							%>
+
 							<%@ include file="/html/taglib/ui/input_date/select_year.jspf" %>
 
 							<%@ include file="/html/taglib/ui/input_date/select_month.jspf" %>
@@ -132,12 +143,18 @@ else if (yearNullable) {
 							<%@ include file="/html/taglib/ui/input_date/select_year.jspf" %>
 						</c:otherwise>
 					</c:choose>
+
+					<c:if test="<%= autoFocus %>">
+						<aui:script>
+							Liferay.Util.focusFormField('#<%= autoFocusParam %>');
+						</aui:script>
+					</c:if>
 				</c:when>
 			</c:choose>
 		</div>
-		<div class="aui-datepicker-button-wrapper">
-			<button class="aui-buttonitem aui-buttonitem-content aui-buttonitem-icon-only aui-component aui-state-default yui3-widget" id="buttonTest" title="<liferay-ui:message key="display-a-datepicker" />" type="button">
-				<span class="aui-buttonitem-icon aui-icon aui-icon-calendar"></span>
+		<div class="datepicker-button-wrapper">
+			<button class="buttonitem buttonitem-content buttonitem-icon-only component state-default yui3-widget" title="<liferay-ui:message key="display-a-datepicker" />" type="button">
+				<span class="buttonitem-icon icon icon-calendar"></span>
 			</button>
 		</div>
 	</div>
@@ -145,11 +162,11 @@ else if (yearNullable) {
 
 <input class="<%= disabled ? "disabled" : "" %>" id="<%= imageInputId %>Input" type="hidden" />
 
-<aui:script use="aui-datepicker-select">
+<aui:script use="aui-datepicker-select-deprecated">
 	var displayDateNode = A.one('#<%= randomNamespace %>displayDate');
 
 	Liferay.component(
-		'<%= namespace + name %>datePicker',
+		'<%= namespace + name %>DatePicker',
 		function() {
 			if (handle) {
 				handle.detach();
@@ -233,7 +250,7 @@ else if (yearNullable) {
 	var handle = displayDateNode.once(
 		['click', 'mousemove'],
 		function(event) {
-			Liferay.component('<%= namespace + name %>datePicker');
+			Liferay.component('<%= namespace + name %>DatePicker');
 		}
 	);
 </aui:script>

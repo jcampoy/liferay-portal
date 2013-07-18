@@ -28,6 +28,7 @@ import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.service.RepositoryServiceUtil;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portlet.documentlibrary.NoSuchFolderException;
 import com.liferay.portlet.documentlibrary.asset.DLFolderAssetRenderer;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.service.DLAppHelperLocalServiceUtil;
@@ -50,42 +51,34 @@ import javax.portlet.PortletRequest;
 public class DLFolderTrashHandler extends DLBaseTrashHandler {
 
 	@Override
+	public void checkDuplicateEntry(
+			long classPK, long containerModelId, String newName)
+		throws PortalException, SystemException {
+
+		DLFolder dlFolder = getDLFolder(classPK);
+
+		checkDuplicateEntry(
+			classPK, 0, containerModelId, dlFolder.getName(), newName);
+	}
+
+	@Override
 	public void checkDuplicateTrashEntry(
 			TrashEntry trashEntry, long containerModelId, String newName)
 		throws PortalException, SystemException {
 
-		DLFolder dlFolder = getDLFolder(trashEntry.getClassPK());
-
-		if (containerModelId == TrashEntryConstants.DEFAULT_CONTAINER_ID) {
-			containerModelId = dlFolder.getParentFolderId();
-		}
-
-		String originalTitle = trashEntry.getTypeSettingsProperty("title");
-
-		if (Validator.isNotNull(newName)) {
-			originalTitle = newName;
-		}
-
-		DLFolder duplicateDLFolder = DLFolderLocalServiceUtil.fetchFolder(
-			dlFolder.getGroupId(), dlFolder.getParentFolderId(), originalTitle);
-
-		if (duplicateDLFolder != null) {
-			DuplicateEntryException dee = new DuplicateEntryException();
-
-			dee.setDuplicateEntryId(duplicateDLFolder.getFolderId());
-			dee.setOldName(duplicateDLFolder.getName());
-			dee.setTrashEntryId(trashEntry.getEntryId());
-
-			throw dee;
-		}
+		checkDuplicateEntry(
+			trashEntry.getClassPK(), trashEntry.getEntryId(), containerModelId,
+			trashEntry.getTypeSettingsProperty("title"), newName);
 	}
 
+	@Override
 	public void deleteTrashEntry(long classPK)
 		throws PortalException, SystemException {
 
 		DLFolderLocalServiceUtil.deleteFolder(classPK, false);
 	}
 
+	@Override
 	public String getClassName() {
 		return DLFolder.class.getName();
 	}
@@ -173,6 +166,7 @@ public class DLFolderTrashHandler extends DLBaseTrashHandler {
 		return true;
 	}
 
+	@Override
 	public boolean isInTrash(long classPK)
 		throws PortalException, SystemException {
 
@@ -207,6 +201,13 @@ public class DLFolderTrashHandler extends DLBaseTrashHandler {
 		try {
 			DLFolder dlFolder = getDLFolder(classPK);
 
+			try {
+				dlFolder.getParentFolder();
+			}
+			catch (NoSuchFolderException nsfe) {
+				return false;
+			}
+
 			return !dlFolder.isInTrashContainer();
 		}
 		catch (InvalidRepositoryException ire) {
@@ -237,6 +238,7 @@ public class DLFolderTrashHandler extends DLBaseTrashHandler {
 			serviceContext);
 	}
 
+	@Override
 	public void restoreTrashEntry(long userId, long classPK)
 		throws PortalException, SystemException {
 
@@ -255,6 +257,35 @@ public class DLFolderTrashHandler extends DLBaseTrashHandler {
 		dlFolder.setName(name);
 
 		DLFolderLocalServiceUtil.updateDLFolder(dlFolder);
+	}
+
+	protected void checkDuplicateEntry(
+			long classPK, long trashEntryId, long containerModelId,
+			String originalTitle, String newName)
+		throws PortalException, SystemException {
+
+		DLFolder dlFolder = getDLFolder(classPK);
+
+		if (containerModelId == TrashEntryConstants.DEFAULT_CONTAINER_ID) {
+			containerModelId = dlFolder.getParentFolderId();
+		}
+
+		if (Validator.isNotNull(newName)) {
+			originalTitle = newName;
+		}
+
+		DLFolder duplicateDLFolder = DLFolderLocalServiceUtil.fetchFolder(
+			dlFolder.getGroupId(), containerModelId, originalTitle);
+
+		if (duplicateDLFolder != null) {
+			DuplicateEntryException dee = new DuplicateEntryException();
+
+			dee.setDuplicateEntryId(duplicateDLFolder.getFolderId());
+			dee.setOldName(duplicateDLFolder.getName());
+			dee.setTrashEntryId(trashEntryId);
+
+			throw dee;
+		}
 	}
 
 	@Override

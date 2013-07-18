@@ -35,7 +35,6 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
-import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.SetUtil;
@@ -114,10 +113,12 @@ public abstract class BaseIndexer implements Indexer {
 		_document = new DocumentImpl();
 	}
 
+	@Override
 	public void addRelatedEntryFields(Document document, Object obj)
 		throws Exception {
 	}
 
+	@Override
 	public void delete(long companyId, String uid) throws SearchException {
 		try {
 			SearchEngineUtil.deleteDocument(
@@ -131,6 +132,7 @@ public abstract class BaseIndexer implements Indexer {
 		}
 	}
 
+	@Override
 	public void delete(Object obj) throws SearchException {
 		try {
 			doDelete(obj);
@@ -143,6 +145,7 @@ public abstract class BaseIndexer implements Indexer {
 		}
 	}
 
+	@Override
 	public Document getDocument(Object obj) throws SearchException {
 		try {
 			Document document = doGetDocument(obj);
@@ -177,6 +180,7 @@ public abstract class BaseIndexer implements Indexer {
 		}
 	}
 
+	@Override
 	public BooleanQuery getFacetQuery(
 			String className, SearchContext searchContext)
 		throws Exception {
@@ -199,6 +203,7 @@ public abstract class BaseIndexer implements Indexer {
 		return facetQuery;
 	}
 
+	@Override
 	public BooleanQuery getFullQuery(SearchContext searchContext)
 		throws SearchException {
 
@@ -254,10 +259,12 @@ public abstract class BaseIndexer implements Indexer {
 		}
 	}
 
+	@Override
 	public IndexerPostProcessor[] getIndexerPostProcessors() {
 		return _indexerPostProcessors;
 	}
 
+	@Override
 	public String getSearchEngineId() {
 		if (_searchEngineId != null) {
 			return _searchEngineId;
@@ -291,6 +298,7 @@ public abstract class BaseIndexer implements Indexer {
 		return _searchEngineId;
 	}
 
+	@Override
 	public String getSortField(String orderByCol) {
 		String sortField = doGetSortField(orderByCol);
 
@@ -301,6 +309,7 @@ public abstract class BaseIndexer implements Indexer {
 		return sortField;
 	}
 
+	@Override
 	public Summary getSummary(
 			Document document, Locale locale, String snippet,
 			PortletURL portletURL)
@@ -327,6 +336,7 @@ public abstract class BaseIndexer implements Indexer {
 		}
 	}
 
+	@Override
 	public boolean hasPermission(
 			PermissionChecker permissionChecker, String entryClassName,
 			long entryClassPK, String actionId)
@@ -335,6 +345,7 @@ public abstract class BaseIndexer implements Indexer {
 		return true;
 	}
 
+	@Override
 	public boolean isFilterSearch() {
 		return _filterSearch;
 	}
@@ -343,19 +354,23 @@ public abstract class BaseIndexer implements Indexer {
 		return _indexerEnabled;
 	}
 
+	@Override
 	public boolean isPermissionAware() {
 		return _permissionAware;
 	}
 
+	@Override
 	public boolean isStagingAware() {
 		return _stagingAware;
 	}
 
+	@Override
 	public void postProcessContextQuery(
 			BooleanQuery contextQuery, SearchContext searchContext)
 		throws Exception {
 	}
 
+	@Override
 	public void postProcessSearchQuery(
 			BooleanQuery searchQuery, SearchContext searchContext)
 		throws Exception {
@@ -369,6 +384,7 @@ public abstract class BaseIndexer implements Indexer {
 		}
 	}
 
+	@Override
 	public void registerIndexerPostProcessor(
 		IndexerPostProcessor indexerPostProcessor) {
 
@@ -381,6 +397,7 @@ public abstract class BaseIndexer implements Indexer {
 			new IndexerPostProcessor[indexerPostProcessorsList.size()]);
 	}
 
+	@Override
 	public void reindex(Object obj) throws SearchException {
 		try {
 			if (SearchEngineUtil.isIndexReadOnly() || !isIndexerEnabled()) {
@@ -397,6 +414,7 @@ public abstract class BaseIndexer implements Indexer {
 		}
 	}
 
+	@Override
 	public void reindex(String className, long classPK) throws SearchException {
 		try {
 			if (SearchEngineUtil.isIndexReadOnly() || !isIndexerEnabled()) {
@@ -418,6 +436,7 @@ public abstract class BaseIndexer implements Indexer {
 		}
 	}
 
+	@Override
 	public void reindex(String[] ids) throws SearchException {
 		try {
 			if (SearchEngineUtil.isIndexReadOnly() || !isIndexerEnabled()) {
@@ -434,6 +453,7 @@ public abstract class BaseIndexer implements Indexer {
 		}
 	}
 
+	@Override
 	public void reindexDDMStructures(List<Long> ddmStructureIds)
 		throws SearchException {
 
@@ -452,6 +472,7 @@ public abstract class BaseIndexer implements Indexer {
 		}
 	}
 
+	@Override
 	public Hits search(SearchContext searchContext) throws SearchException {
 		try {
 			searchContext.setSearchEngineId(getSearchEngineId());
@@ -492,6 +513,7 @@ public abstract class BaseIndexer implements Indexer {
 		}
 	}
 
+	@Override
 	public void unregisterIndexerPostProcessor(
 		IndexerPostProcessor indexerPostProcessor) {
 
@@ -557,10 +579,8 @@ public abstract class BaseIndexer implements Indexer {
 
 		document.addNumber(Field.VIEW_COUNT, assetEntry.getViewCount());
 
-		Map<Locale, String> titleMap = LocalizationUtil.getLocalizationMap(
-			assetEntry.getTitle(), true);
-
-		document.addLocalizedKeyword("localized_title", titleMap, true);
+		document.addLocalizedKeyword(
+			"localized_title", assetEntry.getTitleMap(), true);
 	}
 
 	/**
@@ -728,6 +748,7 @@ public abstract class BaseIndexer implements Indexer {
 
 		multiValueFacet.setFieldName(Field.ASSET_CATEGORY_IDS);
 		multiValueFacet.setStatic(true);
+		multiValueFacet.setValues(searchContext.getAssetCategoryIds());
 
 		searchContext.addFacet(multiValueFacet);
 	}
@@ -789,6 +810,7 @@ public abstract class BaseIndexer implements Indexer {
 
 		multiValueFacet.setFieldName(Field.ASSET_TAG_NAMES);
 		multiValueFacet.setStatic(true);
+		multiValueFacet.setValues(searchContext.getAssetTagNames());
 
 		searchContext.addFacet(multiValueFacet);
 	}
@@ -822,7 +844,8 @@ public abstract class BaseIndexer implements Indexer {
 
 		for (String fieldName : fieldNames) {
 			String name = DDMIndexerUtil.encodeName(
-				ddmStructure.getStructureId(), fieldName);
+				ddmStructure.getStructureId(), fieldName,
+				searchContext.getLocale());
 
 			addSearchTerm(searchQuery, searchContext, name, false);
 		}
@@ -881,6 +904,7 @@ public abstract class BaseIndexer implements Indexer {
 
 		multiValueFacet.setFieldName(Field.FOLDER_ID);
 		multiValueFacet.setStatic(true);
+		multiValueFacet.setValues(searchContext.getFolderIds());
 
 		searchContext.addFacet(multiValueFacet);
 	}
@@ -1477,7 +1501,7 @@ public abstract class BaseIndexer implements Indexer {
 	}
 
 	/**
-	 * @deprecated As of 6.2 renamed to {@link #getSiteGroupId(long)}
+	 * @deprecated As of 6.2.0 renamed to {@link #getSiteGroupId(long)}
 	 */
 	protected long getParentGroupId(long groupId) {
 		return getSiteGroupId(groupId);

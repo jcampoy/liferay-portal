@@ -72,7 +72,7 @@ String redirect = ParamUtil.getString(request, "redirect");
 		typesRightList = ListUtil.sort(typesRightList, new KeyValuePairComparator(false, true));
 		%>
 
-		<div class="<%= allAssetVocabularies ? "aui-helper-hidden" : "" %>" id="<portlet:namespace />assetVocabulariesBoxes">
+		<div class="<%= allAssetVocabularies ? "hide" : "" %>" id="<portlet:namespace />assetVocabulariesBoxes">
 			<liferay-ui:input-move-boxes
 				leftBoxName="currentAssetVocabularyIds"
 				leftList="<%= typesLeftList %>"
@@ -92,7 +92,6 @@ String redirect = ParamUtil.getString(request, "redirect");
 
 			<liferay-ui:ddm-template-selector
 				classNameId="<%= PortalUtil.getClassNameId(templateHandler.getClassName()) %>"
-				preferenceName="displayTemplate"
 				preferenceValue="<%= displayTemplate %>"
 				refreshURL="<%= currentURL %>"
 				showEmptyOption="<%= true %>"

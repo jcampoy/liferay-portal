@@ -14,6 +14,8 @@
 
 package com.liferay.portal.model;
 
+import com.liferay.portal.kernel.util.Validator;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,8 +25,8 @@ import java.util.Map;
  * This class is a wrapper for {@link LayoutSet}.
  * </p>
  *
- * @author    Brian Wing Shun Chan
- * @see       LayoutSet
+ * @author Brian Wing Shun Chan
+ * @see LayoutSet
  * @generated
  */
 public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
@@ -32,14 +34,17 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 		_layoutSet = layoutSet;
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return LayoutSet.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return LayoutSet.class.getName();
 	}
 
+	@Override
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
@@ -65,6 +70,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 		return attributes;
 	}
 
+	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
 		Long layoutSetId = (Long)attributes.get("layoutSetId");
 
@@ -176,6 +182,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @return the primary key of this layout set
 	*/
+	@Override
 	public long getPrimaryKey() {
 		return _layoutSet.getPrimaryKey();
 	}
@@ -185,6 +192,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @param primaryKey the primary key of this layout set
 	*/
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_layoutSet.setPrimaryKey(primaryKey);
 	}
@@ -194,6 +202,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @return the layout set ID of this layout set
 	*/
+	@Override
 	public long getLayoutSetId() {
 		return _layoutSet.getLayoutSetId();
 	}
@@ -203,6 +212,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @param layoutSetId the layout set ID of this layout set
 	*/
+	@Override
 	public void setLayoutSetId(long layoutSetId) {
 		_layoutSet.setLayoutSetId(layoutSetId);
 	}
@@ -212,6 +222,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @return the group ID of this layout set
 	*/
+	@Override
 	public long getGroupId() {
 		return _layoutSet.getGroupId();
 	}
@@ -221,6 +232,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @param groupId the group ID of this layout set
 	*/
+	@Override
 	public void setGroupId(long groupId) {
 		_layoutSet.setGroupId(groupId);
 	}
@@ -230,6 +242,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @return the company ID of this layout set
 	*/
+	@Override
 	public long getCompanyId() {
 		return _layoutSet.getCompanyId();
 	}
@@ -239,6 +252,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @param companyId the company ID of this layout set
 	*/
+	@Override
 	public void setCompanyId(long companyId) {
 		_layoutSet.setCompanyId(companyId);
 	}
@@ -248,6 +262,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @return the create date of this layout set
 	*/
+	@Override
 	public java.util.Date getCreateDate() {
 		return _layoutSet.getCreateDate();
 	}
@@ -257,6 +272,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @param createDate the create date of this layout set
 	*/
+	@Override
 	public void setCreateDate(java.util.Date createDate) {
 		_layoutSet.setCreateDate(createDate);
 	}
@@ -266,6 +282,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @return the modified date of this layout set
 	*/
+	@Override
 	public java.util.Date getModifiedDate() {
 		return _layoutSet.getModifiedDate();
 	}
@@ -275,6 +292,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @param modifiedDate the modified date of this layout set
 	*/
+	@Override
 	public void setModifiedDate(java.util.Date modifiedDate) {
 		_layoutSet.setModifiedDate(modifiedDate);
 	}
@@ -284,6 +302,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @return the private layout of this layout set
 	*/
+	@Override
 	public boolean getPrivateLayout() {
 		return _layoutSet.getPrivateLayout();
 	}
@@ -293,6 +312,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @return <code>true</code> if this layout set is private layout; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isPrivateLayout() {
 		return _layoutSet.isPrivateLayout();
 	}
@@ -302,6 +322,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @param privateLayout the private layout of this layout set
 	*/
+	@Override
 	public void setPrivateLayout(boolean privateLayout) {
 		_layoutSet.setPrivateLayout(privateLayout);
 	}
@@ -311,6 +332,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @return the logo of this layout set
 	*/
+	@Override
 	public boolean getLogo() {
 		return _layoutSet.getLogo();
 	}
@@ -320,6 +342,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @return <code>true</code> if this layout set is logo; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isLogo() {
 		return _layoutSet.isLogo();
 	}
@@ -329,6 +352,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @param logo the logo of this layout set
 	*/
+	@Override
 	public void setLogo(boolean logo) {
 		_layoutSet.setLogo(logo);
 	}
@@ -338,6 +362,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @return the logo ID of this layout set
 	*/
+	@Override
 	public long getLogoId() {
 		return _layoutSet.getLogoId();
 	}
@@ -347,6 +372,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @param logoId the logo ID of this layout set
 	*/
+	@Override
 	public void setLogoId(long logoId) {
 		_layoutSet.setLogoId(logoId);
 	}
@@ -356,6 +382,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @return the theme ID of this layout set
 	*/
+	@Override
 	public java.lang.String getThemeId() {
 		return _layoutSet.getThemeId();
 	}
@@ -365,6 +392,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @param themeId the theme ID of this layout set
 	*/
+	@Override
 	public void setThemeId(java.lang.String themeId) {
 		_layoutSet.setThemeId(themeId);
 	}
@@ -374,6 +402,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @return the color scheme ID of this layout set
 	*/
+	@Override
 	public java.lang.String getColorSchemeId() {
 		return _layoutSet.getColorSchemeId();
 	}
@@ -383,6 +412,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @param colorSchemeId the color scheme ID of this layout set
 	*/
+	@Override
 	public void setColorSchemeId(java.lang.String colorSchemeId) {
 		_layoutSet.setColorSchemeId(colorSchemeId);
 	}
@@ -392,6 +422,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @return the wap theme ID of this layout set
 	*/
+	@Override
 	public java.lang.String getWapThemeId() {
 		return _layoutSet.getWapThemeId();
 	}
@@ -401,6 +432,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @param wapThemeId the wap theme ID of this layout set
 	*/
+	@Override
 	public void setWapThemeId(java.lang.String wapThemeId) {
 		_layoutSet.setWapThemeId(wapThemeId);
 	}
@@ -410,6 +442,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @return the wap color scheme ID of this layout set
 	*/
+	@Override
 	public java.lang.String getWapColorSchemeId() {
 		return _layoutSet.getWapColorSchemeId();
 	}
@@ -419,6 +452,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @param wapColorSchemeId the wap color scheme ID of this layout set
 	*/
+	@Override
 	public void setWapColorSchemeId(java.lang.String wapColorSchemeId) {
 		_layoutSet.setWapColorSchemeId(wapColorSchemeId);
 	}
@@ -428,6 +462,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @return the css of this layout set
 	*/
+	@Override
 	public java.lang.String getCss() {
 		return _layoutSet.getCss();
 	}
@@ -437,6 +472,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @param css the css of this layout set
 	*/
+	@Override
 	public void setCss(java.lang.String css) {
 		_layoutSet.setCss(css);
 	}
@@ -446,6 +482,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @return the page count of this layout set
 	*/
+	@Override
 	public int getPageCount() {
 		return _layoutSet.getPageCount();
 	}
@@ -455,6 +492,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @param pageCount the page count of this layout set
 	*/
+	@Override
 	public void setPageCount(int pageCount) {
 		_layoutSet.setPageCount(pageCount);
 	}
@@ -464,6 +502,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @return the settings of this layout set
 	*/
+	@Override
 	public java.lang.String getSettings() {
 		return _layoutSet.getSettings();
 	}
@@ -473,6 +512,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @param settings the settings of this layout set
 	*/
+	@Override
 	public void setSettings(java.lang.String settings) {
 		_layoutSet.setSettings(settings);
 	}
@@ -482,6 +522,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @return the layout set prototype uuid of this layout set
 	*/
+	@Override
 	public java.lang.String getLayoutSetPrototypeUuid() {
 		return _layoutSet.getLayoutSetPrototypeUuid();
 	}
@@ -491,6 +532,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @param layoutSetPrototypeUuid the layout set prototype uuid of this layout set
 	*/
+	@Override
 	public void setLayoutSetPrototypeUuid(
 		java.lang.String layoutSetPrototypeUuid) {
 		_layoutSet.setLayoutSetPrototypeUuid(layoutSetPrototypeUuid);
@@ -501,6 +543,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @return the layout set prototype link enabled of this layout set
 	*/
+	@Override
 	public boolean getLayoutSetPrototypeLinkEnabled() {
 		return _layoutSet.getLayoutSetPrototypeLinkEnabled();
 	}
@@ -510,6 +553,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @return <code>true</code> if this layout set is layout set prototype link enabled; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isLayoutSetPrototypeLinkEnabled() {
 		return _layoutSet.isLayoutSetPrototypeLinkEnabled();
 	}
@@ -519,53 +563,65 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 	*
 	* @param layoutSetPrototypeLinkEnabled the layout set prototype link enabled of this layout set
 	*/
+	@Override
 	public void setLayoutSetPrototypeLinkEnabled(
 		boolean layoutSetPrototypeLinkEnabled) {
 		_layoutSet.setLayoutSetPrototypeLinkEnabled(layoutSetPrototypeLinkEnabled);
 	}
 
+	@Override
 	public boolean isNew() {
 		return _layoutSet.isNew();
 	}
 
+	@Override
 	public void setNew(boolean n) {
 		_layoutSet.setNew(n);
 	}
 
+	@Override
 	public boolean isCachedModel() {
 		return _layoutSet.isCachedModel();
 	}
 
+	@Override
 	public void setCachedModel(boolean cachedModel) {
 		_layoutSet.setCachedModel(cachedModel);
 	}
 
+	@Override
 	public boolean isEscapedModel() {
 		return _layoutSet.isEscapedModel();
 	}
 
+	@Override
 	public java.io.Serializable getPrimaryKeyObj() {
 		return _layoutSet.getPrimaryKeyObj();
 	}
 
+	@Override
 	public void setPrimaryKeyObj(java.io.Serializable primaryKeyObj) {
 		_layoutSet.setPrimaryKeyObj(primaryKeyObj);
 	}
 
+	@Override
 	public com.liferay.portlet.expando.model.ExpandoBridge getExpandoBridge() {
 		return _layoutSet.getExpandoBridge();
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.model.BaseModel<?> baseModel) {
 		_layoutSet.setExpandoBridgeAttributes(baseModel);
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
 		_layoutSet.setExpandoBridgeAttributes(expandoBridge);
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_layoutSet.setExpandoBridgeAttributes(serviceContext);
@@ -576,6 +632,7 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 		return new LayoutSetWrapper((LayoutSet)_layoutSet.clone());
 	}
 
+	@Override
 	public int compareTo(com.liferay.portal.model.LayoutSet layoutSet) {
 		return _layoutSet.compareTo(layoutSet);
 	}
@@ -585,14 +642,17 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 		return _layoutSet.hashCode();
 	}
 
+	@Override
 	public com.liferay.portal.model.CacheModel<com.liferay.portal.model.LayoutSet> toCacheModel() {
 		return _layoutSet.toCacheModel();
 	}
 
+	@Override
 	public com.liferay.portal.model.LayoutSet toEscapedModel() {
 		return new LayoutSetWrapper(_layoutSet.toEscapedModel());
 	}
 
+	@Override
 	public com.liferay.portal.model.LayoutSet toUnescapedModel() {
 		return new LayoutSetWrapper(_layoutSet.toUnescapedModel());
 	}
@@ -602,80 +662,115 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 		return _layoutSet.toString();
 	}
 
+	@Override
 	public java.lang.String toXmlString() {
 		return _layoutSet.toXmlString();
 	}
 
+	@Override
 	public void persist()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_layoutSet.persist();
 	}
 
+	@Override
 	public com.liferay.portal.model.ColorScheme getColorScheme()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _layoutSet.getColorScheme();
 	}
 
+	@Override
 	public com.liferay.portal.model.Group getGroup()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _layoutSet.getGroup();
 	}
 
+	@Override
 	public long getLayoutSetPrototypeId()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _layoutSet.getLayoutSetPrototypeId();
 	}
 
+	@Override
 	public long getLiveLogoId() {
 		return _layoutSet.getLiveLogoId();
 	}
 
+	@Override
 	public com.liferay.portal.kernel.util.UnicodeProperties getSettingsProperties() {
 		return _layoutSet.getSettingsProperties();
 	}
 
+	@Override
 	public java.lang.String getSettingsProperty(java.lang.String key) {
 		return _layoutSet.getSettingsProperty(key);
 	}
 
+	@Override
 	public com.liferay.portal.model.Theme getTheme()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _layoutSet.getTheme();
 	}
 
+	@Override
 	public java.lang.String getThemeSetting(java.lang.String key,
 		java.lang.String device)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _layoutSet.getThemeSetting(key, device);
 	}
 
+	@Override
 	public java.lang.String getVirtualHostname() {
 		return _layoutSet.getVirtualHostname();
 	}
 
+	@Override
 	public com.liferay.portal.model.ColorScheme getWapColorScheme()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _layoutSet.getWapColorScheme();
 	}
 
+	@Override
 	public com.liferay.portal.model.Theme getWapTheme()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _layoutSet.getWapTheme();
 	}
 
+	@Override
 	public boolean isLayoutSetPrototypeLinkActive() {
 		return _layoutSet.isLayoutSetPrototypeLinkActive();
 	}
 
+	@Override
 	public void setSettingsProperties(
 		com.liferay.portal.kernel.util.UnicodeProperties settingsProperties) {
 		_layoutSet.setSettingsProperties(settingsProperties);
 	}
 
+	@Override
 	public void setVirtualHostname(java.lang.String virtualHostname) {
 		_layoutSet.setVirtualHostname(virtualHostname);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof LayoutSetWrapper)) {
+			return false;
+		}
+
+		LayoutSetWrapper layoutSetWrapper = (LayoutSetWrapper)obj;
+
+		if (Validator.equals(_layoutSet, layoutSetWrapper._layoutSet)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -685,10 +780,12 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 		return _layoutSet;
 	}
 
+	@Override
 	public LayoutSet getWrappedModel() {
 		return _layoutSet;
 	}
 
+	@Override
 	public void resetOriginalValues() {
 		_layoutSet.resetOriginalValues();
 	}

@@ -49,19 +49,22 @@ portletURL.setParameter("struts_action", "/document_library/view_file_entry_type
 	>
 		<liferay-ui:search-container-column-text
 			name="name"
-			property="name"
+			value="<%= HtmlUtil.escape(fileEntryType.getName(locale)) %>"
 		/>
 
+		<%
+		Group group = GroupLocalServiceUtil.getGroup(fileEntryType.getGroupId());
+		%>
+
 		<liferay-ui:search-container-column-text
-			buffer="buffer"
+			name="scope"
+			value="<%= LanguageUtil.get(pageContext, group.getScopeLabel(themeDisplay)) %>"
+		/>
+
+		<liferay-ui:search-container-column-date
 			name="modified-date"
-		>
-
-			<%
-			buffer.append(dateFormatDateTime.format(fileEntryType.getModifiedDate()));
-			%>
-
-		</liferay-ui:search-container-column-text>
+			value="<%= fileEntryType.getModifiedDate() %>"
+		/>
 
 		<liferay-ui:search-container-column-jsp
 			align="right"

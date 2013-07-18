@@ -412,6 +412,7 @@ definePermissionsURL.setRefererPlid(plid);
 						buffer.append("\" ");
 
 						buffer.append("name=\"");
+						buffer.append(renderResponse.getNamespace());
 						buffer.append(role.getRoleId());
 
 						if (Validator.isNotNull(preselectedMsg)) {
@@ -443,8 +444,6 @@ definePermissionsURL.setRefererPlid(plid);
 
 			<liferay-ui:search-iterator paginate="<%= false %>" searchContainer="<%= searchContainer %>" />
 		</liferay-ui:search-container>
-
-		<br />
 
 		<aui:button-row>
 			<aui:button type="submit" />

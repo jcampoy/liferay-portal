@@ -14,6 +14,7 @@
 
 package com.liferay.portlet.shopping.model;
 
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.ModelWrapper;
 
 import java.util.Date;
@@ -25,8 +26,8 @@ import java.util.Map;
  * This class is a wrapper for {@link ShoppingCategory}.
  * </p>
  *
- * @author    Brian Wing Shun Chan
- * @see       ShoppingCategory
+ * @author Brian Wing Shun Chan
+ * @see ShoppingCategory
  * @generated
  */
 public class ShoppingCategoryWrapper implements ShoppingCategory,
@@ -35,14 +36,17 @@ public class ShoppingCategoryWrapper implements ShoppingCategory,
 		_shoppingCategory = shoppingCategory;
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return ShoppingCategory.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return ShoppingCategory.class.getName();
 	}
 
+	@Override
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
@@ -60,6 +64,7 @@ public class ShoppingCategoryWrapper implements ShoppingCategory,
 		return attributes;
 	}
 
+	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
 		Long categoryId = (Long)attributes.get("categoryId");
 
@@ -127,6 +132,7 @@ public class ShoppingCategoryWrapper implements ShoppingCategory,
 	*
 	* @return the primary key of this shopping category
 	*/
+	@Override
 	public long getPrimaryKey() {
 		return _shoppingCategory.getPrimaryKey();
 	}
@@ -136,6 +142,7 @@ public class ShoppingCategoryWrapper implements ShoppingCategory,
 	*
 	* @param primaryKey the primary key of this shopping category
 	*/
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_shoppingCategory.setPrimaryKey(primaryKey);
 	}
@@ -145,6 +152,7 @@ public class ShoppingCategoryWrapper implements ShoppingCategory,
 	*
 	* @return the category ID of this shopping category
 	*/
+	@Override
 	public long getCategoryId() {
 		return _shoppingCategory.getCategoryId();
 	}
@@ -154,6 +162,7 @@ public class ShoppingCategoryWrapper implements ShoppingCategory,
 	*
 	* @param categoryId the category ID of this shopping category
 	*/
+	@Override
 	public void setCategoryId(long categoryId) {
 		_shoppingCategory.setCategoryId(categoryId);
 	}
@@ -163,6 +172,7 @@ public class ShoppingCategoryWrapper implements ShoppingCategory,
 	*
 	* @return the group ID of this shopping category
 	*/
+	@Override
 	public long getGroupId() {
 		return _shoppingCategory.getGroupId();
 	}
@@ -172,6 +182,7 @@ public class ShoppingCategoryWrapper implements ShoppingCategory,
 	*
 	* @param groupId the group ID of this shopping category
 	*/
+	@Override
 	public void setGroupId(long groupId) {
 		_shoppingCategory.setGroupId(groupId);
 	}
@@ -181,6 +192,7 @@ public class ShoppingCategoryWrapper implements ShoppingCategory,
 	*
 	* @return the company ID of this shopping category
 	*/
+	@Override
 	public long getCompanyId() {
 		return _shoppingCategory.getCompanyId();
 	}
@@ -190,6 +202,7 @@ public class ShoppingCategoryWrapper implements ShoppingCategory,
 	*
 	* @param companyId the company ID of this shopping category
 	*/
+	@Override
 	public void setCompanyId(long companyId) {
 		_shoppingCategory.setCompanyId(companyId);
 	}
@@ -199,6 +212,7 @@ public class ShoppingCategoryWrapper implements ShoppingCategory,
 	*
 	* @return the user ID of this shopping category
 	*/
+	@Override
 	public long getUserId() {
 		return _shoppingCategory.getUserId();
 	}
@@ -208,6 +222,7 @@ public class ShoppingCategoryWrapper implements ShoppingCategory,
 	*
 	* @param userId the user ID of this shopping category
 	*/
+	@Override
 	public void setUserId(long userId) {
 		_shoppingCategory.setUserId(userId);
 	}
@@ -218,6 +233,7 @@ public class ShoppingCategoryWrapper implements ShoppingCategory,
 	* @return the user uuid of this shopping category
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.lang.String getUserUuid()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _shoppingCategory.getUserUuid();
@@ -228,6 +244,7 @@ public class ShoppingCategoryWrapper implements ShoppingCategory,
 	*
 	* @param userUuid the user uuid of this shopping category
 	*/
+	@Override
 	public void setUserUuid(java.lang.String userUuid) {
 		_shoppingCategory.setUserUuid(userUuid);
 	}
@@ -237,6 +254,7 @@ public class ShoppingCategoryWrapper implements ShoppingCategory,
 	*
 	* @return the user name of this shopping category
 	*/
+	@Override
 	public java.lang.String getUserName() {
 		return _shoppingCategory.getUserName();
 	}
@@ -246,6 +264,7 @@ public class ShoppingCategoryWrapper implements ShoppingCategory,
 	*
 	* @param userName the user name of this shopping category
 	*/
+	@Override
 	public void setUserName(java.lang.String userName) {
 		_shoppingCategory.setUserName(userName);
 	}
@@ -255,6 +274,7 @@ public class ShoppingCategoryWrapper implements ShoppingCategory,
 	*
 	* @return the create date of this shopping category
 	*/
+	@Override
 	public java.util.Date getCreateDate() {
 		return _shoppingCategory.getCreateDate();
 	}
@@ -264,6 +284,7 @@ public class ShoppingCategoryWrapper implements ShoppingCategory,
 	*
 	* @param createDate the create date of this shopping category
 	*/
+	@Override
 	public void setCreateDate(java.util.Date createDate) {
 		_shoppingCategory.setCreateDate(createDate);
 	}
@@ -273,6 +294,7 @@ public class ShoppingCategoryWrapper implements ShoppingCategory,
 	*
 	* @return the modified date of this shopping category
 	*/
+	@Override
 	public java.util.Date getModifiedDate() {
 		return _shoppingCategory.getModifiedDate();
 	}
@@ -282,6 +304,7 @@ public class ShoppingCategoryWrapper implements ShoppingCategory,
 	*
 	* @param modifiedDate the modified date of this shopping category
 	*/
+	@Override
 	public void setModifiedDate(java.util.Date modifiedDate) {
 		_shoppingCategory.setModifiedDate(modifiedDate);
 	}
@@ -291,6 +314,7 @@ public class ShoppingCategoryWrapper implements ShoppingCategory,
 	*
 	* @return the parent category ID of this shopping category
 	*/
+	@Override
 	public long getParentCategoryId() {
 		return _shoppingCategory.getParentCategoryId();
 	}
@@ -300,6 +324,7 @@ public class ShoppingCategoryWrapper implements ShoppingCategory,
 	*
 	* @param parentCategoryId the parent category ID of this shopping category
 	*/
+	@Override
 	public void setParentCategoryId(long parentCategoryId) {
 		_shoppingCategory.setParentCategoryId(parentCategoryId);
 	}
@@ -309,6 +334,7 @@ public class ShoppingCategoryWrapper implements ShoppingCategory,
 	*
 	* @return the name of this shopping category
 	*/
+	@Override
 	public java.lang.String getName() {
 		return _shoppingCategory.getName();
 	}
@@ -318,6 +344,7 @@ public class ShoppingCategoryWrapper implements ShoppingCategory,
 	*
 	* @param name the name of this shopping category
 	*/
+	@Override
 	public void setName(java.lang.String name) {
 		_shoppingCategory.setName(name);
 	}
@@ -327,6 +354,7 @@ public class ShoppingCategoryWrapper implements ShoppingCategory,
 	*
 	* @return the description of this shopping category
 	*/
+	@Override
 	public java.lang.String getDescription() {
 		return _shoppingCategory.getDescription();
 	}
@@ -336,52 +364,64 @@ public class ShoppingCategoryWrapper implements ShoppingCategory,
 	*
 	* @param description the description of this shopping category
 	*/
+	@Override
 	public void setDescription(java.lang.String description) {
 		_shoppingCategory.setDescription(description);
 	}
 
+	@Override
 	public boolean isNew() {
 		return _shoppingCategory.isNew();
 	}
 
+	@Override
 	public void setNew(boolean n) {
 		_shoppingCategory.setNew(n);
 	}
 
+	@Override
 	public boolean isCachedModel() {
 		return _shoppingCategory.isCachedModel();
 	}
 
+	@Override
 	public void setCachedModel(boolean cachedModel) {
 		_shoppingCategory.setCachedModel(cachedModel);
 	}
 
+	@Override
 	public boolean isEscapedModel() {
 		return _shoppingCategory.isEscapedModel();
 	}
 
+	@Override
 	public java.io.Serializable getPrimaryKeyObj() {
 		return _shoppingCategory.getPrimaryKeyObj();
 	}
 
+	@Override
 	public void setPrimaryKeyObj(java.io.Serializable primaryKeyObj) {
 		_shoppingCategory.setPrimaryKeyObj(primaryKeyObj);
 	}
 
+	@Override
 	public com.liferay.portlet.expando.model.ExpandoBridge getExpandoBridge() {
 		return _shoppingCategory.getExpandoBridge();
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.model.BaseModel<?> baseModel) {
 		_shoppingCategory.setExpandoBridgeAttributes(baseModel);
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
 		_shoppingCategory.setExpandoBridgeAttributes(expandoBridge);
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_shoppingCategory.setExpandoBridgeAttributes(serviceContext);
@@ -392,6 +432,7 @@ public class ShoppingCategoryWrapper implements ShoppingCategory,
 		return new ShoppingCategoryWrapper((ShoppingCategory)_shoppingCategory.clone());
 	}
 
+	@Override
 	public int compareTo(
 		com.liferay.portlet.shopping.model.ShoppingCategory shoppingCategory) {
 		return _shoppingCategory.compareTo(shoppingCategory);
@@ -402,14 +443,17 @@ public class ShoppingCategoryWrapper implements ShoppingCategory,
 		return _shoppingCategory.hashCode();
 	}
 
+	@Override
 	public com.liferay.portal.model.CacheModel<com.liferay.portlet.shopping.model.ShoppingCategory> toCacheModel() {
 		return _shoppingCategory.toCacheModel();
 	}
 
+	@Override
 	public com.liferay.portlet.shopping.model.ShoppingCategory toEscapedModel() {
 		return new ShoppingCategoryWrapper(_shoppingCategory.toEscapedModel());
 	}
 
+	@Override
 	public com.liferay.portlet.shopping.model.ShoppingCategory toUnescapedModel() {
 		return new ShoppingCategoryWrapper(_shoppingCategory.toUnescapedModel());
 	}
@@ -419,17 +463,40 @@ public class ShoppingCategoryWrapper implements ShoppingCategory,
 		return _shoppingCategory.toString();
 	}
 
+	@Override
 	public java.lang.String toXmlString() {
 		return _shoppingCategory.toXmlString();
 	}
 
+	@Override
 	public void persist()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_shoppingCategory.persist();
 	}
 
+	@Override
 	public boolean isRoot() {
 		return _shoppingCategory.isRoot();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof ShoppingCategoryWrapper)) {
+			return false;
+		}
+
+		ShoppingCategoryWrapper shoppingCategoryWrapper = (ShoppingCategoryWrapper)obj;
+
+		if (Validator.equals(_shoppingCategory,
+					shoppingCategoryWrapper._shoppingCategory)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -439,10 +506,12 @@ public class ShoppingCategoryWrapper implements ShoppingCategory,
 		return _shoppingCategory;
 	}
 
+	@Override
 	public ShoppingCategory getWrappedModel() {
 		return _shoppingCategory;
 	}
 
+	@Override
 	public void resetOriginalValues() {
 		_shoppingCategory.resetOriginalValues();
 	}

@@ -29,16 +29,7 @@ if ((classPK > 0) && (structureClassNameId == classNameId)) {
 	structure = DDMStructureServiceUtil.getStructure(classPK);
 }
 
-String title = StringPool.BLANK;
-
-if (!portletName.equals(PortletKeys.PORTLET_DISPLAY_TEMPLATES)) {
-	if (structure != null) {
-		title = LanguageUtil.format(pageContext, (Validator.isNull(templateHeaderTitle) ? "templates-for-structure-x" : templateHeaderTitle), structure.getName(locale), false);
-	}
-	else {
-		title = "application-display-templates";
-	}
-}
+String title = ddmDisplay.getViewTemplatesTitle(structure, locale);
 %>
 
 <c:if test="<%= showToolbar %>">
@@ -98,9 +89,9 @@ if (!portletName.equals(PortletKeys.PORTLET_DISPLAY_TEMPLATES)) {
 				value="<%= HtmlUtil.escape(template.getDescription(locale)) %>"
 			/>
 
-			<liferay-ui:search-container-column-text
+			<liferay-ui:search-container-column-date
 				name="modified-date"
-				value="<%= dateFormatDateTime.format(template.getModifiedDate()) %>"
+				value="<%= template.getModifiedDate() %>"
 			/>
 
 			<liferay-ui:search-container-column-text>
@@ -137,8 +128,8 @@ if (!portletName.equals(PortletKeys.PORTLET_DISPLAY_TEMPLATES)) {
 
 			Util.getOpener().Liferay.fire('<%= HtmlUtil.escapeJS(eventName) %>', result);
 
-			Util.getWindow().close();
+			Util.getWindow().hide();
 		},
-		'.selector-button input'
+		'.selector-button'
 	);
 </aui:script>

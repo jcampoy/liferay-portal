@@ -37,7 +37,7 @@ if (translation == null) {
 
 <c:choose>
 	<c:when test="<%= translation == null %>">
-		<div class="portlet-msg-error">
+		<div class="alert alert-error">
 			<liferay-ui:message key="please-configure-valid-default-languages" />
 		</div>
 	</c:when>
@@ -68,7 +68,7 @@ if (translation == null) {
 			</c:if>
 
 			<aui:fieldset>
-				<aui:input cssClass="lfr-textarea-container" label="" name="text" type="textarea" value="<%= translation.getFromText() %>" wrap="soft" />
+				<aui:input autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) %>" cssClass="lfr-textarea-container" label="" name="text" type="textarea" value="<%= translation.getFromText() %>" wrap="soft" />
 
 				<aui:select label="language-from" name="fromLanguageId">
 
@@ -109,9 +109,3 @@ if (translation == null) {
 		</aui:form>
 	</c:otherwise>
 </c:choose>
-
-<c:if test="<%= windowState.equals(WindowState.MAXIMIZED) %>">
-	<aui:script>
-		Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace />text);
-	</aui:script>
-</c:if>

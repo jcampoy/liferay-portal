@@ -42,12 +42,14 @@ MembershipRequest membershipRequest = (MembershipRequest)request.getAttribute(We
 	<aui:input name="groupId" type="hidden" value="<%= groupId %>" />
 	<aui:input name="membershipRequestId" type="hidden" value="<%= membershipRequest.getMembershipRequestId() %>" />
 
-	<liferay-ui:header
-		backURL="<%= redirect %>"
-		escapeXml="<%= false %>"
-		localizeTitle="<%= false %>"
-		title='<%= LanguageUtil.format(pageContext, "reply-membership-request-for-x", HtmlUtil.escape(group.getDescriptiveName(locale))) %>'
-	/>
+	<c:if test="<%= !layout.isTypeControlPanel() %>">
+		<liferay-ui:header
+			backURL="<%= redirect %>"
+			escapeXml="<%= false %>"
+			localizeTitle="<%= false %>"
+			title='<%= LanguageUtil.format(pageContext, "reply-membership-request-for-x", HtmlUtil.escape(group.getDescriptiveName(locale))) %>'
+		/>
+	</c:if>
 
 	<liferay-ui:error exception="<%= DuplicateGroupException.class %>" message="please-enter-a-unique-name" />
 	<liferay-ui:error exception="<%= GroupNameException.class %>" message="please-enter-a-valid-name" />
@@ -89,7 +91,7 @@ MembershipRequest membershipRequest = (MembershipRequest)request.getAttribute(We
 			<%= HtmlUtil.escape(membershipRequest.getComments()) %>
 		</aui:field-wrapper>
 
-		<aui:select label="status" name="statusId">
+		<aui:select autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) %>" label="status" name="statusId">
 			<aui:option label="approve" value="<%= MembershipRequestConstants.STATUS_APPROVED %>" />
 			<aui:option label="deny" value="<%= MembershipRequestConstants.STATUS_DENIED %>" />
 		</aui:select>
@@ -103,9 +105,3 @@ MembershipRequest membershipRequest = (MembershipRequest)request.getAttribute(We
 		<aui:button href="<%= redirect %>" type="cancel" />
 	</aui:button-row>
 </aui:form>
-
-<c:if test="<%= windowState.equals(WindowState.MAXIMIZED) %>">
-	<aui:script>
-		Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace />statusId);
-	</aui:script>
-</c:if>

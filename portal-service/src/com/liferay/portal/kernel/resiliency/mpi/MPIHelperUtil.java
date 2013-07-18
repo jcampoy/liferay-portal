@@ -16,6 +16,8 @@ package com.liferay.portal.kernel.resiliency.mpi;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.messaging.config.MessagingConfigurator;
+import com.liferay.portal.kernel.messaging.config.MessagingConfiguratorRegistry;
 import com.liferay.portal.kernel.nio.intraband.Intraband;
 import com.liferay.portal.kernel.nio.intraband.IntrabandFactoryUtil;
 import com.liferay.portal.kernel.resiliency.spi.SPI;
@@ -157,6 +159,22 @@ public class MPIHelperUtil {
 			else {
 				SPIRegistryUtil.registerSPI(spi);
 
+				for (String servletContextName :
+						spiConfiguration.getServletContextNames()) {
+
+					List<MessagingConfigurator> messagingConfigurators =
+						MessagingConfiguratorRegistry.getMessagingConfigurators(
+							servletContextName);
+
+					if (messagingConfigurators != null) {
+						for (MessagingConfigurator messagingConfigurator :
+								messagingConfigurators) {
+
+							messagingConfigurator.disconnect();
+						}
+					}
+				}
+
 				if (_log.isInfoEnabled()) {
 					_log.info("Registered SPI " + spi);
 				}
@@ -254,6 +272,22 @@ public class MPIHelperUtil {
 
 			if (_spis.remove(spiKey, spi)) {
 				SPIRegistryUtil.unregisterSPI(spi);
+
+				for (String servletContextName :
+						spiConfiguration.getServletContextNames()) {
+
+					List<MessagingConfigurator> messagingConfigurators =
+						MessagingConfiguratorRegistry.getMessagingConfigurators(
+							servletContextName);
+
+					if (messagingConfigurators != null) {
+						for (MessagingConfigurator messagingConfigurator :
+								messagingConfigurators) {
+
+							messagingConfigurator.connect();
+						}
+					}
+				}
 
 				if (_log.isInfoEnabled()) {
 					_log.info("Unregistered SPI " + spi);
@@ -381,19 +415,11 @@ public class MPIHelperUtil {
 
 		@Override
 		public boolean equals(Object obj) {
-			if (this == obj) {
-				return true;
-			}
-
-			if (!(obj instanceof SPIKey)) {
-				return false;
-			}
-
-			SPIKey clusterNode = (SPIKey)obj;
+			SPIKey spiKey = (SPIKey)obj;
 
 			if (Validator.equals(
-					_spiProviderName, clusterNode._spiProviderName) &&
-				Validator.equals(_spiId, clusterNode._spiId)) {
+					_spiProviderName, spiKey._spiProviderName) &&
+				Validator.equals(_spiId, spiKey._spiId)) {
 
 				return true;
 			}
@@ -403,9 +429,7 @@ public class MPIHelperUtil {
 
 		@Override
 		public int hashCode() {
-			String string = toString();
-
-			return string.hashCode();
+			return _spiProviderName.hashCode() * 11 + _spiId.hashCode();
 		}
 
 		@Override

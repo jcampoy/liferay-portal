@@ -37,29 +37,32 @@ import java.util.Map;
 public class AssetTagsNavigationPortletDisplayTemplateHandler
 	extends BasePortletDisplayTemplateHandler {
 
+	@Override
 	public String getClassName() {
 		return AssetTag.class.getName();
 	}
 
+	@Override
 	public String getName(Locale locale) {
 		String portletTitle = PortalUtil.getPortletTitle(
-			PortletKeys.TAGS_ENTRIES_NAVIGATION, locale);
+			PortletKeys.ASSET_TAGS_NAVIGATION, locale);
 
 		return portletTitle.concat(StringPool.SPACE).concat(
 			LanguageUtil.get(locale, "template"));
 	}
 
+	@Override
 	public String getResourceName() {
-		return "com.liferay.portlet.assettagsnavigation";
+		return PortletKeys.ASSET_TAGS_NAVIGATION;
 	}
 
 	@Override
 	public Map<String, TemplateVariableGroup> getTemplateVariableGroups(
-			long classPK, Locale locale)
+			long classPK, String language, Locale locale)
 		throws Exception {
 
 		Map<String, TemplateVariableGroup> templateVariableGroups =
-			super.getTemplateVariableGroups(classPK, locale);
+			super.getTemplateVariableGroups(classPK, language, locale);
 
 		TemplateVariableGroup templateVariableGroup =
 			templateVariableGroups.get("fields");
@@ -68,7 +71,7 @@ public class AssetTagsNavigationPortletDisplayTemplateHandler
 
 		templateVariableGroup.addCollectionVariable(
 			"tags", List.class, PortletDisplayTemplateConstants.ENTRIES, "tag",
-			AssetTag.class, "curTag");
+			AssetTag.class, "curTag", "name");
 
 		TemplateVariableGroup assetServicesTemplateVariableGroup =
 			new TemplateVariableGroup("tag-services");

@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.util.Tuple;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.Element;
+import com.liferay.portal.tools.javadocformatter.SinceJava;
 import com.liferay.portal.tools.servicebuilder.ServiceBuilder;
 import com.liferay.portal.util.FileImpl;
 import com.liferay.portal.xml.SAXReaderImpl;
@@ -41,6 +42,7 @@ import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.Type;
+import com.thoughtworks.qdox.model.annotation.AnnotationValue;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -70,6 +72,7 @@ import org.apache.tools.ant.DirectoryScanner;
  * @author Brian Wing Shun Chan
  * @author Connor McKay
  * @author James Hinkey
+ * @author Hugo Huijser
  */
 public class JavadocFormatter {
 
@@ -222,6 +225,39 @@ public class JavadocFormatter {
 					javadocsRuntimeXmlFile, newJavadocsRuntimeXmlContent);
 			}
 		}
+	}
+
+	private List<Tuple> _addAncestorJavaClassTuples(
+		JavaClass javaClass, List<Tuple> ancestorJavaClassTuples) {
+
+		JavaClass superJavaClass = javaClass.getSuperJavaClass();
+
+		if (superJavaClass != null) {
+			ancestorJavaClassTuples.add(new Tuple(superJavaClass));
+
+			ancestorJavaClassTuples = _addAncestorJavaClassTuples(
+				superJavaClass, ancestorJavaClassTuples);
+		}
+
+		Type[] implementz = javaClass.getImplements();
+
+		for (Type implement : implementz) {
+			Type[] actualTypeArguments = implement.getActualTypeArguments();
+			JavaClass implementedInterface = implement.getJavaClass();
+
+			if (actualTypeArguments == null) {
+				ancestorJavaClassTuples.add(new Tuple(implementedInterface));
+			}
+			else {
+				ancestorJavaClassTuples.add(
+					new Tuple(implementedInterface, actualTypeArguments));
+			}
+
+			ancestorJavaClassTuples = _addAncestorJavaClassTuples(
+				implementedInterface, ancestorJavaClassTuples);
+		}
+
+		return ancestorJavaClassTuples;
 	}
 
 	private void _addClassCommentElement(
@@ -738,6 +774,29 @@ public class JavadocFormatter {
 			fileName, originalContent, javadocLessContent, document);
 	}
 
+	private String _formatCDATA(String cdata, String exclude) {
+		StringBundler sb = new StringBundler();
+
+		String startTag = "<" + exclude + ">";
+		String endTag = "</" + exclude + ">";
+
+		String[] cdataParts = cdata.split(startTag);
+
+		for (String cdataPart : cdataParts) {
+			if (!cdataPart.contains(endTag)) {
+				cdataPart = _getCDATA(cdataPart);
+			}
+
+			if (cdataPart.contains("</" + exclude + ">")) {
+				sb.append(startTag);
+			}
+
+			sb.append(cdataPart);
+		}
+
+		return sb.toString();
+	}
+
 	private String _formatInlines(String text) {
 
 		// Capitalize ID
@@ -752,16 +811,6 @@ public class JavadocFormatter {
 		return text;
 	}
 
-	private List<JavaClass> _getAncestorJavaClasses(JavaClass javaClass) {
-		List<JavaClass> ancestorJavaClasses = new ArrayList<JavaClass>();
-
-		while ((javaClass = javaClass.getSuperJavaClass()) != null) {
-			ancestorJavaClasses.add(javaClass);
-		}
-
-		return ancestorJavaClasses;
-	}
-
 	private String _getCDATA(AbstractJavaEntity abstractJavaEntity) {
 		return _getCDATA(abstractJavaEntity.getComment());
 	}
@@ -770,38 +819,45 @@ public class JavadocFormatter {
 		if (cdata == null) {
 			return StringPool.BLANK;
 		}
-
-		cdata = cdata.replaceAll(
-			"(?s)\\s*<(p|pre|[ou]l)>\\s*(.*?)\\s*</\\1>\\s*",
-			"\n\n<$1>\n$2\n</$1>\n\n");
-		cdata = cdata.replaceAll(
-			"(?s)\\s*<li>\\s*(.*?)\\s*</li>\\s*", "\n<li>\n$1\n</li>\n");
-		cdata = StringUtil.replace(cdata, "</li>\n\n<li>", "</li>\n<li>");
-		cdata = cdata.replaceAll("\n\\s+\n", "\n\n");
-		cdata = cdata.replaceAll(" +", " ");
-
-		// Trim whitespace inside paragraph tags or in the first paragraph
-
-		Pattern pattern = Pattern.compile(
-			"(^.*?(?=\n\n|$)+|(?<=<p>\n).*?(?=\n</p>))", Pattern.DOTALL);
-
-		Matcher matcher = pattern.matcher(cdata);
-
-		StringBuffer sb = new StringBuffer();
-
-		while (matcher.find()) {
-			String trimmed = _trimMultilineText(matcher.group());
-
-			// Escape dollar signs so they are not treated as replacement groups
-
-			trimmed = trimmed.replaceAll("\\$", "\\\\\\$");
-
-			matcher.appendReplacement(sb, trimmed);
+		else if (cdata.contains("<pre>")) {
+			cdata = _formatCDATA(cdata, "pre");
 		}
+		else if (cdata.contains("<table>")) {
+			cdata = _formatCDATA(cdata, "table");
+		}
+		else {
+			cdata = cdata.replaceAll(
+				"(?s)\\s*<(p|[ou]l)>\\s*(.*?)\\s*</\\1>\\s*",
+				"\n\n<$1>\n$2\n</$1>\n\n");
+			cdata = cdata.replaceAll(
+				"(?s)\\s*<li>\\s*(.*?)\\s*</li>\\s*", "\n<li>\n$1\n</li>\n");
+			cdata = StringUtil.replace(cdata, "</li>\n\n<li>", "</li>\n<li>");
+			cdata = cdata.replaceAll("\n\\s+\n", "\n\n");
+			cdata.replaceAll(" +", " ");
 
-		matcher.appendTail(sb);
+			// Trim whitespace inside paragraph tags or in the first paragraph
 
-		cdata = sb.toString();
+			Pattern pattern = Pattern.compile(
+				"(^.*?(?=\n\n|$)+|(?<=<p>\n).*?(?=\n</p>))", Pattern.DOTALL);
+
+			Matcher matcher = pattern.matcher(cdata);
+
+			StringBuffer sb = new StringBuffer();
+
+			while (matcher.find()) {
+				String trimmed = _trimMultilineText(matcher.group());
+
+				// Escape dollar signs
+
+				trimmed = trimmed.replaceAll("\\$", "\\\\\\$");
+
+				matcher.appendReplacement(sb, trimmed);
+			}
+
+			matcher.appendTail(sb);
+
+			cdata = sb.toString();
+		}
 
 		return cdata.trim();
 	}
@@ -1311,10 +1367,11 @@ public class JavadocFormatter {
 
 	private boolean _isOverrideMethod(
 		JavaClass javaClass, JavaMethod javaMethod,
-		Collection<JavaClass> ancestorJavaClasses) {
+		Collection<Tuple> ancestorJavaClassTuples) {
 
-		if (javaClass.isInterface() || javaMethod.isConstructor() ||
-			javaMethod.isPrivate() || javaMethod.isStatic()) {
+		if (javaMethod.isConstructor() || javaMethod.isPrivate() ||
+			javaMethod.isStatic() ||
+			_overridesHigherJavaAPIVersion(javaMethod)) {
 
 			return false;
 		}
@@ -1331,9 +1388,55 @@ public class JavadocFormatter {
 
 		// Check for matching method in each ancestor
 
-		for (JavaClass ancestorJavaClass : ancestorJavaClasses) {
-			JavaMethod ancestorJavaMethod =
-				ancestorJavaClass.getMethodBySignature(methodName, types);
+		for (Tuple ancestorJavaClassTuple : ancestorJavaClassTuples) {
+			JavaClass ancestorJavaClass =
+				(JavaClass)ancestorJavaClassTuple.getObject(0);
+
+			JavaMethod ancestorJavaMethod = null;
+
+			if (ancestorJavaClassTuple.getSize() > 1) {
+
+				// LPS-35613
+
+				Type[] ancestorActualTypeArguments =
+					(Type[])ancestorJavaClassTuple.getObject(1);
+
+				Type[] genericTypes = new Type[types.length];
+
+				for (int i = 0; i < types.length; i++) {
+					Type type = types[i];
+
+					String typeValue = type.getValue();
+
+					boolean useGenericType = false;
+
+					for (int j = 0; j < ancestorActualTypeArguments.length;
+							j++) {
+
+						if (typeValue.equals(
+								ancestorActualTypeArguments[j].getValue())) {
+
+							useGenericType = true;
+
+							break;
+						}
+					}
+
+					if (useGenericType) {
+						genericTypes[i] = new Type("java.lang.Object");
+					}
+					else {
+						genericTypes[i] = type;
+					}
+				}
+
+				ancestorJavaMethod = ancestorJavaClass.getMethodBySignature(
+					methodName, genericTypes);
+			}
+			else {
+				ancestorJavaMethod = ancestorJavaClass.getMethodBySignature(
+					methodName, types);
+			}
 
 			if (ancestorJavaMethod == null) {
 				continue;
@@ -1361,6 +1464,35 @@ public class JavadocFormatter {
 				}
 				else {
 					return false;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	private boolean _overridesHigherJavaAPIVersion(JavaMethod javaMethod) {
+		Annotation[] annotations = javaMethod.getAnnotations();
+
+		if (annotations == null) {
+			return false;
+		}
+
+		for (Annotation annotation : annotations) {
+			Type type = annotation.getType();
+
+			JavaClass javaClass = type.getJavaClass();
+
+			String javaClassName = javaClass.getFullyQualifiedName();
+
+			if (javaClassName.equals(SinceJava.class.getName())) {
+				AnnotationValue value = annotation.getProperty("value");
+
+				double sinceJava = GetterUtil.getDouble(
+					value.getParameterValue());
+
+				if (sinceJava > _LOWEST_SUPPORTED_JAVA_VERSION) {
+					return true;
 				}
 			}
 		}
@@ -1497,8 +1629,10 @@ public class JavadocFormatter {
 
 		_updateLanguageProperties(document, javaClass.getName());
 
-		List<JavaClass> ancestorJavaClasses = _getAncestorJavaClasses(
-			javaClass);
+		List<Tuple> ancestorJavaClassTuples = new ArrayList<Tuple>();
+
+		ancestorJavaClassTuples = _addAncestorJavaClassTuples(
+			javaClass, ancestorJavaClassTuples);
 
 		Element rootElement = document.getRootElement();
 
@@ -1532,7 +1666,7 @@ public class JavadocFormatter {
 
 			if (!_hasAnnotation(javaMethod, "Override")) {
 				if (_isOverrideMethod(
-						javaClass, javaMethod, ancestorJavaClasses)) {
+						javaClass, javaMethod, ancestorJavaClassTuples)) {
 
 					String overrideLine =
 						_getIndent(lines, javaMethod) + "@Override\n";
@@ -1709,36 +1843,44 @@ public class JavadocFormatter {
 			"Updating " + _languagePropertiesFile + " key " + key);
 	}
 
+	private String _wrapText(String text, int indentLength, String exclude) {
+		StringBuffer sb = new StringBuffer();
+
+		StringBundler regexSB = new StringBundler("(?<=^|</");
+
+		regexSB.append(exclude);
+		regexSB.append(">).+?(?=$|<");
+		regexSB.append(exclude);
+		regexSB.append(">)");
+
+		Pattern pattern = Pattern.compile(regexSB.toString(), Pattern.DOTALL);
+
+		Matcher matcher = pattern.matcher(text);
+
+		while (matcher.find()) {
+			String wrapped = _formatInlines(matcher.group());
+
+			wrapped = StringUtil.wrap(wrapped, 80 - indentLength, "\n");
+
+			matcher.appendReplacement(sb, wrapped);
+		}
+
+		matcher.appendTail(sb);
+
+		return sb.toString();
+	}
+
 	private String _wrapText(String text, String indent) {
 		int indentLength = _getIndentLength(indent);
 
-		// Do not wrap text inside <pre>
-
 		if (text.contains("<pre>")) {
-			Pattern pattern = Pattern.compile(
-				"(?<=^|</pre>).+?(?=$|<pre>)", Pattern.DOTALL);
-
-			Matcher matcher = pattern.matcher(text);
-
-			StringBuffer sb = new StringBuffer();
-
-			while (matcher.find()) {
-				String wrapped = _formatInlines(matcher.group());
-
-				wrapped = StringUtil.wrap(wrapped, 80 - indentLength, "\n");
-
-				matcher.appendReplacement(sb, wrapped);
-			}
-
-			matcher.appendTail(sb);
-
-			sb.append("\n");
-
-			text = sb.toString();
+			text = _wrapText(text, indentLength, "pre");
+		}
+		else if (text.contains("<table>")) {
+			text = _wrapText(text, indentLength, "table");
 		}
 		else {
 			text = _formatInlines(text);
-
 			text = StringUtil.wrap(text, 80 - indentLength, "\n");
 		}
 
@@ -1748,8 +1890,9 @@ public class JavadocFormatter {
 		return text;
 	}
 
-	private static FileImpl _fileUtil = FileImpl.getInstance();
+	private static final double _LOWEST_SUPPORTED_JAVA_VERSION = 1.6;
 
+	private static FileImpl _fileUtil = FileImpl.getInstance();
 	private static SAXReaderImpl _saxReaderUtil = SAXReaderImpl.getInstance();
 
 	private boolean _initializeMissingJavadocs;

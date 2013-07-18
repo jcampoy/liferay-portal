@@ -47,15 +47,28 @@ public class BaseTestCase extends LiferaySeleneseTestCase {
 
 		String className = clazz.getName();
 
-		if (className.contains(".evaluatelog.")) {
+		if (className.contains("evaluatelog")) {
 			return;
 		}
 
 		selenium = SeleniumUtil.getSelenium();
+
+		selenium.startLogger();
 	}
 
 	@Override
 	public void tearDown() throws Exception {
+		String primaryTestSuiteName = selenium.getPrimaryTestSuiteName();
+
+		if (!primaryTestSuiteName.endsWith("TestSuite")) {
+			testCaseCount--;
+		}
+
+		if (!primaryTestSuiteName.contains("TestSuite") &&
+			(testCaseCount < 1)) {
+
+			SeleniumUtil.stopSelenium();
+		}
 	}
 
 	protected void loadRequiredJavaScriptModules() {
@@ -109,6 +122,8 @@ public class BaseTestCase extends LiferaySeleneseTestCase {
 		}
 
 	}
+
+	protected static int testCaseCount;
 
 	protected Map<String, String> commandScopeVariables;
 	protected Map<String, String> definitionScopeVariables =

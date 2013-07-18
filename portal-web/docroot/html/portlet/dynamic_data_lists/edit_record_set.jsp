@@ -77,7 +77,7 @@ if (ddmStructureId > 0) {
 	<aui:model-context bean="<%= recordSet %>" model="<%= DDLRecordSet.class %>" />
 
 	<aui:fieldset>
-		<aui:input name="name" />
+		<aui:input autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) %>" name="name" />
 
 		<aui:input name="description" />
 
@@ -141,11 +141,10 @@ if (ddmStructureId > 0) {
 	function <portlet:namespace />openDDMStructureSelector() {
 		Liferay.Util.openDDMPortlet(
 			{
-				classNameId: '<%= PortalUtil.getClassNameId(DDMStructure.class) %>',
+				basePortletURL: '<%= PortletURLFactoryUtil.create(request, PortletKeys.DYNAMIC_DATA_MAPPING, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>',
 				classPK: <%= ddmStructureId %>,
-				ddmResource: '<%= ddmResource %>',
 				dialog: {
-					width: 820
+					destroyOnHide: true
 				},
 				eventName: '<portlet:namespace />selectDDMStructure',
 				groupId: <%= groupId %>,
@@ -154,15 +153,12 @@ if (ddmStructureId > 0) {
 				Portlet portlet = PortletLocalServiceUtil.getPortletById(portletDisplay.getId());
 				%>
 
+				refererPortletName: '<%= portlet.getPortletName() %>',
 				refererWebDAVToken: '<%= portlet.getWebDAVStorageToken() %>',
-
-				storageType: '<%= PropsValues.DYNAMIC_DATA_LISTS_STORAGE_TYPE %>',
-				structureName: 'data-definition',
-				structureType: 'com.liferay.portlet.dynamicdatalists.model.DDLRecordSet',
 				struts_action: '/dynamic_data_mapping/select_structure',
 				title: '<%= UnicodeLanguageUtil.get(pageContext, "data-definitions") %>'
 			},
-			function(event){
+			function(event) {
 				var A = AUI();
 
 				A.one('#<portlet:namespace />ddmStructureId').val(event.ddmstructureid);
@@ -177,10 +173,6 @@ if (ddmStructureId > 0) {
 
 		submitForm(document.<portlet:namespace />fm);
 	}
-
-	<c:if test="<%= windowState.equals(WindowState.MAXIMIZED) %>">
-		Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace />name);
-	</c:if>
 </aui:script>
 
 <%

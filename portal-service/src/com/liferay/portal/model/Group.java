@@ -87,17 +87,25 @@ public interface Group extends GroupModel, PersistedModel {
 
 	public int getPublicLayoutsPageCount();
 
+	public java.lang.String getScopeDescriptiveName(
+		com.liferay.portal.theme.ThemeDisplay themeDisplay)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public java.lang.String getScopeLabel(
+		com.liferay.portal.theme.ThemeDisplay themeDisplay);
+
 	public com.liferay.portal.model.Group getStagingGroup();
 
 	public java.lang.String getTypeLabel();
-
-	public java.lang.String getTypeSettings();
 
 	public com.liferay.portal.kernel.util.UnicodeProperties getTypeSettingsProperties();
 
 	public java.lang.String getTypeSettingsProperty(java.lang.String key);
 
 	public boolean hasAncestor(long groupId);
+
+	public boolean hasLocalOrRemoteStagingGroup();
 
 	public boolean hasPrivateLayouts();
 
@@ -106,7 +114,7 @@ public interface Group extends GroupModel, PersistedModel {
 	public boolean hasStagingGroup();
 
 	/**
-	* @deprecated As of 6.1, renamed to {@link #isRegularSite}
+	* @deprecated As of 6.1.0, renamed to {@link #isRegularSite}
 	*/
 	public boolean isCommunity();
 
@@ -151,8 +159,6 @@ public interface Group extends GroupModel, PersistedModel {
 	public boolean isUserGroup();
 
 	public boolean isUserPersonalSite();
-
-	public void setTypeSettings(java.lang.String typeSettings);
 
 	public void setTypeSettingsProperties(
 		com.liferay.portal.kernel.util.UnicodeProperties typeSettingsProperties);

@@ -30,7 +30,6 @@ import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.service.permission.PortletPermissionUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.PortletConfigFactoryUtil;
-import com.liferay.portlet.PortletPreferencesFactoryUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -73,6 +72,7 @@ public class DefaultConfigurationAction
 		return ParamUtil.getString(portletRequest, name);
 	}
 
+	@Override
 	public void processAction(
 			PortletConfig portletConfig, ActionRequest actionRequest,
 			ActionResponse actionResponse)
@@ -97,9 +97,7 @@ public class DefaultConfigurationAction
 			themeDisplay.getPermissionChecker(), themeDisplay.getLayout(),
 			portletResource, ActionKeys.CONFIGURATION);
 
-		PortletPreferences portletPreferences =
-			PortletPreferencesFactoryUtil.getPortletSetup(
-				actionRequest, portletResource);
+		PortletPreferences portletPreferences = actionRequest.getPreferences();
 
 		for (Map.Entry<String, String> entry : properties.entrySet()) {
 			String name = entry.getKey();
@@ -150,6 +148,7 @@ public class DefaultConfigurationAction
 		}
 	}
 
+	@Override
 	public String render(
 			PortletConfig portletConfig, RenderRequest renderRequest,
 			RenderResponse renderResponse)
@@ -173,6 +172,7 @@ public class DefaultConfigurationAction
 		return "/configuration.jsp";
 	}
 
+	@Override
 	public void serveResource(
 			PortletConfig portletConfig, ResourceRequest resourceRequest,
 			ResourceResponse resourceResponse)

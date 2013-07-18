@@ -15,20 +15,19 @@
 package com.liferay.portlet.blogs.lar;
 
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
-import com.liferay.portal.kernel.dao.orm.DynamicQuery;
-import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.lar.BasePortletDataHandler;
 import com.liferay.portal.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.lar.PortletDataHandlerBoolean;
 import com.liferay.portal.kernel.lar.PortletDataHandlerControl;
 import com.liferay.portal.kernel.lar.StagedModelDataHandlerUtil;
+import com.liferay.portal.kernel.lar.StagedModelType;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.blogs.model.BlogsEntry;
 import com.liferay.portlet.blogs.service.BlogsEntryLocalServiceUtil;
 import com.liferay.portlet.blogs.service.BlogsStatsUserLocalServiceUtil;
-import com.liferay.portlet.blogs.service.persistence.BlogsEntryActionableDynamicQuery;
-import com.liferay.portlet.journal.lar.JournalPortletDataHandler;
+import com.liferay.portlet.blogs.service.permission.BlogsPermission;
+import com.liferay.portlet.blogs.service.persistence.BlogsEntryExportActionableDynamicQuery;
 
 import java.util.List;
 
@@ -45,19 +44,16 @@ public class BlogsPortletDataHandler extends BasePortletDataHandler {
 	public static final String NAMESPACE = "blogs";
 
 	public BlogsPortletDataHandler() {
-		setAlwaysExportable(true);
+		setDeletionSystemEventStagedModelTypes(
+			new StagedModelType(BlogsEntry.class));
 		setExportControls(
-			new PortletDataHandlerBoolean(NAMESPACE, "entries", true, true));
-		setExportMetadataControls(
 			new PortletDataHandlerBoolean(
-				NAMESPACE, "blog-entries", true,
+				NAMESPACE, "entries", true, false,
 				new PortletDataHandlerControl[] {
-					new PortletDataHandlerBoolean(NAMESPACE, "categories"),
-					new PortletDataHandlerBoolean(NAMESPACE, "comments"),
-					new PortletDataHandlerBoolean(NAMESPACE, "ratings"),
-					new PortletDataHandlerBoolean(NAMESPACE, "tags")
-				}));
-		setImportMetadataControls(getExportMetadataControls()[0]);
+					new PortletDataHandlerBoolean(
+						NAMESPACE, "referenced-content")
+				},
+				BlogsEntry.class.getName()));
 		setPublishToLiveByDefault(PropsValues.BLOGS_PUBLISH_TO_LIVE_BY_DEFAULT);
 	}
 
@@ -88,34 +84,21 @@ public class BlogsPortletDataHandler extends BasePortletDataHandler {
 			PortletPreferences portletPreferences)
 		throws Exception {
 
-		portletDataContext.addPermissions(
-			"com.liferay.portlet.blogs", portletDataContext.getScopeGroupId());
-
 		Element rootElement = addExportDataRootElement(portletDataContext);
+
+		if (!portletDataContext.getBooleanParameter(NAMESPACE, "entries")) {
+			return getExportDataRootElementString(rootElement);
+		}
+
+		portletDataContext.addPermissions(
+			BlogsPermission.RESOURCE_NAME,
+			portletDataContext.getScopeGroupId());
 
 		rootElement.addAttribute(
 			"group-id", String.valueOf(portletDataContext.getScopeGroupId()));
 
 		ActionableDynamicQuery actionableDynamicQuery =
-			new BlogsEntryActionableDynamicQuery() {
-
-			@Override
-			protected void addCriteria(DynamicQuery dynamicQuery) {
-				portletDataContext.addDateRangeCriteria(
-					dynamicQuery, "modifiedDate");
-			}
-
-			@Override
-			protected void performAction(Object object) throws PortalException {
-				BlogsEntry entry = (BlogsEntry)object;
-
-				StagedModelDataHandlerUtil.exportStagedModel(
-					portletDataContext, entry);
-			}
-
-		};
-
-		actionableDynamicQuery.setGroupId(portletDataContext.getScopeGroupId());
+			new BlogsEntryExportActionableDynamicQuery(portletDataContext);
 
 		actionableDynamicQuery.performActions();
 
@@ -128,15 +111,17 @@ public class BlogsPortletDataHandler extends BasePortletDataHandler {
 			PortletPreferences portletPreferences, String data)
 		throws Exception {
 
+		if (!portletDataContext.getBooleanParameter(NAMESPACE, "entries")) {
+			return null;
+		}
+
 		portletDataContext.importPermissions(
-			"com.liferay.portlet.blogs", portletDataContext.getSourceGroupId(),
+			BlogsPermission.RESOURCE_NAME,
+			portletDataContext.getSourceGroupId(),
 			portletDataContext.getScopeGroupId());
 
 		Element entriesElement = portletDataContext.getImportDataGroupElement(
 			BlogsEntry.class);
-
-		JournalPortletDataHandler.importReferenceData(
-			portletDataContext, entriesElement);
 
 		List<Element> entryElements = entriesElement.elements();
 
@@ -146,6 +131,23 @@ public class BlogsPortletDataHandler extends BasePortletDataHandler {
 		}
 
 		return null;
+	}
+
+	@Override
+	protected void doPrepareManifestSummary(
+			PortletDataContext portletDataContext,
+			PortletPreferences portletPreferences)
+		throws Exception {
+
+		ActionableDynamicQuery actionableDynamicQuery =
+			new BlogsEntryExportActionableDynamicQuery(portletDataContext);
+
+		actionableDynamicQuery.performCount();
+	}
+
+	@Override
+	protected String getDisplayTemplatePreferenceName() {
+		return "pageDisplayStyle";
 	}
 
 }

@@ -22,7 +22,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
-import com.liferay.portal.service.persistence.UserUtil;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portlet.messageboards.model.MBBan;
 import com.liferay.portlet.messageboards.service.MBBanLocalServiceUtil;
 
@@ -48,6 +48,12 @@ public class MBBanStagedModelDataHandler
 
 		ban.setBanUserUuid(ban.getBanUserUuid());
 
+		User bannedUser = UserLocalServiceUtil.getUser(ban.getUserId());
+
+		portletDataContext.addReferenceElement(
+			ban, userBanElement, bannedUser, User.class,
+			PortletDataContext.REFERENCE_TYPE_DEPENDENCY_DISPOSABLE, true);
+
 		portletDataContext.addClassedModel(
 			userBanElement, ExportImportPathUtil.getModelPath(ban), ban,
 			MBPortletDataHandler.NAMESPACE);
@@ -58,8 +64,8 @@ public class MBBanStagedModelDataHandler
 			PortletDataContext portletDataContext, MBBan ban)
 		throws Exception {
 
-		User user = UserUtil.fetchByUuid_C_First(
-			ban.getBanUserUuid(), portletDataContext.getCompanyId(), null);
+		User user = UserLocalServiceUtil.fetchUserByUuidAndCompanyId(
+			ban.getBanUserUuid(), portletDataContext.getCompanyId());
 
 		if (user == null) {
 			if (_log.isWarnEnabled()) {

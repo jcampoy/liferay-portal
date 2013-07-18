@@ -15,6 +15,8 @@
 package com.liferay.portal.upgrade.v6_2_0;
 
 import com.liferay.portal.kernel.dao.jdbc.DataAccess;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.upgrade.BaseUpgradePortletPreferences;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -204,6 +206,26 @@ public class UpgradeJournal extends BaseUpgradePortletPreferences {
 		super.doUpgrade();
 	}
 
+	protected long getDDMStructureId(long groupId, String structureId) {
+		if (Validator.isNull(structureId)) {
+			return 0;
+		}
+
+		Long ddmStructureId = _ddmStructureIds.get(groupId + "#" + structureId);
+
+		if (ddmStructureId == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(
+					"Unable to get the DDM structure ID for group " +
+						groupId + " and journal structure ID " + structureId);
+			}
+
+			return 0;
+		}
+
+		return ddmStructureId;
+	}
+
 	@Override
 	protected String[] getPortletIds() {
 		return new String[] {
@@ -255,18 +277,19 @@ public class UpgradeJournal extends BaseUpgradePortletPreferences {
 			long oldPrimKey, long newPrimKey)
 		throws Exception {
 
-		StringBundler sb = new StringBundler(10);
+		StringBundler sb = new StringBundler(11);
 
 		sb.append("update ResourcePermission set name = '");
 		sb.append(newClassName);
-		sb.append("', primKey = ");
+		sb.append("', primKey = '");
 		sb.append(newPrimKey);
-		sb.append(" where companyId = ");
+		sb.append("' where companyId = ");
 		sb.append(companyId);
 		sb.append(" and name = '");
 		sb.append(oldClassName);
-		sb.append("' and primKey = ");
+		sb.append("' and primKey = '");
 		sb.append(oldPrimKey);
+		sb.append("'");
 
 		runSQL(sb.toString());
 	}
@@ -415,11 +438,7 @@ public class UpgradeJournal extends BaseUpgradePortletPreferences {
 				long classNameId = PortalUtil.getClassNameId(
 					DDMStructure.class.getName());
 
-				long classPK = 0;
-
-				if (Validator.isNotNull(structureId)) {
-					classPK = _ddmStructureIds.get(groupId + "#" + structureId);
-				}
+				long classPK = getDDMStructureId(groupId, structureId);
 
 				addDDMTemplate(
 					uuid_, ddmTemplateId, groupId, companyId, userId, userName,
@@ -480,6 +499,8 @@ public class UpgradeJournal extends BaseUpgradePortletPreferences {
 
 		return PortletPreferencesFactoryUtil.toXML(preferences);
 	}
+
+	private static Log _log = LogFactoryUtil.getLog(UpgradeJournal.class);
 
 	private Map<String, Long> _ddmStructureIds = new HashMap<String, Long>();
 	private Map<Long, Long> _ddmStructurePKs = new HashMap<Long, Long>();

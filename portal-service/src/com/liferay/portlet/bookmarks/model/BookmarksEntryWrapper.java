@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.bookmarks.model;
 
+import com.liferay.portal.kernel.lar.StagedModelType;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.ModelWrapper;
 
 import java.util.Date;
@@ -25,8 +27,8 @@ import java.util.Map;
  * This class is a wrapper for {@link BookmarksEntry}.
  * </p>
  *
- * @author    Brian Wing Shun Chan
- * @see       BookmarksEntry
+ * @author Brian Wing Shun Chan
+ * @see BookmarksEntry
  * @generated
  */
 public class BookmarksEntryWrapper implements BookmarksEntry,
@@ -35,14 +37,17 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 		_bookmarksEntry = bookmarksEntry;
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return BookmarksEntry.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return BookmarksEntry.class.getName();
 	}
 
+	@Override
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
@@ -69,6 +74,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 		return attributes;
 	}
 
+	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
 		String uuid = (String)attributes.get("uuid");
 
@@ -190,6 +196,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @return the primary key of this bookmarks entry
 	*/
+	@Override
 	public long getPrimaryKey() {
 		return _bookmarksEntry.getPrimaryKey();
 	}
@@ -199,6 +206,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @param primaryKey the primary key of this bookmarks entry
 	*/
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_bookmarksEntry.setPrimaryKey(primaryKey);
 	}
@@ -208,6 +216,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @return the uuid of this bookmarks entry
 	*/
+	@Override
 	public java.lang.String getUuid() {
 		return _bookmarksEntry.getUuid();
 	}
@@ -217,6 +226,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @param uuid the uuid of this bookmarks entry
 	*/
+	@Override
 	public void setUuid(java.lang.String uuid) {
 		_bookmarksEntry.setUuid(uuid);
 	}
@@ -226,6 +236,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @return the entry ID of this bookmarks entry
 	*/
+	@Override
 	public long getEntryId() {
 		return _bookmarksEntry.getEntryId();
 	}
@@ -235,6 +246,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @param entryId the entry ID of this bookmarks entry
 	*/
+	@Override
 	public void setEntryId(long entryId) {
 		_bookmarksEntry.setEntryId(entryId);
 	}
@@ -244,6 +256,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @return the group ID of this bookmarks entry
 	*/
+	@Override
 	public long getGroupId() {
 		return _bookmarksEntry.getGroupId();
 	}
@@ -253,6 +266,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @param groupId the group ID of this bookmarks entry
 	*/
+	@Override
 	public void setGroupId(long groupId) {
 		_bookmarksEntry.setGroupId(groupId);
 	}
@@ -262,6 +276,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @return the company ID of this bookmarks entry
 	*/
+	@Override
 	public long getCompanyId() {
 		return _bookmarksEntry.getCompanyId();
 	}
@@ -271,6 +286,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @param companyId the company ID of this bookmarks entry
 	*/
+	@Override
 	public void setCompanyId(long companyId) {
 		_bookmarksEntry.setCompanyId(companyId);
 	}
@@ -280,6 +296,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @return the user ID of this bookmarks entry
 	*/
+	@Override
 	public long getUserId() {
 		return _bookmarksEntry.getUserId();
 	}
@@ -289,6 +306,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @param userId the user ID of this bookmarks entry
 	*/
+	@Override
 	public void setUserId(long userId) {
 		_bookmarksEntry.setUserId(userId);
 	}
@@ -299,6 +317,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	* @return the user uuid of this bookmarks entry
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.lang.String getUserUuid()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _bookmarksEntry.getUserUuid();
@@ -309,6 +328,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @param userUuid the user uuid of this bookmarks entry
 	*/
+	@Override
 	public void setUserUuid(java.lang.String userUuid) {
 		_bookmarksEntry.setUserUuid(userUuid);
 	}
@@ -318,6 +338,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @return the user name of this bookmarks entry
 	*/
+	@Override
 	public java.lang.String getUserName() {
 		return _bookmarksEntry.getUserName();
 	}
@@ -327,6 +348,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @param userName the user name of this bookmarks entry
 	*/
+	@Override
 	public void setUserName(java.lang.String userName) {
 		_bookmarksEntry.setUserName(userName);
 	}
@@ -336,6 +358,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @return the create date of this bookmarks entry
 	*/
+	@Override
 	public java.util.Date getCreateDate() {
 		return _bookmarksEntry.getCreateDate();
 	}
@@ -345,6 +368,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @param createDate the create date of this bookmarks entry
 	*/
+	@Override
 	public void setCreateDate(java.util.Date createDate) {
 		_bookmarksEntry.setCreateDate(createDate);
 	}
@@ -354,6 +378,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @return the modified date of this bookmarks entry
 	*/
+	@Override
 	public java.util.Date getModifiedDate() {
 		return _bookmarksEntry.getModifiedDate();
 	}
@@ -363,6 +388,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @param modifiedDate the modified date of this bookmarks entry
 	*/
+	@Override
 	public void setModifiedDate(java.util.Date modifiedDate) {
 		_bookmarksEntry.setModifiedDate(modifiedDate);
 	}
@@ -372,6 +398,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @return the resource block ID of this bookmarks entry
 	*/
+	@Override
 	public long getResourceBlockId() {
 		return _bookmarksEntry.getResourceBlockId();
 	}
@@ -381,6 +408,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @param resourceBlockId the resource block ID of this bookmarks entry
 	*/
+	@Override
 	public void setResourceBlockId(long resourceBlockId) {
 		_bookmarksEntry.setResourceBlockId(resourceBlockId);
 	}
@@ -390,6 +418,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @return the folder ID of this bookmarks entry
 	*/
+	@Override
 	public long getFolderId() {
 		return _bookmarksEntry.getFolderId();
 	}
@@ -399,6 +428,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @param folderId the folder ID of this bookmarks entry
 	*/
+	@Override
 	public void setFolderId(long folderId) {
 		_bookmarksEntry.setFolderId(folderId);
 	}
@@ -408,6 +438,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @return the name of this bookmarks entry
 	*/
+	@Override
 	public java.lang.String getName() {
 		return _bookmarksEntry.getName();
 	}
@@ -417,6 +448,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @param name the name of this bookmarks entry
 	*/
+	@Override
 	public void setName(java.lang.String name) {
 		_bookmarksEntry.setName(name);
 	}
@@ -426,6 +458,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @return the url of this bookmarks entry
 	*/
+	@Override
 	public java.lang.String getUrl() {
 		return _bookmarksEntry.getUrl();
 	}
@@ -435,6 +468,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @param url the url of this bookmarks entry
 	*/
+	@Override
 	public void setUrl(java.lang.String url) {
 		_bookmarksEntry.setUrl(url);
 	}
@@ -444,6 +478,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @return the description of this bookmarks entry
 	*/
+	@Override
 	public java.lang.String getDescription() {
 		return _bookmarksEntry.getDescription();
 	}
@@ -453,6 +488,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @param description the description of this bookmarks entry
 	*/
+	@Override
 	public void setDescription(java.lang.String description) {
 		_bookmarksEntry.setDescription(description);
 	}
@@ -462,6 +498,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @return the visits of this bookmarks entry
 	*/
+	@Override
 	public int getVisits() {
 		return _bookmarksEntry.getVisits();
 	}
@@ -471,6 +508,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @param visits the visits of this bookmarks entry
 	*/
+	@Override
 	public void setVisits(int visits) {
 		_bookmarksEntry.setVisits(visits);
 	}
@@ -480,6 +518,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @return the priority of this bookmarks entry
 	*/
+	@Override
 	public int getPriority() {
 		return _bookmarksEntry.getPriority();
 	}
@@ -489,6 +528,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @param priority the priority of this bookmarks entry
 	*/
+	@Override
 	public void setPriority(int priority) {
 		_bookmarksEntry.setPriority(priority);
 	}
@@ -498,6 +538,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @return the status of this bookmarks entry
 	*/
+	@Override
 	public int getStatus() {
 		return _bookmarksEntry.getStatus();
 	}
@@ -507,6 +548,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @param status the status of this bookmarks entry
 	*/
+	@Override
 	public void setStatus(int status) {
 		_bookmarksEntry.setStatus(status);
 	}
@@ -516,6 +558,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @return the status by user ID of this bookmarks entry
 	*/
+	@Override
 	public long getStatusByUserId() {
 		return _bookmarksEntry.getStatusByUserId();
 	}
@@ -525,6 +568,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @param statusByUserId the status by user ID of this bookmarks entry
 	*/
+	@Override
 	public void setStatusByUserId(long statusByUserId) {
 		_bookmarksEntry.setStatusByUserId(statusByUserId);
 	}
@@ -535,6 +579,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	* @return the status by user uuid of this bookmarks entry
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.lang.String getStatusByUserUuid()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _bookmarksEntry.getStatusByUserUuid();
@@ -545,6 +590,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @param statusByUserUuid the status by user uuid of this bookmarks entry
 	*/
+	@Override
 	public void setStatusByUserUuid(java.lang.String statusByUserUuid) {
 		_bookmarksEntry.setStatusByUserUuid(statusByUserUuid);
 	}
@@ -554,6 +600,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @return the status by user name of this bookmarks entry
 	*/
+	@Override
 	public java.lang.String getStatusByUserName() {
 		return _bookmarksEntry.getStatusByUserName();
 	}
@@ -563,6 +610,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @param statusByUserName the status by user name of this bookmarks entry
 	*/
+	@Override
 	public void setStatusByUserName(java.lang.String statusByUserName) {
 		_bookmarksEntry.setStatusByUserName(statusByUserName);
 	}
@@ -572,6 +620,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @return the status date of this bookmarks entry
 	*/
+	@Override
 	public java.util.Date getStatusDate() {
 		return _bookmarksEntry.getStatusDate();
 	}
@@ -581,6 +630,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @param statusDate the status date of this bookmarks entry
 	*/
+	@Override
 	public void setStatusDate(java.util.Date statusDate) {
 		_bookmarksEntry.setStatusDate(statusDate);
 	}
@@ -588,6 +638,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	/**
 	* @deprecated As of 6.1.0, replaced by {@link #isApproved()}
 	*/
+	@Override
 	public boolean getApproved() {
 		return _bookmarksEntry.getApproved();
 	}
@@ -597,6 +648,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @return <code>true</code> if this bookmarks entry is approved; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isApproved() {
 		return _bookmarksEntry.isApproved();
 	}
@@ -606,6 +658,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @return <code>true</code> if this bookmarks entry is denied; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isDenied() {
 		return _bookmarksEntry.isDenied();
 	}
@@ -615,6 +668,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @return <code>true</code> if this bookmarks entry is a draft; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isDraft() {
 		return _bookmarksEntry.isDraft();
 	}
@@ -624,6 +678,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @return <code>true</code> if this bookmarks entry is expired; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isExpired() {
 		return _bookmarksEntry.isExpired();
 	}
@@ -633,6 +688,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @return <code>true</code> if this bookmarks entry is inactive; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isInactive() {
 		return _bookmarksEntry.isInactive();
 	}
@@ -642,6 +698,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @return <code>true</code> if this bookmarks entry is incomplete; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isIncomplete() {
 		return _bookmarksEntry.isIncomplete();
 	}
@@ -651,6 +708,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @return <code>true</code> if this bookmarks entry is in the Recycle Bin; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isInTrash() {
 		return _bookmarksEntry.isInTrash();
 	}
@@ -660,6 +718,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @return <code>true</code> if this bookmarks entry is pending; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isPending() {
 		return _bookmarksEntry.isPending();
 	}
@@ -669,52 +728,64 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 	*
 	* @return <code>true</code> if this bookmarks entry is scheduled; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isScheduled() {
 		return _bookmarksEntry.isScheduled();
 	}
 
+	@Override
 	public boolean isNew() {
 		return _bookmarksEntry.isNew();
 	}
 
+	@Override
 	public void setNew(boolean n) {
 		_bookmarksEntry.setNew(n);
 	}
 
+	@Override
 	public boolean isCachedModel() {
 		return _bookmarksEntry.isCachedModel();
 	}
 
+	@Override
 	public void setCachedModel(boolean cachedModel) {
 		_bookmarksEntry.setCachedModel(cachedModel);
 	}
 
+	@Override
 	public boolean isEscapedModel() {
 		return _bookmarksEntry.isEscapedModel();
 	}
 
+	@Override
 	public java.io.Serializable getPrimaryKeyObj() {
 		return _bookmarksEntry.getPrimaryKeyObj();
 	}
 
+	@Override
 	public void setPrimaryKeyObj(java.io.Serializable primaryKeyObj) {
 		_bookmarksEntry.setPrimaryKeyObj(primaryKeyObj);
 	}
 
+	@Override
 	public com.liferay.portlet.expando.model.ExpandoBridge getExpandoBridge() {
 		return _bookmarksEntry.getExpandoBridge();
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.model.BaseModel<?> baseModel) {
 		_bookmarksEntry.setExpandoBridgeAttributes(baseModel);
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
 		_bookmarksEntry.setExpandoBridgeAttributes(expandoBridge);
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_bookmarksEntry.setExpandoBridgeAttributes(serviceContext);
@@ -725,6 +796,7 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 		return new BookmarksEntryWrapper((BookmarksEntry)_bookmarksEntry.clone());
 	}
 
+	@Override
 	public int compareTo(
 		com.liferay.portlet.bookmarks.model.BookmarksEntry bookmarksEntry) {
 		return _bookmarksEntry.compareTo(bookmarksEntry);
@@ -735,14 +807,17 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 		return _bookmarksEntry.hashCode();
 	}
 
+	@Override
 	public com.liferay.portal.model.CacheModel<com.liferay.portlet.bookmarks.model.BookmarksEntry> toCacheModel() {
 		return _bookmarksEntry.toCacheModel();
 	}
 
+	@Override
 	public com.liferay.portlet.bookmarks.model.BookmarksEntry toEscapedModel() {
 		return new BookmarksEntryWrapper(_bookmarksEntry.toEscapedModel());
 	}
 
+	@Override
 	public com.liferay.portlet.bookmarks.model.BookmarksEntry toUnescapedModel() {
 		return new BookmarksEntryWrapper(_bookmarksEntry.toUnescapedModel());
 	}
@@ -752,25 +827,61 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 		return _bookmarksEntry.toString();
 	}
 
+	@Override
 	public java.lang.String toXmlString() {
 		return _bookmarksEntry.toXmlString();
 	}
 
+	@Override
 	public void persist()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_bookmarksEntry.persist();
 	}
 
-	public com.liferay.portlet.bookmarks.model.BookmarksFolder getFolder() {
+	@Override
+	public com.liferay.portlet.bookmarks.model.BookmarksFolder getFolder()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
 		return _bookmarksEntry.getFolder();
 	}
 
-	public com.liferay.portlet.bookmarks.model.BookmarksFolder getTrashContainer() {
+	@Override
+	public com.liferay.portlet.bookmarks.model.BookmarksFolder getTrashContainer()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
 		return _bookmarksEntry.getTrashContainer();
 	}
 
-	public boolean isInTrashContainer() {
+	@Override
+	public boolean isInTrashContainer()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
 		return _bookmarksEntry.isInTrashContainer();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof BookmarksEntryWrapper)) {
+			return false;
+		}
+
+		BookmarksEntryWrapper bookmarksEntryWrapper = (BookmarksEntryWrapper)obj;
+
+		if (Validator.equals(_bookmarksEntry,
+					bookmarksEntryWrapper._bookmarksEntry)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	@Override
+	public StagedModelType getStagedModelType() {
+		return _bookmarksEntry.getStagedModelType();
 	}
 
 	/**
@@ -780,10 +891,12 @@ public class BookmarksEntryWrapper implements BookmarksEntry,
 		return _bookmarksEntry;
 	}
 
+	@Override
 	public BookmarksEntry getWrappedModel() {
 		return _bookmarksEntry;
 	}
 
+	@Override
 	public void resetOriginalValues() {
 		_bookmarksEntry.resetOriginalValues();
 	}

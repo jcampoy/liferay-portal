@@ -23,13 +23,11 @@ import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
 import java.rmi.RemoteException;
 
 /**
- * <p>
- * This class provides a SOAP utility for the
+ * Provides the SOAP utility for the
  * {@link com.liferay.portlet.documentlibrary.service.DLAppServiceUtil} service utility. The
  * static methods of this class calls the same methods of the service utility.
  * However, the signatures are different because it is difficult for SOAP to
  * support certain types.
- * </p>
  *
  * <p>
  * The benefits of using the SOAP utility is that it is cross platform
@@ -48,9 +46,9 @@ import java.rmi.RemoteException;
  * The SOAP utility is only generated for remote services.
  * </p>
  *
- * @author    Brian Wing Shun Chan
- * @see       DLAppServiceHttp
- * @see       com.liferay.portlet.documentlibrary.service.DLAppServiceUtil
+ * @author Brian Wing Shun Chan
+ * @see DLAppServiceHttp
+ * @see com.liferay.portlet.documentlibrary.service.DLAppServiceUtil
  * @generated
  */
 public class DLAppServiceSoap {
@@ -571,13 +569,13 @@ public class DLAppServiceSoap {
 	* @throws PortalException if the folder could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.kernel.repository.model.FileEntrySoap[] getFileEntries(
+	public static com.liferay.portal.kernel.repository.model.FileEntry[] getFileEntries(
 		long repositoryId, long folderId) throws RemoteException {
 		try {
 			java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> returnValue =
 				DLAppServiceUtil.getFileEntries(repositoryId, folderId);
 
-			return com.liferay.portal.kernel.repository.model.FileEntrySoap.toSoapModels(returnValue);
+			return returnValue.toArray(new com.liferay.portal.kernel.repository.model.FileEntry[returnValue.size()]);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -607,7 +605,7 @@ public class DLAppServiceSoap {
 	* @throws PortalException if the folder could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.kernel.repository.model.FileEntrySoap[] getFileEntries(
+	public static com.liferay.portal.kernel.repository.model.FileEntry[] getFileEntries(
 		long repositoryId, long folderId, int start, int end)
 		throws RemoteException {
 		try {
@@ -615,7 +613,7 @@ public class DLAppServiceSoap {
 				DLAppServiceUtil.getFileEntries(repositoryId, folderId, start,
 					end);
 
-			return com.liferay.portal.kernel.repository.model.FileEntrySoap.toSoapModels(returnValue);
+			return returnValue.toArray(new com.liferay.portal.kernel.repository.model.FileEntry[returnValue.size()]);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -648,7 +646,7 @@ public class DLAppServiceSoap {
 	* @throws PortalException if the folder could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.kernel.repository.model.FileEntrySoap[] getFileEntries(
+	public static com.liferay.portal.kernel.repository.model.FileEntry[] getFileEntries(
 		long repositoryId, long folderId, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator obc)
 		throws RemoteException {
@@ -657,7 +655,7 @@ public class DLAppServiceSoap {
 				DLAppServiceUtil.getFileEntries(repositoryId, folderId, start,
 					end, obc);
 
-			return com.liferay.portal.kernel.repository.model.FileEntrySoap.toSoapModels(returnValue);
+			return returnValue.toArray(new com.liferay.portal.kernel.repository.model.FileEntry[returnValue.size()]);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -676,7 +674,7 @@ public class DLAppServiceSoap {
 	* @throws PortalException if the folder could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.kernel.repository.model.FileEntrySoap[] getFileEntries(
+	public static com.liferay.portal.kernel.repository.model.FileEntry[] getFileEntries(
 		long repositoryId, long folderId, long fileEntryTypeId)
 		throws RemoteException {
 		try {
@@ -684,7 +682,7 @@ public class DLAppServiceSoap {
 				DLAppServiceUtil.getFileEntries(repositoryId, folderId,
 					fileEntryTypeId);
 
-			return com.liferay.portal.kernel.repository.model.FileEntrySoap.toSoapModels(returnValue);
+			return returnValue.toArray(new com.liferay.portal.kernel.repository.model.FileEntry[returnValue.size()]);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -706,7 +704,7 @@ public class DLAppServiceSoap {
 	* @throws PortalException if the folder could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.kernel.repository.model.FileEntrySoap[] getFileEntries(
+	public static com.liferay.portal.kernel.repository.model.FileEntry[] getFileEntries(
 		long repositoryId, long folderId, long fileEntryTypeId, int start,
 		int end) throws RemoteException {
 		try {
@@ -714,7 +712,7 @@ public class DLAppServiceSoap {
 				DLAppServiceUtil.getFileEntries(repositoryId, folderId,
 					fileEntryTypeId, start, end);
 
-			return com.liferay.portal.kernel.repository.model.FileEntrySoap.toSoapModels(returnValue);
+			return returnValue.toArray(new com.liferay.portal.kernel.repository.model.FileEntry[returnValue.size()]);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -739,7 +737,7 @@ public class DLAppServiceSoap {
 	* @throws PortalException if the folder could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.kernel.repository.model.FileEntrySoap[] getFileEntries(
+	public static com.liferay.portal.kernel.repository.model.FileEntry[] getFileEntries(
 		long repositoryId, long folderId, long fileEntryTypeId, int start,
 		int end, com.liferay.portal.kernel.util.OrderByComparator obc)
 		throws RemoteException {
@@ -748,7 +746,7 @@ public class DLAppServiceSoap {
 				DLAppServiceUtil.getFileEntries(repositoryId, folderId,
 					fileEntryTypeId, start, end, obc);
 
-			return com.liferay.portal.kernel.repository.model.FileEntrySoap.toSoapModels(returnValue);
+			return returnValue.toArray(new com.liferay.portal.kernel.repository.model.FileEntry[returnValue.size()]);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -1012,13 +1010,13 @@ public class DLAppServiceSoap {
 	* @throws PortalException if the parent folder could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.kernel.repository.model.FolderSoap[] getFolders(
+	public static com.liferay.portal.kernel.repository.model.Folder[] getFolders(
 		long repositoryId, long parentFolderId) throws RemoteException {
 		try {
 			java.util.List<com.liferay.portal.kernel.repository.model.Folder> returnValue =
 				DLAppServiceUtil.getFolders(repositoryId, parentFolderId);
 
-			return com.liferay.portal.kernel.repository.model.FolderSoap.toSoapModels(returnValue);
+			return returnValue.toArray(new com.liferay.portal.kernel.repository.model.Folder[returnValue.size()]);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -1039,7 +1037,7 @@ public class DLAppServiceSoap {
 	* @throws PortalException if the parent folder could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.kernel.repository.model.FolderSoap[] getFolders(
+	public static com.liferay.portal.kernel.repository.model.Folder[] getFolders(
 		long repositoryId, long parentFolderId, boolean includeMountFolders)
 		throws RemoteException {
 		try {
@@ -1047,7 +1045,7 @@ public class DLAppServiceSoap {
 				DLAppServiceUtil.getFolders(repositoryId, parentFolderId,
 					includeMountFolders);
 
-			return com.liferay.portal.kernel.repository.model.FolderSoap.toSoapModels(returnValue);
+			return returnValue.toArray(new com.liferay.portal.kernel.repository.model.Folder[returnValue.size()]);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -1080,7 +1078,7 @@ public class DLAppServiceSoap {
 	* @throws PortalException if the parent folder could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.kernel.repository.model.FolderSoap[] getFolders(
+	public static com.liferay.portal.kernel.repository.model.Folder[] getFolders(
 		long repositoryId, long parentFolderId, boolean includeMountFolders,
 		int start, int end) throws RemoteException {
 		try {
@@ -1088,7 +1086,7 @@ public class DLAppServiceSoap {
 				DLAppServiceUtil.getFolders(repositoryId, parentFolderId,
 					includeMountFolders, start, end);
 
-			return com.liferay.portal.kernel.repository.model.FolderSoap.toSoapModels(returnValue);
+			return returnValue.toArray(new com.liferay.portal.kernel.repository.model.Folder[returnValue.size()]);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -1124,7 +1122,7 @@ public class DLAppServiceSoap {
 	* @throws PortalException if the parent folder could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.kernel.repository.model.FolderSoap[] getFolders(
+	public static com.liferay.portal.kernel.repository.model.Folder[] getFolders(
 		long repositoryId, long parentFolderId, boolean includeMountFolders,
 		int start, int end, com.liferay.portal.kernel.util.OrderByComparator obc)
 		throws RemoteException {
@@ -1133,7 +1131,7 @@ public class DLAppServiceSoap {
 				DLAppServiceUtil.getFolders(repositoryId, parentFolderId,
 					includeMountFolders, start, end, obc);
 
-			return com.liferay.portal.kernel.repository.model.FolderSoap.toSoapModels(returnValue);
+			return returnValue.toArray(new com.liferay.portal.kernel.repository.model.Folder[returnValue.size()]);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -1170,7 +1168,7 @@ public class DLAppServiceSoap {
 	* @throws PortalException if the parent folder could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.kernel.repository.model.FolderSoap[] getFolders(
+	public static com.liferay.portal.kernel.repository.model.Folder[] getFolders(
 		long repositoryId, long parentFolderId, int status,
 		boolean includeMountFolders, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator obc)
@@ -1180,7 +1178,7 @@ public class DLAppServiceSoap {
 				DLAppServiceUtil.getFolders(repositoryId, parentFolderId,
 					status, includeMountFolders, start, end, obc);
 
-			return com.liferay.portal.kernel.repository.model.FolderSoap.toSoapModels(returnValue);
+			return returnValue.toArray(new com.liferay.portal.kernel.repository.model.Folder[returnValue.size()]);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -1210,7 +1208,7 @@ public class DLAppServiceSoap {
 	* @throws PortalException if the parent folder could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.kernel.repository.model.FolderSoap[] getFolders(
+	public static com.liferay.portal.kernel.repository.model.Folder[] getFolders(
 		long repositoryId, long parentFolderId, int start, int end)
 		throws RemoteException {
 		try {
@@ -1218,7 +1216,7 @@ public class DLAppServiceSoap {
 				DLAppServiceUtil.getFolders(repositoryId, parentFolderId,
 					start, end);
 
-			return com.liferay.portal.kernel.repository.model.FolderSoap.toSoapModels(returnValue);
+			return returnValue.toArray(new com.liferay.portal.kernel.repository.model.Folder[returnValue.size()]);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -1252,7 +1250,7 @@ public class DLAppServiceSoap {
 	* @throws PortalException if the parent folder could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.kernel.repository.model.FolderSoap[] getFolders(
+	public static com.liferay.portal.kernel.repository.model.Folder[] getFolders(
 		long repositoryId, long parentFolderId, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator obc)
 		throws RemoteException {
@@ -1261,7 +1259,7 @@ public class DLAppServiceSoap {
 				DLAppServiceUtil.getFolders(repositoryId, parentFolderId,
 					start, end, obc);
 
-			return com.liferay.portal.kernel.repository.model.FolderSoap.toSoapModels(returnValue);
+			return returnValue.toArray(new com.liferay.portal.kernel.repository.model.Folder[returnValue.size()]);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -1450,14 +1448,14 @@ public class DLAppServiceSoap {
 	* @throws PortalException if the group could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.kernel.repository.model.FileEntrySoap[] getGroupFileEntries(
+	public static com.liferay.portal.kernel.repository.model.FileEntry[] getGroupFileEntries(
 		long groupId, long userId, int start, int end)
 		throws RemoteException {
 		try {
 			java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> returnValue =
 				DLAppServiceUtil.getGroupFileEntries(groupId, userId, start, end);
 
-			return com.liferay.portal.kernel.repository.model.FileEntrySoap.toSoapModels(returnValue);
+			return returnValue.toArray(new com.liferay.portal.kernel.repository.model.FileEntry[returnValue.size()]);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -1494,7 +1492,7 @@ public class DLAppServiceSoap {
 	* @throws PortalException if the group could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.kernel.repository.model.FileEntrySoap[] getGroupFileEntries(
+	public static com.liferay.portal.kernel.repository.model.FileEntry[] getGroupFileEntries(
 		long groupId, long userId, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator obc)
 		throws RemoteException {
@@ -1503,7 +1501,7 @@ public class DLAppServiceSoap {
 				DLAppServiceUtil.getGroupFileEntries(groupId, userId, start,
 					end, obc);
 
-			return com.liferay.portal.kernel.repository.model.FileEntrySoap.toSoapModels(returnValue);
+			return returnValue.toArray(new com.liferay.portal.kernel.repository.model.FileEntry[returnValue.size()]);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -1539,7 +1537,7 @@ public class DLAppServiceSoap {
 	* @throws PortalException if the group could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.kernel.repository.model.FileEntrySoap[] getGroupFileEntries(
+	public static com.liferay.portal.kernel.repository.model.FileEntry[] getGroupFileEntries(
 		long groupId, long userId, long rootFolderId, int start, int end)
 		throws RemoteException {
 		try {
@@ -1547,7 +1545,7 @@ public class DLAppServiceSoap {
 				DLAppServiceUtil.getGroupFileEntries(groupId, userId,
 					rootFolderId, start, end);
 
-			return com.liferay.portal.kernel.repository.model.FileEntrySoap.toSoapModels(returnValue);
+			return returnValue.toArray(new com.liferay.portal.kernel.repository.model.FileEntry[returnValue.size()]);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -1586,7 +1584,7 @@ public class DLAppServiceSoap {
 	* @throws PortalException if the group could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.kernel.repository.model.FileEntrySoap[] getGroupFileEntries(
+	public static com.liferay.portal.kernel.repository.model.FileEntry[] getGroupFileEntries(
 		long groupId, long userId, long rootFolderId, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator obc)
 		throws RemoteException {
@@ -1595,7 +1593,7 @@ public class DLAppServiceSoap {
 				DLAppServiceUtil.getGroupFileEntries(groupId, userId,
 					rootFolderId, start, end, obc);
 
-			return com.liferay.portal.kernel.repository.model.FileEntrySoap.toSoapModels(returnValue);
+			return returnValue.toArray(new com.liferay.portal.kernel.repository.model.FileEntry[returnValue.size()]);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -1604,7 +1602,7 @@ public class DLAppServiceSoap {
 		}
 	}
 
-	public static com.liferay.portal.kernel.repository.model.FileEntrySoap[] getGroupFileEntries(
+	public static com.liferay.portal.kernel.repository.model.FileEntry[] getGroupFileEntries(
 		long groupId, long userId, long rootFolderId,
 		java.lang.String[] mimeTypes, int status, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator obc)
@@ -1614,7 +1612,7 @@ public class DLAppServiceSoap {
 				DLAppServiceUtil.getGroupFileEntries(groupId, userId,
 					rootFolderId, mimeTypes, status, start, end, obc);
 
-			return com.liferay.portal.kernel.repository.model.FileEntrySoap.toSoapModels(returnValue);
+			return returnValue.toArray(new com.liferay.portal.kernel.repository.model.FileEntry[returnValue.size()]);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -1710,13 +1708,13 @@ public class DLAppServiceSoap {
 	found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.kernel.repository.model.FolderSoap[] getMountFolders(
+	public static com.liferay.portal.kernel.repository.model.Folder[] getMountFolders(
 		long repositoryId, long parentFolderId) throws RemoteException {
 		try {
 			java.util.List<com.liferay.portal.kernel.repository.model.Folder> returnValue =
 				DLAppServiceUtil.getMountFolders(repositoryId, parentFolderId);
 
-			return com.liferay.portal.kernel.repository.model.FolderSoap.toSoapModels(returnValue);
+			return returnValue.toArray(new com.liferay.portal.kernel.repository.model.Folder[returnValue.size()]);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -1750,7 +1748,7 @@ public class DLAppServiceSoap {
 	found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.kernel.repository.model.FolderSoap[] getMountFolders(
+	public static com.liferay.portal.kernel.repository.model.Folder[] getMountFolders(
 		long repositoryId, long parentFolderId, int start, int end)
 		throws RemoteException {
 		try {
@@ -1758,7 +1756,7 @@ public class DLAppServiceSoap {
 				DLAppServiceUtil.getMountFolders(repositoryId, parentFolderId,
 					start, end);
 
-			return com.liferay.portal.kernel.repository.model.FolderSoap.toSoapModels(returnValue);
+			return returnValue.toArray(new com.liferay.portal.kernel.repository.model.Folder[returnValue.size()]);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -1795,7 +1793,7 @@ public class DLAppServiceSoap {
 	found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.kernel.repository.model.FolderSoap[] getMountFolders(
+	public static com.liferay.portal.kernel.repository.model.Folder[] getMountFolders(
 		long repositoryId, long parentFolderId, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator obc)
 		throws RemoteException {
@@ -1804,7 +1802,7 @@ public class DLAppServiceSoap {
 				DLAppServiceUtil.getMountFolders(repositoryId, parentFolderId,
 					start, end, obc);
 
-			return com.liferay.portal.kernel.repository.model.FolderSoap.toSoapModels(returnValue);
+			return returnValue.toArray(new com.liferay.portal.kernel.repository.model.Folder[returnValue.size()]);
 		}
 		catch (Exception e) {
 			_log.error(e, e);

@@ -143,41 +143,42 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 		PermissionCheckerBag bag = PermissionCacheUtil.getBag(
 			defaultUserId, guestGroup.getGroupId());
 
-		if (bag == null) {
-			try {
-				List<Group> groups = new ArrayList<Group>();
+		if (bag != null) {
+			return bag;
+		}
 
-				groups.add(guestGroup);
+		try {
+			List<Group> groups = new ArrayList<Group>();
 
-				List<Role> roles = RoleLocalServiceUtil.getUserRelatedRoles(
-					defaultUserId, groups);
+			groups.add(guestGroup);
 
-				// Only use the guest group for deriving the roles for
-				// unauthenticated users. Do not add the group to the permission
-				// bag as this implies group membership which is incorrect in
-				// the case of unauthenticated users.
+			List<Role> roles = RoleLocalServiceUtil.getUserRelatedRoles(
+				defaultUserId, groups);
 
+			// Only use the guest group for deriving the roles for
+			// unauthenticated users. Do not add the group to the permission bag
+			// as this implies group membership which is incorrect in the case
+			// of unauthenticated users.
+
+			bag = new PermissionCheckerBagImpl(
+				defaultUserId, Collections.<Group>emptyList(),
+				Collections.<Organization>emptyList(),
+				Collections.<Group>emptyList(), Collections.<Group>emptyList(),
+				Collections.<Group>emptyList(), roles);
+		}
+		finally {
+			if (bag == null) {
 				bag = new PermissionCheckerBagImpl(
 					defaultUserId, Collections.<Group>emptyList(),
 					Collections.<Organization>emptyList(),
 					Collections.<Group>emptyList(),
 					Collections.<Group>emptyList(),
-					Collections.<Group>emptyList(), roles);
+					Collections.<Group>emptyList(),
+					Collections.<Role>emptyList());
 			}
-			finally {
-				if (bag == null) {
-					bag = new PermissionCheckerBagImpl(
-						defaultUserId, Collections.<Group>emptyList(),
-						Collections.<Organization>emptyList(),
-						Collections.<Group>emptyList(),
-						Collections.<Group>emptyList(),
-						Collections.<Group>emptyList(),
-						Collections.<Role>emptyList());
-				}
 
-				PermissionCacheUtil.putBag(
-					defaultUserId, guestGroup.getGroupId(), bag);
-			}
+			PermissionCacheUtil.putBag(
+				defaultUserId, guestGroup.getGroupId(), bag);
 		}
 
 		return bag;
@@ -303,31 +304,30 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 		catch (Exception e) {
 		}
 
-		if (bag != null) {
-			if (checkGuest) {
-				Set<Long> roleIds = SetUtil.fromArray(bag.getRoleIds());
-
-				try {
-					PermissionCheckerBag guestBag = getGuestUserBag();
-
-					if (guestBag != null) {
-						for (long roleId : guestBag.getRoleIds()) {
-							roleIds.add(roleId);
-						}
-					}
-				}
-				catch (Exception e) {
-				}
-
-				return ArrayUtil.toArray(
-					roleIds.toArray(new Long[roleIds.size()]));
-			}
-			else {
-				return bag.getRoleIds();
-			}
+		if (bag == null) {
+			return PermissionChecker.DEFAULT_ROLE_IDS;
 		}
 
-		return PermissionChecker.DEFAULT_ROLE_IDS;
+		if (checkGuest) {
+			Set<Long> roleIds = SetUtil.fromArray(bag.getRoleIds());
+
+			try {
+				PermissionCheckerBag guestBag = getGuestUserBag();
+
+				if (guestBag != null) {
+					for (long roleId : guestBag.getRoleIds()) {
+						roleIds.add(roleId);
+					}
+				}
+			}
+			catch (Exception e) {
+			}
+
+			return ArrayUtil.toArray(roleIds.toArray(new Long[roleIds.size()]));
+		}
+		else {
+			return bag.getRoleIds();
+		}
 	}
 
 	/**
@@ -352,11 +352,13 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 		try {
 			Group group = null;
 
+			long parentGroupId = 0;
+
 			if (groupId > 0) {
 				group = GroupLocalServiceUtil.getGroup(groupId);
 
 				if (group.isLayout()) {
-					long parentGroupId = group.getParentGroupId();
+					parentGroupId = group.getParentGroupId();
 
 					if (parentGroupId > 0) {
 						group = GroupLocalServiceUtil.getGroup(parentGroupId);
@@ -403,10 +405,25 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 
 			roles.addAll(userGroupRoles);
 
+			if (parentGroupId > 0) {
+				userGroupRoles = RoleLocalServiceUtil.getUserGroupRoles(
+					userId, parentGroupId);
+
+				roles.addAll(userGroupRoles);
+			}
+
 			List<Role> userGroupGroupRoles =
 				RoleLocalServiceUtil.getUserGroupGroupRoles(userId, groupId);
 
 			roles.addAll(userGroupGroupRoles);
+
+			if (parentGroupId > 0) {
+				userGroupGroupRoles =
+					RoleLocalServiceUtil.getUserGroupGroupRoles(
+						userId, parentGroupId);
+
+				roles.addAll(userGroupGroupRoles);
+			}
 
 			if (group != null) {
 				if (group.isOrganization() && userOrgGroups.contains(group)) {
@@ -456,6 +473,7 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 		}
 	}
 
+	@Override
 	public boolean hasOwnerPermission(
 		long companyId, String name, String primKey, long ownerId,
 		String actionId) {
@@ -507,6 +525,7 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 		return false;
 	}
 
+	@Override
 	public boolean hasPermission(
 		long groupId, String name, String primKey, String actionId) {
 
@@ -564,32 +583,35 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 			user.getUserId(), signedIn, checkGuest, groupId, name, primKey,
 			actionId);
 
-		if (value == null) {
-			try {
-				value = Boolean.valueOf(
-					hasPermissionImpl(groupId, name, primKey, actionId));
+		if (value != null) {
+			return value.booleanValue();
+		}
 
-				if (_log.isDebugEnabled()) {
-					_log.debug(
-						"Checking permission for " + groupId + " " + name +
-							" " + primKey + " " + actionId + " takes " +
-								stopWatch.getTime() + " ms");
-				}
-			}
-			finally {
-				if (value == null) {
-					value = Boolean.FALSE;
-				}
+		try {
+			value = Boolean.valueOf(
+				hasPermissionImpl(groupId, name, primKey, actionId));
 
-				PermissionCacheUtil.putPermission(
-					user.getUserId(), signedIn, checkGuest, groupId, name,
-					primKey, actionId, value);
+			if (_log.isDebugEnabled()) {
+				_log.debug(
+					"Checking permission for " + groupId + " " + name +
+						" " + primKey + " " + actionId + " takes " +
+							stopWatch.getTime() + " ms");
 			}
+		}
+		finally {
+			if (value == null) {
+				value = Boolean.FALSE;
+			}
+
+			PermissionCacheUtil.putPermission(
+				user.getUserId(), signedIn, checkGuest, groupId, name, primKey,
+				actionId, value);
 		}
 
 		return value.booleanValue();
 	}
 
+	@Override
 	public boolean hasUserPermission(
 		long groupId, String name, String primKey, String actionId,
 		boolean checkAdmin) {
@@ -605,6 +627,7 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 		}
 	}
 
+	@Override
 	public boolean isCompanyAdmin() {
 		try {
 			return isCompanyAdminImpl();
@@ -616,6 +639,7 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 		}
 	}
 
+	@Override
 	public boolean isCompanyAdmin(long companyId) {
 		try {
 			return isCompanyAdminImpl(companyId);
@@ -627,6 +651,7 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 		}
 	}
 
+	@Override
 	public boolean isGroupAdmin(long groupId) {
 		try {
 			return isGroupAdminImpl(groupId);
@@ -638,6 +663,7 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 		}
 	}
 
+	@Override
 	public boolean isGroupMember(long groupId) {
 		try {
 			return isGroupMemberImpl(groupId);
@@ -649,6 +675,7 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 		}
 	}
 
+	@Override
 	public boolean isGroupOwner(long groupId) {
 		try {
 			return isGroupOwnerImpl(groupId);
@@ -660,6 +687,7 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 		}
 	}
 
+	@Override
 	public boolean isOrganizationAdmin(long organizationId) {
 		try {
 			return isOrganizationAdminImpl(organizationId);
@@ -671,6 +699,7 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 		}
 	}
 
+	@Override
 	public boolean isOrganizationOwner(long organizationId) {
 		try {
 			return isOrganizationOwnerImpl(organizationId);
@@ -710,6 +739,47 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 
 			roles.add(role);
 		}
+	}
+
+	protected boolean doCheckPermission(
+			long companyId, long groupId, String name, String primKey,
+			String actionId, StopWatch stopWatch)
+		throws Exception {
+
+		logHasUserPermission(groupId, name, primKey, actionId, stopWatch, 1);
+
+		if (ResourceBlockLocalServiceUtil.isSupported(name)) {
+			ResourceBlockIdsBag resourceBlockIdsBag = getResourceBlockIdsBag(
+				companyId, groupId, getUserId(), name);
+
+			boolean value = ResourceBlockLocalServiceUtil.hasPermission(
+				name, GetterUtil.getLong(primKey), actionId,
+				resourceBlockIdsBag);
+
+			logHasUserPermission(
+				groupId, name, primKey, actionId, stopWatch, 2);
+
+			return value;
+		}
+
+		List<Resource> resources = getResources(
+			companyId, groupId, name, primKey, actionId);
+
+		logHasUserPermission(groupId, name, primKey, actionId, stopWatch, 3);
+
+		// Check if user has access to perform the action on the given resource
+		// scopes. The resources are scoped to check first for an individual
+		// class, then for the group that the class may belong to, and then for
+		// the company that the class belongs to.
+
+		PermissionCheckerBag bag = getUserBag(user.getUserId(), groupId);
+
+		boolean value = ResourceLocalServiceUtil.hasUserPermissions(
+			user.getUserId(), groupId, resources, actionId, bag.getRoleIds());
+
+		logHasUserPermission(groupId, name, primKey, actionId, stopWatch, 4);
+
+		return value;
 	}
 
 	/**
@@ -955,40 +1025,8 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 			}
 		}
 
-		logHasUserPermission(groupId, name, primKey, actionId, stopWatch, 1);
-
-		if (ResourceBlockLocalServiceUtil.isSupported(name)) {
-			ResourceBlockIdsBag resourceBlockIdsBag = getResourceBlockIdsBag(
-				companyId, groupId, getUserId(), name);
-
-			boolean value = ResourceBlockLocalServiceUtil.hasPermission(
-				name, GetterUtil.getLong(primKey), actionId,
-				resourceBlockIdsBag);
-
-			logHasUserPermission(
-				groupId, name, primKey, actionId, stopWatch, 2);
-
-			return value;
-		}
-
-		List<Resource> resources = getResources(
-			companyId, groupId, name, primKey, actionId);
-
-		logHasUserPermission(groupId, name, primKey, actionId, stopWatch, 3);
-
-		// Check if user has access to perform the action on the given resource
-		// scopes. The resources are scoped to check first for an individual
-		// class, then for the group that the class may belong to, and then for
-		// the company that the class belongs to.
-
-		PermissionCheckerBag bag = getUserBag(user.getUserId(), groupId);
-
-		boolean value = ResourceLocalServiceUtil.hasUserPermissions(
-			user.getUserId(), groupId, resources, actionId, bag.getRoleIds());
-
-		logHasUserPermission(groupId, name, primKey, actionId, stopWatch, 4);
-
-		return value;
+		return doCheckPermission(
+			companyId, groupId, name, primKey, actionId, stopWatch);
 	}
 
 	protected boolean isCompanyAdminImpl() throws Exception {
@@ -1046,9 +1084,57 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 		if (bag.isGroupAdmin(this, group)) {
 			return true;
 		}
-		else {
-			return false;
+
+		StopWatch stopWatch = null;
+
+		if (_log.isDebugEnabled()) {
+			stopWatch = new StopWatch();
+
+			stopWatch.start();
 		}
+
+		if (group.isOrganization()) {
+			Organization organization =
+				OrganizationLocalServiceUtil.getOrganization(
+					group.getOrganizationId());
+
+			while (!organization.isRoot()) {
+				Organization parentOrganization =
+					organization.getParentOrganization();
+
+				Group parentGroup = parentOrganization.getGroup();
+
+				if (doCheckPermission(
+						parentGroup.getCompanyId(), parentGroup.getGroupId(),
+						Organization.class.getName(),
+						String.valueOf(parentOrganization.getOrganizationId()),
+						ActionKeys.MANAGE_SUBORGANIZATIONS, stopWatch)) {
+
+					return true;
+				}
+
+				organization = parentOrganization;
+			}
+		}
+
+		if (group.isSite()) {
+			while (!group.isRoot()) {
+				Group parentGroup = group.getParentGroup();
+
+				if (doCheckPermission(
+						parentGroup.getCompanyId(), parentGroup.getGroupId(),
+						Group.class.getName(),
+						String.valueOf(parentGroup.getGroupId()),
+						ActionKeys.MANAGE_SUBGROUPS, stopWatch)) {
+
+					return true;
+				}
+
+				group = parentGroup;
+			}
+		}
+
+		return false;
 	}
 
 	protected boolean isGroupMemberImpl(long groupId) throws Exception {

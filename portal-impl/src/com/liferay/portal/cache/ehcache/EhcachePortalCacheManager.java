@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.cache.PortalCache;
 import com.liferay.portal.kernel.cache.PortalCacheManager;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.resiliency.spi.SPIUtil;
 import com.liferay.portal.kernel.util.ReflectionUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.util.PropsUtil;
@@ -57,6 +58,10 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 	implements PortalCacheManager<K, V> {
 
 	public void afterPropertiesSet() {
+		if ((_cacheManager != null) || (_mpiOnly && SPIUtil.isSPI())) {
+			return;
+		}
+
 		String configurationPath = PropsUtil.get(_configPropertyKey);
 
 		if (Validator.isNull(configurationPath)) {
@@ -69,7 +74,7 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 		Configuration configuration = EhcacheConfigurationUtil.getConfiguration(
 			configurationPath, _clusterAware, _usingDefault);
 
-		_cacheManager = new CacheManager(configuration);
+		_cacheManager = CacheManagerUtil.createCacheManager(configuration);
 
 		FailSafeTimer failSafeTimer = _cacheManager.getTimer();
 
@@ -95,6 +100,7 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 		}
 	}
 
+	@Override
 	public void clearAll() {
 		_cacheManager.clearAll();
 	}
@@ -110,10 +116,12 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 		}
 	}
 
+	@Override
 	public PortalCache<K, V> getCache(String name) {
 		return getCache(name, false);
 	}
 
+	@Override
 	public PortalCache<K, V> getCache(String name, boolean blocking) {
 		PortalCache<K, V> portalCache = _ehcachePortalCaches.get(name);
 
@@ -145,6 +153,7 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 		return _cacheManager;
 	}
 
+	@Override
 	public void reconfigureCaches(URL configurationURL) {
 		Configuration configuration = EhcacheConfigurationUtil.getConfiguration(
 			configurationURL, _clusterAware, _usingDefault);
@@ -166,6 +175,7 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 		}
 	}
 
+	@Override
 	public void removeCache(String name) {
 		_ehcachePortalCaches.remove(name);
 
@@ -182,6 +192,10 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 
 	public void setMBeanServer(MBeanServer mBeanServer) {
 		_mBeanServer = mBeanServer;
+	}
+
+	public void setMpiOnly(boolean mpiOnly) {
+		_mpiOnly = mpiOnly;
 	}
 
 	public void setRegisterCacheConfigurations(
@@ -229,9 +243,6 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 				return null;
 			}
 
-			ehcache.setStatisticsEnabled(
-				PropsValues.EHCACHE_STATISTICS_ENABLED);
-
 			ehcachePortalCache = _ehcachePortalCaches.get(name);
 
 			if (ehcachePortalCache == null) {
@@ -261,6 +272,7 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 		new HashMap<String, EhcachePortalCache<K, V>>();
 	private ManagementService _managementService;
 	private MBeanServer _mBeanServer;
+	private boolean _mpiOnly;
 	private boolean _registerCacheConfigurations = true;
 	private boolean _registerCacheManager = true;
 	private boolean _registerCaches = true;

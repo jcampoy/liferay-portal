@@ -14,22 +14,15 @@
 
 package com.liferay.portlet.documentlibrary.lar;
 
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.lar.BaseStagedModelDataHandler;
 import com.liferay.portal.kernel.lar.ExportImportPathUtil;
 import com.liferay.portal.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.lar.StagedModelDataHandlerUtil;
 import com.liferay.portal.kernel.util.MapUtil;
-import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.xml.Element;
-import com.liferay.portal.model.Group;
-import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portlet.documentlibrary.model.DLFileEntryType;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryTypeLocalServiceUtil;
-import com.liferay.portlet.documentlibrary.service.persistence.DLFileEntryTypeUtil;
 import com.liferay.portlet.documentlibrary.util.DLUtil;
 import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
 import com.liferay.portlet.dynamicdatamapping.service.DDMStructureLocalServiceUtil;
@@ -38,7 +31,6 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
  * @author Mate Thurzo
  */
 public class DLFileEntryTypeStagedModelDataHandler
@@ -68,7 +60,8 @@ public class DLFileEntryTypeStagedModelDataHandler
 				portletDataContext, ddmStructure);
 
 			portletDataContext.addReferenceElement(
-				fileEntryTypeElement, ddmStructure);
+				fileEntryType, fileEntryTypeElement, ddmStructure,
+				PortletDataContext.REFERENCE_TYPE_STRONG, false);
 		}
 
 		portletDataContext.addClassedModel(
@@ -84,10 +77,6 @@ public class DLFileEntryTypeStagedModelDataHandler
 		throws Exception {
 
 		long userId = portletDataContext.getUserId(fileEntryType.getUserUuid());
-
-		String name = getFileEntryTypeName(
-			fileEntryType.getUuid(), portletDataContext.getScopeGroupId(),
-			fileEntryType.getName(), 2);
 
 		List<Element> ddmStructureElements =
 			portletDataContext.getReferenceDataElements(
@@ -120,16 +109,17 @@ public class DLFileEntryTypeStagedModelDataHandler
 
 		if (portletDataContext.isDataStrategyMirror()) {
 			DLFileEntryType existingDLFileEntryType =
-				DLFileEntryTypeUtil.fetchByUUID_G(
-					fileEntryType.getUuid(),
-					portletDataContext.getScopeGroupId());
+				DLFileEntryTypeLocalServiceUtil.
+					fetchDLFileEntryTypeByUuidAndGroupId(
+						fileEntryType.getUuid(),
+						portletDataContext.getScopeGroupId());
 
 			if (existingDLFileEntryType == null) {
-				Group companyGroup = GroupLocalServiceUtil.getCompanyGroup(
-					portletDataContext.getCompanyId());
-
-				existingDLFileEntryType = DLFileEntryTypeUtil.fetchByUUID_G(
-					fileEntryType.getUuid(), companyGroup.getGroupId());
+				existingDLFileEntryType =
+					DLFileEntryTypeLocalServiceUtil.
+						fetchDLFileEntryTypeByUuidAndGroupId(
+							fileEntryType.getUuid(),
+							portletDataContext.getCompanyGroupId());
 			}
 
 			if (existingDLFileEntryType == null) {
@@ -137,108 +127,65 @@ public class DLFileEntryTypeStagedModelDataHandler
 
 				importedDLFileEntryType =
 					DLFileEntryTypeLocalServiceUtil.addFileEntryType(
-						userId, portletDataContext.getScopeGroupId(), name,
-						fileEntryType.getDescription(), ddmStructureIdsArray,
+						userId, portletDataContext.getScopeGroupId(),
+						fileEntryType.getFileEntryTypeKey(),
+						fileEntryType.getNameMap(),
+						fileEntryType.getDescriptionMap(), ddmStructureIdsArray,
 						serviceContext);
 			}
 			else {
-				if (!isFileEntryTypeGlobal(
-						portletDataContext.getCompanyId(),
+				if (portletDataContext.isCompanyStagedGroupedModel(
 						existingDLFileEntryType)) {
 
-					DLFileEntryTypeLocalServiceUtil.updateFileEntryType(
-						userId, existingDLFileEntryType.getFileEntryTypeId(),
-						name, fileEntryType.getDescription(),
-						ddmStructureIdsArray, serviceContext);
+					return;
 				}
 
-				importedDLFileEntryType = existingDLFileEntryType;
+				DLFileEntryTypeLocalServiceUtil.updateFileEntryType(
+					userId, existingDLFileEntryType.getFileEntryTypeId(),
+					fileEntryType.getNameMap(),
+					fileEntryType.getDescriptionMap(), ddmStructureIdsArray,
+					serviceContext);
 			}
 		}
 		else {
 			importedDLFileEntryType =
 				DLFileEntryTypeLocalServiceUtil.addFileEntryType(
-					userId, portletDataContext.getScopeGroupId(), name,
-					fileEntryType.getDescription(), ddmStructureIdsArray,
+					userId, portletDataContext.getScopeGroupId(),
+					fileEntryType.getFileEntryTypeKey(),
+					fileEntryType.getNameMap(),
+					fileEntryType.getDescriptionMap(), ddmStructureIdsArray,
 					serviceContext);
 		}
 
-		if (!isFileEntryTypeGlobal(
-				portletDataContext.getCompanyId(), importedDLFileEntryType)) {
+		portletDataContext.importClassedModel(
+			fileEntryType, importedDLFileEntryType,
+			DLPortletDataHandler.NAMESPACE);
 
-			portletDataContext.importClassedModel(
-				fileEntryType, importedDLFileEntryType,
-				DLPortletDataHandler.NAMESPACE);
+		String importedDLFileEntryDDMStructureKey = DLUtil.getDDMStructureKey(
+			importedDLFileEntryType);
 
-			String importedDLFileEntryDDMStructureKey =
-				DLUtil.getDDMStructureKey(importedDLFileEntryType);
+		List<DDMStructure> importedDDMStructures =
+			importedDLFileEntryType.getDDMStructures();
 
-			List<DDMStructure> importedDDMStructures =
-				importedDLFileEntryType.getDDMStructures();
+		for (DDMStructure importedDDMStructure : importedDDMStructures) {
+			String ddmStructureKey = importedDDMStructure.getStructureKey();
 
-			for (DDMStructure importedDDMStructure : importedDDMStructures) {
-				String ddmStructureKey = importedDDMStructure.getStructureKey();
+			if (!DLUtil.isAutoGeneratedDLFileEntryTypeDDMStructureKey(
+					ddmStructureKey)) {
 
-				if (!DLUtil.isAutoGeneratedDLFileEntryTypeDDMStructureKey(
-						ddmStructureKey)) {
-
-					continue;
-				}
-
-				if (ddmStructureKey.equals(
-						importedDLFileEntryDDMStructureKey)) {
-
-					continue;
-				}
-
-				importedDDMStructure.setStructureKey(
-					importedDLFileEntryDDMStructureKey);
-
-				DDMStructureLocalServiceUtil.updateDDMStructure(
-					importedDDMStructure);
+				continue;
 			}
+
+			if (ddmStructureKey.equals(importedDLFileEntryDDMStructureKey)) {
+				continue;
+			}
+
+			importedDDMStructure.setStructureKey(
+				importedDLFileEntryDDMStructureKey);
+
+			DDMStructureLocalServiceUtil.updateDDMStructure(
+				importedDDMStructure);
 		}
-	}
-
-	/**
-	 * @see com.liferay.portal.lar.PortletImporter#getAssetCategoryName(String,
-	 *      long, long, String, int)
-	 * @see com.liferay.portal.lar.PortletImporter#getAssetVocabularyName(
-	 *      String, long, String, int)
-	 */
-	protected String getFileEntryTypeName(
-			String uuid, long groupId, String name, int count)
-		throws Exception {
-
-		DLFileEntryType dlFileEntryType = DLFileEntryTypeUtil.fetchByG_N(
-			groupId, name);
-
-		if (dlFileEntryType == null) {
-			return name;
-		}
-
-		if (Validator.isNotNull(uuid) &&
-			uuid.equals(dlFileEntryType.getUuid())) {
-
-			return name;
-		}
-
-		name = StringUtil.appendParentheticalSuffix(name, count);
-
-		return getFileEntryTypeName(uuid, groupId, name, ++count);
-	}
-
-	protected boolean isFileEntryTypeGlobal(
-			long companyId, DLFileEntryType dlFileEntryType)
-		throws PortalException, SystemException {
-
-		Group group = GroupLocalServiceUtil.getCompanyGroup(companyId);
-
-		if (dlFileEntryType.getGroupId() == group.getGroupId()) {
-			return true;
-		}
-
-		return false;
 	}
 
 }

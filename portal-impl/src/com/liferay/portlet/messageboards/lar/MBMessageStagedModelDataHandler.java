@@ -25,7 +25,6 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.StreamUtil;
-import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
@@ -35,7 +34,6 @@ import com.liferay.portlet.messageboards.model.MBMessage;
 import com.liferay.portlet.messageboards.model.MBThread;
 import com.liferay.portlet.messageboards.service.MBMessageLocalServiceUtil;
 import com.liferay.portlet.messageboards.service.MBThreadLocalServiceUtil;
-import com.liferay.portlet.messageboards.service.persistence.MBMessageUtil;
 
 import java.io.InputStream;
 
@@ -58,13 +56,17 @@ public class MBMessageStagedModelDataHandler
 	}
 
 	@Override
+	public String getDisplayName(MBMessage message) {
+		return message.getSubject();
+	}
+
+	@Override
 	protected void doExportStagedModel(
 			PortletDataContext portletDataContext, MBMessage message)
 		throws Exception {
 
-		if ((message.getStatus() != WorkflowConstants.STATUS_APPROVED) ||
-			(message.getCategoryId() ==
-				MBCategoryConstants.DISCUSSION_CATEGORY_ID)) {
+		if (message.getCategoryId() ==
+				MBCategoryConstants.DISCUSSION_CATEGORY_ID) {
 
 			return;
 		}
@@ -89,10 +91,7 @@ public class MBMessageStagedModelDataHandler
 			"hasAttachmentsFileEntries",
 			String.valueOf(hasAttachmentsFileEntries));
 
-		if (portletDataContext.getBooleanParameter(
-				MBPortletDataHandler.NAMESPACE, "attachments") &&
-			hasAttachmentsFileEntries) {
-
+		if (hasAttachmentsFileEntries) {
 			for (FileEntry fileEntry : message.getAttachmentsFileEntries()) {
 				String name = fileEntry.getTitle();
 				String binPath = ExportImportPathUtil.getModelPath(
@@ -161,11 +160,6 @@ public class MBMessageStagedModelDataHandler
 				portletDataContext.createServiceContext(
 					message, MBPortletDataHandler.NAMESPACE);
 
-			if (message.getStatus() != WorkflowConstants.STATUS_APPROVED) {
-				serviceContext.setWorkflowAction(
-					WorkflowConstants.ACTION_SAVE_DRAFT);
-			}
-
 			if ((parentCategoryId !=
 					MBCategoryConstants.DEFAULT_PARENT_CATEGORY_ID) &&
 				(parentCategoryId !=
@@ -191,8 +185,10 @@ public class MBMessageStagedModelDataHandler
 			MBMessage importedMessage = null;
 
 			if (portletDataContext.isDataStrategyMirror()) {
-				MBMessage existingMessage = MBMessageUtil.fetchByUUID_G(
-					message.getUuid(), portletDataContext.getScopeGroupId());
+				MBMessage existingMessage =
+					MBMessageLocalServiceUtil.fetchMBMessageByUuidAndGroupId(
+						message.getUuid(),
+						portletDataContext.getScopeGroupId());
 
 				if (existingMessage == null) {
 					serviceContext.setUuid(message.getUuid());
@@ -255,10 +251,7 @@ public class MBMessageStagedModelDataHandler
 		boolean hasAttachmentsFileEntries = GetterUtil.getBoolean(
 			messageElement.attributeValue("hasAttachmentsFileEntries"));
 
-		if (!hasAttachmentsFileEntries &&
-			portletDataContext.getBooleanParameter(
-				MBPortletDataHandler.NAMESPACE, "attachments")) {
-
+		if (!hasAttachmentsFileEntries) {
 			return Collections.emptyList();
 		}
 

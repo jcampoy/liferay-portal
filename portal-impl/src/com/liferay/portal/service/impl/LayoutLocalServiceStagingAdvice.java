@@ -37,6 +37,7 @@ import com.liferay.portal.model.LayoutStagingHandler;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.service.ImageLocalServiceUtil;
+import com.liferay.portal.service.LayoutFriendlyURLLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalService;
 import com.liferay.portal.service.LayoutRevisionLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
@@ -44,6 +45,7 @@ import com.liferay.portal.service.ServiceContextThreadLocal;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.persistence.LayoutRevisionUtil;
 import com.liferay.portal.service.persistence.LayoutUtil;
+import com.liferay.portal.staging.ProxiedLayoutsThreadLocal;
 import com.liferay.portal.staging.StagingAdvicesThreadLocal;
 import com.liferay.portal.util.ClassLoaderUtil;
 
@@ -51,6 +53,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -116,6 +120,7 @@ public class LayoutLocalServiceStagingAdvice implements MethodInterceptor {
 		deleteLayout(layoutLocalService, layout, true, serviceContext);
 	}
 
+	@Override
 	public Object invoke(MethodInvocation methodInvocation) throws Throwable {
 		if (!StagingAdvicesThreadLocal.isEnabled()) {
 			return methodInvocation.proceed();
@@ -159,6 +164,21 @@ public class LayoutLocalServiceStagingAdvice implements MethodInterceptor {
 		else if (methodName.equals("updateLayout") &&
 				 (arguments.length == 15)) {
 
+			Map<Locale, String> friendlyURLMap = null;
+
+			if (Arrays.equals(
+					method.getParameterTypes(),
+					_UPDATE_LAYOUT_PARAMETER_TYPES)) {
+
+				friendlyURLMap = new HashMap<Locale, String>();
+
+				friendlyURLMap.put(
+					LocaleUtil.getDefault(), (String)arguments[11]);
+			}
+			else {
+				friendlyURLMap = (Map<Locale, String>)arguments[11];
+			}
+
 			returnValue = updateLayout(
 				(LayoutLocalService)thisObject, (Long)arguments[0],
 				(Boolean)arguments[1], (Long)arguments[2], (Long)arguments[3],
@@ -167,9 +187,8 @@ public class LayoutLocalServiceStagingAdvice implements MethodInterceptor {
 				(Map<Locale, String>)arguments[6],
 				(Map<Locale, String>)arguments[7],
 				(Map<Locale, String>)arguments[8], (String)arguments[9],
-				(Boolean)arguments[10], (String)arguments[11],
-				(Boolean)arguments[12], (byte[])arguments[13],
-				(ServiceContext)arguments[14]);
+				(Boolean)arguments[10], friendlyURLMap, (Boolean)arguments[12],
+				(byte[])arguments[13], (ServiceContext)arguments[14]);
 		}
 		else {
 			try {
@@ -207,8 +226,8 @@ public class LayoutLocalServiceStagingAdvice implements MethodInterceptor {
 			Map<Locale, String> nameMap, Map<Locale, String> titleMap,
 			Map<Locale, String> descriptionMap, Map<Locale, String> keywordsMap,
 			Map<Locale, String> robotsMap, String type, boolean hidden,
-			String friendlyURL, Boolean iconImage, byte[] iconBytes,
-			ServiceContext serviceContext)
+			Map<Locale, String> friendlyURLMap, Boolean iconImage,
+			byte[] iconBytes, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		// Layout
@@ -216,12 +235,13 @@ public class LayoutLocalServiceStagingAdvice implements MethodInterceptor {
 		parentLayoutId = layoutLocalServiceHelper.getParentLayoutId(
 			groupId, privateLayout, parentLayoutId);
 		String name = nameMap.get(LocaleUtil.getDefault());
-		friendlyURL = layoutLocalServiceHelper.getFriendlyURL(
-			groupId, privateLayout, layoutId, StringPool.BLANK, friendlyURL);
+		friendlyURLMap = layoutLocalServiceHelper.getFriendlyURLMap(
+			groupId, privateLayout, layoutId, StringPool.BLANK, friendlyURLMap);
+		String friendlyURL = friendlyURLMap.get(LocaleUtil.getDefault());
 
 		layoutLocalServiceHelper.validate(
 			groupId, privateLayout, layoutId, parentLayoutId, name, type,
-			hidden, friendlyURL);
+			hidden, friendlyURLMap);
 
 		layoutLocalServiceHelper.validateParentLayoutId(
 			groupId, privateLayout, layoutId, parentLayoutId);
@@ -238,7 +258,7 @@ public class LayoutLocalServiceStagingAdvice implements MethodInterceptor {
 			return layoutLocalService.updateLayout(
 				groupId, privateLayout, layoutId, parentLayoutId, nameMap,
 				titleMap, descriptionMap, keywordsMap, robotsMap, type, hidden,
-				friendlyURL, iconImage, iconBytes, serviceContext);
+				friendlyURLMap, iconImage, iconBytes, serviceContext);
 		}
 
 		if (parentLayoutId != originalLayout.getParentLayoutId()) {
@@ -282,6 +302,11 @@ public class LayoutLocalServiceStagingAdvice implements MethodInterceptor {
 		originalLayout.setExpandoBridgeAttributes(serviceContext);
 
 		LayoutUtil.update(originalLayout);
+
+		LayoutFriendlyURLLocalServiceUtil.updateLayoutFriendlyURLs(
+			originalLayout.getUserId(), originalLayout.getCompanyId(),
+			originalLayout.getGroupId(), originalLayout.getPlid(),
+			originalLayout.isPrivateLayout(), friendlyURLMap, serviceContext);
 
 		boolean hasWorkflowTask = StagingUtil.hasWorkflowTask(
 			serviceContext.getUserId(), layoutRevision);
@@ -459,6 +484,25 @@ public class LayoutLocalServiceStagingAdvice implements MethodInterceptor {
 		return layout;
 	}
 
+	protected Layout getProxiedLayout(Layout layout) {
+		Map<Layout, Object> proxiedLayouts =
+			ProxiedLayoutsThreadLocal.getProxiedLayouts();
+
+		Object proxiedLayout = proxiedLayouts.get(layout);
+
+		if (proxiedLayout != null) {
+			return (Layout)proxiedLayout;
+		}
+
+		proxiedLayout = ProxyUtil.newProxyInstance(
+			ClassLoaderUtil.getPortalClassLoader(), new Class[] {Layout.class},
+			new LayoutStagingHandler(layout));
+
+		proxiedLayouts.put(layout, proxiedLayout);
+
+		return (Layout)proxiedLayout;
+	}
+
 	protected Layout unwrapLayout(Layout layout) {
 		LayoutStagingHandler layoutStagingHandler =
 			LayoutStagingUtil.getLayoutStagingHandler(layout);
@@ -482,9 +526,7 @@ public class LayoutLocalServiceStagingAdvice implements MethodInterceptor {
 			return layout;
 		}
 
-		return (Layout)ProxyUtil.newProxyInstance(
-			ClassLoaderUtil.getPortalClassLoader(), new Class[] {Layout.class},
-			new LayoutStagingHandler(layout));
+		return getProxiedLayout(layout);
 	}
 
 	protected List<Layout> wrapLayouts(
@@ -562,6 +604,12 @@ public class LayoutLocalServiceStagingAdvice implements MethodInterceptor {
 
 	@BeanReference(type = LayoutLocalServiceHelper.class)
 	protected LayoutLocalServiceHelper layoutLocalServiceHelper;
+
+	private static final Class<?>[] _UPDATE_LAYOUT_PARAMETER_TYPES = {
+		long.class, boolean.class, long.class, long.class, Map.class, Map.class,
+		Map.class, Map.class, Map.class, String.class, boolean.class,
+		String.class, Boolean.class, byte[].class, ServiceContext.class
+	};
 
 	private static Log _log = LogFactoryUtil.getLog(
 		LayoutLocalServiceStagingAdvice.class);

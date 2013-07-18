@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.MapUtil;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.xml.Element;
@@ -33,7 +34,6 @@ import com.liferay.portlet.mobiledevicerules.model.MDRAction;
 import com.liferay.portlet.mobiledevicerules.model.MDRRuleGroupInstance;
 import com.liferay.portlet.mobiledevicerules.service.MDRActionLocalServiceUtil;
 import com.liferay.portlet.mobiledevicerules.service.MDRRuleGroupInstanceLocalServiceUtil;
-import com.liferay.portlet.mobiledevicerules.service.persistence.MDRActionUtil;
 
 import java.util.Map;
 
@@ -48,6 +48,11 @@ public class MDRActionStagedModelDataHandler
 	@Override
 	public String[] getClassNames() {
 		return CLASS_NAMES;
+	}
+
+	@Override
+	public String getDisplayName(MDRAction action) {
+		return action.getNameCurrentValue();
 	}
 
 	@Override
@@ -131,8 +136,9 @@ public class MDRActionStagedModelDataHandler
 		MDRAction importedAction = null;
 
 		if (portletDataContext.isDataStrategyMirror()) {
-			MDRAction existingAction = MDRActionUtil.fetchByUUID_G(
-				action.getUuid(), portletDataContext.getScopeGroupId());
+			MDRAction existingAction =
+				MDRActionLocalServiceUtil.fetchMDRActionByUuidAndGroupId(
+					action.getUuid(), portletDataContext.getScopeGroupId());
 
 			if (existingAction == null) {
 				serviceContext.setUuid(action.getUuid());
@@ -190,11 +196,15 @@ public class MDRActionStagedModelDataHandler
 		}
 		catch (Exception e) {
 			if (_log.isWarnEnabled()) {
-				_log.warn(
-					"Unable to find layout with uuid " + layoutUuid +
-						" in group " + groupId + ". Site redirect may not " +
-							"match target layout.",
-					e);
+				StringBundler sb = new StringBundler(5);
+
+				sb.append("Unable to find layout with uuid ");
+				sb.append(layoutUuid);
+				sb.append(" in group ");
+				sb.append(groupId);
+				sb.append(". Site redirect may not match the target layout.");
+
+				_log.warn(sb.toString(), e);
 			}
 		}
 	}

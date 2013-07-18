@@ -18,11 +18,12 @@ import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
 
 /**
- * The utility for the company remote service. This utility wraps {@link com.liferay.portal.service.impl.CompanyServiceImpl} and is the primary access point for service operations in application layer code running on a remote server.
- *
- * <p>
- * This is a remote service. Methods of this service are expected to have security checks based on the propagated JAAS credentials because this service can be accessed remotely.
- * </p>
+ * Provides the remote service utility for Company. This utility wraps
+ * {@link com.liferay.portal.service.impl.CompanyServiceImpl} and is the
+ * primary access point for service operations in application layer code running
+ * on a remote server. Methods of this service are expected to have security
+ * checks based on the propagated JAAS credentials because this service can be
+ * accessed remotely.
  *
  * @author Brian Wing Shun Chan
  * @see CompanyService
@@ -81,6 +82,12 @@ public class CompanyServiceUtil {
 		return getService()
 				   .addCompany(webId, virtualHost, mx, shardName, system,
 			maxUsers, active);
+	}
+
+	public static com.liferay.portal.model.Company deleteCompany(long companyId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().deleteCompany(companyId);
 	}
 
 	/**

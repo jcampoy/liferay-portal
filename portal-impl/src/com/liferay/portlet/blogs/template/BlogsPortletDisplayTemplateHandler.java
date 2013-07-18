@@ -36,10 +36,12 @@ import java.util.Map;
 public class BlogsPortletDisplayTemplateHandler
 	extends BasePortletDisplayTemplateHandler {
 
+	@Override
 	public String getClassName() {
 		return BlogsEntry.class.getName();
 	}
 
+	@Override
 	public String getName(Locale locale) {
 		String portletTitle = PortalUtil.getPortletTitle(
 			PortletKeys.BLOGS, locale);
@@ -48,17 +50,18 @@ public class BlogsPortletDisplayTemplateHandler
 			LanguageUtil.get(locale, "template"));
 	}
 
+	@Override
 	public String getResourceName() {
-		return "com.liferay.portlet.blogs";
+		return PortletKeys.BLOGS;
 	}
 
 	@Override
 	public Map<String, TemplateVariableGroup> getTemplateVariableGroups(
-			long classPK, Locale locale)
+			long classPK, String language, Locale locale)
 		throws Exception {
 
 		Map<String, TemplateVariableGroup> templateVariableGroups =
-			super.getTemplateVariableGroups(classPK, locale);
+			super.getTemplateVariableGroups(classPK, language, locale);
 
 		TemplateVariableGroup templateVariableGroup =
 			templateVariableGroups.get("fields");
@@ -67,7 +70,7 @@ public class BlogsPortletDisplayTemplateHandler
 
 		templateVariableGroup.addCollectionVariable(
 			"blog-entries", List.class, PortletDisplayTemplateConstants.ENTRIES,
-			"blog-entry", BlogsEntry.class, "curBlogEntry");
+			"blog-entry", BlogsEntry.class, "curBlogEntry", "title");
 
 		TemplateVariableGroup blogServicesTemplateVariableGroup =
 			new TemplateVariableGroup("blog-services");

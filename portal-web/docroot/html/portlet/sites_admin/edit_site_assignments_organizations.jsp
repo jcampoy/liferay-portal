@@ -48,9 +48,9 @@ if (tabs2.equals("current")) {
 	emptyResultsMessage ="no-organization-was-found-that-is-a-member-of-this-site";
 }
 
-OrganizationSearch organizationSearch = new OrganizationSearch(renderRequest, viewOrganizationsURL);
+SearchContainer searchContainer = new OrganizationSearch(renderRequest, viewOrganizationsURL);
 
-organizationSearch.setEmptyResultsMessage(emptyResultsMessage);
+searchContainer.setEmptyResultsMessage(emptyResultsMessage);
 %>
 
 <aui:input name="tabs1" type="hidden" value="organizations" />
@@ -59,7 +59,8 @@ organizationSearch.setEmptyResultsMessage(emptyResultsMessage);
 
 <liferay-ui:search-container
 	rowChecker="<%= organizationGroupChecker %>"
-	searchContainer="<%= organizationSearch %>"
+	searchContainer="<%= searchContainer %>"
+	var="organizationSearchContainer"
 >
 	<c:if test='<%= !tabs1.equals("summary") %>'>
 		<liferay-ui:search-form
@@ -70,7 +71,7 @@ organizationSearch.setEmptyResultsMessage(emptyResultsMessage);
 	</c:if>
 
 	<%
-	OrganizationSearchTerms searchTerms = (OrganizationSearchTerms)searchContainer.getSearchTerms();
+	OrganizationSearchTerms searchTerms = (OrganizationSearchTerms)organizationSearchContainer.getSearchTerms();
 
 	long parentOrganizationId = OrganizationConstants.ANY_PARENT_ORGANIZATION_ID;
 
@@ -182,7 +183,7 @@ organizationSearch.setEmptyResultsMessage(emptyResultsMessage);
 	<c:choose>
 		<c:when test='<%= tabs1.equals("summary") && (total > 0) %>'>
 			<liferay-ui:panel collapsible="<%= true %>" extended="<%= false %>" persistState="<%= true %>" title='<%= LanguageUtil.format(pageContext, (total > 1) ? "x-organizations" : "x-organization", total) %>'>
-				<span class="aui-search-bar">
+				<span class="form-search">
 					<aui:input inlineField="<%= true %>" label="" name='<%= DisplayTerms.KEYWORDS + "_organizations" %>' size="30" value="" />
 
 					<aui:button type="submit" value="search" />
@@ -192,7 +193,7 @@ organizationSearch.setEmptyResultsMessage(emptyResultsMessage);
 
 				<liferay-ui:search-iterator paginate="<%= false %>" />
 
-				<c:if test="<%= total > organizationSearch.getDelta() %>">
+				<c:if test="<%= total > searchContainer.getDelta() %>">
 					<a href="<%= viewOrganizationsURL %>"><liferay-ui:message key="view-more" /> &raquo;</a>
 				</c:if>
 			</liferay-ui:panel>
@@ -200,7 +201,7 @@ organizationSearch.setEmptyResultsMessage(emptyResultsMessage);
 			<div class="separator"><!-- --></div>
 		</c:when>
 		<c:when test='<%= !tabs1.equals("summary") %>'>
-			<c:if test="<%= total > organizationSearch.getDelta() %>">
+			<c:if test="<%= total > searchContainer.getDelta() %>">
 				<%= formButton %>
 			</c:if>
 

@@ -17,12 +17,10 @@ package com.liferay.portlet.trash.service;
 import com.liferay.portal.service.ServiceWrapper;
 
 /**
- * <p>
- * This class is a wrapper for {@link TrashEntryLocalService}.
- * </p>
+ * Provides a wrapper for {@link TrashEntryLocalService}.
  *
- * @author    Brian Wing Shun Chan
- * @see       TrashEntryLocalService
+ * @author Brian Wing Shun Chan
+ * @see TrashEntryLocalService
  * @generated
  */
 public class TrashEntryLocalServiceWrapper implements TrashEntryLocalService,
@@ -39,6 +37,7 @@ public class TrashEntryLocalServiceWrapper implements TrashEntryLocalService,
 	* @return the trash entry that was added
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.trash.model.TrashEntry addTrashEntry(
 		com.liferay.portlet.trash.model.TrashEntry trashEntry)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -51,6 +50,7 @@ public class TrashEntryLocalServiceWrapper implements TrashEntryLocalService,
 	* @param entryId the primary key for the new trash entry
 	* @return the new trash entry
 	*/
+	@Override
 	public com.liferay.portlet.trash.model.TrashEntry createTrashEntry(
 		long entryId) {
 		return _trashEntryLocalService.createTrashEntry(entryId);
@@ -64,6 +64,7 @@ public class TrashEntryLocalServiceWrapper implements TrashEntryLocalService,
 	* @throws PortalException if a trash entry with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.trash.model.TrashEntry deleteTrashEntry(
 		long entryId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -78,12 +79,14 @@ public class TrashEntryLocalServiceWrapper implements TrashEntryLocalService,
 	* @return the trash entry that was removed
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.trash.model.TrashEntry deleteTrashEntry(
 		com.liferay.portlet.trash.model.TrashEntry trashEntry)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _trashEntryLocalService.deleteTrashEntry(trashEntry);
 	}
 
+	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		return _trashEntryLocalService.dynamicQuery();
 	}
@@ -95,6 +98,7 @@ public class TrashEntryLocalServiceWrapper implements TrashEntryLocalService,
 	* @return the matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
@@ -115,6 +119,7 @@ public class TrashEntryLocalServiceWrapper implements TrashEntryLocalService,
 	* @return the range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -136,6 +141,7 @@ public class TrashEntryLocalServiceWrapper implements TrashEntryLocalService,
 	* @return the ordered range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -153,12 +159,31 @@ public class TrashEntryLocalServiceWrapper implements TrashEntryLocalService,
 	* @return the number of rows that match the dynamic query
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _trashEntryLocalService.dynamicQueryCount(dynamicQuery);
 	}
 
+	/**
+	* Returns the number of rows that match the dynamic query.
+	*
+	* @param dynamicQuery the dynamic query
+	* @param projection the projection to apply to the query
+	* @return the number of rows that match the dynamic query
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public long dynamicQueryCount(
+		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery,
+		com.liferay.portal.kernel.dao.orm.Projection projection)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _trashEntryLocalService.dynamicQueryCount(dynamicQuery,
+			projection);
+	}
+
+	@Override
 	public com.liferay.portlet.trash.model.TrashEntry fetchTrashEntry(
 		long entryId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -173,6 +198,7 @@ public class TrashEntryLocalServiceWrapper implements TrashEntryLocalService,
 	* @throws PortalException if a trash entry with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.trash.model.TrashEntry getTrashEntry(
 		long entryId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -180,6 +206,7 @@ public class TrashEntryLocalServiceWrapper implements TrashEntryLocalService,
 		return _trashEntryLocalService.getTrashEntry(entryId);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -199,6 +226,7 @@ public class TrashEntryLocalServiceWrapper implements TrashEntryLocalService,
 	* @return the range of trash entries
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.trash.model.TrashEntry> getTrashEntries(
 		int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -211,6 +239,7 @@ public class TrashEntryLocalServiceWrapper implements TrashEntryLocalService,
 	* @return the number of trash entries
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getTrashEntriesCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _trashEntryLocalService.getTrashEntriesCount();
@@ -223,6 +252,7 @@ public class TrashEntryLocalServiceWrapper implements TrashEntryLocalService,
 	* @return the trash entry that was updated
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.trash.model.TrashEntry updateTrashEntry(
 		com.liferay.portlet.trash.model.TrashEntry trashEntry)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -234,6 +264,7 @@ public class TrashEntryLocalServiceWrapper implements TrashEntryLocalService,
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _trashEntryLocalService.getBeanIdentifier();
 	}
@@ -243,6 +274,7 @@ public class TrashEntryLocalServiceWrapper implements TrashEntryLocalService,
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_trashEntryLocalService.setBeanIdentifier(beanIdentifier);
 	}
@@ -263,6 +295,7 @@ public class TrashEntryLocalServiceWrapper implements TrashEntryLocalService,
 	* @throws PortalException if a user with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.trash.model.TrashEntry addTrashEntry(
 		long userId, long groupId, java.lang.String className, long classPK,
 		int status,
@@ -274,6 +307,7 @@ public class TrashEntryLocalServiceWrapper implements TrashEntryLocalService,
 			className, classPK, status, statusOVPs, typeSettingsProperties);
 	}
 
+	@Override
 	public void checkEntries()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -288,6 +322,7 @@ public class TrashEntryLocalServiceWrapper implements TrashEntryLocalService,
 	be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.trash.model.TrashEntry deleteEntry(long entryId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -303,6 +338,7 @@ public class TrashEntryLocalServiceWrapper implements TrashEntryLocalService,
 	be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.trash.model.TrashEntry deleteEntry(
 		java.lang.String className, long classPK)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -310,6 +346,7 @@ public class TrashEntryLocalServiceWrapper implements TrashEntryLocalService,
 		return _trashEntryLocalService.deleteEntry(className, classPK);
 	}
 
+	@Override
 	public com.liferay.portlet.trash.model.TrashEntry deleteEntry(
 		com.liferay.portlet.trash.model.TrashEntry trashEntry)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -323,6 +360,7 @@ public class TrashEntryLocalServiceWrapper implements TrashEntryLocalService,
 	* @return the trash entry with the primary key
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.trash.model.TrashEntry fetchEntry(long entryId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _trashEntryLocalService.fetchEntry(entryId);
@@ -336,6 +374,7 @@ public class TrashEntryLocalServiceWrapper implements TrashEntryLocalService,
 	* @return the trash entry with the entity class name and primary key
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.trash.model.TrashEntry fetchEntry(
 		java.lang.String className, long classPK)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -349,6 +388,7 @@ public class TrashEntryLocalServiceWrapper implements TrashEntryLocalService,
 	* @return the trash entries with the group ID
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.trash.model.TrashEntry> getEntries(
 		long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -365,6 +405,7 @@ public class TrashEntryLocalServiceWrapper implements TrashEntryLocalService,
 	* @return the range of matching trash entries
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.trash.model.TrashEntry> getEntries(
 		long groupId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -384,6 +425,7 @@ public class TrashEntryLocalServiceWrapper implements TrashEntryLocalService,
 	<code>obc</code>
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.trash.model.TrashEntry> getEntries(
 		long groupId, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator obc)
@@ -398,6 +440,7 @@ public class TrashEntryLocalServiceWrapper implements TrashEntryLocalService,
 	* @return the number of matching trash entries
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getEntriesCount(long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _trashEntryLocalService.getEntriesCount(groupId);
@@ -412,6 +455,7 @@ public class TrashEntryLocalServiceWrapper implements TrashEntryLocalService,
 	be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.trash.model.TrashEntry getEntry(long entryId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -428,6 +472,7 @@ public class TrashEntryLocalServiceWrapper implements TrashEntryLocalService,
 	be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.trash.model.TrashEntry getEntry(
 		java.lang.String className, long classPK)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -442,6 +487,7 @@ public class TrashEntryLocalServiceWrapper implements TrashEntryLocalService,
 	* @return all the trash versions associated with the trash entry
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.trash.model.TrashVersion> getVersions(
 		long entryId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -456,12 +502,14 @@ public class TrashEntryLocalServiceWrapper implements TrashEntryLocalService,
 	* @return all the trash versions associated with the trash entry
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.trash.model.TrashVersion> getVersions(
 		java.lang.String className, long classPK)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _trashEntryLocalService.getVersions(className, classPK);
 	}
 
+	@Override
 	public com.liferay.portal.kernel.search.Hits search(long companyId,
 		long groupId, long userId, java.lang.String keywords, int start,
 		int end, com.liferay.portal.kernel.search.Sort sort)
@@ -485,10 +533,12 @@ public class TrashEntryLocalServiceWrapper implements TrashEntryLocalService,
 		_trashEntryLocalService = trashEntryLocalService;
 	}
 
+	@Override
 	public TrashEntryLocalService getWrappedService() {
 		return _trashEntryLocalService;
 	}
 
+	@Override
 	public void setWrappedService(TrashEntryLocalService trashEntryLocalService) {
 		_trashEntryLocalService = trashEntryLocalService;
 	}

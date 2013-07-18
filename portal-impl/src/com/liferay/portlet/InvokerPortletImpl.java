@@ -166,11 +166,7 @@ public class InvokerPortletImpl implements InvokerPortlet {
 		boolean facesPortlet = false;
 
 		if (ClassUtil.isSubclass(
-				portlet.getClass(), PortletDeployer.JSF_MYFACES) ||
-			ClassUtil.isSubclass(
-				portlet.getClass(), PortletDeployer.JSF_STANDARD) ||
-			ClassUtil.isSubclass(
-				portlet.getClass(), PortletDeployer.JSF_SUN)) {
+				portlet.getClass(), PortletDeployer.JSF_STANDARD)) {
 
 			facesPortlet = true;
 		}
@@ -187,6 +183,7 @@ public class InvokerPortletImpl implements InvokerPortlet {
 			facesPortlet, strutsPortlet, strutsBridgePortlet);
 	}
 
+	@Override
 	public void destroy() {
 		if (PortletConstants.hasInstanceId(_portletModel.getPortletId())) {
 			if (_log.isWarnEnabled()) {
@@ -217,14 +214,17 @@ public class InvokerPortletImpl implements InvokerPortlet {
 		}
 	}
 
+	@Override
 	public Integer getExpCache() {
 		return _expCache;
 	}
 
+	@Override
 	public Portlet getPortlet() {
 		return _portlet;
 	}
 
+	@Override
 	public ClassLoader getPortletClassLoader() {
 		ClassLoader classLoader =
 			(ClassLoader)_liferayPortletContext.getAttribute(
@@ -237,18 +237,22 @@ public class InvokerPortletImpl implements InvokerPortlet {
 		return classLoader;
 	}
 
+	@Override
 	public PortletConfig getPortletConfig() {
 		return _liferayPortletConfig;
 	}
 
+	@Override
 	public PortletContext getPortletContext() {
 		return _liferayPortletContext;
 	}
 
+	@Override
 	public Portlet getPortletInstance() {
 		return _portlet;
 	}
 
+	@Override
 	public void init(PortletConfig portletConfig) throws PortletException {
 		_liferayPortletConfig = (LiferayPortletConfig)portletConfig;
 
@@ -271,22 +275,27 @@ public class InvokerPortletImpl implements InvokerPortlet {
 		}
 	}
 
+	@Override
 	public boolean isCheckAuthToken() {
 		return _checkAuthToken;
 	}
 
+	@Override
 	public boolean isFacesPortlet() {
 		return _facesPortlet;
 	}
 
+	@Override
 	public boolean isStrutsBridgePortlet() {
 		return _strutsBridgePortlet;
 	}
 
+	@Override
 	public boolean isStrutsPortlet() {
 		return _strutsPortlet;
 	}
 
+	@Override
 	public void processAction(
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
@@ -319,6 +328,7 @@ public class InvokerPortletImpl implements InvokerPortlet {
 		}
 	}
 
+	@Override
 	public void processEvent(
 			EventRequest eventRequest, EventResponse eventResponse)
 		throws IOException, PortletException {
@@ -340,6 +350,7 @@ public class InvokerPortletImpl implements InvokerPortlet {
 		}
 	}
 
+	@Override
 	public void render(
 			RenderRequest renderRequest, RenderResponse renderResponse)
 		throws IOException, PortletException {
@@ -434,6 +445,7 @@ public class InvokerPortletImpl implements InvokerPortlet {
 		}
 	}
 
+	@Override
 	public void serveResource(
 			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 		throws IOException {
@@ -461,6 +473,7 @@ public class InvokerPortletImpl implements InvokerPortlet {
 		}
 	}
 
+	@Override
 	public void setPortletFilters() throws PortletException {
 		PortletApp portletApp = _portletModel.getPortletApp();
 

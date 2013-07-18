@@ -27,12 +27,14 @@ Set<String> contextPaths = JSONWebServiceActionsManagerUtil.getContextPaths();
 
 		<%
 		for (String curContextPath : contextPaths) {
+			String curContextPathView = curContextPath;
+
 			if (Validator.isNull(curContextPath)) {
-				curContextPath = StringPool.SLASH;
+				curContextPathView = StringPool.SLASH;
 			}
 		%>
 
-			<aui:option label="<%= curContextPath %>" selected="<%= contextPath.equals(curContextPath) %>" value="<%= curContextPath %>" />
+			<aui:option label="<%= curContextPathView %>" selected="<%= contextPath.equals(curContextPath) %>" value="<%= curContextPath %>" />
 
 		<%
 		}
@@ -41,7 +43,7 @@ Set<String> contextPaths = JSONWebServiceActionsManagerUtil.getContextPaths();
 	</aui:select>
 </c:if>
 
-<aui:input cssClass="lfr-api-service-search" label="" name="serviceSearch" placeholder="search" />
+<aui:input autoFocus="<%= true %>" cssClass="lfr-api-service-search" label="" name="serviceSearch" placeholder="search" />
 
 <div class="services" id="services">
 
@@ -72,10 +74,19 @@ Set<String> contextPaths = JSONWebServiceActionsManagerUtil.getContextPaths();
 
 	for (String jsonWebServiceClassName : jsonWebServiceClasses.keySet()) {
 		Set<JSONWebServiceActionMapping> jsonWebServiceMappings = jsonWebServiceClasses.get(jsonWebServiceClassName);
+
+		String panelTitle = jsonWebServiceClassName;
+
+		if (panelTitle.endsWith("Impl")) {
+			panelTitle = panelTitle.substring(0, panelTitle.length() - 4);
+		}
+		if (panelTitle.endsWith("Service")) {
+			panelTitle = panelTitle.substring(0, panelTitle.length() - 7);
+		}
 	%>
 
-		<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id='<%= "apiService" + jsonWebServiceClassName + "Panel" %>' persistState="<%= true %>" title="<%= jsonWebServiceClassName %>">
-			<ul class="lfr-component">
+		<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id='<%= "apiService" + jsonWebServiceClassName + "Panel" %>' persistState="<%= true %>" title="<%= panelTitle %>">
+			<ul class="unstyled">
 
 				<%
 				for (JSONWebServiceActionMapping jsonWebServiceActionMapping : jsonWebServiceMappings) {
@@ -112,7 +123,7 @@ Set<String> contextPaths = JSONWebServiceActionsManagerUtil.getContextPaths();
 
 </div>
 
-<div class="no-matches aui-helper-hidden" id="noMatches">
+<div class="hide no-matches" id="noMatches">
 	<liferay-ui:message key="there-are-no-services-matching-that-phrase" />
 </div>
 
@@ -127,7 +138,7 @@ Set<String> contextPaths = JSONWebServiceActionsManagerUtil.getContextPaths();
 		if (contextPathSelector) {
 			contextPathSelector.on(
 				'change',
-				function(event){
+				function(event) {
 					var contextPath = contextPathSelector.val();
 
 					var location = '<%= jsonWSPath %>';
@@ -181,11 +192,9 @@ Set<String> contextPaths = JSONWebServiceActionsManagerUtil.getContextPaths();
 
 	var cache = {};
 
-	var serviceSearch = A.one('#serviceSearch');
-
 	var filter = new ServiceFilter(
 		{
-			inputNode: serviceSearch,
+			inputNode: A.one('#serviceSearch'),
 			minQueryLength: 0,
 			queryDelay: 0,
 			resultFilters: function(query, results) {
@@ -307,6 +316,4 @@ Set<String> contextPaths = JSONWebServiceActionsManagerUtil.getContextPaths();
 			50
 		)
 	);
-
-	Liferay.Util.focusFormField(serviceSearch);
 </aui:script>

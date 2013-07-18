@@ -26,6 +26,7 @@ import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.service.RepositoryServiceUtil;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portlet.documentlibrary.NoSuchFolderException;
 import com.liferay.portlet.documentlibrary.model.DLFileShortcut;
 import com.liferay.portlet.documentlibrary.service.DLAppHelperLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
@@ -43,12 +44,14 @@ import javax.portlet.PortletRequest;
  */
 public class DLFileShortcutTrashHandler extends DLBaseTrashHandler {
 
+	@Override
 	public void deleteTrashEntry(long classPK)
 		throws PortalException, SystemException {
 
 		DLAppLocalServiceUtil.deleteFileShortcut(classPK);
 	}
 
+	@Override
 	public String getClassName() {
 		return DLFileShortcut.class.getName();
 	}
@@ -122,6 +125,7 @@ public class DLFileShortcutTrashHandler extends DLBaseTrashHandler {
 			permissionChecker, groupId, classPK, trashActionId);
 	}
 
+	@Override
 	public boolean isInTrash(long classPK)
 		throws PortalException, SystemException {
 
@@ -144,6 +148,13 @@ public class DLFileShortcutTrashHandler extends DLBaseTrashHandler {
 		throws PortalException, SystemException {
 
 		DLFileShortcut dlFileShortcut = getDLFileShortcut(classPK);
+
+		try {
+			dlFileShortcut.getFolder();
+		}
+		catch (NoSuchFolderException nsfe) {
+			return false;
+		}
 
 		return !dlFileShortcut.isInTrashContainer();
 	}
@@ -172,6 +183,7 @@ public class DLFileShortcutTrashHandler extends DLBaseTrashHandler {
 			serviceContext);
 	}
 
+	@Override
 	public void restoreTrashEntry(long userId, long classPK)
 		throws PortalException, SystemException {
 

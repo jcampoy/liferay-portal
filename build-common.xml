@@ -55,7 +55,7 @@
 	<path id="test.classpath">
 		<pathelement path="test-classes/${test.type}" />
 		<pathelement path="${classpath}" />
-		<fileset dir="${project.dir}/lib/development" includes="*.jar" excludes="jetty*.jar,tomcat*.jar" />
+		<fileset dir="${project.dir}/lib/development" includes="*.jar" excludes="jalopy.jar,jetty*.jar,tomcat*.jar" />
 		<fileset dir="${project.dir}/lib/global" includes="*.jar" />
 		<fileset dir="${project.dir}/lib/portal" includes="*.jar" excludes="ant.jar" />
 		<fileset dir="${project.dir}/osgi/lib/common/core" includes="*.jar" />
@@ -445,6 +445,7 @@ Please set the environment variable ANT_OPTS to the recommended value of
 			<liferay-manifest-helper
 				analyze="@{analyze}"
 				classpathref="project.classpath"
+				projectDirPropertyName="project.dir"
 			/>
 		</sequential>
 	</macrodef>
@@ -518,7 +519,7 @@ Please set the environment variable ANT_OPTS to the recommended value of
 	</target>
 
 	<target name="format-javadoc">
-		<echo message="Run &quot;ant compile compile-test&quot; before using format-javadoc to generate @Override tags." />
+		<echo>Run "ant compile compile-test" before using format-javadoc to generate @Override tags.</echo>
 
 		<java
 			classname="com.liferay.portal.tools.JavadocFormatter"
@@ -526,7 +527,7 @@ Please set the environment variable ANT_OPTS to the recommended value of
 			fork="true"
 			newenvironment="true"
 		>
-			<jvmarg value="-Xmx512m" />
+			<jvmarg value="-Xmx1024m" />
 			<arg value="javadoc.init=${init}" />
 			<arg value="javadoc.input.dir=${input.dir}" />
 			<arg value="javadoc.limit=${limit}" />
@@ -788,11 +789,27 @@ Please set the environment variable ANT_OPTS to the recommended value of
 				</then>
 			</elseif>
 			<else>
-				<fail>The property "test.type" is invalid.</fail>
+				<if>
+					<not>
+						<isset property="class" />
+					</not>
+					<then>
+						<fail>Missing class argument. Use "ant test-class -Dclass=TestClassName".</fail>
+					</then>
+					<elseif>
+						<not>
+							<isset property="test.type" />
+						</not>
+						<then>
+							<fail>Class ${class} cannot be found.</fail>
+						</then>
+					</elseif>
+				</if>
 			</else>
 		</if>
 
 		<ant target="test-cmd">
+			<property name="junit.forkmode" value="once" />
 			<property name="test.type" value="${test.type}" />
 		</ant>
 
@@ -814,7 +831,7 @@ Please set the environment variable ANT_OPTS to the recommended value of
 		<if>
 			<available file="test/${test.type}" type="dir" />
 			<then>
-				<junit dir="${project.dir}" fork="on" forkmode="once" haltonfailure="${junit.halt.on.failure}" outputtoformatters="false" printsummary="on" showoutput="true">
+				<junit dir="${project.dir}" fork="on" forkmode="${junit.forkmode}" haltonfailure="${junit.halt.on.failure}" outputtoformatters="false" printsummary="on" showoutput="true">
 					<sysproperty key="junit.aspectj.dump" file="woven-classes" />
 					<sysproperty key="junit.cobertura.agent" value="${junit.cobertura.agent}" />
 					<sysproperty key="junit.code.coverage" value="${junit.code.coverage}" />
@@ -852,6 +869,7 @@ Please set the environment variable ANT_OPTS to the recommended value of
 		<var name="class" value="*Test" />
 
 		<ant target="test-cmd">
+			<property name="junit.forkmode" value="once" />
 			<property name="test.excludes" value="**/*PersistenceTest.class" />
 			<property name="test.type" value="integration" />
 		</ant>
@@ -859,6 +877,7 @@ Please set the environment variable ANT_OPTS to the recommended value of
 		<var name="class" value="*PersistenceTest" />
 
 		<ant target="test-cmd">
+			<property name="junit.forkmode" value="once" />
 			<property name="test.type" value="integration" />
 		</ant>
 
@@ -892,6 +911,7 @@ Please set the environment variable ANT_OPTS to the recommended value of
 		<property name="class" value="*Test" />
 
 		<ant target="test-cmd">
+			<property name="junit.forkmode" value="perTest" />
 			<property name="test.type" value="unit" />
 		</ant>
 

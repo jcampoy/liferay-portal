@@ -3,6 +3,10 @@
 <#list elements as element>
 	<#assign name = element.getName()>
 
+	<#assign lineNumber = element.attributeValue("line-number")>
+
+	liferaySelenium.sendLogger("${macroName?uncap_first}Macro${lineNumber}", "pending");
+
 	<#if name == "echo">
 		<#assign message = element.attributeValue("message")>
 
@@ -13,15 +17,42 @@
 		</#if>
 
 		liferaySelenium.echo("${message}");
+
+		<#assign lineNumber = element.attributeValue("line-number")>
+
+		liferaySelenium.sendLogger("${macroName?uncap_first}Macro${lineNumber}", "pass");
 	<#elseif name == "execute">
 		<#if element.attributeValue("action")??>
+			<#assign action = element.attributeValue("action")>
+
+			<#if action?contains("#is")>
+				try {
+			</#if>
+
 			<#assign actionElement = element>
 
 			<#include "action_element.ftl">
+
+			<#if action?contains("#is")>
+				}
+				finally {
+					<#assign lineNumber = element.attributeValue("line-number")>
+
+					liferaySelenium.sendLogger("${macroName?uncap_first}Macro${lineNumber}", "pass");
+				}
+			<#else>
+				<#assign lineNumber = element.attributeValue("line-number")>
+
+				liferaySelenium.sendLogger("${macroName?uncap_first}Macro${lineNumber}", "pass");
+			</#if>
 		<#elseif element.attributeValue("macro")??>
 			<#assign macroElement = element>
 
 			<#include "macro_element.ftl">
+
+			<#assign lineNumber = element.attributeValue("line-number")>
+
+			liferaySelenium.sendLogger("${macroName?uncap_first}Macro${lineNumber}", "pass");
 		</#if>
 	<#elseif name == "fail">
 		<#assign message = element.attributeValue("message")>
@@ -33,6 +64,10 @@
 		</#if>
 
 		liferaySelenium.fail("${message}");
+
+		<#assign lineNumber = element.attributeValue("line-number")>
+
+		liferaySelenium.sendLogger("${macroName?uncap_first}Macro${lineNumber}", "pass");
 	<#elseif name == "if">
 		executeScopeVariables = new HashMap<String, String>();
 
@@ -54,23 +89,33 @@
 			<#assign elseElement = element.element("else")>
 
 			else {
+				<#assign lineNumber = elseElement.attributeValue("line-number")>
+
+				liferaySelenium.sendLogger("${macroName?uncap_first}Macro${lineNumber}", "pending");
+
 				<#assign blockElement = elseElement>
 
 				<#include "macro_block_element.ftl">
+
+				<#assign lineNumber = elseElement.attributeValue("line-number")>
+
+				liferaySelenium.sendLogger("${macroName?uncap_first}Macro${lineNumber}", "pass");
 			}
 		</#if>
+
+		<#assign lineNumber = element.attributeValue("line-number")>
+
+		liferaySelenium.sendLogger("${macroName?uncap_first}Macro${lineNumber}", "pass");
 	<#elseif name == "var">
-		<#assign varName = element.attributeValue("name")>
+		<#assign varElement = element>
 
-		<#assign varValue = element.attributeValue("value")>
+		<#assign context = "commandScopeVariables">
 
-		<#if varValue?contains("${") && varValue?contains("}")>
-			<#assign varValue = varValue?replace("${", "\" + commandScopeVariables.get(\"")>
+		<#include "var_element.ftl">
 
-			<#assign varValue = varValue?replace("}", "\") + \"")>
-		</#if>
+		<#assign lineNumber = element.attributeValue("line-number")>
 
-		commandScopeVariables.put("${varName}", "${varValue}");
+		liferaySelenium.sendLogger("${macroName?uncap_first}Macro${lineNumber}", "pass");
 	<#elseif name == "while">
 		executeScopeVariables = new HashMap<String, String>();
 
@@ -79,5 +124,9 @@
 		<#assign ifElement = element>
 
 		<#include "macro_if_element.ftl">
+
+		<#assign lineNumber = element.attributeValue("line-number")>
+
+		liferaySelenium.sendLogger("${macroName?uncap_first}Macro${lineNumber}", "pass");
 	</#if>
 </#list>

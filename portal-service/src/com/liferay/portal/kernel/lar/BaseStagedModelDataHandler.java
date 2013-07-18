@@ -14,35 +14,74 @@
 
 package com.liferay.portal.kernel.lar;
 
+import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.model.StagedModel;
+import com.liferay.portal.model.WorkflowedModel;
 
 /**
  * @author Mate Thurzo
  * @author Daniel Kocsis
+ * @author Zsolt Berentey
  */
 public abstract class BaseStagedModelDataHandler<T extends StagedModel>
 	implements StagedModelDataHandler<T> {
 
+	@Override
 	public void exportStagedModel(
 			PortletDataContext portletDataContext, T stagedModel)
 		throws PortletDataException {
 
 		String path = ExportImportPathUtil.getModelPath(stagedModel);
 
-		if (portletDataContext.isPathProcessed(path)) {
+		if (portletDataContext.isPathExportedInScope(path)) {
 			return;
+		}
+
+		if (stagedModel instanceof WorkflowedModel) {
+			WorkflowedModel workflowedModel = (WorkflowedModel)stagedModel;
+
+			if (!ArrayUtil.contains(
+					getExportableStatuses(), workflowedModel.getStatus())) {
+
+				return;
+			}
 		}
 
 		try {
 			doExportStagedModel(portletDataContext, (T)stagedModel.clone());
+
+			if (countStagedModel(portletDataContext, stagedModel)) {
+				ManifestSummary manifestSummary =
+					portletDataContext.getManifestSummary();
+
+				manifestSummary.incrementModelAdditionCount(
+					stagedModel.getStagedModelType());
+
+				PortletDataHandlerStatusMessageSenderUtil.sendStatusMessage(
+					"stagedModel", stagedModel, manifestSummary);
+			}
 		}
 		catch (Exception e) {
 			throw new PortletDataException(e);
 		}
 	}
 
+	@Override
 	public abstract String[] getClassNames();
 
+	@Override
+	public String getDisplayName(T stagedModel) {
+		return stagedModel.getUuid();
+	}
+
+	@Override
+	public int[] getExportableStatuses() {
+		return new int[] {WorkflowConstants.STATUS_APPROVED};
+	}
+
+	@Override
 	public void importStagedModel(
 			PortletDataContext portletDataContext, T stagedModel)
 		throws PortletDataException {
@@ -55,10 +94,56 @@ public abstract class BaseStagedModelDataHandler<T extends StagedModel>
 
 		try {
 			doImportStagedModel(portletDataContext, stagedModel);
+
+			ManifestSummary manifestSummary =
+				portletDataContext.getManifestSummary();
+
+			manifestSummary.incrementModelAdditionCount(
+				stagedModel.getStagedModelType());
+
+			PortletDataHandlerStatusMessageSenderUtil.sendStatusMessage(
+				"stagedModel", stagedModel, manifestSummary);
 		}
 		catch (Exception e) {
 			throw new PortletDataException(e);
 		}
+	}
+
+	@Override
+	public boolean validateReference(
+		PortletDataContext portletDataContext, Element rootElement,
+		Element referenceElement) {
+
+		String elementName = referenceElement.getName();
+
+		if (elementName.equals("missing-reference")) {
+			String uuid = referenceElement.attributeValue("uuid");
+
+			try {
+				boolean valid = validateMissingReference(
+					uuid, portletDataContext.getCompanyId(),
+					portletDataContext.getScopeGroupId());
+
+				if (!valid) {
+					valid = validateMissingReference(
+						uuid, portletDataContext.getCompanyId(),
+						portletDataContext.getCompanyGroupId());
+				}
+
+				return valid;
+			}
+			catch (Exception e) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	protected boolean countStagedModel(
+		PortletDataContext portletDataContext, T stagedModel) {
+
+		return true;
 	}
 
 	protected abstract void doExportStagedModel(
@@ -68,5 +153,12 @@ public abstract class BaseStagedModelDataHandler<T extends StagedModel>
 	protected abstract void doImportStagedModel(
 			PortletDataContext portletDataContext, T stagedModel)
 		throws Exception;
+
+	protected boolean validateMissingReference(
+			String uuid, long companyId, long groupId)
+		throws Exception {
+
+		return true;
+	}
 
 }

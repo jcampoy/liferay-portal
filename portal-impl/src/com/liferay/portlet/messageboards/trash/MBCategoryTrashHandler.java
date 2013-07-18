@@ -30,6 +30,7 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.PortletURLFactoryUtil;
+import com.liferay.portlet.messageboards.NoSuchCategoryException;
 import com.liferay.portlet.messageboards.model.MBCategory;
 import com.liferay.portlet.messageboards.model.MBThread;
 import com.liferay.portlet.messageboards.service.MBCategoryLocalServiceUtil;
@@ -50,6 +51,7 @@ import javax.portlet.PortletURL;
  */
 public class MBCategoryTrashHandler extends BaseTrashHandler {
 
+	@Override
 	public void deleteTrashEntry(long classPK)
 		throws PortalException, SystemException {
 
@@ -58,6 +60,7 @@ public class MBCategoryTrashHandler extends BaseTrashHandler {
 		MBCategoryLocalServiceUtil.deleteCategory(category, false);
 	}
 
+	@Override
 	public String getClassName() {
 		return MBCategory.class.getName();
 	}
@@ -297,7 +300,7 @@ public class MBCategoryTrashHandler extends BaseTrashHandler {
 
 		if (trashActionId.equals(TrashActionKeys.MOVE)) {
 			return MBCategoryPermission.contains(
-				permissionChecker, groupId, classPK, ActionKeys.ADD_FOLDER);
+				permissionChecker, groupId, classPK, ActionKeys.ADD_CATEGORY);
 		}
 
 		return super.hasTrashPermission(
@@ -309,6 +312,7 @@ public class MBCategoryTrashHandler extends BaseTrashHandler {
 		return true;
 	}
 
+	@Override
 	public boolean isInTrash(long classPK)
 		throws PortalException, SystemException {
 
@@ -337,6 +341,13 @@ public class MBCategoryTrashHandler extends BaseTrashHandler {
 
 		MBCategory category = MBCategoryLocalServiceUtil.getCategory(classPK);
 
+		try {
+			category.getParentCategory();
+		}
+		catch (NoSuchCategoryException nsce) {
+			return false;
+		}
+
 		return !category.isInTrashContainer();
 	}
 
@@ -360,6 +371,7 @@ public class MBCategoryTrashHandler extends BaseTrashHandler {
 			userId, classPK, containerModelId);
 	}
 
+	@Override
 	public void restoreTrashEntry(long userId, long classPK)
 		throws PortalException, SystemException {
 

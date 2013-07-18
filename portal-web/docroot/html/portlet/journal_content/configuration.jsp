@@ -23,7 +23,9 @@ String redirect = ParamUtil.getString(request, "redirect");
 
 JournalArticle article = null;
 
-String type = StringPool.BLANK;
+groupId = ParamUtil.getLong(request, "groupId", themeDisplay.getScopeGroupId());
+
+String type = ParamUtil.getString(request, "type");
 
 try {
 	if (Validator.isNotNull(articleId)) {
@@ -37,9 +39,6 @@ try {
 }
 catch (NoSuchArticleException nsae) {
 }
-
-groupId = ParamUtil.getLong(request, "groupId", themeDisplay.getScopeGroupId());
-type = ParamUtil.getString(request, "type", type);
 %>
 
 <liferay-portlet:actionURL portletConfiguration="true" var="configurationActionURL" />
@@ -51,12 +50,12 @@ type = ParamUtil.getString(request, "type", type);
 
 	<liferay-ui:error exception="<%= NoSuchArticleException.class %>" message="the-web-content-could-not-be-found" />
 
-	<div class="portlet-msg-info">
-		<span class="displaying-help-message-holder <%= article == null ? StringPool.BLANK : "aui-helper-hidden" %>">
+	<div class="alert alert-info">
+		<span class="displaying-help-message-holder <%= article == null ? StringPool.BLANK : "hide" %>">
 			<liferay-ui:message key="please-select-a-web-content-from-the-list-below" />
 		</span>
 
-		<span class="displaying-article-id-holder <%= article == null ? "aui-helper-hidden" : StringPool.BLANK %>">
+		<span class="displaying-article-id-holder <%= article == null ? "hide" : StringPool.BLANK %>">
 			<liferay-ui:message key="displaying-content" />: <span class="displaying-article-id"><%= article != null ? article.getTitle(locale) : StringPool.BLANK %></span>
 		</span>
 	</div>
@@ -116,6 +115,7 @@ type = ParamUtil.getString(request, "type", type);
 						<liferay-portlet:renderURL portletName="<%= PortletKeys.DYNAMIC_DATA_MAPPING %>" var="editTemplateURL">
 							<portlet:param name="struts_action" value="/dynamic_data_mapping/edit_template" />
 							<portlet:param name="redirect" value="<%= currentURL %>" />
+							<portlet:param name="refererPortletName" value="<%= PortletKeys.JOURNAL %>" />
 							<portlet:param name="groupId" value="<%= String.valueOf(tableIteratorObj.getGroupId()) %>" />
 							<portlet:param name="templateId" value="<%= String.valueOf(tableIteratorObj.getTemplateId()) %>" />
 						</liferay-portlet:renderURL>
@@ -167,14 +167,12 @@ type = ParamUtil.getString(request, "type", type);
 		searchContainer="<%= searchContainer %>"
 	>
 		<liferay-ui:param name="groupId" value="<%= String.valueOf(groupId) %>" />
-		<liferay-ui:param name="type" value="<%= type %>" />
+		<liferay-ui:param name="type" value="<%= HtmlUtil.escape(type) %>" />
 	</liferay-ui:search-form>
 
 	<br />
 
 	<%
-	OrderByComparator orderByComparator = JournalUtil.getArticleOrderByComparator(searchContainer.getOrderByCol(), searchContainer.getOrderByType());
-
 	ArticleSearchTerms searchTerms = (ArticleSearchTerms)searchContainer.getSearchTerms();
 
 	searchTerms.setFolderIds(new ArrayList<Long>());
@@ -218,11 +216,11 @@ type = ParamUtil.getString(request, "type", type);
 
 		// Modified date
 
-		row.addText(dateFormatDate.format(curArticle.getModifiedDate()), rowHREF);
+		row.addDate(curArticle.getModifiedDate(), rowHREF);
 
 		// Display date
 
-		row.addText(dateFormatDate.format(curArticle.getDisplayDate()), rowHREF);
+		row.addDate(curArticle.getDisplayDate(), rowHREF);
 
 		// Author
 
@@ -244,9 +242,9 @@ type = ParamUtil.getString(request, "type", type);
 	<aui:input name="preferences--articleId--" type="hidden" value="<%= articleId %>" />
 	<aui:input name="preferences--ddmTemplateKey--" type="hidden" value="<%= ddmTemplateKey %>" />
 
-	<aui:fieldset cssClass="aui-helper-hidden">
+	<aui:fieldset cssClass="hide">
 		<aui:field-wrapper label="portlet-id">
-			<%= portletResource %>
+			<%= HtmlUtil.escape(portletResource) %>
 		</aui:field-wrapper>
 	</aui:fieldset>
 

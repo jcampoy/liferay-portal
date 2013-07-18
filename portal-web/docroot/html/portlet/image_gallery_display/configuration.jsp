@@ -49,7 +49,7 @@ String redirect = ParamUtil.getString(request, "redirect");
 
 					List leftList = new ArrayList();
 
-					String[] mediaGalleryMimeTypes = DLUtil.getMediaGalleryMimeTypes(preferences, renderRequest);
+					String[] mediaGalleryMimeTypes = DLUtil.getMediaGalleryMimeTypes(portletPreferences, renderRequest);
 
 					for (String mimeType : mediaGalleryMimeTypes) {
 						leftList.add(new KeyValuePair(mimeType, LanguageUtil.get(pageContext, mimeType)));
@@ -87,7 +87,6 @@ String redirect = ParamUtil.getString(request, "redirect");
 
 					<liferay-ui:ddm-template-selector
 						classNameId="<%= PortalUtil.getClassNameId(templateHandler.getClassName()) %>"
-						preferenceName="displayTemplate"
 						preferenceValue="<%= displayTemplate %>"
 						refreshURL="<%= currentURL %>"
 						showEmptyOption="<%= true %>"
@@ -139,13 +138,11 @@ String redirect = ParamUtil.getString(request, "redirect");
 			Liferay.Util.selectEntity(
 				{
 					dialog: {
-						align: Liferay.Util.Window.ALIGN_CENTER,
 						constrain: true,
 						modal: true,
-						stack: true,
 						width: 680
 					},
-					id: '_<%= portletResource %>_selectFolder',
+					id: '_<%= HtmlUtil.escapeJS(portletResource) %>_selectFolder',
 					title: '<%= UnicodeLanguageUtil.format(pageContext, "select-x", "folder") %>',
 					uri: '<%= selectFolderURL.toString() %>'
 				},

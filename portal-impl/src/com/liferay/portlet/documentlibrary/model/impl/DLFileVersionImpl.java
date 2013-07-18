@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.security.auth.PrincipalThreadLocal;
+import com.liferay.portlet.documentlibrary.NoSuchFolderException;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
@@ -40,6 +41,7 @@ public class DLFileVersionImpl extends DLFileVersionBaseImpl {
 	public DLFileVersionImpl() {
 	}
 
+	@Override
 	public InputStream getContentStream(boolean incrementCounter)
 		throws PortalException, SystemException {
 
@@ -68,6 +70,7 @@ public class DLFileVersionImpl extends DLFileVersionBaseImpl {
 		}
 	}
 
+	@Override
 	public UnicodeProperties getExtraSettingsProperties() {
 		if (_extraSettingsProperties == null) {
 			_extraSettingsProperties = new UnicodeProperties(true);
@@ -83,36 +86,37 @@ public class DLFileVersionImpl extends DLFileVersionBaseImpl {
 		return _extraSettingsProperties;
 	}
 
+	@Override
 	public DLFileEntry getFileEntry() throws PortalException, SystemException {
 		return DLFileEntryLocalServiceUtil.getFileEntry(getFileEntryId());
 	}
 
-	public DLFolder getFolder() {
-		DLFolder dlFolder = null;
-
-		if (getFolderId() > 0) {
-			try {
-				dlFolder = DLFolderLocalServiceUtil.getFolder(getFolderId());
-			}
-			catch (Exception e) {
-				dlFolder = new DLFolderImpl();
-
-				_log.error(e, e);
-			}
-		}
-		else {
-			dlFolder = new DLFolderImpl();
+	@Override
+	public DLFolder getFolder() throws PortalException, SystemException {
+		if (getFolderId() <= 0) {
+			return new DLFolderImpl();
 		}
 
-		return dlFolder;
+		return DLFolderLocalServiceUtil.getFolder(getFolderId());
 	}
 
+	@Override
 	public String getIcon() {
 		return DLUtil.getFileIcon(getExtension());
 	}
 
-	public DLFolder getTrashContainer() {
-		DLFolder dlFolder = getFolder();
+	@Override
+	public DLFolder getTrashContainer()
+		throws PortalException, SystemException {
+
+		DLFolder dlFolder = null;
+
+		try {
+			dlFolder = getFolder();
+		}
+		catch (NoSuchFolderException nsfe) {
+			return null;
+		}
 
 		if (dlFolder.isInTrash()) {
 			return dlFolder;
@@ -121,7 +125,10 @@ public class DLFileVersionImpl extends DLFileVersionBaseImpl {
 		return dlFolder.getTrashContainer();
 	}
 
-	public boolean isInTrashContainer() {
+	@Override
+	public boolean isInTrashContainer()
+		throws PortalException, SystemException {
+
 		if (getTrashContainer() != null) {
 			return true;
 		}
@@ -137,6 +144,7 @@ public class DLFileVersionImpl extends DLFileVersionBaseImpl {
 		super.setExtraSettings(extraSettings);
 	}
 
+	@Override
 	public void setExtraSettingsProperties(
 		UnicodeProperties extraSettingsProperties) {
 

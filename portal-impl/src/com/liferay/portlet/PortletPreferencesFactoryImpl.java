@@ -46,6 +46,7 @@ import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.WebKeys;
 import com.liferay.portal.xml.StAXReaderUtil;
+import com.liferay.portlet.portletconfiguration.util.ConfigurationPortletRequest;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,6 +56,7 @@ import java.util.Map;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 import javax.portlet.PreferencesValidator;
+import javax.portlet.filter.PortletRequestWrapper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -76,6 +78,7 @@ import javax.xml.stream.events.XMLEvent;
 public class PortletPreferencesFactoryImpl
 	implements PortletPreferencesFactory {
 
+	@Override
 	public PortletPreferences fromDefaultXML(String xml)
 		throws SystemException {
 
@@ -87,6 +90,7 @@ public class PortletPreferencesFactoryImpl
 		return new PortletPreferencesImpl(xml, preferencesMap);
 	}
 
+	@Override
 	public PortletPreferencesImpl fromXML(
 			long companyId, long ownerId, int ownerType, long plid,
 			String portletId, String xml)
@@ -107,6 +111,7 @@ public class PortletPreferencesFactoryImpl
 		}
 	}
 
+	@Override
 	public PortalPreferencesImpl fromXML(
 			long companyId, long ownerId, int ownerType, String xml)
 		throws SystemException {
@@ -125,6 +130,7 @@ public class PortletPreferencesFactoryImpl
 		}
 	}
 
+	@Override
 	public PortletPreferences getLayoutPortletSetup(
 			Layout layout, String portletId)
 		throws SystemException {
@@ -142,6 +148,7 @@ public class PortletPreferencesFactoryImpl
 			portletId);
 	}
 
+	@Override
 	public PortalPreferences getPortalPreferences(HttpServletRequest request)
 		throws SystemException {
 
@@ -153,6 +160,7 @@ public class PortletPreferencesFactoryImpl
 			themeDisplay.getUserId(), themeDisplay.isSignedIn());
 	}
 
+	@Override
 	public PortalPreferences getPortalPreferences(
 			HttpSession session, long companyId, long userId, boolean signedIn)
 		throws SystemException {
@@ -202,6 +210,7 @@ public class PortletPreferencesFactoryImpl
 		return portalPreferences;
 	}
 
+	@Override
 	public PortalPreferences getPortalPreferences(
 			long companyId, long userId, boolean signedIn)
 		throws SystemException {
@@ -209,6 +218,7 @@ public class PortletPreferencesFactoryImpl
 		return getPortalPreferences(null, companyId, userId, signedIn);
 	}
 
+	@Override
 	public PortalPreferences getPortalPreferences(PortletRequest portletRequest)
 		throws SystemException {
 
@@ -218,6 +228,7 @@ public class PortletPreferencesFactoryImpl
 		return getPortalPreferences(request);
 	}
 
+	@Override
 	public PortletPreferences getPortletPreferences(
 			HttpServletRequest request, String portletId)
 		throws PortalException, SystemException {
@@ -229,6 +240,7 @@ public class PortletPreferencesFactoryImpl
 			portletPreferencesIds);
 	}
 
+	@Override
 	public PortletPreferencesIds getPortletPreferencesIds(
 			HttpServletRequest request, Layout layout, String portletId)
 		throws PortalException, SystemException {
@@ -257,6 +269,7 @@ public class PortletPreferencesFactoryImpl
 			scopeGroupId, userId, layout, portletId, modeEditGuest);
 	}
 
+	@Override
 	public PortletPreferencesIds getPortletPreferencesIds(
 			HttpServletRequest request, String portletId)
 		throws PortalException, SystemException {
@@ -266,6 +279,7 @@ public class PortletPreferencesFactoryImpl
 		return getPortletPreferencesIds(request, layout, portletId);
 	}
 
+	@Override
 	public PortletPreferencesIds getPortletPreferencesIds(
 			long scopeGroupId, long userId, Layout layout, String portletId,
 			boolean modeEditGuest)
@@ -353,6 +367,7 @@ public class PortletPreferencesFactoryImpl
 			layout.getCompanyId(), ownerId, ownerType, plid, portletId);
 	}
 
+	@Override
 	public PortletPreferences getPortletSetup(
 			HttpServletRequest request, String portletId)
 		throws PortalException, SystemException {
@@ -360,10 +375,21 @@ public class PortletPreferencesFactoryImpl
 		return getPortletSetup(request, portletId, null);
 	}
 
+	@Override
 	public PortletPreferences getPortletSetup(
 			HttpServletRequest request, String portletId,
 			String defaultPreferences)
 		throws PortalException, SystemException {
+
+		PortletRequest portletRequest = (PortletRequest)request.getAttribute(
+			JavaConstants.JAVAX_PORTLET_REQUEST);
+
+		if (portletRequest instanceof ConfigurationPortletRequest) {
+			PortletRequestWrapper portletRequestWrapper =
+				(PortletRequestWrapper)portletRequest;
+
+			return portletRequestWrapper.getPreferences();
+		}
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
 			WebKeys.THEME_DISPLAY);
@@ -376,6 +402,7 @@ public class PortletPreferencesFactoryImpl
 			defaultPreferences);
 	}
 
+	@Override
 	public PortletPreferences getPortletSetup(
 			Layout layout, String portletId, String defaultPreferences)
 		throws SystemException {
@@ -385,6 +412,7 @@ public class PortletPreferencesFactoryImpl
 			defaultPreferences);
 	}
 
+	@Override
 	public PortletPreferences getPortletSetup(
 			long scopeGroupId, Layout layout, String portletId,
 			String defaultPreferences)
@@ -394,26 +422,34 @@ public class PortletPreferencesFactoryImpl
 			scopeGroupId, layout, portletId, defaultPreferences, false);
 	}
 
+	@Override
 	public PortletPreferences getPortletSetup(PortletRequest portletRequest)
 		throws PortalException, SystemException {
 
-		HttpServletRequest request = PortalUtil.getHttpServletRequest(
-			portletRequest);
 		String portletId = PortalUtil.getPortletId(portletRequest);
 
-		return getPortletSetup(request, portletId);
+		return getPortletSetup(portletRequest, portletId);
 	}
 
+	@Override
 	public PortletPreferences getPortletSetup(
 			PortletRequest portletRequest, String portletId)
 		throws PortalException, SystemException {
 
+		if (portletRequest instanceof ConfigurationPortletRequest) {
+			PortletRequestWrapper portletRequestWrapper =
+				(PortletRequestWrapper)portletRequest;
+
+			return portletRequestWrapper.getPreferences();
+		}
+
 		HttpServletRequest request = PortalUtil.getHttpServletRequest(
 			portletRequest);
 
 		return getPortletSetup(request, portletId);
 	}
 
+	@Override
 	public Map<Long, PortletPreferences> getPortletSetupMap(
 			long companyId, long groupId, long ownerId, int ownerType,
 			String portletId, boolean privateLayout)
@@ -442,6 +478,7 @@ public class PortletPreferencesFactoryImpl
 		return portletSetupMap;
 	}
 
+	@Override
 	public PortletPreferences getPreferences(HttpServletRequest request) {
 		PortletRequest portletRequest = (PortletRequest)request.getAttribute(
 			JavaConstants.JAVAX_PORTLET_REQUEST);
@@ -459,10 +496,12 @@ public class PortletPreferencesFactoryImpl
 		return portletPreferences;
 	}
 
+	@Override
 	public PreferencesValidator getPreferencesValidator(Portlet portlet) {
 		return PortalUtil.getPreferencesValidator(portlet);
 	}
 
+	@Override
 	public PortletPreferences getStrictLayoutPortletSetup(
 			Layout layout, String portletId)
 		throws SystemException {
@@ -480,6 +519,7 @@ public class PortletPreferencesFactoryImpl
 			portletId);
 	}
 
+	@Override
 	public PortletPreferences getStrictPortletSetup(
 			Layout layout, String portletId)
 		throws SystemException {
@@ -489,6 +529,7 @@ public class PortletPreferencesFactoryImpl
 			true);
 	}
 
+	@Override
 	public String toXML(PortalPreferences portalPreferences) {
 		PortalPreferencesImpl portalPreferencesImpl =
 			(PortalPreferencesImpl)portalPreferences;
@@ -496,6 +537,7 @@ public class PortletPreferencesFactoryImpl
 		return portalPreferencesImpl.toXML();
 	}
 
+	@Override
 	public String toXML(PortletPreferences portletPreferences) {
 		PortletPreferencesImpl portletPreferencesImpl =
 			(PortletPreferencesImpl)portletPreferences;

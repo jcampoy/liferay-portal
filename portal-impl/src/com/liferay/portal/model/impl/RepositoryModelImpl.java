@@ -17,6 +17,7 @@ package com.liferay.portal.model.impl;
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSON;
+import com.liferay.portal.kernel.lar.StagedModelType;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -80,7 +81,7 @@ public class RepositoryModelImpl extends BaseModelImpl<Repository>
 			{ "typeSettings", Types.CLOB },
 			{ "dlFolderId", Types.BIGINT }
 		};
-	public static final String TABLE_SQL_CREATE = "create table Repository (uuid_ VARCHAR(75) null,repositoryId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,classNameId LONG,name VARCHAR(75) null,description STRING null,portletId VARCHAR(75) null,typeSettings TEXT null,dlFolderId LONG)";
+	public static final String TABLE_SQL_CREATE = "create table Repository (uuid_ VARCHAR(75) null,repositoryId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,classNameId LONG,name VARCHAR(75) null,description STRING null,portletId VARCHAR(200) null,typeSettings TEXT null,dlFolderId LONG)";
 	public static final String TABLE_SQL_DROP = "drop table Repository";
 	public static final String ORDER_BY_JPQL = " ORDER BY repository.repositoryId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY Repository.repositoryId ASC";
@@ -160,26 +161,32 @@ public class RepositoryModelImpl extends BaseModelImpl<Repository>
 	public RepositoryModelImpl() {
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _repositoryId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setRepositoryId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
 		return _repositoryId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return Repository.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return Repository.class.getName();
 	}
@@ -293,6 +300,7 @@ public class RepositoryModelImpl extends BaseModelImpl<Repository>
 		}
 	}
 
+	@Override
 	@JSON
 	public String getUuid() {
 		if (_uuid == null) {
@@ -303,6 +311,7 @@ public class RepositoryModelImpl extends BaseModelImpl<Repository>
 		}
 	}
 
+	@Override
 	public void setUuid(String uuid) {
 		if (_originalUuid == null) {
 			_originalUuid = _uuid;
@@ -315,20 +324,24 @@ public class RepositoryModelImpl extends BaseModelImpl<Repository>
 		return GetterUtil.getString(_originalUuid);
 	}
 
+	@Override
 	@JSON
 	public long getRepositoryId() {
 		return _repositoryId;
 	}
 
+	@Override
 	public void setRepositoryId(long repositoryId) {
 		_repositoryId = repositoryId;
 	}
 
+	@Override
 	@JSON
 	public long getGroupId() {
 		return _groupId;
 	}
 
+	@Override
 	public void setGroupId(long groupId) {
 		_columnBitmask |= GROUPID_COLUMN_BITMASK;
 
@@ -345,11 +358,13 @@ public class RepositoryModelImpl extends BaseModelImpl<Repository>
 		return _originalGroupId;
 	}
 
+	@Override
 	@JSON
 	public long getCompanyId() {
 		return _companyId;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
 		_columnBitmask |= COMPANYID_COLUMN_BITMASK;
 
@@ -366,23 +381,28 @@ public class RepositoryModelImpl extends BaseModelImpl<Repository>
 		return _originalCompanyId;
 	}
 
+	@Override
 	@JSON
 	public long getUserId() {
 		return _userId;
 	}
 
+	@Override
 	public void setUserId(long userId) {
 		_userId = userId;
 	}
 
+	@Override
 	public String getUserUuid() throws SystemException {
 		return PortalUtil.getUserValue(getUserId(), "uuid", _userUuid);
 	}
 
+	@Override
 	public void setUserUuid(String userUuid) {
 		_userUuid = userUuid;
 	}
 
+	@Override
 	@JSON
 	public String getUserName() {
 		if (_userName == null) {
@@ -393,28 +413,34 @@ public class RepositoryModelImpl extends BaseModelImpl<Repository>
 		}
 	}
 
+	@Override
 	public void setUserName(String userName) {
 		_userName = userName;
 	}
 
+	@Override
 	@JSON
 	public Date getCreateDate() {
 		return _createDate;
 	}
 
+	@Override
 	public void setCreateDate(Date createDate) {
 		_createDate = createDate;
 	}
 
+	@Override
 	@JSON
 	public Date getModifiedDate() {
 		return _modifiedDate;
 	}
 
+	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		_modifiedDate = modifiedDate;
 	}
 
+	@Override
 	public String getClassName() {
 		if (getClassNameId() <= 0) {
 			return StringPool.BLANK;
@@ -423,6 +449,7 @@ public class RepositoryModelImpl extends BaseModelImpl<Repository>
 		return PortalUtil.getClassName(getClassNameId());
 	}
 
+	@Override
 	public void setClassName(String className) {
 		long classNameId = 0;
 
@@ -433,15 +460,18 @@ public class RepositoryModelImpl extends BaseModelImpl<Repository>
 		setClassNameId(classNameId);
 	}
 
+	@Override
 	@JSON
 	public long getClassNameId() {
 		return _classNameId;
 	}
 
+	@Override
 	public void setClassNameId(long classNameId) {
 		_classNameId = classNameId;
 	}
 
+	@Override
 	@JSON
 	public String getName() {
 		if (_name == null) {
@@ -452,6 +482,7 @@ public class RepositoryModelImpl extends BaseModelImpl<Repository>
 		}
 	}
 
+	@Override
 	public void setName(String name) {
 		_columnBitmask |= NAME_COLUMN_BITMASK;
 
@@ -466,6 +497,7 @@ public class RepositoryModelImpl extends BaseModelImpl<Repository>
 		return GetterUtil.getString(_originalName);
 	}
 
+	@Override
 	@JSON
 	public String getDescription() {
 		if (_description == null) {
@@ -476,10 +508,12 @@ public class RepositoryModelImpl extends BaseModelImpl<Repository>
 		}
 	}
 
+	@Override
 	public void setDescription(String description) {
 		_description = description;
 	}
 
+	@Override
 	@JSON
 	public String getPortletId() {
 		if (_portletId == null) {
@@ -490,6 +524,7 @@ public class RepositoryModelImpl extends BaseModelImpl<Repository>
 		}
 	}
 
+	@Override
 	public void setPortletId(String portletId) {
 		_columnBitmask |= PORTLETID_COLUMN_BITMASK;
 
@@ -504,6 +539,7 @@ public class RepositoryModelImpl extends BaseModelImpl<Repository>
 		return GetterUtil.getString(_originalPortletId);
 	}
 
+	@Override
 	@JSON
 	public String getTypeSettings() {
 		if (_typeSettings == null) {
@@ -514,17 +550,26 @@ public class RepositoryModelImpl extends BaseModelImpl<Repository>
 		}
 	}
 
+	@Override
 	public void setTypeSettings(String typeSettings) {
 		_typeSettings = typeSettings;
 	}
 
+	@Override
 	@JSON
 	public long getDlFolderId() {
 		return _dlFolderId;
 	}
 
+	@Override
 	public void setDlFolderId(long dlFolderId) {
 		_dlFolderId = dlFolderId;
+	}
+
+	@Override
+	public StagedModelType getStagedModelType() {
+		return new StagedModelType(PortalUtil.getClassNameId(
+				Repository.class.getName()), getClassNameId());
 	}
 
 	public long getColumnBitmask() {
@@ -578,6 +623,7 @@ public class RepositoryModelImpl extends BaseModelImpl<Repository>
 		return repositoryImpl;
 	}
 
+	@Override
 	public int compareTo(Repository repository) {
 		long primaryKey = repository.getPrimaryKey();
 
@@ -594,18 +640,15 @@ public class RepositoryModelImpl extends BaseModelImpl<Repository>
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof Repository)) {
 			return false;
 		}
 
-		Repository repository = null;
-
-		try {
-			repository = (Repository)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		Repository repository = (Repository)obj;
 
 		long primaryKey = repository.getPrimaryKey();
 
@@ -765,6 +808,7 @@ public class RepositoryModelImpl extends BaseModelImpl<Repository>
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(46);
 

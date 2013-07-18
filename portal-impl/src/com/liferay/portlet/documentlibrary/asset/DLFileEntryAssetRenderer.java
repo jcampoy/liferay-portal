@@ -21,8 +21,11 @@ import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 import com.liferay.portal.kernel.trash.TrashRenderer;
+import com.liferay.portal.kernel.util.CharPool;
+import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.security.permission.ActionKeys;
@@ -57,17 +60,18 @@ public class DLFileEntryAssetRenderer
 	extends BaseAssetRenderer implements TrashRenderer {
 
 	public DLFileEntryAssetRenderer(
-		FileEntry fileEntry, FileVersion fileVersion, int type) {
+		FileEntry fileEntry, FileVersion fileVersion) {
 
 		_fileEntry = fileEntry;
 		_fileVersion = fileVersion;
-		_type = type;
 	}
 
+	@Override
 	public String getClassName() {
 		return DLFileEntry.class.getName();
 	}
 
+	@Override
 	public long getClassPK() {
 		if (!_fileVersion.isApproved() && _fileVersion.isDraft() &&
 			!_fileVersion.isPending() &&
@@ -96,6 +100,7 @@ public class DLFileEntryAssetRenderer
 		return _fileEntry.getModifiedDate();
 	}
 
+	@Override
 	public long getGroupId() {
 		return _fileEntry.getGroupId();
 	}
@@ -106,12 +111,36 @@ public class DLFileEntryAssetRenderer
 			_fileEntry.getIcon() + ".png";
 	}
 
+	@Override
+	public String getNewName(String oldName, String token) {
+		String extension = FileUtil.getExtension(oldName);
+
+		if (Validator.isNull(extension)) {
+			return super.getNewName(oldName, token);
+		}
+
+		StringBundler sb = new StringBundler(5);
+
+		int index = oldName.lastIndexOf(CharPool.PERIOD);
+
+		sb.append(oldName.substring(0, index));
+
+		sb.append(StringPool.SPACE);
+		sb.append(token);
+		sb.append(StringPool.PERIOD);
+		sb.append(extension);
+
+		return sb.toString();
+	}
+
+	@Override
 	public String getPortletId() {
 		AssetRendererFactory assetRendererFactory = getAssetRendererFactory();
 
 		return assetRendererFactory.getPortletId();
 	}
 
+	@Override
 	public String getSummary(Locale locale) {
 		return HtmlUtil.stripHtml(_fileEntry.getDescription());
 	}
@@ -134,10 +163,11 @@ public class DLFileEntryAssetRenderer
 			"/file_system/large/document.png";
 	}
 
+	@Override
 	public String getTitle(Locale locale) {
 		String title = null;
 
-		if (_type == AssetRendererFactory.TYPE_LATEST) {
+		if (getAssetRendererType() == AssetRendererFactory.TYPE_LATEST) {
 			title = _fileVersion.getTitle();
 		}
 		else {
@@ -147,6 +177,7 @@ public class DLFileEntryAssetRenderer
 		return TrashUtil.getOriginalTitle(title);
 	}
 
+	@Override
 	public String getType() {
 		return DLFileEntryAssetRendererFactory.TYPE;
 	}
@@ -215,14 +246,17 @@ public class DLFileEntryAssetRenderer
 			_fileEntry.getFileEntryId());
 	}
 
+	@Override
 	public long getUserId() {
 		return _fileEntry.getUserId();
 	}
 
+	@Override
 	public String getUserName() {
 		return _fileEntry.getUserName();
 	}
 
+	@Override
 	public String getUuid() {
 		return _fileEntry.getUuid();
 	}
@@ -260,6 +294,7 @@ public class DLFileEntryAssetRenderer
 		return false;
 	}
 
+	@Override
 	public String render(
 			RenderRequest renderRequest, RenderResponse renderResponse,
 			String template)
@@ -273,7 +308,7 @@ public class DLFileEntryAssetRenderer
 
 			String version = ParamUtil.getString(renderRequest, "version");
 
-			if ((_type == AssetRendererFactory.TYPE_LATEST) ||
+			if ((getAssetRendererType() == AssetRendererFactory.TYPE_LATEST) ||
 				Validator.isNotNull(version)) {
 
 				if ((_fileEntry != null) && Validator.isNotNull(version)) {
@@ -282,6 +317,11 @@ public class DLFileEntryAssetRenderer
 
 				renderRequest.setAttribute(
 					WebKeys.DOCUMENT_LIBRARY_FILE_VERSION, _fileVersion);
+			}
+			else {
+				renderRequest.setAttribute(
+					WebKeys.DOCUMENT_LIBRARY_FILE_VERSION,
+					_fileEntry.getFileVersion());
 			}
 
 			return "/html/portlet/document_library/asset/file_entry_" +
@@ -294,6 +334,5 @@ public class DLFileEntryAssetRenderer
 
 	private FileEntry _fileEntry;
 	private FileVersion _fileVersion;
-	private int _type;
 
 }

@@ -34,7 +34,7 @@ import java.util.Set;
 /**
  * @author Brian Wing Shun Chan
  */
-public class Fields implements Serializable {
+public class Fields implements Iterable<Field>, Serializable {
 
 	public boolean contains(String name) {
 		return _fieldsMap.containsKey(name);
@@ -42,6 +42,10 @@ public class Fields implements Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
 		if (!(obj instanceof Fields)) {
 			return false;
 		}
@@ -63,6 +67,10 @@ public class Fields implements Serializable {
 		Set<Locale> availableLocales = new HashSet<Locale>();
 
 		for (Field field : _fieldsMap.values()) {
+			if (field.isPrivate()) {
+				continue;
+			}
+
 			for (Locale availableLocale : field.getAvailableLocales()) {
 				availableLocales.add(availableLocale);
 			}
@@ -89,6 +97,7 @@ public class Fields implements Serializable {
 		return _fieldsMap.keySet();
 	}
 
+	@Override
 	public Iterator<Field> iterator() {
 		return iterator(false);
 	}

@@ -17,6 +17,8 @@
 <%@ include file="/html/portlet/sites_admin/init.jsp" %>
 
 <%
+String strutsAction = ParamUtil.getString(request, "struts_action");
+
 String p_u_i_d = ParamUtil.getString(request, "p_u_i_d");
 long groupId = ParamUtil.getLong(request, "groupId");
 boolean includeCompany = ParamUtil.getBoolean(request, "includeCompany");
@@ -64,9 +66,13 @@ portletURL.setParameter("target", target);
 			<%
 			results.clear();
 
-			if (groupId > 0) {
-				List<Long> excludedGroupIds = new ArrayList<Long>();
+			List<Long> excludedGroupIds = new ArrayList<Long>();
 
+			Group companyGroup = GroupLocalServiceUtil.getCompanyGroup(company.getCompanyId());
+
+			excludedGroupIds.add(companyGroup.getGroupId());
+
+			if (groupId > 0) {
 				Group group = GroupLocalServiceUtil.getGroup(groupId);
 
 				if (group.isStagingGroup()) {
@@ -75,8 +81,12 @@ portletURL.setParameter("target", target);
 				else {
 					excludedGroupIds.add(groupId);
 				}
+			}
 
-				groupParams.put("excludedGroupIds", excludedGroupIds);
+			groupParams.put("excludedGroupIds", excludedGroupIds);
+
+			if (strutsAction.equals("/users_admin/select_site")) {
+				groupParams.put("manualMembership", Boolean.TRUE);
 			}
 
 			groupParams.put("site", Boolean.TRUE);
@@ -121,13 +131,12 @@ portletURL.setParameter("target", target);
 			}
 			else {
 				sites = GroupLocalServiceUtil.search(company.getCompanyId(), null, searchTerms.getKeywords(), groupParams, start, end, searchContainer.getOrderByComparator());
-				total = GroupLocalServiceUtil.searchCount(company.getCompanyId(), null, searchTerms.getKeywords(), groupParams, searchTerms.isAndOperator());
+				total = GroupLocalServiceUtil.searchCount(company.getCompanyId(), null, searchTerms.getKeywords(), groupParams);
 			}
 
 			total += additionalSites;
 
 			results.addAll(sites);
-
 
 			pageContext.setAttribute("results", results);
 			pageContext.setAttribute("total", total);
@@ -174,10 +183,6 @@ portletURL.setParameter("target", target);
 	</liferay-ui:search-container>
 </aui:form>
 
-<aui:script>
-	Liferay.Util.focusFormField(document.<portlet:namespace />selectGroupFm.<portlet:namespace />name);
-</aui:script>
-
 <aui:script use="aui-base">
 	var Util = Liferay.Util;
 
@@ -188,8 +193,8 @@ portletURL.setParameter("target", target);
 
 			Util.getOpener().Liferay.fire('<%= HtmlUtil.escapeJS(eventName) %>', result);
 
-			Util.getWindow().close();
+			Util.getWindow().hide();
 		},
-		'.selector-button input'
+		'.selector-button'
 	);
 </aui:script>

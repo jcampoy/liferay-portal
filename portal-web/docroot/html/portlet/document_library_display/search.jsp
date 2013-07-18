@@ -65,8 +65,8 @@ int mountFoldersCount = DLAppServiceUtil.getMountFoldersCount(scopeGroupId, DLFo
 		title="search"
 	/>
 
-	<span class="aui-search-bar">
-		<aui:input inlineField="<%= true %>" label="" name="keywords" size="30" title="search-documents" type="text" value="<%= keywords %>" />
+	<span class="form-search">
+		<aui:input autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) %>" inlineField="<%= true %>" label="" name="keywords" size="30" title="search-documents" type="text" value="<%= keywords %>" />windowState.equals(WindowState.MAXIMIZED)
 
 		<aui:button type="submit" value="search" />
 	</span>
@@ -106,7 +106,7 @@ int mountFoldersCount = DLAppServiceUtil.getMountFoldersCount(scopeGroupId, DLFo
 		}
 		%>
 
-		<span class="portlet-msg-info">
+		<span class="alert alert-info">
 			<liferay-ui:message arguments="<%= sb.toString() %>" key="results-from-the-local-repository-search-in-x" />
 		</span>
 	</c:if>
@@ -148,12 +148,20 @@ int mountFoldersCount = DLAppServiceUtil.getMountFoldersCount(scopeGroupId, DLFo
 
 		Hits hits = DLAppServiceUtil.search(repositoryId, searchContext);
 
+		searchContainer.setTotal(hits.getLength());
+
+		if (searchContainer.isRecalculateCur()) {
+			searchContext.setEnd(searchContainer.getEnd());
+			searchContext.setStart(searchContainer.getStart());
+
+			hits = DLAppServiceUtil.search(repositoryId, searchContext);
+		}
+
 		PortletURL hitURL = renderResponse.createRenderURL();
 		%>
 
 		<liferay-ui:search-container-results
 			results="<%= SearchResultUtil.getSearchResults(hits, locale, hitURL) %>"
-			total="<%= hits.getLength() %>"
 		/>
 
 		<liferay-ui:search-container-row
@@ -239,12 +247,6 @@ int mountFoldersCount = DLAppServiceUtil.getMountFoldersCount(scopeGroupId, DLFo
 		<liferay-ui:search-paginator searchContainer="<%= searchContainer %>" type="more" />
 	</liferay-ui:search-container>
 </aui:form>
-
-<c:if test="<%= windowState.equals(WindowState.MAXIMIZED) %>">
-	<aui:script>
-		Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace />keywords);
-	</aui:script>
-</c:if>
 
 <%
 if (searchFolderId > 0) {

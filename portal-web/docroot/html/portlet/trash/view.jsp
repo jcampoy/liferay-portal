@@ -39,6 +39,10 @@ portletURL.setParameter("tabs1", tabs1);
 
 <liferay-util:include page="/html/portlet/trash/restore_path.jsp" />
 
+<liferay-ui:error exception="<%= DuplicateEntryException.class %>">
+	<liferay-ui:message key="unable-to-move-this-item-to-the-selected-destination" />
+</liferay-ui:error>
+
 <liferay-ui:error exception="<%= TrashPermissionException.class %>">
 
 	<%
@@ -109,7 +113,9 @@ portletURL.setParameter("tabs1", tabs1);
 
 			total = hits.getLength();
 
-			if (searchContainer.recalculateCur(total)) {
+			searchContainer.setTotal(total);
+
+			if (searchContainer.isRecalculateCur()) {
 				hits = TrashEntryLocalServiceUtil.search(company.getCompanyId(), groupId, user.getUserId(), searchTerms.getKeywords(), searchContainer.getStart(), searchContainer.getEnd(), sort);
 			}
 
@@ -121,7 +127,9 @@ portletURL.setParameter("tabs1", tabs1);
 
 			total = trashEntryList.getCount();
 
-			if (searchContainer.recalculateCur(total)) {
+			searchContainer.setTotal(total);
+
+			if (searchContainer.isRecalculateCur()) {
 				trashEntryList = TrashEntryServiceUtil.getEntries(groupId, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
 			}
 
@@ -224,19 +232,11 @@ portletURL.setParameter("tabs1", tabs1);
 			value="<%= ResourceActionsUtil.getModelResource(locale, entry.getClassName()) %>"
 		/>
 
-		<liferay-ui:search-container-column-text
+		<liferay-ui:search-container-column-date
 			name="removed-date"
 			orderable="<%= true %>"
-		>
-			<span title="<liferay-ui:message arguments="<%= dateFormatDateTime.format(entry.getCreateDate()) %>" key="deleted-x" />">
-
-				<%
-				Date createDate = entry.getCreateDate();
-				%>
-
-				<liferay-ui:message arguments="<%= LanguageUtil.getTimeDescription(pageContext, System.currentTimeMillis() - createDate.getTime(), true) %>" key="x-ago" />
-			</span>
-		</liferay-ui:search-container-column-text>
+			value="<%= entry.getCreateDate() %>"
+		/>
 
 		<liferay-ui:search-container-column-text
 			name="removed-by"

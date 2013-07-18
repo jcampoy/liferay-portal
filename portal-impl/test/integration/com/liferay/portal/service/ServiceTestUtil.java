@@ -20,8 +20,11 @@ import com.liferay.portal.jcr.JCRFactoryUtil;
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.messaging.BaseDestination;
+import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.MessageBus;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
+import com.liferay.portal.kernel.messaging.SynchronousDestination;
 import com.liferay.portal.kernel.messaging.sender.MessageSender;
 import com.liferay.portal.kernel.messaging.sender.SynchronousMessageSender;
 import com.liferay.portal.kernel.scheduler.SchedulerEngineHelperUtil;
@@ -244,6 +247,19 @@ public class ServiceTestUtil {
 		MessageBusUtil.init(
 			messageBus, messageSender, synchronousMessageSender);
 
+		if (TestPropsValues.DL_FILE_ENTRY_PROCESSORS_TRIGGER_SYNCHRONOUSLY) {
+			_replaceWithSynchronousDestination(
+				DestinationNames.DOCUMENT_LIBRARY_AUDIO_PROCESSOR);
+			_replaceWithSynchronousDestination(
+				DestinationNames.DOCUMENT_LIBRARY_IMAGE_PROCESSOR);
+			_replaceWithSynchronousDestination(
+				DestinationNames.DOCUMENT_LIBRARY_PDF_PROCESSOR);
+			_replaceWithSynchronousDestination(
+				DestinationNames.DOCUMENT_LIBRARY_RAW_METADATA_PROCESSOR);
+			_replaceWithSynchronousDestination(
+				DestinationNames.DOCUMENT_LIBRARY_VIDEO_PROCESSOR);
+		}
+
 		// Scheduler
 
 		try {
@@ -332,6 +348,10 @@ public class ServiceTestUtil {
 		return _random.nextBoolean();
 	}
 
+	public static Map<Locale, String> randomLocaleStringMap() throws Exception {
+		return randomLocaleStringMap(LocaleUtil.getDefault());
+	}
+
 	public static Map<Locale, String> randomLocaleStringMap(Locale locale)
 		throws Exception {
 
@@ -342,12 +362,18 @@ public class ServiceTestUtil {
 		return map;
 	}
 
-	public static Map<Locale, String> randomLocaleStringMap() throws Exception {
-		return randomLocaleStringMap(LocaleUtil.getDefault());
-	}
-
 	public static long randomLong() throws Exception {
-		return _random.nextLong();
+		long value = _random.nextLong();
+
+		if (value > 0) {
+			return value;
+		}
+		else if (value == 0) {
+			return randomLong();
+		}
+		else {
+			return -value;
+		}
 	}
 
 	public static String randomString() throws Exception {
@@ -412,6 +438,16 @@ public class ServiceTestUtil {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private static void _replaceWithSynchronousDestination(String name) {
+		BaseDestination baseDestination = new SynchronousDestination();
+
+		baseDestination.setName(name);
+
+		MessageBus messageBus = MessageBusUtil.getMessageBus();
+
+		messageBus.replace(baseDestination);
 	}
 
 	private static Random _random = new Random();

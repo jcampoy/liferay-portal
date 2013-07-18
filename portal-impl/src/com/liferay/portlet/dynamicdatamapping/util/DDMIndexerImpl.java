@@ -32,7 +32,6 @@ import com.liferay.portlet.dynamicdatamapping.storage.Fields;
 import java.io.Serializable;
 
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Locale;
 
 /**
@@ -40,14 +39,11 @@ import java.util.Locale;
  */
 public class DDMIndexerImpl implements DDMIndexer {
 
+	@Override
 	public void addAttributes(
 		Document document, DDMStructure ddmStructure, Fields fields) {
 
-		Iterator<Field> itr = fields.iterator();
-
-		while (itr.hasNext()) {
-			Field field = itr.next();
-
+		for (Field field : fields) {
 			try {
 				String indexType = ddmStructure.getFieldProperty(
 					field.getName(), "indexType");
@@ -137,10 +133,12 @@ public class DDMIndexerImpl implements DDMIndexer {
 		}
 	}
 
+	@Override
 	public String encodeName(long ddmStructureId, String fieldName) {
 		return encodeName(ddmStructureId, fieldName, null);
 	}
 
+	@Override
 	public String encodeName(
 		long ddmStructureId, String fieldName, Locale locale) {
 

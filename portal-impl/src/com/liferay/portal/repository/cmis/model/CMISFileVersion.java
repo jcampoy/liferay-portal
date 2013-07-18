@@ -16,6 +16,7 @@ package com.liferay.portal.repository.cmis.model;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.lar.StagedModelType;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
@@ -83,10 +84,12 @@ public class CMISFileVersion extends CMISModel implements FileVersion {
 		return cmisFileVersion;
 	}
 
+	@Override
 	public Map<String, Serializable> getAttributes() {
 		return new HashMap<String, Serializable>();
 	}
 
+	@Override
 	public String getChangeLog() {
 		return _document.getCheckinComment();
 	}
@@ -96,6 +99,7 @@ public class CMISFileVersion extends CMISModel implements FileVersion {
 		return _cmisRepository.getCompanyId();
 	}
 
+	@Override
 	public InputStream getContentStream(boolean incrementCounter) {
 		ContentStream contentStream = _document.getContentStream();
 
@@ -111,6 +115,7 @@ public class CMISFileVersion extends CMISModel implements FileVersion {
 		return contentStream.getStream();
 	}
 
+	@Override
 	public Date getCreateDate() {
 		Calendar creationDate = _document.getCreationDate();
 
@@ -122,14 +127,17 @@ public class CMISFileVersion extends CMISModel implements FileVersion {
 		return null;
 	}
 
+	@Override
 	public String getExtension() {
 		return FileUtil.getExtension(getTitle());
 	}
 
+	@Override
 	public String getExtraSettings() {
 		return null;
 	}
 
+	@Override
 	public FileEntry getFileEntry() throws PortalException, SystemException {
 		Document document = null;
 
@@ -151,6 +159,7 @@ public class CMISFileVersion extends CMISModel implements FileVersion {
 			getRepositoryId(), document);
 	}
 
+	@Override
 	public long getFileEntryId() {
 		try {
 			return getFileEntry().getFileEntryId();
@@ -164,18 +173,22 @@ public class CMISFileVersion extends CMISModel implements FileVersion {
 		return 0;
 	}
 
+	@Override
 	public long getFileVersionId() {
 		return _fileVersionId;
 	}
 
+	@Override
 	public long getGroupId() {
 		return _cmisRepository.getGroupId();
 	}
 
+	@Override
 	public String getIcon() {
 		return DLUtil.getFileIcon(getExtension());
 	}
 
+	@Override
 	public String getMimeType() {
 		String mimeType = _document.getContentStreamMimeType();
 
@@ -186,10 +199,12 @@ public class CMISFileVersion extends CMISModel implements FileVersion {
 		return MimeTypesUtil.getContentType(getTitle());
 	}
 
+	@Override
 	public Object getModel() {
 		return _document;
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return CMISFileVersion.class;
 	}
@@ -199,6 +214,7 @@ public class CMISFileVersion extends CMISModel implements FileVersion {
 		return CMISFileVersion.class.getName();
 	}
 
+	@Override
 	public Date getModifiedDate() {
 		Calendar modificationDate = _document.getLastModificationDate();
 
@@ -210,42 +226,57 @@ public class CMISFileVersion extends CMISModel implements FileVersion {
 		return _fileVersionId;
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
 		return getPrimaryKey();
 	}
 
+	@Override
 	public long getRepositoryId() {
 		return _cmisRepository.getRepositoryId();
 	}
 
+	@Override
 	public long getSize() {
 		return _document.getContentStreamLength();
 	}
 
+	@Override
+	public StagedModelType getStagedModelType() {
+		return new StagedModelType(FileVersion.class);
+	}
+
+	@Override
 	public int getStatus() {
 		return 0;
 	}
 
+	@Override
 	public long getStatusByUserId() {
 		return 0;
 	}
 
+	@Override
 	public String getStatusByUserName() {
 		return null;
 	}
 
+	@Override
 	public String getStatusByUserUuid() {
 		return null;
 	}
 
+	@Override
 	public Date getStatusDate() {
 		return getModifiedDate();
 	}
 
+	@Override
 	public String getTitle() {
 		return _document.getName();
 	}
 
+	@Override
 	public long getUserId() {
 		try {
 			return UserLocalServiceUtil.getDefaultUserId(getCompanyId());
@@ -255,10 +286,12 @@ public class CMISFileVersion extends CMISModel implements FileVersion {
 		}
 	}
 
+	@Override
 	public String getUserName() {
 		return _document.getCreatedBy();
 	}
 
+	@Override
 	public String getUserUuid() {
 		try {
 			User user = UserLocalServiceUtil.getDefaultUser(getCompanyId());
@@ -270,50 +303,62 @@ public class CMISFileVersion extends CMISModel implements FileVersion {
 		}
 	}
 
+	@Override
 	public String getUuid() {
 		return _uuid;
 	}
 
+	@Override
 	public String getVersion() {
 		return GetterUtil.getString(_document.getVersionLabel());
 	}
 
+	@Override
 	public boolean isApproved() {
 		return false;
 	}
 
+	@Override
 	public boolean isDefaultRepository() {
 		return false;
 	}
 
+	@Override
 	public boolean isDraft() {
 		return false;
 	}
 
+	@Override
 	public boolean isEscapedModel() {
 		return false;
 	}
 
+	@Override
 	public boolean isExpired() {
 		return false;
 	}
 
+	@Override
 	public boolean isInTrash() {
 		return false;
 	}
 
+	@Override
 	public boolean isInTrashContainer() {
 		return false;
 	}
 
+	@Override
 	public boolean isPending() {
 		return false;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
 		_cmisRepository.setCompanyId(companyId);
 	}
 
+	@Override
 	public void setCreateDate(Date date) {
 	}
 
@@ -321,10 +366,12 @@ public class CMISFileVersion extends CMISModel implements FileVersion {
 		_fileVersionId = fileVersionId;
 	}
 
+	@Override
 	public void setGroupId(long groupId) {
 		_cmisRepository.setGroupId(groupId);
 	}
 
+	@Override
 	public void setModifiedDate(Date date) {
 	}
 
@@ -332,26 +379,33 @@ public class CMISFileVersion extends CMISModel implements FileVersion {
 		setFileVersionId(primaryKey);
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public void setUserId(long userId) {
 	}
 
+	@Override
 	public void setUserName(String userName) {
 	}
 
+	@Override
 	public void setUserUuid(String userUuid) {
 	}
 
+	@Override
 	public void setUuid(String uuid) {
 	}
 
+	@Override
 	public FileVersion toEscapedModel() {
 		return this;
 	}
 
+	@Override
 	public FileVersion toUnescapedModel() {
 		return this;
 	}

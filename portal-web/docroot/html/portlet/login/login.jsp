@@ -22,7 +22,7 @@
 		<%
 		String signedInAs = HtmlUtil.escape(user.getFullName());
 
-		if (themeDisplay.isShowMyAccountIcon() && PortalPermissionUtil.contains(permissionChecker, ActionKeys.VIEW_CONTROL_PANEL)) {
+		if (themeDisplay.isShowMyAccountIcon() && Validator.isNotNull(themeDisplay.getURLMyAccount())) {
 			signedInAs = "<a href=\"" + HtmlUtil.escape(themeDisplay.getURLMyAccount().toString()) + "\">" + signedInAs + "</a>";
 		}
 		%>
@@ -60,7 +60,7 @@
 					String userPassword = (String)SessionMessages.get(request, "userAddedPassword");
 					%>
 
-					<div class="portlet-msg-success">
+					<div class="alert alert-success">
 						<c:choose>
 							<c:when test="<%= company.isStrangersVerify() || Validator.isNull(userPassword) %>">
 								<%= LanguageUtil.get(pageContext, "thank-you-for-creating-an-account") %>
@@ -85,7 +85,7 @@
 					String userEmailAddress = (String)SessionMessages.get(request, "userPending");
 					%>
 
-					<div class="portlet-msg-success">
+					<div class="alert alert-success">
 						<%= LanguageUtil.format(pageContext, "thank-you-for-creating-an-account.-you-will-be-notified-via-email-at-x-when-your-account-has-been-approved", userEmailAddress) %>
 					</div>
 				</c:when>
@@ -117,7 +117,7 @@
 				}
 				%>
 
-				<aui:input label="<%= loginLabel %>" name="login" showRequiredLabel="<%= false %>" type="text" value="<%= login %>">
+				<aui:input autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) %>" label="<%= loginLabel %>" name="login" showRequiredLabel="<%= false %>" type="text" value="<%= login %>">
 					<aui:validator name="required" />
 				</aui:input>
 
@@ -138,12 +138,6 @@
 		</aui:form>
 
 		<liferay-util:include page="/html/portlet/login/navigation.jsp" />
-
-		<c:if test="<%= windowState.equals(WindowState.MAXIMIZED) %>">
-			<aui:script>
-				Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace />login);
-			</aui:script>
-		</c:if>
 
 		<aui:script use="aui-base">
 			var password = A.one('#<portlet:namespace />password');

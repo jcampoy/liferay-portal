@@ -112,10 +112,8 @@ portletURL.setParameter("articleId", String.valueOf(articleId));
 			Liferay.Util.selectEntity(
 				{
 					dialog: {
-						align: Liferay.Util.Window.ALIGN_CENTER,
 						constrain: true,
 						modal: true,
-						stack: true,
 						width: 680
 					},
 					id: '<portlet:namespace />selectFolder',
