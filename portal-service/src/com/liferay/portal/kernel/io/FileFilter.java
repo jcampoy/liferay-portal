@@ -32,16 +32,16 @@ public class FileFilter implements java.io.FileFilter {
 		_pattern = Pattern.compile(regex);
 	}
 
+	@Override
 	public boolean accept(File file) {
 		if (file.isFile()) {
 			if (_pattern == null) {
 				return true;
 			}
-			else {
-				Matcher matcher = _pattern.matcher(file.getName());
 
-				return matcher.matches();
-			}
+			Matcher matcher = _pattern.matcher(file.getName());
+
+			return matcher.matches();
 		}
 		else {
 			return false;

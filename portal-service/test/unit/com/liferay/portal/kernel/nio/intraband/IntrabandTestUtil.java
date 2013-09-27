@@ -15,8 +15,8 @@
 package com.liferay.portal.kernel.nio.intraband;
 
 import com.liferay.portal.kernel.util.ProxyUtil;
-import com.liferay.portal.kernel.util.SocketUtil.ServerSocketConfigurator;
 import com.liferay.portal.kernel.util.SocketUtil;
+import com.liferay.portal.kernel.util.SocketUtil.ServerSocketConfigurator;
 
 import java.io.IOException;
 
@@ -28,19 +28,33 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.SocketException;
 
+import java.nio.channels.ScatteringByteChannel;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+
+import java.util.logging.LogRecord;
+
+import org.junit.Assert;
 
 /**
  * @author Shuyang Zhou
  */
 public class IntrabandTestUtil {
 
+	public static void assertMessageStartWith(
+		LogRecord logRecord, String messagePrefix) {
+
+		String message = logRecord.getMessage();
+
+		Assert.assertTrue(message.startsWith(messagePrefix));
+	}
+
 	public static <T> T createProxy(Class<?>... interfaces) {
 		return (T)ProxyUtil.newProxyInstance(
 			IntrabandTestUtil.class.getClassLoader(), interfaces,
 			new InvocationHandler() {
 
+				@Override
 				public Object invoke(
 					Object proxy, Method method, Object[] args) {
 
@@ -75,9 +89,21 @@ public class IntrabandTestUtil {
 		return socketChannels;
 	}
 
+	public static Datagram readDatagramFully(
+			ScatteringByteChannel scatteringByteChannel)
+		throws IOException {
+
+		Datagram datagram = DatagramHelper.createReceiveDatagram();
+
+		while (!DatagramHelper.readFrom(datagram, scatteringByteChannel));
+
+		return datagram;
+	}
+
 	private static ServerSocketConfigurator _serverSocketConfigurator =
 		new ServerSocketConfigurator() {
 
+		@Override
 		public void configure(ServerSocket serverSocket)
 			throws SocketException {
 

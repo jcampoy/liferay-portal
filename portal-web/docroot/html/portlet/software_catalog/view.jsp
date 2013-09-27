@@ -226,7 +226,7 @@ portletURL.setParameter("tabs1", tabs1);
 
 			// Modified date
 
-			row.addText(dateFormatDateTime.format(productEntry.getModifiedDate()), rowURL);
+			row.addDate(productEntry.getModifiedDate(), rowURL);
 
 			// Action
 
@@ -328,23 +328,21 @@ portletURL.setParameter("tabs1", tabs1);
 		searchContainer.setOrderByCol(orderByCol);
 		searchContainer.setOrderByType(orderByType);
 
+		List results = null;
 		int total = 0;
 
 		if (tabs1.equals("products")) {
 			total = SCProductEntryLocalServiceUtil.getProductEntriesCount(scopeGroupId);
-		}
-		else {
-			total = SCProductEntryLocalServiceUtil.getProductEntriesCount(scopeGroupId, user.getUserId());
-		}
 
-		searchContainer.setTotal(total);
+			searchContainer.setTotal(total);
 
-		List results = null;
-
-		if (tabs1.equals("products")) {
 			results = SCProductEntryLocalServiceUtil.getProductEntries(scopeGroupId, searchContainer.getStart(), searchContainer.getEnd(), orderByComparator);
 		}
 		else {
+			total = SCProductEntryLocalServiceUtil.getProductEntriesCount(scopeGroupId, user.getUserId());
+
+			searchContainer.setTotal(total);
+
 			results = SCProductEntryLocalServiceUtil.getProductEntries(scopeGroupId, user.getUserId(), searchContainer.getStart(), searchContainer.getEnd(), orderByComparator);
 		}
 
@@ -429,7 +427,7 @@ portletURL.setParameter("tabs1", tabs1);
 
 			// Modified date
 
-			row.addText(dateFormatDateTime.format(productEntry.getModifiedDate()), rowURL);
+			row.addDate(productEntry.getModifiedDate(), rowURL);
 
 			// Action
 
@@ -658,20 +656,13 @@ portletURL.setParameter("tabs1", tabs1);
 		}
 
 		document.<portlet:namespace />fm.method = 'post';
+
 		submitForm(document.<portlet:namespace />fm, url);
 	}
 
 	<c:if test="<%= windowState.equals(WindowState.MAXIMIZED) %>">
 		Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace />keywords);
 	</c:if>
-</aui:script>
-
-<aui:script use="aui-base">
-	var description = A.one('#cpContextPanelTemplate');
-
-	if (description) {
-		description.append('<span class="warn"><liferay-ui:message key="warning-x-will-be-replaced-with-liferay-marketplace" arguments="<%= portletDisplay.getTitle() %>" /></span>');
-	}
 </aui:script>
 
 <%

@@ -44,6 +44,7 @@ import java.util.List;
 @DoPrivileged
 public class ExpandoBridgeIndexerImpl implements ExpandoBridgeIndexer {
 
+	@Override
 	public void addAttributes(Document document, ExpandoBridge expandoBridge) {
 		if (expandoBridge == null) {
 			return;
@@ -57,12 +58,14 @@ public class ExpandoBridgeIndexerImpl implements ExpandoBridgeIndexer {
 		}
 	}
 
+	@Override
 	public String encodeFieldName(String columnName) {
 		StringBundler sb = new StringBundler(3);
 
 		sb.append(FIELD_NAMESPACE);
 		sb.append(StringPool.FORWARD_SLASH);
-		sb.append(ExpandoTableConstants.DEFAULT_TABLE_NAME.toLowerCase());
+		sb.append(
+			StringUtil.toLowerCase(ExpandoTableConstants.DEFAULT_TABLE_NAME));
 		sb.append(StringPool.FORWARD_SLASH);
 		sb.append(columnName);
 

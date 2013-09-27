@@ -186,7 +186,7 @@ public class PortletPermissionUtil {
 	}
 
 	/**
-	 * @deprecated As of 6.2, replaced by {@link
+	 * @deprecated As of 6.2.0, replaced by {@link
 	 *             #hasControlPanelAccessPermission(PermissionChecker, long,
 	 *             Collection)}
 	 */
@@ -197,7 +197,6 @@ public class PortletPermissionUtil {
 		try {
 			return hasControlPanelAccessPermission(
 				permissionChecker, groupId, portlets);
-
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -278,6 +277,15 @@ public class PortletPermissionUtil {
 
 		return getPortletPermission().hasAccessPermission(
 			permissionChecker, scopeGroupId, layout, portlet, portletMode);
+	}
+
+	public static boolean hasConfigurationPermission(
+			PermissionChecker permissionChecker, long groupId, Layout layout,
+			String actionId)
+		throws PortalException, SystemException {
+
+		return getPortletPermission().hasConfigurationPermission(
+			permissionChecker, groupId, layout, actionId);
 	}
 
 	public static boolean hasControlPanelAccessPermission(

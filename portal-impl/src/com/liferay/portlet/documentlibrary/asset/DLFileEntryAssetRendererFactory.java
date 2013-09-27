@@ -14,7 +14,6 @@
 
 package com.liferay.portlet.documentlibrary.asset;
 
-import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
@@ -63,6 +62,7 @@ public class DLFileEntryAssetRendererFactory extends BaseAssetRendererFactory {
 
 	public static final String TYPE = "document";
 
+	@Override
 	public AssetRenderer getAssetRenderer(long classPK, int type)
 		throws PortalException, SystemException {
 
@@ -80,9 +80,15 @@ public class DLFileEntryAssetRendererFactory extends BaseAssetRendererFactory {
 			fileVersion = fileEntry.getFileVersion();
 		}
 
-		return new DLFileEntryAssetRenderer(fileEntry, fileVersion, type);
+		DLFileEntryAssetRenderer dlFileEntryAssetRenderer =
+			new DLFileEntryAssetRenderer(fileEntry, fileVersion);
+
+		dlFileEntryAssetRenderer.setAssetRendererType(type);
+
+		return dlFileEntryAssetRenderer;
 	}
 
+	@Override
 	public String getClassName() {
 		return DLFileEntry.class.getName();
 	}
@@ -104,12 +110,7 @@ public class DLFileEntryAssetRendererFactory extends BaseAssetRendererFactory {
 				getDDMStructureFieldNames(ddmStructure, locale));
 		}
 
-		if ((start != QueryUtil.ALL_POS) || (end != QueryUtil.ALL_POS)) {
-			classTypeFieldNames = ListUtil.subList(
-				classTypeFieldNames, start, end);
-		}
-
-		return classTypeFieldNames;
+		return ListUtil.subList(classTypeFieldNames, start, end);
 	}
 
 	@Override
@@ -143,12 +144,13 @@ public class DLFileEntryAssetRendererFactory extends BaseAssetRendererFactory {
 		for (DLFileEntryType dlFileEntryType : dlFileEntryTypes) {
 			classTypes.put(
 				dlFileEntryType.getFileEntryTypeId(),
-				dlFileEntryType.getName());
+				dlFileEntryType.getName(locale));
 		}
 
 		return classTypes;
 	}
 
+	@Override
 	public String getType() {
 		return TYPE;
 	}

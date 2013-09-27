@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.scripting.BaseScriptingExecutor;
 import com.liferay.portal.kernel.scripting.ExecutionException;
 import com.liferay.portal.kernel.scripting.ScriptingException;
 import com.liferay.portal.kernel.util.AggregateClassLoader;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.NamedThreadFactory;
 import com.liferay.portal.kernel.util.ReflectionUtil;
@@ -47,8 +48,8 @@ import java.util.concurrent.ThreadFactory;
 import jodd.io.ZipUtil;
 
 import org.jruby.Ruby;
-import org.jruby.RubyInstanceConfig.CompileMode;
 import org.jruby.RubyInstanceConfig;
+import org.jruby.RubyInstanceConfig.CompileMode;
 import org.jruby.embed.LocalContextScope;
 import org.jruby.embed.ScriptingContainer;
 import org.jruby.embed.internal.LocalContextProvider;
@@ -120,6 +121,7 @@ public class RubyExecutor extends BaseScriptingExecutor {
 			classLoaders);
 	}
 
+	@Override
 	public Map<String, Object> eval(
 			Set<String> allowedClasses, Map<String, Object> inputObjects,
 			Set<String> outputNames, String script, ClassLoader... classLoaders)
@@ -130,6 +132,7 @@ public class RubyExecutor extends BaseScriptingExecutor {
 			classLoaders);
 	}
 
+	@Override
 	public String getLanguage() {
 		return LANGUAGE;
 	}
@@ -158,7 +161,7 @@ public class RubyExecutor extends BaseScriptingExecutor {
 
 			rubyInstanceConfig.setCurrentDirectory(_basePath);
 
-			if ((classLoaders != null) && (classLoaders.length > 0)) {
+			if (ArrayUtil.isNotEmpty(classLoaders)) {
 				ClassLoader aggregateClassLoader =
 					AggregateClassLoader.getAggregateClassLoader(
 						ClassLoaderUtil.getPortalClassLoader(), classLoaders);
@@ -325,6 +328,7 @@ public class RubyExecutor extends BaseScriptingExecutor {
 			_classLoaders = classLoaders;
 		}
 
+		@Override
 		public Map<String, Object> call() throws Exception {
 			return doEval(
 				_allowedClasses, _inputObjects, _outputNames, _scriptFile,

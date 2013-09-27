@@ -22,13 +22,11 @@ import com.liferay.portlet.blogs.service.BlogsEntryServiceUtil;
 import java.rmi.RemoteException;
 
 /**
- * <p>
- * This class provides a SOAP utility for the
+ * Provides the SOAP utility for the
  * {@link com.liferay.portlet.blogs.service.BlogsEntryServiceUtil} service utility. The
  * static methods of this class calls the same methods of the service utility.
  * However, the signatures are different because it is difficult for SOAP to
  * support certain types.
- * </p>
  *
  * <p>
  * ServiceBuilder follows certain rules in translating the methods. For example,
@@ -57,10 +55,10 @@ import java.rmi.RemoteException;
  * The SOAP utility is only generated for remote services.
  * </p>
  *
- * @author    Brian Wing Shun Chan
- * @see       BlogsEntryServiceHttp
- * @see       com.liferay.portlet.blogs.model.BlogsEntrySoap
- * @see       com.liferay.portlet.blogs.service.BlogsEntryServiceUtil
+ * @author Brian Wing Shun Chan
+ * @see BlogsEntryServiceHttp
+ * @see com.liferay.portlet.blogs.model.BlogsEntrySoap
+ * @see com.liferay.portlet.blogs.service.BlogsEntryServiceUtil
  * @generated
  */
 public class BlogsEntryServiceSoap {
@@ -250,9 +248,12 @@ public class BlogsEntryServiceSoap {
 		}
 	}
 
-	public static void moveEntryToTrash(long entryId) throws RemoteException {
+	public static com.liferay.portlet.blogs.model.BlogsEntrySoap moveEntryToTrash(
+		long entryId) throws RemoteException {
 		try {
-			BlogsEntryServiceUtil.moveEntryToTrash(entryId);
+			com.liferay.portlet.blogs.model.BlogsEntry returnValue = BlogsEntryServiceUtil.moveEntryToTrash(entryId);
+
+			return com.liferay.portlet.blogs.model.BlogsEntrySoap.toSoapModel(returnValue);
 		}
 		catch (Exception e) {
 			_log.error(e, e);

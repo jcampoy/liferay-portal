@@ -12,6 +12,11 @@
 		<constructor-arg value="com.liferay.portal.spring.aop.ServiceBeanAutoProxyCreator" />
 		<constructor-arg>
 			<map>
+				<entry key="beanMatcher">
+					<bean class="com.liferay.portal.kernel.spring.util.SpringFactoryUtil" factory-method="newBean">
+						<constructor-arg value="com.liferay.portal.spring.aop.ServiceBeanMatcher" />
+					</bean>
+				</entry>
 				<entry key="methodInterceptor" value-ref="serviceAdvice" />
 			</map>
 		</constructor-arg>
@@ -29,6 +34,14 @@
 		<property name="sessionFactory" ref="liferaySessionFactory" />
 	</bean>
 	<bean id="serviceAdvice" class="com.liferay.portal.kernel.spring.util.SpringFactoryUtil" factory-method="newBean">
+		<constructor-arg value="com.liferay.portal.spring.aop.SkipAdvice" />
+		<constructor-arg>
+			<map>
+				<entry key="nextMethodInterceptor" value-ref="accessControlAdvice" />
+			</map>
+		</constructor-arg>
+	</bean>
+	<bean id="accessControlAdvice" class="com.liferay.portal.kernel.spring.util.SpringFactoryUtil" factory-method="newBean">
 		<constructor-arg value="com.liferay.portal.security.ac.AccessControlAdvice" />
 		<constructor-arg>
 			<map>
@@ -37,6 +50,14 @@
 						<constructor-arg value="com.liferay.portal.security.ac.AccessControlAdvisorImpl" />
 					</bean>
 				</entry>
+				<entry key="nextMethodInterceptor" value-ref="portalResiliencyAdvice" />
+			</map>
+		</constructor-arg>
+	</bean>
+	<bean id="portalResiliencyAdvice" class="com.liferay.portal.kernel.spring.util.SpringFactoryUtil" factory-method="newBean">
+		<constructor-arg value="com.liferay.portal.resiliency.service.PortalResiliencyAdvice" />
+		<constructor-arg>
+			<map>
 				<entry key="nextMethodInterceptor" value-ref="serviceMonitorAdvice" />
 			</map>
 		</constructor-arg>
@@ -45,7 +66,6 @@
 		<constructor-arg value="com.liferay.portal.monitoring.statistics.service.ServiceMonitorAdvice" />
 		<constructor-arg>
 			<map>
-				<entry key="monitoringDestinationName" value="liferay/monitoring" />
 				<entry key="nextMethodInterceptor" value-ref="asyncAdvice" />
 			</map>
 		</constructor-arg>
@@ -77,6 +97,14 @@
 	</bean>
 	<bean id="indexableAdvice" class="com.liferay.portal.kernel.spring.util.SpringFactoryUtil" factory-method="newBean">
 		<constructor-arg value="com.liferay.portal.search.IndexableAdvice" />
+		<constructor-arg>
+			<map>
+				<entry key="nextMethodInterceptor" value-ref="systemEventAdvice" />
+			</map>
+		</constructor-arg>
+	</bean>
+	<bean id="systemEventAdvice" class="com.liferay.portal.kernel.spring.util.SpringFactoryUtil" factory-method="newBean">
+		<constructor-arg value="com.liferay.portal.systemevent.SystemEventAdvice" />
 		<constructor-arg>
 			<map>
 				<entry key="nextMethodInterceptor" value-ref="transactionAdvice" />

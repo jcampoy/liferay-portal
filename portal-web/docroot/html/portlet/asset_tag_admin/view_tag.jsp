@@ -39,7 +39,7 @@ List<AssetTagProperty> tagProperties = AssetTagPropertyServiceUtil.getTagPropert
 			<aui:button id="deleteTagButton" value="delete" />
 		</c:if>
 
-		<c:if test="<%= AssetTagPermission.contains(permissionChecker, tag, ActionKeys.PERMISSIONS) %>">
+		<c:if test="<%= PropsValues.ASSET_TAG_PERMISSIONS_ENABLED && AssetTagPermission.contains(permissionChecker, tag, ActionKeys.PERMISSIONS) %>">
 			<liferay-security:permissionsURL
 				modelResource="<%= AssetTag.class.getName() %>"
 				modelResourceDescription="<%= tag.getName() %>"
@@ -58,7 +58,7 @@ List<AssetTagProperty> tagProperties = AssetTagPropertyServiceUtil.getTagPropert
 				<label><liferay-ui:message key="count" />:</label> <liferay-ui:message key="used-in-x-assets" arguments="<%= tag.getAssetCount() %>" />
 			</c:when>
 			<c:otherwise>
-				<div class="portlet-msg-info">
+				<div class="alert alert-info">
 					<liferay-ui:message key="this-tag-is-not-used" />
 				</div>
 			</c:otherwise>

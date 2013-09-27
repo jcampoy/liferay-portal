@@ -16,6 +16,7 @@ package com.liferay.portal.service.permission;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.OrganizationConstants;
@@ -27,9 +28,11 @@ import com.liferay.portal.service.OrganizationLocalServiceUtil;
 /**
  * @author Charles May
  * @author Jorge Ferrer
+ * @author Sergio González
  */
 public class OrganizationPermissionImpl implements OrganizationPermission {
 
+	@Override
 	public void check(
 			PermissionChecker permissionChecker, long organizationId,
 			String actionId)
@@ -40,6 +43,7 @@ public class OrganizationPermissionImpl implements OrganizationPermission {
 		}
 	}
 
+	@Override
 	public void check(
 			PermissionChecker permissionChecker, Organization organization,
 			String actionId)
@@ -50,6 +54,7 @@ public class OrganizationPermissionImpl implements OrganizationPermission {
 		}
 	}
 
+	@Override
 	public boolean contains(
 			PermissionChecker permissionChecker, long organizationId,
 			String actionId)
@@ -66,12 +71,13 @@ public class OrganizationPermissionImpl implements OrganizationPermission {
 		}
 	}
 
+	@Override
 	public boolean contains(
 			PermissionChecker permissionChecker, long[] organizationIds,
 			String actionId)
 		throws PortalException, SystemException {
 
-		if ((organizationIds == null) || (organizationIds.length == 0)) {
+		if (ArrayUtil.isEmpty(organizationIds)) {
 			return true;
 		}
 
@@ -82,6 +88,7 @@ public class OrganizationPermissionImpl implements OrganizationPermission {
 		return true;
 	}
 
+	@Override
 	public boolean contains(
 			PermissionChecker permissionChecker, Organization organization,
 			String actionId)
@@ -125,9 +132,19 @@ public class OrganizationPermissionImpl implements OrganizationPermission {
 			   (organization.getOrganizationId() !=
 					OrganizationConstants.DEFAULT_PARENT_ORGANIZATION_ID)) {
 
-			if (permissionChecker.hasPermission(
+			if (actionId.equals(ActionKeys.ADD_ORGANIZATION) &&
+				permissionChecker.hasPermission(
 					groupId, Organization.class.getName(),
-					organization.getOrganizationId(), actionId)) {
+					organization.getOrganizationId(),
+					ActionKeys.MANAGE_SUBORGANIZATIONS) ||
+				PortalPermissionUtil.contains(
+					permissionChecker, ActionKeys.ADD_ORGANIZATION)) {
+
+				return true;
+			}
+			else if (permissionChecker.hasPermission(
+						groupId, Organization.class.getName(),
+						organization.getOrganizationId(), actionId)) {
 
 				return true;
 			}

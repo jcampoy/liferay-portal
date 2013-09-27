@@ -18,7 +18,6 @@ import com.liferay.portal.kernel.bean.BeanPropertiesUtil;
 import com.liferay.portal.kernel.dao.search.ResultRow;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.repository.model.RepositoryModel;
-import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ServerDetector;
@@ -30,6 +29,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.BodyTag;
@@ -70,7 +70,9 @@ public class SearchContainerRowTag<R>
 
 	@Override
 	public int doAfterBody() {
-		if (!_headerNamesAssigned) {
+		if (!_headerNamesAssigned && (_headerNames != null) &&
+			!_headerNames.isEmpty()) {
+
 			SearchContainerTag<R> searchContainerTag =
 				(SearchContainerTag<R>)findAncestorWithClass(
 					this, SearchContainerTag.class);
@@ -309,8 +311,7 @@ public class SearchContainerRowTag<R>
 			}
 			else {
 				rowId = FriendlyURLNormalizerUtil.normalize(
-					String.valueOf(rowIdObj),
-					new char[] {CharPool.PERIOD, CharPool.SLASH});
+					String.valueOf(rowIdObj), _friendlyURLPattern);
 			}
 		}
 
@@ -320,6 +321,8 @@ public class SearchContainerRowTag<R>
 		pageContext.setAttribute(_modelVar, model);
 		pageContext.setAttribute(_rowVar, _resultRow);
 	}
+
+	private static Pattern _friendlyURLPattern = Pattern.compile("[^a-z0-9_-]");
 
 	private boolean _bold;
 	private String _className;

@@ -35,6 +35,7 @@ import java.lang.reflect.InvocationHandler;
 @DoPrivileged
 public class LayoutStagingImpl implements LayoutStaging {
 
+	@Override
 	public LayoutRevision getLayoutRevision(Layout layout) {
 		LayoutStagingHandler layoutStagingHandler = getLayoutStagingHandler(
 			layout);
@@ -46,6 +47,7 @@ public class LayoutStagingImpl implements LayoutStaging {
 		return layoutStagingHandler.getLayoutRevision();
 	}
 
+	@Override
 	public LayoutSetBranch getLayoutSetBranch(LayoutSet layoutSet) {
 		LayoutSetStagingHandler layoutSetStagingHandler =
 			getLayoutSetStagingHandler(layoutSet);
@@ -57,6 +59,7 @@ public class LayoutStagingImpl implements LayoutStaging {
 		return layoutSetStagingHandler.getLayoutSetBranch();
 	}
 
+	@Override
 	public LayoutSetStagingHandler getLayoutSetStagingHandler(
 		LayoutSet layoutSet) {
 
@@ -74,6 +77,7 @@ public class LayoutStagingImpl implements LayoutStaging {
 		return (LayoutSetStagingHandler)invocationHandler;
 	}
 
+	@Override
 	public LayoutStagingHandler getLayoutStagingHandler(Layout layout) {
 		if (!ProxyUtil.isProxyClass(layout.getClass())) {
 			return null;
@@ -89,6 +93,7 @@ public class LayoutStagingImpl implements LayoutStaging {
 		return (LayoutStagingHandler)invocationHandler;
 	}
 
+	@Override
 	public boolean isBranchingLayout(Layout layout) {
 		try {
 			return isBranchingLayoutSet(
@@ -99,6 +104,7 @@ public class LayoutStagingImpl implements LayoutStaging {
 		}
 	}
 
+	@Override
 	public boolean isBranchingLayoutSet(Group group, boolean privateLayout) {
 		boolean isStagingGroup = false;
 
@@ -111,6 +117,10 @@ public class LayoutStagingImpl implements LayoutStaging {
 		UnicodeProperties typeSettingsProperties =
 			group.getTypeSettingsProperties();
 
+		if (typeSettingsProperties.isEmpty()) {
+			return false;
+		}
+
 		boolean branchingEnabled = false;
 
 		if (privateLayout) {
@@ -122,8 +132,8 @@ public class LayoutStagingImpl implements LayoutStaging {
 				typeSettingsProperties.getProperty("branchingPublic"));
 		}
 
-		if (group.isStaged() && branchingEnabled) {
-			if (!group.isStagedRemotely() && !isStagingGroup) {
+		if (branchingEnabled && group.isStaged()) {
+			if (!isStagingGroup && !group.isStagedRemotely()) {
 				return false;
 			}
 

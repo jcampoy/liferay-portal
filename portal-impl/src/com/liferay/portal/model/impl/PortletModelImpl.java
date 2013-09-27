@@ -135,26 +135,32 @@ public class PortletModelImpl extends BaseModelImpl<Portlet>
 	public PortletModelImpl() {
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _id;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
 		return _id;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return Portlet.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return Portlet.class.getName();
 	}
@@ -206,19 +212,23 @@ public class PortletModelImpl extends BaseModelImpl<Portlet>
 	}
 
 	@JSON
+	@Override
 	public long getId() {
 		return _id;
 	}
 
+	@Override
 	public void setId(long id) {
 		_id = id;
 	}
 
 	@JSON
+	@Override
 	public long getCompanyId() {
 		return _companyId;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
 		_columnBitmask |= COMPANYID_COLUMN_BITMASK;
 
@@ -236,6 +246,7 @@ public class PortletModelImpl extends BaseModelImpl<Portlet>
 	}
 
 	@JSON
+	@Override
 	public String getPortletId() {
 		if (_portletId == null) {
 			return StringPool.BLANK;
@@ -245,6 +256,7 @@ public class PortletModelImpl extends BaseModelImpl<Portlet>
 		}
 	}
 
+	@Override
 	public void setPortletId(String portletId) {
 		_columnBitmask |= PORTLETID_COLUMN_BITMASK;
 
@@ -260,6 +272,7 @@ public class PortletModelImpl extends BaseModelImpl<Portlet>
 	}
 
 	@JSON
+	@Override
 	public String getRoles() {
 		if (_roles == null) {
 			return StringPool.BLANK;
@@ -269,19 +282,23 @@ public class PortletModelImpl extends BaseModelImpl<Portlet>
 		}
 	}
 
+	@Override
 	public void setRoles(String roles) {
 		_roles = roles;
 	}
 
 	@JSON
+	@Override
 	public boolean getActive() {
 		return _active;
 	}
 
+	@Override
 	public boolean isActive() {
 		return _active;
 	}
 
+	@Override
 	public void setActive(boolean active) {
 		_active = active;
 	}
@@ -328,6 +345,7 @@ public class PortletModelImpl extends BaseModelImpl<Portlet>
 		return portletImpl;
 	}
 
+	@Override
 	public int compareTo(Portlet portlet) {
 		long primaryKey = portlet.getPrimaryKey();
 
@@ -344,18 +362,15 @@ public class PortletModelImpl extends BaseModelImpl<Portlet>
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof Portlet)) {
 			return false;
 		}
 
-		Portlet portlet = null;
-
-		try {
-			portlet = (Portlet)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		Portlet portlet = (Portlet)obj;
 
 		long primaryKey = portlet.getPrimaryKey();
 
@@ -433,6 +448,7 @@ public class PortletModelImpl extends BaseModelImpl<Portlet>
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(19);
 

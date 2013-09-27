@@ -17,26 +17,22 @@
 <%@ include file="/html/portlet/password_policies_admin/init.jsp" %>
 
 <%
-String toolbarItem = ParamUtil.getString(request, "toolbarItem", "view-all");
+String toolbarItem = ParamUtil.getString(request, "toolbarItem");
 %>
 
-<div class="lfr-portlet-toolbar">
-	<portlet:renderURL var="viewPasswordPoliciesURL">
-		<portlet:param name="struts_action" value="/password_policies_admin/view" />
-	</portlet:renderURL>
-
-	<span class="lfr-toolbar-button view-button <%= toolbarItem.equals("view-all") ? "current" : StringPool.BLANK %>">
-		<a href="<%= viewPasswordPoliciesURL %>"><liferay-ui:message key="view-all" /></a>
-	</span>
-
-	<c:if test="<%= PortalPermissionUtil.contains(permissionChecker, ActionKeys.ADD_PASSWORD_POLICY) %>">
-		<portlet:renderURL var="addPasswordPolicyURL">
-			<portlet:param name="struts_action" value="/password_policies_admin/edit_password_policy" />
-			<portlet:param name="redirect" value="<%= viewPasswordPoliciesURL %>" />
+<aui:nav-bar>
+	<aui:nav>
+		<portlet:renderURL var="viewPasswordPoliciesURL">
+			<portlet:param name="struts_action" value="/password_policies_admin/view" />
 		</portlet:renderURL>
 
-		<span class="lfr-toolbar-button add-button <%= toolbarItem.equals("add") ? "current" : StringPool.BLANK %>">
-			<a href="<%= addPasswordPolicyURL %>"><liferay-ui:message key="add" /></a>
-		</span>
-	</c:if>
-</div>
+		<c:if test="<%= PortalPermissionUtil.contains(permissionChecker, ActionKeys.ADD_PASSWORD_POLICY) %>">
+			<portlet:renderURL var="addPasswordPolicyURL">
+				<portlet:param name="struts_action" value="/password_policies_admin/edit_password_policy" />
+				<portlet:param name="redirect" value="<%= viewPasswordPoliciesURL %>" />
+			</portlet:renderURL>
+
+			<aui:nav-item href="<%= addPasswordPolicyURL %>" iconClass="icon-plus" label="add" selected='<%= toolbarItem.equals("add") %>' />
+		</c:if>
+	</aui:nav>
+</aui:nav-bar>

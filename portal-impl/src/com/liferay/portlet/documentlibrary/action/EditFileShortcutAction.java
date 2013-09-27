@@ -14,7 +14,6 @@
 
 package com.liferay.portlet.documentlibrary.action;
 
-import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.Constants;
@@ -23,6 +22,7 @@ import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.struts.PortletAction;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.assetpublisher.util.AssetPublisherUtil;
 import com.liferay.portlet.documentlibrary.FileShortcutPermissionException;
 import com.liferay.portlet.documentlibrary.NoSuchFileEntryException;
@@ -51,8 +51,9 @@ public class EditFileShortcutAction extends PortletAction {
 
 	@Override
 	public void processAction(
-			ActionMapping mapping, ActionForm form, PortletConfig portletConfig,
-			ActionRequest actionRequest, ActionResponse actionResponse)
+			ActionMapping actionMapping, ActionForm actionForm,
+			PortletConfig portletConfig, ActionRequest actionRequest,
+			ActionResponse actionResponse)
 		throws Exception {
 
 		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
@@ -62,8 +63,7 @@ public class EditFileShortcutAction extends PortletAction {
 				updateFileShortcut(actionRequest);
 			}
 			else if (cmd.equals(Constants.DELETE)) {
-				deleteFileShortcut(
-					(LiferayPortletConfig)portletConfig, actionRequest, false);
+				deleteFileShortcut(actionRequest, false);
 			}
 			else if (cmd.equals(Constants.MOVE)) {
 				moveFileShortcut(actionRequest, false);
@@ -72,8 +72,7 @@ public class EditFileShortcutAction extends PortletAction {
 				moveFileShortcut(actionRequest, true);
 			}
 			else if (cmd.equals(Constants.MOVE_TO_TRASH)) {
-				deleteFileShortcut(
-					(LiferayPortletConfig)portletConfig, actionRequest, true);
+				deleteFileShortcut(actionRequest, true);
 			}
 
 			sendRedirect(actionRequest, actionResponse);
@@ -99,8 +98,9 @@ public class EditFileShortcutAction extends PortletAction {
 
 	@Override
 	public ActionForward render(
-			ActionMapping mapping, ActionForm form, PortletConfig portletConfig,
-			RenderRequest renderRequest, RenderResponse renderResponse)
+			ActionMapping actionMapping, ActionForm actionForm,
+			PortletConfig portletConfig, RenderRequest renderRequest,
+			RenderResponse renderResponse)
 		throws Exception {
 
 		try {
@@ -112,20 +112,20 @@ public class EditFileShortcutAction extends PortletAction {
 
 				SessionErrors.add(renderRequest, e.getClass());
 
-				return mapping.findForward("portlet.document_library.error");
+				return actionMapping.findForward(
+					"portlet.document_library.error");
 			}
 			else {
 				throw e;
 			}
 		}
 
-		return mapping.findForward(
+		return actionMapping.findForward(
 			getForward(
 				renderRequest, "portlet.document_library.edit_file_shortcut"));
 	}
 
 	protected void deleteFileShortcut(
-			LiferayPortletConfig liferayPortletConfig,
 			ActionRequest actionRequest, boolean moveToTrash)
 		throws Exception {
 
@@ -133,9 +133,20 @@ public class EditFileShortcutAction extends PortletAction {
 			actionRequest, "fileShortcutId");
 
 		if (moveToTrash) {
-			DLAppServiceUtil.moveFileShortcutToTrash(fileShortcutId);
+			DLFileShortcut fileShortcut =
+				DLAppServiceUtil.moveFileShortcutToTrash(fileShortcutId);
 
 			Map<String, String[]> data = new HashMap<String, String[]>();
+
+			data.put(
+				"deleteEntryClassName",
+				new String[] {DLFileShortcut.class.getName()});
+
+			if (fileShortcut != null) {
+				data.put(
+					"deleteEntryTitle",
+					new String[] {fileShortcut.getToTitle()});
+			}
 
 			data.put(
 				"restoreFileShortcutIds",
@@ -143,13 +154,10 @@ public class EditFileShortcutAction extends PortletAction {
 
 			SessionMessages.add(
 				actionRequest,
-				liferayPortletConfig.getPortletId() +
+				PortalUtil.getPortletId(actionRequest) +
 					SessionMessages.KEY_SUFFIX_DELETE_SUCCESS_DATA, data);
 
-			SessionMessages.add(
-				actionRequest,
-				liferayPortletConfig.getPortletId() +
-					SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_SUCCESS_MESSAGE);
+			hideDefaultSuccessMessage(actionRequest);
 		}
 		else {
 			DLAppServiceUtil.deleteFileShortcut(fileShortcutId);

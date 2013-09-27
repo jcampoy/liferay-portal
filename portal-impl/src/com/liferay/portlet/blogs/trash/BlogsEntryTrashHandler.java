@@ -38,18 +38,72 @@ import javax.portlet.PortletURL;
  */
 public class BlogsEntryTrashHandler extends BaseTrashHandler {
 
+	@Override
 	public void deleteTrashEntry(long classPK)
 		throws PortalException, SystemException {
 
 		BlogsEntryLocalServiceUtil.deleteEntry(classPK);
 	}
 
+	@Override
 	public String getClassName() {
 		return BlogsEntry.class.getName();
 	}
 
 	@Override
-	public String getRestoreLink(PortletRequest portletRequest, long classPK)
+	public String getRestoreContainedModelLink(
+			PortletRequest portletRequest, long classPK)
+		throws PortalException, SystemException {
+
+		BlogsEntry entry = BlogsEntryLocalServiceUtil.getEntry(classPK);
+
+		PortletURL portletURL = getRestoreURL(portletRequest, classPK, false);
+
+		portletURL.setParameter("entryId", String.valueOf(entry.getEntryId()));
+		portletURL.setParameter("urlTitle", entry.getUrlTitle());
+
+		return portletURL.toString();
+	}
+
+	@Override
+	public String getRestoreContainerModelLink(
+			PortletRequest portletRequest, long classPK)
+		throws PortalException, SystemException {
+
+		PortletURL portletURL = getRestoreURL(portletRequest, classPK, true);
+
+		return portletURL.toString();
+	}
+
+	@Override
+	public String getRestoreMessage(
+		PortletRequest portletRequest, long classPK) {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		return themeDisplay.translate("blogs");
+	}
+
+	@Override
+	public boolean isInTrash(long classPK)
+		throws PortalException, SystemException {
+
+		BlogsEntry entry = BlogsEntryLocalServiceUtil.getEntry(classPK);
+
+		return entry.isInTrash();
+	}
+
+	@Override
+	public void restoreTrashEntry(long userId, long classPK)
+		throws PortalException, SystemException {
+
+		BlogsEntryLocalServiceUtil.restoreEntryFromTrash(userId, classPK);
+	}
+
+	protected PortletURL getRestoreURL(
+			PortletRequest portletRequest, long classPK,
+			boolean isContainerModel)
 		throws PortalException, SystemException {
 
 		String portletId = PortletKeys.BLOGS;
@@ -68,31 +122,17 @@ public class BlogsEntryTrashHandler extends BaseTrashHandler {
 		PortletURL portletURL = PortletURLFactoryUtil.create(
 			portletRequest, portletId, plid, PortletRequest.RENDER_PHASE);
 
-		return portletURL.toString();
-	}
+		if (!isContainerModel) {
+			if (portletId.equals(PortletKeys.BLOGS)) {
+				portletURL.setParameter("struts_action", "/blogs/view_entry");
+			}
+			else {
+				portletURL.setParameter(
+					"struts_action", "/blogs_admin/view_entry");
+			}
+		}
 
-	@Override
-	public String getRestoreMessage(
-		PortletRequest portletRequest, long classPK) {
-
-		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
-
-		return themeDisplay.translate("blogs");
-	}
-
-	public boolean isInTrash(long classPK)
-		throws PortalException, SystemException {
-
-		BlogsEntry entry = BlogsEntryLocalServiceUtil.getEntry(classPK);
-
-		return entry.isInTrash();
-	}
-
-	public void restoreTrashEntry(long userId, long classPK)
-		throws PortalException, SystemException {
-
-		BlogsEntryLocalServiceUtil.restoreEntryFromTrash(userId, classPK);
+		return portletURL;
 	}
 
 	@Override

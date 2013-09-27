@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Account;
 import com.liferay.portal.model.CacheField;
@@ -71,29 +72,35 @@ public class CompanyImpl extends CompanyBaseImpl {
 		}
 	}
 
+	@Override
 	public Account getAccount() throws PortalException, SystemException {
 		return AccountLocalServiceUtil.getAccount(
 			getCompanyId(), getAccountId());
 	}
 
+	@Override
 	public String getAdminName() {
 		return "Administrator";
 	}
 
+	@Override
 	public String getAuthType() throws SystemException {
 		return PrefsPropsUtil.getString(
 			getCompanyId(), PropsKeys.COMPANY_SECURITY_AUTH_TYPE,
 			PropsValues.COMPANY_SECURITY_AUTH_TYPE);
 	}
 
+	@Override
 	public User getDefaultUser() throws PortalException, SystemException {
 		return UserLocalServiceUtil.getDefaultUser(getCompanyId());
 	}
 
+	@Override
 	public String getDefaultWebId() {
 		return PropsValues.COMPANY_DEFAULT_WEB_ID;
 	}
 
+	@Override
 	public String getEmailAddress() {
 
 		// Primary email address
@@ -101,6 +108,7 @@ public class CompanyImpl extends CompanyBaseImpl {
 		return "admin@" + getMx();
 	}
 
+	@Override
 	public Group getGroup() throws PortalException, SystemException {
 		if (getCompanyId() > CompanyConstants.SYSTEM) {
 			return GroupLocalServiceUtil.getCompanyGroup(getCompanyId());
@@ -122,15 +130,18 @@ public class CompanyImpl extends CompanyBaseImpl {
 		return _keyObj;
 	}
 
+	@Override
 	public Locale getLocale() throws PortalException, SystemException {
 		return getDefaultUser().getLocale();
 	}
 
 	@AutoEscape
+	@Override
 	public String getName() throws PortalException, SystemException {
 		return getAccount().getName();
 	}
 
+	@Override
 	public String getPortalURL(long groupId)
 		throws PortalException, SystemException {
 
@@ -165,6 +176,7 @@ public class CompanyImpl extends CompanyBaseImpl {
 		return portalURL;
 	}
 
+	@Override
 	public String getShardName() throws PortalException, SystemException {
 		Shard shard = ShardLocalServiceUtil.getShard(
 			Company.class.getName(), getCompanyId());
@@ -172,10 +184,12 @@ public class CompanyImpl extends CompanyBaseImpl {
 		return shard.getName();
 	}
 
+	@Override
 	public String getShortName() throws PortalException, SystemException {
 		return getName();
 	}
 
+	@Override
 	public TimeZone getTimeZone() throws PortalException, SystemException {
 		return getDefaultUser().getTimeZone();
 	}
@@ -204,8 +218,9 @@ public class CompanyImpl extends CompanyBaseImpl {
 		return _virtualHostname;
 	}
 
+	@Override
 	public boolean hasCompanyMx(String emailAddress) throws SystemException {
-		emailAddress = emailAddress.trim().toLowerCase();
+		emailAddress = StringUtil.toLowerCase(emailAddress.trim());
 
 		int pos = emailAddress.indexOf(CharPool.AT);
 
@@ -224,7 +239,7 @@ public class CompanyImpl extends CompanyBaseImpl {
 			StringPool.NEW_LINE, PropsValues.ADMIN_MAIL_HOST_NAMES);
 
 		for (int i = 0; i < mailHostNames.length; i++) {
-			if (mx.equalsIgnoreCase(mailHostNames[i])) {
+			if (StringUtil.equalsIgnoreCase(mx, mailHostNames[i])) {
 				return true;
 			}
 		}
@@ -232,42 +247,49 @@ public class CompanyImpl extends CompanyBaseImpl {
 		return false;
 	}
 
+	@Override
 	public boolean isAutoLogin() throws SystemException {
 		return PrefsPropsUtil.getBoolean(
 			getCompanyId(), PropsKeys.COMPANY_SECURITY_AUTO_LOGIN,
 			PropsValues.COMPANY_SECURITY_AUTO_LOGIN);
 	}
 
+	@Override
 	public boolean isSendPassword() throws SystemException {
 		return PrefsPropsUtil.getBoolean(
 			getCompanyId(), PropsKeys.COMPANY_SECURITY_SEND_PASSWORD,
 			PropsValues.COMPANY_SECURITY_SEND_PASSWORD);
 	}
 
+	@Override
 	public boolean isSendPasswordResetLink() throws SystemException {
 		return PrefsPropsUtil.getBoolean(
 			getCompanyId(), PropsKeys.COMPANY_SECURITY_SEND_PASSWORD_RESET_LINK,
 			PropsValues.COMPANY_SECURITY_SEND_PASSWORD_RESET_LINK);
 	}
 
+	@Override
 	public boolean isSiteLogo() throws SystemException {
 		return PrefsPropsUtil.getBoolean(
 			getCompanyId(), PropsKeys.COMPANY_SECURITY_SITE_LOGO,
 			PropsValues.COMPANY_SECURITY_SITE_LOGO);
 	}
 
+	@Override
 	public boolean isStrangers() throws SystemException {
 		return PrefsPropsUtil.getBoolean(
 			getCompanyId(), PropsKeys.COMPANY_SECURITY_STRANGERS,
 			PropsValues.COMPANY_SECURITY_STRANGERS);
 	}
 
+	@Override
 	public boolean isStrangersVerify() throws SystemException {
 		return PrefsPropsUtil.getBoolean(
 			getCompanyId(), PropsKeys.COMPANY_SECURITY_STRANGERS_VERIFY,
 			PropsValues.COMPANY_SECURITY_STRANGERS_VERIFY);
 	}
 
+	@Override
 	public boolean isStrangersWithMx() throws SystemException {
 		return PrefsPropsUtil.getBoolean(
 			getCompanyId(), PropsKeys.COMPANY_SECURITY_STRANGERS_WITH_MX,

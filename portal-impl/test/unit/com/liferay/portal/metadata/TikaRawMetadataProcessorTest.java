@@ -69,9 +69,8 @@ public class TikaRawMetadataProcessorTest extends PowerMockito {
 
 			Assert.assertNotNull(metadata);
 			Assert.assertEquals(0, metadata.size());
-
 		}
-		catch (SystemException e) {
+		catch (SystemException se) {
 			Assert.fail("Unexpected error");
 		}
 	}

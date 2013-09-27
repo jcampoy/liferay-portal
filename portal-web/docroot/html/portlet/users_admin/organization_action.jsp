@@ -42,14 +42,18 @@ Group organizationGroup = organization.getGroup();
 
 long organizationGroupId = organizationGroup.getGroupId();
 
+String cssClass = StringPool.BLANK;
+
 boolean view = false;
 
 if (row == null) {
+	cssClass = "nav nav-list unstyled well";
+
 	view = true;
 }
 %>
 
-<liferay-ui:icon-menu showExpanded="<%= view %>" showWhenSingleIcon="<%= view %>">
+<liferay-ui:icon-menu cssClass="<%= cssClass %>" showExpanded="<%= view %>" showWhenSingleIcon="<%= view %>">
 
 	<%
 	boolean hasUpdatePermission = OrganizationPermissionUtil.contains(permissionChecker, organizationId, ActionKeys.UPDATE);
@@ -74,11 +78,14 @@ if (row == null) {
 			modelResourceDescription="<%= HtmlUtil.escape(organization.getName()) %>"
 			resourcePrimKey="<%= String.valueOf(organization.getOrganizationId()) %>"
 			var="editOrganizationPermissionsURL"
+			windowState="<%= LiferayWindowState.POP_UP.toString() %>"
 		/>
 
 		<liferay-ui:icon
 			image="permissions"
+			method="get"
 			url="<%= editOrganizationPermissionsURL %>"
+			useDialog="<%= true %>"
 		/>
 	</c:if>--%>
 
@@ -146,7 +153,7 @@ if (row == null) {
 		for (String childrenType : childrenTypes) {
 		%>
 
-			<c:if test="<%= OrganizationPermissionUtil.contains(permissionChecker, organizationId, ActionKeys.MANAGE_SUBORGANIZATIONS) %>">
+			<c:if test="<%= OrganizationPermissionUtil.contains(permissionChecker, organizationId, ActionKeys.ADD_ORGANIZATION) %>">
 				<portlet:renderURL var="addSuborganizationURL">
 					<portlet:param name="struts_action" value="/users_admin/edit_organization" />
 					<portlet:param name="redirect" value="<%= redirect %>" />

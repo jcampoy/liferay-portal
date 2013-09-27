@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.webdav.Resource;
 import com.liferay.portal.kernel.webdav.WebDAVException;
 import com.liferay.portal.kernel.webdav.WebDAVRequest;
 import com.liferay.portal.kernel.webdav.WebDAVStorage;
+import com.liferay.portal.kernel.webdav.methods.Method;
 
 import java.io.InputStream;
 
@@ -33,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class GetMethodImpl implements Method {
 
+	@Override
 	public int process(WebDAVRequest webDAVRequest) throws WebDAVException {
 		InputStream is = null;
 

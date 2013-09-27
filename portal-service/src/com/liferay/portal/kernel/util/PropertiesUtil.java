@@ -154,35 +154,37 @@ public class PropertiesUtil {
 	public static void load(Properties properties, String s)
 		throws IOException {
 
-		if (Validator.isNotNull(s)) {
-			s = UnicodeFormatter.toString(s);
+		if (Validator.isNull(s)) {
+			return;
+		}
 
-			s = StringUtil.replace(s, "\\u003d", "=");
-			s = StringUtil.replace(s, "\\u000a", "\n");
-			s = StringUtil.replace(s, "\\u0021", "!");
-			s = StringUtil.replace(s, "\\u0023", "#");
-			s = StringUtil.replace(s, "\\u0020", " ");
-			s = StringUtil.replace(s, "\\u005c", "\\");
+		s = UnicodeFormatter.toString(s);
 
-			properties.load(new UnsyncByteArrayInputStream(s.getBytes()));
+		s = StringUtil.replace(s, "\\u003d", "=");
+		s = StringUtil.replace(s, "\\u000a", "\n");
+		s = StringUtil.replace(s, "\\u0021", "!");
+		s = StringUtil.replace(s, "\\u0023", "#");
+		s = StringUtil.replace(s, "\\u0020", " ");
+		s = StringUtil.replace(s, "\\u005c", "\\");
 
-			List<String> propertyNames = Collections.list(
-				(Enumeration<String>)properties.propertyNames());
+		properties.load(new UnsyncByteArrayInputStream(s.getBytes()));
 
-			for (int i = 0; i < propertyNames.size(); i++) {
-				String key = propertyNames.get(i);
+		List<String> propertyNames = Collections.list(
+			(Enumeration<String>)properties.propertyNames());
 
-				String value = properties.getProperty(key);
+		for (int i = 0; i < propertyNames.size(); i++) {
+			String key = propertyNames.get(i);
 
-				// Trim values because it may leave a trailing \r in certain
-				// Windows environments. This is a known case for loading SQL
-				// scripts in SQL Server.
+			String value = properties.getProperty(key);
 
-				if (value != null) {
-					value = value.trim();
+			// Trim values because it may leave a trailing \r in certain Windows
+			// environments. This is a known case for loading SQL scripts in SQL
+			// Server.
 
-					properties.setProperty(key, value);
-				}
+			if (value != null) {
+				value = value.trim();
+
+				properties.setProperty(key, value);
 			}
 		}
 	}
@@ -197,15 +199,13 @@ public class PropertiesUtil {
 		if (JavaDetector.isJDK6()) {
 			return loadJDK6(new UnsyncStringReader(s));
 		}
-		else {
-			ByteBuffer byteBuffer = CharsetEncoderUtil.encode(charsetName, s);
 
-			InputStream is = new UnsyncByteArrayInputStream(
-				byteBuffer.array(), byteBuffer.arrayOffset(),
-				byteBuffer.limit());
+		ByteBuffer byteBuffer = CharsetEncoderUtil.encode(charsetName, s);
 
-			return loadJDK5(is, charsetName);
-		}
+		InputStream is = new UnsyncByteArrayInputStream(
+			byteBuffer.array(), byteBuffer.arrayOffset(), byteBuffer.limit());
+
+		return loadJDK5(is, charsetName);
 	}
 
 	public static Properties loadJDK5(InputStream is, String charsetName)
@@ -227,12 +227,13 @@ public class PropertiesUtil {
 			String key = (String)entry.getKey();
 			String value = (String)entry.getValue();
 
-			key = charsetDecoder.decode(
-				charsetEncoder.encode(CharBuffer.wrap(key))).toString();
-			value = charsetDecoder.decode(
-				charsetEncoder.encode(CharBuffer.wrap(value))).toString();
+			CharBuffer keyCharBuffer = charsetDecoder.decode(
+				charsetEncoder.encode(CharBuffer.wrap(key)));
+			CharBuffer valueCharBuffer = charsetDecoder.decode(
+				charsetEncoder.encode(CharBuffer.wrap(value)));
 
-			properties.put(key, value);
+			properties.put(
+				keyCharBuffer.toString(), valueCharBuffer.toString());
 		}
 
 		return properties;

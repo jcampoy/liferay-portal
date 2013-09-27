@@ -50,6 +50,7 @@ public class PortletContextImpl implements LiferayPortletContext {
 			_servletContext.getServletContextName());
 	}
 
+	@Override
 	public Object getAttribute(String name) {
 		if (name == null) {
 			throw new IllegalArgumentException();
@@ -58,14 +59,17 @@ public class PortletContextImpl implements LiferayPortletContext {
 		return _servletContext.getAttribute(name);
 	}
 
+	@Override
 	public Enumeration<String> getAttributeNames() {
 		return _servletContext.getAttributeNames();
 	}
 
+	@Override
 	public Enumeration<String> getContainerRuntimeOptions() {
 		return null;
 	}
 
+	@Override
 	public String getInitParameter(String name) {
 		if (name == null) {
 			throw new IllegalArgumentException();
@@ -74,22 +78,27 @@ public class PortletContextImpl implements LiferayPortletContext {
 		return _servletContext.getInitParameter(name);
 	}
 
+	@Override
 	public Enumeration<String> getInitParameterNames() {
 		return _servletContext.getInitParameterNames();
 	}
 
+	@Override
 	public int getMajorVersion() {
 		return _MAJOR_VERSION;
 	}
 
+	@Override
 	public String getMimeType(String file) {
 		return _servletContext.getMimeType(file);
 	}
 
+	@Override
 	public int getMinorVersion() {
 		return _MINOR_VERSION;
 	}
 
+	@Override
 	public PortletRequestDispatcher getNamedDispatcher(String name) {
 		RequestDispatcher requestDispatcher = null;
 
@@ -101,27 +110,31 @@ public class PortletContextImpl implements LiferayPortletContext {
 		}
 
 		if (requestDispatcher != null) {
-			return DoPrivilegedUtil.wrap(
+			return DoPrivilegedUtil.wrapWhenActive(
 				new PortletRequestDispatcherImpl(
-					requestDispatcher, true, this), true);
+					requestDispatcher, true, this));
 		}
 		else {
 			return null;
 		}
 	}
 
+	@Override
 	public Portlet getPortlet() {
 		return _portlet;
 	}
 
+	@Override
 	public String getPortletContextName() {
 		return _servletContextName;
 	}
 
+	@Override
 	public String getRealPath(String path) {
 		return _servletContext.getRealPath(path);
 	}
 
+	@Override
 	public PortletRequestDispatcher getRequestDispatcher(String path) {
 		RequestDispatcher requestDispatcher = null;
 
@@ -133,15 +146,16 @@ public class PortletContextImpl implements LiferayPortletContext {
 		}
 
 		if (requestDispatcher != null) {
-			return DoPrivilegedUtil.wrap(
+			return DoPrivilegedUtil.wrapWhenActive(
 				new PortletRequestDispatcherImpl(
-					requestDispatcher, false, this, path), true);
+					requestDispatcher, false, this, path));
 		}
 		else {
 			return null;
 		}
 	}
 
+	@Override
 	public URL getResource(String path) throws MalformedURLException {
 		if ((path == null) || !path.startsWith(StringPool.SLASH)) {
 			throw new MalformedURLException();
@@ -150,18 +164,22 @@ public class PortletContextImpl implements LiferayPortletContext {
 		return _servletContext.getResource(path);
 	}
 
+	@Override
 	public InputStream getResourceAsStream(String path) {
 		return _servletContext.getResourceAsStream(path);
 	}
 
+	@Override
 	public Set<String> getResourcePaths(String path) {
 		return _servletContext.getResourcePaths(path);
 	}
 
+	@Override
 	public String getServerInfo() {
 		return ReleaseInfo.getServerInfo();
 	}
 
+	@Override
 	public ServletContext getServletContext() {
 		return _servletContext;
 	}
@@ -172,18 +190,21 @@ public class PortletContextImpl implements LiferayPortletContext {
 		return portletApp.isWARFile();
 	}
 
+	@Override
 	public void log(String msg) {
 		if (_log.isInfoEnabled()) {
 			_log.info(msg);
 		}
 	}
 
+	@Override
 	public void log(String msg, Throwable throwable) {
 		if (_log.isInfoEnabled()) {
 			_log.info(msg, throwable);
 		}
 	}
 
+	@Override
 	public void removeAttribute(String name) {
 		if (name == null) {
 			throw new IllegalArgumentException();
@@ -192,6 +213,7 @@ public class PortletContextImpl implements LiferayPortletContext {
 		_servletContext.removeAttribute(name);
 	}
 
+	@Override
 	public void setAttribute(String name, Object obj) {
 		if (name == null) {
 			throw new IllegalArgumentException();

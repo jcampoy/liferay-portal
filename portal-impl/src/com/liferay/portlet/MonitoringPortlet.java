@@ -14,7 +14,6 @@
 
 package com.liferay.portlet;
 
-import com.liferay.portal.kernel.messaging.sender.SingleDestinationMessageSender;
 import com.liferay.portal.kernel.monitoring.RequestStatus;
 import com.liferay.portal.kernel.monitoring.statistics.DataSampleThreadLocal;
 import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
@@ -87,42 +86,46 @@ public class MonitoringPortlet implements InvokerPortlet {
 	public MonitoringPortlet() {
 	}
 
-	public MonitoringPortlet(
-		InvokerPortlet invokerPortlet,
-		SingleDestinationMessageSender singleDestinationMessageSender) {
-
+	public MonitoringPortlet(InvokerPortlet invokerPortlet) {
 		_invokerPortlet = invokerPortlet;
-		_singleDestinationMessageSender = singleDestinationMessageSender;
 	}
 
+	@Override
 	public void destroy() {
 		_invokerPortlet.destroy();
 	}
 
+	@Override
 	public Integer getExpCache() {
 		return _invokerPortlet.getExpCache();
 	}
 
+	@Override
 	public Portlet getPortlet() {
 		return _invokerPortlet.getPortlet();
 	}
 
+	@Override
 	public ClassLoader getPortletClassLoader() {
 		return _invokerPortlet.getPortletClassLoader();
 	}
 
+	@Override
 	public PortletConfig getPortletConfig() {
 		return _invokerPortlet.getPortletConfig();
 	}
 
+	@Override
 	public PortletContext getPortletContext() {
 		return _invokerPortlet.getPortletContext();
 	}
 
+	@Override
 	public Portlet getPortletInstance() {
 		return _invokerPortlet.getPortletInstance();
 	}
 
+	@Override
 	public void init(PortletConfig portletConfig) throws PortletException {
 		LiferayPortletConfig liferayPortletConfig =
 			(LiferayPortletConfig)portletConfig;
@@ -136,22 +139,27 @@ public class MonitoringPortlet implements InvokerPortlet {
 		_renderTimeout = portletModel.getRenderTimeout();
 	}
 
+	@Override
 	public boolean isCheckAuthToken() {
 		return _invokerPortlet.isCheckAuthToken();
 	}
 
+	@Override
 	public boolean isFacesPortlet() {
 		return _invokerPortlet.isFacesPortlet();
 	}
 
+	@Override
 	public boolean isStrutsBridgePortlet() {
 		return _invokerPortlet.isStrutsBridgePortlet();
 	}
 
+	@Override
 	public boolean isStrutsPortlet() {
 		return _invokerPortlet.isStrutsPortlet();
 	}
 
+	@Override
 	public void processAction(
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException, PortletException {
@@ -180,13 +188,12 @@ public class MonitoringPortlet implements InvokerPortlet {
 		}
 		finally {
 			if (portletRequestDataSample != null) {
-				_singleDestinationMessageSender.send(portletRequestDataSample);
-
 				DataSampleThreadLocal.addDataSample(portletRequestDataSample);
 			}
 		}
 	}
 
+	@Override
 	public void processEvent(
 			EventRequest eventRequest, EventResponse eventResponse)
 		throws IOException, PortletException {
@@ -213,13 +220,12 @@ public class MonitoringPortlet implements InvokerPortlet {
 		}
 		finally {
 			if (portletRequestDataSample != null) {
-				_singleDestinationMessageSender.send(portletRequestDataSample);
-
 				DataSampleThreadLocal.addDataSample(portletRequestDataSample);
 			}
 		}
 	}
 
+	@Override
 	public void render(
 			RenderRequest renderRequest, RenderResponse renderResponse)
 		throws IOException, PortletException {
@@ -248,13 +254,12 @@ public class MonitoringPortlet implements InvokerPortlet {
 		}
 		finally {
 			if (portletRequestDataSample != null) {
-				_singleDestinationMessageSender.send(portletRequestDataSample);
-
 				DataSampleThreadLocal.addDataSample(portletRequestDataSample);
 			}
 		}
 	}
 
+	@Override
 	public void serveResource(
 			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 		throws IOException, PortletException {
@@ -282,8 +287,6 @@ public class MonitoringPortlet implements InvokerPortlet {
 		}
 		finally {
 			if (portletRequestDataSample != null) {
-				_singleDestinationMessageSender.send(portletRequestDataSample);
-
 				DataSampleThreadLocal.addDataSample(portletRequestDataSample);
 			}
 		}
@@ -293,14 +296,9 @@ public class MonitoringPortlet implements InvokerPortlet {
 		_invokerPortlet = invokerPortlet;
 	}
 
+	@Override
 	public void setPortletFilters() throws PortletException {
 		_invokerPortlet.setPortletFilters();
-	}
-
-	public void setSingleDestinationMessageSender(
-		SingleDestinationMessageSender singleDestinationMessageSender) {
-
-		_singleDestinationMessageSender = singleDestinationMessageSender;
 	}
 
 	private void _processException(
@@ -335,6 +333,5 @@ public class MonitoringPortlet implements InvokerPortlet {
 	private long _actionTimeout;
 	private InvokerPortlet _invokerPortlet;
 	private long _renderTimeout;
-	private SingleDestinationMessageSender _singleDestinationMessageSender;
 
 }

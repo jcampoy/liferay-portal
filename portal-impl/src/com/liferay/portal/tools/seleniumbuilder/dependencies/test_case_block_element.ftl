@@ -7,23 +7,41 @@
 		<#if element.attributeValue("action")??>
 			<#assign actionElement = element>
 
+			<#assign lineNumber = element.attributeValue("line-number")>
+
+			selenium.sendLogger("${testCaseName?uncap_first}TestCase${lineNumber}", "pending");
+
 			<#include "action_element.ftl">
+
+			<#assign lineNumber = element.attributeValue("line-number")>
+
+			selenium.sendLogger("${testCaseName?uncap_first}TestCase${lineNumber}", "pass");
 		<#elseif element.attributeValue("macro")??>
+			<#assign lineNumber = element.attributeValue("line-number")>
+
+			selenium.sendLogger("${testCaseName?uncap_first}TestCase${lineNumber}", "pending");
+
 			<#assign macroElement = element>
 
 			<#include "macro_element.ftl">
+
+			<#assign lineNumber = element.attributeValue("line-number")>
+
+			selenium.sendLogger("${testCaseName?uncap_first}TestCase${lineNumber}", "pass");
 		</#if>
 	<#elseif name == "var">
-		<#assign varName = element.attributeValue("name")>
+		<#assign varElement = element>
 
-		<#assign varValue = element.attributeValue("value")>
+		<#assign context = "commandScopeVariables">
 
-		<#if varValue?contains("${") && varValue?contains("}")>
-			<#assign varValue = varValue?replace("${", "\" + commandScopeVariables.get(\"")>
+		<#include "var_element.ftl">
 
-			<#assign varValue = varValue?replace("}", "\") + \"")>
-		</#if>
+		<#assign lineNumber = element.attributeValue("line-number")>
 
-		commandScopeVariables.put("${varName}", "${varValue}");
+		selenium.sendLogger("${testCaseName?uncap_first}TestCase${lineNumber}", "pending");
+
+		<#assign lineNumber = element.attributeValue("line-number")>
+
+		selenium.sendLogger("${testCaseName?uncap_first}TestCase${lineNumber}", "pass");
 	</#if>
 </#list>

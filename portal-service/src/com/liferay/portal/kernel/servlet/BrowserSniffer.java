@@ -41,6 +41,8 @@ public interface BrowserSniffer {
 
 	public boolean isAir(HttpServletRequest request);
 
+	public boolean isAndroid(HttpServletRequest request);
+
 	public boolean isChrome(HttpServletRequest request);
 
 	public boolean isFirefox(HttpServletRequest request);
@@ -48,6 +50,10 @@ public interface BrowserSniffer {
 	public boolean isGecko(HttpServletRequest request);
 
 	public boolean isIe(HttpServletRequest request);
+
+	public boolean isIeOnWin32(HttpServletRequest request);
+
+	public boolean isIeOnWin64(HttpServletRequest request);
 
 	public boolean isIphone(HttpServletRequest request);
 

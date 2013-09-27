@@ -86,7 +86,7 @@ int counter = 0;
 for (SearchResult searchResult : searchResults) {
 	Attributes attributes = searchResult.getAttributes();
 
-	String name = LDAPUtil.getAttributeString(attributes, groupMappings.getProperty("groupName")).toLowerCase();
+	String name = StringUtil.toLowerCase(LDAPUtil.getAttributeString(attributes, groupMappings.getProperty("groupName")));
 	String description = LDAPUtil.getAttributeString(attributes, groupMappings.getProperty("description"));
 	Attribute attribute = attributes.get(groupMappings.getProperty("user"));
 
@@ -171,7 +171,7 @@ if (counter == 0) {
 if (showMissingAttributeMessage) {
 %>
 
-	<div class="portlet-msg-info">
+	<div class="alert alert-info">
 		<liferay-ui:message key="the-above-results-include-groups-which-are-missing-the-required-attributes-(group-name-and-user).-these-groups-will-not-be-imported-until-these-attributes-are-filled-in" />
 	</div>
 

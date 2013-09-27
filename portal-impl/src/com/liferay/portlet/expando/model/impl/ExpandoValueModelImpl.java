@@ -144,26 +144,32 @@ public class ExpandoValueModelImpl extends BaseModelImpl<ExpandoValue>
 	public ExpandoValueModelImpl() {
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _valueId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setValueId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
 		return _valueId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return ExpandoValue.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return ExpandoValue.class.getName();
 	}
@@ -236,28 +242,34 @@ public class ExpandoValueModelImpl extends BaseModelImpl<ExpandoValue>
 	}
 
 	@JSON
+	@Override
 	public long getValueId() {
 		return _valueId;
 	}
 
+	@Override
 	public void setValueId(long valueId) {
 		_valueId = valueId;
 	}
 
 	@JSON
+	@Override
 	public long getCompanyId() {
 		return _companyId;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
 		_companyId = companyId;
 	}
 
 	@JSON
+	@Override
 	public long getTableId() {
 		return _tableId;
 	}
 
+	@Override
 	public void setTableId(long tableId) {
 		_columnBitmask = -1L;
 
@@ -275,10 +287,12 @@ public class ExpandoValueModelImpl extends BaseModelImpl<ExpandoValue>
 	}
 
 	@JSON
+	@Override
 	public long getColumnId() {
 		return _columnId;
 	}
 
+	@Override
 	public void setColumnId(long columnId) {
 		_columnBitmask = -1L;
 
@@ -296,10 +310,12 @@ public class ExpandoValueModelImpl extends BaseModelImpl<ExpandoValue>
 	}
 
 	@JSON
+	@Override
 	public long getRowId() {
 		return _rowId;
 	}
 
+	@Override
 	public void setRowId(long rowId) {
 		_columnBitmask = -1L;
 
@@ -316,6 +332,7 @@ public class ExpandoValueModelImpl extends BaseModelImpl<ExpandoValue>
 		return _originalRowId;
 	}
 
+	@Override
 	public String getClassName() {
 		if (getClassNameId() <= 0) {
 			return StringPool.BLANK;
@@ -324,6 +341,7 @@ public class ExpandoValueModelImpl extends BaseModelImpl<ExpandoValue>
 		return PortalUtil.getClassName(getClassNameId());
 	}
 
+	@Override
 	public void setClassName(String className) {
 		long classNameId = 0;
 
@@ -335,10 +353,12 @@ public class ExpandoValueModelImpl extends BaseModelImpl<ExpandoValue>
 	}
 
 	@JSON
+	@Override
 	public long getClassNameId() {
 		return _classNameId;
 	}
 
+	@Override
 	public void setClassNameId(long classNameId) {
 		_columnBitmask |= CLASSNAMEID_COLUMN_BITMASK;
 
@@ -356,10 +376,12 @@ public class ExpandoValueModelImpl extends BaseModelImpl<ExpandoValue>
 	}
 
 	@JSON
+	@Override
 	public long getClassPK() {
 		return _classPK;
 	}
 
+	@Override
 	public void setClassPK(long classPK) {
 		_columnBitmask |= CLASSPK_COLUMN_BITMASK;
 
@@ -377,6 +399,7 @@ public class ExpandoValueModelImpl extends BaseModelImpl<ExpandoValue>
 	}
 
 	@JSON
+	@Override
 	public String getData() {
 		if (_data == null) {
 			return StringPool.BLANK;
@@ -386,6 +409,7 @@ public class ExpandoValueModelImpl extends BaseModelImpl<ExpandoValue>
 		}
 	}
 
+	@Override
 	public void setData(String data) {
 		_columnBitmask |= DATA_COLUMN_BITMASK;
 
@@ -432,6 +456,7 @@ public class ExpandoValueModelImpl extends BaseModelImpl<ExpandoValue>
 		return expandoValueImpl;
 	}
 
+	@Override
 	public int compareTo(ExpandoValue expandoValue) {
 		int value = 0;
 
@@ -482,18 +507,15 @@ public class ExpandoValueModelImpl extends BaseModelImpl<ExpandoValue>
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof ExpandoValue)) {
 			return false;
 		}
 
-		ExpandoValue expandoValue = null;
-
-		try {
-			expandoValue = (ExpandoValue)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		ExpandoValue expandoValue = (ExpandoValue)obj;
 
 		long primaryKey = expandoValue.getPrimaryKey();
 
@@ -593,6 +615,7 @@ public class ExpandoValueModelImpl extends BaseModelImpl<ExpandoValue>
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(28);
 

@@ -31,13 +31,13 @@ public interface DLFileVersion extends DLFileVersionModel, PersistedModel {
 	 *
 	 * Never modify this interface directly. Add methods to {@link com.liferay.portlet.documentlibrary.model.impl.DLFileVersionImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
-	public java.io.InputStream getContentStream(boolean incrementCounter)
+	public java.lang.String buildTreePath()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
-	public com.liferay.portlet.expando.model.ExpandoBridge getExpandoBridge();
-
-	public java.lang.String getExtraSettings();
+	public java.io.InputStream getContentStream(boolean incrementCounter)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	public com.liferay.portal.kernel.util.UnicodeProperties getExtraSettingsProperties();
 
@@ -45,15 +45,19 @@ public interface DLFileVersion extends DLFileVersionModel, PersistedModel {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
-	public com.liferay.portlet.documentlibrary.model.DLFolder getFolder();
+	public com.liferay.portlet.documentlibrary.model.DLFolder getFolder()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	public java.lang.String getIcon();
 
-	public com.liferay.portlet.documentlibrary.model.DLFolder getTrashContainer();
+	public com.liferay.portlet.documentlibrary.model.DLFolder getTrashContainer()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
 
-	public boolean isInTrashContainer();
-
-	public void setExtraSettings(java.lang.String extraSettings);
+	public boolean isInTrashContainer()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	public void setExtraSettingsProperties(
 		com.liferay.portal.kernel.util.UnicodeProperties extraSettingsProperties);

@@ -14,19 +14,21 @@
 
 package com.liferay.portlet.wiki.action;
 
-import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.struts.PortletAction;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.WebKeys;
+import com.liferay.portlet.trash.util.TrashUtil;
 import com.liferay.portlet.wiki.DuplicateNodeNameException;
 import com.liferay.portlet.wiki.NoSuchNodeException;
 import com.liferay.portlet.wiki.NodeNameException;
@@ -58,8 +60,9 @@ public class EditNodeAction extends PortletAction {
 
 	@Override
 	public void processAction(
-			ActionMapping mapping, ActionForm form, PortletConfig portletConfig,
-			ActionRequest actionRequest, ActionResponse actionResponse)
+			ActionMapping actionMapping, ActionForm actionForm,
+			PortletConfig portletConfig, ActionRequest actionRequest,
+			ActionResponse actionResponse)
 		throws Exception {
 
 		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
@@ -69,12 +72,10 @@ public class EditNodeAction extends PortletAction {
 				updateNode(actionRequest);
 			}
 			else if (cmd.equals(Constants.DELETE)) {
-				deleteNode(
-					(LiferayPortletConfig)portletConfig, actionRequest, false);
+				deleteNode(actionRequest, false);
 			}
 			else if (cmd.equals(Constants.MOVE_TO_TRASH)) {
-				deleteNode(
-					(LiferayPortletConfig)portletConfig, actionRequest, true);
+				deleteNode(actionRequest, true);
 			}
 			else if (cmd.equals(Constants.RESTORE)) {
 				restoreNode(actionRequest);
@@ -109,8 +110,9 @@ public class EditNodeAction extends PortletAction {
 
 	@Override
 	public ActionForward render(
-			ActionMapping mapping, ActionForm form, PortletConfig portletConfig,
-			RenderRequest renderRequest, RenderResponse renderResponse)
+			ActionMapping actionMapping, ActionForm actionForm,
+			PortletConfig portletConfig, RenderRequest renderRequest,
+			RenderResponse renderResponse)
 		throws Exception {
 
 		try {
@@ -126,20 +128,18 @@ public class EditNodeAction extends PortletAction {
 
 				SessionErrors.add(renderRequest, e.getClass());
 
-				return mapping.findForward("portlet.wiki.error");
+				return actionMapping.findForward("portlet.wiki.error");
 			}
 			else {
 				throw e;
 			}
 		}
 
-		return mapping.findForward(
+		return actionMapping.findForward(
 			getForward(renderRequest, "portlet.wiki.edit_node"));
 	}
 
-	protected void deleteNode(
-			LiferayPortletConfig liferayPortletConfig,
-			ActionRequest actionRequest, boolean moveToTrash)
+	protected void deleteNode(ActionRequest actionRequest, boolean moveToTrash)
 		throws Exception {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
@@ -160,8 +160,12 @@ public class EditNodeAction extends PortletAction {
 
 		WikiCacheThreadLocal.setClearCache(false);
 
+		String deleteEntryTitle = null;
+
 		if (moveToTrash) {
-			WikiNodeServiceUtil.moveNodeToTrash(nodeId);
+			WikiNode node = WikiNodeServiceUtil.moveNodeToTrash(nodeId);
+
+			deleteEntryTitle = node.getName();
 		}
 		else {
 			WikiNodeServiceUtil.deleteNode(nodeId);
@@ -176,17 +180,25 @@ public class EditNodeAction extends PortletAction {
 		if (moveToTrash) {
 			Map<String, String[]> data = new HashMap<String, String[]>();
 
+			data.put(
+				"deleteEntryClassName",
+				new String[] {WikiNode.class.getName()});
+
+			if (Validator.isNotNull(deleteEntryTitle)) {
+				data.put(
+					"deleteEntryTitle",
+					new String[] {
+						TrashUtil.getOriginalTitle(deleteEntryTitle)});
+			}
+
 			data.put("restoreEntryIds", new String[] {String.valueOf(nodeId)});
 
 			SessionMessages.add(
 				actionRequest,
-				liferayPortletConfig.getPortletId() +
+				PortalUtil.getPortletId(actionRequest) +
 					SessionMessages.KEY_SUFFIX_DELETE_SUCCESS_DATA, data);
 
-			SessionMessages.add(
-				actionRequest,
-				liferayPortletConfig.getPortletId() +
-					SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_SUCCESS_MESSAGE);
+			hideDefaultSuccessMessage(actionRequest);
 		}
 	}
 
@@ -251,22 +263,22 @@ public class EditNodeAction extends PortletAction {
 			ActionRequest actionRequest, String oldName, String newName)
 		throws Exception {
 
-		PortletPreferences preferences = actionRequest.getPreferences();
+		PortletPreferences portletPreferences = actionRequest.getPreferences();
 
-		String hiddenNodes = preferences.getValue(
+		String hiddenNodes = portletPreferences.getValue(
 			"hiddenNodes", StringPool.BLANK);
-		String visibleNodes = preferences.getValue(
+		String visibleNodes = portletPreferences.getValue(
 			"visibleNodes", StringPool.BLANK);
 
 		String regex = oldName + ",?";
 
-		preferences.setValue(
+		portletPreferences.setValue(
 			"hiddenNodes", hiddenNodes.replaceFirst(regex, newName));
-		preferences.setValue(
+		portletPreferences.setValue(
 			"visibleNodes",
 			visibleNodes.replaceFirst(regex, newName));
 
-		preferences.store();
+		portletPreferences.store();
 	}
 
 }

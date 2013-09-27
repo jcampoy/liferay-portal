@@ -33,7 +33,11 @@
 		vertical-align: top;
 	}
 
-	.portlet-msg-error, .portlet-msg-success {
+	.license-form {
+		padding-bottom: 30px;
+	}
+
+	.alert-error, .alert-success {
 		margin: 15px auto 5px;
 	}
 
@@ -79,10 +83,10 @@ dateFormatDateTime.setTimeZone(timeZone);
 	<%= buildInfo %>
 </h3>
 
-<form method="post" name="license_fm" <%= (clusterNodes.size() > 1) ? "onsubmit=\"return validateForm();\"" : "" %>>
+<form class="license-form" method="post" name="license_fm" <%= (clusterNodes.size() > 1) ? "onsubmit=\"return validateForm();\"" : "" %>>
 
 <c:if test="<%= Validator.isNotNull(errorMessage) %>">
-	<div class="portlet-msg-error">
+	<div class="alert alert-error">
 		<%= errorMessage %>
 	</div>
 </c:if>
@@ -99,7 +103,7 @@ dateFormatDateTime.setTimeZone(timeZone);
 		%>
 
 		<c:if test="<%= Validator.isNotNull(successMessage) %>">
-			<div class="portlet-msg-success">
+			<div class="alert alert-success">
 				<%= successMessage %>
 			</div>
 		</c:if>
@@ -314,7 +318,7 @@ dateFormatDateTime.setTimeZone(timeZone);
 			<c:if test="<%= Validator.isNotNull(successMessage) %>">
 				<tr>
 					<td colspan="3">
-						<div class="portlet-msg-success">
+						<div class="alert alert-success">
 							<%= successMessage %>
 						</div>
 					</td>
@@ -324,7 +328,7 @@ dateFormatDateTime.setTimeZone(timeZone);
 			<c:if test="<%= Validator.isNotNull(curErrorMessage) %>">
 				<tr>
 					<td colspan="3">
-						<div class="portlet-msg-error">
+						<div class="alert alert-error">
 							<%= curErrorMessage %>
 						</div>
 					</td>
@@ -333,7 +337,7 @@ dateFormatDateTime.setTimeZone(timeZone);
 
 			<tr>
 				<td style="border: 1px solid gray; vertical-align: middle;">
-					<liferay-ui:input-checkbox disabled="<%= true %>" param='<%= clusterNode.getClusterNodeId() + "_register" %>' />
+					<liferay-ui:input-checkbox disabled="<%= true %>" id='<%= "node_" + clusterNode.getClusterNodeId() + "_registerCheckbox" %>' param='<%= clusterNode.getClusterNodeId() + "_register" %>' />
 				</td>
 				<td style="border: 1px solid gray;">
 					<table class="license-table">
@@ -352,23 +356,23 @@ dateFormatDateTime.setTimeZone(timeZone);
 						</c:if>
 					</tr>
 					<tr>
-						<td id="<%= clusterNode.getClusterNodeId() %>_hostName"></td>
+						<td id="node_<%= clusterNode.getClusterNodeId() %>_hostName"></td>
 
 						<c:if test='<%= GetterUtil.getBoolean(PropsUtil.get("license.server.info.display"), true) %>'>
-							<td id="<%= clusterNode.getClusterNodeId() %>_ipAddresses"></td>
-							<td id="<%= clusterNode.getClusterNodeId() %>_macAddresses"></td>
+							<td id="node_<%= clusterNode.getClusterNodeId() %>_ipAddresses"></td>
+							<td id="node_<%= clusterNode.getClusterNodeId() %>_macAddresses"></td>
 						</c:if>
 					</tr>
 					</table>
 
-					<div id="<%= clusterNode.getClusterNodeId() %>_serverInfo">
+					<div id="node_<%= clusterNode.getClusterNodeId() %>_serverInfo">
 						<div style="text-align: center;">
 							<img src="<%= themeDisplay.getPathThemeImages() %>/aui/loading_indicator.gif" />
 						</div>
 					</div>
 				</td>
 				<td style="border: 1px solid gray;">
-					<table class="license-table" id="<%= clusterNode.getClusterNodeId() %>_licenseTable">
+					<table class="license-table" id="node_<%= clusterNode.getClusterNodeId() %>_licenseTable">
 					<tr>
 						<th>
 							<liferay-ui:message key="product" />
@@ -397,7 +401,7 @@ dateFormatDateTime.setTimeZone(timeZone);
 					</tr>
 					</table>
 
-					<div id="<%= clusterNode.getClusterNodeId() %>_licenseProperties">
+					<div id="node_<%= clusterNode.getClusterNodeId() %>_licenseProperties">
 						<div style="text-align: center;">
 							<img src="<%= themeDisplay.getPathThemeImages() %>/aui/loading_indicator.gif" />
 						</div>
@@ -440,14 +444,14 @@ dateFormatDateTime.setTimeZone(timeZone);
 										errorMessage += ':' + port;
 									}
 
-									A.one('#' + clusterNodeId + '_' + cmd).html('<div class="portlet-msg-error">' + errorMessage + '</div>');
+									A.one('#node_' + clusterNodeId + '_' + cmd).html('<div class="alert alert-error">' + errorMessage + '</div>');
 								},
 								success: function(event, id, obj) {
 									var instance = this;
 
 									var message = instance.get('responseData');
 
-									A.one('#' + clusterNodeId + '_' + cmd).html('');
+									A.one('#node_' + clusterNodeId + '_' + cmd).html('');
 
 									success(message);
 								}
@@ -474,9 +478,9 @@ dateFormatDateTime.setTimeZone(timeZone);
 							A.one('#portHelp').removeAttribute('style');
 						</c:if>
 
-						A.one('#<%= clusterNode.getClusterNodeId() %>_hostName').html(message.hostName + ':<%= clusterNode.getPort() %><%= (clusterNode.getPort() == -1) ? "*" : "" %>');
-						A.one('#<%= clusterNode.getClusterNodeId() %>_ipAddresses').html(message.ipAddresses.split(',').join('<br />'));
-						A.one('#<%= clusterNode.getClusterNodeId() %>_macAddresses').html(message.macAddresses.split(',').join('<br />'));
+						A.one('#node_<%= clusterNode.getClusterNodeId() %>_hostName').html(message.hostName + ':<%= clusterNode.getPort() %><%= (clusterNode.getPort() == -1) ? "*" : "" %>');
+						A.one('#node_<%= clusterNode.getClusterNodeId() %>_ipAddresses').html(message.ipAddresses.split(',').join('<br />'));
+						A.one('#node_<%= clusterNode.getClusterNodeId() %>_macAddresses').html(message.macAddresses.split(',').join('<br />'));
 					}
 				);
 
@@ -488,17 +492,17 @@ dateFormatDateTime.setTimeZone(timeZone);
 					function(message) {
 						var A = AUI();
 
-						A.one('#<%= clusterNode.getClusterNodeId() %>_registerCheckbox').attr('disabled', false);
+						A.one('#node_<%= clusterNode.getClusterNodeId() %>_registerCheckbox').attr('disabled', false);
 
 						if (!message) {
-							A.one('#<%= clusterNode.getClusterNodeId() %>_licenseProperties').html('License information is not available.');
+							A.one('#node_<%= clusterNode.getClusterNodeId() %>_licenseProperties').html('License information is not available.');
 
 							return;
 						}
 
 						var empty = true;
 
-						var licenseTable = document.getElementById('<%= clusterNode.getClusterNodeId() %>_licenseTable');
+						var licenseTable = document.getElementById('node_<%= clusterNode.getClusterNodeId() %>_licenseTable');
 
 						for (var i in message) {
 							var productEntryName = message[i].productEntryName;
@@ -533,7 +537,7 @@ dateFormatDateTime.setTimeZone(timeZone);
 						}
 
 						if (empty) {
-							A.one('#<%= clusterNode.getClusterNodeId() %>_licenseProperties').html('There are no licenses registered.');
+							A.one('#node_<%= clusterNode.getClusterNodeId() %>_licenseProperties').html('There are no licenses registered.');
 						}
 					}
 				);
@@ -584,7 +588,7 @@ dateFormatDateTime.setTimeZone(timeZone);
 
 <br />
 
-<strong>Register Your Application</strong>
+<h3>Register Your Application</h3>
 
 <table class="lfr-table">
 <tr>
@@ -674,12 +678,12 @@ dateFormatDateTime.setTimeZone(timeZone);
 
 <c:choose>
 	<c:when test="<%= orderProducts != null %>">
-		<input type="submit" value="<liferay-ui:message key="register" />" />
+		<input class="btn" type="submit" value="<liferay-ui:message key="register" />" />
 
 		<input onClick="location.href='<%= themeDisplay.getURLCurrent() %>';" type="button" value="<liferay-ui:message key="cancel" />" />
 	</c:when>
 	<c:otherwise>
-		<input type="submit" value="Query" />
+		<input class="btn" type="submit" value="Query" />
 	</c:otherwise>
 </c:choose>
 

@@ -17,11 +17,8 @@ package com.liferay.portal.xsl;
 import com.liferay.portal.kernel.security.pacl.DoPrivileged;
 import com.liferay.portal.kernel.template.Template;
 import com.liferay.portal.kernel.template.TemplateConstants;
-import com.liferay.portal.kernel.template.TemplateContextType;
 import com.liferay.portal.kernel.template.TemplateResource;
 import com.liferay.portal.template.BaseTemplateManager;
-import com.liferay.portal.template.RestrictedTemplate;
-import com.liferay.portal.template.TemplateContextHelper;
 
 import java.util.Map;
 
@@ -31,71 +28,42 @@ import java.util.Map;
 @DoPrivileged
 public class XSLManager extends BaseTemplateManager {
 
+	@Override
 	public void destroy() {
-		if (_templateContextHelper == null) {
+		if (templateContextHelper == null) {
 			return;
 		}
 
-		_templateContextHelper.removeAllHelperUtilities();
+		templateContextHelper.removeAllHelperUtilities();
 
-		_templateContextHelper = null;
+		templateContextHelper = null;
 	}
 
+	@Override
 	public void destroy(ClassLoader classLoader) {
-		_templateContextHelper.removeHelperUtilities(classLoader);
+		templateContextHelper.removeHelperUtilities(classLoader);
 	}
 
+	@Override
 	public String getName() {
 		return TemplateConstants.LANG_TYPE_XSL;
 	}
 
+	@Override
 	public void init() {
-	}
-
-	public void setTemplateContextHelper(
-		TemplateContextHelper templateContextHelper) {
-
-		_templateContextHelper = templateContextHelper;
 	}
 
 	@Override
 	protected Template doGetTemplate(
 		TemplateResource templateResource,
-		TemplateResource errorTemplateResource,
-		TemplateContextType templateContextType,
-		Map<String, Object> helperUtilities) {
-
-		Template template = null;
+		TemplateResource errorTemplateResource, boolean restricted,
+		Map<String, Object> helperUtilities, boolean privileged) {
 
 		XSLTemplateResource xslTemplateResource =
 			(XSLTemplateResource)templateResource;
 
-		if (templateContextType.equals(TemplateContextType.EMPTY)) {
-			template = new XSLTemplate(
-				xslTemplateResource, errorTemplateResource, null,
-				_templateContextHelper);
-		}
-		else if (templateContextType.equals(TemplateContextType.RESTRICTED)) {
-			template = new RestrictedTemplate(
-				new XSLTemplate(
-					xslTemplateResource, errorTemplateResource, helperUtilities,
-					_templateContextHelper),
-				_templateContextHelper.getRestrictedVariables());
-		}
-		else if (templateContextType.equals(TemplateContextType.STANDARD)) {
-			template = new XSLTemplate(
-				xslTemplateResource, errorTemplateResource, helperUtilities,
-				_templateContextHelper);
-		}
-
-		return template;
+		return new XSLTemplate(
+			xslTemplateResource, errorTemplateResource, templateContextHelper);
 	}
-
-	@Override
-	protected TemplateContextHelper getTemplateContextHelper() {
-		return _templateContextHelper;
-	}
-
-	private TemplateContextHelper _templateContextHelper;
 
 }

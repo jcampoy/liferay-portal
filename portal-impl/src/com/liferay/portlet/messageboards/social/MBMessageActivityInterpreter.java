@@ -33,6 +33,7 @@ import com.liferay.portlet.social.model.SocialActivity;
 public class MBMessageActivityInterpreter
 	extends BaseSocialActivityInterpreter {
 
+	@Override
 	public String[] getClassNames() {
 		return _CLASS_NAMES;
 	}
@@ -59,17 +60,6 @@ public class MBMessageActivityInterpreter
 		String categoryLink = sb.toString();
 
 		return wrapLink(categoryLink, "go-to-category", serviceContext);
-	}
-
-	@Override
-	protected String getEntryTitle(
-			SocialActivity activity, ServiceContext serviceContext)
-		throws Exception {
-
-		MBMessage message = MBMessageLocalServiceUtil.getMessage(
-			activity.getClassPK());
-
-		return message.getSubject();
 	}
 
 	@Override

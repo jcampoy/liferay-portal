@@ -55,6 +55,7 @@ public class GUserManagerImpl extends GBaseManagerImpl implements GUserManager {
 		userURL = sb.toString();
 	}
 
+	@Override
 	public void addGUser(
 			long userId, String password, String firstName, String lastName)
 		throws GoogleAppsException {
@@ -78,10 +79,12 @@ public class GUserManagerImpl extends GBaseManagerImpl implements GUserManager {
 		submitAdd(userURL, document);
 	}
 
+	@Override
 	public void deleteGUser(long userId) throws GoogleAppsException {
 		submitDelete(getUserURL(userId));
 	}
 
+	@Override
 	public GUser getGUser(long userId) throws GoogleAppsException {
 		Document document = getDocument(getUserURL(userId));
 
@@ -98,6 +101,7 @@ public class GUserManagerImpl extends GBaseManagerImpl implements GUserManager {
 		return getGUser(atomEntryElement);
 	}
 
+	@Override
 	public GUser getGUser(String emailAddress) throws GoogleAppsException {
 		int pos = emailAddress.indexOf(CharPool.AT);
 
@@ -112,29 +116,28 @@ public class GUserManagerImpl extends GBaseManagerImpl implements GUserManager {
 
 			return getGUser(userId);
 		}
-		else {
-			try {
-				User user = UserLocalServiceUtil.getUserByEmailAddress(
-					getCompanyId(), emailAddress);
 
-				return getGUser(user.getUserId());
-			}
-			catch (Exception e) {
-			}
+		try {
+			User user = UserLocalServiceUtil.getUserByEmailAddress(
+				getCompanyId(), emailAddress);
 
-			GNicknameManager gNicknameManager =
-				googleApps.getGNicknameManager();
-
-			GNickname gNickname = gNicknameManager.getGNickname(nickname);
-
-			if (gNickname != null) {
-				return getGUser(gNickname.getUserId());
-			}
-
-			return null;
+			return getGUser(user.getUserId());
 		}
+		catch (Exception e) {
+		}
+
+		GNicknameManager gNicknameManager = googleApps.getGNicknameManager();
+
+		GNickname gNickname = gNicknameManager.getGNickname(nickname);
+
+		if (gNickname != null) {
+			return getGUser(gNickname.getUserId());
+		}
+
+		return null;
 	}
 
+	@Override
 	public List<GUser> getGUsers() throws GoogleAppsException {
 		List<GUser> gUsers = new ArrayList<GUser>();
 
@@ -143,6 +146,7 @@ public class GUserManagerImpl extends GBaseManagerImpl implements GUserManager {
 		return gUsers;
 	}
 
+	@Override
 	public void updateActive(long userId, boolean active)
 		throws GoogleAppsException {
 
@@ -166,6 +170,7 @@ public class GUserManagerImpl extends GBaseManagerImpl implements GUserManager {
 		submitUpdate(getUserURL(userId), document);
 	}
 
+	@Override
 	public void updatePassword(long userId, String password)
 		throws GoogleAppsException {
 

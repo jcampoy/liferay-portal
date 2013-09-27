@@ -27,6 +27,7 @@ import com.liferay.portal.model.Phone;
 import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.Website;
 import com.liferay.portal.security.auth.PrincipalException;
+import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.service.base.CompanyServiceBaseImpl;
 import com.liferay.portlet.usersadmin.util.UsersAdminUtil;
 
@@ -63,17 +64,34 @@ public class CompanyServiceImpl extends CompanyServiceBaseImpl {
 	 * @throws SystemException if a system exception occurred
 	 */
 	@JSONWebService(mode = JSONWebServiceMode.IGNORE)
+	@Override
 	public Company addCompany(
 			String webId, String virtualHost, String mx, String shardName,
 			boolean system, int maxUsers, boolean active)
 		throws PortalException, SystemException {
 
-		if (!getPermissionChecker().isOmniadmin()) {
+		PermissionChecker permissionChecker = getPermissionChecker();
+
+		if (!permissionChecker.isOmniadmin()) {
 			throw new PrincipalException();
 		}
 
 		return companyLocalService.addCompany(
 			webId, virtualHost, mx, shardName, system, maxUsers, active);
+	}
+
+	@JSONWebService(mode = JSONWebServiceMode.IGNORE)
+	@Override
+	public Company deleteCompany(long companyId)
+		throws PortalException, SystemException {
+
+		PermissionChecker permissionChecker = getPermissionChecker();
+
+		if (!permissionChecker.isOmniadmin()) {
+			throw new PrincipalException();
+		}
+
+		return companyLocalService.deleteCompany(companyId);
 	}
 
 	/**
@@ -85,6 +103,7 @@ public class CompanyServiceImpl extends CompanyServiceBaseImpl {
 	 *         was not an administrator
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void deleteLogo(long companyId)
 		throws PortalException, SystemException {
 
@@ -106,6 +125,7 @@ public class CompanyServiceImpl extends CompanyServiceBaseImpl {
 	 *         found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Company getCompanyById(long companyId)
 		throws PortalException, SystemException {
 
@@ -120,6 +140,7 @@ public class CompanyServiceImpl extends CompanyServiceBaseImpl {
 	 * @throws PortalException if the company with the logo could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Company getCompanyByLogoId(long logoId)
 		throws PortalException, SystemException {
 
@@ -135,6 +156,7 @@ public class CompanyServiceImpl extends CompanyServiceBaseImpl {
 	 *         found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Company getCompanyByMx(String mx)
 		throws PortalException, SystemException {
 
@@ -151,6 +173,7 @@ public class CompanyServiceImpl extends CompanyServiceBaseImpl {
 	 *         company
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Company getCompanyByVirtualHost(String virtualHost)
 		throws PortalException, SystemException {
 
@@ -166,6 +189,7 @@ public class CompanyServiceImpl extends CompanyServiceBaseImpl {
 	 *         found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Company getCompanyByWebId(String webId)
 		throws PortalException, SystemException {
 
@@ -185,6 +209,7 @@ public class CompanyServiceImpl extends CompanyServiceBaseImpl {
 	 * @throws SystemException if a system exception occurred
 	 */
 	@JSONWebService(mode = JSONWebServiceMode.IGNORE)
+	@Override
 	public void removePreferences(long companyId, String[] keys)
 		throws PortalException, SystemException {
 
@@ -212,12 +237,15 @@ public class CompanyServiceImpl extends CompanyServiceBaseImpl {
 	 *         not a universal administrator
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Company updateCompany(
 			long companyId, String virtualHost, String mx, int maxUsers,
 			boolean active)
 		throws PortalException, SystemException {
 
-		if (!getPermissionChecker().isOmniadmin()) {
+		PermissionChecker permissionChecker = getPermissionChecker();
+
+		if (!permissionChecker.isOmniadmin()) {
 			throw new PrincipalException();
 		}
 
@@ -253,6 +281,7 @@ public class CompanyServiceImpl extends CompanyServiceBaseImpl {
 	 *         not an administrator
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Company updateCompany(
 			long companyId, String virtualHost, String mx, String homeURL,
 			String name, String legalName, String legalId, String legalType,
@@ -307,6 +336,7 @@ public class CompanyServiceImpl extends CompanyServiceBaseImpl {
 	 * @throws SystemException if a system exception occurred
 	 */
 	@JSONWebService(mode = JSONWebServiceMode.IGNORE)
+	@Override
 	public Company updateCompany(
 			long companyId, String virtualHost, String mx, String homeURL,
 			String name, String legalName, String legalId, String legalType,
@@ -350,6 +380,7 @@ public class CompanyServiceImpl extends CompanyServiceBaseImpl {
 	 *         or if the user was not an administrator
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void updateDisplay(
 			long companyId, String languageId, String timeZoneId)
 		throws PortalException, SystemException {
@@ -374,6 +405,7 @@ public class CompanyServiceImpl extends CompanyServiceBaseImpl {
 	 *         administrator
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Company updateLogo(long companyId, byte[] bytes)
 		throws PortalException, SystemException {
 
@@ -398,6 +430,7 @@ public class CompanyServiceImpl extends CompanyServiceBaseImpl {
 	 * @throws SystemException if a system exception occurred
 	 */
 	@JSONWebService(mode = JSONWebServiceMode.IGNORE)
+	@Override
 	public Company updateLogo(long companyId, InputStream inputStream)
 		throws PortalException, SystemException {
 
@@ -421,6 +454,7 @@ public class CompanyServiceImpl extends CompanyServiceBaseImpl {
 	 * @throws SystemException if a system exception occurred
 	 */
 	@JSONWebService(mode = JSONWebServiceMode.IGNORE)
+	@Override
 	public void updatePreferences(long companyId, UnicodeProperties properties)
 		throws PortalException, SystemException {
 
@@ -454,6 +488,7 @@ public class CompanyServiceImpl extends CompanyServiceBaseImpl {
 	 * @throws SystemException if a system exception occurred
 	 */
 	@JSONWebService(mode = JSONWebServiceMode.IGNORE)
+	@Override
 	public void updateSecurity(
 			long companyId, String authType, boolean autoLogin,
 			boolean sendPassword, boolean strangers, boolean strangersWithMx,

@@ -38,7 +38,7 @@ public class JournalArticleCacheModel implements CacheModel<JournalArticle>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(67);
+		StringBundler sb = new StringBundler(69);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -64,6 +64,8 @@ public class JournalArticleCacheModel implements CacheModel<JournalArticle>,
 		sb.append(classNameId);
 		sb.append(", classPK=");
 		sb.append(classPK);
+		sb.append(", treePath=");
+		sb.append(treePath);
 		sb.append(", articleId=");
 		sb.append(articleId);
 		sb.append(", version=");
@@ -111,6 +113,7 @@ public class JournalArticleCacheModel implements CacheModel<JournalArticle>,
 		return sb.toString();
 	}
 
+	@Override
 	public JournalArticle toEntityModel() {
 		JournalArticleImpl journalArticleImpl = new JournalArticleImpl();
 
@@ -151,6 +154,13 @@ public class JournalArticleCacheModel implements CacheModel<JournalArticle>,
 		journalArticleImpl.setFolderId(folderId);
 		journalArticleImpl.setClassNameId(classNameId);
 		journalArticleImpl.setClassPK(classPK);
+
+		if (treePath == null) {
+			journalArticleImpl.setTreePath(StringPool.BLANK);
+		}
+		else {
+			journalArticleImpl.setTreePath(treePath);
+		}
 
 		if (articleId == null) {
 			journalArticleImpl.setArticleId(StringPool.BLANK);
@@ -271,6 +281,7 @@ public class JournalArticleCacheModel implements CacheModel<JournalArticle>,
 		return journalArticleImpl;
 	}
 
+	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
 		uuid = objectInput.readUTF();
 		id = objectInput.readLong();
@@ -284,6 +295,7 @@ public class JournalArticleCacheModel implements CacheModel<JournalArticle>,
 		folderId = objectInput.readLong();
 		classNameId = objectInput.readLong();
 		classPK = objectInput.readLong();
+		treePath = objectInput.readUTF();
 		articleId = objectInput.readUTF();
 		version = objectInput.readDouble();
 		title = objectInput.readUTF();
@@ -307,6 +319,7 @@ public class JournalArticleCacheModel implements CacheModel<JournalArticle>,
 		statusDate = objectInput.readLong();
 	}
 
+	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
 		if (uuid == null) {
@@ -334,6 +347,13 @@ public class JournalArticleCacheModel implements CacheModel<JournalArticle>,
 		objectOutput.writeLong(folderId);
 		objectOutput.writeLong(classNameId);
 		objectOutput.writeLong(classPK);
+
+		if (treePath == null) {
+			objectOutput.writeUTF(StringPool.BLANK);
+		}
+		else {
+			objectOutput.writeUTF(treePath);
+		}
 
 		if (articleId == null) {
 			objectOutput.writeUTF(StringPool.BLANK);
@@ -439,6 +459,7 @@ public class JournalArticleCacheModel implements CacheModel<JournalArticle>,
 	public long folderId;
 	public long classNameId;
 	public long classPK;
+	public String treePath;
 	public String articleId;
 	public double version;
 	public String title;

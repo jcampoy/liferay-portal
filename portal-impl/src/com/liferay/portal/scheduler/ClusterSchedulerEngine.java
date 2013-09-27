@@ -91,6 +91,7 @@ public class ClusterSchedulerEngine
 	}
 
 	@Clusterable(acceptor = SchedulerClusterInvokeAcceptor.class)
+	@Override
 	public void delete(String groupName) throws SchedulerException {
 		boolean memoryClusteredSlaveJob = isMemoryClusteredSlaveJob(groupName);
 
@@ -112,6 +113,7 @@ public class ClusterSchedulerEngine
 	}
 
 	@Clusterable(acceptor = SchedulerClusterInvokeAcceptor.class)
+	@Override
 	public void delete(String jobName, String groupName)
 		throws SchedulerException {
 
@@ -134,10 +136,12 @@ public class ClusterSchedulerEngine
 		setClusterableThreadLocal(groupName);
 	}
 
+	@Override
 	public String getBeanIdentifier() {
 		return _beanIdentifier;
 	}
 
+	@Override
 	public SchedulerResponse getScheduledJob(String jobName, String groupName)
 		throws SchedulerException {
 
@@ -166,6 +170,7 @@ public class ClusterSchedulerEngine
 		}
 	}
 
+	@Override
 	public List<SchedulerResponse> getScheduledJobs()
 		throws SchedulerException {
 
@@ -185,6 +190,7 @@ public class ClusterSchedulerEngine
 		}
 	}
 
+	@Override
 	public List<SchedulerResponse> getScheduledJobs(String groupName)
 		throws SchedulerException {
 
@@ -213,6 +219,7 @@ public class ClusterSchedulerEngine
 		}
 	}
 
+	@Override
 	public void initialize() throws SchedulerException {
 		try {
 			ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
@@ -243,6 +250,7 @@ public class ClusterSchedulerEngine
 	}
 
 	@Clusterable(acceptor = SchedulerClusterInvokeAcceptor.class)
+	@Override
 	public void pause(String groupName) throws SchedulerException {
 		boolean memoryClusteredSlaveJob = isMemoryClusteredSlaveJob(groupName);
 
@@ -264,6 +272,7 @@ public class ClusterSchedulerEngine
 	}
 
 	@Clusterable(acceptor = SchedulerClusterInvokeAcceptor.class)
+	@Override
 	public void pause(String jobName, String groupName)
 		throws SchedulerException {
 
@@ -288,6 +297,7 @@ public class ClusterSchedulerEngine
 	}
 
 	@Clusterable(acceptor = SchedulerClusterInvokeAcceptor.class)
+	@Override
 	public void resume(String groupName) throws SchedulerException {
 		boolean memoryClusteredSlaveJob = isMemoryClusteredSlaveJob(groupName);
 
@@ -309,6 +319,7 @@ public class ClusterSchedulerEngine
 	}
 
 	@Clusterable(acceptor = SchedulerClusterInvokeAcceptor.class)
+	@Override
 	public void resume(String jobName, String groupName)
 		throws SchedulerException {
 
@@ -333,6 +344,7 @@ public class ClusterSchedulerEngine
 	}
 
 	@Clusterable(acceptor = SchedulerClusterInvokeAcceptor.class)
+	@Override
 	public void schedule(
 			Trigger trigger, String description, String destinationName,
 			Message message)
@@ -373,10 +385,12 @@ public class ClusterSchedulerEngine
 		setClusterableThreadLocal(groupName);
 	}
 
+	@Override
 	public void setBeanIdentifier(String beanIdentifier) {
 		_beanIdentifier = beanIdentifier;
 	}
 
+	@Override
 	public void shutdown() throws SchedulerException {
 		_portalReady = false;
 
@@ -385,8 +399,7 @@ public class ClusterSchedulerEngine
 				_clusterEventListener);
 
 			LockLocalServiceUtil.unlock(
-				_LOCK_CLASS_NAME, _LOCK_CLASS_NAME, _localClusterNodeAddress,
-				PropsValues.MEMORY_CLUSTER_SCHEDULER_LOCK_CACHE_ENABLED);
+				_LOCK_CLASS_NAME, _LOCK_CLASS_NAME, _localClusterNodeAddress);
 		}
 		catch (Exception e) {
 			throw new SchedulerException("Unable to shutdown scheduler", e);
@@ -395,6 +408,7 @@ public class ClusterSchedulerEngine
 		_schedulerEngine.shutdown();
 	}
 
+	@Override
 	public void start() throws SchedulerException {
 		_schedulerEngine.start();
 
@@ -402,6 +416,7 @@ public class ClusterSchedulerEngine
 	}
 
 	@Clusterable(acceptor = SchedulerClusterInvokeAcceptor.class)
+	@Override
 	public void suppressError(String jobName, String groupName)
 		throws SchedulerException {
 
@@ -422,6 +437,7 @@ public class ClusterSchedulerEngine
 	}
 
 	@Clusterable(acceptor = SchedulerClusterInvokeAcceptor.class)
+	@Override
 	public void unschedule(String groupName) throws SchedulerException {
 		boolean memoryClusteredSlaveJob = isMemoryClusteredSlaveJob(groupName);
 
@@ -443,6 +459,7 @@ public class ClusterSchedulerEngine
 	}
 
 	@Clusterable(acceptor = SchedulerClusterInvokeAcceptor.class)
+	@Override
 	public void unschedule(String jobName, String groupName)
 		throws SchedulerException {
 
@@ -466,6 +483,7 @@ public class ClusterSchedulerEngine
 	}
 
 	@Clusterable(acceptor = SchedulerClusterInvokeAcceptor.class)
+	@Override
 	public void update(Trigger trigger) throws SchedulerException {
 		String jobName = trigger.getJobName();
 		String groupName = trigger.getGroupName();
@@ -511,6 +529,7 @@ public class ClusterSchedulerEngine
 		setClusterableThreadLocal(groupName);
 	}
 
+	@Override
 	public Lock updateMemorySchedulerClusterMaster() throws SchedulerException {
 		getMasterAddressString(false);
 
@@ -595,16 +614,12 @@ public class ClusterSchedulerEngine
 				if (owner == null) {
 					lock = LockLocalServiceUtil.lock(
 						_LOCK_CLASS_NAME, _LOCK_CLASS_NAME,
-						_localClusterNodeAddress,
-						PropsValues.
-							MEMORY_CLUSTER_SCHEDULER_LOCK_CACHE_ENABLED);
+						_localClusterNodeAddress);
 				}
 				else {
 					lock = LockLocalServiceUtil.lock(
 						_LOCK_CLASS_NAME, _LOCK_CLASS_NAME, owner,
-						_localClusterNodeAddress,
-						PropsValues.
-							MEMORY_CLUSTER_SCHEDULER_LOCK_CACHE_ENABLED);
+						_localClusterNodeAddress);
 				}
 
 				Address address = (Address)getDeserializedObject(
@@ -874,7 +889,7 @@ public class ClusterSchedulerEngine
 	}
 
 	@BeanReference(
-		name="com.liferay.portal.scheduler.ClusterSchedulerEngineService")
+		name = "com.liferay.portal.scheduler.ClusterSchedulerEngineService")
 	protected SchedulerEngine schedulerEngine;
 
 	private void _doMasterToSlave(List<SchedulerResponse> schedulerResponses)
@@ -951,6 +966,7 @@ public class ClusterSchedulerEngine
 	private static class SchedulerClusterInvokeAcceptor
 		implements ClusterInvokeAcceptor {
 
+		@Override
 		public boolean accept(Map<String, Serializable> context) {
 			if (ClusterInvokeThreadLocal.isEnabled()) {
 				return true;
@@ -974,6 +990,7 @@ public class ClusterSchedulerEngine
 	private class MemorySchedulerClusterEventListener
 		implements ClusterEventListener {
 
+		@Override
 		public void processClusterEvent(ClusterEvent clusterEvent) {
 			try {
 				getMasterAddressString(true);

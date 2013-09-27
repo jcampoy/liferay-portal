@@ -18,7 +18,6 @@ import com.liferay.portal.ImageTypeException;
 import com.liferay.portal.NoSuchGroupException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.io.ByteArrayFileInputStream;
-import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.upload.UploadException;
@@ -69,8 +68,9 @@ public class EditLayoutSetAction extends EditLayoutsAction {
 
 	@Override
 	public void processAction(
-			ActionMapping mapping, ActionForm form, PortletConfig portletConfig,
-			ActionRequest actionRequest, ActionResponse actionResponse)
+			ActionMapping actionMapping, ActionForm actionForm,
+			PortletConfig portletConfig, ActionRequest actionRequest,
+			ActionResponse actionResponse)
 		throws Exception {
 
 		try {
@@ -95,12 +95,9 @@ public class EditLayoutSetAction extends EditLayoutsAction {
 				redirect = HttpUtil.setParameter(
 					redirect, "closeRedirect", closeRedirect);
 
-				LiferayPortletConfig liferayPortletConfig =
-					(LiferayPortletConfig)portletConfig;
-
 				SessionMessages.add(
 					actionRequest,
-					liferayPortletConfig.getPortletId() +
+					PortalUtil.getPortletId(actionRequest) +
 						SessionMessages.KEY_SUFFIX_CLOSE_REDIRECT,
 					closeRedirect);
 			}
@@ -129,8 +126,9 @@ public class EditLayoutSetAction extends EditLayoutsAction {
 
 	@Override
 	public ActionForward render(
-			ActionMapping mapping, ActionForm form, PortletConfig portletConfig,
-			RenderRequest renderRequest, RenderResponse renderResponse)
+			ActionMapping actionMapping, ActionForm actionForm,
+			PortletConfig portletConfig, RenderRequest renderRequest,
+			RenderResponse renderResponse)
 		throws Exception {
 
 		try {
@@ -140,7 +138,7 @@ public class EditLayoutSetAction extends EditLayoutsAction {
 			SessionErrors.add(
 				renderRequest, PrincipalException.class.getName());
 
-			return mapping.findForward("portlet.layouts_admin.error");
+			return actionMapping.findForward("portlet.layouts_admin.error");
 		}
 
 		try {
@@ -152,14 +150,14 @@ public class EditLayoutSetAction extends EditLayoutsAction {
 
 				SessionErrors.add(renderRequest, e.getClass());
 
-				return mapping.findForward("portlet.layouts_admin.error");
+				return actionMapping.findForward("portlet.layouts_admin.error");
 			}
 			else {
 				throw e;
 			}
 		}
 
-		return mapping.findForward(
+		return actionMapping.findForward(
 			getForward(renderRequest, "portlet.layouts_admin.edit_layouts"));
 	}
 

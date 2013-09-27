@@ -18,11 +18,12 @@ import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
 
 /**
- * The utility for the social activity interpreter local service. This utility wraps {@link com.liferay.portlet.social.service.impl.SocialActivityInterpreterLocalServiceImpl} and is the primary access point for service operations in application layer code running on the local server.
- *
- * <p>
- * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
- * </p>
+ * Provides the local service utility for SocialActivityInterpreter. This utility wraps
+ * {@link com.liferay.portlet.social.service.impl.SocialActivityInterpreterLocalServiceImpl} and is the
+ * primary access point for service operations in application layer code running
+ * on the local server. Methods of this service will not have security checks
+ * based on the propagated JAAS credentials because this service can only be
+ * accessed from within the same VM.
  *
  * @author Brian Wing Shun Chan
  * @see SocialActivityInterpreterLocalService
@@ -77,6 +78,11 @@ public class SocialActivityInterpreterLocalServiceUtil {
 
 	public static java.util.Map<java.lang.String, java.util.List<com.liferay.portlet.social.model.SocialActivityInterpreter>> getActivityInterpreters() {
 		return getService().getActivityInterpreters();
+	}
+
+	public static java.util.List<com.liferay.portlet.social.model.SocialActivityInterpreter> getActivityInterpreters(
+		java.lang.String selector) {
+		return getService().getActivityInterpreters(selector);
 	}
 
 	/**

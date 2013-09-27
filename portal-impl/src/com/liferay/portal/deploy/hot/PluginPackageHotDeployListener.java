@@ -53,6 +53,7 @@ public class PluginPackageHotDeployListener extends BaseHotDeployListener {
 	public static final String SERVICE_BUILDER_PROPERTIES =
 		"SERVICE_BUILDER_PROPERTIES";
 
+	@Override
 	public void invokeDeploy(HotDeployEvent hotDeployEvent)
 		throws HotDeployException {
 
@@ -61,10 +62,14 @@ public class PluginPackageHotDeployListener extends BaseHotDeployListener {
 		}
 		catch (Throwable t) {
 			throwHotDeployException(
-				hotDeployEvent, "Error registering plugins for ", t);
+				hotDeployEvent,
+				"Error registering plugins for " +
+					hotDeployEvent.getServletContextName(),
+				t);
 		}
 	}
 
+	@Override
 	public void invokeUndeploy(HotDeployEvent hotDeployEvent)
 		throws HotDeployException {
 
@@ -73,7 +78,10 @@ public class PluginPackageHotDeployListener extends BaseHotDeployListener {
 		}
 		catch (Throwable t) {
 			throwHotDeployException(
-				hotDeployEvent, "Error unregistering plugins for ", t);
+				hotDeployEvent,
+				"Error unregistering plugins for " +
+					hotDeployEvent.getServletContextName(),
+				t);
 		}
 	}
 

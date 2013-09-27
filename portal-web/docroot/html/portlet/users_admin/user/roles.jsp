@@ -99,18 +99,16 @@ userGroupRoles.addAll(siteRoles);
 				Liferay.Util.selectEntity(
 					{
 						dialog: {
-							align: Liferay.Util.Window.ALIGN_CENTER,
 							constrain: true,
 							modal: true,
-							stack: true,
 							width: 600
 						},
 						id: '<portlet:namespace />selectRegularRole',
-						title: '<%= UnicodeLanguageUtil.format(pageContext, "select-x", "regular-role") %>',
+						title: '<liferay-ui:message arguments="regular-role" key="select-x" />',
 						uri: '<portlet:renderURL windowState="<%= LiferayWindowState.POP_UP.toString() %>"><portlet:param name="struts_action" value="/users_admin/select_regular_role" /><portlet:param name="p_u_i_d" value='<%= (selUser == null) ? "0" : String.valueOf(selUser.getUserId()) %>' /></portlet:renderURL>'
 					},
-					function(event){
-						<portlet:namespace />selectRole(event.roleid, event.roletitle, event.searchcontainername, event.groupname, event.groupid);
+					function(event) {
+						<portlet:namespace />selectRole(event.roleid, event.roletitle, event.searchcontainername, event.groupdescriptivename, event.groupid);
 					}
 				);
 			}
@@ -123,12 +121,23 @@ userGroupRoles.addAll(siteRoles);
 <h3><liferay-ui:message key="inherited-roles" /></h3>
 
 <liferay-ui:search-container
-	headerNames="title,null"
+	headerNames="title,group"
 	id="inheritedRolesSearchContainer"
 >
+
+	<%
+	List<Group> roleGroups = new ArrayList<Group>();
+
+	for (Group group : allGroups) {
+		if (RoleLocalServiceUtil.hasGroupRoles(group.getGroupId())) {
+			roleGroups.add(group);
+		}
+	}
+	%>
+
 	<liferay-ui:search-container-results
-		results="<%= allGroups %>"
-		total="<%= allGroups.size() %>"
+		results="<%= roleGroups %>"
+		total="<%= roleGroups.size() %>"
 	/>
 
 	<liferay-ui:search-container-row
@@ -140,27 +149,20 @@ userGroupRoles.addAll(siteRoles);
 
 		<%
 		List<Role> groupRoles = RoleLocalServiceUtil.getGroupRoles(group.getGroupId());
-
-		if (!groupRoles.isEmpty()) {
-			Role groupRole = groupRoles.get(0);
 		%>
 
-			<liferay-util:param name="className" value="<%= RolesAdminUtil.getCssClassName(groupRole) %>" />
-			<liferay-util:param name="classHoverName" value="<%= RolesAdminUtil.getCssClassName(groupRole) %>" />
+		<liferay-util:param name="className" value="<%= RolesAdminUtil.getCssClassName(groupRoles.get(0)) %>" />
+		<liferay-util:param name="classHoverName" value="<%= RolesAdminUtil.getCssClassName(groupRoles.get(0)) %>" />
 
-			<liferay-ui:search-container-column-text
-				name="group"
-				value="<%= HtmlUtil.escape(group.getDescriptiveName(locale)) %>"
-			/>
-			<liferay-ui:search-container-column-text
-				name="title"
-				value="<%= HtmlUtil.escape(ListUtil.toString(groupRoles, Role.NAME_ACCESSOR)) %>"
-			/>
+		<liferay-ui:search-container-column-text
+			name="title"
+			value="<%= HtmlUtil.escape(ListUtil.toString(groupRoles, Role.NAME_ACCESSOR)) %>"
+		/>
 
-		<%
-		}
-		%>
-
+		<liferay-ui:search-container-column-text
+			name="group"
+			value="<%= HtmlUtil.escape(group.getDescriptiveName(locale)) %>"
+		/>
 	</liferay-ui:search-container-row>
 
 	<liferay-ui:search-iterator paginate="<%= false %>" />
@@ -266,18 +268,14 @@ userGroupRoles.addAll(siteRoles);
 				Liferay.Util.selectEntity(
 					{
 						dialog: {
-							align: Liferay.Util.Window.ALIGN_CENTER,
-							constrain: true,
-							modal: true,
-							stack: true,
-							width: 600
+							modal: true
 						},
 						id: '<portlet:namespace />selectOrganizationRole',
-						title: '<%= UnicodeLanguageUtil.format(pageContext, "select-x", "organization-role") %>',
+						title: '<liferay-ui:message arguments="organization-role" key="select-x" />',
 						uri: '<portlet:renderURL windowState="<%= LiferayWindowState.POP_UP.toString() %>"><portlet:param name="struts_action" value="/users_admin/select_organization_role" /><portlet:param name="step" value="1" /><portlet:param name="organizationIds" value="<%= StringUtil.merge(organizationIds) %>" /><portlet:param name="p_u_i_d" value='<%= (selUser == null) ? "0" : String.valueOf(selUser.getUserId()) %>' /></portlet:renderURL>'
 					},
-					function(event){
-						<portlet:namespace />selectRole(event.roleid, event.roletitle, event.searchcontainername, event.groupname, event.groupid);
+					function(event) {
+						<portlet:namespace />selectRole(event.roleid, event.roletitle, event.searchcontainername, event.groupdescriptivename, event.groupid);
 					}
 				);
 			}
@@ -382,18 +380,16 @@ userGroupRoles.addAll(siteRoles);
 						Liferay.Util.selectEntity(
 							{
 								dialog: {
-									align: Liferay.Util.Window.ALIGN_CENTER,
 									constrain: true,
 									modal: true,
-									stack: true,
 									width: 600
 								},
 								id: '<portlet:namespace />selectSiteRole',
-								title: '<%= UnicodeLanguageUtil.format(pageContext, "select-x", "site-role") %>',
+								title: '<liferay-ui:message arguments="site-role" key="select-x" />',
 								uri: '<portlet:renderURL windowState="<%= LiferayWindowState.POP_UP.toString() %>"><portlet:param name="struts_action" value="/users_admin/select_site_role" /><portlet:param name="step" value="1" /><portlet:param name="p_u_i_d" value='<%= (selUser == null) ? "0" : String.valueOf(selUser.getUserId()) %>' /></portlet:renderURL>'
 							},
-							function(event){
-								<portlet:namespace />selectRole(event.roleid, event.roletitle, event.searchcontainername, event.groupname, event.groupid);
+							function(event) {
+								<portlet:namespace />selectRole(event.roleid, event.roletitle, event.searchcontainername, event.groupdescriptivename, event.groupid);
 							}
 						);
 					}

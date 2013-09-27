@@ -14,10 +14,14 @@
 
 package com.liferay.portlet.documentlibrary.model.impl;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.Folder;
+import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.Repository;
 import com.liferay.portal.repository.liferayrepository.model.LiferayFolder;
 import com.liferay.portal.service.RepositoryLocalServiceUtil;
@@ -34,31 +38,32 @@ public class DLFileShortcutImpl extends DLFileShortcutBaseImpl {
 	public DLFileShortcutImpl() {
 	}
 
-	public Folder getFolder() {
-		Folder folder = new LiferayFolder(new DLFolderImpl());
+	@Override
+	public String buildTreePath() throws PortalException, SystemException {
+		StringBundler sb = new StringBundler();
 
-		if (getFolderId() > 0) {
-			try {
-				folder = DLAppLocalServiceUtil.getFolder(getFolderId());
-			}
-			catch (NoSuchFolderException nsfe) {
-				try {
-					if (!isInTrash()) {
-						_log.error(nsfe, nsfe);
-					}
-				}
-				catch (Exception e) {
-					_log.error(e, e);
-				}
-			}
-			catch (Exception e) {
-				_log.error(e, e);
-			}
-		}
+		buildTreePath(sb, getDLFolder());
 
-		return folder;
+		return sb.toString();
 	}
 
+	@Override
+	public DLFolder getDLFolder() throws PortalException, SystemException {
+		Folder folder = getFolder();
+
+		return (DLFolder)folder.getModel();
+	}
+
+	@Override
+	public Folder getFolder() throws PortalException, SystemException {
+		if (getFolderId() <= 0) {
+			return new LiferayFolder(new DLFolderImpl());
+		}
+
+		return DLAppLocalServiceUtil.getFolder(getFolderId());
+	}
+
+	@Override
 	public String getToTitle() {
 		String toTitle = null;
 
@@ -75,10 +80,18 @@ public class DLFileShortcutImpl extends DLFileShortcutBaseImpl {
 		return toTitle;
 	}
 
-	public DLFolder getTrashContainer() {
-		Folder folder = getFolder();
+	@Override
+	public DLFolder getTrashContainer()
+		throws PortalException, SystemException {
 
-		DLFolder dlFolder = (DLFolder)folder.getModel();
+		DLFolder dlFolder = null;
+
+		try {
+			dlFolder = getDLFolder();
+		}
+		catch (NoSuchFolderException nsfe) {
+			return null;
+		}
 
 		if (dlFolder.isInTrash()) {
 			return dlFolder;
@@ -87,6 +100,7 @@ public class DLFileShortcutImpl extends DLFileShortcutBaseImpl {
 		return dlFolder.getTrashContainer();
 	}
 
+	@Override
 	public boolean isInHiddenFolder() {
 		try {
 			long repositoryId = getRepositoryId();
@@ -106,12 +120,30 @@ public class DLFileShortcutImpl extends DLFileShortcutBaseImpl {
 		return false;
 	}
 
+	@Override
 	public boolean isInTrashContainer() {
-		if (getTrashContainer() != null) {
-			return true;
+		try {
+			if (getTrashContainer() != null) {
+				return true;
+			}
+		}
+		catch (Exception e) {
+		}
+
+		return false;
+	}
+
+	protected void buildTreePath(StringBundler sb, DLFolder dlFolder)
+		throws PortalException, SystemException {
+
+		if (dlFolder == null) {
+			sb.append(StringPool.SLASH);
 		}
 		else {
-			return false;
+			buildTreePath(sb, dlFolder.getParentFolder());
+
+			sb.append(dlFolder.getFolderId());
+			sb.append(StringPool.SLASH);
 		}
 	}
 

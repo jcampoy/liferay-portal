@@ -23,11 +23,9 @@ import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.security.ac.AccessControlled;
 
 /**
- * The interface for the company remote service.
- *
- * <p>
- * This is a remote service. Methods of this service are expected to have security checks based on the propagated JAAS credentials because this service can be accessed remotely.
- * </p>
+ * Provides the remote service interface for Company. Methods of this
+ * service are expected to have security checks based on the propagated JAAS
+ * credentials because this service can be accessed remotely.
  *
  * @author Brian Wing Shun Chan
  * @see CompanyServiceUtil
@@ -80,6 +78,10 @@ public interface CompanyService extends BaseService {
 	public com.liferay.portal.model.Company addCompany(java.lang.String webId,
 		java.lang.String virtualHost, java.lang.String mx,
 		java.lang.String shardName, boolean system, int maxUsers, boolean active)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.portal.model.Company deleteCompany(long companyId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 

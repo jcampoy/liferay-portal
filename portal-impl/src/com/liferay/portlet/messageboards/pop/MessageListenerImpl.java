@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.pop.MessageListener;
 import com.liferay.portal.kernel.pop.MessageListenerException;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ObjectValuePair;
@@ -35,7 +36,6 @@ import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.PropsValues;
-import com.liferay.portlet.messageboards.NoSuchCategoryException;
 import com.liferay.portlet.messageboards.NoSuchMessageException;
 import com.liferay.portlet.messageboards.model.MBCategory;
 import com.liferay.portlet.messageboards.model.MBCategoryConstants;
@@ -63,6 +63,7 @@ import org.apache.commons.lang.time.StopWatch;
  */
 public class MessageListenerImpl implements MessageListener {
 
+	@Override
 	public boolean accept(String from, String recipient, Message message) {
 		try {
 			if (isAutoReply(message)) {
@@ -98,7 +99,7 @@ public class MessageListenerImpl implements MessageListener {
 				PropsKeys.MAIL_SESSION_MAIL_POP3_USER,
 				PropsValues.MAIL_SESSION_MAIL_POP3_USER);
 
-			if (from.equalsIgnoreCase(pop3User)) {
+			if (StringUtil.equalsIgnoreCase(from, pop3User)) {
 				return false;
 			}
 
@@ -116,6 +117,7 @@ public class MessageListenerImpl implements MessageListener {
 		}
 	}
 
+	@Override
 	public void deliver(String from, String recipient, Message message)
 		throws MessageListenerException {
 
@@ -143,10 +145,14 @@ public class MessageListenerImpl implements MessageListener {
 			long groupId = 0;
 			long categoryId = getCategoryId(messageIdString);
 
-			try {
-				MBCategory category = MBCategoryLocalServiceUtil.getCategory(
-					categoryId);
+			MBCategory category = MBCategoryLocalServiceUtil.fetchMBCategory(
+				categoryId);
 
+			if (category == null) {
+				groupId = categoryId;
+				categoryId = MBCategoryConstants.DEFAULT_PARENT_CATEGORY_ID;
+			}
+			else {
 				groupId = category.getGroupId();
 
 				if (category.isRoot()) {
@@ -159,10 +165,6 @@ public class MessageListenerImpl implements MessageListener {
 						groupId = threadMessage.getGroupId();
 					}
 				}
-			}
-			catch (NoSuchCategoryException nsce) {
-				groupId = categoryId;
-				categoryId = MBCategoryConstants.DEFAULT_PARENT_CATEGORY_ID;
 			}
 
 			if (_log.isDebugEnabled()) {
@@ -262,6 +264,7 @@ public class MessageListenerImpl implements MessageListener {
 		}
 	}
 
+	@Override
 	public String getId() {
 		return MessageListenerImpl.class.getName();
 	}
@@ -362,19 +365,19 @@ public class MessageListenerImpl implements MessageListener {
 	protected boolean isAutoReply(Message message) throws MessagingException {
 		String[] autoReply = message.getHeader("X-Autoreply");
 
-		if ((autoReply != null) && (autoReply.length > 0)) {
+		if (ArrayUtil.isNotEmpty(autoReply)) {
 			return true;
 		}
 
 		String[] autoReplyFrom = message.getHeader("X-Autoreply-From");
 
-		if ((autoReplyFrom != null) && (autoReplyFrom.length > 0)) {
+		if (ArrayUtil.isNotEmpty(autoReplyFrom)) {
 			return true;
 		}
 
 		String[] mailAutoReply = message.getHeader("X-Mail-Autoreply");
 
-		if ((mailAutoReply != null) && (mailAutoReply.length > 0)) {
+		if (ArrayUtil.isNotEmpty(mailAutoReply)) {
 			return true;
 		}
 

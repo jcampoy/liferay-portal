@@ -16,7 +16,7 @@ package com.liferay.portlet.calendar.model.impl;
 
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.json.JSON;
+import com.liferay.portal.kernel.lar.StagedModelType;
 import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
@@ -29,7 +29,6 @@ import com.liferay.portal.util.PortalUtil;
 
 import com.liferay.portlet.calendar.model.CalEvent;
 import com.liferay.portlet.calendar.model.CalEventModel;
-import com.liferay.portlet.calendar.model.CalEventSoap;
 import com.liferay.portlet.expando.model.ExpandoBridge;
 import com.liferay.portlet.expando.util.ExpandoBridgeFactoryUtil;
 
@@ -37,10 +36,8 @@ import java.io.Serializable;
 
 import java.sql.Types;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -56,7 +53,6 @@ import java.util.Map;
  * @see com.liferay.portlet.calendar.model.CalEventModel
  * @generated
  */
-@JSON(strict = true)
 public class CalEventModelImpl extends BaseModelImpl<CalEvent>
 	implements CalEventModel {
 	/*
@@ -114,93 +110,38 @@ public class CalEventModelImpl extends BaseModelImpl<CalEvent>
 	public static long UUID_COLUMN_BITMASK = 32L;
 	public static long STARTDATE_COLUMN_BITMASK = 64L;
 	public static long TITLE_COLUMN_BITMASK = 128L;
-
-	/**
-	 * Converts the soap model instance into a normal model instance.
-	 *
-	 * @param soapModel the soap model instance to convert
-	 * @return the normal model instance
-	 */
-	public static CalEvent toModel(CalEventSoap soapModel) {
-		if (soapModel == null) {
-			return null;
-		}
-
-		CalEvent model = new CalEventImpl();
-
-		model.setUuid(soapModel.getUuid());
-		model.setEventId(soapModel.getEventId());
-		model.setGroupId(soapModel.getGroupId());
-		model.setCompanyId(soapModel.getCompanyId());
-		model.setUserId(soapModel.getUserId());
-		model.setUserName(soapModel.getUserName());
-		model.setCreateDate(soapModel.getCreateDate());
-		model.setModifiedDate(soapModel.getModifiedDate());
-		model.setTitle(soapModel.getTitle());
-		model.setDescription(soapModel.getDescription());
-		model.setLocation(soapModel.getLocation());
-		model.setStartDate(soapModel.getStartDate());
-		model.setEndDate(soapModel.getEndDate());
-		model.setDurationHour(soapModel.getDurationHour());
-		model.setDurationMinute(soapModel.getDurationMinute());
-		model.setAllDay(soapModel.getAllDay());
-		model.setTimeZoneSensitive(soapModel.getTimeZoneSensitive());
-		model.setType(soapModel.getType());
-		model.setRepeating(soapModel.getRepeating());
-		model.setRecurrence(soapModel.getRecurrence());
-		model.setRemindBy(soapModel.getRemindBy());
-		model.setFirstReminder(soapModel.getFirstReminder());
-		model.setSecondReminder(soapModel.getSecondReminder());
-
-		return model;
-	}
-
-	/**
-	 * Converts the soap model instances into normal model instances.
-	 *
-	 * @param soapModels the soap model instances to convert
-	 * @return the normal model instances
-	 */
-	public static List<CalEvent> toModels(CalEventSoap[] soapModels) {
-		if (soapModels == null) {
-			return null;
-		}
-
-		List<CalEvent> models = new ArrayList<CalEvent>(soapModels.length);
-
-		for (CalEventSoap soapModel : soapModels) {
-			models.add(toModel(soapModel));
-		}
-
-		return models;
-	}
-
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portlet.calendar.model.CalEvent"));
 
 	public CalEventModelImpl() {
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _eventId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setEventId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
 		return _eventId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return CalEvent.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return CalEvent.class.getName();
 	}
@@ -377,7 +318,7 @@ public class CalEventModelImpl extends BaseModelImpl<CalEvent>
 		}
 	}
 
-	@JSON
+	@Override
 	public String getUuid() {
 		if (_uuid == null) {
 			return StringPool.BLANK;
@@ -387,6 +328,7 @@ public class CalEventModelImpl extends BaseModelImpl<CalEvent>
 		}
 	}
 
+	@Override
 	public void setUuid(String uuid) {
 		if (_originalUuid == null) {
 			_originalUuid = _uuid;
@@ -399,20 +341,22 @@ public class CalEventModelImpl extends BaseModelImpl<CalEvent>
 		return GetterUtil.getString(_originalUuid);
 	}
 
-	@JSON
+	@Override
 	public long getEventId() {
 		return _eventId;
 	}
 
+	@Override
 	public void setEventId(long eventId) {
 		_eventId = eventId;
 	}
 
-	@JSON
+	@Override
 	public long getGroupId() {
 		return _groupId;
 	}
 
+	@Override
 	public void setGroupId(long groupId) {
 		_columnBitmask |= GROUPID_COLUMN_BITMASK;
 
@@ -429,11 +373,12 @@ public class CalEventModelImpl extends BaseModelImpl<CalEvent>
 		return _originalGroupId;
 	}
 
-	@JSON
+	@Override
 	public long getCompanyId() {
 		return _companyId;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
 		_columnBitmask |= COMPANYID_COLUMN_BITMASK;
 
@@ -450,24 +395,27 @@ public class CalEventModelImpl extends BaseModelImpl<CalEvent>
 		return _originalCompanyId;
 	}
 
-	@JSON
+	@Override
 	public long getUserId() {
 		return _userId;
 	}
 
+	@Override
 	public void setUserId(long userId) {
 		_userId = userId;
 	}
 
+	@Override
 	public String getUserUuid() throws SystemException {
 		return PortalUtil.getUserValue(getUserId(), "uuid", _userUuid);
 	}
 
+	@Override
 	public void setUserUuid(String userUuid) {
 		_userUuid = userUuid;
 	}
 
-	@JSON
+	@Override
 	public String getUserName() {
 		if (_userName == null) {
 			return StringPool.BLANK;
@@ -477,29 +425,32 @@ public class CalEventModelImpl extends BaseModelImpl<CalEvent>
 		}
 	}
 
+	@Override
 	public void setUserName(String userName) {
 		_userName = userName;
 	}
 
-	@JSON
+	@Override
 	public Date getCreateDate() {
 		return _createDate;
 	}
 
+	@Override
 	public void setCreateDate(Date createDate) {
 		_createDate = createDate;
 	}
 
-	@JSON
+	@Override
 	public Date getModifiedDate() {
 		return _modifiedDate;
 	}
 
+	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		_modifiedDate = modifiedDate;
 	}
 
-	@JSON
+	@Override
 	public String getTitle() {
 		if (_title == null) {
 			return StringPool.BLANK;
@@ -509,13 +460,14 @@ public class CalEventModelImpl extends BaseModelImpl<CalEvent>
 		}
 	}
 
+	@Override
 	public void setTitle(String title) {
 		_columnBitmask = -1L;
 
 		_title = title;
 	}
 
-	@JSON
+	@Override
 	public String getDescription() {
 		if (_description == null) {
 			return StringPool.BLANK;
@@ -525,11 +477,12 @@ public class CalEventModelImpl extends BaseModelImpl<CalEvent>
 		}
 	}
 
+	@Override
 	public void setDescription(String description) {
 		_description = description;
 	}
 
-	@JSON
+	@Override
 	public String getLocation() {
 		if (_location == null) {
 			return StringPool.BLANK;
@@ -539,75 +492,84 @@ public class CalEventModelImpl extends BaseModelImpl<CalEvent>
 		}
 	}
 
+	@Override
 	public void setLocation(String location) {
 		_location = location;
 	}
 
-	@JSON
+	@Override
 	public Date getStartDate() {
 		return _startDate;
 	}
 
+	@Override
 	public void setStartDate(Date startDate) {
 		_columnBitmask = -1L;
 
 		_startDate = startDate;
 	}
 
-	@JSON
+	@Override
 	public Date getEndDate() {
 		return _endDate;
 	}
 
+	@Override
 	public void setEndDate(Date endDate) {
 		_endDate = endDate;
 	}
 
-	@JSON
+	@Override
 	public int getDurationHour() {
 		return _durationHour;
 	}
 
+	@Override
 	public void setDurationHour(int durationHour) {
 		_durationHour = durationHour;
 	}
 
-	@JSON
+	@Override
 	public int getDurationMinute() {
 		return _durationMinute;
 	}
 
+	@Override
 	public void setDurationMinute(int durationMinute) {
 		_durationMinute = durationMinute;
 	}
 
-	@JSON
+	@Override
 	public boolean getAllDay() {
 		return _allDay;
 	}
 
+	@Override
 	public boolean isAllDay() {
 		return _allDay;
 	}
 
+	@Override
 	public void setAllDay(boolean allDay) {
 		_allDay = allDay;
 	}
 
-	@JSON
+	@Override
 	public boolean getTimeZoneSensitive() {
 		return _timeZoneSensitive;
 	}
 
+	@Override
 	public boolean isTimeZoneSensitive() {
 		return _timeZoneSensitive;
 	}
 
+	@Override
 	public void setTimeZoneSensitive(boolean timeZoneSensitive) {
 		_timeZoneSensitive = timeZoneSensitive;
 	}
 
-	@JSON
+	@Override
 	public String getType() {
 		if (_type == null) {
 			return StringPool.BLANK;
@@ -617,6 +579,7 @@ public class CalEventModelImpl extends BaseModelImpl<CalEvent>
 		}
 	}
 
+	@Override
 	public void setType(String type) {
 		_columnBitmask |= TYPE_COLUMN_BITMASK;
 
@@ -631,15 +594,17 @@ public class CalEventModelImpl extends BaseModelImpl<CalEvent>
 		return GetterUtil.getString(_originalType);
 	}
 
-	@JSON
+	@Override
 	public boolean getRepeating() {
 		return _repeating;
 	}
 
+	@Override
 	public boolean isRepeating() {
 		return _repeating;
 	}
 
+	@Override
 	public void setRepeating(boolean repeating) {
 		_columnBitmask |= REPEATING_COLUMN_BITMASK;
 
@@ -656,7 +621,7 @@ public class CalEventModelImpl extends BaseModelImpl<CalEvent>
 		return _originalRepeating;
 	}
 
-	@JSON
+	@Override
 	public String getRecurrence() {
 		if (_recurrence == null) {
 			return StringPool.BLANK;
@@ -666,15 +631,17 @@ public class CalEventModelImpl extends BaseModelImpl<CalEvent>
 		}
 	}
 
+	@Override
 	public void setRecurrence(String recurrence) {
 		_recurrence = recurrence;
 	}
 
-	@JSON
+	@Override
 	public int getRemindBy() {
 		return _remindBy;
 	}
 
+	@Override
 	public void setRemindBy(int remindBy) {
 		_columnBitmask |= REMINDBY_COLUMN_BITMASK;
 
@@ -691,22 +658,30 @@ public class CalEventModelImpl extends BaseModelImpl<CalEvent>
 		return _originalRemindBy;
 	}
 
-	@JSON
+	@Override
 	public int getFirstReminder() {
 		return _firstReminder;
 	}
 
+	@Override
 	public void setFirstReminder(int firstReminder) {
 		_firstReminder = firstReminder;
 	}
 
-	@JSON
+	@Override
 	public int getSecondReminder() {
 		return _secondReminder;
 	}
 
+	@Override
 	public void setSecondReminder(int secondReminder) {
 		_secondReminder = secondReminder;
+	}
+
+	@Override
+	public StagedModelType getStagedModelType() {
+		return new StagedModelType(PortalUtil.getClassNameId(
+				CalEvent.class.getName()));
 	}
 
 	public long getColumnBitmask() {
@@ -769,6 +744,7 @@ public class CalEventModelImpl extends BaseModelImpl<CalEvent>
 		return calEventImpl;
 	}
 
+	@Override
 	public int compareTo(CalEvent calEvent) {
 		int value = 0;
 
@@ -789,18 +765,15 @@ public class CalEventModelImpl extends BaseModelImpl<CalEvent>
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof CalEvent)) {
 			return false;
 		}
 
-		CalEvent calEvent = null;
-
-		try {
-			calEvent = (CalEvent)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		CalEvent calEvent = (CalEvent)obj;
 
 		long primaryKey = calEvent.getPrimaryKey();
 
@@ -1022,6 +995,7 @@ public class CalEventModelImpl extends BaseModelImpl<CalEvent>
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(73);
 

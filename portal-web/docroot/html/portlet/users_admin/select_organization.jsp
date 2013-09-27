@@ -45,13 +45,14 @@ if (Validator.isNotNull(target)) {
 
 	<liferay-ui:search-container
 		searchContainer="<%= new OrganizationSearch(renderRequest, portletURL) %>"
+		var="organizationSearchContainer"
 	>
 		<liferay-ui:search-form
 			page="/html/portlet/users_admin/organization_search.jsp"
 		/>
 
 		<%
-		OrganizationSearchTerms searchTerms = (OrganizationSearchTerms)searchContainer.getSearchTerms();
+		OrganizationSearchTerms searchTerms = (OrganizationSearchTerms)organizationSearchContainer.getSearchTerms();
 
 		long parentOrganizationId = OrganizationConstants.ANY_PARENT_ORGANIZATION_ID;
 
@@ -136,7 +137,7 @@ if (Validator.isNotNull(target)) {
 					Map<String, Object> data = new HashMap<String, Object>();
 
 					data.put("groupid", organization.getGroupId());
-					data.put("name", HtmlUtil.escapeAttribute(organization.getName()));
+					data.put("name", HtmlUtil.escape(organization.getName()));
 					data.put("organizationid", organization.getOrganizationId());
 					data.put("type", LanguageUtil.get(pageContext, organization.getType()));
 					%>
@@ -150,10 +151,6 @@ if (Validator.isNotNull(target)) {
 	</liferay-ui:search-container>
 </aui:form>
 
-<aui:script>
-	Liferay.Util.focusFormField(document.<portlet:namespace />selectOrganizationFm.<portlet:namespace />name);
-</aui:script>
-
 <aui:script use="aui-base">
 	var Util = Liferay.Util;
 
@@ -164,8 +161,8 @@ if (Validator.isNotNull(target)) {
 
 			Util.getOpener().Liferay.fire('<%= HtmlUtil.escapeJS(eventName) %>', result);
 
-			Util.getWindow().close();
+			Util.getWindow().hide();
 		},
-		'.selector-button input'
+		'.selector-button'
 	);
 </aui:script>

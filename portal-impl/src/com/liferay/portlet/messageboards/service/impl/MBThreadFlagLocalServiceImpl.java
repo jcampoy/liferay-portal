@@ -18,7 +18,9 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.systemevent.SystemEvent;
 import com.liferay.portal.kernel.util.DateUtil;
+import com.liferay.portal.model.SystemEventConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portlet.messageboards.model.MBThread;
@@ -34,6 +36,7 @@ import java.util.Date;
 public class MBThreadFlagLocalServiceImpl
 	extends MBThreadFlagLocalServiceBaseImpl {
 
+	@Override
 	public void addThreadFlag(
 			long userId, MBThread thread, ServiceContext serviceContext)
 		throws PortalException, SystemException {
@@ -92,6 +95,7 @@ public class MBThreadFlagLocalServiceImpl
 		}
 	}
 
+	@Override
 	public void deleteThreadFlag(long threadFlagId)
 		throws PortalException, SystemException {
 
@@ -101,22 +105,27 @@ public class MBThreadFlagLocalServiceImpl
 		deleteThreadFlag(threadFlag);
 	}
 
+	@Override
+	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
 	public void deleteThreadFlag(MBThreadFlag threadFlag)
 		throws SystemException {
 
 		mbThreadFlagPersistence.remove(threadFlag);
 	}
 
+	@Override
 	public void deleteThreadFlagsByThreadId(long threadId)
 		throws SystemException {
 
 		mbThreadFlagPersistence.removeByThreadId(threadId);
 	}
 
+	@Override
 	public void deleteThreadFlagsByUserId(long userId) throws SystemException {
 		mbThreadFlagPersistence.removeByUserId(userId);
 	}
 
+	@Override
 	public MBThreadFlag getThreadFlag(long userId, MBThread thread)
 		throws PortalException, SystemException {
 
@@ -129,6 +138,7 @@ public class MBThreadFlagLocalServiceImpl
 		return mbThreadFlagPersistence.fetchByU_T(userId, thread.getThreadId());
 	}
 
+	@Override
 	public boolean hasThreadFlag(long userId, MBThread thread)
 		throws PortalException, SystemException {
 

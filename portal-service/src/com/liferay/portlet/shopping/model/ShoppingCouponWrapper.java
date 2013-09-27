@@ -14,6 +14,7 @@
 
 package com.liferay.portlet.shopping.model;
 
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.ModelWrapper;
 
 import java.util.Date;
@@ -25,8 +26,8 @@ import java.util.Map;
  * This class is a wrapper for {@link ShoppingCoupon}.
  * </p>
  *
- * @author    Brian Wing Shun Chan
- * @see       ShoppingCoupon
+ * @author Brian Wing Shun Chan
+ * @see ShoppingCoupon
  * @generated
  */
 public class ShoppingCouponWrapper implements ShoppingCoupon,
@@ -35,14 +36,17 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 		_shoppingCoupon = shoppingCoupon;
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return ShoppingCoupon.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return ShoppingCoupon.class.getName();
 	}
 
+	@Override
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
@@ -68,6 +72,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 		return attributes;
 	}
 
+	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
 		Long couponId = (Long)attributes.get("couponId");
 
@@ -183,6 +188,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @return the primary key of this shopping coupon
 	*/
+	@Override
 	public long getPrimaryKey() {
 		return _shoppingCoupon.getPrimaryKey();
 	}
@@ -192,6 +198,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @param primaryKey the primary key of this shopping coupon
 	*/
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_shoppingCoupon.setPrimaryKey(primaryKey);
 	}
@@ -201,6 +208,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @return the coupon ID of this shopping coupon
 	*/
+	@Override
 	public long getCouponId() {
 		return _shoppingCoupon.getCouponId();
 	}
@@ -210,6 +218,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @param couponId the coupon ID of this shopping coupon
 	*/
+	@Override
 	public void setCouponId(long couponId) {
 		_shoppingCoupon.setCouponId(couponId);
 	}
@@ -219,6 +228,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @return the group ID of this shopping coupon
 	*/
+	@Override
 	public long getGroupId() {
 		return _shoppingCoupon.getGroupId();
 	}
@@ -228,6 +238,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @param groupId the group ID of this shopping coupon
 	*/
+	@Override
 	public void setGroupId(long groupId) {
 		_shoppingCoupon.setGroupId(groupId);
 	}
@@ -237,6 +248,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @return the company ID of this shopping coupon
 	*/
+	@Override
 	public long getCompanyId() {
 		return _shoppingCoupon.getCompanyId();
 	}
@@ -246,6 +258,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @param companyId the company ID of this shopping coupon
 	*/
+	@Override
 	public void setCompanyId(long companyId) {
 		_shoppingCoupon.setCompanyId(companyId);
 	}
@@ -255,6 +268,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @return the user ID of this shopping coupon
 	*/
+	@Override
 	public long getUserId() {
 		return _shoppingCoupon.getUserId();
 	}
@@ -264,6 +278,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @param userId the user ID of this shopping coupon
 	*/
+	@Override
 	public void setUserId(long userId) {
 		_shoppingCoupon.setUserId(userId);
 	}
@@ -274,6 +289,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	* @return the user uuid of this shopping coupon
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.lang.String getUserUuid()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _shoppingCoupon.getUserUuid();
@@ -284,6 +300,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @param userUuid the user uuid of this shopping coupon
 	*/
+	@Override
 	public void setUserUuid(java.lang.String userUuid) {
 		_shoppingCoupon.setUserUuid(userUuid);
 	}
@@ -293,6 +310,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @return the user name of this shopping coupon
 	*/
+	@Override
 	public java.lang.String getUserName() {
 		return _shoppingCoupon.getUserName();
 	}
@@ -302,6 +320,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @param userName the user name of this shopping coupon
 	*/
+	@Override
 	public void setUserName(java.lang.String userName) {
 		_shoppingCoupon.setUserName(userName);
 	}
@@ -311,6 +330,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @return the create date of this shopping coupon
 	*/
+	@Override
 	public java.util.Date getCreateDate() {
 		return _shoppingCoupon.getCreateDate();
 	}
@@ -320,6 +340,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @param createDate the create date of this shopping coupon
 	*/
+	@Override
 	public void setCreateDate(java.util.Date createDate) {
 		_shoppingCoupon.setCreateDate(createDate);
 	}
@@ -329,6 +350,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @return the modified date of this shopping coupon
 	*/
+	@Override
 	public java.util.Date getModifiedDate() {
 		return _shoppingCoupon.getModifiedDate();
 	}
@@ -338,6 +360,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @param modifiedDate the modified date of this shopping coupon
 	*/
+	@Override
 	public void setModifiedDate(java.util.Date modifiedDate) {
 		_shoppingCoupon.setModifiedDate(modifiedDate);
 	}
@@ -347,6 +370,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @return the code of this shopping coupon
 	*/
+	@Override
 	public java.lang.String getCode() {
 		return _shoppingCoupon.getCode();
 	}
@@ -356,6 +380,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @param code the code of this shopping coupon
 	*/
+	@Override
 	public void setCode(java.lang.String code) {
 		_shoppingCoupon.setCode(code);
 	}
@@ -365,6 +390,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @return the name of this shopping coupon
 	*/
+	@Override
 	public java.lang.String getName() {
 		return _shoppingCoupon.getName();
 	}
@@ -374,6 +400,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @param name the name of this shopping coupon
 	*/
+	@Override
 	public void setName(java.lang.String name) {
 		_shoppingCoupon.setName(name);
 	}
@@ -383,6 +410,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @return the description of this shopping coupon
 	*/
+	@Override
 	public java.lang.String getDescription() {
 		return _shoppingCoupon.getDescription();
 	}
@@ -392,6 +420,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @param description the description of this shopping coupon
 	*/
+	@Override
 	public void setDescription(java.lang.String description) {
 		_shoppingCoupon.setDescription(description);
 	}
@@ -401,6 +430,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @return the start date of this shopping coupon
 	*/
+	@Override
 	public java.util.Date getStartDate() {
 		return _shoppingCoupon.getStartDate();
 	}
@@ -410,6 +440,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @param startDate the start date of this shopping coupon
 	*/
+	@Override
 	public void setStartDate(java.util.Date startDate) {
 		_shoppingCoupon.setStartDate(startDate);
 	}
@@ -419,6 +450,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @return the end date of this shopping coupon
 	*/
+	@Override
 	public java.util.Date getEndDate() {
 		return _shoppingCoupon.getEndDate();
 	}
@@ -428,6 +460,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @param endDate the end date of this shopping coupon
 	*/
+	@Override
 	public void setEndDate(java.util.Date endDate) {
 		_shoppingCoupon.setEndDate(endDate);
 	}
@@ -437,6 +470,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @return the active of this shopping coupon
 	*/
+	@Override
 	public boolean getActive() {
 		return _shoppingCoupon.getActive();
 	}
@@ -446,6 +480,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @return <code>true</code> if this shopping coupon is active; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isActive() {
 		return _shoppingCoupon.isActive();
 	}
@@ -455,6 +490,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @param active the active of this shopping coupon
 	*/
+	@Override
 	public void setActive(boolean active) {
 		_shoppingCoupon.setActive(active);
 	}
@@ -464,6 +500,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @return the limit categories of this shopping coupon
 	*/
+	@Override
 	public java.lang.String getLimitCategories() {
 		return _shoppingCoupon.getLimitCategories();
 	}
@@ -473,6 +510,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @param limitCategories the limit categories of this shopping coupon
 	*/
+	@Override
 	public void setLimitCategories(java.lang.String limitCategories) {
 		_shoppingCoupon.setLimitCategories(limitCategories);
 	}
@@ -482,6 +520,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @return the limit skus of this shopping coupon
 	*/
+	@Override
 	public java.lang.String getLimitSkus() {
 		return _shoppingCoupon.getLimitSkus();
 	}
@@ -491,6 +530,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @param limitSkus the limit skus of this shopping coupon
 	*/
+	@Override
 	public void setLimitSkus(java.lang.String limitSkus) {
 		_shoppingCoupon.setLimitSkus(limitSkus);
 	}
@@ -500,6 +540,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @return the min order of this shopping coupon
 	*/
+	@Override
 	public double getMinOrder() {
 		return _shoppingCoupon.getMinOrder();
 	}
@@ -509,6 +550,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @param minOrder the min order of this shopping coupon
 	*/
+	@Override
 	public void setMinOrder(double minOrder) {
 		_shoppingCoupon.setMinOrder(minOrder);
 	}
@@ -518,6 +560,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @return the discount of this shopping coupon
 	*/
+	@Override
 	public double getDiscount() {
 		return _shoppingCoupon.getDiscount();
 	}
@@ -527,6 +570,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @param discount the discount of this shopping coupon
 	*/
+	@Override
 	public void setDiscount(double discount) {
 		_shoppingCoupon.setDiscount(discount);
 	}
@@ -536,6 +580,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @return the discount type of this shopping coupon
 	*/
+	@Override
 	public java.lang.String getDiscountType() {
 		return _shoppingCoupon.getDiscountType();
 	}
@@ -545,52 +590,64 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 	*
 	* @param discountType the discount type of this shopping coupon
 	*/
+	@Override
 	public void setDiscountType(java.lang.String discountType) {
 		_shoppingCoupon.setDiscountType(discountType);
 	}
 
+	@Override
 	public boolean isNew() {
 		return _shoppingCoupon.isNew();
 	}
 
+	@Override
 	public void setNew(boolean n) {
 		_shoppingCoupon.setNew(n);
 	}
 
+	@Override
 	public boolean isCachedModel() {
 		return _shoppingCoupon.isCachedModel();
 	}
 
+	@Override
 	public void setCachedModel(boolean cachedModel) {
 		_shoppingCoupon.setCachedModel(cachedModel);
 	}
 
+	@Override
 	public boolean isEscapedModel() {
 		return _shoppingCoupon.isEscapedModel();
 	}
 
+	@Override
 	public java.io.Serializable getPrimaryKeyObj() {
 		return _shoppingCoupon.getPrimaryKeyObj();
 	}
 
+	@Override
 	public void setPrimaryKeyObj(java.io.Serializable primaryKeyObj) {
 		_shoppingCoupon.setPrimaryKeyObj(primaryKeyObj);
 	}
 
+	@Override
 	public com.liferay.portlet.expando.model.ExpandoBridge getExpandoBridge() {
 		return _shoppingCoupon.getExpandoBridge();
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.model.BaseModel<?> baseModel) {
 		_shoppingCoupon.setExpandoBridgeAttributes(baseModel);
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
 		_shoppingCoupon.setExpandoBridgeAttributes(expandoBridge);
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_shoppingCoupon.setExpandoBridgeAttributes(serviceContext);
@@ -601,6 +658,7 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 		return new ShoppingCouponWrapper((ShoppingCoupon)_shoppingCoupon.clone());
 	}
 
+	@Override
 	public int compareTo(
 		com.liferay.portlet.shopping.model.ShoppingCoupon shoppingCoupon) {
 		return _shoppingCoupon.compareTo(shoppingCoupon);
@@ -611,14 +669,17 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 		return _shoppingCoupon.hashCode();
 	}
 
+	@Override
 	public com.liferay.portal.model.CacheModel<com.liferay.portlet.shopping.model.ShoppingCoupon> toCacheModel() {
 		return _shoppingCoupon.toCacheModel();
 	}
 
+	@Override
 	public com.liferay.portlet.shopping.model.ShoppingCoupon toEscapedModel() {
 		return new ShoppingCouponWrapper(_shoppingCoupon.toEscapedModel());
 	}
 
+	@Override
 	public com.liferay.portlet.shopping.model.ShoppingCoupon toUnescapedModel() {
 		return new ShoppingCouponWrapper(_shoppingCoupon.toUnescapedModel());
 	}
@@ -628,25 +689,50 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 		return _shoppingCoupon.toString();
 	}
 
+	@Override
 	public java.lang.String toXmlString() {
 		return _shoppingCoupon.toXmlString();
 	}
 
+	@Override
 	public void persist()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_shoppingCoupon.persist();
 	}
 
+	@Override
 	public boolean hasValidDateRange() {
 		return _shoppingCoupon.hasValidDateRange();
 	}
 
+	@Override
 	public boolean hasValidEndDate() {
 		return _shoppingCoupon.hasValidEndDate();
 	}
 
+	@Override
 	public boolean hasValidStartDate() {
 		return _shoppingCoupon.hasValidStartDate();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof ShoppingCouponWrapper)) {
+			return false;
+		}
+
+		ShoppingCouponWrapper shoppingCouponWrapper = (ShoppingCouponWrapper)obj;
+
+		if (Validator.equals(_shoppingCoupon,
+					shoppingCouponWrapper._shoppingCoupon)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -656,10 +742,12 @@ public class ShoppingCouponWrapper implements ShoppingCoupon,
 		return _shoppingCoupon;
 	}
 
+	@Override
 	public ShoppingCoupon getWrappedModel() {
 		return _shoppingCoupon;
 	}
 
+	@Override
 	public void resetOriginalValues() {
 		_shoppingCoupon.resetOriginalValues();
 	}

@@ -116,6 +116,7 @@ public class TemplateResourceExternalizationTest {
 				getClass().getClassLoader(), new Class<?>[] {DDMTemplate.class},
 				new InvocationHandler() {
 
+					@Override
 					public Object invoke(
 							Object proxy, Method method, Object[] arguments)
 						throws Throwable {
@@ -200,7 +201,7 @@ public class TemplateResourceExternalizationTest {
 
 	@Test
 	public void testStringTemplateResourceExternalization() throws Exception {
-		String templateId= "testId";
+		String templateId = "testId";
 		String templateContent = "testContent";
 
 		StringTemplateResource stringTemplateResource =
@@ -311,6 +312,7 @@ public class TemplateResourceExternalizationTest {
 			super(inputStream);
 		}
 
+		@Override
 		public Object readObject() {
 			throw new UnsupportedOperationException();
 		}
@@ -324,6 +326,7 @@ public class TemplateResourceExternalizationTest {
 			super(outputStream);
 		}
 
+		@Override
 		public void writeObject(Object obj) {
 			throw new UnsupportedOperationException();
 		}

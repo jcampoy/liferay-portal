@@ -14,20 +14,20 @@
 
 package com.liferay.portal.kernel.jsonwebservice;
 
-import com.liferay.portal.kernel.servlet.HttpMethods;
-import com.liferay.portal.kernel.util.CamelCaseUtil;
-import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 
 import java.lang.reflect.Method;
-
-import java.util.Set;
 
 /**
  * @author Igor Spasic
  */
 public class JSONWebServiceMappingResolver {
+
+	public JSONWebServiceMappingResolver(
+		JSONWebServiceNaming jsonWebServiceNaming) {
+
+		_jsonWebServiceNaming = jsonWebServiceNaming;
+	}
 
 	public String resolveHttpMethod(Method method) {
 		JSONWebService jsonWebServiceAnnotation = method.getAnnotation(
@@ -43,11 +43,7 @@ public class JSONWebServiceMappingResolver {
 			return httpMethod;
 		}
 
-		String methodName = method.getName();
-
-		String methodNamePrefix = _cutPrefix(methodName);
-
-		return _prefixToHttpMethod(methodNamePrefix);
+		return _jsonWebServiceNaming.convertMethodNameToHttpMethod(method);
 	}
 
 	public String resolvePath(Class<?> clazz, Method method) {
@@ -61,67 +57,34 @@ public class JSONWebServiceMappingResolver {
 		}
 
 		if ((path == null) || (path.length() == 0)) {
-			path = CamelCaseUtil.fromCamelCase(method.getName());
+			path = _jsonWebServiceNaming.convertMethodNameToPath(method);
 		}
 
-		if (!path.startsWith(StringPool.SLASH)) {
-			path = StringPool.SLASH + path;
-
-			String pathFromClass = null;
-
-			jsonWebServiceAnnotation = clazz.getAnnotation(
-				JSONWebService.class);
-
-			if (jsonWebServiceAnnotation != null) {
-				pathFromClass = jsonWebServiceAnnotation.value().trim();
-			}
-
-			if ((pathFromClass == null) || (pathFromClass.length() == 0)) {
-				pathFromClass = _classNameToPath(clazz);
-			}
-
-			if (!pathFromClass.startsWith(StringPool.SLASH)) {
-				pathFromClass = StringPool.SLASH + pathFromClass;
-			}
-
-			path = pathFromClass + path;
+		if (path.startsWith(StringPool.SLASH)) {
+			return path;
 		}
 
-		return path;
-	}
+		path = StringPool.SLASH + path;
 
-	private String _classNameToPath(Class<?> clazz) {
-		String className = clazz.getSimpleName();
+		String pathFromClass = null;
 
-		className = StringUtil.replace(className, "Impl", StringPool.BLANK);
-		className = StringUtil.replace(className, "Service", StringPool.BLANK);
+		jsonWebServiceAnnotation = clazz.getAnnotation(JSONWebService.class);
 
-		return className.toLowerCase();
-	}
-
-	private String _cutPrefix(String methodName) {
-		int i = 0;
-
-		while (i < methodName.length()) {
-			if (Character.isUpperCase(methodName.charAt(i))) {
-				break;
-			}
-
-			i++;
+		if (jsonWebServiceAnnotation != null) {
+			pathFromClass = jsonWebServiceAnnotation.value().trim();
 		}
 
-		return methodName.substring(0, i);
-	}
-
-	private String _prefixToHttpMethod(String prefix) {
-		if (_prefixes.contains(prefix)) {
-			return HttpMethods.GET;
+		if ((pathFromClass == null) || (pathFromClass.length() == 0)) {
+			pathFromClass = _jsonWebServiceNaming.convertClassNameToPath(clazz);
 		}
 
-		return HttpMethods.POST;
+		if (!pathFromClass.startsWith(StringPool.SLASH)) {
+			pathFromClass = StringPool.SLASH + pathFromClass;
+		}
+
+		return pathFromClass + path;
 	}
 
-	private static Set<String> _prefixes = SetUtil.fromArray(
-		new String[] {"get", "has", "is"});
+	private JSONWebServiceNaming _jsonWebServiceNaming;
 
 }

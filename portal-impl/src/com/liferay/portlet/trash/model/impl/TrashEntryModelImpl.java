@@ -75,10 +75,11 @@ public class TrashEntryModelImpl extends BaseModelImpl<TrashEntry>
 			{ "createDate", Types.TIMESTAMP },
 			{ "classNameId", Types.BIGINT },
 			{ "classPK", Types.BIGINT },
+			{ "systemEventSetKey", Types.BIGINT },
 			{ "typeSettings", Types.CLOB },
 			{ "status", Types.INTEGER }
 		};
-	public static final String TABLE_SQL_CREATE = "create table TrashEntry (entryId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,classNameId LONG,classPK LONG,typeSettings TEXT null,status INTEGER)";
+	public static final String TABLE_SQL_CREATE = "create table TrashEntry (entryId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,classNameId LONG,classPK LONG,systemEventSetKey LONG,typeSettings TEXT null,status INTEGER)";
 	public static final String TABLE_SQL_DROP = "drop table TrashEntry";
 	public static final String ORDER_BY_JPQL = " ORDER BY trashEntry.createDate DESC";
 	public static final String ORDER_BY_SQL = " ORDER BY TrashEntry.createDate DESC";
@@ -121,6 +122,7 @@ public class TrashEntryModelImpl extends BaseModelImpl<TrashEntry>
 		model.setCreateDate(soapModel.getCreateDate());
 		model.setClassNameId(soapModel.getClassNameId());
 		model.setClassPK(soapModel.getClassPK());
+		model.setSystemEventSetKey(soapModel.getSystemEventSetKey());
 		model.setTypeSettings(soapModel.getTypeSettings());
 		model.setStatus(soapModel.getStatus());
 
@@ -153,26 +155,32 @@ public class TrashEntryModelImpl extends BaseModelImpl<TrashEntry>
 	public TrashEntryModelImpl() {
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _entryId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setEntryId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
 		return _entryId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return TrashEntry.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return TrashEntry.class.getName();
 	}
@@ -189,6 +197,7 @@ public class TrashEntryModelImpl extends BaseModelImpl<TrashEntry>
 		attributes.put("createDate", getCreateDate());
 		attributes.put("classNameId", getClassNameId());
 		attributes.put("classPK", getClassPK());
+		attributes.put("systemEventSetKey", getSystemEventSetKey());
 		attributes.put("typeSettings", getTypeSettings());
 		attributes.put("status", getStatus());
 
@@ -245,6 +254,12 @@ public class TrashEntryModelImpl extends BaseModelImpl<TrashEntry>
 			setClassPK(classPK);
 		}
 
+		Long systemEventSetKey = (Long)attributes.get("systemEventSetKey");
+
+		if (systemEventSetKey != null) {
+			setSystemEventSetKey(systemEventSetKey);
+		}
+
 		String typeSettings = (String)attributes.get("typeSettings");
 
 		if (typeSettings != null) {
@@ -259,19 +274,23 @@ public class TrashEntryModelImpl extends BaseModelImpl<TrashEntry>
 	}
 
 	@JSON
+	@Override
 	public long getEntryId() {
 		return _entryId;
 	}
 
+	@Override
 	public void setEntryId(long entryId) {
 		_entryId = entryId;
 	}
 
 	@JSON
+	@Override
 	public long getGroupId() {
 		return _groupId;
 	}
 
+	@Override
 	public void setGroupId(long groupId) {
 		_columnBitmask |= GROUPID_COLUMN_BITMASK;
 
@@ -289,10 +308,12 @@ public class TrashEntryModelImpl extends BaseModelImpl<TrashEntry>
 	}
 
 	@JSON
+	@Override
 	public long getCompanyId() {
 		return _companyId;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
 		_columnBitmask |= COMPANYID_COLUMN_BITMASK;
 
@@ -310,23 +331,28 @@ public class TrashEntryModelImpl extends BaseModelImpl<TrashEntry>
 	}
 
 	@JSON
+	@Override
 	public long getUserId() {
 		return _userId;
 	}
 
+	@Override
 	public void setUserId(long userId) {
 		_userId = userId;
 	}
 
+	@Override
 	public String getUserUuid() throws SystemException {
 		return PortalUtil.getUserValue(getUserId(), "uuid", _userUuid);
 	}
 
+	@Override
 	public void setUserUuid(String userUuid) {
 		_userUuid = userUuid;
 	}
 
 	@JSON
+	@Override
 	public String getUserName() {
 		if (_userName == null) {
 			return StringPool.BLANK;
@@ -336,15 +362,18 @@ public class TrashEntryModelImpl extends BaseModelImpl<TrashEntry>
 		}
 	}
 
+	@Override
 	public void setUserName(String userName) {
 		_userName = userName;
 	}
 
 	@JSON
+	@Override
 	public Date getCreateDate() {
 		return _createDate;
 	}
 
+	@Override
 	public void setCreateDate(Date createDate) {
 		_columnBitmask = -1L;
 
@@ -359,6 +388,7 @@ public class TrashEntryModelImpl extends BaseModelImpl<TrashEntry>
 		return _originalCreateDate;
 	}
 
+	@Override
 	public String getClassName() {
 		if (getClassNameId() <= 0) {
 			return StringPool.BLANK;
@@ -367,6 +397,7 @@ public class TrashEntryModelImpl extends BaseModelImpl<TrashEntry>
 		return PortalUtil.getClassName(getClassNameId());
 	}
 
+	@Override
 	public void setClassName(String className) {
 		long classNameId = 0;
 
@@ -378,10 +409,12 @@ public class TrashEntryModelImpl extends BaseModelImpl<TrashEntry>
 	}
 
 	@JSON
+	@Override
 	public long getClassNameId() {
 		return _classNameId;
 	}
 
+	@Override
 	public void setClassNameId(long classNameId) {
 		_columnBitmask |= CLASSNAMEID_COLUMN_BITMASK;
 
@@ -399,10 +432,12 @@ public class TrashEntryModelImpl extends BaseModelImpl<TrashEntry>
 	}
 
 	@JSON
+	@Override
 	public long getClassPK() {
 		return _classPK;
 	}
 
+	@Override
 	public void setClassPK(long classPK) {
 		_columnBitmask |= CLASSPK_COLUMN_BITMASK;
 
@@ -420,6 +455,18 @@ public class TrashEntryModelImpl extends BaseModelImpl<TrashEntry>
 	}
 
 	@JSON
+	@Override
+	public long getSystemEventSetKey() {
+		return _systemEventSetKey;
+	}
+
+	@Override
+	public void setSystemEventSetKey(long systemEventSetKey) {
+		_systemEventSetKey = systemEventSetKey;
+	}
+
+	@JSON
+	@Override
 	public String getTypeSettings() {
 		if (_typeSettings == null) {
 			return StringPool.BLANK;
@@ -429,15 +476,18 @@ public class TrashEntryModelImpl extends BaseModelImpl<TrashEntry>
 		}
 	}
 
+	@Override
 	public void setTypeSettings(String typeSettings) {
 		_typeSettings = typeSettings;
 	}
 
 	@JSON
+	@Override
 	public int getStatus() {
 		return _status;
 	}
 
+	@Override
 	public void setStatus(int status) {
 		_status = status;
 	}
@@ -481,6 +531,7 @@ public class TrashEntryModelImpl extends BaseModelImpl<TrashEntry>
 		trashEntryImpl.setCreateDate(getCreateDate());
 		trashEntryImpl.setClassNameId(getClassNameId());
 		trashEntryImpl.setClassPK(getClassPK());
+		trashEntryImpl.setSystemEventSetKey(getSystemEventSetKey());
 		trashEntryImpl.setTypeSettings(getTypeSettings());
 		trashEntryImpl.setStatus(getStatus());
 
@@ -489,6 +540,7 @@ public class TrashEntryModelImpl extends BaseModelImpl<TrashEntry>
 		return trashEntryImpl;
 	}
 
+	@Override
 	public int compareTo(TrashEntry trashEntry) {
 		int value = 0;
 
@@ -505,18 +557,15 @@ public class TrashEntryModelImpl extends BaseModelImpl<TrashEntry>
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof TrashEntry)) {
 			return false;
 		}
 
-		TrashEntry trashEntry = null;
-
-		try {
-			trashEntry = (TrashEntry)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		TrashEntry trashEntry = (TrashEntry)obj;
 
 		long primaryKey = trashEntry.getPrimaryKey();
 
@@ -591,6 +640,8 @@ public class TrashEntryModelImpl extends BaseModelImpl<TrashEntry>
 
 		trashEntryCacheModel.classPK = getClassPK();
 
+		trashEntryCacheModel.systemEventSetKey = getSystemEventSetKey();
+
 		trashEntryCacheModel.typeSettings = getTypeSettings();
 
 		String typeSettings = trashEntryCacheModel.typeSettings;
@@ -606,7 +657,7 @@ public class TrashEntryModelImpl extends BaseModelImpl<TrashEntry>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(21);
+		StringBundler sb = new StringBundler(23);
 
 		sb.append("{entryId=");
 		sb.append(getEntryId());
@@ -624,6 +675,8 @@ public class TrashEntryModelImpl extends BaseModelImpl<TrashEntry>
 		sb.append(getClassNameId());
 		sb.append(", classPK=");
 		sb.append(getClassPK());
+		sb.append(", systemEventSetKey=");
+		sb.append(getSystemEventSetKey());
 		sb.append(", typeSettings=");
 		sb.append(getTypeSettings());
 		sb.append(", status=");
@@ -633,8 +686,9 @@ public class TrashEntryModelImpl extends BaseModelImpl<TrashEntry>
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(34);
+		StringBundler sb = new StringBundler(37);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.portlet.trash.model.TrashEntry");
@@ -673,6 +727,10 @@ public class TrashEntryModelImpl extends BaseModelImpl<TrashEntry>
 		sb.append(getClassPK());
 		sb.append("]]></column-value></column>");
 		sb.append(
+			"<column><column-name>systemEventSetKey</column-name><column-value><![CDATA[");
+		sb.append(getSystemEventSetKey());
+		sb.append("]]></column-value></column>");
+		sb.append(
 			"<column><column-name>typeSettings</column-name><column-value><![CDATA[");
 		sb.append(getTypeSettings());
 		sb.append("]]></column-value></column>");
@@ -708,6 +766,7 @@ public class TrashEntryModelImpl extends BaseModelImpl<TrashEntry>
 	private long _classPK;
 	private long _originalClassPK;
 	private boolean _setOriginalClassPK;
+	private long _systemEventSetKey;
 	private String _typeSettings;
 	private int _status;
 	private long _columnBitmask;

@@ -66,7 +66,7 @@ try {
 								variablePropertyValue = assetTagProperty.getValue();
 							}
 
-							xmlUrl = StringUtil.replace(xmlUrl, "[" + variablePropertyKey + "]", variablePropertyValue.toUpperCase());
+							xmlUrl = StringUtil.replace(xmlUrl, "[" + variablePropertyKey + "]", StringUtil.toUpperCase(variablePropertyValue));
 
 							break;
 						}
@@ -93,7 +93,7 @@ catch (Exception e) {
 	_log.error(e.getMessage());
 %>
 
-	<div class="portlet-msg-error">
+	<div class="alert alert-error">
 		<liferay-ui:message key="an-error-occurred-while-processing-your-xml-and-xsl" />
 	</div>
 

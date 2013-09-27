@@ -28,6 +28,7 @@ import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.TermQuery;
 import com.liferay.portal.kernel.search.TermRangeQuery;
 import com.liferay.portal.kernel.search.WildcardQuery;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.Validator;
@@ -47,6 +48,7 @@ import java.util.Set;
  */
 public class BaseCmisSearchQueryBuilder implements CMISSearchQueryBuilder {
 
+	@Override
 	public String buildQuery(SearchContext searchContext, Query query)
 		throws SearchException {
 
@@ -73,13 +75,11 @@ public class BaseCmisSearchQueryBuilder implements CMISSearchQueryBuilder {
 
 		Sort[] sorts = searchContext.getSorts();
 
-		if (queryConfig.isScoreEnabled() ||
-			((sorts != null) && (sorts.length > 0))) {
-
+		if (queryConfig.isScoreEnabled() || ArrayUtil.isNotEmpty(sorts)) {
 			sb.append(" ORDER BY ");
 		}
 
-		if ((sorts != null) && (sorts.length > 0)) {
+		if (ArrayUtil.isNotEmpty(sorts)) {
 			int i = 0;
 
 			for (Sort sort : sorts) {

@@ -14,8 +14,10 @@
 
 package com.liferay.portlet.bookmarks.model.impl;
 
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portlet.bookmarks.model.BookmarksFolder;
 import com.liferay.portlet.bookmarks.service.BookmarksFolderLocalServiceUtil;
 
@@ -27,46 +29,36 @@ public class BookmarksEntryImpl extends BookmarksEntryBaseImpl {
 	public BookmarksEntryImpl() {
 	}
 
-	public BookmarksFolder getFolder() {
-		BookmarksFolder folder = null;
+	@Override
+	public String buildTreePath() throws PortalException, SystemException {
+		StringBundler sb = new StringBundler();
 
-		if (getFolderId() > 0) {
-			try {
-				folder = BookmarksFolderLocalServiceUtil.getFolder(
-					getFolderId());
-			}
-			catch (Exception e) {
-				folder = new BookmarksFolderImpl();
+		buildTreePath(sb, getFolder());
 
-				_log.error(e);
-			}
+		return sb.toString();
+	}
+
+	@Override
+	public BookmarksFolder getFolder() throws PortalException, SystemException {
+		if (getFolderId() <= 0) {
+			return new BookmarksFolderImpl();
+		}
+
+		return BookmarksFolderLocalServiceUtil.getFolder(getFolderId());
+	}
+
+	protected void buildTreePath(StringBundler sb, BookmarksFolder folder)
+		throws PortalException, SystemException {
+
+		if (folder == null) {
+			sb.append(StringPool.SLASH);
 		}
 		else {
-			folder = new BookmarksFolderImpl();
-		}
+			buildTreePath(sb, folder.getParentFolder());
 
-		return folder;
-	}
-
-	public BookmarksFolder getTrashContainer() {
-		BookmarksFolder folder = getFolder();
-
-		if (folder.isInTrash()) {
-			return folder;
-		}
-
-		return folder.getTrashContainer();
-	}
-
-	public boolean isInTrashContainer() {
-		if (getTrashContainer() != null) {
-			return true;
-		}
-		else {
-			return false;
+			sb.append(folder.getFolderId());
+			sb.append(StringPool.SLASH);
 		}
 	}
-
-	private static Log _log = LogFactoryUtil.getLog(BookmarksEntryImpl.class);
 
 }

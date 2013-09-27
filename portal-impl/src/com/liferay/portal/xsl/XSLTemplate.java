@@ -16,12 +16,12 @@ package com.liferay.portal.xsl;
 
 import com.liferay.portal.kernel.io.unsync.UnsyncStringWriter;
 import com.liferay.portal.kernel.template.StringTemplateResource;
+import com.liferay.portal.kernel.template.Template;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.template.TemplateException;
 import com.liferay.portal.kernel.template.TemplateResource;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.StringBundler;
-import com.liferay.portal.template.AbstractProcessingTemplate;
 import com.liferay.portal.template.TemplateContextHelper;
 
 import java.io.Writer;
@@ -45,11 +45,11 @@ import javax.xml.transform.stream.StreamSource;
 /**
  * @author Tina Tian
  */
-public class XSLTemplate extends AbstractProcessingTemplate {
+public class XSLTemplate implements Template {
 
 	public XSLTemplate(
 		XSLTemplateResource xslTemplateResource,
-		TemplateResource errorTemplateResource, Map<String, Object> context,
+		TemplateResource errorTemplateResource,
 		TemplateContextHelper templateContextHelper) {
 
 		if (xslTemplateResource == null) {
@@ -66,18 +66,14 @@ public class XSLTemplate extends AbstractProcessingTemplate {
 		_templateContextHelper = templateContextHelper;
 
 		_context = new HashMap<String, Object>();
-
-		if (context != null) {
-			for (Map.Entry<String, Object> entry : context.entrySet()) {
-				put(entry.getKey(), entry.getValue());
-			}
-		}
 	}
 
+	@Override
 	public Object get(String key) {
 		return _context.get(key);
 	}
 
+	@Override
 	public String[] getKeys() {
 		Set<String> keys = _context.keySet();
 
@@ -85,24 +81,12 @@ public class XSLTemplate extends AbstractProcessingTemplate {
 	}
 
 	@Override
-	public TemplateContextHelper getTemplateContextHelper() {
-		return _templateContextHelper;
-	}
-
 	public void prepare(HttpServletRequest request) {
 		_templateContextHelper.prepare(this, request);
 	}
 
-	public void put(String key, Object value) {
-		if (value == null) {
-			return;
-		}
-
-		_context.put(key, value);
-	}
-
 	@Override
-	protected void doProcessTemplate(Writer writer) throws TemplateException {
+	public void processTemplate(Writer writer) throws TemplateException {
 		TransformerFactory transformerFactory =
 			TransformerFactory.newInstance();
 
@@ -196,6 +180,15 @@ public class XSLTemplate extends AbstractProcessingTemplate {
 		}
 	}
 
+	@Override
+	public void put(String key, Object value) {
+		if (value == null) {
+			return;
+		}
+
+		_context.put(key, value);
+	}
+
 	private Transformer _getTransformer(
 			TransformerFactory transformerFactory,
 			TemplateResource templateResource)
@@ -244,6 +237,7 @@ public class XSLTemplate extends AbstractProcessingTemplate {
 			_scriptSource = scriptSource;
 		}
 
+		@Override
 		public Transformer run() throws Exception {
 			return _transformerFactory.newTransformer(_scriptSource);
 		}

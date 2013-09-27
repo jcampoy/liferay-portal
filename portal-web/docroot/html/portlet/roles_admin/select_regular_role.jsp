@@ -59,15 +59,20 @@ portletURL.setParameter("eventName", eventName);
 				roles = UsersAdminUtil.filterRoles(permissionChecker, roles);
 
 				total = roles.size();
+
+				searchContainer.setTotal(total);
+
 				results = ListUtil.subList(roles, searchContainer.getStart(), searchContainer.getEnd());
 			}
 			else {
-				results = RoleLocalServiceUtil.search(company.getCompanyId(), searchTerms.getKeywords(), new Integer[] {RoleConstants.TYPE_REGULAR}, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
 				total = RoleLocalServiceUtil.searchCount(company.getCompanyId(), searchTerms.getKeywords(), new Integer[] {RoleConstants.TYPE_REGULAR});
+
+				searchContainer.setTotal(total);
+
+				results = RoleLocalServiceUtil.search(company.getCompanyId(), searchTerms.getKeywords(), new Integer[] {RoleConstants.TYPE_REGULAR}, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
 			}
 
-			pageContext.setAttribute("results", results);
-			pageContext.setAttribute("total", total);
+			searchContainer.setResults(results);
 			%>
 
 		</liferay-ui:search-container-results>
@@ -105,10 +110,6 @@ portletURL.setParameter("eventName", eventName);
 	</liferay-ui:search-container>
 </aui:form>
 
-<aui:script>
-	Liferay.Util.focusFormField(document.<portlet:namespace />selectRegularRoleFm.<portlet:namespace />name);
-</aui:script>
-
 <aui:script use="aui-base">
 	var Util = Liferay.Util;
 
@@ -119,8 +120,8 @@ portletURL.setParameter("eventName", eventName);
 
 			Util.getOpener().Liferay.fire('<%= HtmlUtil.escapeJS(eventName) %>', result);
 
-			Util.getWindow().close();
+			Util.getWindow().hide();
 		},
-		'.selector-button input'
+		'.selector-button'
 	);
 </aui:script>

@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Release;
 import com.liferay.portal.model.ReleaseConstants;
@@ -43,6 +44,7 @@ import java.util.Date;
  */
 public class ReleaseLocalServiceImpl extends ReleaseLocalServiceBaseImpl {
 
+	@Override
 	public Release addRelease(String servletContextName, int buildNumber)
 		throws SystemException {
 
@@ -77,6 +79,7 @@ public class ReleaseLocalServiceImpl extends ReleaseLocalServiceBaseImpl {
 		return release;
 	}
 
+	@Override
 	public void createTablesAndPopulate() throws SystemException {
 		try {
 			if (_log.isInfoEnabled()) {
@@ -104,6 +107,7 @@ public class ReleaseLocalServiceImpl extends ReleaseLocalServiceBaseImpl {
 		}
 	}
 
+	@Override
 	public Release fetchRelease(String servletContextName)
 		throws SystemException {
 
@@ -127,6 +131,7 @@ public class ReleaseLocalServiceImpl extends ReleaseLocalServiceBaseImpl {
 		return release;
 	}
 
+	@Override
 	public int getBuildNumberOrCreate()
 		throws PortalException, SystemException {
 
@@ -197,6 +202,7 @@ public class ReleaseLocalServiceImpl extends ReleaseLocalServiceBaseImpl {
 		}
 	}
 
+	@Override
 	public Release updateRelease(
 			long releaseId, int buildNumber, Date buildDate, boolean verified)
 		throws PortalException, SystemException {
@@ -253,7 +259,7 @@ public class ReleaseLocalServiceImpl extends ReleaseLocalServiceBaseImpl {
 		}
 
 		count = testSupportsStringCaseSensitiveQuery(
-			ReleaseConstants.TEST_STRING.toUpperCase());
+			StringUtil.toUpperCase(ReleaseConstants.TEST_STRING));
 
 		if (count == 0) {
 			db.setSupportsStringCaseSensitiveQuery(true);

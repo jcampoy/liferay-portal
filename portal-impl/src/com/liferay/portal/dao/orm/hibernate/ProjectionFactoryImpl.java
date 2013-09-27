@@ -19,7 +19,7 @@ import com.liferay.portal.kernel.dao.orm.ProjectionFactory;
 import com.liferay.portal.kernel.dao.orm.ProjectionList;
 import com.liferay.portal.kernel.dao.orm.Type;
 import com.liferay.portal.kernel.security.pacl.DoPrivileged;
-import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.ArrayUtil;
 
 import org.hibernate.criterion.Projections;
 
@@ -29,6 +29,7 @@ import org.hibernate.criterion.Projections;
 @DoPrivileged
 public class ProjectionFactoryImpl implements ProjectionFactory {
 
+	@Override
 	public Projection alias(Projection projection, String alias) {
 		ProjectionImpl projectionImpl = (ProjectionImpl)projection;
 
@@ -36,18 +37,22 @@ public class ProjectionFactoryImpl implements ProjectionFactory {
 			Projections.alias(projectionImpl.getWrappedProjection(), alias));
 	}
 
+	@Override
 	public Projection avg(String propertyName) {
 		return new ProjectionImpl(Projections.avg(propertyName));
 	}
 
+	@Override
 	public Projection count(String propertyName) {
 		return new ProjectionImpl(Projections.count(propertyName));
 	}
 
+	@Override
 	public Projection countDistinct(String propertyName) {
 		return new ProjectionImpl(Projections.countDistinct(propertyName));
 	}
 
+	@Override
 	public Projection distinct(Projection projection) {
 		ProjectionImpl projectionImpl = (ProjectionImpl)projection;
 
@@ -55,34 +60,41 @@ public class ProjectionFactoryImpl implements ProjectionFactory {
 			Projections.distinct(projectionImpl.getWrappedProjection()));
 	}
 
+	@Override
 	public Projection groupProperty(String propertyName) {
 		return new ProjectionImpl(Projections.groupProperty(propertyName));
 	}
 
+	@Override
 	public Projection max(String propertyName) {
 		return new ProjectionImpl(Projections.max(propertyName));
 	}
 
+	@Override
 	public Projection min(String propertyName) {
 		return new ProjectionImpl(Projections.min(propertyName));
 	}
 
+	@Override
 	public ProjectionList projectionList() {
 		return new ProjectionListImpl(Projections.projectionList());
 	}
 
+	@Override
 	public Projection property(String propertyName) {
 		return new ProjectionImpl(Projections.property(propertyName));
 	}
 
+	@Override
 	public Projection rowCount() {
 		return new ProjectionImpl(Projections.rowCount());
 	}
 
+	@Override
 	public Projection sqlProjection(
 		String sql, String[] columnAliases, Type[] types) {
 
-		if (Validator.isNull(types)) {
+		if (ArrayUtil.isEmpty(types)) {
 			return new ProjectionImpl(
 				Projections.sqlProjection(sql, columnAliases, null));
 		}
@@ -98,6 +110,7 @@ public class ProjectionFactoryImpl implements ProjectionFactory {
 			Projections.sqlProjection(sql, columnAliases, hibernateTypes));
 	}
 
+	@Override
 	public Projection sum(String propertyName) {
 		return new ProjectionImpl(Projections.sum(propertyName));
 	}

@@ -26,6 +26,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.Base64;
 import com.liferay.portal.kernel.util.CharPool;
+import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Http;
@@ -37,14 +38,13 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.util.ClassLoaderUtil;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PropsUtil;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.util.Encryptor;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 
 import java.net.Inet4Address;
@@ -138,61 +138,44 @@ public class LicenseUtil {
 		}
 	}
 
+	/**
+	 * @deprecated As of 6.2.0, replaced by {@link PortalUtil#getComputerName()}
+	 */
 	public static String getHostName() {
-		if (_hostName == null) {
-			_hostName = StringPool.BLANK;
-
-			try {
-				Runtime runtime = Runtime.getRuntime();
-
-				Process process = runtime.exec("hostname");
-
-				BufferedReader bufferedReader = new BufferedReader(
-					new InputStreamReader(process.getInputStream()), 128);
-
-				_hostName = bufferedReader.readLine();
-
-				bufferedReader.close();
-			}
-			catch (Exception e) {
-				_log.error("Unable to read local server's host name");
-
-				_log.error(e, e);
-			}
-		}
-
-		return _hostName;
+		return PortalUtil.getComputerName();
 	}
 
 	public static Set<String> getIpAddresses() {
-		if (_ipAddresses == null) {
-			_ipAddresses = new HashSet<String>();
+		if (_ipAddresses != null) {
+			return new HashSet<String>(_ipAddresses);
+		}
 
-			try {
-				List<NetworkInterface> networkInterfaces = Collections.list(
-					NetworkInterface.getNetworkInterfaces());
+		_ipAddresses = new HashSet<String>();
 
-				for (NetworkInterface networkInterface : networkInterfaces) {
-					List<InetAddress> inetAddresses = Collections.list(
-						networkInterface.getInetAddresses());
+		try {
+			List<NetworkInterface> networkInterfaces = Collections.list(
+				NetworkInterface.getNetworkInterfaces());
 
-					for (InetAddress inetAddress : inetAddresses) {
-						if (inetAddress.isLinkLocalAddress() ||
-							inetAddress.isLoopbackAddress() ||
-							!(inetAddress instanceof Inet4Address)) {
+			for (NetworkInterface networkInterface : networkInterfaces) {
+				List<InetAddress> inetAddresses = Collections.list(
+					networkInterface.getInetAddresses());
 
-							continue;
-						}
+				for (InetAddress inetAddress : inetAddresses) {
+					if (inetAddress.isLinkLocalAddress() ||
+						inetAddress.isLoopbackAddress() ||
+						!(inetAddress instanceof Inet4Address)) {
 
-						_ipAddresses.add(inetAddress.getHostAddress());
+						continue;
 					}
+
+					_ipAddresses.add(inetAddress.getHostAddress());
 				}
 			}
-			catch (Exception e) {
-				_log.error("Unable to read local server's IP addresses");
+		}
+		catch (Exception e) {
+			_log.error("Unable to read local server's IP addresses");
 
-				_log.error(e, e);
-			}
+			_log.error(e, e);
 		}
 
 		return new HashSet<String>(_ipAddresses);
@@ -273,7 +256,7 @@ public class LicenseUtil {
 
 			String macAddress = matcher.group(1);
 
-			macAddress = macAddress.toLowerCase();
+			macAddress = StringUtil.toLowerCase(macAddress);
 			macAddress = macAddress.replace(CharPool.DASH, CharPool.COLON);
 			macAddress = macAddress.replace(CharPool.PERIOD, CharPool.COLON);
 
@@ -321,7 +304,7 @@ public class LicenseUtil {
 	public static Map<String, String> getServerInfo() {
 		Map<String, String> serverInfo = new HashMap<String, String>();
 
-		serverInfo.put("hostName", getHostName());
+		serverInfo.put("hostName", PortalUtil.getComputerName());
 		serverInfo.put("ipAddresses", StringUtil.merge(getIpAddresses()));
 		serverInfo.put("macAddresses", StringUtil.merge(getMacAddresses()));
 
@@ -535,10 +518,10 @@ public class LicenseUtil {
 		jsonObject.put("liferayVersion", ReleaseInfo.getBuildNumber());
 
 		if (Validator.isNull(productEntryName)) {
-			jsonObject.put("cmd", "QUERY");
+			jsonObject.put(Constants.CMD, "QUERY");
 		}
 		else {
-			jsonObject.put("cmd", "REGISTER");
+			jsonObject.put(Constants.CMD, "REGISTER");
 
 			if (productEntryName.startsWith("basic")) {
 				jsonObject.put("productEntryName", "basic");
@@ -561,7 +544,7 @@ public class LicenseUtil {
 				jsonObject.put("productEntryName", productEntryName);
 			}
 
-			jsonObject.put("hostName", getHostName());
+			jsonObject.put("hostName", PortalUtil.getComputerName());
 			jsonObject.put("ipAddresses", StringUtil.merge(getIpAddresses()));
 			jsonObject.put("macAddresses", StringUtil.merge(getMacAddresses()));
 			jsonObject.put("serverId", Arrays.toString(getServerIdBytes()));
@@ -577,17 +560,16 @@ public class LicenseUtil {
 		if (serverURL.startsWith(Http.HTTPS)) {
 			return StringUtil.read(inputStream);
 		}
-		else {
-			byte[] bytes = IOUtils.toByteArray(inputStream);
 
-			if ((bytes == null) || (bytes.length <= 0)) {
-				return null;
-			}
+		byte[] bytes = IOUtils.toByteArray(inputStream);
 
-			bytes = Encryptor.decryptUnencodedAsBytes(_symmetricKey, bytes);
-
-			return new String(bytes, StringPool.UTF8);
+		if ((bytes == null) || (bytes.length <= 0)) {
+			return null;
 		}
+
+		bytes = Encryptor.decryptUnencodedAsBytes(_symmetricKey, bytes);
+
+		return new String(bytes, StringPool.UTF8);
 	}
 
 	private static byte[] _encryptRequest(String serverURL, String request)
@@ -598,16 +580,15 @@ public class LicenseUtil {
 		if (serverURL.startsWith(Http.HTTPS)) {
 			return bytes;
 		}
-		else {
-			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
-			bytes = Encryptor.encryptUnencoded(_symmetricKey, bytes);
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
-			jsonObject.put("content", Base64.objectToString(bytes));
-			jsonObject.put("key", _encryptedSymmetricKey);
+		bytes = Encryptor.encryptUnencoded(_symmetricKey, bytes);
 
-			return jsonObject.toString().getBytes(StringPool.UTF8);
-		}
+		jsonObject.put("content", Base64.objectToString(bytes));
+		jsonObject.put("key", _encryptedSymmetricKey);
+
+		return jsonObject.toString().getBytes(StringPool.UTF8);
 	}
 
 	private static Map<String, String> _getOrderProducts(
@@ -713,17 +694,15 @@ public class LicenseUtil {
 	private static final String _PROXY_USER_NAME = GetterUtil.getString(
 		PropsUtil.get("license.proxy.username"));
 
-	private static Log _log = LogFactoryUtil.getLog(
-		DefaultLicenseManagerImpl.class);
+	private static Log _log = LogFactoryUtil.getLog(LicenseUtil.class);
 
 	private static String _encryptedSymmetricKey;
 	private static MethodHandler _getServerInfoMethodHandler =
 		new MethodHandler(new MethodKey(LicenseUtil.class, "getServerInfo"));
-	private static String _hostName;
 	private static Set<String> _ipAddresses;
 	private static Set<String> _macAddresses;
 	private static Pattern _macAddressPattern1 = Pattern.compile(
-		"\\s((\\p{XDigit}{2}(-|:)){5}(\\p{XDigit}{2}))(?:\\s|$)");
+		"\\s((\\p{XDigit}{1,2}(-|:)){5}(\\p{XDigit}{1,2}))(?:\\s|$)");
 	private static Pattern _macAddressPattern2 = Pattern.compile(
 		"\\s((\\p{XDigit}{1,2}(\\.)){5}(\\p{XDigit}{1,2}))(?:\\s|$)");
 	private static MethodKey _registerOrderMethodKey = new MethodKey(

@@ -14,6 +14,7 @@
 
 package com.liferay.portlet.journal.model;
 
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.ModelWrapper;
 
 import java.util.HashMap;
@@ -24,8 +25,8 @@ import java.util.Map;
  * This class is a wrapper for {@link JournalContentSearch}.
  * </p>
  *
- * @author    Brian Wing Shun Chan
- * @see       JournalContentSearch
+ * @author Brian Wing Shun Chan
+ * @see JournalContentSearch
  * @generated
  */
 public class JournalContentSearchWrapper implements JournalContentSearch,
@@ -35,14 +36,17 @@ public class JournalContentSearchWrapper implements JournalContentSearch,
 		_journalContentSearch = journalContentSearch;
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return JournalContentSearch.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return JournalContentSearch.class.getName();
 	}
 
+	@Override
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
@@ -57,6 +61,7 @@ public class JournalContentSearchWrapper implements JournalContentSearch,
 		return attributes;
 	}
 
+	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
 		Long contentSearchId = (Long)attributes.get("contentSearchId");
 
@@ -106,6 +111,7 @@ public class JournalContentSearchWrapper implements JournalContentSearch,
 	*
 	* @return the primary key of this journal content search
 	*/
+	@Override
 	public long getPrimaryKey() {
 		return _journalContentSearch.getPrimaryKey();
 	}
@@ -115,6 +121,7 @@ public class JournalContentSearchWrapper implements JournalContentSearch,
 	*
 	* @param primaryKey the primary key of this journal content search
 	*/
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_journalContentSearch.setPrimaryKey(primaryKey);
 	}
@@ -124,6 +131,7 @@ public class JournalContentSearchWrapper implements JournalContentSearch,
 	*
 	* @return the content search ID of this journal content search
 	*/
+	@Override
 	public long getContentSearchId() {
 		return _journalContentSearch.getContentSearchId();
 	}
@@ -133,6 +141,7 @@ public class JournalContentSearchWrapper implements JournalContentSearch,
 	*
 	* @param contentSearchId the content search ID of this journal content search
 	*/
+	@Override
 	public void setContentSearchId(long contentSearchId) {
 		_journalContentSearch.setContentSearchId(contentSearchId);
 	}
@@ -142,6 +151,7 @@ public class JournalContentSearchWrapper implements JournalContentSearch,
 	*
 	* @return the group ID of this journal content search
 	*/
+	@Override
 	public long getGroupId() {
 		return _journalContentSearch.getGroupId();
 	}
@@ -151,6 +161,7 @@ public class JournalContentSearchWrapper implements JournalContentSearch,
 	*
 	* @param groupId the group ID of this journal content search
 	*/
+	@Override
 	public void setGroupId(long groupId) {
 		_journalContentSearch.setGroupId(groupId);
 	}
@@ -160,6 +171,7 @@ public class JournalContentSearchWrapper implements JournalContentSearch,
 	*
 	* @return the company ID of this journal content search
 	*/
+	@Override
 	public long getCompanyId() {
 		return _journalContentSearch.getCompanyId();
 	}
@@ -169,6 +181,7 @@ public class JournalContentSearchWrapper implements JournalContentSearch,
 	*
 	* @param companyId the company ID of this journal content search
 	*/
+	@Override
 	public void setCompanyId(long companyId) {
 		_journalContentSearch.setCompanyId(companyId);
 	}
@@ -178,6 +191,7 @@ public class JournalContentSearchWrapper implements JournalContentSearch,
 	*
 	* @return the private layout of this journal content search
 	*/
+	@Override
 	public boolean getPrivateLayout() {
 		return _journalContentSearch.getPrivateLayout();
 	}
@@ -187,6 +201,7 @@ public class JournalContentSearchWrapper implements JournalContentSearch,
 	*
 	* @return <code>true</code> if this journal content search is private layout; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isPrivateLayout() {
 		return _journalContentSearch.isPrivateLayout();
 	}
@@ -196,6 +211,7 @@ public class JournalContentSearchWrapper implements JournalContentSearch,
 	*
 	* @param privateLayout the private layout of this journal content search
 	*/
+	@Override
 	public void setPrivateLayout(boolean privateLayout) {
 		_journalContentSearch.setPrivateLayout(privateLayout);
 	}
@@ -205,6 +221,7 @@ public class JournalContentSearchWrapper implements JournalContentSearch,
 	*
 	* @return the layout ID of this journal content search
 	*/
+	@Override
 	public long getLayoutId() {
 		return _journalContentSearch.getLayoutId();
 	}
@@ -214,6 +231,7 @@ public class JournalContentSearchWrapper implements JournalContentSearch,
 	*
 	* @param layoutId the layout ID of this journal content search
 	*/
+	@Override
 	public void setLayoutId(long layoutId) {
 		_journalContentSearch.setLayoutId(layoutId);
 	}
@@ -223,6 +241,7 @@ public class JournalContentSearchWrapper implements JournalContentSearch,
 	*
 	* @return the portlet ID of this journal content search
 	*/
+	@Override
 	public java.lang.String getPortletId() {
 		return _journalContentSearch.getPortletId();
 	}
@@ -232,6 +251,7 @@ public class JournalContentSearchWrapper implements JournalContentSearch,
 	*
 	* @param portletId the portlet ID of this journal content search
 	*/
+	@Override
 	public void setPortletId(java.lang.String portletId) {
 		_journalContentSearch.setPortletId(portletId);
 	}
@@ -241,6 +261,7 @@ public class JournalContentSearchWrapper implements JournalContentSearch,
 	*
 	* @return the article ID of this journal content search
 	*/
+	@Override
 	public java.lang.String getArticleId() {
 		return _journalContentSearch.getArticleId();
 	}
@@ -250,52 +271,64 @@ public class JournalContentSearchWrapper implements JournalContentSearch,
 	*
 	* @param articleId the article ID of this journal content search
 	*/
+	@Override
 	public void setArticleId(java.lang.String articleId) {
 		_journalContentSearch.setArticleId(articleId);
 	}
 
+	@Override
 	public boolean isNew() {
 		return _journalContentSearch.isNew();
 	}
 
+	@Override
 	public void setNew(boolean n) {
 		_journalContentSearch.setNew(n);
 	}
 
+	@Override
 	public boolean isCachedModel() {
 		return _journalContentSearch.isCachedModel();
 	}
 
+	@Override
 	public void setCachedModel(boolean cachedModel) {
 		_journalContentSearch.setCachedModel(cachedModel);
 	}
 
+	@Override
 	public boolean isEscapedModel() {
 		return _journalContentSearch.isEscapedModel();
 	}
 
+	@Override
 	public java.io.Serializable getPrimaryKeyObj() {
 		return _journalContentSearch.getPrimaryKeyObj();
 	}
 
+	@Override
 	public void setPrimaryKeyObj(java.io.Serializable primaryKeyObj) {
 		_journalContentSearch.setPrimaryKeyObj(primaryKeyObj);
 	}
 
+	@Override
 	public com.liferay.portlet.expando.model.ExpandoBridge getExpandoBridge() {
 		return _journalContentSearch.getExpandoBridge();
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.model.BaseModel<?> baseModel) {
 		_journalContentSearch.setExpandoBridgeAttributes(baseModel);
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
 		_journalContentSearch.setExpandoBridgeAttributes(expandoBridge);
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_journalContentSearch.setExpandoBridgeAttributes(serviceContext);
@@ -306,6 +339,7 @@ public class JournalContentSearchWrapper implements JournalContentSearch,
 		return new JournalContentSearchWrapper((JournalContentSearch)_journalContentSearch.clone());
 	}
 
+	@Override
 	public int compareTo(
 		com.liferay.portlet.journal.model.JournalContentSearch journalContentSearch) {
 		return _journalContentSearch.compareTo(journalContentSearch);
@@ -316,14 +350,17 @@ public class JournalContentSearchWrapper implements JournalContentSearch,
 		return _journalContentSearch.hashCode();
 	}
 
+	@Override
 	public com.liferay.portal.model.CacheModel<com.liferay.portlet.journal.model.JournalContentSearch> toCacheModel() {
 		return _journalContentSearch.toCacheModel();
 	}
 
+	@Override
 	public com.liferay.portlet.journal.model.JournalContentSearch toEscapedModel() {
 		return new JournalContentSearchWrapper(_journalContentSearch.toEscapedModel());
 	}
 
+	@Override
 	public com.liferay.portlet.journal.model.JournalContentSearch toUnescapedModel() {
 		return new JournalContentSearchWrapper(_journalContentSearch.toUnescapedModel());
 	}
@@ -333,13 +370,35 @@ public class JournalContentSearchWrapper implements JournalContentSearch,
 		return _journalContentSearch.toString();
 	}
 
+	@Override
 	public java.lang.String toXmlString() {
 		return _journalContentSearch.toXmlString();
 	}
 
+	@Override
 	public void persist()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_journalContentSearch.persist();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof JournalContentSearchWrapper)) {
+			return false;
+		}
+
+		JournalContentSearchWrapper journalContentSearchWrapper = (JournalContentSearchWrapper)obj;
+
+		if (Validator.equals(_journalContentSearch,
+					journalContentSearchWrapper._journalContentSearch)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -349,10 +408,12 @@ public class JournalContentSearchWrapper implements JournalContentSearch,
 		return _journalContentSearch;
 	}
 
+	@Override
 	public JournalContentSearch getWrappedModel() {
 		return _journalContentSearch;
 	}
 
+	@Override
 	public void resetOriginalValues() {
 		_journalContentSearch.resetOriginalValues();
 	}

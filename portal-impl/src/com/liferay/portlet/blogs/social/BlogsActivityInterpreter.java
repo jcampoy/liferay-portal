@@ -36,6 +36,7 @@ import java.text.Format;
  */
 public class BlogsActivityInterpreter extends BaseSocialActivityInterpreter {
 
+	@Override
 	public String[] getClassNames() {
 		return _CLASS_NAMES;
 	}
@@ -76,10 +77,8 @@ public class BlogsActivityInterpreter extends BaseSocialActivityInterpreter {
 			displayDate = dateFormatDate.format(entry.getDisplayDate());
 		}
 
-		String displayTitle = wrapLink(link, entry.getTitle());
-
 		return new Object[] {
-			groupName, creatorUserName, receiverUserName, displayTitle,
+			groupName, creatorUserName, receiverUserName, wrapLink(link, title),
 			displayDate
 		};
 	}

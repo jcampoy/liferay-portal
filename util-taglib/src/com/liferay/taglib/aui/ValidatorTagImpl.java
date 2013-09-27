@@ -16,10 +16,10 @@ package com.liferay.taglib.aui;
 
 import com.liferay.portal.kernel.servlet.taglib.aui.ValidatorTag;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.ModelHintsUtil;
 import com.liferay.taglib.aui.base.BaseValidatorTagImpl;
-import com.liferay.util.PwdGenerator;
 
 import javax.servlet.jsp.tagext.BodyContent;
 import javax.servlet.jsp.tagext.BodyTag;
@@ -84,6 +84,7 @@ public class ValidatorTagImpl
 		return EVAL_BODY_BUFFERED;
 	}
 
+	@Override
 	public String getBody() {
 		if (Validator.isNull(_body)) {
 			return StringPool.DOUBLE_APOSTROPHE;
@@ -103,6 +104,7 @@ public class ValidatorTagImpl
 		return errorMessage;
 	}
 
+	@Override
 	public boolean isCustom() {
 		return _custom;
 	}
@@ -115,9 +117,8 @@ public class ValidatorTagImpl
 		if (name.equals("custom")) {
 			_custom = true;
 
-			return name.concat(
-				StringPool.UNDERLINE).concat(
-					PwdGenerator.getPassword(PwdGenerator.KEY3, 4));
+			return name.concat(StringPool.UNDERLINE).concat(
+				StringUtil.randomId());
 		}
 
 		return name;

@@ -193,17 +193,15 @@ for (long defaultTeamId : defaultTeamIds) {
 			Liferay.Util.selectEntity(
 				{
 					dialog: {
-						align: Liferay.Util.Window.ALIGN_CENTER,
 						constrain: true,
 						modal: true,
-						stack: true,
 						width: 600
 					},
 					id: '<portlet:namespace />selectSiteRole',
-					title: '<%= UnicodeLanguageUtil.format(pageContext, "select-x", "site-role") %>',
+					title: '<liferay-ui:message arguments="site-role" key="select-x" />',
 					uri: '<portlet:renderURL windowState="<%= LiferayWindowState.POP_UP.toString() %>"><portlet:param name="struts_action" value="/sites_admin/select_site_role" /><portlet:param name="step" value="2" /><portlet:param name="groupId" value="<%= String.valueOf(groupId) %>" /></portlet:renderURL>'
 				},
-				function(event){
+				function(event) {
 					for (var i = 0; i < <portlet:namespace />siteRolesRoleIds.length; i++) {
 						if (<portlet:namespace />siteRolesRoleIds[i] == event.roleid) {
 							return;
@@ -241,14 +239,12 @@ for (long defaultTeamId : defaultTeamIds) {
 			Liferay.Util.selectEntity(
 				{
 					dialog: {
-						align: Liferay.Util.Window.ALIGN_CENTER,
 						constrain: true,
 						modal: true,
-						stack: true,
 						width: 680
 					},
 					id: '<portlet:namespace />selectTeam',
-					title: '<%= UnicodeLanguageUtil.format(pageContext, "select-x", "team") %>',
+					title: '<liferay-ui:message arguments="team" key="select-x" />',
 					uri: '<%= selectTeamURL.toString() %>'
 				},
 				function(event) {

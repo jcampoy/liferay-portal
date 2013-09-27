@@ -50,6 +50,7 @@ import java.util.List;
 public class ShoppingCouponLocalServiceImpl
 	extends ShoppingCouponLocalServiceBaseImpl {
 
+	@Override
 	public ShoppingCoupon addCoupon(
 			long userId, String code, boolean autoCode, String name,
 			String description, int startDateMonth, int startDateDay,
@@ -63,7 +64,7 @@ public class ShoppingCouponLocalServiceImpl
 		User user = userPersistence.findByPrimaryKey(userId);
 		long groupId = serviceContext.getScopeGroupId();
 
-		code = code.trim().toUpperCase();
+		code = StringUtil.toUpperCase(code.trim());
 
 		if (autoCode) {
 			code = getCode();
@@ -120,6 +121,7 @@ public class ShoppingCouponLocalServiceImpl
 		return coupon;
 	}
 
+	@Override
 	public void deleteCoupon(long couponId)
 		throws PortalException, SystemException {
 
@@ -129,10 +131,12 @@ public class ShoppingCouponLocalServiceImpl
 		deleteCoupon(coupon);
 	}
 
+	@Override
 	public void deleteCoupon(ShoppingCoupon coupon) throws SystemException {
 		shoppingCouponPersistence.remove(coupon);
 	}
 
+	@Override
 	public void deleteCoupons(long groupId) throws SystemException {
 		List<ShoppingCoupon> coupons = shoppingCouponPersistence.findByGroupId(
 			groupId);
@@ -142,20 +146,23 @@ public class ShoppingCouponLocalServiceImpl
 		}
 	}
 
+	@Override
 	public ShoppingCoupon getCoupon(long couponId)
 		throws PortalException, SystemException {
 
 		return shoppingCouponPersistence.findByPrimaryKey(couponId);
 	}
 
+	@Override
 	public ShoppingCoupon getCoupon(String code)
 		throws PortalException, SystemException {
 
-		code = code.trim().toUpperCase();
+		code = StringUtil.toUpperCase(code.trim());
 
 		return shoppingCouponPersistence.findByCode(code);
 	}
 
+	@Override
 	public List<ShoppingCoupon> search(
 			long groupId, long companyId, String code, boolean active,
 			String discountType, boolean andOperator, int start, int end)
@@ -166,6 +173,7 @@ public class ShoppingCouponLocalServiceImpl
 			end);
 	}
 
+	@Override
 	public int searchCount(
 			long groupId, long companyId, String code, boolean active,
 			String discountType, boolean andOperator)
@@ -175,6 +183,7 @@ public class ShoppingCouponLocalServiceImpl
 			groupId, companyId, code, active, discountType, andOperator);
 	}
 
+	@Override
 	public ShoppingCoupon updateCoupon(
 			long userId, long couponId, String name, String description,
 			int startDateMonth, int startDateDay, int startDateYear,
@@ -231,7 +240,7 @@ public class ShoppingCouponLocalServiceImpl
 
 	protected String getCode() throws SystemException {
 		String code = PwdGenerator.getPassword(
-			PwdGenerator.KEY1 + PwdGenerator.KEY2, 8);
+			8, PwdGenerator.KEY1, PwdGenerator.KEY2);
 
 		ShoppingCoupon coupon = shoppingCouponPersistence.fetchByCode(code);
 
@@ -250,6 +259,7 @@ public class ShoppingCouponLocalServiceImpl
 
 		if (!autoCode) {
 			if (Validator.isNull(code) || Validator.isNumber(code) ||
+				(code.indexOf(CharPool.COMMA) != -1) ||
 				(code.indexOf(CharPool.SPACE) != -1)) {
 
 				throw new CouponCodeException();

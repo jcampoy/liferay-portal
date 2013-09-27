@@ -28,6 +28,7 @@ import com.liferay.portal.kernel.search.Summary;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Organization;
+import com.liferay.portal.model.OrganizationConstants;
 import com.liferay.portal.service.OrganizationLocalServiceUtil;
 import com.liferay.portal.service.persistence.OrganizationActionableDynamicQuery;
 import com.liferay.portal.util.PortletKeys;
@@ -60,10 +61,12 @@ public class OrganizationIndexer extends BaseIndexer {
 		setStagingAware(false);
 	}
 
+	@Override
 	public String[] getClassNames() {
 		return CLASS_NAMES;
 	}
 
+	@Override
 	public String getPortletId() {
 		return PORTLET_ID;
 	}
@@ -107,7 +110,7 @@ public class OrganizationIndexer extends BaseIndexer {
 			for (Organization organization : organizationsTree) {
 				String treePath = organization.buildTreePath();
 
-				booleanQuery.addTerm("treePath", treePath, true);
+				booleanQuery.addTerm(Field.TREE_PATH, treePath, true);
 			}
 
 			contextQuery.add(booleanQuery, BooleanClauseOccur.MUST);
@@ -116,7 +119,9 @@ public class OrganizationIndexer extends BaseIndexer {
 			long parentOrganizationId = GetterUtil.getLong(
 				searchContext.getAttribute("parentOrganizationId"));
 
-			if (parentOrganizationId > 0) {
+			if (parentOrganizationId !=
+					OrganizationConstants.ANY_PARENT_ORGANIZATION_ID) {
+
 				contextQuery.addRequiredTerm(
 					"parentOrganizationId", parentOrganizationId);
 			}
@@ -166,14 +171,11 @@ public class OrganizationIndexer extends BaseIndexer {
 		document.addText(Field.NAME, organization.getName());
 		document.addKeyword(
 			Field.ORGANIZATION_ID, organization.getOrganizationId());
+		document.addKeyword(Field.TREE_PATH, organization.buildTreePath());
 		document.addKeyword(Field.TYPE, organization.getType());
 
 		document.addKeyword(
 			"parentOrganizationId", organization.getParentOrganizationId());
-
-		String treePath = organization.buildTreePath();
-
-		document.addKeyword("treePath", treePath);
 
 		populateAddresses(
 			document, organization.getAddresses(), organization.getRegionId(),

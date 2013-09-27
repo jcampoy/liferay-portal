@@ -105,8 +105,8 @@ int counter = 0;
 for (SearchResult searchResult : searchResults) {
 	Attributes attributes = searchResult.getAttributes();
 
-	String screenName = LDAPUtil.getAttributeString(attributes, userMappings.getProperty("screenName")).toLowerCase();
-	String password = LDAPUtil.getAttributeString(attributes, userMappings.getProperty("password")).toLowerCase();
+	String screenName = StringUtil.toLowerCase(LDAPUtil.getAttributeString(attributes, userMappings.getProperty("screenName")));
+	String password = StringUtil.toLowerCase(LDAPUtil.getAttributeString(attributes, userMappings.getProperty("password")));
 	String emailAddress = LDAPUtil.getAttributeString(attributes, userMappings.getProperty("emailAddress"));
 	String firstName = LDAPUtil.getAttributeString(attributes, userMappings.getProperty("firstName"));
 	String lastName = LDAPUtil.getAttributeString(attributes, userMappings.getProperty("lastName"));
@@ -204,7 +204,7 @@ if (counter == 0) {
 if (showMissingAttributeMessage) {
 %>
 
-	<div class="portlet-msg-info">
+	<div class="alert alert-info">
 		<liferay-ui:message key="the-above-results-include-users-which-are-missing-the-required-attributes-(screen-name,-password,-email-address,-first-name,-and-last-name).-these-users-will-not-be-imported-until-these-attributes-are-filled-in" />
 	</div>
 

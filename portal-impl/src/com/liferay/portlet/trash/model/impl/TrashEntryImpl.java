@@ -14,7 +14,10 @@
 
 package com.liferay.portlet.trash.model.impl;
 
+import com.liferay.portal.kernel.trash.TrashHandler;
 import com.liferay.portal.kernel.util.UnicodeProperties;
+import com.liferay.portal.model.ClassedModel;
+import com.liferay.portal.model.TrashedModel;
 import com.liferay.portlet.trash.model.TrashEntry;
 
 /**
@@ -22,6 +25,7 @@ import com.liferay.portlet.trash.model.TrashEntry;
  */
 public class TrashEntryImpl extends TrashEntryBaseImpl {
 
+	@Override
 	public TrashEntry getRootEntry() {
 		return _rootEntry;
 	}
@@ -36,6 +40,7 @@ public class TrashEntryImpl extends TrashEntryBaseImpl {
 		}
 	}
 
+	@Override
 	public UnicodeProperties getTypeSettingsProperties() {
 		if (_typeSettingsProperties == null) {
 			_typeSettingsProperties = new UnicodeProperties(true);
@@ -46,18 +51,51 @@ public class TrashEntryImpl extends TrashEntryBaseImpl {
 		return _typeSettingsProperties;
 	}
 
+	@Override
 	public String getTypeSettingsProperty(String key) {
 		UnicodeProperties typeSettingsProperties = getTypeSettingsProperties();
 
 		return typeSettingsProperties.getProperty(key);
 	}
 
+	@Override
 	public String getTypeSettingsProperty(String key, String defaultValue) {
 		UnicodeProperties typeSettingsProperties = getTypeSettingsProperties();
 
 		return typeSettingsProperties.getProperty(key, defaultValue);
 	}
 
+	@Override
+	public boolean isTrashEntry(Class<?> clazz, long classPK) {
+		if (clazz == null) {
+			return false;
+		}
+
+		String className = clazz.getName();
+
+		if (className.equals(getClassName()) && (classPK == getClassPK())) {
+			return true;
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean isTrashEntry(TrashedModel trashedModel) {
+		TrashHandler trashHandler = trashedModel.getTrashHandler();
+
+		if (trashHandler == null) {
+			return false;
+		}
+
+		if (!(trashedModel instanceof ClassedModel)) {
+			return false;
+		}
+
+		return trashHandler.isTrashEntry(this, (ClassedModel)trashedModel);
+	}
+
+	@Override
 	public void setRootEntry(TrashEntry rootEntry) {
 		_rootEntry = rootEntry;
 	}
@@ -69,6 +107,7 @@ public class TrashEntryImpl extends TrashEntryBaseImpl {
 		super.setTypeSettings(typeSettings);
 	}
 
+	@Override
 	public void setTypeSettingsProperties(
 		UnicodeProperties typeSettingsProperties) {
 

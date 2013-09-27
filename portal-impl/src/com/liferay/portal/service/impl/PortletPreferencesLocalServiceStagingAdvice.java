@@ -26,6 +26,7 @@ import com.liferay.portal.service.LayoutRevisionLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextThreadLocal;
 import com.liferay.portal.service.persistence.LayoutRevisionUtil;
+import com.liferay.portal.staging.ProxiedLayoutsThreadLocal;
 import com.liferay.portal.staging.StagingAdvicesThreadLocal;
 
 import java.lang.reflect.InvocationTargetException;
@@ -40,6 +41,7 @@ import org.aopalliance.intercept.MethodInvocation;
 public class PortletPreferencesLocalServiceStagingAdvice
 	implements MethodInterceptor {
 
+	@Override
 	public Object invoke(MethodInvocation methodInvocation) throws Throwable {
 		if (!StagingAdvicesThreadLocal.isEnabled()) {
 			return methodInvocation.proceed();
@@ -138,6 +140,10 @@ public class PortletPreferencesLocalServiceStagingAdvice
 		LayoutRevision layoutRevision = LayoutStagingUtil.getLayoutRevision(
 			layout);
 
+		if (layoutRevision == null) {
+			return methodInvocation.proceed();
+		}
+
 		plid = layoutRevision.getLayoutRevisionId();
 
 		if (arguments.length == 1) {
@@ -198,6 +204,8 @@ public class PortletPreferencesLocalServiceStagingAdvice
 			serviceContext);
 
 		arguments[2] = layoutRevision.getLayoutRevisionId();
+
+		ProxiedLayoutsThreadLocal.clearProxiedLayouts();
 
 		return method.invoke(methodInvocation.getThis(), arguments);
 	}

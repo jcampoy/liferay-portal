@@ -58,10 +58,10 @@ portletURL.setParameter("struts_action", "/blogs/view");
 
 		total = AssetEntryServiceUtil.getEntriesCount(assetEntryQuery);
 
-		if (searchContainer.recalculateCur(total)) {
-			assetEntryQuery.setEnd(searchContainer.getEnd());
-			assetEntryQuery.setStart(searchContainer.getStart());
-		}
+		searchContainer.setTotal(total);
+
+		assetEntryQuery.setEnd(searchContainer.getEnd());
+		assetEntryQuery.setStart(searchContainer.getStart());
 
 		results = AssetEntryServiceUtil.getEntries(assetEntryQuery);
 	}
@@ -84,9 +84,3 @@ portletURL.setParameter("struts_action", "/blogs/view");
 
 	<%@ include file="/html/portlet/blogs/view_entries.jspf" %>
 </aui:form>
-
-<c:if test="<%= windowState.equals(WindowState.MAXIMIZED) %>">
-	<aui:script>
-		Liferay.Util.focusFormField(document.<portlet:namespace />fm1.<portlet:namespace />keywords);
-	</aui:script>
-</c:if>

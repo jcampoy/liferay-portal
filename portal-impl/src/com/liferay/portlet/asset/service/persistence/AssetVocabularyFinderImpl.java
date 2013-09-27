@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dao.orm.Type;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portlet.asset.model.AssetVocabulary;
@@ -43,16 +44,19 @@ public class AssetVocabularyFinderImpl
 	public static final String FIND_BY_G_N =
 		AssetVocabularyFinder.class.getName() + ".findByG_N";
 
+	@Override
 	public int countByG_N(long groupId, String name) throws SystemException {
 		return doCountByG_N(groupId, name, false);
 	}
 
+	@Override
 	public int filterCountByG_N(long groupId, String name)
 		throws SystemException {
 
 		return doCountByG_N(groupId, name, true);
 	}
 
+	@Override
 	public List<AssetVocabulary> filterFindByG_N(
 			long groupId, String name, int start, int end,
 			OrderByComparator obc)
@@ -61,6 +65,7 @@ public class AssetVocabularyFinderImpl
 		return doFindByG_N(groupId, name, start, end, obc, true);
 	}
 
+	@Override
 	public List<AssetVocabulary> findByG_N(
 			long groupId, String name, int start, int end,
 			OrderByComparator obc)
@@ -121,7 +126,7 @@ public class AssetVocabularyFinderImpl
 			OrderByComparator obc, boolean inlineSQLHelper)
 		throws SystemException {
 
-		name = name.trim().toLowerCase();
+		name = StringUtil.toLowerCase(name.trim());
 
 		Session session = null;
 

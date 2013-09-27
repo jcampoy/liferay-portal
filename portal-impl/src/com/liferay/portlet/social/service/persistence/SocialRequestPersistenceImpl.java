@@ -113,6 +113,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialRequest> findByUuid(String uuid)
 		throws SystemException {
 		return findByUuid(uuid, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
@@ -131,6 +132,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the range of matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialRequest> findByUuid(String uuid, int start, int end)
 		throws SystemException {
 		return findByUuid(uuid, start, end, null);
@@ -150,6 +152,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the ordered range of matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialRequest> findByUuid(String uuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -270,6 +273,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest findByUuid_First(String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchRequestException, SystemException {
@@ -299,6 +303,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest fetchByUuid_First(String uuid,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<SocialRequest> list = findByUuid(uuid, 0, 1, orderByComparator);
@@ -319,6 +324,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest findByUuid_Last(String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchRequestException, SystemException {
@@ -348,9 +354,14 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest fetchByUuid_Last(String uuid,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByUuid(uuid);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<SocialRequest> list = findByUuid(uuid, count - 1, count,
 				orderByComparator);
@@ -372,6 +383,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws com.liferay.portlet.social.NoSuchRequestException if a social request with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest[] findByUuid_PrevAndNext(long requestId, String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchRequestException, SystemException {
@@ -527,6 +539,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @param uuid the uuid
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByUuid(String uuid) throws SystemException {
 		for (SocialRequest socialRequest : findByUuid(uuid, QueryUtil.ALL_POS,
 				QueryUtil.ALL_POS, null)) {
@@ -541,6 +554,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the number of matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByUuid(String uuid) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID;
 
@@ -623,6 +637,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest findByUUID_G(String uuid, long groupId)
 		throws NoSuchRequestException, SystemException {
 		SocialRequest socialRequest = fetchByUUID_G(uuid, groupId);
@@ -658,6 +673,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the matching social request, or <code>null</code> if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest fetchByUUID_G(String uuid, long groupId)
 		throws SystemException {
 		return fetchByUUID_G(uuid, groupId, true);
@@ -672,6 +688,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the matching social request, or <code>null</code> if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest fetchByUUID_G(String uuid, long groupId,
 		boolean retrieveFromCache) throws SystemException {
 		Object[] finderArgs = new Object[] { uuid, groupId };
@@ -778,6 +795,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the social request that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest removeByUUID_G(String uuid, long groupId)
 		throws NoSuchRequestException, SystemException {
 		SocialRequest socialRequest = findByUUID_G(uuid, groupId);
@@ -793,6 +811,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the number of matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByUUID_G(String uuid, long groupId)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_G;
@@ -892,6 +911,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialRequest> findByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		return findByUuid_C(uuid, companyId, QueryUtil.ALL_POS,
@@ -912,6 +932,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the range of matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialRequest> findByUuid_C(String uuid, long companyId,
 		int start, int end) throws SystemException {
 		return findByUuid_C(uuid, companyId, start, end, null);
@@ -932,6 +953,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the ordered range of matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialRequest> findByUuid_C(String uuid, long companyId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -1063,6 +1085,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest findByUuid_C_First(String uuid, long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchRequestException, SystemException {
@@ -1097,6 +1120,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest fetchByUuid_C_First(String uuid, long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<SocialRequest> list = findByUuid_C(uuid, companyId, 0, 1,
@@ -1119,6 +1143,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest findByUuid_C_Last(String uuid, long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchRequestException, SystemException {
@@ -1153,9 +1178,14 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest fetchByUuid_C_Last(String uuid, long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByUuid_C(uuid, companyId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<SocialRequest> list = findByUuid_C(uuid, companyId, count - 1,
 				count, orderByComparator);
@@ -1178,6 +1208,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws com.liferay.portlet.social.NoSuchRequestException if a social request with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest[] findByUuid_C_PrevAndNext(long requestId,
 		String uuid, long companyId, OrderByComparator orderByComparator)
 		throws NoSuchRequestException, SystemException {
@@ -1338,6 +1369,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @param companyId the company ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		for (SocialRequest socialRequest : findByUuid_C(uuid, companyId,
@@ -1354,6 +1386,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the number of matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_C;
@@ -1451,6 +1484,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialRequest> findByCompanyId(long companyId)
 		throws SystemException {
 		return findByCompanyId(companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
@@ -1470,6 +1504,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the range of matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialRequest> findByCompanyId(long companyId, int start,
 		int end) throws SystemException {
 		return findByCompanyId(companyId, start, end, null);
@@ -1489,6 +1524,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the ordered range of matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialRequest> findByCompanyId(long companyId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -1595,6 +1631,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest findByCompanyId_First(long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchRequestException, SystemException {
@@ -1625,6 +1662,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest fetchByCompanyId_First(long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<SocialRequest> list = findByCompanyId(companyId, 0, 1,
@@ -1646,6 +1684,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest findByCompanyId_Last(long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchRequestException, SystemException {
@@ -1676,9 +1715,14 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest fetchByCompanyId_Last(long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByCompanyId(companyId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<SocialRequest> list = findByCompanyId(companyId, count - 1, count,
 				orderByComparator);
@@ -1700,6 +1744,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws com.liferay.portlet.social.NoSuchRequestException if a social request with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest[] findByCompanyId_PrevAndNext(long requestId,
 		long companyId, OrderByComparator orderByComparator)
 		throws NoSuchRequestException, SystemException {
@@ -1841,6 +1886,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @param companyId the company ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByCompanyId(long companyId) throws SystemException {
 		for (SocialRequest socialRequest : findByCompanyId(companyId,
 				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
@@ -1855,6 +1901,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the number of matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByCompanyId(long companyId) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_COMPANYID;
 
@@ -1929,6 +1976,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialRequest> findByUserId(long userId)
 		throws SystemException {
 		return findByUserId(userId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
@@ -1947,6 +1995,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the range of matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialRequest> findByUserId(long userId, int start, int end)
 		throws SystemException {
 		return findByUserId(userId, start, end, null);
@@ -1966,6 +2015,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the ordered range of matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialRequest> findByUserId(long userId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -2072,6 +2122,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest findByUserId_First(long userId,
 		OrderByComparator orderByComparator)
 		throws NoSuchRequestException, SystemException {
@@ -2102,6 +2153,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest fetchByUserId_First(long userId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<SocialRequest> list = findByUserId(userId, 0, 1, orderByComparator);
@@ -2122,6 +2174,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest findByUserId_Last(long userId,
 		OrderByComparator orderByComparator)
 		throws NoSuchRequestException, SystemException {
@@ -2152,9 +2205,14 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest fetchByUserId_Last(long userId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByUserId(userId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<SocialRequest> list = findByUserId(userId, count - 1, count,
 				orderByComparator);
@@ -2176,6 +2234,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws com.liferay.portlet.social.NoSuchRequestException if a social request with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest[] findByUserId_PrevAndNext(long requestId,
 		long userId, OrderByComparator orderByComparator)
 		throws NoSuchRequestException, SystemException {
@@ -2317,6 +2376,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @param userId the user ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByUserId(long userId) throws SystemException {
 		for (SocialRequest socialRequest : findByUserId(userId,
 				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
@@ -2331,6 +2391,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the number of matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByUserId(long userId) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_USERID;
 
@@ -2406,6 +2467,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialRequest> findByReceiverUserId(long receiverUserId)
 		throws SystemException {
 		return findByReceiverUserId(receiverUserId, QueryUtil.ALL_POS,
@@ -2425,6 +2487,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the range of matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialRequest> findByReceiverUserId(long receiverUserId,
 		int start, int end) throws SystemException {
 		return findByReceiverUserId(receiverUserId, start, end, null);
@@ -2444,6 +2507,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the ordered range of matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialRequest> findByReceiverUserId(long receiverUserId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -2555,6 +2619,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest findByReceiverUserId_First(long receiverUserId,
 		OrderByComparator orderByComparator)
 		throws NoSuchRequestException, SystemException {
@@ -2585,6 +2650,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest fetchByReceiverUserId_First(long receiverUserId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<SocialRequest> list = findByReceiverUserId(receiverUserId, 0, 1,
@@ -2606,6 +2672,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest findByReceiverUserId_Last(long receiverUserId,
 		OrderByComparator orderByComparator)
 		throws NoSuchRequestException, SystemException {
@@ -2636,9 +2703,14 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest fetchByReceiverUserId_Last(long receiverUserId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByReceiverUserId(receiverUserId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<SocialRequest> list = findByReceiverUserId(receiverUserId,
 				count - 1, count, orderByComparator);
@@ -2660,6 +2732,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws com.liferay.portlet.social.NoSuchRequestException if a social request with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest[] findByReceiverUserId_PrevAndNext(long requestId,
 		long receiverUserId, OrderByComparator orderByComparator)
 		throws NoSuchRequestException, SystemException {
@@ -2801,6 +2874,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @param receiverUserId the receiver user ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByReceiverUserId(long receiverUserId)
 		throws SystemException {
 		for (SocialRequest socialRequest : findByReceiverUserId(
@@ -2816,6 +2890,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the number of matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByReceiverUserId(long receiverUserId)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_RECEIVERUSERID;
@@ -2893,6 +2968,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialRequest> findByU_S(long userId, int status)
 		throws SystemException {
 		return findByU_S(userId, status, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
@@ -2913,6 +2989,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the range of matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialRequest> findByU_S(long userId, int status, int start,
 		int end) throws SystemException {
 		return findByU_S(userId, status, start, end, null);
@@ -2933,6 +3010,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the ordered range of matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialRequest> findByU_S(long userId, int status, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -3049,6 +3127,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest findByU_S_First(long userId, int status,
 		OrderByComparator orderByComparator)
 		throws NoSuchRequestException, SystemException {
@@ -3083,6 +3162,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest fetchByU_S_First(long userId, int status,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<SocialRequest> list = findByU_S(userId, status, 0, 1,
@@ -3105,6 +3185,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest findByU_S_Last(long userId, int status,
 		OrderByComparator orderByComparator)
 		throws NoSuchRequestException, SystemException {
@@ -3139,9 +3220,14 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest fetchByU_S_Last(long userId, int status,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByU_S(userId, status);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<SocialRequest> list = findByU_S(userId, status, count - 1, count,
 				orderByComparator);
@@ -3164,6 +3250,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws com.liferay.portlet.social.NoSuchRequestException if a social request with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest[] findByU_S_PrevAndNext(long requestId, long userId,
 		int status, OrderByComparator orderByComparator)
 		throws NoSuchRequestException, SystemException {
@@ -3310,6 +3397,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @param status the status
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByU_S(long userId, int status) throws SystemException {
 		for (SocialRequest socialRequest : findByU_S(userId, status,
 				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
@@ -3325,6 +3413,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the number of matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByU_S(long userId, int status) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_U_S;
 
@@ -3406,6 +3495,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialRequest> findByR_S(long receiverUserId, int status)
 		throws SystemException {
 		return findByR_S(receiverUserId, status, QueryUtil.ALL_POS,
@@ -3426,6 +3516,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the range of matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialRequest> findByR_S(long receiverUserId, int status,
 		int start, int end) throws SystemException {
 		return findByR_S(receiverUserId, status, start, end, null);
@@ -3446,6 +3537,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the ordered range of matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialRequest> findByR_S(long receiverUserId, int status,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -3563,6 +3655,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest findByR_S_First(long receiverUserId, int status,
 		OrderByComparator orderByComparator)
 		throws NoSuchRequestException, SystemException {
@@ -3597,6 +3690,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest fetchByR_S_First(long receiverUserId, int status,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<SocialRequest> list = findByR_S(receiverUserId, status, 0, 1,
@@ -3619,6 +3713,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest findByR_S_Last(long receiverUserId, int status,
 		OrderByComparator orderByComparator)
 		throws NoSuchRequestException, SystemException {
@@ -3653,9 +3748,14 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest fetchByR_S_Last(long receiverUserId, int status,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByR_S(receiverUserId, status);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<SocialRequest> list = findByR_S(receiverUserId, status, count - 1,
 				count, orderByComparator);
@@ -3678,6 +3778,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws com.liferay.portlet.social.NoSuchRequestException if a social request with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest[] findByR_S_PrevAndNext(long requestId,
 		long receiverUserId, int status, OrderByComparator orderByComparator)
 		throws NoSuchRequestException, SystemException {
@@ -3824,6 +3925,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @param status the status
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByR_S(long receiverUserId, int status)
 		throws SystemException {
 		for (SocialRequest socialRequest : findByR_S(receiverUserId, status,
@@ -3840,6 +3942,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the number of matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByR_S(long receiverUserId, int status)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_R_S;
@@ -3925,6 +4028,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest findByU_C_C_T_R(long userId, long classNameId,
 		long classPK, int type, long receiverUserId)
 		throws NoSuchRequestException, SystemException {
@@ -3974,6 +4078,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the matching social request, or <code>null</code> if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest fetchByU_C_C_T_R(long userId, long classNameId,
 		long classPK, int type, long receiverUserId) throws SystemException {
 		return fetchByU_C_C_T_R(userId, classNameId, classPK, type,
@@ -3992,6 +4097,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the matching social request, or <code>null</code> if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest fetchByU_C_C_T_R(long userId, long classNameId,
 		long classPK, int type, long receiverUserId, boolean retrieveFromCache)
 		throws SystemException {
@@ -4107,6 +4213,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the social request that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest removeByU_C_C_T_R(long userId, long classNameId,
 		long classPK, int type, long receiverUserId)
 		throws NoSuchRequestException, SystemException {
@@ -4127,6 +4234,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the number of matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByU_C_C_T_R(long userId, long classNameId, long classPK,
 		int type, long receiverUserId) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_U_C_C_T_R;
@@ -4241,6 +4349,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialRequest> findByU_C_C_T_S(long userId, long classNameId,
 		long classPK, int type, int status) throws SystemException {
 		return findByU_C_C_T_S(userId, classNameId, classPK, type, status,
@@ -4264,6 +4373,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the range of matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialRequest> findByU_C_C_T_S(long userId, long classNameId,
 		long classPK, int type, int status, int start, int end)
 		throws SystemException {
@@ -4289,6 +4399,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the ordered range of matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialRequest> findByU_C_C_T_S(long userId, long classNameId,
 		long classPK, int type, int status, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
@@ -4424,6 +4535,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest findByU_C_C_T_S_First(long userId, long classNameId,
 		long classPK, int type, int status, OrderByComparator orderByComparator)
 		throws NoSuchRequestException, SystemException {
@@ -4470,6 +4582,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest fetchByU_C_C_T_S_First(long userId, long classNameId,
 		long classPK, int type, int status, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -4496,6 +4609,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest findByU_C_C_T_S_Last(long userId, long classNameId,
 		long classPK, int type, int status, OrderByComparator orderByComparator)
 		throws NoSuchRequestException, SystemException {
@@ -4542,10 +4656,15 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest fetchByU_C_C_T_S_Last(long userId, long classNameId,
 		long classPK, int type, int status, OrderByComparator orderByComparator)
 		throws SystemException {
 		int count = countByU_C_C_T_S(userId, classNameId, classPK, type, status);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<SocialRequest> list = findByU_C_C_T_S(userId, classNameId,
 				classPK, type, status, count - 1, count, orderByComparator);
@@ -4571,6 +4690,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws com.liferay.portlet.social.NoSuchRequestException if a social request with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest[] findByU_C_C_T_S_PrevAndNext(long requestId,
 		long userId, long classNameId, long classPK, int type, int status,
 		OrderByComparator orderByComparator)
@@ -4736,6 +4856,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @param status the status
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByU_C_C_T_S(long userId, long classNameId, long classPK,
 		int type, int status) throws SystemException {
 		for (SocialRequest socialRequest : findByU_C_C_T_S(userId, classNameId,
@@ -4756,6 +4877,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the number of matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByU_C_C_T_S(long userId, long classNameId, long classPK,
 		int type, int status) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_U_C_C_T_S;
@@ -4873,6 +4995,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialRequest> findByC_C_T_R_S(long classNameId, long classPK,
 		int type, long receiverUserId, int status) throws SystemException {
 		return findByC_C_T_R_S(classNameId, classPK, type, receiverUserId,
@@ -4896,6 +5019,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the range of matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialRequest> findByC_C_T_R_S(long classNameId, long classPK,
 		int type, long receiverUserId, int status, int start, int end)
 		throws SystemException {
@@ -4921,6 +5045,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the ordered range of matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialRequest> findByC_C_T_R_S(long classNameId, long classPK,
 		int type, long receiverUserId, int status, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
@@ -5058,6 +5183,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest findByC_C_T_R_S_First(long classNameId, long classPK,
 		int type, long receiverUserId, int status,
 		OrderByComparator orderByComparator)
@@ -5105,6 +5231,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest fetchByC_C_T_R_S_First(long classNameId, long classPK,
 		int type, long receiverUserId, int status,
 		OrderByComparator orderByComparator) throws SystemException {
@@ -5131,6 +5258,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest findByC_C_T_R_S_Last(long classNameId, long classPK,
 		int type, long receiverUserId, int status,
 		OrderByComparator orderByComparator)
@@ -5178,11 +5306,16 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest fetchByC_C_T_R_S_Last(long classNameId, long classPK,
 		int type, long receiverUserId, int status,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByC_C_T_R_S(classNameId, classPK, type,
 				receiverUserId, status);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<SocialRequest> list = findByC_C_T_R_S(classNameId, classPK, type,
 				receiverUserId, status, count - 1, count, orderByComparator);
@@ -5208,6 +5341,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws com.liferay.portlet.social.NoSuchRequestException if a social request with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest[] findByC_C_T_R_S_PrevAndNext(long requestId,
 		long classNameId, long classPK, int type, long receiverUserId,
 		int status, OrderByComparator orderByComparator)
@@ -5373,6 +5507,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @param status the status
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByC_C_T_R_S(long classNameId, long classPK, int type,
 		long receiverUserId, int status) throws SystemException {
 		for (SocialRequest socialRequest : findByC_C_T_R_S(classNameId,
@@ -5393,6 +5528,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the number of matching social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByC_C_T_R_S(long classNameId, long classPK, int type,
 		long receiverUserId, int status) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_C_T_R_S;
@@ -5463,11 +5599,16 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	private static final String _FINDER_COLUMN_C_C_T_R_S_RECEIVERUSERID_2 = "socialRequest.receiverUserId = ? AND ";
 	private static final String _FINDER_COLUMN_C_C_T_R_S_STATUS_2 = "socialRequest.status = ?";
 
+	public SocialRequestPersistenceImpl() {
+		setModelClass(SocialRequest.class);
+	}
+
 	/**
 	 * Caches the social request in the entity cache if it is enabled.
 	 *
 	 * @param socialRequest the social request
 	 */
+	@Override
 	public void cacheResult(SocialRequest socialRequest) {
 		EntityCacheUtil.putResult(SocialRequestModelImpl.ENTITY_CACHE_ENABLED,
 			SocialRequestImpl.class, socialRequest.getPrimaryKey(),
@@ -5492,6 +5633,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 *
 	 * @param socialRequests the social requests
 	 */
+	@Override
 	public void cacheResult(List<SocialRequest> socialRequests) {
 		for (SocialRequest socialRequest : socialRequests) {
 			if (EntityCacheUtil.getResult(
@@ -5661,6 +5803,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @param requestId the primary key for the new social request
 	 * @return the new social request
 	 */
+	@Override
 	public SocialRequest create(long requestId) {
 		SocialRequest socialRequest = new SocialRequestImpl();
 
@@ -5682,6 +5825,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws com.liferay.portlet.social.NoSuchRequestException if a social request with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest remove(long requestId)
 		throws NoSuchRequestException, SystemException {
 		return remove((Serializable)requestId);
@@ -6069,6 +6213,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws com.liferay.portlet.social.NoSuchRequestException if a social request with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest findByPrimaryKey(long requestId)
 		throws NoSuchRequestException, SystemException {
 		return findByPrimaryKey((Serializable)requestId);
@@ -6129,6 +6274,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the social request, or <code>null</code> if a social request with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialRequest fetchByPrimaryKey(long requestId)
 		throws SystemException {
 		return fetchByPrimaryKey((Serializable)requestId);
@@ -6140,6 +6286,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialRequest> findAll() throws SystemException {
 		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
@@ -6156,6 +6303,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the range of social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialRequest> findAll(int start, int end)
 		throws SystemException {
 		return findAll(start, end, null);
@@ -6174,6 +6322,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the ordered range of social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialRequest> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -6259,6 +6408,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 *
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeAll() throws SystemException {
 		for (SocialRequest socialRequest : findAll()) {
 			remove(socialRequest);
@@ -6271,6 +6421,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @return the number of social requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countAll() throws SystemException {
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
 				FINDER_ARGS_EMPTY, this);
@@ -6364,6 +6515,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 		};
 
 	private static CacheModel<SocialRequest> _nullSocialRequestCacheModel = new CacheModel<SocialRequest>() {
+			@Override
 			public SocialRequest toEntityModel() {
 				return _nullSocialRequest;
 			}

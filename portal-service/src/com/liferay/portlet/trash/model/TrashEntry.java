@@ -33,8 +33,6 @@ public interface TrashEntry extends TrashEntryModel, PersistedModel {
 	 */
 	public com.liferay.portlet.trash.model.TrashEntry getRootEntry();
 
-	public java.lang.String getTypeSettings();
-
 	public com.liferay.portal.kernel.util.UnicodeProperties getTypeSettingsProperties();
 
 	public java.lang.String getTypeSettingsProperty(java.lang.String key);
@@ -42,10 +40,13 @@ public interface TrashEntry extends TrashEntryModel, PersistedModel {
 	public java.lang.String getTypeSettingsProperty(java.lang.String key,
 		java.lang.String defaultValue);
 
+	public boolean isTrashEntry(java.lang.Class<?> clazz, long classPK);
+
+	public boolean isTrashEntry(
+		com.liferay.portal.model.TrashedModel trashedModel);
+
 	public void setRootEntry(
 		com.liferay.portlet.trash.model.TrashEntry rootEntry);
-
-	public void setTypeSettings(java.lang.String typeSettings);
 
 	public void setTypeSettingsProperties(
 		com.liferay.portal.kernel.util.UnicodeProperties typeSettingsProperties);

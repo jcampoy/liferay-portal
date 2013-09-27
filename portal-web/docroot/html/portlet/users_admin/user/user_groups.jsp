@@ -88,14 +88,12 @@ List<UserGroup> userGroups = (List<UserGroup>)request.getAttribute("user.userGro
 				Liferay.Util.selectEntity(
 					{
 						dialog: {
-							align: Liferay.Util.Window.ALIGN_CENTER,
 							constrain: true,
 							modal: true,
-							stack: true,
 							width: 680
 						},
 						id: '<portlet:namespace />selectUserGroup',
-						title: '<%= UnicodeLanguageUtil.format(pageContext, "select-x", "user-group") %>',
+						title: '<liferay-ui:message arguments="user-group" key="select-x" />',
 						uri: '<%= selectUserGroupURL.toString() %>'
 					},
 					function(event) {

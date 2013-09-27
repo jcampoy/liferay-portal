@@ -17,11 +17,6 @@ package com.liferay.portal.service.persistence;
 import com.liferay.portal.NoSuchUserGroupException;
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
-import com.liferay.portal.kernel.dao.jdbc.MappingSqlQuery;
-import com.liferay.portal.kernel.dao.jdbc.MappingSqlQueryFactoryUtil;
-import com.liferay.portal.kernel.dao.jdbc.RowMapper;
-import com.liferay.portal.kernel.dao.jdbc.SqlUpdate;
-import com.liferay.portal.kernel.dao.jdbc.SqlUpdateFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
@@ -50,6 +45,8 @@ import com.liferay.portal.model.impl.UserGroupImpl;
 import com.liferay.portal.model.impl.UserGroupModelImpl;
 import com.liferay.portal.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
+import com.liferay.portal.service.persistence.impl.TableMapper;
+import com.liferay.portal.service.persistence.impl.TableMapperFactory;
 
 import java.io.Serializable;
 
@@ -118,6 +115,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the matching user groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<UserGroup> findByUuid(String uuid) throws SystemException {
 		return findByUuid(uuid, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
@@ -135,6 +133,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the range of matching user groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<UserGroup> findByUuid(String uuid, int start, int end)
 		throws SystemException {
 		return findByUuid(uuid, start, end, null);
@@ -154,6 +153,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the ordered range of matching user groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<UserGroup> findByUuid(String uuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -274,6 +274,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @throws com.liferay.portal.NoSuchUserGroupException if a matching user group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public UserGroup findByUuid_First(String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchUserGroupException, SystemException {
@@ -303,6 +304,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the first matching user group, or <code>null</code> if a matching user group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public UserGroup fetchByUuid_First(String uuid,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<UserGroup> list = findByUuid(uuid, 0, 1, orderByComparator);
@@ -323,6 +325,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @throws com.liferay.portal.NoSuchUserGroupException if a matching user group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public UserGroup findByUuid_Last(String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchUserGroupException, SystemException {
@@ -352,9 +355,14 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the last matching user group, or <code>null</code> if a matching user group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public UserGroup fetchByUuid_Last(String uuid,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByUuid(uuid);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<UserGroup> list = findByUuid(uuid, count - 1, count,
 				orderByComparator);
@@ -376,6 +384,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @throws com.liferay.portal.NoSuchUserGroupException if a user group with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public UserGroup[] findByUuid_PrevAndNext(long userGroupId, String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchUserGroupException, SystemException {
@@ -532,6 +541,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the matching user groups that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<UserGroup> filterFindByUuid(String uuid)
 		throws SystemException {
 		return filterFindByUuid(uuid, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
@@ -550,6 +560,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the range of matching user groups that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<UserGroup> filterFindByUuid(String uuid, int start, int end)
 		throws SystemException {
 		return filterFindByUuid(uuid, start, end, null);
@@ -569,6 +580,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the ordered range of matching user groups that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<UserGroup> filterFindByUuid(String uuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		if (!InlineSQLHelperUtil.isEnabled()) {
@@ -672,6 +684,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @throws com.liferay.portal.NoSuchUserGroupException if a user group with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public UserGroup[] filterFindByUuid_PrevAndNext(long userGroupId,
 		String uuid, OrderByComparator orderByComparator)
 		throws NoSuchUserGroupException, SystemException {
@@ -865,6 +878,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param uuid the uuid
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByUuid(String uuid) throws SystemException {
 		for (UserGroup userGroup : findByUuid(uuid, QueryUtil.ALL_POS,
 				QueryUtil.ALL_POS, null)) {
@@ -879,6 +893,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the number of matching user groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByUuid(String uuid) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID;
 
@@ -945,6 +960,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the number of matching user groups that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int filterCountByUuid(String uuid) throws SystemException {
 		if (!InlineSQLHelperUtil.isEnabled()) {
 			return countByUuid(uuid);
@@ -1035,6 +1051,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the matching user groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<UserGroup> findByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		return findByUuid_C(uuid, companyId, QueryUtil.ALL_POS,
@@ -1055,6 +1072,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the range of matching user groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<UserGroup> findByUuid_C(String uuid, long companyId, int start,
 		int end) throws SystemException {
 		return findByUuid_C(uuid, companyId, start, end, null);
@@ -1075,6 +1093,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the ordered range of matching user groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<UserGroup> findByUuid_C(String uuid, long companyId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -1205,6 +1224,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @throws com.liferay.portal.NoSuchUserGroupException if a matching user group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public UserGroup findByUuid_C_First(String uuid, long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchUserGroupException, SystemException {
@@ -1239,6 +1259,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the first matching user group, or <code>null</code> if a matching user group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public UserGroup fetchByUuid_C_First(String uuid, long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<UserGroup> list = findByUuid_C(uuid, companyId, 0, 1,
@@ -1261,6 +1282,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @throws com.liferay.portal.NoSuchUserGroupException if a matching user group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public UserGroup findByUuid_C_Last(String uuid, long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchUserGroupException, SystemException {
@@ -1295,9 +1317,14 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the last matching user group, or <code>null</code> if a matching user group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public UserGroup fetchByUuid_C_Last(String uuid, long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByUuid_C(uuid, companyId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<UserGroup> list = findByUuid_C(uuid, companyId, count - 1, count,
 				orderByComparator);
@@ -1320,6 +1347,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @throws com.liferay.portal.NoSuchUserGroupException if a user group with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public UserGroup[] findByUuid_C_PrevAndNext(long userGroupId, String uuid,
 		long companyId, OrderByComparator orderByComparator)
 		throws NoSuchUserGroupException, SystemException {
@@ -1481,6 +1509,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the matching user groups that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<UserGroup> filterFindByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		return filterFindByUuid_C(uuid, companyId, QueryUtil.ALL_POS,
@@ -1501,6 +1530,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the range of matching user groups that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<UserGroup> filterFindByUuid_C(String uuid, long companyId,
 		int start, int end) throws SystemException {
 		return filterFindByUuid_C(uuid, companyId, start, end, null);
@@ -1521,6 +1551,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the ordered range of matching user groups that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<UserGroup> filterFindByUuid_C(String uuid, long companyId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -1630,6 +1661,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @throws com.liferay.portal.NoSuchUserGroupException if a user group with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public UserGroup[] filterFindByUuid_C_PrevAndNext(long userGroupId,
 		String uuid, long companyId, OrderByComparator orderByComparator)
 		throws NoSuchUserGroupException, SystemException {
@@ -1829,6 +1861,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param companyId the company ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		for (UserGroup userGroup : findByUuid_C(uuid, companyId,
@@ -1845,6 +1878,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the number of matching user groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_C;
@@ -1917,6 +1951,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the number of matching user groups that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int filterCountByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		if (!InlineSQLHelperUtil.isEnabled()) {
@@ -2012,6 +2047,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the matching user groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<UserGroup> findByCompanyId(long companyId)
 		throws SystemException {
 		return findByCompanyId(companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
@@ -2031,6 +2067,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the range of matching user groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<UserGroup> findByCompanyId(long companyId, int start, int end)
 		throws SystemException {
 		return findByCompanyId(companyId, start, end, null);
@@ -2050,6 +2087,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the ordered range of matching user groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<UserGroup> findByCompanyId(long companyId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -2156,6 +2194,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @throws com.liferay.portal.NoSuchUserGroupException if a matching user group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public UserGroup findByCompanyId_First(long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchUserGroupException, SystemException {
@@ -2186,6 +2225,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the first matching user group, or <code>null</code> if a matching user group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public UserGroup fetchByCompanyId_First(long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<UserGroup> list = findByCompanyId(companyId, 0, 1,
@@ -2207,6 +2247,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @throws com.liferay.portal.NoSuchUserGroupException if a matching user group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public UserGroup findByCompanyId_Last(long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchUserGroupException, SystemException {
@@ -2236,9 +2277,14 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the last matching user group, or <code>null</code> if a matching user group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public UserGroup fetchByCompanyId_Last(long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByCompanyId(companyId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<UserGroup> list = findByCompanyId(companyId, count - 1, count,
 				orderByComparator);
@@ -2260,6 +2306,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @throws com.liferay.portal.NoSuchUserGroupException if a user group with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public UserGroup[] findByCompanyId_PrevAndNext(long userGroupId,
 		long companyId, OrderByComparator orderByComparator)
 		throws NoSuchUserGroupException, SystemException {
@@ -2402,6 +2449,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the matching user groups that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<UserGroup> filterFindByCompanyId(long companyId)
 		throws SystemException {
 		return filterFindByCompanyId(companyId, QueryUtil.ALL_POS,
@@ -2421,6 +2469,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the range of matching user groups that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<UserGroup> filterFindByCompanyId(long companyId, int start,
 		int end) throws SystemException {
 		return filterFindByCompanyId(companyId, start, end, null);
@@ -2440,6 +2489,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the ordered range of matching user groups that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<UserGroup> filterFindByCompanyId(long companyId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
 		if (!InlineSQLHelperUtil.isEnabled()) {
@@ -2529,6 +2579,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @throws com.liferay.portal.NoSuchUserGroupException if a user group with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public UserGroup[] filterFindByCompanyId_PrevAndNext(long userGroupId,
 		long companyId, OrderByComparator orderByComparator)
 		throws NoSuchUserGroupException, SystemException {
@@ -2709,6 +2760,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param companyId the company ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByCompanyId(long companyId) throws SystemException {
 		for (UserGroup userGroup : findByCompanyId(companyId,
 				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
@@ -2723,6 +2775,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the number of matching user groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByCompanyId(long companyId) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_COMPANYID;
 
@@ -2775,6 +2828,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the number of matching user groups that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int filterCountByCompanyId(long companyId) throws SystemException {
 		if (!InlineSQLHelperUtil.isEnabled()) {
 			return countByCompanyId(companyId);
@@ -2845,6 +2899,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the matching user groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<UserGroup> findByC_P(long companyId, long parentUserGroupId)
 		throws SystemException {
 		return findByC_P(companyId, parentUserGroupId, QueryUtil.ALL_POS,
@@ -2865,6 +2920,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the range of matching user groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<UserGroup> findByC_P(long companyId, long parentUserGroupId,
 		int start, int end) throws SystemException {
 		return findByC_P(companyId, parentUserGroupId, start, end, null);
@@ -2885,6 +2941,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the ordered range of matching user groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<UserGroup> findByC_P(long companyId, long parentUserGroupId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -3002,6 +3059,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @throws com.liferay.portal.NoSuchUserGroupException if a matching user group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public UserGroup findByC_P_First(long companyId, long parentUserGroupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchUserGroupException, SystemException {
@@ -3036,6 +3094,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the first matching user group, or <code>null</code> if a matching user group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public UserGroup fetchByC_P_First(long companyId, long parentUserGroupId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<UserGroup> list = findByC_P(companyId, parentUserGroupId, 0, 1,
@@ -3058,6 +3117,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @throws com.liferay.portal.NoSuchUserGroupException if a matching user group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public UserGroup findByC_P_Last(long companyId, long parentUserGroupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchUserGroupException, SystemException {
@@ -3092,9 +3152,14 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the last matching user group, or <code>null</code> if a matching user group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public UserGroup fetchByC_P_Last(long companyId, long parentUserGroupId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByC_P(companyId, parentUserGroupId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<UserGroup> list = findByC_P(companyId, parentUserGroupId,
 				count - 1, count, orderByComparator);
@@ -3117,6 +3182,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @throws com.liferay.portal.NoSuchUserGroupException if a user group with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public UserGroup[] findByC_P_PrevAndNext(long userGroupId, long companyId,
 		long parentUserGroupId, OrderByComparator orderByComparator)
 		throws NoSuchUserGroupException, SystemException {
@@ -3264,6 +3330,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the matching user groups that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<UserGroup> filterFindByC_P(long companyId,
 		long parentUserGroupId) throws SystemException {
 		return filterFindByC_P(companyId, parentUserGroupId, QueryUtil.ALL_POS,
@@ -3284,6 +3351,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the range of matching user groups that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<UserGroup> filterFindByC_P(long companyId,
 		long parentUserGroupId, int start, int end) throws SystemException {
 		return filterFindByC_P(companyId, parentUserGroupId, start, end, null);
@@ -3304,6 +3372,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the ordered range of matching user groups that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<UserGroup> filterFindByC_P(long companyId,
 		long parentUserGroupId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
@@ -3400,6 +3469,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @throws com.liferay.portal.NoSuchUserGroupException if a user group with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public UserGroup[] filterFindByC_P_PrevAndNext(long userGroupId,
 		long companyId, long parentUserGroupId,
 		OrderByComparator orderByComparator)
@@ -3586,6 +3656,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param parentUserGroupId the parent user group ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByC_P(long companyId, long parentUserGroupId)
 		throws SystemException {
 		for (UserGroup userGroup : findByC_P(companyId, parentUserGroupId,
@@ -3602,6 +3673,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the number of matching user groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByC_P(long companyId, long parentUserGroupId)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_P;
@@ -3660,6 +3732,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the number of matching user groups that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int filterCountByC_P(long companyId, long parentUserGroupId)
 		throws SystemException {
 		if (!InlineSQLHelperUtil.isEnabled()) {
@@ -3727,6 +3800,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @throws com.liferay.portal.NoSuchUserGroupException if a matching user group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public UserGroup findByC_N(long companyId, String name)
 		throws NoSuchUserGroupException, SystemException {
 		UserGroup userGroup = fetchByC_N(companyId, name);
@@ -3762,6 +3836,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the matching user group, or <code>null</code> if a matching user group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public UserGroup fetchByC_N(long companyId, String name)
 		throws SystemException {
 		return fetchByC_N(companyId, name, true);
@@ -3776,6 +3851,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the matching user group, or <code>null</code> if a matching user group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public UserGroup fetchByC_N(long companyId, String name,
 		boolean retrieveFromCache) throws SystemException {
 		Object[] finderArgs = new Object[] { companyId, name };
@@ -3882,6 +3958,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the user group that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public UserGroup removeByC_N(long companyId, String name)
 		throws NoSuchUserGroupException, SystemException {
 		UserGroup userGroup = findByC_N(companyId, name);
@@ -3897,6 +3974,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the number of matching user groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByC_N(long companyId, String name)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_N;
@@ -3966,11 +4044,16 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	private static final String _FINDER_COLUMN_C_N_NAME_2 = "userGroup.name = ?";
 	private static final String _FINDER_COLUMN_C_N_NAME_3 = "(userGroup.name IS NULL OR userGroup.name = '')";
 
+	public UserGroupPersistenceImpl() {
+		setModelClass(UserGroup.class);
+	}
+
 	/**
 	 * Caches the user group in the entity cache if it is enabled.
 	 *
 	 * @param userGroup the user group
 	 */
+	@Override
 	public void cacheResult(UserGroup userGroup) {
 		EntityCacheUtil.putResult(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
 			UserGroupImpl.class, userGroup.getPrimaryKey(), userGroup);
@@ -3987,6 +4070,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 *
 	 * @param userGroups the user groups
 	 */
+	@Override
 	public void cacheResult(List<UserGroup> userGroups) {
 		for (UserGroup userGroup : userGroups) {
 			if (EntityCacheUtil.getResult(
@@ -4106,6 +4190,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param userGroupId the primary key for the new user group
 	 * @return the new user group
 	 */
+	@Override
 	public UserGroup create(long userGroupId) {
 		UserGroup userGroup = new UserGroupImpl();
 
@@ -4127,6 +4212,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @throws com.liferay.portal.NoSuchUserGroupException if a user group with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public UserGroup remove(long userGroupId)
 		throws NoSuchUserGroupException, SystemException {
 		return remove((Serializable)userGroupId);
@@ -4178,35 +4264,11 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 		throws SystemException {
 		userGroup = toUnwrappedModel(userGroup);
 
-		try {
-			clearGroups.clear(userGroup.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_GROUPS_USERGROUPS_NAME);
-		}
+		userGroupToGroupTableMapper.deleteLeftPrimaryKeyTableMappings(userGroup.getPrimaryKey());
 
-		try {
-			clearTeams.clear(userGroup.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_USERGROUPS_TEAMS_NAME);
-		}
+		userGroupToTeamTableMapper.deleteLeftPrimaryKeyTableMappings(userGroup.getPrimaryKey());
 
-		try {
-			clearUsers.clear(userGroup.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_USERS_USERGROUPS_NAME);
-		}
+		userGroupToUserTableMapper.deleteLeftPrimaryKeyTableMappings(userGroup.getPrimaryKey());
 
 		Session session = null;
 
@@ -4425,6 +4487,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @throws com.liferay.portal.NoSuchUserGroupException if a user group with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public UserGroup findByPrimaryKey(long userGroupId)
 		throws NoSuchUserGroupException, SystemException {
 		return findByPrimaryKey((Serializable)userGroupId);
@@ -4485,6 +4548,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the user group, or <code>null</code> if a user group with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public UserGroup fetchByPrimaryKey(long userGroupId)
 		throws SystemException {
 		return fetchByPrimaryKey((Serializable)userGroupId);
@@ -4496,6 +4560,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the user groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<UserGroup> findAll() throws SystemException {
 		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
@@ -4512,6 +4577,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the range of user groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<UserGroup> findAll(int start, int end)
 		throws SystemException {
 		return findAll(start, end, null);
@@ -4530,6 +4596,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the ordered range of user groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<UserGroup> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -4615,6 +4682,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 *
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeAll() throws SystemException {
 		for (UserGroup userGroup : findAll()) {
 			remove(userGroup);
@@ -4627,6 +4695,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the number of user groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countAll() throws SystemException {
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
 				FINDER_ARGS_EMPTY, this);
@@ -4665,6 +4734,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the groups associated with the user group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<com.liferay.portal.model.Group> getGroups(long pk)
 		throws SystemException {
 		return getGroups(pk, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
@@ -4683,23 +4753,10 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the range of groups associated with the user group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<com.liferay.portal.model.Group> getGroups(long pk, int start,
 		int end) throws SystemException {
 		return getGroups(pk, start, end, null);
-	}
-
-	public static final FinderPath FINDER_PATH_GET_GROUPS = new FinderPath(com.liferay.portal.model.impl.GroupModelImpl.ENTITY_CACHE_ENABLED,
-			UserGroupModelImpl.FINDER_CACHE_ENABLED_GROUPS_USERGROUPS,
-			com.liferay.portal.model.impl.GroupImpl.class,
-			UserGroupModelImpl.MAPPING_TABLE_GROUPS_USERGROUPS_NAME,
-			"getGroups",
-			new String[] {
-				Long.class.getName(), Integer.class.getName(),
-				Integer.class.getName(), OrderByComparator.class.getName()
-			});
-
-	static {
-		FINDER_PATH_GET_GROUPS.setCacheKeyGeneratorCacheName(null);
 	}
 
 	/**
@@ -4716,91 +4773,11 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the ordered range of groups associated with the user group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<com.liferay.portal.model.Group> getGroups(long pk, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
-		boolean pagination = true;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			pagination = false;
-			finderArgs = new Object[] { pk };
-		}
-		else {
-			finderArgs = new Object[] { pk, start, end, orderByComparator };
-		}
-
-		List<com.liferay.portal.model.Group> list = (List<com.liferay.portal.model.Group>)FinderCacheUtil.getResult(FINDER_PATH_GET_GROUPS,
-				finderArgs, this);
-
-		if (list == null) {
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				String sql = null;
-
-				if (orderByComparator != null) {
-					sql = _SQL_GETGROUPS.concat(ORDER_BY_CLAUSE)
-										.concat(orderByComparator.getOrderBy());
-				}
-				else {
-					sql = _SQL_GETGROUPS;
-
-					if (pagination) {
-						sql = sql.concat(com.liferay.portal.model.impl.GroupModelImpl.ORDER_BY_SQL);
-					}
-				}
-
-				SQLQuery q = session.createSQLQuery(sql);
-
-				q.addEntity("Group_",
-					com.liferay.portal.model.impl.GroupImpl.class);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(pk);
-
-				if (!pagination) {
-					list = (List<com.liferay.portal.model.Group>)QueryUtil.list(q,
-							getDialect(), start, end, false);
-
-					Collections.sort(list);
-
-					list = new UnmodifiableList<com.liferay.portal.model.Group>(list);
-				}
-				else {
-					list = (List<com.liferay.portal.model.Group>)QueryUtil.list(q,
-							getDialect(), start, end);
-				}
-
-				groupPersistence.cacheResult(list);
-
-				FinderCacheUtil.putResult(FINDER_PATH_GET_GROUPS, finderArgs,
-					list);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_GET_GROUPS, finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	public static final FinderPath FINDER_PATH_GET_GROUPS_SIZE = new FinderPath(com.liferay.portal.model.impl.GroupModelImpl.ENTITY_CACHE_ENABLED,
-			UserGroupModelImpl.FINDER_CACHE_ENABLED_GROUPS_USERGROUPS,
-			Long.class,
-			UserGroupModelImpl.MAPPING_TABLE_GROUPS_USERGROUPS_NAME,
-			"getGroupsSize", new String[] { Long.class.getName() });
-
-	static {
-		FINDER_PATH_GET_GROUPS_SIZE.setCacheKeyGeneratorCacheName(null);
+		return userGroupToGroupTableMapper.getRightBaseModels(pk, start, end,
+			orderByComparator);
 	}
 
 	/**
@@ -4810,52 +4787,12 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the number of groups associated with the user group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int getGroupsSize(long pk) throws SystemException {
-		Object[] finderArgs = new Object[] { pk };
+		long[] pks = userGroupToGroupTableMapper.getRightPrimaryKeys(pk);
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_GET_GROUPS_SIZE,
-				finderArgs, this);
-
-		if (count == null) {
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				SQLQuery q = session.createSQLQuery(_SQL_GETGROUPSSIZE);
-
-				q.addScalar(COUNT_COLUMN_NAME,
-					com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(pk);
-
-				count = (Long)q.uniqueResult();
-
-				FinderCacheUtil.putResult(FINDER_PATH_GET_GROUPS_SIZE,
-					finderArgs, count);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_GET_GROUPS_SIZE,
-					finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
+		return pks.length;
 	}
-
-	public static final FinderPath FINDER_PATH_CONTAINS_GROUP = new FinderPath(com.liferay.portal.model.impl.GroupModelImpl.ENTITY_CACHE_ENABLED,
-			UserGroupModelImpl.FINDER_CACHE_ENABLED_GROUPS_USERGROUPS,
-			Boolean.class,
-			UserGroupModelImpl.MAPPING_TABLE_GROUPS_USERGROUPS_NAME,
-			"containsGroup",
-			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns <code>true</code> if the group is associated with the user group.
@@ -4865,29 +4802,10 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return <code>true</code> if the group is associated with the user group; <code>false</code> otherwise
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public boolean containsGroup(long pk, long groupPK)
 		throws SystemException {
-		Object[] finderArgs = new Object[] { pk, groupPK };
-
-		Boolean value = (Boolean)FinderCacheUtil.getResult(FINDER_PATH_CONTAINS_GROUP,
-				finderArgs, this);
-
-		if (value == null) {
-			try {
-				value = Boolean.valueOf(containsGroup.contains(pk, groupPK));
-
-				FinderCacheUtil.putResult(FINDER_PATH_CONTAINS_GROUP,
-					finderArgs, value);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_CONTAINS_GROUP,
-					finderArgs);
-
-				throw processException(e);
-			}
-		}
-
-		return value.booleanValue();
+		return userGroupToGroupTableMapper.containsTableMapping(pk, groupPK);
 	}
 
 	/**
@@ -4897,6 +4815,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return <code>true</code> if the user group has any groups associated with it; <code>false</code> otherwise
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public boolean containsGroups(long pk) throws SystemException {
 		if (getGroupsSize(pk) > 0) {
 			return true;
@@ -4913,16 +4832,9 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param groupPK the primary key of the group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addGroup(long pk, long groupPK) throws SystemException {
-		try {
-			addGroup.add(pk, groupPK);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_GROUPS_USERGROUPS_NAME);
-		}
+		userGroupToGroupTableMapper.addTableMapping(pk, groupPK);
 	}
 
 	/**
@@ -4932,17 +4844,10 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param group the group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addGroup(long pk, com.liferay.portal.model.Group group)
 		throws SystemException {
-		try {
-			addGroup.add(pk, group.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_GROUPS_USERGROUPS_NAME);
-		}
+		userGroupToGroupTableMapper.addTableMapping(pk, group.getPrimaryKey());
 	}
 
 	/**
@@ -4952,17 +4857,10 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param groupPKs the primary keys of the groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addGroups(long pk, long[] groupPKs) throws SystemException {
-		try {
-			for (long groupPK : groupPKs) {
-				addGroup.add(pk, groupPK);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_GROUPS_USERGROUPS_NAME);
+		for (long groupPK : groupPKs) {
+			userGroupToGroupTableMapper.addTableMapping(pk, groupPK);
 		}
 	}
 
@@ -4973,18 +4871,12 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param groups the groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addGroups(long pk, List<com.liferay.portal.model.Group> groups)
 		throws SystemException {
-		try {
-			for (com.liferay.portal.model.Group group : groups) {
-				addGroup.add(pk, group.getPrimaryKey());
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_GROUPS_USERGROUPS_NAME);
+		for (com.liferay.portal.model.Group group : groups) {
+			userGroupToGroupTableMapper.addTableMapping(pk,
+				group.getPrimaryKey());
 		}
 	}
 
@@ -4994,16 +4886,9 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param pk the primary key of the user group to clear the associated groups from
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void clearGroups(long pk) throws SystemException {
-		try {
-			clearGroups.clear(pk);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_GROUPS_USERGROUPS_NAME);
-		}
+		userGroupToGroupTableMapper.deleteLeftPrimaryKeyTableMappings(pk);
 	}
 
 	/**
@@ -5013,16 +4898,9 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param groupPK the primary key of the group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeGroup(long pk, long groupPK) throws SystemException {
-		try {
-			removeGroup.remove(pk, groupPK);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_GROUPS_USERGROUPS_NAME);
-		}
+		userGroupToGroupTableMapper.deleteTableMapping(pk, groupPK);
 	}
 
 	/**
@@ -5032,17 +4910,10 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param group the group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeGroup(long pk, com.liferay.portal.model.Group group)
 		throws SystemException {
-		try {
-			removeGroup.remove(pk, group.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_GROUPS_USERGROUPS_NAME);
-		}
+		userGroupToGroupTableMapper.deleteTableMapping(pk, group.getPrimaryKey());
 	}
 
 	/**
@@ -5052,18 +4923,11 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param groupPKs the primary keys of the groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeGroups(long pk, long[] groupPKs)
 		throws SystemException {
-		try {
-			for (long groupPK : groupPKs) {
-				removeGroup.remove(pk, groupPK);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_GROUPS_USERGROUPS_NAME);
+		for (long groupPK : groupPKs) {
+			userGroupToGroupTableMapper.deleteTableMapping(pk, groupPK);
 		}
 	}
 
@@ -5074,18 +4938,12 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param groups the groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeGroups(long pk,
 		List<com.liferay.portal.model.Group> groups) throws SystemException {
-		try {
-			for (com.liferay.portal.model.Group group : groups) {
-				removeGroup.remove(pk, group.getPrimaryKey());
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_GROUPS_USERGROUPS_NAME);
+		for (com.liferay.portal.model.Group group : groups) {
+			userGroupToGroupTableMapper.deleteTableMapping(pk,
+				group.getPrimaryKey());
 		}
 	}
 
@@ -5096,27 +4954,12 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param groupPKs the primary keys of the groups to be associated with the user group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void setGroups(long pk, long[] groupPKs) throws SystemException {
-		try {
-			Set<Long> groupPKSet = SetUtil.fromArray(groupPKs);
+		userGroupToGroupTableMapper.deleteLeftPrimaryKeyTableMappings(pk);
 
-			List<com.liferay.portal.model.Group> groups = getGroups(pk);
-
-			for (com.liferay.portal.model.Group group : groups) {
-				if (!groupPKSet.remove(group.getPrimaryKey())) {
-					removeGroup.remove(pk, group.getPrimaryKey());
-				}
-			}
-
-			for (Long groupPK : groupPKSet) {
-				addGroup.add(pk, groupPK);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_GROUPS_USERGROUPS_NAME);
+		for (Long groupPK : groupPKs) {
+			userGroupToGroupTableMapper.addTableMapping(pk, groupPK);
 		}
 	}
 
@@ -5127,6 +4970,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param groups the groups to be associated with the user group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void setGroups(long pk, List<com.liferay.portal.model.Group> groups)
 		throws SystemException {
 		try {
@@ -5155,6 +4999,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the teams associated with the user group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<com.liferay.portal.model.Team> getTeams(long pk)
 		throws SystemException {
 		return getTeams(pk, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
@@ -5173,22 +5018,10 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the range of teams associated with the user group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<com.liferay.portal.model.Team> getTeams(long pk, int start,
 		int end) throws SystemException {
 		return getTeams(pk, start, end, null);
-	}
-
-	public static final FinderPath FINDER_PATH_GET_TEAMS = new FinderPath(com.liferay.portal.model.impl.TeamModelImpl.ENTITY_CACHE_ENABLED,
-			UserGroupModelImpl.FINDER_CACHE_ENABLED_USERGROUPS_TEAMS,
-			com.liferay.portal.model.impl.TeamImpl.class,
-			UserGroupModelImpl.MAPPING_TABLE_USERGROUPS_TEAMS_NAME, "getTeams",
-			new String[] {
-				Long.class.getName(), Integer.class.getName(),
-				Integer.class.getName(), OrderByComparator.class.getName()
-			});
-
-	static {
-		FINDER_PATH_GET_TEAMS.setCacheKeyGeneratorCacheName(null);
 	}
 
 	/**
@@ -5205,89 +5038,11 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the ordered range of teams associated with the user group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<com.liferay.portal.model.Team> getTeams(long pk, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
-		boolean pagination = true;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			pagination = false;
-			finderArgs = new Object[] { pk };
-		}
-		else {
-			finderArgs = new Object[] { pk, start, end, orderByComparator };
-		}
-
-		List<com.liferay.portal.model.Team> list = (List<com.liferay.portal.model.Team>)FinderCacheUtil.getResult(FINDER_PATH_GET_TEAMS,
-				finderArgs, this);
-
-		if (list == null) {
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				String sql = null;
-
-				if (orderByComparator != null) {
-					sql = _SQL_GETTEAMS.concat(ORDER_BY_CLAUSE)
-									   .concat(orderByComparator.getOrderBy());
-				}
-				else {
-					sql = _SQL_GETTEAMS;
-
-					if (pagination) {
-						sql = sql.concat(com.liferay.portal.model.impl.TeamModelImpl.ORDER_BY_SQL);
-					}
-				}
-
-				SQLQuery q = session.createSQLQuery(sql);
-
-				q.addEntity("Team", com.liferay.portal.model.impl.TeamImpl.class);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(pk);
-
-				if (!pagination) {
-					list = (List<com.liferay.portal.model.Team>)QueryUtil.list(q,
-							getDialect(), start, end, false);
-
-					Collections.sort(list);
-
-					list = new UnmodifiableList<com.liferay.portal.model.Team>(list);
-				}
-				else {
-					list = (List<com.liferay.portal.model.Team>)QueryUtil.list(q,
-							getDialect(), start, end);
-				}
-
-				teamPersistence.cacheResult(list);
-
-				FinderCacheUtil.putResult(FINDER_PATH_GET_TEAMS, finderArgs,
-					list);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_GET_TEAMS, finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	public static final FinderPath FINDER_PATH_GET_TEAMS_SIZE = new FinderPath(com.liferay.portal.model.impl.TeamModelImpl.ENTITY_CACHE_ENABLED,
-			UserGroupModelImpl.FINDER_CACHE_ENABLED_USERGROUPS_TEAMS,
-			Long.class, UserGroupModelImpl.MAPPING_TABLE_USERGROUPS_TEAMS_NAME,
-			"getTeamsSize", new String[] { Long.class.getName() });
-
-	static {
-		FINDER_PATH_GET_TEAMS_SIZE.setCacheKeyGeneratorCacheName(null);
+		return userGroupToTeamTableMapper.getRightBaseModels(pk, start, end,
+			orderByComparator);
 	}
 
 	/**
@@ -5297,52 +5052,12 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the number of teams associated with the user group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int getTeamsSize(long pk) throws SystemException {
-		Object[] finderArgs = new Object[] { pk };
+		long[] pks = userGroupToTeamTableMapper.getRightPrimaryKeys(pk);
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_GET_TEAMS_SIZE,
-				finderArgs, this);
-
-		if (count == null) {
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				SQLQuery q = session.createSQLQuery(_SQL_GETTEAMSSIZE);
-
-				q.addScalar(COUNT_COLUMN_NAME,
-					com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(pk);
-
-				count = (Long)q.uniqueResult();
-
-				FinderCacheUtil.putResult(FINDER_PATH_GET_TEAMS_SIZE,
-					finderArgs, count);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_GET_TEAMS_SIZE,
-					finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
+		return pks.length;
 	}
-
-	public static final FinderPath FINDER_PATH_CONTAINS_TEAM = new FinderPath(com.liferay.portal.model.impl.TeamModelImpl.ENTITY_CACHE_ENABLED,
-			UserGroupModelImpl.FINDER_CACHE_ENABLED_USERGROUPS_TEAMS,
-			Boolean.class,
-			UserGroupModelImpl.MAPPING_TABLE_USERGROUPS_TEAMS_NAME,
-			"containsTeam",
-			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns <code>true</code> if the team is associated with the user group.
@@ -5352,28 +5067,9 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return <code>true</code> if the team is associated with the user group; <code>false</code> otherwise
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public boolean containsTeam(long pk, long teamPK) throws SystemException {
-		Object[] finderArgs = new Object[] { pk, teamPK };
-
-		Boolean value = (Boolean)FinderCacheUtil.getResult(FINDER_PATH_CONTAINS_TEAM,
-				finderArgs, this);
-
-		if (value == null) {
-			try {
-				value = Boolean.valueOf(containsTeam.contains(pk, teamPK));
-
-				FinderCacheUtil.putResult(FINDER_PATH_CONTAINS_TEAM,
-					finderArgs, value);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_CONTAINS_TEAM,
-					finderArgs);
-
-				throw processException(e);
-			}
-		}
-
-		return value.booleanValue();
+		return userGroupToTeamTableMapper.containsTableMapping(pk, teamPK);
 	}
 
 	/**
@@ -5383,6 +5079,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return <code>true</code> if the user group has any teams associated with it; <code>false</code> otherwise
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public boolean containsTeams(long pk) throws SystemException {
 		if (getTeamsSize(pk) > 0) {
 			return true;
@@ -5399,16 +5096,9 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param teamPK the primary key of the team
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addTeam(long pk, long teamPK) throws SystemException {
-		try {
-			addTeam.add(pk, teamPK);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_USERGROUPS_TEAMS_NAME);
-		}
+		userGroupToTeamTableMapper.addTableMapping(pk, teamPK);
 	}
 
 	/**
@@ -5418,17 +5108,10 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param team the team
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addTeam(long pk, com.liferay.portal.model.Team team)
 		throws SystemException {
-		try {
-			addTeam.add(pk, team.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_USERGROUPS_TEAMS_NAME);
-		}
+		userGroupToTeamTableMapper.addTableMapping(pk, team.getPrimaryKey());
 	}
 
 	/**
@@ -5438,17 +5121,10 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param teamPKs the primary keys of the teams
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addTeams(long pk, long[] teamPKs) throws SystemException {
-		try {
-			for (long teamPK : teamPKs) {
-				addTeam.add(pk, teamPK);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_USERGROUPS_TEAMS_NAME);
+		for (long teamPK : teamPKs) {
+			userGroupToTeamTableMapper.addTableMapping(pk, teamPK);
 		}
 	}
 
@@ -5459,18 +5135,11 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param teams the teams
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addTeams(long pk, List<com.liferay.portal.model.Team> teams)
 		throws SystemException {
-		try {
-			for (com.liferay.portal.model.Team team : teams) {
-				addTeam.add(pk, team.getPrimaryKey());
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_USERGROUPS_TEAMS_NAME);
+		for (com.liferay.portal.model.Team team : teams) {
+			userGroupToTeamTableMapper.addTableMapping(pk, team.getPrimaryKey());
 		}
 	}
 
@@ -5480,16 +5149,9 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param pk the primary key of the user group to clear the associated teams from
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void clearTeams(long pk) throws SystemException {
-		try {
-			clearTeams.clear(pk);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_USERGROUPS_TEAMS_NAME);
-		}
+		userGroupToTeamTableMapper.deleteLeftPrimaryKeyTableMappings(pk);
 	}
 
 	/**
@@ -5499,16 +5161,9 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param teamPK the primary key of the team
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeTeam(long pk, long teamPK) throws SystemException {
-		try {
-			removeTeam.remove(pk, teamPK);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_USERGROUPS_TEAMS_NAME);
-		}
+		userGroupToTeamTableMapper.deleteTableMapping(pk, teamPK);
 	}
 
 	/**
@@ -5518,17 +5173,10 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param team the team
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeTeam(long pk, com.liferay.portal.model.Team team)
 		throws SystemException {
-		try {
-			removeTeam.remove(pk, team.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_USERGROUPS_TEAMS_NAME);
-		}
+		userGroupToTeamTableMapper.deleteTableMapping(pk, team.getPrimaryKey());
 	}
 
 	/**
@@ -5538,17 +5186,10 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param teamPKs the primary keys of the teams
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeTeams(long pk, long[] teamPKs) throws SystemException {
-		try {
-			for (long teamPK : teamPKs) {
-				removeTeam.remove(pk, teamPK);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_USERGROUPS_TEAMS_NAME);
+		for (long teamPK : teamPKs) {
+			userGroupToTeamTableMapper.deleteTableMapping(pk, teamPK);
 		}
 	}
 
@@ -5559,18 +5200,12 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param teams the teams
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeTeams(long pk, List<com.liferay.portal.model.Team> teams)
 		throws SystemException {
-		try {
-			for (com.liferay.portal.model.Team team : teams) {
-				removeTeam.remove(pk, team.getPrimaryKey());
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_USERGROUPS_TEAMS_NAME);
+		for (com.liferay.portal.model.Team team : teams) {
+			userGroupToTeamTableMapper.deleteTableMapping(pk,
+				team.getPrimaryKey());
 		}
 	}
 
@@ -5581,27 +5216,12 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param teamPKs the primary keys of the teams to be associated with the user group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void setTeams(long pk, long[] teamPKs) throws SystemException {
-		try {
-			Set<Long> teamPKSet = SetUtil.fromArray(teamPKs);
+		userGroupToTeamTableMapper.deleteLeftPrimaryKeyTableMappings(pk);
 
-			List<com.liferay.portal.model.Team> teams = getTeams(pk);
-
-			for (com.liferay.portal.model.Team team : teams) {
-				if (!teamPKSet.remove(team.getPrimaryKey())) {
-					removeTeam.remove(pk, team.getPrimaryKey());
-				}
-			}
-
-			for (Long teamPK : teamPKSet) {
-				addTeam.add(pk, teamPK);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_USERGROUPS_TEAMS_NAME);
+		for (Long teamPK : teamPKs) {
+			userGroupToTeamTableMapper.addTableMapping(pk, teamPK);
 		}
 	}
 
@@ -5612,6 +5232,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param teams the teams to be associated with the user group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void setTeams(long pk, List<com.liferay.portal.model.Team> teams)
 		throws SystemException {
 		try {
@@ -5640,6 +5261,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the users associated with the user group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<com.liferay.portal.model.User> getUsers(long pk)
 		throws SystemException {
 		return getUsers(pk, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
@@ -5658,22 +5280,10 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the range of users associated with the user group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<com.liferay.portal.model.User> getUsers(long pk, int start,
 		int end) throws SystemException {
 		return getUsers(pk, start, end, null);
-	}
-
-	public static final FinderPath FINDER_PATH_GET_USERS = new FinderPath(com.liferay.portal.model.impl.UserModelImpl.ENTITY_CACHE_ENABLED,
-			UserGroupModelImpl.FINDER_CACHE_ENABLED_USERS_USERGROUPS,
-			com.liferay.portal.model.impl.UserImpl.class,
-			UserGroupModelImpl.MAPPING_TABLE_USERS_USERGROUPS_NAME, "getUsers",
-			new String[] {
-				Long.class.getName(), Integer.class.getName(),
-				Integer.class.getName(), OrderByComparator.class.getName()
-			});
-
-	static {
-		FINDER_PATH_GET_USERS.setCacheKeyGeneratorCacheName(null);
 	}
 
 	/**
@@ -5690,90 +5300,11 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the ordered range of users associated with the user group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<com.liferay.portal.model.User> getUsers(long pk, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
-		boolean pagination = true;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			pagination = false;
-			finderArgs = new Object[] { pk };
-		}
-		else {
-			finderArgs = new Object[] { pk, start, end, orderByComparator };
-		}
-
-		List<com.liferay.portal.model.User> list = (List<com.liferay.portal.model.User>)FinderCacheUtil.getResult(FINDER_PATH_GET_USERS,
-				finderArgs, this);
-
-		if (list == null) {
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				String sql = null;
-
-				if (orderByComparator != null) {
-					sql = _SQL_GETUSERS.concat(ORDER_BY_CLAUSE)
-									   .concat(orderByComparator.getOrderBy());
-				}
-				else {
-					sql = _SQL_GETUSERS;
-
-					if (pagination) {
-						sql = sql.concat(com.liferay.portal.model.impl.UserModelImpl.ORDER_BY_SQL);
-					}
-				}
-
-				SQLQuery q = session.createSQLQuery(sql);
-
-				q.addEntity("User_",
-					com.liferay.portal.model.impl.UserImpl.class);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(pk);
-
-				if (!pagination) {
-					list = (List<com.liferay.portal.model.User>)QueryUtil.list(q,
-							getDialect(), start, end, false);
-
-					Collections.sort(list);
-
-					list = new UnmodifiableList<com.liferay.portal.model.User>(list);
-				}
-				else {
-					list = (List<com.liferay.portal.model.User>)QueryUtil.list(q,
-							getDialect(), start, end);
-				}
-
-				userPersistence.cacheResult(list);
-
-				FinderCacheUtil.putResult(FINDER_PATH_GET_USERS, finderArgs,
-					list);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_GET_USERS, finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	public static final FinderPath FINDER_PATH_GET_USERS_SIZE = new FinderPath(com.liferay.portal.model.impl.UserModelImpl.ENTITY_CACHE_ENABLED,
-			UserGroupModelImpl.FINDER_CACHE_ENABLED_USERS_USERGROUPS,
-			Long.class, UserGroupModelImpl.MAPPING_TABLE_USERS_USERGROUPS_NAME,
-			"getUsersSize", new String[] { Long.class.getName() });
-
-	static {
-		FINDER_PATH_GET_USERS_SIZE.setCacheKeyGeneratorCacheName(null);
+		return userGroupToUserTableMapper.getRightBaseModels(pk, start, end,
+			orderByComparator);
 	}
 
 	/**
@@ -5783,52 +5314,12 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return the number of users associated with the user group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int getUsersSize(long pk) throws SystemException {
-		Object[] finderArgs = new Object[] { pk };
+		long[] pks = userGroupToUserTableMapper.getRightPrimaryKeys(pk);
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_GET_USERS_SIZE,
-				finderArgs, this);
-
-		if (count == null) {
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				SQLQuery q = session.createSQLQuery(_SQL_GETUSERSSIZE);
-
-				q.addScalar(COUNT_COLUMN_NAME,
-					com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(pk);
-
-				count = (Long)q.uniqueResult();
-
-				FinderCacheUtil.putResult(FINDER_PATH_GET_USERS_SIZE,
-					finderArgs, count);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_GET_USERS_SIZE,
-					finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
+		return pks.length;
 	}
-
-	public static final FinderPath FINDER_PATH_CONTAINS_USER = new FinderPath(com.liferay.portal.model.impl.UserModelImpl.ENTITY_CACHE_ENABLED,
-			UserGroupModelImpl.FINDER_CACHE_ENABLED_USERS_USERGROUPS,
-			Boolean.class,
-			UserGroupModelImpl.MAPPING_TABLE_USERS_USERGROUPS_NAME,
-			"containsUser",
-			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns <code>true</code> if the user is associated with the user group.
@@ -5838,28 +5329,9 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return <code>true</code> if the user is associated with the user group; <code>false</code> otherwise
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public boolean containsUser(long pk, long userPK) throws SystemException {
-		Object[] finderArgs = new Object[] { pk, userPK };
-
-		Boolean value = (Boolean)FinderCacheUtil.getResult(FINDER_PATH_CONTAINS_USER,
-				finderArgs, this);
-
-		if (value == null) {
-			try {
-				value = Boolean.valueOf(containsUser.contains(pk, userPK));
-
-				FinderCacheUtil.putResult(FINDER_PATH_CONTAINS_USER,
-					finderArgs, value);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_CONTAINS_USER,
-					finderArgs);
-
-				throw processException(e);
-			}
-		}
-
-		return value.booleanValue();
+		return userGroupToUserTableMapper.containsTableMapping(pk, userPK);
 	}
 
 	/**
@@ -5869,6 +5341,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @return <code>true</code> if the user group has any users associated with it; <code>false</code> otherwise
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public boolean containsUsers(long pk) throws SystemException {
 		if (getUsersSize(pk) > 0) {
 			return true;
@@ -5885,16 +5358,9 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param userPK the primary key of the user
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addUser(long pk, long userPK) throws SystemException {
-		try {
-			addUser.add(pk, userPK);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_USERS_USERGROUPS_NAME);
-		}
+		userGroupToUserTableMapper.addTableMapping(pk, userPK);
 	}
 
 	/**
@@ -5904,17 +5370,10 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param user the user
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addUser(long pk, com.liferay.portal.model.User user)
 		throws SystemException {
-		try {
-			addUser.add(pk, user.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_USERS_USERGROUPS_NAME);
-		}
+		userGroupToUserTableMapper.addTableMapping(pk, user.getPrimaryKey());
 	}
 
 	/**
@@ -5924,17 +5383,10 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param userPKs the primary keys of the users
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addUsers(long pk, long[] userPKs) throws SystemException {
-		try {
-			for (long userPK : userPKs) {
-				addUser.add(pk, userPK);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_USERS_USERGROUPS_NAME);
+		for (long userPK : userPKs) {
+			userGroupToUserTableMapper.addTableMapping(pk, userPK);
 		}
 	}
 
@@ -5945,18 +5397,11 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param users the users
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addUsers(long pk, List<com.liferay.portal.model.User> users)
 		throws SystemException {
-		try {
-			for (com.liferay.portal.model.User user : users) {
-				addUser.add(pk, user.getPrimaryKey());
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_USERS_USERGROUPS_NAME);
+		for (com.liferay.portal.model.User user : users) {
+			userGroupToUserTableMapper.addTableMapping(pk, user.getPrimaryKey());
 		}
 	}
 
@@ -5966,16 +5411,9 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param pk the primary key of the user group to clear the associated users from
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void clearUsers(long pk) throws SystemException {
-		try {
-			clearUsers.clear(pk);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_USERS_USERGROUPS_NAME);
-		}
+		userGroupToUserTableMapper.deleteLeftPrimaryKeyTableMappings(pk);
 	}
 
 	/**
@@ -5985,16 +5423,9 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param userPK the primary key of the user
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeUser(long pk, long userPK) throws SystemException {
-		try {
-			removeUser.remove(pk, userPK);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_USERS_USERGROUPS_NAME);
-		}
+		userGroupToUserTableMapper.deleteTableMapping(pk, userPK);
 	}
 
 	/**
@@ -6004,17 +5435,10 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param user the user
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeUser(long pk, com.liferay.portal.model.User user)
 		throws SystemException {
-		try {
-			removeUser.remove(pk, user.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_USERS_USERGROUPS_NAME);
-		}
+		userGroupToUserTableMapper.deleteTableMapping(pk, user.getPrimaryKey());
 	}
 
 	/**
@@ -6024,17 +5448,10 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param userPKs the primary keys of the users
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeUsers(long pk, long[] userPKs) throws SystemException {
-		try {
-			for (long userPK : userPKs) {
-				removeUser.remove(pk, userPK);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_USERS_USERGROUPS_NAME);
+		for (long userPK : userPKs) {
+			userGroupToUserTableMapper.deleteTableMapping(pk, userPK);
 		}
 	}
 
@@ -6045,18 +5462,12 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param users the users
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeUsers(long pk, List<com.liferay.portal.model.User> users)
 		throws SystemException {
-		try {
-			for (com.liferay.portal.model.User user : users) {
-				removeUser.remove(pk, user.getPrimaryKey());
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_USERS_USERGROUPS_NAME);
+		for (com.liferay.portal.model.User user : users) {
+			userGroupToUserTableMapper.deleteTableMapping(pk,
+				user.getPrimaryKey());
 		}
 	}
 
@@ -6067,27 +5478,12 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param userPKs the primary keys of the users to be associated with the user group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void setUsers(long pk, long[] userPKs) throws SystemException {
-		try {
-			Set<Long> userPKSet = SetUtil.fromArray(userPKs);
+		userGroupToUserTableMapper.deleteLeftPrimaryKeyTableMappings(pk);
 
-			List<com.liferay.portal.model.User> users = getUsers(pk);
-
-			for (com.liferay.portal.model.User user : users) {
-				if (!userPKSet.remove(user.getPrimaryKey())) {
-					removeUser.remove(pk, user.getPrimaryKey());
-				}
-			}
-
-			for (Long userPK : userPKSet) {
-				addUser.add(pk, userPK);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_USERS_USERGROUPS_NAME);
+		for (Long userPK : userPKs) {
+			userGroupToUserTableMapper.addTableMapping(pk, userPK);
 		}
 	}
 
@@ -6098,6 +5494,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @param users the users to be associated with the user group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void setUsers(long pk, List<com.liferay.portal.model.User> users)
 		throws SystemException {
 		try {
@@ -6148,23 +5545,14 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 			}
 		}
 
-		containsGroup = new ContainsGroup();
+		userGroupToGroupTableMapper = TableMapperFactory.getTableMapper("Groups_UserGroups",
+				"userGroupId", "groupId", this, groupPersistence);
 
-		addGroup = new AddGroup();
-		clearGroups = new ClearGroups();
-		removeGroup = new RemoveGroup();
+		userGroupToTeamTableMapper = TableMapperFactory.getTableMapper("UserGroups_Teams",
+				"userGroupId", "teamId", this, teamPersistence);
 
-		containsTeam = new ContainsTeam();
-
-		addTeam = new AddTeam();
-		clearTeams = new ClearTeams();
-		removeTeam = new RemoveTeam();
-
-		containsUser = new ContainsUser();
-
-		addUser = new AddUser();
-		clearUsers = new ClearUsers();
-		removeUser = new RemoveUser();
+		userGroupToUserTableMapper = TableMapperFactory.getTableMapper("Users_UserGroups",
+				"userGroupId", "userId", this, userPersistence);
 	}
 
 	public void destroy() {
@@ -6176,510 +5564,17 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 
 	@BeanReference(type = GroupPersistence.class)
 	protected GroupPersistence groupPersistence;
-	protected ContainsGroup containsGroup;
-	protected AddGroup addGroup;
-	protected ClearGroups clearGroups;
-	protected RemoveGroup removeGroup;
+	protected TableMapper<UserGroup, com.liferay.portal.model.Group> userGroupToGroupTableMapper;
 	@BeanReference(type = TeamPersistence.class)
 	protected TeamPersistence teamPersistence;
-	protected ContainsTeam containsTeam;
-	protected AddTeam addTeam;
-	protected ClearTeams clearTeams;
-	protected RemoveTeam removeTeam;
+	protected TableMapper<UserGroup, com.liferay.portal.model.Team> userGroupToTeamTableMapper;
 	@BeanReference(type = UserPersistence.class)
 	protected UserPersistence userPersistence;
-	protected ContainsUser containsUser;
-	protected AddUser addUser;
-	protected ClearUsers clearUsers;
-	protected RemoveUser removeUser;
-
-	protected class ContainsGroup {
-		protected ContainsGroup() {
-			_mappingSqlQuery = MappingSqlQueryFactoryUtil.getMappingSqlQuery(getDataSource(),
-					"SELECT COUNT(*) AS COUNT_VALUE FROM Groups_UserGroups WHERE userGroupId = ? AND groupId = ?",
-					new int[] { java.sql.Types.BIGINT, java.sql.Types.BIGINT },
-					RowMapper.COUNT);
-		}
-
-		protected boolean contains(long userGroupId, long groupId) {
-			List<Integer> results = _mappingSqlQuery.execute(new Object[] {
-						new Long(userGroupId), new Long(groupId)
-					});
-
-			if (results.size() > 0) {
-				Integer count = results.get(0);
-
-				if (count.intValue() > 0) {
-					return true;
-				}
-			}
-
-			return false;
-		}
-
-		private MappingSqlQuery<Integer> _mappingSqlQuery;
-	}
-
-	protected class AddGroup {
-		protected AddGroup() {
-			_sqlUpdate = SqlUpdateFactoryUtil.getSqlUpdate(getDataSource(),
-					"INSERT INTO Groups_UserGroups (userGroupId, groupId) VALUES (?, ?)",
-					new int[] { java.sql.Types.BIGINT, java.sql.Types.BIGINT });
-		}
-
-		protected void add(long userGroupId, long groupId)
-			throws SystemException {
-			if (!containsGroup.contains(userGroupId, groupId)) {
-				ModelListener<com.liferay.portal.model.Group>[] groupListeners = groupPersistence.getListeners();
-
-				for (ModelListener<UserGroup> listener : listeners) {
-					listener.onBeforeAddAssociation(userGroupId,
-						com.liferay.portal.model.Group.class.getName(), groupId);
-				}
-
-				for (ModelListener<com.liferay.portal.model.Group> listener : groupListeners) {
-					listener.onBeforeAddAssociation(groupId,
-						UserGroup.class.getName(), userGroupId);
-				}
-
-				_sqlUpdate.update(new Object[] {
-						new Long(userGroupId), new Long(groupId)
-					});
-
-				for (ModelListener<UserGroup> listener : listeners) {
-					listener.onAfterAddAssociation(userGroupId,
-						com.liferay.portal.model.Group.class.getName(), groupId);
-				}
-
-				for (ModelListener<com.liferay.portal.model.Group> listener : groupListeners) {
-					listener.onAfterAddAssociation(groupId,
-						UserGroup.class.getName(), userGroupId);
-				}
-			}
-		}
-
-		private SqlUpdate _sqlUpdate;
-	}
-
-	protected class ClearGroups {
-		protected ClearGroups() {
-			_sqlUpdate = SqlUpdateFactoryUtil.getSqlUpdate(getDataSource(),
-					"DELETE FROM Groups_UserGroups WHERE userGroupId = ?",
-					new int[] { java.sql.Types.BIGINT });
-		}
-
-		protected void clear(long userGroupId) throws SystemException {
-			ModelListener<com.liferay.portal.model.Group>[] groupListeners = groupPersistence.getListeners();
-
-			List<com.liferay.portal.model.Group> groups = null;
-
-			if ((listeners.length > 0) || (groupListeners.length > 0)) {
-				groups = getGroups(userGroupId);
-
-				for (com.liferay.portal.model.Group group : groups) {
-					for (ModelListener<UserGroup> listener : listeners) {
-						listener.onBeforeRemoveAssociation(userGroupId,
-							com.liferay.portal.model.Group.class.getName(),
-							group.getPrimaryKey());
-					}
-
-					for (ModelListener<com.liferay.portal.model.Group> listener : groupListeners) {
-						listener.onBeforeRemoveAssociation(group.getPrimaryKey(),
-							UserGroup.class.getName(), userGroupId);
-					}
-				}
-			}
-
-			_sqlUpdate.update(new Object[] { new Long(userGroupId) });
-
-			if ((listeners.length > 0) || (groupListeners.length > 0)) {
-				for (com.liferay.portal.model.Group group : groups) {
-					for (ModelListener<UserGroup> listener : listeners) {
-						listener.onAfterRemoveAssociation(userGroupId,
-							com.liferay.portal.model.Group.class.getName(),
-							group.getPrimaryKey());
-					}
-
-					for (ModelListener<com.liferay.portal.model.Group> listener : groupListeners) {
-						listener.onAfterRemoveAssociation(group.getPrimaryKey(),
-							UserGroup.class.getName(), userGroupId);
-					}
-				}
-			}
-		}
-
-		private SqlUpdate _sqlUpdate;
-	}
-
-	protected class RemoveGroup {
-		protected RemoveGroup() {
-			_sqlUpdate = SqlUpdateFactoryUtil.getSqlUpdate(getDataSource(),
-					"DELETE FROM Groups_UserGroups WHERE userGroupId = ? AND groupId = ?",
-					new int[] { java.sql.Types.BIGINT, java.sql.Types.BIGINT });
-		}
-
-		protected void remove(long userGroupId, long groupId)
-			throws SystemException {
-			if (containsGroup.contains(userGroupId, groupId)) {
-				ModelListener<com.liferay.portal.model.Group>[] groupListeners = groupPersistence.getListeners();
-
-				for (ModelListener<UserGroup> listener : listeners) {
-					listener.onBeforeRemoveAssociation(userGroupId,
-						com.liferay.portal.model.Group.class.getName(), groupId);
-				}
-
-				for (ModelListener<com.liferay.portal.model.Group> listener : groupListeners) {
-					listener.onBeforeRemoveAssociation(groupId,
-						UserGroup.class.getName(), userGroupId);
-				}
-
-				_sqlUpdate.update(new Object[] {
-						new Long(userGroupId), new Long(groupId)
-					});
-
-				for (ModelListener<UserGroup> listener : listeners) {
-					listener.onAfterRemoveAssociation(userGroupId,
-						com.liferay.portal.model.Group.class.getName(), groupId);
-				}
-
-				for (ModelListener<com.liferay.portal.model.Group> listener : groupListeners) {
-					listener.onAfterRemoveAssociation(groupId,
-						UserGroup.class.getName(), userGroupId);
-				}
-			}
-		}
-
-		private SqlUpdate _sqlUpdate;
-	}
-
-	protected class ContainsTeam {
-		protected ContainsTeam() {
-			_mappingSqlQuery = MappingSqlQueryFactoryUtil.getMappingSqlQuery(getDataSource(),
-					"SELECT COUNT(*) AS COUNT_VALUE FROM UserGroups_Teams WHERE userGroupId = ? AND teamId = ?",
-					new int[] { java.sql.Types.BIGINT, java.sql.Types.BIGINT },
-					RowMapper.COUNT);
-		}
-
-		protected boolean contains(long userGroupId, long teamId) {
-			List<Integer> results = _mappingSqlQuery.execute(new Object[] {
-						new Long(userGroupId), new Long(teamId)
-					});
-
-			if (results.size() > 0) {
-				Integer count = results.get(0);
-
-				if (count.intValue() > 0) {
-					return true;
-				}
-			}
-
-			return false;
-		}
-
-		private MappingSqlQuery<Integer> _mappingSqlQuery;
-	}
-
-	protected class AddTeam {
-		protected AddTeam() {
-			_sqlUpdate = SqlUpdateFactoryUtil.getSqlUpdate(getDataSource(),
-					"INSERT INTO UserGroups_Teams (userGroupId, teamId) VALUES (?, ?)",
-					new int[] { java.sql.Types.BIGINT, java.sql.Types.BIGINT });
-		}
-
-		protected void add(long userGroupId, long teamId)
-			throws SystemException {
-			if (!containsTeam.contains(userGroupId, teamId)) {
-				ModelListener<com.liferay.portal.model.Team>[] teamListeners = teamPersistence.getListeners();
-
-				for (ModelListener<UserGroup> listener : listeners) {
-					listener.onBeforeAddAssociation(userGroupId,
-						com.liferay.portal.model.Team.class.getName(), teamId);
-				}
-
-				for (ModelListener<com.liferay.portal.model.Team> listener : teamListeners) {
-					listener.onBeforeAddAssociation(teamId,
-						UserGroup.class.getName(), userGroupId);
-				}
-
-				_sqlUpdate.update(new Object[] {
-						new Long(userGroupId), new Long(teamId)
-					});
-
-				for (ModelListener<UserGroup> listener : listeners) {
-					listener.onAfterAddAssociation(userGroupId,
-						com.liferay.portal.model.Team.class.getName(), teamId);
-				}
-
-				for (ModelListener<com.liferay.portal.model.Team> listener : teamListeners) {
-					listener.onAfterAddAssociation(teamId,
-						UserGroup.class.getName(), userGroupId);
-				}
-			}
-		}
-
-		private SqlUpdate _sqlUpdate;
-	}
-
-	protected class ClearTeams {
-		protected ClearTeams() {
-			_sqlUpdate = SqlUpdateFactoryUtil.getSqlUpdate(getDataSource(),
-					"DELETE FROM UserGroups_Teams WHERE userGroupId = ?",
-					new int[] { java.sql.Types.BIGINT });
-		}
-
-		protected void clear(long userGroupId) throws SystemException {
-			ModelListener<com.liferay.portal.model.Team>[] teamListeners = teamPersistence.getListeners();
-
-			List<com.liferay.portal.model.Team> teams = null;
-
-			if ((listeners.length > 0) || (teamListeners.length > 0)) {
-				teams = getTeams(userGroupId);
-
-				for (com.liferay.portal.model.Team team : teams) {
-					for (ModelListener<UserGroup> listener : listeners) {
-						listener.onBeforeRemoveAssociation(userGroupId,
-							com.liferay.portal.model.Team.class.getName(),
-							team.getPrimaryKey());
-					}
-
-					for (ModelListener<com.liferay.portal.model.Team> listener : teamListeners) {
-						listener.onBeforeRemoveAssociation(team.getPrimaryKey(),
-							UserGroup.class.getName(), userGroupId);
-					}
-				}
-			}
-
-			_sqlUpdate.update(new Object[] { new Long(userGroupId) });
-
-			if ((listeners.length > 0) || (teamListeners.length > 0)) {
-				for (com.liferay.portal.model.Team team : teams) {
-					for (ModelListener<UserGroup> listener : listeners) {
-						listener.onAfterRemoveAssociation(userGroupId,
-							com.liferay.portal.model.Team.class.getName(),
-							team.getPrimaryKey());
-					}
-
-					for (ModelListener<com.liferay.portal.model.Team> listener : teamListeners) {
-						listener.onAfterRemoveAssociation(team.getPrimaryKey(),
-							UserGroup.class.getName(), userGroupId);
-					}
-				}
-			}
-		}
-
-		private SqlUpdate _sqlUpdate;
-	}
-
-	protected class RemoveTeam {
-		protected RemoveTeam() {
-			_sqlUpdate = SqlUpdateFactoryUtil.getSqlUpdate(getDataSource(),
-					"DELETE FROM UserGroups_Teams WHERE userGroupId = ? AND teamId = ?",
-					new int[] { java.sql.Types.BIGINT, java.sql.Types.BIGINT });
-		}
-
-		protected void remove(long userGroupId, long teamId)
-			throws SystemException {
-			if (containsTeam.contains(userGroupId, teamId)) {
-				ModelListener<com.liferay.portal.model.Team>[] teamListeners = teamPersistence.getListeners();
-
-				for (ModelListener<UserGroup> listener : listeners) {
-					listener.onBeforeRemoveAssociation(userGroupId,
-						com.liferay.portal.model.Team.class.getName(), teamId);
-				}
-
-				for (ModelListener<com.liferay.portal.model.Team> listener : teamListeners) {
-					listener.onBeforeRemoveAssociation(teamId,
-						UserGroup.class.getName(), userGroupId);
-				}
-
-				_sqlUpdate.update(new Object[] {
-						new Long(userGroupId), new Long(teamId)
-					});
-
-				for (ModelListener<UserGroup> listener : listeners) {
-					listener.onAfterRemoveAssociation(userGroupId,
-						com.liferay.portal.model.Team.class.getName(), teamId);
-				}
-
-				for (ModelListener<com.liferay.portal.model.Team> listener : teamListeners) {
-					listener.onAfterRemoveAssociation(teamId,
-						UserGroup.class.getName(), userGroupId);
-				}
-			}
-		}
-
-		private SqlUpdate _sqlUpdate;
-	}
-
-	protected class ContainsUser {
-		protected ContainsUser() {
-			_mappingSqlQuery = MappingSqlQueryFactoryUtil.getMappingSqlQuery(getDataSource(),
-					"SELECT COUNT(*) AS COUNT_VALUE FROM Users_UserGroups WHERE userGroupId = ? AND userId = ?",
-					new int[] { java.sql.Types.BIGINT, java.sql.Types.BIGINT },
-					RowMapper.COUNT);
-		}
-
-		protected boolean contains(long userGroupId, long userId) {
-			List<Integer> results = _mappingSqlQuery.execute(new Object[] {
-						new Long(userGroupId), new Long(userId)
-					});
-
-			if (results.size() > 0) {
-				Integer count = results.get(0);
-
-				if (count.intValue() > 0) {
-					return true;
-				}
-			}
-
-			return false;
-		}
-
-		private MappingSqlQuery<Integer> _mappingSqlQuery;
-	}
-
-	protected class AddUser {
-		protected AddUser() {
-			_sqlUpdate = SqlUpdateFactoryUtil.getSqlUpdate(getDataSource(),
-					"INSERT INTO Users_UserGroups (userGroupId, userId) VALUES (?, ?)",
-					new int[] { java.sql.Types.BIGINT, java.sql.Types.BIGINT });
-		}
-
-		protected void add(long userGroupId, long userId)
-			throws SystemException {
-			if (!containsUser.contains(userGroupId, userId)) {
-				ModelListener<com.liferay.portal.model.User>[] userListeners = userPersistence.getListeners();
-
-				for (ModelListener<UserGroup> listener : listeners) {
-					listener.onBeforeAddAssociation(userGroupId,
-						com.liferay.portal.model.User.class.getName(), userId);
-				}
-
-				for (ModelListener<com.liferay.portal.model.User> listener : userListeners) {
-					listener.onBeforeAddAssociation(userId,
-						UserGroup.class.getName(), userGroupId);
-				}
-
-				_sqlUpdate.update(new Object[] {
-						new Long(userGroupId), new Long(userId)
-					});
-
-				for (ModelListener<UserGroup> listener : listeners) {
-					listener.onAfterAddAssociation(userGroupId,
-						com.liferay.portal.model.User.class.getName(), userId);
-				}
-
-				for (ModelListener<com.liferay.portal.model.User> listener : userListeners) {
-					listener.onAfterAddAssociation(userId,
-						UserGroup.class.getName(), userGroupId);
-				}
-			}
-		}
-
-		private SqlUpdate _sqlUpdate;
-	}
-
-	protected class ClearUsers {
-		protected ClearUsers() {
-			_sqlUpdate = SqlUpdateFactoryUtil.getSqlUpdate(getDataSource(),
-					"DELETE FROM Users_UserGroups WHERE userGroupId = ?",
-					new int[] { java.sql.Types.BIGINT });
-		}
-
-		protected void clear(long userGroupId) throws SystemException {
-			ModelListener<com.liferay.portal.model.User>[] userListeners = userPersistence.getListeners();
-
-			List<com.liferay.portal.model.User> users = null;
-
-			if ((listeners.length > 0) || (userListeners.length > 0)) {
-				users = getUsers(userGroupId);
-
-				for (com.liferay.portal.model.User user : users) {
-					for (ModelListener<UserGroup> listener : listeners) {
-						listener.onBeforeRemoveAssociation(userGroupId,
-							com.liferay.portal.model.User.class.getName(),
-							user.getPrimaryKey());
-					}
-
-					for (ModelListener<com.liferay.portal.model.User> listener : userListeners) {
-						listener.onBeforeRemoveAssociation(user.getPrimaryKey(),
-							UserGroup.class.getName(), userGroupId);
-					}
-				}
-			}
-
-			_sqlUpdate.update(new Object[] { new Long(userGroupId) });
-
-			if ((listeners.length > 0) || (userListeners.length > 0)) {
-				for (com.liferay.portal.model.User user : users) {
-					for (ModelListener<UserGroup> listener : listeners) {
-						listener.onAfterRemoveAssociation(userGroupId,
-							com.liferay.portal.model.User.class.getName(),
-							user.getPrimaryKey());
-					}
-
-					for (ModelListener<com.liferay.portal.model.User> listener : userListeners) {
-						listener.onAfterRemoveAssociation(user.getPrimaryKey(),
-							UserGroup.class.getName(), userGroupId);
-					}
-				}
-			}
-		}
-
-		private SqlUpdate _sqlUpdate;
-	}
-
-	protected class RemoveUser {
-		protected RemoveUser() {
-			_sqlUpdate = SqlUpdateFactoryUtil.getSqlUpdate(getDataSource(),
-					"DELETE FROM Users_UserGroups WHERE userGroupId = ? AND userId = ?",
-					new int[] { java.sql.Types.BIGINT, java.sql.Types.BIGINT });
-		}
-
-		protected void remove(long userGroupId, long userId)
-			throws SystemException {
-			if (containsUser.contains(userGroupId, userId)) {
-				ModelListener<com.liferay.portal.model.User>[] userListeners = userPersistence.getListeners();
-
-				for (ModelListener<UserGroup> listener : listeners) {
-					listener.onBeforeRemoveAssociation(userGroupId,
-						com.liferay.portal.model.User.class.getName(), userId);
-				}
-
-				for (ModelListener<com.liferay.portal.model.User> listener : userListeners) {
-					listener.onBeforeRemoveAssociation(userId,
-						UserGroup.class.getName(), userGroupId);
-				}
-
-				_sqlUpdate.update(new Object[] {
-						new Long(userGroupId), new Long(userId)
-					});
-
-				for (ModelListener<UserGroup> listener : listeners) {
-					listener.onAfterRemoveAssociation(userGroupId,
-						com.liferay.portal.model.User.class.getName(), userId);
-				}
-
-				for (ModelListener<com.liferay.portal.model.User> listener : userListeners) {
-					listener.onAfterRemoveAssociation(userId,
-						UserGroup.class.getName(), userGroupId);
-				}
-			}
-		}
-
-		private SqlUpdate _sqlUpdate;
-	}
-
+	protected TableMapper<UserGroup, com.liferay.portal.model.User> userGroupToUserTableMapper;
 	private static final String _SQL_SELECT_USERGROUP = "SELECT userGroup FROM UserGroup userGroup";
 	private static final String _SQL_SELECT_USERGROUP_WHERE = "SELECT userGroup FROM UserGroup userGroup WHERE ";
 	private static final String _SQL_COUNT_USERGROUP = "SELECT COUNT(userGroup) FROM UserGroup userGroup";
 	private static final String _SQL_COUNT_USERGROUP_WHERE = "SELECT COUNT(userGroup) FROM UserGroup userGroup WHERE ";
-	private static final String _SQL_GETGROUPS = "SELECT {Group_.*} FROM Group_ INNER JOIN Groups_UserGroups ON (Groups_UserGroups.groupId = Group_.groupId) WHERE (Groups_UserGroups.userGroupId = ?)";
-	private static final String _SQL_GETGROUPSSIZE = "SELECT COUNT(*) AS COUNT_VALUE FROM Groups_UserGroups WHERE userGroupId = ?";
-	private static final String _SQL_GETTEAMS = "SELECT {Team.*} FROM Team INNER JOIN UserGroups_Teams ON (UserGroups_Teams.teamId = Team.teamId) WHERE (UserGroups_Teams.userGroupId = ?)";
-	private static final String _SQL_GETTEAMSSIZE = "SELECT COUNT(*) AS COUNT_VALUE FROM UserGroups_Teams WHERE userGroupId = ?";
-	private static final String _SQL_GETUSERS = "SELECT {User_.*} FROM User_ INNER JOIN Users_UserGroups ON (Users_UserGroups.userId = User_.userId) WHERE (Users_UserGroups.userGroupId = ?)";
-	private static final String _SQL_GETUSERSSIZE = "SELECT COUNT(*) AS COUNT_VALUE FROM Users_UserGroups WHERE userGroupId = ?";
 	private static final String _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN = "userGroup.userGroupId";
 	private static final String _FILTER_SQL_SELECT_USERGROUP_WHERE = "SELECT DISTINCT {userGroup.*} FROM UserGroup userGroup WHERE ";
 	private static final String _FILTER_SQL_SELECT_USERGROUP_NO_INLINE_DISTINCT_WHERE_1 =
@@ -6711,6 +5606,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 		};
 
 	private static CacheModel<UserGroup> _nullUserGroupCacheModel = new CacheModel<UserGroup>() {
+			@Override
 			public UserGroup toEntityModel() {
 				return _nullUserGroup;
 			}

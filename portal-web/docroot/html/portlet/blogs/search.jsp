@@ -35,11 +35,11 @@ String keywords = ParamUtil.getString(request, "keywords");
 		title="search"
 	/>
 
-	<span class="aui-search-bar">
-		<aui:input inlineField="<%= true %>" label="" name="keywords" size="30" title="search-entries" type="text" value="<%= keywords %>" />
-
-		<aui:button type="submit" value="search" />
-	</span>
+	<div class="form-search">
+		<div class="pull-right">
+			<liferay-ui:input-search autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) %>" id="keywords1" name="keywords" placeholder='<%= LanguageUtil.get(locale, "keywords") %>' />
+		</div>
+	</div>
 
 	<%
 	PortletURL portletURL = renderResponse.createRenderURL();
@@ -74,12 +74,7 @@ String keywords = ParamUtil.getString(request, "keywords");
 
 		Hits hits = indexer.search(searchContext);
 
-		if (searchContainer.recalculateCur(hits.getLength())) {
-			searchContext.setEnd(searchContainer.getEnd());
-			searchContext.setStart(searchContainer.getStart());
-
-			hits = indexer.search(searchContext);
-		}
+		searchContainer.setTotal(hits.getLength());
 
 		PortletURL hitURL = renderResponse.createRenderURL();
 
@@ -124,12 +119,6 @@ String keywords = ParamUtil.getString(request, "keywords");
 		<liferay-ui:search-paginator searchContainer="<%= searchContainer %>" type="more" />
 	</liferay-ui:search-container>
 </aui:form>
-
-<c:if test="<%= windowState.equals(WindowState.MAXIMIZED) %>">
-	<aui:script>
-		Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace />keywords);
-	</aui:script>
-</c:if>
 
 <%
 if (Validator.isNotNull(keywords)) {

@@ -149,26 +149,32 @@ public class AssetCategoryPropertyModelImpl extends BaseModelImpl<AssetCategoryP
 	public AssetCategoryPropertyModelImpl() {
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _categoryPropertyId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setCategoryPropertyId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
 		return _categoryPropertyId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return AssetCategoryProperty.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return AssetCategoryProperty.class.getName();
 	}
@@ -248,19 +254,23 @@ public class AssetCategoryPropertyModelImpl extends BaseModelImpl<AssetCategoryP
 	}
 
 	@JSON
+	@Override
 	public long getCategoryPropertyId() {
 		return _categoryPropertyId;
 	}
 
+	@Override
 	public void setCategoryPropertyId(long categoryPropertyId) {
 		_categoryPropertyId = categoryPropertyId;
 	}
 
 	@JSON
+	@Override
 	public long getCompanyId() {
 		return _companyId;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
 		_columnBitmask |= COMPANYID_COLUMN_BITMASK;
 
@@ -278,23 +288,28 @@ public class AssetCategoryPropertyModelImpl extends BaseModelImpl<AssetCategoryP
 	}
 
 	@JSON
+	@Override
 	public long getUserId() {
 		return _userId;
 	}
 
+	@Override
 	public void setUserId(long userId) {
 		_userId = userId;
 	}
 
+	@Override
 	public String getUserUuid() throws SystemException {
 		return PortalUtil.getUserValue(getUserId(), "uuid", _userUuid);
 	}
 
+	@Override
 	public void setUserUuid(String userUuid) {
 		_userUuid = userUuid;
 	}
 
 	@JSON
+	@Override
 	public String getUserName() {
 		if (_userName == null) {
 			return StringPool.BLANK;
@@ -304,33 +319,40 @@ public class AssetCategoryPropertyModelImpl extends BaseModelImpl<AssetCategoryP
 		}
 	}
 
+	@Override
 	public void setUserName(String userName) {
 		_userName = userName;
 	}
 
 	@JSON
+	@Override
 	public Date getCreateDate() {
 		return _createDate;
 	}
 
+	@Override
 	public void setCreateDate(Date createDate) {
 		_createDate = createDate;
 	}
 
 	@JSON
+	@Override
 	public Date getModifiedDate() {
 		return _modifiedDate;
 	}
 
+	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		_modifiedDate = modifiedDate;
 	}
 
 	@JSON
+	@Override
 	public long getCategoryId() {
 		return _categoryId;
 	}
 
+	@Override
 	public void setCategoryId(long categoryId) {
 		_columnBitmask |= CATEGORYID_COLUMN_BITMASK;
 
@@ -348,6 +370,7 @@ public class AssetCategoryPropertyModelImpl extends BaseModelImpl<AssetCategoryP
 	}
 
 	@JSON
+	@Override
 	public String getKey() {
 		if (_key == null) {
 			return StringPool.BLANK;
@@ -357,6 +380,7 @@ public class AssetCategoryPropertyModelImpl extends BaseModelImpl<AssetCategoryP
 		}
 	}
 
+	@Override
 	public void setKey(String key) {
 		_columnBitmask = -1L;
 
@@ -372,6 +396,7 @@ public class AssetCategoryPropertyModelImpl extends BaseModelImpl<AssetCategoryP
 	}
 
 	@JSON
+	@Override
 	public String getValue() {
 		if (_value == null) {
 			return StringPool.BLANK;
@@ -381,6 +406,7 @@ public class AssetCategoryPropertyModelImpl extends BaseModelImpl<AssetCategoryP
 		}
 	}
 
+	@Override
 	public void setValue(String value) {
 		_value = value;
 	}
@@ -431,6 +457,7 @@ public class AssetCategoryPropertyModelImpl extends BaseModelImpl<AssetCategoryP
 		return assetCategoryPropertyImpl;
 	}
 
+	@Override
 	public int compareTo(AssetCategoryProperty assetCategoryProperty) {
 		int value = 0;
 
@@ -445,18 +472,15 @@ public class AssetCategoryPropertyModelImpl extends BaseModelImpl<AssetCategoryP
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof AssetCategoryProperty)) {
 			return false;
 		}
 
-		AssetCategoryProperty assetCategoryProperty = null;
-
-		try {
-			assetCategoryProperty = (AssetCategoryProperty)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		AssetCategoryProperty assetCategoryProperty = (AssetCategoryProperty)obj;
 
 		long primaryKey = assetCategoryProperty.getPrimaryKey();
 
@@ -574,6 +598,7 @@ public class AssetCategoryPropertyModelImpl extends BaseModelImpl<AssetCategoryP
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(31);
 

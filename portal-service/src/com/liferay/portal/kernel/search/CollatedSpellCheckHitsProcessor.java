@@ -14,20 +14,37 @@
 
 package com.liferay.portal.kernel.search;
 
+import com.liferay.portal.kernel.util.StringPool;
+
 /**
  * @author Michael C. Han
+ * @author Josef Sustacek
  */
 public class CollatedSpellCheckHitsProcessor implements HitsProcessor {
 
+	@Override
 	public boolean process(SearchContext searchContext, Hits hits)
 		throws SearchException {
 
-		if (hits.getLength() > 0) {
+		QueryConfig queryConfig = searchContext.getQueryConfig();
+
+		if (!queryConfig.isCollatedSpellCheckResultEnabled()) {
+			return true;
+		}
+
+		int collatedSpellCheckResultScoresThreshold =
+			queryConfig.getCollatedSpellCheckResultScoresThreshold();
+
+		if (hits.getLength() >= collatedSpellCheckResultScoresThreshold) {
 			return true;
 		}
 
 		String collatedKeywords = SearchEngineUtil.spellCheckKeywords(
 			searchContext);
+
+		if (collatedKeywords.equals(searchContext.getKeywords())) {
+			collatedKeywords = StringPool.BLANK;
+		}
 
 		hits.setCollatedSpellCheckResult(collatedKeywords);
 

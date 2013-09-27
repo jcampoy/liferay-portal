@@ -22,8 +22,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -215,6 +215,7 @@ public class ConcurrentLFUCache<K, V> {
 	private class EntryComparator
 		implements Comparator<Entry<K, ValueWrapper>> {
 
+		@Override
 		public int compare(
 			Entry<K, ValueWrapper> entry1, Entry<K, ValueWrapper> entry2) {
 

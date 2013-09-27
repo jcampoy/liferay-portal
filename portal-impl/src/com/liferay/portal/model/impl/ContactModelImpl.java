@@ -197,26 +197,32 @@ public class ContactModelImpl extends BaseModelImpl<Contact>
 	public ContactModelImpl() {
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _contactId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setContactId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
 		return _contactId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return Contact.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return Contact.class.getName();
 	}
@@ -464,19 +470,23 @@ public class ContactModelImpl extends BaseModelImpl<Contact>
 	}
 
 	@JSON
+	@Override
 	public long getContactId() {
 		return _contactId;
 	}
 
+	@Override
 	public void setContactId(long contactId) {
 		_contactId = contactId;
 	}
 
 	@JSON
+	@Override
 	public long getCompanyId() {
 		return _companyId;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
 		_columnBitmask |= COMPANYID_COLUMN_BITMASK;
 
@@ -494,23 +504,28 @@ public class ContactModelImpl extends BaseModelImpl<Contact>
 	}
 
 	@JSON
+	@Override
 	public long getUserId() {
 		return _userId;
 	}
 
+	@Override
 	public void setUserId(long userId) {
 		_userId = userId;
 	}
 
+	@Override
 	public String getUserUuid() throws SystemException {
 		return PortalUtil.getUserValue(getUserId(), "uuid", _userUuid);
 	}
 
+	@Override
 	public void setUserUuid(String userUuid) {
 		_userUuid = userUuid;
 	}
 
 	@JSON
+	@Override
 	public String getUserName() {
 		if (_userName == null) {
 			return StringPool.BLANK;
@@ -520,28 +535,34 @@ public class ContactModelImpl extends BaseModelImpl<Contact>
 		}
 	}
 
+	@Override
 	public void setUserName(String userName) {
 		_userName = userName;
 	}
 
 	@JSON
+	@Override
 	public Date getCreateDate() {
 		return _createDate;
 	}
 
+	@Override
 	public void setCreateDate(Date createDate) {
 		_createDate = createDate;
 	}
 
 	@JSON
+	@Override
 	public Date getModifiedDate() {
 		return _modifiedDate;
 	}
 
+	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		_modifiedDate = modifiedDate;
 	}
 
+	@Override
 	public String getClassName() {
 		if (getClassNameId() <= 0) {
 			return StringPool.BLANK;
@@ -550,6 +571,7 @@ public class ContactModelImpl extends BaseModelImpl<Contact>
 		return PortalUtil.getClassName(getClassNameId());
 	}
 
+	@Override
 	public void setClassName(String className) {
 		long classNameId = 0;
 
@@ -561,10 +583,12 @@ public class ContactModelImpl extends BaseModelImpl<Contact>
 	}
 
 	@JSON
+	@Override
 	public long getClassNameId() {
 		return _classNameId;
 	}
 
+	@Override
 	public void setClassNameId(long classNameId) {
 		_columnBitmask |= CLASSNAMEID_COLUMN_BITMASK;
 
@@ -582,10 +606,12 @@ public class ContactModelImpl extends BaseModelImpl<Contact>
 	}
 
 	@JSON
+	@Override
 	public long getClassPK() {
 		return _classPK;
 	}
 
+	@Override
 	public void setClassPK(long classPK) {
 		_columnBitmask |= CLASSPK_COLUMN_BITMASK;
 
@@ -603,10 +629,12 @@ public class ContactModelImpl extends BaseModelImpl<Contact>
 	}
 
 	@JSON
+	@Override
 	public long getAccountId() {
 		return _accountId;
 	}
 
+	@Override
 	public void setAccountId(long accountId) {
 		_columnBitmask |= ACCOUNTID_COLUMN_BITMASK;
 
@@ -624,15 +652,18 @@ public class ContactModelImpl extends BaseModelImpl<Contact>
 	}
 
 	@JSON
+	@Override
 	public long getParentContactId() {
 		return _parentContactId;
 	}
 
+	@Override
 	public void setParentContactId(long parentContactId) {
 		_parentContactId = parentContactId;
 	}
 
 	@JSON
+	@Override
 	public String getEmailAddress() {
 		if (_emailAddress == null) {
 			return StringPool.BLANK;
@@ -642,11 +673,13 @@ public class ContactModelImpl extends BaseModelImpl<Contact>
 		}
 	}
 
+	@Override
 	public void setEmailAddress(String emailAddress) {
 		_emailAddress = emailAddress;
 	}
 
 	@JSON
+	@Override
 	public String getFirstName() {
 		if (_firstName == null) {
 			return StringPool.BLANK;
@@ -656,11 +689,13 @@ public class ContactModelImpl extends BaseModelImpl<Contact>
 		}
 	}
 
+	@Override
 	public void setFirstName(String firstName) {
 		_firstName = firstName;
 	}
 
 	@JSON
+	@Override
 	public String getMiddleName() {
 		if (_middleName == null) {
 			return StringPool.BLANK;
@@ -670,11 +705,13 @@ public class ContactModelImpl extends BaseModelImpl<Contact>
 		}
 	}
 
+	@Override
 	public void setMiddleName(String middleName) {
 		_middleName = middleName;
 	}
 
 	@JSON
+	@Override
 	public String getLastName() {
 		if (_lastName == null) {
 			return StringPool.BLANK;
@@ -684,51 +721,62 @@ public class ContactModelImpl extends BaseModelImpl<Contact>
 		}
 	}
 
+	@Override
 	public void setLastName(String lastName) {
 		_lastName = lastName;
 	}
 
 	@JSON
+	@Override
 	public int getPrefixId() {
 		return _prefixId;
 	}
 
+	@Override
 	public void setPrefixId(int prefixId) {
 		_prefixId = prefixId;
 	}
 
 	@JSON
+	@Override
 	public int getSuffixId() {
 		return _suffixId;
 	}
 
+	@Override
 	public void setSuffixId(int suffixId) {
 		_suffixId = suffixId;
 	}
 
 	@JSON
+	@Override
 	public boolean getMale() {
 		return _male;
 	}
 
+	@Override
 	public boolean isMale() {
 		return _male;
 	}
 
+	@Override
 	public void setMale(boolean male) {
 		_male = male;
 	}
 
 	@JSON
+	@Override
 	public Date getBirthday() {
 		return _birthday;
 	}
 
+	@Override
 	public void setBirthday(Date birthday) {
 		_birthday = birthday;
 	}
 
 	@JSON
+	@Override
 	public String getSmsSn() {
 		if (_smsSn == null) {
 			return StringPool.BLANK;
@@ -738,11 +786,13 @@ public class ContactModelImpl extends BaseModelImpl<Contact>
 		}
 	}
 
+	@Override
 	public void setSmsSn(String smsSn) {
 		_smsSn = smsSn;
 	}
 
 	@JSON
+	@Override
 	public String getAimSn() {
 		if (_aimSn == null) {
 			return StringPool.BLANK;
@@ -752,11 +802,13 @@ public class ContactModelImpl extends BaseModelImpl<Contact>
 		}
 	}
 
+	@Override
 	public void setAimSn(String aimSn) {
 		_aimSn = aimSn;
 	}
 
 	@JSON
+	@Override
 	public String getFacebookSn() {
 		if (_facebookSn == null) {
 			return StringPool.BLANK;
@@ -766,11 +818,13 @@ public class ContactModelImpl extends BaseModelImpl<Contact>
 		}
 	}
 
+	@Override
 	public void setFacebookSn(String facebookSn) {
 		_facebookSn = facebookSn;
 	}
 
 	@JSON
+	@Override
 	public String getIcqSn() {
 		if (_icqSn == null) {
 			return StringPool.BLANK;
@@ -780,11 +834,13 @@ public class ContactModelImpl extends BaseModelImpl<Contact>
 		}
 	}
 
+	@Override
 	public void setIcqSn(String icqSn) {
 		_icqSn = icqSn;
 	}
 
 	@JSON
+	@Override
 	public String getJabberSn() {
 		if (_jabberSn == null) {
 			return StringPool.BLANK;
@@ -794,11 +850,13 @@ public class ContactModelImpl extends BaseModelImpl<Contact>
 		}
 	}
 
+	@Override
 	public void setJabberSn(String jabberSn) {
 		_jabberSn = jabberSn;
 	}
 
 	@JSON
+	@Override
 	public String getMsnSn() {
 		if (_msnSn == null) {
 			return StringPool.BLANK;
@@ -808,11 +866,13 @@ public class ContactModelImpl extends BaseModelImpl<Contact>
 		}
 	}
 
+	@Override
 	public void setMsnSn(String msnSn) {
 		_msnSn = msnSn;
 	}
 
 	@JSON
+	@Override
 	public String getMySpaceSn() {
 		if (_mySpaceSn == null) {
 			return StringPool.BLANK;
@@ -822,11 +882,13 @@ public class ContactModelImpl extends BaseModelImpl<Contact>
 		}
 	}
 
+	@Override
 	public void setMySpaceSn(String mySpaceSn) {
 		_mySpaceSn = mySpaceSn;
 	}
 
 	@JSON
+	@Override
 	public String getSkypeSn() {
 		if (_skypeSn == null) {
 			return StringPool.BLANK;
@@ -836,11 +898,13 @@ public class ContactModelImpl extends BaseModelImpl<Contact>
 		}
 	}
 
+	@Override
 	public void setSkypeSn(String skypeSn) {
 		_skypeSn = skypeSn;
 	}
 
 	@JSON
+	@Override
 	public String getTwitterSn() {
 		if (_twitterSn == null) {
 			return StringPool.BLANK;
@@ -850,11 +914,13 @@ public class ContactModelImpl extends BaseModelImpl<Contact>
 		}
 	}
 
+	@Override
 	public void setTwitterSn(String twitterSn) {
 		_twitterSn = twitterSn;
 	}
 
 	@JSON
+	@Override
 	public String getYmSn() {
 		if (_ymSn == null) {
 			return StringPool.BLANK;
@@ -864,11 +930,13 @@ public class ContactModelImpl extends BaseModelImpl<Contact>
 		}
 	}
 
+	@Override
 	public void setYmSn(String ymSn) {
 		_ymSn = ymSn;
 	}
 
 	@JSON
+	@Override
 	public String getEmployeeStatusId() {
 		if (_employeeStatusId == null) {
 			return StringPool.BLANK;
@@ -878,11 +946,13 @@ public class ContactModelImpl extends BaseModelImpl<Contact>
 		}
 	}
 
+	@Override
 	public void setEmployeeStatusId(String employeeStatusId) {
 		_employeeStatusId = employeeStatusId;
 	}
 
 	@JSON
+	@Override
 	public String getEmployeeNumber() {
 		if (_employeeNumber == null) {
 			return StringPool.BLANK;
@@ -892,11 +962,13 @@ public class ContactModelImpl extends BaseModelImpl<Contact>
 		}
 	}
 
+	@Override
 	public void setEmployeeNumber(String employeeNumber) {
 		_employeeNumber = employeeNumber;
 	}
 
 	@JSON
+	@Override
 	public String getJobTitle() {
 		if (_jobTitle == null) {
 			return StringPool.BLANK;
@@ -906,11 +978,13 @@ public class ContactModelImpl extends BaseModelImpl<Contact>
 		}
 	}
 
+	@Override
 	public void setJobTitle(String jobTitle) {
 		_jobTitle = jobTitle;
 	}
 
 	@JSON
+	@Override
 	public String getJobClass() {
 		if (_jobClass == null) {
 			return StringPool.BLANK;
@@ -920,11 +994,13 @@ public class ContactModelImpl extends BaseModelImpl<Contact>
 		}
 	}
 
+	@Override
 	public void setJobClass(String jobClass) {
 		_jobClass = jobClass;
 	}
 
 	@JSON
+	@Override
 	public String getHoursOfOperation() {
 		if (_hoursOfOperation == null) {
 			return StringPool.BLANK;
@@ -934,6 +1010,7 @@ public class ContactModelImpl extends BaseModelImpl<Contact>
 		}
 	}
 
+	@Override
 	public void setHoursOfOperation(String hoursOfOperation) {
 		_hoursOfOperation = hoursOfOperation;
 	}
@@ -1008,6 +1085,7 @@ public class ContactModelImpl extends BaseModelImpl<Contact>
 		return contactImpl;
 	}
 
+	@Override
 	public int compareTo(Contact contact) {
 		long primaryKey = contact.getPrimaryKey();
 
@@ -1024,18 +1102,15 @@ public class ContactModelImpl extends BaseModelImpl<Contact>
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof Contact)) {
 			return false;
 		}
 
-		Contact contact = null;
-
-		try {
-			contact = (Contact)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		Contact contact = (Contact)obj;
 
 		long primaryKey = contact.getPrimaryKey();
 
@@ -1364,6 +1439,7 @@ public class ContactModelImpl extends BaseModelImpl<Contact>
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(103);
 

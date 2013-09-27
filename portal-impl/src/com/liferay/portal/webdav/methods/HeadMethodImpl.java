@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.webdav.Resource;
 import com.liferay.portal.kernel.webdav.WebDAVException;
 import com.liferay.portal.kernel.webdav.WebDAVRequest;
 import com.liferay.portal.kernel.webdav.WebDAVStorage;
+import com.liferay.portal.kernel.webdav.methods.Method;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -27,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class HeadMethodImpl implements Method {
 
+	@Override
 	public int process(WebDAVRequest webDAVRequest) throws WebDAVException {
 		try {
 			WebDAVStorage storage = webDAVRequest.getWebDAVStorage();

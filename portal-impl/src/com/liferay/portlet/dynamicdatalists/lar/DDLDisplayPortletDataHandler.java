@@ -14,6 +14,7 @@
 
 package com.liferay.portlet.dynamicdatalists.lar;
 
+import com.liferay.portal.kernel.lar.DataLevel;
 import com.liferay.portal.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.lar.StagedModelDataHandlerUtil;
 import com.liferay.portal.kernel.log.Log;
@@ -24,6 +25,7 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portlet.dynamicdatalists.model.DDLRecordSet;
 import com.liferay.portlet.dynamicdatalists.service.DDLRecordSetLocalServiceUtil;
+import com.liferay.portlet.dynamicdatalists.service.permission.DDLPermission;
 import com.liferay.portlet.dynamicdatamapping.model.DDMTemplate;
 
 import java.util.List;
@@ -37,6 +39,7 @@ import javax.portlet.PortletPreferences;
 public class DDLDisplayPortletDataHandler extends DDLPortletDataHandler {
 
 	public DDLDisplayPortletDataHandler() {
+		setDataLevel(DataLevel.PORTLET_INSTANCE);
 		setDataPortletPreferences(
 			"recordSetId", "displayDDMTemplateId", "formDDMTemplateId");
 	}
@@ -66,9 +69,7 @@ public class DDLDisplayPortletDataHandler extends DDLPortletDataHandler {
 			PortletPreferences portletPreferences)
 		throws Exception {
 
-		portletDataContext.addPermissions(
-			"com.liferay.portlet.dynamicdatalist",
-			portletDataContext.getScopeGroupId());
+		portletDataContext.addPortletPermissions(DDLPermission.RESOURCE_NAME);
 
 		long recordSetId = GetterUtil.getLong(
 			portletPreferences.getValue("recordSetId", null), 0);
@@ -83,11 +84,15 @@ public class DDLDisplayPortletDataHandler extends DDLPortletDataHandler {
 
 		Element rootElement = addExportDataRootElement(portletDataContext);
 
-		DDLRecordSet recordSet = DDLRecordSetLocalServiceUtil.getRecordSet(
+		DDLRecordSet recordSet = DDLRecordSetLocalServiceUtil.fetchRecordSet(
 			recordSetId);
 
-		StagedModelDataHandlerUtil.exportStagedModel(
-			portletDataContext, recordSet);
+		if (recordSet == null) {
+			return getExportDataRootElementString(rootElement);
+		}
+
+		StagedModelDataHandlerUtil.exportReferenceStagedModel(
+			portletDataContext, portletId, recordSet);
 
 		return getExportDataRootElementString(rootElement);
 	}
@@ -98,10 +103,8 @@ public class DDLDisplayPortletDataHandler extends DDLPortletDataHandler {
 			PortletPreferences portletPreferences, String data)
 		throws Exception {
 
-		portletDataContext.importPermissions(
-			"com.liferay.portlet.dynamicdatalist",
-			portletDataContext.getSourceGroupId(),
-			portletDataContext.getScopeGroupId());
+		portletDataContext.importPortletPermissions(
+			DDLPermission.RESOURCE_NAME);
 
 		Element recordSetsElement =
 			portletDataContext.getImportDataGroupElement(DDLRecordSet.class);
@@ -110,7 +113,7 @@ public class DDLDisplayPortletDataHandler extends DDLPortletDataHandler {
 
 		Element recordSetElement = recordSetElements.get(0);
 
-		StagedModelDataHandlerUtil.importStagedModel(
+		StagedModelDataHandlerUtil.importReferenceStagedModel(
 			portletDataContext, recordSetElement);
 
 		long importedRecordSetId = GetterUtil.getLong(

@@ -195,7 +195,7 @@ viewProductEntryURL.setParameter("productEntryId", String.valueOf(productEntryId
 		<br />
 	</c:when>
 	<c:otherwise>
-		<div class="portlet-msg-error">
+		<div class="alert alert-error">
 			<liferay-ui:message key="this-product-does-not-have-any-released-versions" />
 		</div>
 	</c:otherwise>
@@ -256,7 +256,6 @@ List productScreenshots = SCProductScreenshotLocalServiceUtil.getProductScreensh
 			classPK="<%= productEntry.getProductEntryId() %>"
 			formAction="<%= discussionURL %>"
 			redirect="<%= currentURL %>"
-			subject="<%= productEntry.getName() %>"
 			userId="<%= productEntry.getUserId() %>"
 		/>
 	</c:when>
@@ -312,7 +311,7 @@ List productScreenshots = SCProductScreenshotLocalServiceUtil.getProductScreensh
 			row.addText(sb.toString());
 
 			row.addText(_getFrameworkVersions(curProductVersion.getFrameworkVersions()));
-			row.addText(dateFormatDateTime.format(curProductVersion.getModifiedDate()));
+			row.addDate(curProductVersion.getModifiedDate());
 
 			// Action
 

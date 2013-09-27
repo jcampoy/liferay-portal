@@ -17,6 +17,7 @@ package com.liferay.portlet.social.model;
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.CacheModel;
+import com.liferay.portal.model.TypedModel;
 import com.liferay.portal.service.ServiceContext;
 
 import com.liferay.portlet.expando.model.ExpandoBridge;
@@ -36,7 +37,8 @@ import java.io.Serializable;
  * @see com.liferay.portlet.social.model.impl.SocialActivitySettingModelImpl
  * @generated
  */
-public interface SocialActivitySettingModel extends BaseModel<SocialActivitySetting> {
+public interface SocialActivitySettingModel extends BaseModel<SocialActivitySetting>,
+	TypedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -104,6 +106,7 @@ public interface SocialActivitySettingModel extends BaseModel<SocialActivitySett
 	 *
 	 * @return the fully qualified class name of this social activity setting
 	 */
+	@Override
 	public String getClassName();
 
 	public void setClassName(String className);
@@ -113,6 +116,7 @@ public interface SocialActivitySettingModel extends BaseModel<SocialActivitySett
 	 *
 	 * @return the class name ID of this social activity setting
 	 */
+	@Override
 	public long getClassNameId();
 
 	/**
@@ -120,6 +124,7 @@ public interface SocialActivitySettingModel extends BaseModel<SocialActivitySett
 	 *
 	 * @param classNameId the class name ID of this social activity setting
 	 */
+	@Override
 	public void setClassNameId(long classNameId);
 
 	/**
@@ -166,41 +171,60 @@ public interface SocialActivitySettingModel extends BaseModel<SocialActivitySett
 	 */
 	public void setValue(String value);
 
+	@Override
 	public boolean isNew();
 
+	@Override
 	public void setNew(boolean n);
 
+	@Override
 	public boolean isCachedModel();
 
+	@Override
 	public void setCachedModel(boolean cachedModel);
 
+	@Override
 	public boolean isEscapedModel();
 
+	@Override
 	public Serializable getPrimaryKeyObj();
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj);
 
+	@Override
 	public ExpandoBridge getExpandoBridge();
 
+	@Override
 	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
 
+	@Override
 	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
 
+	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
+	@Override
 	public Object clone();
 
+	@Override
 	public int compareTo(SocialActivitySetting socialActivitySetting);
 
+	@Override
 	public int hashCode();
 
+	@Override
 	public CacheModel<SocialActivitySetting> toCacheModel();
 
+	@Override
 	public SocialActivitySetting toEscapedModel();
 
+	@Override
 	public SocialActivitySetting toUnescapedModel();
 
+	@Override
 	public String toString();
 
+	@Override
 	public String toXmlString();
 }

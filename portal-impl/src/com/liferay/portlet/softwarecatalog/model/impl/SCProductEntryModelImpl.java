@@ -178,26 +178,32 @@ public class SCProductEntryModelImpl extends BaseModelImpl<SCProductEntry>
 	public SCProductEntryModelImpl() {
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _productEntryId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setProductEntryId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
 		return _productEntryId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return SCProductEntry.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return SCProductEntry.class.getName();
 	}
@@ -326,19 +332,23 @@ public class SCProductEntryModelImpl extends BaseModelImpl<SCProductEntry>
 	}
 
 	@JSON
+	@Override
 	public long getProductEntryId() {
 		return _productEntryId;
 	}
 
+	@Override
 	public void setProductEntryId(long productEntryId) {
 		_productEntryId = productEntryId;
 	}
 
 	@JSON
+	@Override
 	public long getGroupId() {
 		return _groupId;
 	}
 
+	@Override
 	public void setGroupId(long groupId) {
 		_columnBitmask |= GROUPID_COLUMN_BITMASK;
 
@@ -356,10 +366,12 @@ public class SCProductEntryModelImpl extends BaseModelImpl<SCProductEntry>
 	}
 
 	@JSON
+	@Override
 	public long getCompanyId() {
 		return _companyId;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
 		_columnBitmask |= COMPANYID_COLUMN_BITMASK;
 
@@ -377,10 +389,12 @@ public class SCProductEntryModelImpl extends BaseModelImpl<SCProductEntry>
 	}
 
 	@JSON
+	@Override
 	public long getUserId() {
 		return _userId;
 	}
 
+	@Override
 	public void setUserId(long userId) {
 		_columnBitmask |= USERID_COLUMN_BITMASK;
 
@@ -393,10 +407,12 @@ public class SCProductEntryModelImpl extends BaseModelImpl<SCProductEntry>
 		_userId = userId;
 	}
 
+	@Override
 	public String getUserUuid() throws SystemException {
 		return PortalUtil.getUserValue(getUserId(), "uuid", _userUuid);
 	}
 
+	@Override
 	public void setUserUuid(String userUuid) {
 		_userUuid = userUuid;
 	}
@@ -406,6 +422,7 @@ public class SCProductEntryModelImpl extends BaseModelImpl<SCProductEntry>
 	}
 
 	@JSON
+	@Override
 	public String getUserName() {
 		if (_userName == null) {
 			return StringPool.BLANK;
@@ -415,24 +432,29 @@ public class SCProductEntryModelImpl extends BaseModelImpl<SCProductEntry>
 		}
 	}
 
+	@Override
 	public void setUserName(String userName) {
 		_userName = userName;
 	}
 
 	@JSON
+	@Override
 	public Date getCreateDate() {
 		return _createDate;
 	}
 
+	@Override
 	public void setCreateDate(Date createDate) {
 		_createDate = createDate;
 	}
 
 	@JSON
+	@Override
 	public Date getModifiedDate() {
 		return _modifiedDate;
 	}
 
+	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		_columnBitmask = -1L;
 
@@ -440,6 +462,7 @@ public class SCProductEntryModelImpl extends BaseModelImpl<SCProductEntry>
 	}
 
 	@JSON
+	@Override
 	public String getName() {
 		if (_name == null) {
 			return StringPool.BLANK;
@@ -449,6 +472,7 @@ public class SCProductEntryModelImpl extends BaseModelImpl<SCProductEntry>
 		}
 	}
 
+	@Override
 	public void setName(String name) {
 		_columnBitmask = -1L;
 
@@ -456,6 +480,7 @@ public class SCProductEntryModelImpl extends BaseModelImpl<SCProductEntry>
 	}
 
 	@JSON
+	@Override
 	public String getType() {
 		if (_type == null) {
 			return StringPool.BLANK;
@@ -465,11 +490,13 @@ public class SCProductEntryModelImpl extends BaseModelImpl<SCProductEntry>
 		}
 	}
 
+	@Override
 	public void setType(String type) {
 		_type = type;
 	}
 
 	@JSON
+	@Override
 	public String getTags() {
 		if (_tags == null) {
 			return StringPool.BLANK;
@@ -479,11 +506,13 @@ public class SCProductEntryModelImpl extends BaseModelImpl<SCProductEntry>
 		}
 	}
 
+	@Override
 	public void setTags(String tags) {
 		_tags = tags;
 	}
 
 	@JSON
+	@Override
 	public String getShortDescription() {
 		if (_shortDescription == null) {
 			return StringPool.BLANK;
@@ -493,11 +522,13 @@ public class SCProductEntryModelImpl extends BaseModelImpl<SCProductEntry>
 		}
 	}
 
+	@Override
 	public void setShortDescription(String shortDescription) {
 		_shortDescription = shortDescription;
 	}
 
 	@JSON
+	@Override
 	public String getLongDescription() {
 		if (_longDescription == null) {
 			return StringPool.BLANK;
@@ -507,11 +538,13 @@ public class SCProductEntryModelImpl extends BaseModelImpl<SCProductEntry>
 		}
 	}
 
+	@Override
 	public void setLongDescription(String longDescription) {
 		_longDescription = longDescription;
 	}
 
 	@JSON
+	@Override
 	public String getPageURL() {
 		if (_pageURL == null) {
 			return StringPool.BLANK;
@@ -521,11 +554,13 @@ public class SCProductEntryModelImpl extends BaseModelImpl<SCProductEntry>
 		}
 	}
 
+	@Override
 	public void setPageURL(String pageURL) {
 		_pageURL = pageURL;
 	}
 
 	@JSON
+	@Override
 	public String getAuthor() {
 		if (_author == null) {
 			return StringPool.BLANK;
@@ -535,11 +570,13 @@ public class SCProductEntryModelImpl extends BaseModelImpl<SCProductEntry>
 		}
 	}
 
+	@Override
 	public void setAuthor(String author) {
 		_author = author;
 	}
 
 	@JSON
+	@Override
 	public String getRepoGroupId() {
 		if (_repoGroupId == null) {
 			return StringPool.BLANK;
@@ -549,6 +586,7 @@ public class SCProductEntryModelImpl extends BaseModelImpl<SCProductEntry>
 		}
 	}
 
+	@Override
 	public void setRepoGroupId(String repoGroupId) {
 		_columnBitmask |= REPOGROUPID_COLUMN_BITMASK;
 
@@ -564,6 +602,7 @@ public class SCProductEntryModelImpl extends BaseModelImpl<SCProductEntry>
 	}
 
 	@JSON
+	@Override
 	public String getRepoArtifactId() {
 		if (_repoArtifactId == null) {
 			return StringPool.BLANK;
@@ -573,6 +612,7 @@ public class SCProductEntryModelImpl extends BaseModelImpl<SCProductEntry>
 		}
 	}
 
+	@Override
 	public void setRepoArtifactId(String repoArtifactId) {
 		_columnBitmask |= REPOARTIFACTID_COLUMN_BITMASK;
 
@@ -640,6 +680,7 @@ public class SCProductEntryModelImpl extends BaseModelImpl<SCProductEntry>
 		return scProductEntryImpl;
 	}
 
+	@Override
 	public int compareTo(SCProductEntry scProductEntry) {
 		int value = 0;
 
@@ -665,18 +706,15 @@ public class SCProductEntryModelImpl extends BaseModelImpl<SCProductEntry>
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof SCProductEntry)) {
 			return false;
 		}
 
-		SCProductEntry scProductEntry = null;
-
-		try {
-			scProductEntry = (SCProductEntry)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		SCProductEntry scProductEntry = (SCProductEntry)obj;
 
 		long primaryKey = scProductEntry.getPrimaryKey();
 
@@ -870,6 +908,7 @@ public class SCProductEntryModelImpl extends BaseModelImpl<SCProductEntry>
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(52);
 

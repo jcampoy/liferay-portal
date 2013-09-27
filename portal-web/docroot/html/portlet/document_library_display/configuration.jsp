@@ -41,7 +41,7 @@ String portletNameSpace = PortalUtil.getPortletNamespace(portletResource);
 
 	<liferay-ui:panel-container extended="<%= true %>" id="documentLibrarySettingsPanelContainer" persistState="<%= true %>">
 		<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="documentLibraryDisplay" persistState="<%= true %>" title="display-settings">
-			<aui:input label="show-actions" name="preferences--showActions--" type="checkbox" value="<%= showActions %>" />
+			<aui:input id="showActions" label="show-actions" name="preferences--showActions--" type="checkbox" value="<%= showActions %>" />
 
 			<aui:input label="show-folder-menu" name="preferences--showFolderMenu--" type="checkbox" value="<%= showFolderMenu %>" />
 
@@ -53,20 +53,17 @@ String portletNameSpace = PortalUtil.getPortletNamespace(portletResource);
 		<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="documentLibraryFoldersListingPanel" persistState="<%= true %>" title="folders-listing">
 			<aui:fieldset>
 				<aui:field-wrapper label="root-folder">
-					<portlet:renderURL var="viewFolderURL">
-						<portlet:param name="struts_action" value='<%= strutsAction + "/view" %>' />
-						<portlet:param name="folderId" value="<%= String.valueOf(rootFolderId) %>" />
-					</portlet:renderURL>
+					<div class="input-append">
+						<liferay-ui:input-resource id="rootFolderName" url="<%= rootFolderName %>" />
 
-					<aui:a href="<%= viewFolderURL %>" id="rootFolderName"><%= rootFolderName %></aui:a>
+						<aui:button name="openFolderSelectorButton" value="select" />
 
-					<aui:button name="openFolderSelectorButton" value="select" />
+						<%
+						String taglibRemoveFolder = "Liferay.Util.removeFolderSelection('rootFolderId', 'rootFolderName', '" + renderResponse.getNamespace() + "');";
+						%>
 
-					<%
-					String taglibRemoveFolder = "Liferay.Util.removeFolderSelection('rootFolderId', 'rootFolderName', '" + renderResponse.getNamespace() + "');";
-					%>
-
-					<aui:button disabled="<%= rootFolderId <= 0 %>" name="removeFolderButton" onClick="<%= taglibRemoveFolder %>" value="remove" />
+						<aui:button disabled="<%= rootFolderId <= 0 %>" name="removeFolderButton" onClick="<%= taglibRemoveFolder %>" value="remove" />
+					</div>
 				</aui:field-wrapper>
 
 				<aui:input name="preferences--showSubfolders--" type="checkbox" value="<%= showSubfolders %>" />
@@ -181,14 +178,12 @@ String portletNameSpace = PortalUtil.getPortletNamespace(portletResource);
 			Liferay.Util.selectEntity(
 				{
 					dialog: {
-						align: Liferay.Util.Window.ALIGN_CENTER,
 						constrain: true,
 						modal: true,
-						stack: true,
 						width: 600
 					},
-					id: '_<%= portletResource %>_selectFolder',
-					title: '<%= UnicodeLanguageUtil.format(pageContext, "select-x", "folder") %>',
+					id: '_<%= HtmlUtil.escapeJS(portletResource) %>_selectFolder',
+					title: '<liferay-ui:message arguments="folder" key="select-x" />',
 					uri: '<%= selectFolderURL.toString() %>'
 				},
 				function(event) {
@@ -199,11 +194,43 @@ String portletNameSpace = PortalUtil.getPortletNamespace(portletResource);
 						nameValue: event.foldername
 					};
 
-					Liferay.Util.selectFolder(folderData, '<liferay-portlet:renderURL portletName="<%= portletResource %>"><portlet:param name="struts_action" value='<%= strutsAction + "/view" %>' /></liferay-portlet:renderURL>', '<portlet:namespace />');
+					Liferay.Util.selectFolder(folderData, '<portlet:namespace />');
 				}
 			);
 		}
 	);
+
+	A.one('#<portlet:namespace />showActionsCheckbox').after(
+		'change',
+		function(event) {
+			var currentFileEntryColumns = A.one('#<portlet:namespace />currentFileEntryColumns');
+			var currentFolderColumns = A.one('#<portlet:namespace />currentFolderColumns');
+			var showActionsInput = A.one('#<portlet:namespace />showActions');
+
+			if (showActionsInput.val() === 'false') {
+				var actionHTML = '<option value="action"><%= UnicodeLanguageUtil.get(pageContext, "action") %></option>';
+
+				currentFileEntryColumns.append(actionHTML);
+				currentFolderColumns.append(actionHTML);
+			}
+			else {
+				var availableFileEntryColumns = A.one('#<portlet:namespace />availableFileEntryColumns');
+				var availableFolderColumns = A.one('#<portlet:namespace />availableFolderColumns');
+
+				A.Array.each(
+					[currentFolderColumns, currentFileEntryColumns, availableFileEntryColumns, availableFolderColumns],
+					function(item, index, collection) {
+						var actionsNode = item.one('option[value="action"]');
+
+						if (actionsNode) {
+							actionsNode.remove();
+						}
+					}
+				);
+			}
+		}
+	);
+
 </aui:script>
 
 <aui:script>

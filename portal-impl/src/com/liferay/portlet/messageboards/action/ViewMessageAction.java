@@ -46,8 +46,9 @@ public class ViewMessageAction extends PortletAction {
 
 	@Override
 	public ActionForward render(
-			ActionMapping mapping, ActionForm form, PortletConfig portletConfig,
-			RenderRequest renderRequest, RenderResponse renderResponse)
+			ActionMapping actionMapping, ActionForm actionForm,
+			PortletConfig portletConfig, RenderRequest renderRequest,
+			RenderResponse renderResponse)
 		throws Exception {
 
 		try {
@@ -91,9 +92,7 @@ public class ViewMessageAction extends PortletAction {
 			if (messageDisplay != null) {
 				MBMessage message = messageDisplay.getMessage();
 
-				if ((message != null) &&
-					(message.isInTrash() || message.isInTrashThread())) {
-
+				if ((message != null) && message.isInTrash()) {
 					throw new NoSuchMessageException();
 				}
 			}
@@ -101,7 +100,8 @@ public class ViewMessageAction extends PortletAction {
 			renderRequest.setAttribute(
 				WebKeys.MESSAGE_BOARDS_MESSAGE, messageDisplay);
 
-			return mapping.findForward("portlet.message_boards.view_message");
+			return actionMapping.findForward(
+				"portlet.message_boards.view_message");
 		}
 		catch (Exception e) {
 			if (e instanceof NoSuchMessageException ||
@@ -109,7 +109,8 @@ public class ViewMessageAction extends PortletAction {
 
 				SessionErrors.add(renderRequest, e.getClass());
 
-				return mapping.findForward("portlet.message_boards.error");
+				return actionMapping.findForward(
+					"portlet.message_boards.error");
 			}
 			else {
 				throw e;

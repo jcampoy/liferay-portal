@@ -15,14 +15,18 @@
 package com.liferay.portlet.documentlibrary.model;
 
 import com.liferay.portal.kernel.bean.AutoEscape;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.trash.TrashHandler;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.StagedGroupedModel;
+import com.liferay.portal.model.TrashedModel;
 import com.liferay.portal.model.WorkflowedModel;
 import com.liferay.portal.service.ServiceContext;
 
 import com.liferay.portlet.expando.model.ExpandoBridge;
+import com.liferay.portlet.trash.model.TrashEntry;
 
 import java.io.Serializable;
 
@@ -42,7 +46,7 @@ import java.util.Date;
  * @generated
  */
 public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
-	StagedGroupedModel, WorkflowedModel {
+	StagedGroupedModel, TrashedModel, WorkflowedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -69,6 +73,7 @@ public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
 	 * @return the uuid of this document library file shortcut
 	 */
 	@AutoEscape
+	@Override
 	public String getUuid();
 
 	/**
@@ -76,6 +81,7 @@ public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
 	 *
 	 * @param uuid the uuid of this document library file shortcut
 	 */
+	@Override
 	public void setUuid(String uuid);
 
 	/**
@@ -97,6 +103,7 @@ public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
 	 *
 	 * @return the group ID of this document library file shortcut
 	 */
+	@Override
 	public long getGroupId();
 
 	/**
@@ -104,6 +111,7 @@ public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
 	 *
 	 * @param groupId the group ID of this document library file shortcut
 	 */
+	@Override
 	public void setGroupId(long groupId);
 
 	/**
@@ -111,6 +119,7 @@ public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
 	 *
 	 * @return the company ID of this document library file shortcut
 	 */
+	@Override
 	public long getCompanyId();
 
 	/**
@@ -118,6 +127,7 @@ public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
 	 *
 	 * @param companyId the company ID of this document library file shortcut
 	 */
+	@Override
 	public void setCompanyId(long companyId);
 
 	/**
@@ -125,6 +135,7 @@ public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
 	 *
 	 * @return the user ID of this document library file shortcut
 	 */
+	@Override
 	public long getUserId();
 
 	/**
@@ -132,6 +143,7 @@ public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
 	 *
 	 * @param userId the user ID of this document library file shortcut
 	 */
+	@Override
 	public void setUserId(long userId);
 
 	/**
@@ -140,6 +152,7 @@ public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
 	 * @return the user uuid of this document library file shortcut
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public String getUserUuid() throws SystemException;
 
 	/**
@@ -147,6 +160,7 @@ public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
 	 *
 	 * @param userUuid the user uuid of this document library file shortcut
 	 */
+	@Override
 	public void setUserUuid(String userUuid);
 
 	/**
@@ -155,6 +169,7 @@ public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
 	 * @return the user name of this document library file shortcut
 	 */
 	@AutoEscape
+	@Override
 	public String getUserName();
 
 	/**
@@ -162,6 +177,7 @@ public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
 	 *
 	 * @param userName the user name of this document library file shortcut
 	 */
+	@Override
 	public void setUserName(String userName);
 
 	/**
@@ -169,6 +185,7 @@ public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
 	 *
 	 * @return the create date of this document library file shortcut
 	 */
+	@Override
 	public Date getCreateDate();
 
 	/**
@@ -176,6 +193,7 @@ public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
 	 *
 	 * @param createDate the create date of this document library file shortcut
 	 */
+	@Override
 	public void setCreateDate(Date createDate);
 
 	/**
@@ -183,6 +201,7 @@ public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
 	 *
 	 * @return the modified date of this document library file shortcut
 	 */
+	@Override
 	public Date getModifiedDate();
 
 	/**
@@ -190,6 +209,7 @@ public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
 	 *
 	 * @param modifiedDate the modified date of this document library file shortcut
 	 */
+	@Override
 	public void setModifiedDate(Date modifiedDate);
 
 	/**
@@ -235,6 +255,21 @@ public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
 	public void setToFileEntryId(long toFileEntryId);
 
 	/**
+	 * Returns the tree path of this document library file shortcut.
+	 *
+	 * @return the tree path of this document library file shortcut
+	 */
+	@AutoEscape
+	public String getTreePath();
+
+	/**
+	 * Sets the tree path of this document library file shortcut.
+	 *
+	 * @param treePath the tree path of this document library file shortcut
+	 */
+	public void setTreePath(String treePath);
+
+	/**
 	 * Returns the active of this document library file shortcut.
 	 *
 	 * @return the active of this document library file shortcut
@@ -260,6 +295,7 @@ public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
 	 *
 	 * @return the status of this document library file shortcut
 	 */
+	@Override
 	public int getStatus();
 
 	/**
@@ -267,6 +303,7 @@ public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
 	 *
 	 * @param status the status of this document library file shortcut
 	 */
+	@Override
 	public void setStatus(int status);
 
 	/**
@@ -274,6 +311,7 @@ public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
 	 *
 	 * @return the status by user ID of this document library file shortcut
 	 */
+	@Override
 	public long getStatusByUserId();
 
 	/**
@@ -281,6 +319,7 @@ public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
 	 *
 	 * @param statusByUserId the status by user ID of this document library file shortcut
 	 */
+	@Override
 	public void setStatusByUserId(long statusByUserId);
 
 	/**
@@ -289,6 +328,7 @@ public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
 	 * @return the status by user uuid of this document library file shortcut
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public String getStatusByUserUuid() throws SystemException;
 
 	/**
@@ -296,6 +336,7 @@ public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
 	 *
 	 * @param statusByUserUuid the status by user uuid of this document library file shortcut
 	 */
+	@Override
 	public void setStatusByUserUuid(String statusByUserUuid);
 
 	/**
@@ -304,6 +345,7 @@ public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
 	 * @return the status by user name of this document library file shortcut
 	 */
 	@AutoEscape
+	@Override
 	public String getStatusByUserName();
 
 	/**
@@ -311,6 +353,7 @@ public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
 	 *
 	 * @param statusByUserName the status by user name of this document library file shortcut
 	 */
+	@Override
 	public void setStatusByUserName(String statusByUserName);
 
 	/**
@@ -318,6 +361,7 @@ public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
 	 *
 	 * @return the status date of this document library file shortcut
 	 */
+	@Override
 	public Date getStatusDate();
 
 	/**
@@ -325,11 +369,55 @@ public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
 	 *
 	 * @param statusDate the status date of this document library file shortcut
 	 */
+	@Override
 	public void setStatusDate(Date statusDate);
+
+	/**
+	 * Returns the trash entry created when this document library file shortcut was moved to the Recycle Bin. The trash entry may belong to one of the ancestors of this document library file shortcut.
+	 *
+	 * @return the trash entry created when this document library file shortcut was moved to the Recycle Bin
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public TrashEntry getTrashEntry() throws PortalException, SystemException;
+
+	/**
+	 * Returns the class primary key of the trash entry for this document library file shortcut.
+	 *
+	 * @return the class primary key of the trash entry for this document library file shortcut
+	 */
+	@Override
+	public long getTrashEntryClassPK();
+
+	/**
+	 * Returns the trash handler for this document library file shortcut.
+	 *
+	 * @return the trash handler for this document library file shortcut
+	 */
+	@Override
+	public TrashHandler getTrashHandler();
+
+	/**
+	 * Returns <code>true</code> if this document library file shortcut is in the Recycle Bin.
+	 *
+	 * @return <code>true</code> if this document library file shortcut is in the Recycle Bin; <code>false</code> otherwise
+	 */
+	@Override
+	public boolean isInTrash();
+
+	/**
+	 * Returns <code>true</code> if the parent of this document library file shortcut is in the Recycle Bin.
+	 *
+	 * @return <code>true</code> if the parent of this document library file shortcut is in the Recycle Bin; <code>false</code> otherwise
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public boolean isInTrashContainer();
 
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #isApproved()}
 	 */
+	@Override
 	public boolean getApproved();
 
 	/**
@@ -337,6 +425,7 @@ public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
 	 *
 	 * @return <code>true</code> if this document library file shortcut is approved; <code>false</code> otherwise
 	 */
+	@Override
 	public boolean isApproved();
 
 	/**
@@ -344,6 +433,7 @@ public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
 	 *
 	 * @return <code>true</code> if this document library file shortcut is denied; <code>false</code> otherwise
 	 */
+	@Override
 	public boolean isDenied();
 
 	/**
@@ -351,6 +441,7 @@ public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
 	 *
 	 * @return <code>true</code> if this document library file shortcut is a draft; <code>false</code> otherwise
 	 */
+	@Override
 	public boolean isDraft();
 
 	/**
@@ -358,6 +449,7 @@ public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
 	 *
 	 * @return <code>true</code> if this document library file shortcut is expired; <code>false</code> otherwise
 	 */
+	@Override
 	public boolean isExpired();
 
 	/**
@@ -365,6 +457,7 @@ public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
 	 *
 	 * @return <code>true</code> if this document library file shortcut is inactive; <code>false</code> otherwise
 	 */
+	@Override
 	public boolean isInactive();
 
 	/**
@@ -372,20 +465,15 @@ public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
 	 *
 	 * @return <code>true</code> if this document library file shortcut is incomplete; <code>false</code> otherwise
 	 */
+	@Override
 	public boolean isIncomplete();
-
-	/**
-	 * Returns <code>true</code> if this document library file shortcut is in the Recycle Bin.
-	 *
-	 * @return <code>true</code> if this document library file shortcut is in the Recycle Bin; <code>false</code> otherwise
-	 */
-	public boolean isInTrash();
 
 	/**
 	 * Returns <code>true</code> if this document library file shortcut is pending.
 	 *
 	 * @return <code>true</code> if this document library file shortcut is pending; <code>false</code> otherwise
 	 */
+	@Override
 	public boolean isPending();
 
 	/**
@@ -393,43 +481,63 @@ public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
 	 *
 	 * @return <code>true</code> if this document library file shortcut is scheduled; <code>false</code> otherwise
 	 */
+	@Override
 	public boolean isScheduled();
 
+	@Override
 	public boolean isNew();
 
+	@Override
 	public void setNew(boolean n);
 
+	@Override
 	public boolean isCachedModel();
 
+	@Override
 	public void setCachedModel(boolean cachedModel);
 
+	@Override
 	public boolean isEscapedModel();
 
+	@Override
 	public Serializable getPrimaryKeyObj();
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj);
 
+	@Override
 	public ExpandoBridge getExpandoBridge();
 
+	@Override
 	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
 
+	@Override
 	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
 
+	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
+	@Override
 	public Object clone();
 
+	@Override
 	public int compareTo(DLFileShortcut dlFileShortcut);
 
+	@Override
 	public int hashCode();
 
+	@Override
 	public CacheModel<DLFileShortcut> toCacheModel();
 
+	@Override
 	public DLFileShortcut toEscapedModel();
 
+	@Override
 	public DLFileShortcut toUnescapedModel();
 
+	@Override
 	public String toString();
 
+	@Override
 	public String toXmlString();
 }

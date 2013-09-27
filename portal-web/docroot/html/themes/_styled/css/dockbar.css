@@ -1,516 +1,523 @@
-.portlet-dockbar, .portlet-staging-bar {
-	background: url(../images/application/loading_indicator.gif) no-repeat 50%;
-}
+@import "compass";
+@import "mixins";
 
-.portlet-dockbar {
-	background-color: #E0E7F1;
-	border-bottom: 1px solid #636364;
-}
+$addContentPanelWidth: 350px;
+$devicePreviewPanelWidth: 220px;
+$editLayoutPanelWidth: 460px;
 
-.dockbar, .staging-bar {
-	visibility: hidden;
-}
-
-.dockbar-ready .dockbar, .live-view .staging-bar, .staging .staging-bar {
-	visibility: visible;
-}
-
-.dockbar-ready .portlet-dockbar, .portal-popup .portlet-dockbar, .portal-popup .portlet-staging-bar, .staging-ready .portlet-staging-bar {
-	background: none;
-	border-width: 0;
-}
-
-.dockbar {
-	background: #97A1AE url(../images/dockbar/dockbar_bg.png) repeat-x 0 0;
-	border-bottom: 1px solid #636364;
-	font-size: 13px;
-	padding: 1px 5px;
-	position: relative;
-	z-index: 300;
-
-	&:after {
-		clear: both;
-		content: ".";
-		display: block;
-		height: 0;
-		visibility: hidden;
-	}
-
-	a, span.user-portrait {
-		color: #2C2F34;
-		font-weight: bold;
-		text-shadow: 1px 1px #FFF;
-	}
-
-	.menu-button-active {
-		background: #5C94DA url(../images/dockbar/button_active_bg.png) repeat-x 0 0;
-
-		a {
-			color: #FFF;
-			text-shadow: -1px -1px #2C2F34;
-		}
-	}
-
-	.user-avatar .sign-out {
-		font-size: 0.8em;
-		padding-left: 0;
-	}
-
-	ul {
-		margin: 0;
-		padding: 0;
-	}
-
-	li li {
-		margin-left: 0;
-	}
-
-	.menu-button {
-		background: url(../images/arrows/05_down.png) no-repeat 93% 50%;
-		display: inline-block;
-		padding: 5px 20px 5px 5px;
-		text-decoration: none;
-
-		span {
-			background: url() no-repeat 0 50%;
-			padding-left: 20px;
-		}
-	}
-
-	.add-content .menu-button span {
-		background-image: url(../images/common/add.png);
-	}
-
-	.manage-content .menu-button span {
-		background-image: url(../images/dockbar/settings.png);
-	}
-
-	.my-sites .menu-button span {
-		background-image: url(../images/dockbar/places.png);
-	}
-
-	a.user-portrait {
-		&, &:hover span {
-			text-decoration: none;
-		}
-
-		span {
-			text-decoration: underline;
-		}
-	}
-
-	.user-portrait img {
-		text-decoration: none;
-		vertical-align: middle;
-		width: 25px;
-	}
-
-	.impersonating-user {
-		background: url(../images/messages/alert.png) no-repeat 0 50%;
-		padding-left: 20px;
-
-		.user-links a {
-			color: #999;
-		}
-	}
-
-	.aui-toolbar {
-		float: left;
-	}
-
-	.user-toolbar {
-		float: right;
-	}
-
-	.toggle-controls a {
-		background-image: url(../images/dockbar/checked.png);
-	}
-}
-
-.toggle-controls a {
-	background: url(../images/dockbar/unchecked.png) no-repeat 0 50%;
-	padding-left: 20px;
-}
-
-.controls-hidden .toggle-controls a {
-	background-image: url(../images/dockbar/unchecked.png);
-}
-
-.pin-dockbar {
-	margin-left: 0;
-
-	img {
-		background: url(../images/dockbar/pin.png) no-repeat 0 0;
-		height: 27px;
-		vertical-align: middle;
-		width: 27px;
-	}
-}
-
-.lfr-dockbar-pinned {
+.aui {
 	.dockbar {
 		left: 0;
-		position: fixed;
 		right: 0;
 		top: 0;
-	}
 
-	.pin-dockbar img {
-		background-image: url(../images/dockbar/unpin.png);
-	}
-}
+		.impersonating-user {
+			.alert-icon{
+				margin-right: 9px;
+			}
 
-html > .lfr-dockbar-pinned {
-	padding-top: 3.45em;
-}
+			.alert-info {
+				border-width: 0;
+				margin-bottom: 6px;
+			}
+		}
 
-/* ---------- Staging Dockbar ---------- */
+		.navbar-inner {
+			padding-left: 20px;
+			padding-right: 20px;
 
-.variation-selector {
-	display: block;
-	font-size: 1.2em;
-	font-weight: bold;
-	margin: 1em;
-}
+			.brand {
+				h1 {
+					display: inline-block;
+					font-size: inherit;
+					line-height: 1;
+					margin-bottom: 0;
+					margin-top: 0;
+				}
+			}
 
-.layout-revision-container {
-	margin: 1em 0 0 1em;
-	padding: 0;
+			.container {
+				margin-left: 0;
+				margin-right: 0;
+				width: 100%;
 
-	.approximate-date {
-		color: #999;
-		font-weight: bold;
-	}
+				.nav-account-controls {
+					float: right;
+				}
+			}
 
-	.current-version {
-		color: #41801d;
-		display: block;
-	}
+			.site-administration-menu li {
+				list-style: none;
 
-	.current-version-pointer {
-		display: inline-block;
-		width: 0;
+				a {
+					color: #000;
+					display: block;
+					padding: 3px 5px 3px 40px;
 
-		img {
-			left: -25px;
-			position: relative;
+					&:hover {
+						background: #0DB5E7;
+						color: #FFF;
+						text-decoration: none;
+					}
+
+					i {
+						font-size: 0.8em;
+					}
+				}
+			}
+		}
+
+		.nav.staging-nav-items {
+			margin: 0;
+			position: static;
+
+			li.dropdown.active > .dropdown-toggle {
+				background-color: transparent;
+				display: block;
+
+				&:hover {
+					color: #0077B3;
+				}
+			}
+
+			.staging-link {
+				position: static;
+			}
+		}
+
+		.user-avatar img {
+			margin-top: -2px;
+			text-decoration: none;
+			vertical-align: middle;
+			width: 27px;
 		}
 	}
 
-	.layout-variation-name {
-		color: #666;
-		font-size: 1.15em;
-		margin-bottom: 0.1em;
-		text-transform: uppercase;
+	.dockbar-split {
+		.dockbar {
+			height: 0;
+			position: absolute;
+
+			.divider-vertical {
+				display: none;
+			}
+
+			.navbar-inner {
+				background-color: transparent;
+				border-width: 0;
+				padding: 0;
+				width: 0;
+
+				.nav {
+					background-color: #333;
+					border-bottom-width: 0;
+
+					> li {
+						> a {
+							color: #FFF;
+							line-height: 31px;
+
+							&:focus, &:hover {
+								color: #FFF;
+							}
+
+							[class^="icon-"], [class*=" icon-"] {
+								margin-top: 3px;
+							}
+						}
+
+						&.active > a {
+							color: #FFF;
+						}
+					}
+
+					li {
+						&.dropdown {
+							&.active > .dropdown-toggle {
+								color: #FFF;
+							}
+
+							&.open > .dropdown-toggle {
+								background-color: #555;
+								color: #FFF;
+							}
+						}
+
+						&.staging-toggle {
+							background-color: #0ECD27;
+
+							> a {
+								&, &:hover {
+									background-color: transparent;
+								}
+							}
+
+							span {
+								padding: 5px 10px;
+							}
+
+							&.active span {
+								background-color: #080;
+							}
+						}
+					}
+				}
+
+				.nav-account-controls {
+					left: auto;
+					margin-right: 0;
+					padding: 0 5px;
+					position: fixed;
+					right: 5em;
+					z-index: 325;
+				}
+
+				.nav-add-controls {
+					background: transparent;
+					position: fixed;
+					top: 10%;
+					z-index: 350;
+
+					> li {
+						float: none;
+						margin: 10px;
+						position: relative;
+
+						&.toggle-controls a {
+							clip: rect(0 0 0 0);
+							position: absolute;
+
+							&:focus {
+								clip: rect(auto auto auto auto);
+								position: static;
+							}
+						}
+
+						&.page-preview-controls {
+							@include respond-to(phone) {
+								display: none;
+							}
+
+							@include respond-to(tablet) {
+								display: none;
+							}
+						}
+
+						> a {
+							background: #333;
+							color: #FFF;
+							padding: 6px 8px;
+							text-align: center;
+
+							&:hover {
+								background: #555;
+							}
+
+							[class^="icon-"], [class^="icon-"], [class*=" icon-"] {
+								font-size: 25px;
+								position: relative;
+								vertical-align: middle;
+							}
+
+							&.toggle-controls-link {
+								background: #92F545;
+
+								[class^="icon-"], [class^="icon-"], [class*=" icon-"] {
+									color: #000;
+								}
+							}
+
+							.nav-item-label {
+								background: #333;
+								display: none;
+								left: 100%;
+								margin-left: 0.5em;
+								margin-top: -1em;
+								padding: 0 20px;
+								position: absolute;
+								top: 50%;
+								white-space: nowrap;
+							}
+
+							&:hover .nav-item-label {
+								display: block;
+							}
+
+							.icon-caret-down {
+								display: none;
+							}
+						}
+					}
+
+					&:hover > li.toggle-controls a {
+						clip: rect(auto auto auto auto);
+						position: static;
+					}
+				}
+			}
+
+			.staging-nav-items {
+				li > span {
+					color: #FFF;
+					display: block;
+					padding: 10px 15px;
+					line-height: 31px;
+				}
+			}
+		}
+
+		.staging-controls {
+			select {
+				width: 100%;
+			}
+
+			.staging-bar {
+				margin-right: 0;
+
+				.dropdown-menu {
+					font-size: 13px;
+					width: 100%;
+
+					.btn-link {
+						float: left;
+						font-size: 11px;
+						margin: 0 5px 0 0;
+						padding: 0;
+						text-decoration: underline;
+
+						@include text-shadow(none);
+
+						&:hover {
+							text-decoration: none;
+						}
+
+						&.history {
+							float: right;
+						}
+					}
+				}
+			}
+		}
+
+		&.controls-hidden .dockbar .navbar-inner .nav-add-controls > li.toggle-controls > .toggle-controls-link {
+			background: #F5AF45;
+		}
+
+		&.lfr-has-add-content .nav-add-controls {
+			left: $addContentPanelWidth;
+		}
+
+		&.lfr-has-device-preview .nav-add-controls {
+			left: $devicePreviewPanelWidth;
+		}
+
+		&.lfr-has-edit-layout .nav-add-controls {
+			left: $editLayoutPanelWidth;
+		}
 	}
 
-	.layout-revision-current {
-		color: #666;
+	.touch .dockbar-split, .controls-hidden.dockbar-split {
+		.dockbar .navbar-inner .nav-add-controls > li.toggle-controls > .toggle-controls-link {
+			clip: rect(auto auto auto auto);
+			position: static;
+		}
 	}
 
-	.real-date {
-		color: #999;
+	/* ---------- Staging dockbar ---------- */
+
+	.variation-selector {
 		display: block;
-		text-align: right;
+		font-size: 1.2em;
+		font-weight: bold;
+		margin: 1em;
 	}
 
-	.taglib-workflow-status .workflow-status {
-		background: none;
-		padding-left: 0;
+	.layout-revision-container {
+		margin: 1em 0 0 1em;
+		padding: 0;
 
-		.workflow-status-ready-for-publication {
-			color: #41801d;
+		.approximate-date {
+			color: #999;
 			font-weight: bold;
 		}
-	}
-}
 
-.layout-revision-container-root {
-	margin: 0;
-}
+		.current-version {
+			color: #41801d;
+			display: block;
+		}
 
-.staging-details {
-	background: url() no-repeat 0 0;
-	min-height: 50px;
-	padding-left: 65px;
-}
+		.current-version-pointer {
+			display: inline-block;
+			width: 0;
 
-.staging {
-	.staging-details {
-		background-image: url(../images/staging_bar/staging.png);
-	}
+			img {
+				left: -25px;
+				position: relative;
+			}
+		}
 
-	.staging-tabview-list {
-		background-color: #FFDBA6;
-	}
-}
+		.layout-variation-name {
+			color: #666;
+			font-size: 1.15em;
+			margin-bottom: 0.1em;
+			text-transform: uppercase;
+		}
 
-.live-view {
-	.staging-details {
-		background-image: url(../images/staging_bar/live.png);
-	}
+		.layout-revision-current {
+			color: #666;
+		}
 
-	.staging-tabview-list {
-		background-color: #C4F0BC;
-	}
-}
+		.real-date {
+			color: #999;
+			display: block;
+			text-align: right;
+		}
 
-/* ---------- Menus ---------- */
+		.taglib-workflow-status .workflow-status {
+			background: none;
+			padding-left: 0;
 
-.aui-dockbarmenu-hidden {
-	visibility: hidden;
-}
-
-.aui-underlay {
-	.portal-add-content {
-		background-color: transparent;
-		font-size: 11px;
-	}
-
-	.portal-add-content .portlet-dd-placeholder {
-		display: none;
-	}
-}
-
-.add-application .yui3-widget-bd, .dockbar-messages .yui3-widget-bd {
-	padding: 0 10px 10px;
-}
-
-.add-application {
-	left: 10px !important;
-}
-
-.lfr-has-add-content #wrapper {
-	padding-left: 340px;
-}
-
-.manage-layouts {
-	left: 60px !important;
-}
-
-.my-sites-menu {
-	max-width: 350px;
-
-	ul {
-		list-style: none;
-		max-height: 300px;
-		overflow: auto;
+			.workflow-status-ready-for-publication {
+				color: #41801d;
+				font-weight: bold;
+			}
+		}
 	}
 
-	li, ul {
-		display: block;
+	.layout-revision-container-root {
 		margin: 0;
-		padding: 0;
 	}
 
-	a {
-		display: block;
-		overflow: hidden;
-		text-align: right;
-		white-space: nowrap;
-	}
+	/* ---------- Add content ---------- */
 
-	.control-panel a {
-		background: url(../images/common/control_panel.png) no-repeat 3px 50%;
-		padding-left: 25px;
-	}
-
-	.current-site {
-		border: solid #1D4280;
-		border-width: 1px 0;
-
-		a {
-			background: #3068BA url(../images/arrows/01_right.png) no-repeat scroll 2px 30%;
-			color: #FFF;
-			padding-left: 20px;
-			text-shadow: 1px 1px #333;
-		}
-
-		.site-type {
-			color: #FFF;
-		}
-	}
-
-	a:hover .site-type, .current-site a:hover {
-		color: #FFF;
-		text-shadow: 1px 1px #333;
-	}
-
-	.site-name {
-		cursor: pointer;
-		float: left;
-	}
-
-	.site-type {
-		color: #777;
-		float: right;
-		font-size: 0.8em;
-		font-weight: normal;
-		margin-left: 10px;
-	}
-}
-
-.add-content-menu {
-	.add-page a {
-		background: url(../images/navigation/add_page.png) no-repeat 3px 50%;
-		padding-left: 25px;
-	}
-
-	.add-application a {
-		background: url(../images/common/portlet.png) no-repeat 3px 50%;
-		padding-left: 25px;
-	}
-
-	a.lfr-portlet-used {
-		color: #999;
-		cursor: auto;
-	}
-}
-
-.manage-content-menu {
-	li a, li .disabled {
-		background: url() no-repeat 3px 50%;
-		padding-left: 25px;
-	}
-
-	.manage-page a {
-		background-image: url(../images/common/edit.png);
-	}
-
-	.manage-site-content a {
-		background-image: url(../images/common/site_icon.png);
-	}
-
-	.manage-site-memberships a {
-		background-image: url(../images/common/assign.png);
-	}
-
-	.manage-page-customization a, .manage-page-customization .disabled {
-		background-image: url(../images/dockbar/customizations.png);
-	}
-
-	.page-layout a {
-		background-image: url(../images/common/layout.png);
-	}
-
-	.sitemap a {
-		background-image: url(../images/common/sitemap.png);
-	}
-
-	.settings a {
-		background-image: url(../images/common/configuration.png);
-	}
-}
-
-.dockbar-messages-container {
-	left: 50%;
-	margin-left: -150px;
-}
-
-.dockbar-messages {
-	width: 300px;
-}
-
-.showing-messages .dockbar-messages {
-	display: block;
-}
-
-.multiple-messages {
-	.dockbar-message {
-		border-top: 1px solid #CCC;
-		padding: 5px 0;
-	}
-
-	.first {
-		border-top-width: 0;
-		padding-top: 0;
-	}
-}
-
-.ie.rtl .dockbar .menu-button span {
-	background-position-x: -25px;
-}
-
-.ie7 {
-	.dockbar {
-		zoom: 1;
-	}
-
-	.my-sites-menu {
-		a {
-			overflow: visible;
-			text-align: left;
-		}
-
-		.site-name {
-			float: none;
-		}
-
-		.site-type {
-			float: none;
-		}
-	}
-}
-
-.ie6 {
-	.dockbar, .lfr-dockbar-pinned .dockbar {
-		height: 10px;
+	.lfr-admin-panel {
+		background-color: #FFF;
+		bottom: 0;
 		left: 0;
-		position: relative;
+		overflow: auto;
+		padding: 10px;
+		position: fixed;
 		top: 0;
+		z-index: 1100;
 	}
 
-	.dockbar .pin-dockbar {
-		display: none;
+	.lfr-has-add-content {
+		padding-left: $addContentPanelWidth;
 	}
+
+	.lfr-has-device-preview {
+		padding-left: $devicePreviewPanelWidth;
+	}
+
+	.lfr-has-edit-layout {
+		padding-left: $editLayoutPanelWidth;
+	}
+
+	/* ---------- Menus ---------- */
 
 	.my-sites-menu {
-		width: 200px;
+		.site-type {
+			color: #FFF;
+			display: none;
+			float: right;
+			font-size: 0.8em;
+			font-weight: normal;
+			margin-right: 10px;
+			position: absolute;
+			right: 100%;
+		}
 
-		a {
+		a:hover .site-type {
+			color: #FFFFFF;
+			display: inline-block;
+		}
+	}
+
+	.ie.rtl .dockbar .menu-button span {
+		background-position-x: -25px;
+	}
+
+	.ie7 {
+		.dockbar {
 			zoom: 1;
 		}
+
+		.my-sites-menu {
+			a {
+				overflow: visible;
+				text-align: left;
+			}
+
+			.site-name {
+				float: none;
+			}
+
+			.site-type {
+				float: none;
+			}
+		}
 	}
 
-	.aui-menu-scroll {
-		height: 300px;
-		overflow-y: auto;
-	}
-}
+	.ie6 {
+		.dockbar, .lfr-dockbar-pinned .dockbar {
+			height: 10px;
+			left: 0;
+			position: relative;
+			top: 0;
+		}
 
-/* ---------- Customization Bar ---------- */
+		.dockbar .pin-dockbar {
+			display: none;
+		}
 
-.page-customization-bar {
-	background-color: #999;
-	color: #FFF;
-	font-size: 1.2em;
-	font-weight: bold;
-	min-height: 30px;
-	padding: 5px;
-}
+		.my-sites-menu {
+			width: 200px;
 
-.controls-hidden .page-customization-bar {
-	display: none;
-}
+			a {
+				zoom: 1;
+			}
+		}
 
-.page-customization-bar {
-	.customized-icon {
-		margin: 5px;
-		vertical-align: middle;
-	}
-
-	.page-customization-actions {
-		padding-left: 5em;
+		.menu-scroll {
+			height: 300px;
+			overflow-y: auto;
+		}
 	}
 
-	.page-customization-actions a {
-		color: #EEE;
-		font-size: 0.8em;
-		padding: 0 1em;
+	/* ---------- Customization bar ---------- */
+
+	.page-customization-bar {
+		background-color: #999;
+		color: #FFF;
+		font-size: 1.2em;
+		font-weight: bold;
+		min-height: 30px;
+		padding: 5px;
 	}
 
-	.reset-prototype {
-		display: inline;
-		padding-left: 1em;
+	.controls-hidden .page-customization-bar {
+		display: none;
+	}
+
+	.page-customization-bar {
+		.customized-icon {
+			margin: 5px;
+			vertical-align: middle;
+		}
+
+		.page-customization-actions {
+			padding-left: 5em;
+		}
+
+		.page-customization-actions a {
+			color: #EEE;
+			font-size: 0.8em;
+			padding: 0 1em;
+		}
+
+		.reset-prototype {
+			display: inline;
+			padding-left: 1em;
+		}
 	}
 }

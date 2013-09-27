@@ -59,6 +59,7 @@ import org.springframework.core.annotation.Order;
 public class LayoutLocalServiceVirtualLayoutsAdvice
 	implements MethodInterceptor {
 
+	@Override
 	public Object invoke(MethodInvocation methodInvocation) throws Throwable {
 		if (MergeLayoutPrototypesThreadLocal.isInProgress()) {
 			return methodInvocation.proceed();
@@ -73,7 +74,7 @@ public class LayoutLocalServiceVirtualLayoutsAdvice
 		Class<?>[] parameterTypes = method.getParameterTypes();
 
 		if (MergeLayoutPrototypesThreadLocal.isMergeComplete(
-				methodName, arguments, parameterTypes)) {
+				method, arguments)) {
 
 			return methodInvocation.proceed();
 		}
@@ -104,15 +105,12 @@ public class LayoutLocalServiceVirtualLayoutsAdvice
 				if (Validator.isNotNull(
 						layout.getSourcePrototypeLayoutUuid())) {
 
-					if (!SitesUtil.isLayoutModifiedSinceLastMerge(layout)) {
-						SitesUtil.mergeLayoutSetPrototypeLayouts(
-							group, layoutSet);
-					}
+					SitesUtil.mergeLayoutSetPrototypeLayouts(group, layoutSet);
 				}
 			}
 			finally {
 				MergeLayoutPrototypesThreadLocal.setMergeComplete(
-					methodName, arguments, parameterTypes);
+					method, arguments);
 				WorkflowThreadLocal.setEnabled(workflowEnabled);
 			}
 		}
@@ -131,8 +129,8 @@ public class LayoutLocalServiceVirtualLayoutsAdvice
 					groupId, privateLayout);
 
 				mergeLayoutSetPrototypeLayouts(
-					methodName, arguments, parameterTypes, group, layoutSet,
-					privateLayout, workflowEnabled);
+					method, arguments, group, layoutSet, privateLayout,
+					workflowEnabled);
 
 				List<Layout> layouts = (List<Layout>)methodInvocation.proceed();
 
@@ -264,9 +262,8 @@ public class LayoutLocalServiceVirtualLayoutsAdvice
 	}
 
 	protected void mergeLayoutSetPrototypeLayouts(
-		String methodName, Object[] arguments, Class<?>[] parameterTypes,
-		Group group, LayoutSet layoutSet, boolean privateLayout,
-		boolean workflowEnabled) {
+		Method method, Object[] arguments, Group group, LayoutSet layoutSet,
+		boolean privateLayout, boolean workflowEnabled) {
 
 		try {
 			if (!SitesUtil.isLayoutSetMergeable(group, layoutSet)) {
@@ -275,24 +272,6 @@ public class LayoutLocalServiceVirtualLayoutsAdvice
 
 			MergeLayoutPrototypesThreadLocal.setInProgress(true);
 			WorkflowThreadLocal.setEnabled(false);
-
-			int count = LayoutLocalServiceUtil.getLayoutsCount(
-				group, privateLayout);
-
-			if (count == 0) {
-				SitesUtil.mergeLayoutSetPrototypeLayouts(group, layoutSet);
-
-				return;
-			}
-
-			List<Layout> layouts = getPrototypeLinkedLayouts(
-				group.getGroupId(), privateLayout);
-
-			for (Layout layout : layouts) {
-				if (SitesUtil.isLayoutModifiedSinceLastMerge(layout)) {
-					return;
-				}
-			}
 
 			SitesUtil.mergeLayoutSetPrototypeLayouts(group, layoutSet);
 		}
@@ -303,7 +282,7 @@ public class LayoutLocalServiceVirtualLayoutsAdvice
 		}
 		finally {
 			MergeLayoutPrototypesThreadLocal.setMergeComplete(
-				methodName, arguments, parameterTypes);
+				method, arguments);
 			WorkflowThreadLocal.setEnabled(workflowEnabled);
 		}
 	}

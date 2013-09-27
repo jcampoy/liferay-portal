@@ -14,6 +14,9 @@
 
 package com.liferay.portal.model;
 
+import com.liferay.portal.kernel.lar.StagedModelType;
+import com.liferay.portal.kernel.util.Validator;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,8 +26,8 @@ import java.util.Map;
  * This class is a wrapper for {@link Organization}.
  * </p>
  *
- * @author    Brian Wing Shun Chan
- * @see       Organization
+ * @author Brian Wing Shun Chan
+ * @see Organization
  * @generated
  */
 public class OrganizationWrapper implements Organization,
@@ -33,14 +36,17 @@ public class OrganizationWrapper implements Organization,
 		_organization = organization;
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return Organization.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return Organization.class.getName();
 	}
 
+	@Override
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
@@ -64,6 +70,7 @@ public class OrganizationWrapper implements Organization,
 		return attributes;
 	}
 
+	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
 		String uuid = (String)attributes.get("uuid");
 
@@ -167,6 +174,7 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @return the primary key of this organization
 	*/
+	@Override
 	public long getPrimaryKey() {
 		return _organization.getPrimaryKey();
 	}
@@ -176,6 +184,7 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @param primaryKey the primary key of this organization
 	*/
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_organization.setPrimaryKey(primaryKey);
 	}
@@ -185,6 +194,7 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @return the uuid of this organization
 	*/
+	@Override
 	public java.lang.String getUuid() {
 		return _organization.getUuid();
 	}
@@ -194,6 +204,7 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @param uuid the uuid of this organization
 	*/
+	@Override
 	public void setUuid(java.lang.String uuid) {
 		_organization.setUuid(uuid);
 	}
@@ -203,6 +214,7 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @return the organization ID of this organization
 	*/
+	@Override
 	public long getOrganizationId() {
 		return _organization.getOrganizationId();
 	}
@@ -212,6 +224,7 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @param organizationId the organization ID of this organization
 	*/
+	@Override
 	public void setOrganizationId(long organizationId) {
 		_organization.setOrganizationId(organizationId);
 	}
@@ -221,6 +234,7 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @return the company ID of this organization
 	*/
+	@Override
 	public long getCompanyId() {
 		return _organization.getCompanyId();
 	}
@@ -230,6 +244,7 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @param companyId the company ID of this organization
 	*/
+	@Override
 	public void setCompanyId(long companyId) {
 		_organization.setCompanyId(companyId);
 	}
@@ -239,6 +254,7 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @return the user ID of this organization
 	*/
+	@Override
 	public long getUserId() {
 		return _organization.getUserId();
 	}
@@ -248,6 +264,7 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @param userId the user ID of this organization
 	*/
+	@Override
 	public void setUserId(long userId) {
 		_organization.setUserId(userId);
 	}
@@ -258,6 +275,7 @@ public class OrganizationWrapper implements Organization,
 	* @return the user uuid of this organization
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.lang.String getUserUuid()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _organization.getUserUuid();
@@ -268,6 +286,7 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @param userUuid the user uuid of this organization
 	*/
+	@Override
 	public void setUserUuid(java.lang.String userUuid) {
 		_organization.setUserUuid(userUuid);
 	}
@@ -277,6 +296,7 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @return the user name of this organization
 	*/
+	@Override
 	public java.lang.String getUserName() {
 		return _organization.getUserName();
 	}
@@ -286,6 +306,7 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @param userName the user name of this organization
 	*/
+	@Override
 	public void setUserName(java.lang.String userName) {
 		_organization.setUserName(userName);
 	}
@@ -295,6 +316,7 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @return the create date of this organization
 	*/
+	@Override
 	public java.util.Date getCreateDate() {
 		return _organization.getCreateDate();
 	}
@@ -304,6 +326,7 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @param createDate the create date of this organization
 	*/
+	@Override
 	public void setCreateDate(java.util.Date createDate) {
 		_organization.setCreateDate(createDate);
 	}
@@ -313,6 +336,7 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @return the modified date of this organization
 	*/
+	@Override
 	public java.util.Date getModifiedDate() {
 		return _organization.getModifiedDate();
 	}
@@ -322,6 +346,7 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @param modifiedDate the modified date of this organization
 	*/
+	@Override
 	public void setModifiedDate(java.util.Date modifiedDate) {
 		_organization.setModifiedDate(modifiedDate);
 	}
@@ -331,6 +356,7 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @return the parent organization ID of this organization
 	*/
+	@Override
 	public long getParentOrganizationId() {
 		return _organization.getParentOrganizationId();
 	}
@@ -340,6 +366,7 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @param parentOrganizationId the parent organization ID of this organization
 	*/
+	@Override
 	public void setParentOrganizationId(long parentOrganizationId) {
 		_organization.setParentOrganizationId(parentOrganizationId);
 	}
@@ -349,6 +376,7 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @return the tree path of this organization
 	*/
+	@Override
 	public java.lang.String getTreePath() {
 		return _organization.getTreePath();
 	}
@@ -358,6 +386,7 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @param treePath the tree path of this organization
 	*/
+	@Override
 	public void setTreePath(java.lang.String treePath) {
 		_organization.setTreePath(treePath);
 	}
@@ -367,6 +396,7 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @return the name of this organization
 	*/
+	@Override
 	public java.lang.String getName() {
 		return _organization.getName();
 	}
@@ -376,6 +406,7 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @param name the name of this organization
 	*/
+	@Override
 	public void setName(java.lang.String name) {
 		_organization.setName(name);
 	}
@@ -385,6 +416,7 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @return the type of this organization
 	*/
+	@Override
 	public java.lang.String getType() {
 		return _organization.getType();
 	}
@@ -394,6 +426,7 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @param type the type of this organization
 	*/
+	@Override
 	public void setType(java.lang.String type) {
 		_organization.setType(type);
 	}
@@ -403,6 +436,7 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @return the recursable of this organization
 	*/
+	@Override
 	public boolean getRecursable() {
 		return _organization.getRecursable();
 	}
@@ -412,6 +446,7 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @return <code>true</code> if this organization is recursable; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isRecursable() {
 		return _organization.isRecursable();
 	}
@@ -421,6 +456,7 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @param recursable the recursable of this organization
 	*/
+	@Override
 	public void setRecursable(boolean recursable) {
 		_organization.setRecursable(recursable);
 	}
@@ -430,6 +466,7 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @return the region ID of this organization
 	*/
+	@Override
 	public long getRegionId() {
 		return _organization.getRegionId();
 	}
@@ -439,6 +476,7 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @param regionId the region ID of this organization
 	*/
+	@Override
 	public void setRegionId(long regionId) {
 		_organization.setRegionId(regionId);
 	}
@@ -448,6 +486,7 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @return the country ID of this organization
 	*/
+	@Override
 	public long getCountryId() {
 		return _organization.getCountryId();
 	}
@@ -457,6 +496,7 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @param countryId the country ID of this organization
 	*/
+	@Override
 	public void setCountryId(long countryId) {
 		_organization.setCountryId(countryId);
 	}
@@ -466,6 +506,7 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @return the status ID of this organization
 	*/
+	@Override
 	public int getStatusId() {
 		return _organization.getStatusId();
 	}
@@ -475,6 +516,7 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @param statusId the status ID of this organization
 	*/
+	@Override
 	public void setStatusId(int statusId) {
 		_organization.setStatusId(statusId);
 	}
@@ -484,6 +526,7 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @return the comments of this organization
 	*/
+	@Override
 	public java.lang.String getComments() {
 		return _organization.getComments();
 	}
@@ -493,52 +536,64 @@ public class OrganizationWrapper implements Organization,
 	*
 	* @param comments the comments of this organization
 	*/
+	@Override
 	public void setComments(java.lang.String comments) {
 		_organization.setComments(comments);
 	}
 
+	@Override
 	public boolean isNew() {
 		return _organization.isNew();
 	}
 
+	@Override
 	public void setNew(boolean n) {
 		_organization.setNew(n);
 	}
 
+	@Override
 	public boolean isCachedModel() {
 		return _organization.isCachedModel();
 	}
 
+	@Override
 	public void setCachedModel(boolean cachedModel) {
 		_organization.setCachedModel(cachedModel);
 	}
 
+	@Override
 	public boolean isEscapedModel() {
 		return _organization.isEscapedModel();
 	}
 
+	@Override
 	public java.io.Serializable getPrimaryKeyObj() {
 		return _organization.getPrimaryKeyObj();
 	}
 
+	@Override
 	public void setPrimaryKeyObj(java.io.Serializable primaryKeyObj) {
 		_organization.setPrimaryKeyObj(primaryKeyObj);
 	}
 
+	@Override
 	public com.liferay.portlet.expando.model.ExpandoBridge getExpandoBridge() {
 		return _organization.getExpandoBridge();
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.model.BaseModel<?> baseModel) {
 		_organization.setExpandoBridgeAttributes(baseModel);
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
 		_organization.setExpandoBridgeAttributes(expandoBridge);
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_organization.setExpandoBridgeAttributes(serviceContext);
@@ -549,6 +604,7 @@ public class OrganizationWrapper implements Organization,
 		return new OrganizationWrapper((Organization)_organization.clone());
 	}
 
+	@Override
 	public int compareTo(com.liferay.portal.model.Organization organization) {
 		return _organization.compareTo(organization);
 	}
@@ -558,14 +614,17 @@ public class OrganizationWrapper implements Organization,
 		return _organization.hashCode();
 	}
 
+	@Override
 	public com.liferay.portal.model.CacheModel<com.liferay.portal.model.Organization> toCacheModel() {
 		return _organization.toCacheModel();
 	}
 
+	@Override
 	public com.liferay.portal.model.Organization toEscapedModel() {
 		return new OrganizationWrapper(_organization.toEscapedModel());
 	}
 
+	@Override
 	public com.liferay.portal.model.Organization toUnescapedModel() {
 		return new OrganizationWrapper(_organization.toUnescapedModel());
 	}
@@ -575,121 +634,170 @@ public class OrganizationWrapper implements Organization,
 		return _organization.toString();
 	}
 
+	@Override
 	public java.lang.String toXmlString() {
 		return _organization.toXmlString();
 	}
 
+	@Override
 	public void persist()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_organization.persist();
 	}
 
+	@Override
 	public java.lang.String buildTreePath()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _organization.buildTreePath();
 	}
 
+	@Override
 	public com.liferay.portal.model.Address getAddress() {
 		return _organization.getAddress();
 	}
 
+	@Override
 	public java.util.List<com.liferay.portal.model.Address> getAddresses()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _organization.getAddresses();
 	}
 
+	@Override
 	public java.util.List<com.liferay.portal.model.Organization> getAncestors()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _organization.getAncestors();
 	}
 
+	@Override
 	public java.lang.String[] getChildrenTypes() {
 		return _organization.getChildrenTypes();
 	}
 
+	@Override
 	public java.util.List<com.liferay.portal.model.Organization> getDescendants()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _organization.getDescendants();
 	}
 
+	@Override
 	public com.liferay.portal.model.Group getGroup() {
 		return _organization.getGroup();
 	}
 
+	@Override
 	public long getGroupId() {
 		return _organization.getGroupId();
 	}
 
+	@Override
 	public long getLogoId() {
 		return _organization.getLogoId();
 	}
 
+	@Override
 	public com.liferay.portal.model.Organization getParentOrganization()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _organization.getParentOrganization();
 	}
 
+	@Override
 	public javax.portlet.PortletPreferences getPreferences()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _organization.getPreferences();
 	}
 
+	@Override
 	public int getPrivateLayoutsPageCount() {
 		return _organization.getPrivateLayoutsPageCount();
 	}
 
+	@Override
 	public int getPublicLayoutsPageCount() {
 		return _organization.getPublicLayoutsPageCount();
 	}
 
+	@Override
 	public java.util.Set<java.lang.String> getReminderQueryQuestions(
 		java.util.Locale locale)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _organization.getReminderQueryQuestions(locale);
 	}
 
+	@Override
 	public java.util.Set<java.lang.String> getReminderQueryQuestions(
 		java.lang.String languageId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _organization.getReminderQueryQuestions(languageId);
 	}
 
+	@Override
 	public java.util.List<com.liferay.portal.model.Organization> getSuborganizations()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _organization.getSuborganizations();
 	}
 
+	@Override
 	public int getSuborganizationsSize()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _organization.getSuborganizationsSize();
 	}
 
+	@Override
 	public int getTypeOrder() {
 		return _organization.getTypeOrder();
 	}
 
+	@Override
 	public boolean hasPrivateLayouts() {
 		return _organization.hasPrivateLayouts();
 	}
 
+	@Override
 	public boolean hasPublicLayouts() {
 		return _organization.hasPublicLayouts();
 	}
 
+	@Override
 	public boolean hasSuborganizations()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _organization.hasSuborganizations();
 	}
 
+	@Override
 	public boolean isParentable() {
 		return _organization.isParentable();
 	}
 
+	@Override
 	public boolean isRoot() {
 		return _organization.isRoot();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof OrganizationWrapper)) {
+			return false;
+		}
+
+		OrganizationWrapper organizationWrapper = (OrganizationWrapper)obj;
+
+		if (Validator.equals(_organization, organizationWrapper._organization)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	@Override
+	public StagedModelType getStagedModelType() {
+		return _organization.getStagedModelType();
 	}
 
 	/**
@@ -699,10 +807,12 @@ public class OrganizationWrapper implements Organization,
 		return _organization;
 	}
 
+	@Override
 	public Organization getWrappedModel() {
 		return _organization;
 	}
 
+	@Override
 	public void resetOriginalValues() {
 		_organization.resetOriginalValues();
 	}

@@ -16,6 +16,7 @@ package com.liferay.portlet.bookmarks.service.impl;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.search.Hits;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
@@ -37,6 +38,7 @@ import java.util.List;
  */
 public class BookmarksEntryServiceImpl extends BookmarksEntryServiceBaseImpl {
 
+	@Override
 	public BookmarksEntry addEntry(
 			long groupId, long folderId, String name, String url,
 			String description, ServiceContext serviceContext)
@@ -50,6 +52,7 @@ public class BookmarksEntryServiceImpl extends BookmarksEntryServiceBaseImpl {
 			serviceContext);
 	}
 
+	@Override
 	public void deleteEntry(long entryId)
 		throws PortalException, SystemException {
 
@@ -59,6 +62,7 @@ public class BookmarksEntryServiceImpl extends BookmarksEntryServiceBaseImpl {
 		bookmarksEntryLocalService.deleteEntry(entryId);
 	}
 
+	@Override
 	public List<BookmarksEntry> getEntries(
 			long groupId, long folderId, int start, int end)
 		throws SystemException {
@@ -67,6 +71,7 @@ public class BookmarksEntryServiceImpl extends BookmarksEntryServiceBaseImpl {
 			groupId, folderId, WorkflowConstants.STATUS_APPROVED, start, end);
 	}
 
+	@Override
 	public List<BookmarksEntry> getEntries(
 			long groupId, long folderId, int start, int end,
 			OrderByComparator orderByComparator)
@@ -77,13 +82,29 @@ public class BookmarksEntryServiceImpl extends BookmarksEntryServiceBaseImpl {
 			orderByComparator);
 	}
 
+	@Override
 	public int getEntriesCount(long groupId, long folderId)
 		throws SystemException {
 
-		return bookmarksEntryPersistence.filterCountByG_F_S(
+		return getEntriesCount(
 			groupId, folderId, WorkflowConstants.STATUS_APPROVED);
 	}
 
+	@Override
+	public int getEntriesCount(long groupId, long folderId, int status)
+		throws SystemException {
+
+		if (status == WorkflowConstants.STATUS_ANY) {
+			return bookmarksEntryPersistence.filterCountByG_F_NotS(
+				groupId, folderId, WorkflowConstants.STATUS_IN_TRASH);
+		}
+		else {
+			return bookmarksEntryPersistence.filterCountByG_F_S(
+				groupId, folderId, status);
+		}
+	}
+
+	@Override
 	public BookmarksEntry getEntry(long entryId)
 		throws PortalException, SystemException {
 
@@ -93,6 +114,7 @@ public class BookmarksEntryServiceImpl extends BookmarksEntryServiceBaseImpl {
 		return bookmarksEntryLocalService.getEntry(entryId);
 	}
 
+	@Override
 	public int getFoldersEntriesCount(long groupId, List<Long> folderIds)
 		throws SystemException {
 
@@ -102,6 +124,7 @@ public class BookmarksEntryServiceImpl extends BookmarksEntryServiceBaseImpl {
 			WorkflowConstants.STATUS_APPROVED);
 	}
 
+	@Override
 	public List<BookmarksEntry> getGroupEntries(
 			long groupId, int start, int end)
 		throws PortalException, SystemException {
@@ -110,6 +133,7 @@ public class BookmarksEntryServiceImpl extends BookmarksEntryServiceBaseImpl {
 			groupId, 0, WorkflowConstants.STATUS_APPROVED, start, end);
 	}
 
+	@Override
 	public List<BookmarksEntry> getGroupEntries(
 			long groupId, long userId, int start, int end)
 		throws PortalException, SystemException {
@@ -119,9 +143,23 @@ public class BookmarksEntryServiceImpl extends BookmarksEntryServiceBaseImpl {
 			start, end);
 	}
 
+	@Override
 	public List<BookmarksEntry> getGroupEntries(
 			long groupId, long userId, long rootFolderId, int start, int end)
 		throws PortalException, SystemException {
+
+		if (rootFolderId == BookmarksFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
+			if (userId <= 0) {
+				return bookmarksEntryPersistence.filterFindByG_NotS(
+					groupId, WorkflowConstants.STATUS_IN_TRASH, start, end,
+					new EntryModifiedDateComparator());
+			}
+			else {
+				return bookmarksEntryPersistence.filterFindByG_U_NotS(
+					groupId, userId, WorkflowConstants.STATUS_IN_TRASH, start,
+					end, new EntryModifiedDateComparator());
+			}
+		}
 
 		List<Long> folderIds = bookmarksFolderService.getFolderIds(
 			groupId, rootFolderId);
@@ -143,12 +181,14 @@ public class BookmarksEntryServiceImpl extends BookmarksEntryServiceBaseImpl {
 		}
 	}
 
+	@Override
 	public int getGroupEntriesCount(long groupId)
 		throws PortalException, SystemException {
 
 		return getGroupEntriesCount(groupId, 0);
 	}
 
+	@Override
 	public int getGroupEntriesCount(long groupId, long userId)
 		throws PortalException, SystemException {
 
@@ -156,9 +196,21 @@ public class BookmarksEntryServiceImpl extends BookmarksEntryServiceBaseImpl {
 			groupId, userId, BookmarksFolderConstants.DEFAULT_PARENT_FOLDER_ID);
 	}
 
+	@Override
 	public int getGroupEntriesCount(
 			long groupId, long userId, long rootFolderId)
 		throws PortalException, SystemException {
+
+		if (rootFolderId == BookmarksFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
+			if (userId <= 0) {
+				return bookmarksEntryPersistence.filterCountByG_NotS(
+					groupId, WorkflowConstants.STATUS_IN_TRASH);
+			}
+			else {
+				return bookmarksEntryPersistence.filterCountByG_U_NotS(
+					groupId, userId, WorkflowConstants.STATUS_IN_TRASH);
+			}
+		}
 
 		List<Long> folderIds = bookmarksFolderService.getFolderIds(
 			groupId, rootFolderId);
@@ -178,6 +230,7 @@ public class BookmarksEntryServiceImpl extends BookmarksEntryServiceBaseImpl {
 		}
 	}
 
+	@Override
 	public BookmarksEntry moveEntry(long entryId, long parentFolderId)
 		throws PortalException, SystemException {
 
@@ -187,6 +240,7 @@ public class BookmarksEntryServiceImpl extends BookmarksEntryServiceBaseImpl {
 		return bookmarksEntryLocalService.moveEntry(entryId, parentFolderId);
 	}
 
+	@Override
 	public BookmarksEntry moveEntryFromTrash(long entryId, long parentFolderId)
 		throws PortalException, SystemException {
 
@@ -197,15 +251,18 @@ public class BookmarksEntryServiceImpl extends BookmarksEntryServiceBaseImpl {
 			getUserId(), entryId, parentFolderId);
 	}
 
-	public void moveEntryToTrash(long entryId)
+	@Override
+	public BookmarksEntry moveEntryToTrash(long entryId)
 		throws PortalException, SystemException {
 
 		BookmarksEntryPermission.check(
 			getPermissionChecker(), entryId, ActionKeys.DELETE);
 
-		bookmarksEntryLocalService.moveEntryToTrash(getUserId(), entryId);
+		return bookmarksEntryLocalService.moveEntryToTrash(
+			getUserId(), entryId);
 	}
 
+	@Override
 	public BookmarksEntry openEntry(BookmarksEntry entry)
 		throws PortalException, SystemException {
 
@@ -215,6 +272,7 @@ public class BookmarksEntryServiceImpl extends BookmarksEntryServiceBaseImpl {
 		return bookmarksEntryLocalService.openEntry(getGuestOrUserId(), entry);
 	}
 
+	@Override
 	public BookmarksEntry openEntry(long entryId)
 		throws PortalException, SystemException {
 
@@ -225,6 +283,7 @@ public class BookmarksEntryServiceImpl extends BookmarksEntryServiceBaseImpl {
 			getGuestOrUserId(), entryId);
 	}
 
+	@Override
 	public void restoreEntryFromTrash(long entryId)
 		throws PortalException, SystemException {
 
@@ -234,6 +293,16 @@ public class BookmarksEntryServiceImpl extends BookmarksEntryServiceBaseImpl {
 		bookmarksEntryLocalService.restoreEntryFromTrash(getUserId(), entryId);
 	}
 
+	@Override
+	public Hits search(
+			long groupId, long creatorUserId, int status, int start, int end)
+		throws PortalException, SystemException {
+
+		return bookmarksEntryLocalService.search(
+			groupId, getUserId(), creatorUserId, status, start, end);
+	}
+
+	@Override
 	public void subscribeEntry(long entryId)
 		throws PortalException, SystemException {
 
@@ -243,6 +312,7 @@ public class BookmarksEntryServiceImpl extends BookmarksEntryServiceBaseImpl {
 		bookmarksEntryLocalService.subscribeEntry(getUserId(), entryId);
 	}
 
+	@Override
 	public void unsubscribeEntry(long entryId)
 		throws PortalException, SystemException {
 
@@ -252,6 +322,7 @@ public class BookmarksEntryServiceImpl extends BookmarksEntryServiceBaseImpl {
 		bookmarksEntryLocalService.unsubscribeEntry(getUserId(), entryId);
 	}
 
+	@Override
 	public BookmarksEntry updateEntry(
 			long entryId, long groupId, long folderId, String name, String url,
 			String description, ServiceContext serviceContext)

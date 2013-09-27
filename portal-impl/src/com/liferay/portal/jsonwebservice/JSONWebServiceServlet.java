@@ -14,31 +14,23 @@
 
 package com.liferay.portal.jsonwebservice;
 
-import com.liferay.portal.events.ServicePreAction;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.servlet.PluginContextListener;
 import com.liferay.portal.kernel.upload.UploadServletRequest;
 import com.liferay.portal.kernel.util.ContextPathUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
-import com.liferay.portal.kernel.util.InstancePool;
 import com.liferay.portal.kernel.util.LocaleThreadLocal;
-import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.security.ac.AccessControlThreadLocal;
 import com.liferay.portal.servlet.JSONServlet;
+import com.liferay.portal.spring.context.PortalContextLoaderListener;
 import com.liferay.portal.struts.JSONAction;
 import com.liferay.portal.upload.UploadServletRequestImpl;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.portal.util.PropsValues;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
-import java.net.URL;
 
 import java.util.Locale;
 
@@ -53,13 +45,6 @@ import javax.servlet.http.HttpSession;
  * @author Igor Spasic
  */
 public class JSONWebServiceServlet extends JSONServlet {
-
-	@Override
-	public void destroy() {
-		_jsonWebServiceServiceAction.destroy();
-
-		super.destroy();
-	}
 
 	@Override
 	public void service(
@@ -79,19 +64,9 @@ public class JSONWebServiceServlet extends JSONServlet {
 			 !path.equals(StringPool.SLASH)) ||
 			(request.getParameter("discover") != null)) {
 
-			try {
-				ServicePreAction servicePreAction =
-					(ServicePreAction)InstancePool.get(
-						ServicePreAction.class.getName());
+			Locale locale = PortalUtil.getLocale(request, response, true);
 
-				Locale locale = servicePreAction.initLocale(
-					request, response, null);
-
-				LocaleThreadLocal.setThemeDisplayLocale(locale);
-			}
-			catch (Exception e) {
-				throw new ServletException(e);
-			}
+			LocaleThreadLocal.setThemeDisplayLocale(locale);
 
 			super.service(request, response);
 
@@ -113,9 +88,22 @@ public class JSONWebServiceServlet extends JSONServlet {
 		try {
 			AccessControlThreadLocal.setRemoteAccess(true);
 
-			String contextPath = PropsValues.PORTAL_CTX;
+			String contextPath =
+				PortalContextLoaderListener.getPortalServletContextPath();
+
+			if (contextPath.isEmpty()) {
+				contextPath = StringPool.SLASH;
+			}
+
+			String proxyPath = PortalUtil.getPathProxy();
 
 			if (servletContext.getContext(contextPath) != null) {
+				if (Validator.isNotNull(proxyPath) &&
+					apiPath.startsWith(proxyPath)) {
+
+					apiPath = apiPath.substring(proxyPath.length());
+				}
+
 				if (!contextPath.equals(StringPool.SLASH) &&
 					apiPath.startsWith(contextPath)) {
 
@@ -128,46 +116,14 @@ public class JSONWebServiceServlet extends JSONServlet {
 				requestDispatcher.forward(request, response);
 			}
 			else {
-				String requestURI = request.getRequestURI();
-				String requestURL = String.valueOf(request.getRequestURL());
-
-				String serverURL = requestURL.substring(
-					0, requestURL.length() - requestURI.length());
-
-				String queryString = request.getQueryString();
-
-				if (Validator.isNull(queryString)) {
-					queryString = StringPool.BLANK;
-				}
-				else {
-					queryString += StringPool.AMPERSAND;
-				}
-
 				String servletContextPath = ContextPathUtil.getContextPath(
 					servletContext);
 
-				queryString +=
-					"contextPath=" + HttpUtil.encodeURL(servletContextPath);
+				String redirectPath =
+					PortalUtil.getPathContext() + "/api/jsonws?contextPath=" +
+						HttpUtil.encodeURL(servletContextPath);
 
-				apiPath =
-					serverURL + apiPath + StringPool.QUESTION + queryString;
-
-				URL url = new URL(apiPath);
-
-				InputStream inputStream = null;
-
-				try {
-					inputStream = url.openStream();
-
-					OutputStream outputStream = response.getOutputStream();
-
-					StreamUtil.transfer(inputStream, outputStream);
-				}
-				finally {
-					StreamUtil.cleanUp(inputStream);
-
-					AccessControlThreadLocal.setRemoteAccess(remoteAccess);
-				}
+				response.sendRedirect(redirectPath);
 			}
 		}
 		finally {
@@ -177,20 +133,15 @@ public class JSONWebServiceServlet extends JSONServlet {
 
 	@Override
 	protected JSONAction getJSONAction(ServletContext servletContext) {
-		ClassLoader classLoader = (ClassLoader)servletContext.getAttribute(
-			PluginContextListener.PLUGIN_CLASS_LOADER);
+		JSONWebServiceServiceAction jsonWebServiceServiceAction =
+			new JSONWebServiceServiceAction();
 
-		_jsonWebServiceServiceAction = new JSONWebServiceServiceAction(
-			servletContext, classLoader);
+		jsonWebServiceServiceAction.setServletContext(servletContext);
 
-		_jsonWebServiceServiceAction.setServletContext(servletContext);
-
-		return _jsonWebServiceServiceAction;
+		return jsonWebServiceServiceAction;
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(
 		JSONWebServiceServlet.class);
-
-	private JSONWebServiceServiceAction _jsonWebServiceServiceAction;
 
 }

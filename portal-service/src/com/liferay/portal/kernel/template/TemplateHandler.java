@@ -60,6 +60,8 @@ public interface TemplateHandler {
 	 */
 	public String getResourceName();
 
+	public String[] getRestrictedVariables(String language);
+
 	/**
 	 * Returns the path to the help template.
 	 *
@@ -79,7 +81,7 @@ public interface TemplateHandler {
 	public String getTemplatesHelpPropertyKey();
 
 	public Map<String, TemplateVariableGroup> getTemplateVariableGroups(
-			long classPK, Locale locale)
+			long classPK, String language, Locale locale)
 		throws Exception;
 
 }

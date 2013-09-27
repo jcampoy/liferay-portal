@@ -155,26 +155,32 @@ public class AssetTagModelImpl extends BaseModelImpl<AssetTag>
 	public AssetTagModelImpl() {
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _tagId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setTagId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
 		return _tagId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return AssetTag.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return AssetTag.class.getName();
 	}
@@ -254,19 +260,23 @@ public class AssetTagModelImpl extends BaseModelImpl<AssetTag>
 	}
 
 	@JSON
+	@Override
 	public long getTagId() {
 		return _tagId;
 	}
 
+	@Override
 	public void setTagId(long tagId) {
 		_tagId = tagId;
 	}
 
 	@JSON
+	@Override
 	public long getGroupId() {
 		return _groupId;
 	}
 
+	@Override
 	public void setGroupId(long groupId) {
 		_columnBitmask |= GROUPID_COLUMN_BITMASK;
 
@@ -284,32 +294,39 @@ public class AssetTagModelImpl extends BaseModelImpl<AssetTag>
 	}
 
 	@JSON
+	@Override
 	public long getCompanyId() {
 		return _companyId;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
 		_companyId = companyId;
 	}
 
 	@JSON
+	@Override
 	public long getUserId() {
 		return _userId;
 	}
 
+	@Override
 	public void setUserId(long userId) {
 		_userId = userId;
 	}
 
+	@Override
 	public String getUserUuid() throws SystemException {
 		return PortalUtil.getUserValue(getUserId(), "uuid", _userUuid);
 	}
 
+	@Override
 	public void setUserUuid(String userUuid) {
 		_userUuid = userUuid;
 	}
 
 	@JSON
+	@Override
 	public String getUserName() {
 		if (_userName == null) {
 			return StringPool.BLANK;
@@ -319,29 +336,35 @@ public class AssetTagModelImpl extends BaseModelImpl<AssetTag>
 		}
 	}
 
+	@Override
 	public void setUserName(String userName) {
 		_userName = userName;
 	}
 
 	@JSON
+	@Override
 	public Date getCreateDate() {
 		return _createDate;
 	}
 
+	@Override
 	public void setCreateDate(Date createDate) {
 		_createDate = createDate;
 	}
 
 	@JSON
+	@Override
 	public Date getModifiedDate() {
 		return _modifiedDate;
 	}
 
+	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		_modifiedDate = modifiedDate;
 	}
 
 	@JSON
+	@Override
 	public String getName() {
 		if (_name == null) {
 			return StringPool.BLANK;
@@ -351,6 +374,7 @@ public class AssetTagModelImpl extends BaseModelImpl<AssetTag>
 		}
 	}
 
+	@Override
 	public void setName(String name) {
 		_columnBitmask = -1L;
 
@@ -366,10 +390,12 @@ public class AssetTagModelImpl extends BaseModelImpl<AssetTag>
 	}
 
 	@JSON
+	@Override
 	public int getAssetCount() {
 		return _assetCount;
 	}
 
+	@Override
 	public void setAssetCount(int assetCount) {
 		_assetCount = assetCount;
 	}
@@ -420,6 +446,7 @@ public class AssetTagModelImpl extends BaseModelImpl<AssetTag>
 		return assetTagImpl;
 	}
 
+	@Override
 	public int compareTo(AssetTag assetTag) {
 		int value = 0;
 
@@ -434,18 +461,15 @@ public class AssetTagModelImpl extends BaseModelImpl<AssetTag>
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof AssetTag)) {
 			return false;
 		}
 
-		AssetTag assetTag = null;
-
-		try {
-			assetTag = (AssetTag)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		AssetTag assetTag = (AssetTag)obj;
 
 		long primaryKey = assetTag.getPrimaryKey();
 
@@ -553,6 +577,7 @@ public class AssetTagModelImpl extends BaseModelImpl<AssetTag>
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(31);
 

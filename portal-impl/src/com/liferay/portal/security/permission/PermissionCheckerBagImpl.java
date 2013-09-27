@@ -17,10 +17,12 @@ package com.liferay.portal.security.permission;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.Group;
+import com.liferay.portal.model.GroupConstants;
 import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.OrganizationConstants;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.OrganizationLocalServiceUtil;
 import com.liferay.portal.service.UserGroupRoleLocalServiceUtil;
 import com.liferay.portal.service.permission.LayoutPrototypePermissionUtil;
@@ -53,10 +55,12 @@ public class PermissionCheckerBagImpl implements PermissionCheckerBag {
 		_roles = roles;
 	}
 
+	@Override
 	public List<Group> getGroups() {
 		return _groups;
 	}
 
+	@Override
 	public long[] getRoleIds() {
 		if (_roleIds == null) {
 			List<Role> roles = getRoles();
@@ -77,30 +81,36 @@ public class PermissionCheckerBagImpl implements PermissionCheckerBag {
 		return _roleIds;
 	}
 
+	@Override
 	public List<Role> getRoles() {
 		return _roles;
 	}
 
+	@Override
 	public List<Group> getUserGroups() {
 		return _userGroups;
 	}
 
+	@Override
 	public List<Group> getUserOrgGroups() {
 		return _userOrgGroups;
 	}
 
+	@Override
 	public List<Organization> getUserOrgs() {
 		return _userOrgs;
 	}
 
+	@Override
 	public List<Group> getUserUserGroupGroups() {
 		return _userUserGroupGroups;
 	}
 
 	/**
-	 * @deprecated As of 6.1, renamed to {@link #isGroupAdmin(PermissionChecker,
-	 *             Group)}
+	 * @deprecated As of 6.1.0, renamed to {@link
+	 *             #isGroupAdmin(PermissionChecker, Group)}
 	 */
+	@Override
 	public boolean isCommunityAdmin(
 			PermissionChecker permissionChecker, Group group)
 		throws Exception {
@@ -109,9 +119,10 @@ public class PermissionCheckerBagImpl implements PermissionCheckerBag {
 	}
 
 	/**
-	 * @deprecated As of 6.1, renamed to {@link #isGroupOwner(PermissionChecker,
-	 *             Group)}
+	 * @deprecated As of 6.1.0, renamed to {@link
+	 *             #isGroupOwner(PermissionChecker, Group)}
 	 */
+	@Override
 	public boolean isCommunityOwner(
 			PermissionChecker permissionChecker, Group group)
 		throws Exception {
@@ -119,6 +130,7 @@ public class PermissionCheckerBagImpl implements PermissionCheckerBag {
 		return isGroupOwner(permissionChecker, group);
 	}
 
+	@Override
 	public boolean isGroupAdmin(
 			PermissionChecker permissionChecker, Group group)
 		throws Exception {
@@ -134,6 +146,7 @@ public class PermissionCheckerBagImpl implements PermissionCheckerBag {
 		return value.booleanValue();
 	}
 
+	@Override
 	public boolean isGroupMember(
 			PermissionChecker permissionChecker, Group group)
 		throws Exception {
@@ -153,6 +166,7 @@ public class PermissionCheckerBagImpl implements PermissionCheckerBag {
 		return false;
 	}
 
+	@Override
 	public boolean isGroupOwner(
 			PermissionChecker permissionChecker, Group group)
 		throws Exception {
@@ -168,6 +182,7 @@ public class PermissionCheckerBagImpl implements PermissionCheckerBag {
 		return value.booleanValue();
 	}
 
+	@Override
 	public boolean isOrganizationAdmin(
 			PermissionChecker permissionChecker, Organization organization)
 		throws Exception {
@@ -185,6 +200,7 @@ public class PermissionCheckerBagImpl implements PermissionCheckerBag {
 		return value.booleanValue();
 	}
 
+	@Override
 	public boolean isOrganizationOwner(
 			PermissionChecker permissionChecker, Organization organization)
 		throws Exception {
@@ -205,6 +221,16 @@ public class PermissionCheckerBagImpl implements PermissionCheckerBag {
 	protected boolean isGroupAdminImpl(
 			PermissionChecker permissionChecker, Group group)
 		throws PortalException, SystemException {
+
+		if (group.isLayout()) {
+			long parentGroupId = group.getParentGroupId();
+
+			if (parentGroupId == GroupConstants.DEFAULT_PARENT_GROUP_ID) {
+				return false;
+			}
+
+			group = GroupLocalServiceUtil.getGroup(parentGroupId);
+		}
 
 		if (group.isSite()) {
 			if (UserGroupRoleLocalServiceUtil.hasUserGroupRole(

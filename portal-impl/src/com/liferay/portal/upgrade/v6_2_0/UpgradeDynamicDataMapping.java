@@ -17,12 +17,13 @@ package com.liferay.portal.upgrade.v6_2_0;
 import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
 import com.liferay.portal.upgrade.v6_2_0.util.DDMTemplateTable;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.portlet.dynamicdatamapping.model.DDMTemplate;
+import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
 import com.liferay.portlet.dynamicdatamapping.util.DDMXMLUtil;
 
 import java.sql.Connection;
@@ -54,7 +55,7 @@ public class UpgradeDynamicDataMapping extends UpgradeProcess {
 				DDMTemplateTable.TABLE_SQL_ADD_INDEXES);
 		}
 
-		long classNameId = PortalUtil.getClassNameId(DDMTemplate.class);
+		long classNameId = PortalUtil.getClassNameId(DDMStructure.class);
 
 		runSQL("update DDMTemplate set classNameId = " + classNameId);
 
@@ -127,7 +128,7 @@ public class UpgradeDynamicDataMapping extends UpgradeProcess {
 				String xsd = rs.getString("xsd");
 
 				updateStructure(
-					structureId, structureKey.trim().toUpperCase(),
+					structureId, StringUtil.toUpperCase(structureKey.trim()),
 					updateXSD(xsd));
 			}
 		}

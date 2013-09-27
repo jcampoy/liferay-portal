@@ -36,6 +36,7 @@ import com.liferay.portlet.documentlibrary.service.DLAppHelperLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.service.DLFileVersionLocalServiceUtil;
+import com.liferay.portlet.documentlibrary.service.DLFolderLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.service.permission.DLFileEntryPermission;
 import com.liferay.portlet.documentlibrary.service.permission.DLFolderPermission;
 import com.liferay.portlet.documentlibrary.util.DLUtil;
@@ -55,43 +56,34 @@ import javax.portlet.PortletRequest;
 public class DLFileEntryTrashHandler extends DLBaseTrashHandler {
 
 	@Override
+	public void checkDuplicateEntry(
+			long classPK, long containerModelId, String newName)
+		throws PortalException, SystemException {
+
+		DLFileEntry dlFileEntry = getDLFileEntry(classPK);
+
+		checkDuplicateEntry(
+			classPK, 0, containerModelId, dlFileEntry.getTitle(), newName);
+	}
+
+	@Override
 	public void checkDuplicateTrashEntry(
 			TrashEntry trashEntry, long containerModelId, String newName)
 		throws PortalException, SystemException {
 
-		DLFileEntry dlFileEntry = getDLFileEntry(trashEntry.getClassPK());
-
-		if (containerModelId == TrashEntryConstants.DEFAULT_CONTAINER_ID) {
-			containerModelId = dlFileEntry.getFolderId();
-		}
-
-		String originalTitle = trashEntry.getTypeSettingsProperty("title");
-
-		if (Validator.isNotNull(newName)) {
-			originalTitle = newName;
-		}
-
-		DLFileEntry duplicateDLFileEntry =
-			DLFileEntryLocalServiceUtil.fetchFileEntry(
-				dlFileEntry.getGroupId(), containerModelId, originalTitle);
-
-		if (duplicateDLFileEntry != null) {
-			DuplicateEntryException dee = new DuplicateEntryException();
-
-			dee.setDuplicateEntryId(duplicateDLFileEntry.getFileEntryId());
-			dee.setOldName(duplicateDLFileEntry.getTitle());
-			dee.setTrashEntryId(trashEntry.getEntryId());
-
-			throw dee;
-		}
+		checkDuplicateEntry(
+			trashEntry.getClassPK(), trashEntry.getEntryId(), containerModelId,
+			trashEntry.getTypeSettingsProperty("title"), newName);
 	}
 
+	@Override
 	public void deleteTrashEntry(long classPK)
 		throws PortalException, SystemException {
 
 		DLAppLocalServiceUtil.deleteFileEntry(classPK);
 	}
 
+	@Override
 	public String getClassName() {
 		return DLFileEntry.class.getName();
 	}
@@ -112,12 +104,24 @@ public class DLFileEntryTrashHandler extends DLBaseTrashHandler {
 	}
 
 	@Override
-	public String getRestoreLink(PortletRequest portletRequest, long classPK)
+	public String getRestoreContainedModelLink(
+			PortletRequest portletRequest, long classPK)
 		throws PortalException, SystemException {
 
 		DLFileEntry dlFileEntry = getDLFileEntry(classPK);
 
-		return DLUtil.getDLControlPanelLink(
+		return DLUtil.getDLFileEntryControlPanelLink(
+			portletRequest, dlFileEntry.getFileEntryId());
+	}
+
+	@Override
+	public String getRestoreContainerModelLink(
+			PortletRequest portletRequest, long classPK)
+		throws PortalException, SystemException {
+
+		DLFileEntry dlFileEntry = getDLFileEntry(classPK);
+
+		return DLUtil.getDLFolderControlPanelLink(
 			portletRequest, dlFileEntry.getFolderId());
 	}
 
@@ -130,6 +134,11 @@ public class DLFileEntryTrashHandler extends DLBaseTrashHandler {
 		DLFolder dlFolder = dlFileEntry.getFolder();
 
 		return DLUtil.getAbsolutePath(portletRequest, dlFolder.getFolderId());
+	}
+
+	@Override
+	public String getSystemEventClassName() {
+		return FileEntry.class.getName();
 	}
 
 	@Override
@@ -161,15 +170,14 @@ public class DLFileEntryTrashHandler extends DLBaseTrashHandler {
 			permissionChecker, groupId, classPK, trashActionId);
 	}
 
+	@Override
 	public boolean isInTrash(long classPK)
 		throws PortalException, SystemException {
 
 		try {
 			DLFileEntry dlFileEntry = getDLFileEntry(classPK);
 
-			DLFileVersion dlFileVersion = dlFileEntry.getFileVersion();
-
-			return dlFileVersion.isInTrash();
+			return dlFileEntry.isInTrash();
 		}
 		catch (InvalidRepositoryException ire) {
 			return false;
@@ -194,14 +202,17 @@ public class DLFileEntryTrashHandler extends DLBaseTrashHandler {
 	public boolean isRestorable(long classPK)
 		throws PortalException, SystemException {
 
-		try {
-			DLFileEntry dlFileEntry = getDLFileEntry(classPK);
+		DLFileEntry dlFileEntry = fetchDLFileEntry(classPK);
 
-			return !dlFileEntry.isInTrashContainer();
-		}
-		catch (InvalidRepositoryException ire) {
+		if ((dlFileEntry == null) ||
+			((dlFileEntry.getFolderId() > 0) &&
+			 (DLFolderLocalServiceUtil.fetchFolder(
+				dlFileEntry.getFolderId()) == null))) {
+
 			return false;
 		}
+
+		return !dlFileEntry.isInTrashContainer();
 	}
 
 	@Override
@@ -227,6 +238,7 @@ public class DLFileEntryTrashHandler extends DLBaseTrashHandler {
 			serviceContext);
 	}
 
+	@Override
 	public void restoreTrashEntry(long userId, long classPK)
 		throws PortalException, SystemException {
 
@@ -262,6 +274,51 @@ public class DLFileEntryTrashHandler extends DLBaseTrashHandler {
 		dlFileVersion.setTitle(name);
 
 		DLFileVersionLocalServiceUtil.updateDLFileVersion(dlFileVersion);
+	}
+
+	protected void checkDuplicateEntry(
+			long classPK, long entryId, long containerModelId,
+			String originalTitle, String newName)
+		throws PortalException, SystemException {
+
+		DLFileEntry dlFileEntry = getDLFileEntry(classPK);
+
+		if (containerModelId == TrashEntryConstants.DEFAULT_CONTAINER_ID) {
+			containerModelId = dlFileEntry.getFolderId();
+		}
+
+		if (Validator.isNotNull(newName)) {
+			originalTitle = newName;
+		}
+
+		DLFileEntry duplicateDLFileEntry =
+			DLFileEntryLocalServiceUtil.fetchFileEntry(
+				dlFileEntry.getGroupId(), containerModelId, originalTitle);
+
+		if (duplicateDLFileEntry != null) {
+			DuplicateEntryException dee = new DuplicateEntryException();
+
+			dee.setDuplicateEntryId(duplicateDLFileEntry.getFileEntryId());
+			dee.setOldName(duplicateDLFileEntry.getTitle());
+			dee.setTrashEntryId(entryId);
+
+			throw dee;
+		}
+	}
+
+	protected DLFileEntry fetchDLFileEntry(long classPK)
+		throws PortalException, SystemException {
+
+		Repository repository = RepositoryServiceUtil.getRepositoryImpl(
+			0, classPK, 0);
+
+		if (!(repository instanceof LiferayRepository)) {
+			return null;
+		}
+
+		FileEntry fileEntry = repository.getFileEntry(classPK);
+
+		return (DLFileEntry)fileEntry.getModel();
 	}
 
 	protected DLFileEntry getDLFileEntry(long classPK)

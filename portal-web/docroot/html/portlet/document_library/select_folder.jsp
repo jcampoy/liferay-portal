@@ -20,6 +20,7 @@
 Folder folder = (Folder)request.getAttribute(WebKeys.DOCUMENT_LIBRARY_FOLDER);
 
 long folderId = BeanParamUtil.getLong(folder, request, "folderId", DLFolderConstants.DEFAULT_PARENT_FOLDER_ID);
+
 String eventName = ParamUtil.getString(request, "eventName", liferayPortletResponse.getNamespace() + "selectFolder");
 
 long repositoryId = scopeGroupId;
@@ -73,11 +74,11 @@ if (folder != null) {
 
 	<liferay-ui:search-container
 		iteratorURL="<%= portletURL %>"
+		total="<%= DLAppServiceUtil.getFoldersCount(repositoryId, folderId) %>"
 	>
 
 		<liferay-ui:search-container-results
 			results="<%= DLAppServiceUtil.getFolders(repositoryId, folderId, searchContainer.getStart(), searchContainer.getEnd()) %>"
-			total="<%= DLAppServiceUtil.getFoldersCount(repositoryId, folderId) %>"
 		/>
 
 		<liferay-ui:search-container-row
@@ -181,8 +182,8 @@ if (folder != null) {
 
 			Util.getOpener().Liferay.fire('<%= HtmlUtil.escapeJS(eventName) %>', result);
 
-			Util.getWindow().close();
+			Util.getWindow().hide();
 		},
-		'.selector-button input'
+		'.selector-button'
 	);
 </aui:script>

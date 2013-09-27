@@ -16,7 +16,10 @@ package com.liferay.portlet.documentlibrary.model.impl;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.lar.StagedModelType;
+import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.util.CharPool;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.Repository;
@@ -38,6 +41,16 @@ public class DLFolderImpl extends DLFolderBaseImpl {
 	public DLFolderImpl() {
 	}
 
+	@Override
+	public String buildTreePath() throws PortalException, SystemException {
+		StringBundler sb = new StringBundler();
+
+		buildTreePath(sb, this);
+
+		return sb.toString();
+	}
+
+	@Override
 	public List<Long> getAncestorFolderIds()
 		throws PortalException, SystemException {
 
@@ -63,6 +76,7 @@ public class DLFolderImpl extends DLFolderBaseImpl {
 		return ancestorFolderIds;
 	}
 
+	@Override
 	public List<DLFolder> getAncestors()
 		throws PortalException, SystemException {
 
@@ -88,6 +102,7 @@ public class DLFolderImpl extends DLFolderBaseImpl {
 		return ancestors;
 	}
 
+	@Override
 	public DLFolder getParentFolder() throws PortalException, SystemException {
 		if (getParentFolderId() == DLFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
 			return null;
@@ -96,6 +111,7 @@ public class DLFolderImpl extends DLFolderBaseImpl {
 		return DLFolderLocalServiceUtil.getFolder(getParentFolderId());
 	}
 
+	@Override
 	public String getPath() throws PortalException, SystemException {
 		StringBuilder sb = new StringBuilder();
 
@@ -111,6 +127,7 @@ public class DLFolderImpl extends DLFolderBaseImpl {
 		return sb.toString();
 	}
 
+	@Override
 	public String[] getPathArray() throws PortalException, SystemException {
 		String path = getPath();
 
@@ -121,6 +138,12 @@ public class DLFolderImpl extends DLFolderBaseImpl {
 		return StringUtil.split(path, CharPool.SLASH);
 	}
 
+	@Override
+	public StagedModelType getStagedModelType() {
+		return new StagedModelType(Folder.class);
+	}
+
+	@Override
 	public DLFolder getTrashContainer() {
 		DLFolder dlFolder = null;
 
@@ -147,6 +170,7 @@ public class DLFolderImpl extends DLFolderBaseImpl {
 		return null;
 	}
 
+	@Override
 	public boolean hasInheritableLock() {
 		try {
 			return DLFolderServiceUtil.hasInheritableLock(getFolderId());
@@ -157,6 +181,7 @@ public class DLFolderImpl extends DLFolderBaseImpl {
 		return false;
 	}
 
+	@Override
 	public boolean hasLock() {
 		try {
 			return DLFolderServiceUtil.hasFolderLock(getFolderId());
@@ -167,6 +192,7 @@ public class DLFolderImpl extends DLFolderBaseImpl {
 		return false;
 	}
 
+	@Override
 	public boolean isInHiddenFolder() {
 		try {
 			Repository repository = RepositoryLocalServiceUtil.getRepository(
@@ -184,6 +210,7 @@ public class DLFolderImpl extends DLFolderBaseImpl {
 		return false;
 	}
 
+	@Override
 	public boolean isInTrashContainer() {
 		if (getTrashContainer() != null) {
 			return true;
@@ -193,6 +220,7 @@ public class DLFolderImpl extends DLFolderBaseImpl {
 		}
 	}
 
+	@Override
 	public boolean isLocked() {
 		try {
 			return DLFolderServiceUtil.isFolderLocked(getFolderId());
@@ -203,12 +231,27 @@ public class DLFolderImpl extends DLFolderBaseImpl {
 		return false;
 	}
 
+	@Override
 	public boolean isRoot() {
 		if (getParentFolderId() == DLFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
 			return true;
 		}
 
 		return false;
+	}
+
+	protected void buildTreePath(StringBundler sb, DLFolder dlFolder)
+		throws PortalException, SystemException {
+
+		if (dlFolder == null) {
+			sb.append(StringPool.SLASH);
+		}
+		else {
+			buildTreePath(sb, dlFolder.getParentFolder());
+
+			sb.append(dlFolder.getFolderId());
+			sb.append(StringPool.SLASH);
+		}
 	}
 
 }

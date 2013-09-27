@@ -21,7 +21,6 @@ import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dao.orm.Type;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.OrderByComparator;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.PasswordPolicy;
 import com.liferay.portal.model.impl.PasswordPolicyImpl;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
@@ -43,8 +42,9 @@ public class PasswordPolicyFinderImpl
 	public static final String FIND_BY_C_N =
 		PasswordPolicyFinder.class.getName() + ".findByC_N";
 
+	@Override
 	public int countByC_N(long companyId, String name) throws SystemException {
-		name = StringUtil.lowerCase(name);
+		name = CustomSQLUtil.keywords(name)[0];
 
 		Session session = null;
 
@@ -83,12 +83,13 @@ public class PasswordPolicyFinderImpl
 		}
 	}
 
+	@Override
 	public List<PasswordPolicy> findByC_N(
 			long companyId, String name, int start, int end,
 			OrderByComparator obc)
 		throws SystemException {
 
-		name = StringUtil.lowerCase(name);
+		name = CustomSQLUtil.keywords(name)[0];
 
 		Session session = null;
 

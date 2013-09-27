@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
 public class SQLServerLimitStringUtil {
 
 	public static String getLimitString(String sql, int offset, int limit) {
-		String sqlLowerCase = sql.toLowerCase();
+		String sqlLowerCase = StringUtil.toLowerCase(sql);
 
 		int fromPos = sqlLowerCase.indexOf(" from ");
 
@@ -196,13 +196,13 @@ public class SQLServerLimitStringUtil {
 		};
 	}
 
-	private static final Pattern _columnAliasPattern = Pattern.compile(
+	private static Pattern _columnAliasPattern = Pattern.compile(
 		"[\\w\\.]+(?:\\(.+?\\))? AS (\\w+)", Pattern.CASE_INSENSITIVE);
-	private static final Pattern _distinctPattern = Pattern.compile(
+	private static Pattern _distinctPattern = Pattern.compile(
 		" DISTINCT ", Pattern.CASE_INSENSITIVE);
-	private static final Pattern _qualifiedColumnPattern = Pattern.compile(
+	private static Pattern _qualifiedColumnPattern = Pattern.compile(
 		"\\w+\\.([\\w\\*]+)");
-	private static final Pattern _selectPattern = Pattern.compile(
+	private static Pattern _selectPattern = Pattern.compile(
 		"SELECT ", Pattern.CASE_INSENSITIVE);
 
 }

@@ -14,18 +14,20 @@
 
 package com.liferay.portlet.documentlibrary.action;
 
-import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
+import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.struts.PortletAction;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.WebKeys;
 import com.liferay.portlet.assetpublisher.util.AssetPublisherUtil;
 import com.liferay.portlet.documentlibrary.DuplicateFileException;
@@ -36,6 +38,7 @@ import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
 import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
+import com.liferay.portlet.trash.util.TrashUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -60,8 +63,9 @@ public class EditFolderAction extends PortletAction {
 
 	@Override
 	public void processAction(
-			ActionMapping mapping, ActionForm form, PortletConfig portletConfig,
-			ActionRequest actionRequest, ActionResponse actionResponse)
+			ActionMapping actionMapping, ActionForm actionForm,
+			PortletConfig portletConfig, ActionRequest actionRequest,
+			ActionResponse actionResponse)
 		throws Exception {
 
 		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
@@ -71,8 +75,7 @@ public class EditFolderAction extends PortletAction {
 				updateFolder(actionRequest);
 			}
 			else if (cmd.equals(Constants.DELETE)) {
-				deleteFolders(
-					(LiferayPortletConfig)portletConfig, actionRequest, false);
+				deleteFolders(actionRequest, false);
 			}
 			else if (cmd.equals(Constants.MOVE)) {
 				moveFolders(actionRequest, false);
@@ -81,8 +84,7 @@ public class EditFolderAction extends PortletAction {
 				moveFolders(actionRequest, true);
 			}
 			else if (cmd.equals(Constants.MOVE_TO_TRASH)) {
-				deleteFolders(
-					(LiferayPortletConfig)portletConfig, actionRequest, true);
+				deleteFolders(actionRequest, true);
 			}
 			else if (cmd.equals(Constants.SUBSCRIBE)) {
 				subscribeFolder(actionRequest);
@@ -118,8 +120,9 @@ public class EditFolderAction extends PortletAction {
 
 	@Override
 	public ActionForward render(
-			ActionMapping mapping, ActionForm form, PortletConfig portletConfig,
-			RenderRequest renderRequest, RenderResponse renderResponse)
+			ActionMapping actionMapping, ActionForm actionForm,
+			PortletConfig portletConfig, RenderRequest renderRequest,
+			RenderResponse renderResponse)
 		throws Exception {
 
 		try {
@@ -131,21 +134,23 @@ public class EditFolderAction extends PortletAction {
 
 				SessionErrors.add(renderRequest, e.getClass());
 
-				return mapping.findForward("portlet.document_library.error");
+				return actionMapping.findForward(
+					"portlet.document_library.error");
 			}
 			else {
 				throw e;
 			}
 		}
 
-		return mapping.findForward(
+		return actionMapping.findForward(
 			getForward(renderRequest, "portlet.document_library.edit_folder"));
 	}
 
 	protected void deleteFolders(
-			LiferayPortletConfig liferayPortletConfig,
 			ActionRequest actionRequest, boolean moveToTrash)
 		throws Exception {
+
+		String deleteEntryTitle = null;
 
 		long[] deleteFolderIds = null;
 
@@ -159,9 +164,17 @@ public class EditFolderAction extends PortletAction {
 				ParamUtil.getString(actionRequest, "folderIds"), 0L);
 		}
 
-		for (long deleteFolderId : deleteFolderIds) {
+		for (int i = 0; i < deleteFolderIds.length; i++) {
+			long deleteFolderId = deleteFolderIds[i];
+
 			if (moveToTrash) {
-				DLAppServiceUtil.moveFolderToTrash(deleteFolderId);
+				Folder folder = DLAppServiceUtil.moveFolderToTrash(
+					deleteFolderId);
+
+				if (i == 0) {
+					deleteEntryTitle = TrashUtil.getOriginalTitle(
+						folder.getName());
+				}
 			}
 			else {
 				DLAppServiceUtil.deleteFolder(deleteFolderId);
@@ -175,17 +188,22 @@ public class EditFolderAction extends PortletAction {
 			Map<String, String[]> data = new HashMap<String, String[]>();
 
 			data.put(
+				"deleteEntryClassName",
+				new String[] {DLFolder.class.getName()});
+
+			if (Validator.isNotNull(deleteEntryTitle)) {
+				data.put("deleteEntryTitle", new String[] {deleteEntryTitle});
+			}
+
+			data.put(
 				"restoreFolderIds", ArrayUtil.toStringArray(deleteFolderIds));
 
 			SessionMessages.add(
 				actionRequest,
-				liferayPortletConfig.getPortletId() +
+				PortalUtil.getPortletId(actionRequest) +
 					SessionMessages.KEY_SUFFIX_DELETE_SUCCESS_DATA, data);
 
-			SessionMessages.add(
-				actionRequest,
-				liferayPortletConfig.getPortletId() +
-					SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_SUCCESS_MESSAGE);
+			hideDefaultSuccessMessage(actionRequest);
 		}
 	}
 

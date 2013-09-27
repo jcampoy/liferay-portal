@@ -19,10 +19,10 @@
 <%
 int index = ParamUtil.getInteger(request, "index", GetterUtil.getInteger((String)request.getAttribute("configuration.jsp-index")));
 
-String displayActivityCounterName = PrefsParamUtil.getString(preferences, request, "displayActivityCounterName" + index);
-String chartType = PrefsParamUtil.getString(preferences, request, "chartType" + index);
-int chartWidth = PrefsParamUtil.getInteger(preferences, request, "chartWidth" + index, 35);
-String dataRange = PrefsParamUtil.getString(preferences, request, "dataRange" + index);
+String displayActivityCounterName = PrefsParamUtil.getString(portletPreferences, request, "displayActivityCounterName" + index);
+String chartType = PrefsParamUtil.getString(portletPreferences, request, "chartType" + index);
+int chartWidth = PrefsParamUtil.getInteger(portletPreferences, request, "chartWidth" + index, 35);
+String dataRange = PrefsParamUtil.getString(portletPreferences, request, "dataRange" + index);
 
 List<String> activityCounterNames = SocialConfigurationUtil.getActivityCounterNames(SocialActivityCounterConstants.TYPE_ACTOR);
 
@@ -35,8 +35,8 @@ activityCounterNames.add(SocialActivityCounterConstants.NAME_USER_ACTIVITIES);
 Collections.sort(activityCounterNames, new SocialActivityCounterNameComparator(locale));
 %>
 
-<div class="aui-field-row">
-	<span class="aui-field aui-field-inline inline-text">
+<div class="field-row">
+	<span class="field field-inline inline-text">
 		<liferay-ui:message key="group-statistics-add-counter-first-text" />
 	</span>
 
@@ -57,7 +57,7 @@ Collections.sort(activityCounterNames, new SocialActivityCounterNameComparator(l
 
 	</aui:select>
 
-	<span class="aui-field aui-field-inline inline-text">
+	<span class="field field-inline inline-text">
 		<liferay-ui:message key="group-statistics-add-counter-second-text" />
 	</span>
 
@@ -68,7 +68,7 @@ Collections.sort(activityCounterNames, new SocialActivityCounterNameComparator(l
 		<aui:option label="group-statistics-chart-type-tag-cloud" selected='<%= chartType.equals("tag-cloud") %>' value="tag-cloud" />
 	</aui:select>
 
-	<span class="aui-field aui-field-inline inline-text">
+	<span class="field field-inline inline-text">
 		<liferay-ui:message key="group-statistics-add-counter-third-text" />
 	</span>
 
@@ -78,8 +78,8 @@ Collections.sort(activityCounterNames, new SocialActivityCounterNameComparator(l
 	</aui:select>
 </div>
 
-<div class="aui-field-row">
-	<span class="aui-field aui-field-inline inline-text">
+<div class="field-row">
+	<span class="field field-inline inline-text">
 		<liferay-ui:message key="chart-width" />:
 	</span>
 

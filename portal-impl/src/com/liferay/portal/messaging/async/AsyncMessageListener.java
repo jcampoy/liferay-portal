@@ -25,9 +25,9 @@ public class AsyncMessageListener extends BaseMessageListener {
 
 	@Override
 	protected void doReceive(Message message) throws Exception {
-		Runnable runnable = (Runnable)message.getPayload();
+		AsyncRunnable asyncRunnable = (AsyncRunnable)message.getPayload();
 
-		runnable.run();
+		asyncRunnable.run();
 	}
 
 }

@@ -26,10 +26,10 @@ int maxTerms = dataJSONObject.getInt("maxTerms", 10);
 boolean showAssetCount = dataJSONObject.getBoolean("showAssetCount", true);
 %>
 
-<div class="<%= cssClass %>" data-facetFieldName="<%= facet.getFieldName() %>" id="<%= randomNamespace %>facet">
-	<aui:input name="<%= facet.getFieldName() %>" type="hidden" value="<%= fieldParam %>" />
+<div class="<%= cssClass %>" data-facetFieldName="<%= facet.getFieldId() %>" id="<%= randomNamespace %>facet">
+	<aui:input name="<%= facet.getFieldId() %>" type="hidden" value="<%= fieldParam %>" />
 
-	<ul class="lfr-component users">
+	<ul class="users unstyled">
 		<li class="facet-value default <%= Validator.isNull(fieldParam) ? "current-term" : StringPool.BLANK %>">
 			<a data-value="" href="javascript:;"><img alt="" src='<%= themeDisplay.getPathThemeImages() + "/common/user_icon.png" %>' /><liferay-ui:message key="any" /> <liferay-ui:message key="<%= facetConfiguration.getLabel() %>" /></a>
 		</li>
@@ -49,7 +49,7 @@ boolean showAssetCount = dataJSONObject.getBoolean("showAssetCount", true);
 				<aui:script use="liferay-token-list">
 					Liferay.Search.tokenList.add(
 						{
-							clearFields: '<%= renderResponse.getNamespace() + facet.getFieldName() %>',
+							clearFields: '<%= renderResponse.getNamespace() + facet.getFieldId() %>',
 							text: '<%= HtmlUtil.escapeJS(curUser.getFullName()) %>'
 						}
 					);

@@ -18,11 +18,12 @@ import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
 
 /**
- * The utility for the journal article remote service. This utility wraps {@link com.liferay.portlet.journal.service.impl.JournalArticleServiceImpl} and is the primary access point for service operations in application layer code running on a remote server.
- *
- * <p>
- * This is a remote service. Methods of this service are expected to have security checks based on the propagated JAAS credentials because this service can be accessed remotely.
- * </p>
+ * Provides the remote service utility for JournalArticle. This utility wraps
+ * {@link com.liferay.portlet.journal.service.impl.JournalArticleServiceImpl} and is the
+ * primary access point for service operations in application layer code running
+ * on a remote server. Methods of this service are expected to have security
+ * checks based on the propagated JAAS credentials because this service can be
+ * accessed remotely.
  *
  * @author Brian Wing Shun Chan
  * @see JournalArticleService
@@ -751,6 +752,11 @@ public class JournalArticleServiceUtil {
 		return getService().getArticlesCount(groupId, folderId);
 	}
 
+	public static int getArticlesCount(long groupId, long folderId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getArticlesCount(groupId, folderId, status);
+	}
+
 	/**
 	* Returns the number of web content articles matching the group and article
 	* ID.
@@ -845,6 +851,17 @@ public class JournalArticleServiceUtil {
 		return getService().getFoldersAndArticlesCount(groupId, folderIds);
 	}
 
+	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> getGroupArticles(
+		long groupId, long userId, long rootFolderId, int status, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getGroupArticles(groupId, userId, rootFolderId, status,
+			start, end, orderByComparator);
+	}
+
 	/**
 	* Returns an ordered range of all the web content articles matching the
 	* group, user, the root folder or any of its subfolders.
@@ -895,6 +912,14 @@ public class JournalArticleServiceUtil {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService().getGroupArticlesCount(groupId, userId, rootFolderId);
+	}
+
+	public static int getGroupArticlesCount(long groupId, long userId,
+		long rootFolderId, int status)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getGroupArticlesCount(groupId, userId, rootFolderId, status);
 	}
 
 	/**
@@ -1142,6 +1167,13 @@ public class JournalArticleServiceUtil {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		getService().restoreArticleFromTrash(groupId, articleId);
+	}
+
+	public static com.liferay.portal.kernel.search.Hits search(long groupId,
+		long creatorUserId, int status, int start, int end)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().search(groupId, creatorUserId, status, start, end);
 	}
 
 	/**

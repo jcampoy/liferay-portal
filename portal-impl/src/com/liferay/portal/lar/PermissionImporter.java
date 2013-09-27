@@ -23,12 +23,14 @@ import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
+import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.PortletConstants;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.Team;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.ResourcePermissionLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.TeamLocalServiceUtil;
@@ -63,23 +65,6 @@ public class PermissionImporter {
 		}
 
 		return actions;
-	}
-
-	protected void importLayoutPermissions(
-			LayoutCache layoutCache, long companyId, long groupId, long userId,
-			Layout layout, Element layoutElement, Element parentElement)
-		throws Exception {
-
-		Element permissionsElement = layoutElement.element("permissions");
-
-		if (permissionsElement != null) {
-			String resourceName = Layout.class.getName();
-			String resourcePrimKey = String.valueOf(layout.getPlid());
-
-			importPermissions(
-				layoutCache, companyId, groupId, userId, layout, resourceName,
-				resourcePrimKey, permissionsElement, false);
-		}
 	}
 
 	protected void importPermissions(
@@ -140,17 +125,22 @@ public class PermissionImporter {
 					subtype, null);
 			}
 
-			String roleName = role.getName();
+			Group group = GroupLocalServiceUtil.getGroup(groupId);
 
-			if (!layout.isPrivateLayout() ||
-				!roleName.equals(RoleConstants.GUEST)) {
+			if (!group.isLayoutPrototype() && !group.isLayoutSetPrototype() &&
+				layout.isPrivateLayout()) {
 
-				List<String> actions = getActions(roleElement);
+				String roleName = role.getName();
 
-				roleIdsToActionIds.put(
-					role.getRoleId(),
-					actions.toArray(new String[actions.size()]));
+				if (roleName.equals(RoleConstants.GUEST)) {
+					continue;
+				}
 			}
+
+			List<String> actions = getActions(roleElement);
+
+			roleIdsToActionIds.put(
+				role.getRoleId(), actions.toArray(new String[actions.size()]));
 		}
 
 		if (roleIdsToActionIds.isEmpty()) {
@@ -169,7 +159,7 @@ public class PermissionImporter {
 
 		Element permissionsElement = portletElement.element("permissions");
 
-		if (permissionsElement != null) {
+		if ((layout != null) && (permissionsElement != null)) {
 			String resourceName = PortletConstants.getRootPortletId(portletId);
 
 			String resourcePrimKey = PortletPermissionUtil.getPrimaryKey(

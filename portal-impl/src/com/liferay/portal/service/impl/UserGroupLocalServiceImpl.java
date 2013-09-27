@@ -28,6 +28,7 @@ import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.QueryConfig;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.Sort;
+import com.liferay.portal.kernel.systemevent.SystemEvent;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.Validator;
@@ -35,6 +36,7 @@ import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.GroupConstants;
 import com.liferay.portal.model.ResourceConstants;
+import com.liferay.portal.model.SystemEventConstants;
 import com.liferay.portal.model.Team;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserGroup;
@@ -115,6 +117,7 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 	 * @deprecated As of 6.2.0, replaced by {@link #addUserGroup(long, long,
 	 *             String, String, ServiceContext)}
 	 */
+	@Override
 	public UserGroup addUserGroup(
 			long userId, long companyId, String name, String description)
 		throws PortalException, SystemException {
@@ -143,6 +146,7 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 	 * @throws PortalException if the user group's information was invalid
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public UserGroup addUserGroup(
 			long userId, long companyId, String name, String description,
 			ServiceContext serviceContext)
@@ -193,7 +197,8 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 			userId, GroupConstants.DEFAULT_PARENT_GROUP_ID,
 			UserGroup.class.getName(), userGroup.getUserGroupId(),
 			GroupConstants.DEFAULT_LIVE_GROUP_ID, String.valueOf(userGroupId),
-			null, 0, null, false, true, null);
+			null, 0, true, GroupConstants.DEFAULT_MEMBERSHIP_RESTRICTION, null,
+			false, true, null);
 
 		// Resources
 
@@ -239,6 +244,7 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 	 * @throws     SystemException if a system exception occurred
 	 * @deprecated As of 6.2.0
 	 */
+	@Override
 	public void copyUserGroupLayouts(long userGroupId, long userId)
 		throws PortalException, SystemException {
 
@@ -271,6 +277,7 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 	 * @throws     SystemException if a system exception occurred
 	 * @deprecated As of 6.1.0
 	 */
+	@Override
 	public void copyUserGroupLayouts(long userGroupId, long[] userIds)
 		throws PortalException, SystemException {
 
@@ -306,6 +313,7 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 	 * @throws     SystemException if a system exception occurred
 	 * @deprecated As of 6.1.0
 	 */
+	@Override
 	public void copyUserGroupLayouts(long[] userGroupIds, long userId)
 		throws PortalException, SystemException {
 
@@ -332,7 +340,7 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 		UserGroup userGroup = userGroupPersistence.findByPrimaryKey(
 			userGroupId);
 
-		return deleteUserGroup(userGroup);
+		return userGroupLocalService.deleteUserGroup(userGroup);
 	}
 
 	/**
@@ -345,6 +353,9 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
+	@SystemEvent(
+		action = SystemEventConstants.ACTION_SKIP,
+		type = SystemEventConstants.TYPE_DELETE)
 	public UserGroup deleteUserGroup(UserGroup userGroup)
 		throws PortalException, SystemException {
 
@@ -357,8 +368,7 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 
 		// Expando
 
-		expandoValueLocalService.deleteValues(
-			UserGroup.class.getName(), userGroup.getUserGroupId());
+		expandoRowLocalService.deleteRows(userGroup.getUserGroupId());
 
 		// Users
 
@@ -392,17 +402,23 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 		return userGroup;
 	}
 
+	@Override
+	public void deleteUserGroups(long companyId)
+		throws PortalException, SystemException {
+
+		List<UserGroup> userGroups = userGroupPersistence.findByCompanyId(
+			companyId);
+
+		for (UserGroup userGroup : userGroups) {
+			userGroupLocalService.deleteUserGroup(userGroup);
+		}
+	}
+
+	@Override
 	public UserGroup fetchUserGroup(long companyId, String name)
 		throws SystemException {
 
 		return userGroupPersistence.fetchByC_N(companyId, name);
-	}
-
-	public UserGroup fetchUserGroupByUuidAndCompanyId(
-			String uuid, long companyId)
-		throws SystemException {
-
-		return userGroupPersistence.fetchByUuid_C_First(uuid, companyId, null);
 	}
 
 	/**
@@ -414,6 +430,7 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 	 * @throws PortalException if a user group with the name could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public UserGroup getUserGroup(long companyId, String name)
 		throws PortalException, SystemException {
 
@@ -427,6 +444,7 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 	 * @return the user groups belonging to the company
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<UserGroup> getUserGroups(long companyId)
 		throws SystemException {
 
@@ -441,6 +459,7 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 	 * @throws PortalException if any one of the user groups could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<UserGroup> getUserGroups(long[] userGroupIds)
 		throws PortalException, SystemException {
 
@@ -484,6 +503,7 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 	 * @throws SystemException if a system exception occurred
 	 * @see    com.liferay.portal.service.persistence.UserGroupFinder
 	 */
+	@Override
 	public List<UserGroup> search(
 			long companyId, String keywords,
 			LinkedHashMap<String, Object> params, int start, int end,
@@ -524,6 +544,7 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 	 * @throws SystemException if a system exception occurred
 	 * @see    com.liferay.portlet.usergroupsadmin.util.UserGroupIndexer
 	 */
+	@Override
 	public Hits search(
 			long companyId, String keywords,
 			LinkedHashMap<String, Object> params, int start, int end, Sort sort)
@@ -583,6 +604,7 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 	 * @throws SystemException if a system exception occurred
 	 * @see    com.liferay.portal.service.persistence.UserGroupFinder
 	 */
+	@Override
 	public Hits search(
 			long companyId, String name, String description,
 			LinkedHashMap<String, Object> params, boolean andSearch, int start,
@@ -621,7 +643,7 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 			searchContext.setQueryConfig(queryConfig);
 
 			if (sort != null) {
-				searchContext.setSorts(new Sort[] {sort});
+				searchContext.setSorts(sort);
 			}
 
 			searchContext.setStart(start);
@@ -649,6 +671,7 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 	 * @throws SystemException if a system exception occurred
 	 * @see    com.liferay.portal.service.persistence.UserGroupFinder
 	 */
+	@Override
 	public int searchCount(
 			long companyId, String keywords,
 			LinkedHashMap<String, Object> params)
@@ -689,6 +712,7 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 	 * @param  userGroupIds the primary keys of the user groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void unsetGroupUserGroups(long groupId, long[] userGroupIds)
 		throws SystemException {
 
@@ -713,6 +737,7 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 	 * @param  userGroupIds the primary keys of the user groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void unsetTeamUserGroups(long teamId, long[] userGroupIds)
 		throws SystemException {
 
@@ -735,6 +760,7 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 	 * @deprecated As of 6.2.0, replaced by {@link #updateUserGroup(long, long,
 	 *             String, String, ServiceContext)}
 	 */
+	@Override
 	public UserGroup updateUserGroup(
 			long companyId, long userGroupId, String name, String description)
 		throws PortalException, SystemException {
@@ -757,6 +783,7 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 	 *         found or if the new information was invalid
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public UserGroup updateUserGroup(
 			long companyId, long userGroupId, String name, String description,
 			ServiceContext serviceContext)
@@ -840,16 +867,19 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 			PortletDataHandlerKeys.PERMISSIONS,
 			new String[] {Boolean.TRUE.toString()});
 		parameterMap.put(
+			PortletDataHandlerKeys.PORTLET_CONFIGURATION,
+			new String[] {Boolean.TRUE.toString()});
+		parameterMap.put(
+			PortletDataHandlerKeys.PORTLET_CONFIGURATION_ALL,
+			new String[] {Boolean.TRUE.toString()});
+		parameterMap.put(
 			PortletDataHandlerKeys.PORTLET_DATA,
 			new String[] {Boolean.TRUE.toString()});
 		parameterMap.put(
 			PortletDataHandlerKeys.PORTLET_DATA_ALL,
 			new String[] {Boolean.TRUE.toString()});
 		parameterMap.put(
-			PortletDataHandlerKeys.PORTLET_SETUP,
-			new String[] {Boolean.TRUE.toString()});
-		parameterMap.put(
-			PortletDataHandlerKeys.PORTLET_USER_PREFERENCES,
+			PortletDataHandlerKeys.PORTLET_SETUP_ALL,
 			new String[] {Boolean.TRUE.toString()});
 		parameterMap.put(
 			PortletDataHandlerKeys.PORTLETS_MERGE_MODE,

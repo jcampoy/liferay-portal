@@ -21,55 +21,70 @@ import com.thoughtworks.selenium.Selenium;
  */
 public interface LiferaySelenium extends Selenium {
 
-	public void assertAlert(String pattern);
+	public void assertAlert(String pattern) throws Exception;
 
-	public void assertChecked(String pattern);
+	public void assertChecked(String pattern) throws Exception;
 
-	public void assertConfirmation(String pattern);
+	public void assertConfirmation(String pattern) throws Exception;
 
-	public void assertElementNotPresent(String locator);
+	public void assertElementNotPresent(String locator) throws Exception;
 
-	public void assertElementPresent(String locator);
+	public void assertElementPresent(String locator) throws Exception;
+
+	public void assertEmailContent(String index, String content)
+		throws Exception;
+
+	public void assertEmailSubject(String index, String subject)
+		throws Exception;
 
 	public void assertLocation(String pattern);
 
 	public void assertNotAlert(String pattern);
 
-	public void assertNotChecked(String locator);
+	public void assertNotChecked(String locator) throws Exception;
 
-	public void assertNotLocation(String pattern);
+	public void assertNotLocation(String pattern) throws Exception;
 
-	public void assertNotPartialText(String locator, String pattern);
+	public void assertNotPartialText(String locator, String pattern)
+		throws Exception;
 
-	public void assertNotSelectedLabel(String selectLocator, String pattern);
+	public void assertNotSelectedLabel(String selectLocator, String pattern)
+		throws Exception;
 
-	public void assertNotText(String locator, String pattern);
+	public void assertNotText(String locator, String pattern) throws Exception;
 
-	public void assertNotValue(String locator, String pattern);
+	public void assertNotValue(String locator, String pattern) throws Exception;
 
-	public void assertNotVisible(String locator);
+	public void assertNotVisible(String locator) throws Exception;
 
-	public void assertPartialText(String locator, String pattern);
+	public void assertPartialText(String locator, String pattern)
+		throws Exception;
 
-	public void assertSelectedLabel(String selectLocator, String pattern);
+	public void assertSelectedLabel(String selectLocator, String pattern)
+			throws Exception;
 
-	public void assertText(String locator, String pattern);
+	public void assertText(String locator, String pattern) throws Exception;
 
-	public void assertTextNotPresent(String pattern);
+	public void assertTextNotPresent(String pattern) throws Exception;
 
-	public void assertTextPresent(String pattern);
+	public void assertTextPresent(String pattern) throws Exception;
 
-	public void assertValue(String locator, String pattern);
+	public void assertValue(String locator, String pattern) throws Exception;
 
-	public void assertVisible(String locator);
+	public void assertVisible(String locator) throws Exception;
 
 	public void clickAndWait(String locator);
 
 	public void clickAtAndWait(String locator, String coordString);
 
+	public void connectToEmailAccount(String emailAddress, String emailPassword)
+		throws Exception;
+
 	public void copyText(String locator);
 
 	public void copyValue(String locator);
+
+	public void deleteAllEmails() throws Exception;
 
 	public void echo(String message);
 
@@ -81,6 +96,10 @@ public interface LiferaySelenium extends Selenium {
 
 	public String getCurrentYear();
 
+	public String getEmailContent(String index) throws Exception;
+
+	public String getEmailSubject(String index) throws Exception;
+
 	public String getFirstNumber(String locator);
 
 	public String getFirstNumberIncrement(String locator);
@@ -88,6 +107,10 @@ public interface LiferaySelenium extends Selenium {
 	public String getNumberDecrement(String value);
 
 	public String getNumberIncrement(String value);
+
+	public String getPrimaryTestSuiteName();
+
+	public String getProjectDir();
 
 	public void goBackAndWait();
 
@@ -131,17 +154,32 @@ public interface LiferaySelenium extends Selenium {
 
 	public void refreshAndWait();
 
-	public void saveScreenShotAndSource() throws Exception;
+	public void replyToEmail(String to, String content) throws Exception;
+
+	public void saveScreenshot(String fileName) throws Exception;
+
+	public void saveScreenshotAndSource() throws Exception;
 
 	public void selectAndWait(String selectLocator, String optionLocator);
 
+	public void sendEmail(String to, String subject, String content)
+		throws Exception;
+
 	public void sendKeys(String locator, String value);
+
+	public void sendLogger(String id, String status);
 
 	public void setDefaultTimeout();
 
 	public void setDefaultTimeoutImplicit();
 
+	public void setPrimaryTestSuiteName(String primaryTestSuiteName);
+
 	public void setTimeoutImplicit(String timeout);
+
+	public void startLogger();
+
+	public void stopLogger();
 
 	public void typeFrame(String locator, String value);
 

@@ -17,6 +17,7 @@ package com.liferay.portlet.journal.service.impl;
 import com.liferay.portal.kernel.dao.orm.QueryDefinition;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.search.Hits;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
@@ -25,6 +26,7 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.model.JournalArticleConstants;
+import com.liferay.portlet.journal.model.JournalFolderConstants;
 import com.liferay.portlet.journal.service.base.JournalArticleServiceBaseImpl;
 import com.liferay.portlet.journal.service.permission.JournalArticlePermission;
 import com.liferay.portlet.journal.service.permission.JournalPermission;
@@ -133,6 +135,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         web content article or if a portal exception occurred
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalArticle addArticle(
 			long groupId, long folderId, long classNameId, long classPK,
 			String articleId, boolean autoArticleId,
@@ -244,6 +247,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         web content article or if a portal exception occurred
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalArticle addArticle(
 			long groupId, long folderId, long classNameId, long classPK,
 			String articleId, boolean autoArticleId,
@@ -291,6 +295,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         could not be found, or if a portal exception occurred
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalArticle copyArticle(
 			long groupId, String oldArticleId, String newArticleId,
 			boolean autoArticleId, double version)
@@ -321,6 +326,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         be found, or if a portal exception occurred
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void deleteArticle(
 			long groupId, String articleId, double version, String articleURL,
 			ServiceContext serviceContext)
@@ -349,6 +355,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         web content article or if a portal exception occurred
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void deleteArticle(
 			long groupId, String articleId, String articleURL,
 			ServiceContext serviceContext)
@@ -383,6 +390,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         be found, or if a portal exception occurred
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalArticle expireArticle(
 			long groupId, String articleId, double version, String articleURL,
 			ServiceContext serviceContext)
@@ -419,6 +427,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         be found, or if a portal exception occurred
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void expireArticle(
 			long groupId, String articleId, String articleURL,
 			ServiceContext serviceContext)
@@ -441,6 +450,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         content article
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalArticle getArticle(long id)
 		throws PortalException, SystemException {
 
@@ -465,6 +475,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalArticle getArticle(long groupId, String articleId)
 		throws PortalException, SystemException {
 
@@ -487,6 +498,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalArticle getArticle(
 			long groupId, String articleId, double version)
 		throws PortalException, SystemException {
@@ -518,6 +530,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         content article
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalArticle getArticle(
 			long groupId, String className, long classPK)
 		throws PortalException, SystemException {
@@ -544,6 +557,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         web content article or if a portal exception occurred
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalArticle getArticleByUrlTitle(long groupId, String urlTitle)
 		throws PortalException, SystemException {
 
@@ -570,6 +584,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         template could not be found, or if a portal exception occurred
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public String getArticleContent(
 			long groupId, String articleId, double version, String languageId,
 			ThemeDisplay themeDisplay)
@@ -596,6 +611,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         template could not be found, or if a portal exception occurred
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public String getArticleContent(
 			long groupId, String articleId, String languageId,
 			ThemeDisplay themeDisplay)
@@ -616,6 +632,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 * @return the matching web content articles
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalArticle> getArticles(long groupId, long folderId)
 		throws SystemException {
 
@@ -654,6 +671,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 * @return the matching web content articles
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalArticle> getArticles(
 			long groupId, long folderId, int start, int end,
 			OrderByComparator obc)
@@ -695,6 +713,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         comparator
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalArticle> getArticlesByArticleId(
 			long groupId, String articleId, int start, int end,
 			OrderByComparator obc)
@@ -713,6 +732,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 * @return the matching web content articles
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalArticle> getArticlesByLayoutUuid(
 			long groupId, String layoutUuid)
 		throws SystemException {
@@ -753,6 +773,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         comparator
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalArticle> getArticlesByStructureId(
 			long groupId, long classNameId, String ddmStructureKey, int status,
 			int start, int end, OrderByComparator obc)
@@ -791,6 +812,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         comparator
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalArticle> getArticlesByStructureId(
 			long groupId, String ddmStructureKey, int start, int end,
 			OrderByComparator obc)
@@ -812,11 +834,19 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 * @return the number of matching web content articles
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int getArticlesCount(long groupId, long folderId)
 		throws SystemException {
 
-		QueryDefinition queryDefinition = new QueryDefinition(
-			WorkflowConstants.STATUS_ANY);
+		return getArticlesCount(
+			groupId, folderId, WorkflowConstants.STATUS_ANY);
+	}
+
+	@Override
+	public int getArticlesCount(long groupId, long folderId, int status)
+		throws SystemException {
+
+		QueryDefinition queryDefinition = new QueryDefinition(status);
 
 		List<Long> folderIds = new ArrayList<Long>();
 
@@ -835,6 +865,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 * @return the number of matching web content articles
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int getArticlesCountByArticleId(long groupId, String articleId)
 		throws SystemException {
 
@@ -858,6 +889,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 * @return the number of matching web content articles
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int getArticlesCountByStructureId(
 			long groupId, long classNameId, String ddmStructureKey, int status)
 		throws SystemException {
@@ -876,6 +908,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 * @return the number of matching web content articles
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int getArticlesCountByStructureId(
 			long groupId, String ddmStructureKey)
 		throws SystemException {
@@ -899,6 +932,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         articles could be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalArticle getDisplayArticleByUrlTitle(
 			long groupId, String urlTitle)
 		throws PortalException, SystemException {
@@ -923,12 +957,43 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 * @return the number of matching folders containing web content articles
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int getFoldersAndArticlesCount(long groupId, List<Long> folderIds)
 		throws SystemException {
 
 		return journalArticlePersistence.filterCountByG_F(
 			groupId,
 			ArrayUtil.toArray(folderIds.toArray(new Long[folderIds.size()])));
+	}
+
+	@Override
+	public List<JournalArticle> getGroupArticles(
+			long groupId, long userId, long rootFolderId, int status, int start,
+			int end, OrderByComparator orderByComparator)
+		throws PortalException, SystemException {
+
+		List<Long> folderIds = new ArrayList<Long>();
+
+		if (rootFolderId == JournalFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
+			folderIds = journalFolderService.getFolderIds(
+				groupId, rootFolderId);
+		}
+
+		QueryDefinition queryDefinition = new QueryDefinition(
+			status, start, end, orderByComparator);
+
+		if (folderIds.isEmpty()) {
+			return Collections.emptyList();
+		}
+		else if (userId <= 0) {
+			return journalArticleFinder.filterFindByG_F(
+				groupId, folderIds, queryDefinition);
+		}
+		else {
+			return journalArticleFinder.filterFindByG_U_F_C(
+				groupId, userId, folderIds,
+				JournalArticleConstants.CLASSNAME_ID_DEFAULT, queryDefinition);
+		}
 	}
 
 	/**
@@ -952,29 +1017,15 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         if a portal exception occurred
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalArticle> getGroupArticles(
 			long groupId, long userId, long rootFolderId, int start, int end,
 			OrderByComparator orderByComparator)
 		throws PortalException, SystemException {
 
-		List<Long> folderIds = journalFolderService.getFolderIds(
-			groupId, rootFolderId);
-
-		QueryDefinition queryDefinition = new QueryDefinition(
-			WorkflowConstants.STATUS_ANY, start, end, orderByComparator);
-
-		if (folderIds.isEmpty()) {
-			return Collections.emptyList();
-		}
-		else if (userId <= 0) {
-			return journalArticleFinder.filterFindByG_F(
-				groupId, folderIds, queryDefinition);
-		}
-		else {
-			return journalArticleFinder.filterFindByG_U_F_C(
-				groupId, userId, folderIds,
-				JournalArticleConstants.CLASSNAME_ID_DEFAULT, queryDefinition);
-		}
+		return getGroupArticles(
+			groupId, userId, rootFolderId, WorkflowConstants.STATUS_ANY, start,
+			end, orderByComparator);
 	}
 
 	/**
@@ -991,15 +1042,28 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         if a portal exception occurred
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int getGroupArticlesCount(
 			long groupId, long userId, long rootFolderId)
 		throws PortalException, SystemException {
 
-		List<Long> folderIds = journalFolderService.getFolderIds(
-			groupId, rootFolderId);
+		return getGroupArticlesCount(
+			groupId, userId, rootFolderId, WorkflowConstants.STATUS_ANY);
+	}
 
-		QueryDefinition queryDefinition = new QueryDefinition(
-			WorkflowConstants.STATUS_ANY);
+	@Override
+	public int getGroupArticlesCount(
+			long groupId, long userId, long rootFolderId, int status)
+		throws PortalException, SystemException {
+
+		List<Long> folderIds = new ArrayList<Long>();
+
+		if (rootFolderId == JournalFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
+			folderIds = journalFolderService.getFolderIds(
+				groupId, rootFolderId);
+		}
+
+		QueryDefinition queryDefinition = new QueryDefinition(status);
 
 		if (folderIds.isEmpty()) {
 			return 0;
@@ -1027,6 +1091,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalArticle getLatestArticle(long resourcePrimKey)
 		throws PortalException, SystemException {
 
@@ -1051,6 +1116,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalArticle getLatestArticle(
 			long groupId, String articleId, int status)
 		throws PortalException, SystemException {
@@ -1082,6 +1148,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         content article
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalArticle getLatestArticle(
 			long groupId, String className, long classPK)
 		throws PortalException, SystemException {
@@ -1110,6 +1177,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         folder
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void moveArticle(long groupId, String articleId, long newFolderId)
 		throws PortalException, SystemException {
 
@@ -1147,6 +1215,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         article could not be found, or if a portal exception occurred
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalArticle moveArticleFromTrash(
 			long groupId, long resourcePrimKey, long newFolderId,
 			ServiceContext serviceContext)
@@ -1184,6 +1253,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         occurred
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalArticle moveArticleFromTrash(
 			long groupId, String articleId, long newFolderId,
 			ServiceContext serviceContext)
@@ -1211,6 +1281,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         article to the Recycle Bin or if a portal exception occurred
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalArticle moveArticleToTrash(long groupId, String articleId)
 		throws PortalException, SystemException {
 
@@ -1232,6 +1303,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         the language could not be found for any one of the articles
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeArticleLocale(long companyId, String languageId)
 		throws PortalException, SystemException {
 
@@ -1258,6 +1330,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalArticle removeArticleLocale(
 			long groupId, String articleId, double version, String languageId)
 		throws PortalException, SystemException {
@@ -1280,6 +1353,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         view or restore the article, or if a portal exception occurred
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void restoreArticleFromTrash(long resourcePrimKey)
 		throws PortalException, SystemException {
 
@@ -1303,6 +1377,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         occurred
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void restoreArticleFromTrash(long groupId, String articleId)
 		throws PortalException, SystemException {
 
@@ -1310,6 +1385,15 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 			groupId, articleId, WorkflowConstants.STATUS_IN_TRASH);
 
 		restoreArticleFromTrash(article.getResourcePrimKey());
+	}
+
+	@Override
+	public Hits search(
+			long groupId, long creatorUserId, int status, int start, int end)
+		throws PortalException, SystemException {
+
+		return journalArticleLocalService.search(
+			groupId, getUserId(), creatorUserId, status, start, end);
 	}
 
 	/**
@@ -1372,6 +1456,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         comparator
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalArticle> search(
 			long companyId, long groupId, List<Long> folderIds,
 			long classNameId, String keywords, Double version, String type,
@@ -1452,6 +1537,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         comparator
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalArticle> search(
 			long companyId, long groupId, List<Long> folderIds,
 			long classNameId, String articleId, Double version, String title,
@@ -1537,6 +1623,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         comparator
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalArticle> search(
 			long companyId, long groupId, List<Long> folderIds,
 			long classNameId, String articleId, Double version, String title,
@@ -1600,6 +1687,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 * @return the number of matching web content articles
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int searchCount(
 			long companyId, long groupId, List<Long> folderIds,
 			long classNameId, String keywords, Double version, String type,
@@ -1663,6 +1751,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 * @return the number of matching web content articles
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int searchCount(
 			long companyId, long groupId, List<Long> folderIds,
 			long classNameId, String articleId, Double version, String title,
@@ -1729,6 +1818,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 * @return the number of matching web content articles
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int searchCount(
 			long companyId, long groupId, List<Long> folderIds,
 			long classNameId, String articleId, Double version, String title,
@@ -1756,6 +1846,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void subscribe(long groupId)
 		throws PortalException, SystemException {
 
@@ -1775,6 +1866,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void unsubscribe(long groupId)
 		throws PortalException, SystemException {
 
@@ -1818,6 +1910,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         occurred
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalArticle updateArticle(
 			long userId, long groupId, long folderId, String articleId,
 			double version, Map<Locale, String> titleMap,
@@ -1916,6 +2009,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         occurred
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalArticle updateArticle(
 			long groupId, long folderId, String articleId, double version,
 			Map<Locale, String> titleMap, Map<Locale, String> descriptionMap,
@@ -1976,6 +2070,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         occurred
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalArticle updateArticle(
 			long groupId, long folderId, String articleId, double version,
 			String content, ServiceContext serviceContext)
@@ -1995,6 +2090,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *             #updateArticleTranslation(long, String, double, Locale,
 	 *             String, String, String, Map, ServiceContext)}
 	 */
+	@Override
 	public JournalArticle updateArticleTranslation(
 			long groupId, String articleId, double version, Locale locale,
 			String title, String description, String content,
@@ -2029,6 +2125,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         occurred
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalArticle updateArticleTranslation(
 			long groupId, String articleId, double version, Locale locale,
 			String title, String description, String content,
@@ -2060,6 +2157,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalArticle updateContent(
 			long groupId, String articleId, double version, String content)
 		throws PortalException, SystemException {
@@ -2092,6 +2190,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *         be found, or if a portal exception occurred
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalArticle updateStatus(
 			long groupId, String articleId, double version, int status,
 			String articleURL, ServiceContext serviceContext)

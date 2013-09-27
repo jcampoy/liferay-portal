@@ -247,6 +247,11 @@ public class VerifyAuditedModel extends VerifyProcess {
 
 			ps.executeUpdate();
 		}
+		catch (Exception e) {
+			if (_log.isWarnEnabled()) {
+				_log.warn("Unable to verify model " + modelName, e);
+			}
+		}
 		finally {
 			DataAccess.cleanUp(con, ps);
 		}
@@ -318,6 +323,9 @@ public class VerifyAuditedModel extends VerifyProcess {
 	}
 
 	private static final String[][] _MODELS = new String[][] {
+		new String[] {
+			"Layout", "plid", null, null, null, "false"
+		},
 		new String[] {
 			"LayoutPrototype", "layoutPrototypeId", null, null, null, "true"
 		},

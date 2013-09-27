@@ -41,6 +41,10 @@ public class IconTag extends IncludeTag {
 		_alt = alt;
 	}
 
+	public void setAriaRole(String ariaRole) {
+		_ariaRole = ariaRole;
+	}
+
 	public void setCssClass(String cssClass) {
 		_cssClass = cssClass;
 	}
@@ -109,9 +113,14 @@ public class IconTag extends IncludeTag {
 		_url = url;
 	}
 
+	public void setUseDialog(boolean useDialog) {
+		_useDialog = useDialog;
+	}
+
 	@Override
 	protected void cleanUp() {
 		_alt = null;
+		_ariaRole = null;
 		_cssClass = null;
 		_data = null;
 		_id = null;
@@ -129,6 +138,11 @@ public class IconTag extends IncludeTag {
 		_target = null;
 		_toolTip = false;
 		_url = null;
+		_useDialog = false;
+	}
+
+	protected String getImage() {
+		return _image;
 	}
 
 	protected String getMessage() {
@@ -170,9 +184,14 @@ public class IconTag extends IncludeTag {
 					(PortletResponse)request.getAttribute(
 						JavaConstants.JAVAX_PORTLET_RESPONSE);
 
+				String namespace = StringPool.BLANK;
+
+				if (portletResponse != null) {
+					namespace = portletResponse.getNamespace();
+				}
+
 				id = PortalUtil.getUniqueElementId(
-					getOriginalServletRequest(), portletResponse.getNamespace(),
-					id);
+					getOriginalServletRequest(), namespace, id);
 			}
 			else {
 				id = PortalUtil.generateRandomKey(
@@ -181,6 +200,7 @@ public class IconTag extends IncludeTag {
 		}
 
 		request.setAttribute("liferay-ui:icon:alt", _alt);
+		request.setAttribute("liferay-ui:icon:ariaRole", _ariaRole);
 		request.setAttribute("liferay-ui:icon:cssClass", _cssClass);
 		request.setAttribute("liferay-ui:icon:data", _data);
 		request.setAttribute("liferay-ui:icon:id", id);
@@ -201,6 +221,8 @@ public class IconTag extends IncludeTag {
 		request.setAttribute(
 			"liferay-ui:icon:toolTip", String.valueOf(_toolTip));
 		request.setAttribute("liferay-ui:icon:url", _url);
+		request.setAttribute(
+			"liferay-ui:icon:useDialog", String.valueOf(_useDialog));
 	}
 
 	private static final boolean _CLEAN_UP_SET_ATTRIBUTES = true;
@@ -208,6 +230,7 @@ public class IconTag extends IncludeTag {
 	private static final String _PAGE = "/html/taglib/ui/icon/page.jsp";
 
 	private String _alt;
+	private String _ariaRole;
 	private String _cssClass;
 	private Map<String, Object> _data;
 	private String _id;
@@ -225,5 +248,6 @@ public class IconTag extends IncludeTag {
 	private String _target = "_self";
 	private boolean _toolTip;
 	private String _url;
+	private boolean _useDialog = false;
 
 }

@@ -22,11 +22,10 @@ import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.service.BaseLocalService;
 
 /**
- * The interface for the social activity interpreter local service.
- *
- * <p>
- * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
- * </p>
+ * Provides the local service interface for SocialActivityInterpreter. Methods of this
+ * service will not have security checks based on the propagated JAAS
+ * credentials because this service can only be accessed from within the same
+ * VM.
  *
  * @author Brian Wing Shun Chan
  * @see SocialActivityInterpreterLocalServiceUtil
@@ -75,6 +74,10 @@ public interface SocialActivityInterpreterLocalService extends BaseLocalService 
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.Map<java.lang.String, java.util.List<com.liferay.portlet.social.model.SocialActivityInterpreter>> getActivityInterpreters();
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.portlet.social.model.SocialActivityInterpreter> getActivityInterpreters(
+		java.lang.String selector);
 
 	/**
 	* @deprecated As of 6.2.0, replaced by {@link #interpret(String,

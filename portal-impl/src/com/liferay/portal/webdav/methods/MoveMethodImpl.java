@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.webdav.WebDAVException;
 import com.liferay.portal.kernel.webdav.WebDAVRequest;
 import com.liferay.portal.kernel.webdav.WebDAVStorage;
 import com.liferay.portal.kernel.webdav.WebDAVUtil;
+import com.liferay.portal.kernel.webdav.methods.Method;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,6 +33,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class MoveMethodImpl implements Method {
 
+	@Override
 	public int process(WebDAVRequest webDAVRequest) throws WebDAVException {
 		WebDAVStorage storage = webDAVRequest.getWebDAVStorage();
 		HttpServletRequest request = webDAVRequest.getHttpServletRequest();

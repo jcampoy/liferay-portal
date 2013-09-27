@@ -18,11 +18,12 @@ import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
 
 /**
- * The utility for the asset entry remote service. This utility wraps {@link com.liferay.portlet.asset.service.impl.AssetEntryServiceImpl} and is the primary access point for service operations in application layer code running on a remote server.
- *
- * <p>
- * This is a remote service. Methods of this service are expected to have security checks based on the propagated JAAS credentials because this service can be accessed remotely.
- * </p>
+ * Provides the remote service utility for AssetEntry. This utility wraps
+ * {@link com.liferay.portlet.asset.service.impl.AssetEntryServiceImpl} and is the
+ * primary access point for service operations in application layer code running
+ * on a remote server. Methods of this service are expected to have security
+ * checks based on the propagated JAAS credentials because this service can be
+ * accessed remotely.
  *
  * @author Brian Wing Shun Chan
  * @see AssetEntryService
@@ -140,7 +141,7 @@ public class AssetEntryServiceUtil {
 
 	/**
 	* @deprecated As of 6.2.0, replaced by {@link #updateEntry(long, Date,
-	Date. String, long, String, long, long[], String[], boolean,
+	Date, String, long, String, long, long[], String[], boolean,
 	Date, Date, Date, String, String, String, String, String,
 	String, int, int, Integer, boolean)}
 	*/

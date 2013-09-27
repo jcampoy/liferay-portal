@@ -17,25 +17,37 @@ package com.liferay.portal.servlet.filters.aggregate;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.FileUtil;
-import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.StringPool;
 
-import java.io.File;
 import java.io.IOException;
 
 /**
  * @author Raymond Augé
+ * @author Eduardo Lundgren
  */
-public class FileAggregateContext implements AggregateContext {
+public class FileAggregateContext extends BaseAggregateContext {
 
-	public FileAggregateContext(File file) {
-		_file = file.getParentFile();
+	public FileAggregateContext(String docrootPath, String resourcePath) {
+		int pos = resourcePath.lastIndexOf(StringPool.SLASH);
+
+		if (pos > -1) {
+			resourcePath = resourcePath.substring(0, pos + 1);
+		}
+
+		pushPath(docrootPath);
+		pushPath(resourcePath);
 	}
 
+	@Override
 	public String getContent(String path) {
 		try {
-			File file = new File(_file, path);
+			pushPath(path);
 
-			return FileUtil.read(file);
+			String fullPath = getFullPath(StringPool.BLANK);
+
+			popPath();
+
+			return FileUtil.read(fullPath);
 		}
 		catch (IOException ioe) {
 			_log.error(ioe, ioe);
@@ -44,26 +56,17 @@ public class FileAggregateContext implements AggregateContext {
 		return null;
 	}
 
-	public String getFullPath(String path) {
-		String absolutePath = _file.getAbsolutePath();
+	@Override
+	public String getResourcePath(String path) {
+		String docrootPath = shiftPath();
 
-		return absolutePath.concat(path);
-	}
+		String fullPath = getFullPath(StringPool.BLANK);
 
-	public void popPath(String path) {
-		if (Validator.isNotNull(path)) {
-			_file = _file.getParentFile();
-		}
-	}
+		unshiftPath(docrootPath);
 
-	public void pushPath(String path) {
-		if (Validator.isNotNull(path)) {
-			_file = new File(_file, path);
-		}
+		return fullPath.concat(path);
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(FileAggregateContext.class);
-
-	private File _file;
 
 }

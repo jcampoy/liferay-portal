@@ -1,0 +1,16 @@
+<definition>
+	<command name="searchPG">
+		<execute action="PGSearch#type" locator-key1="SEARCH_FIELD" value1="${searchTerm}" />
+		<execute action="PGSearch#click" locator-key1="SEARCH_ICON" />
+
+		<execute action="PGSearchResults#assertTextEquals" locator-key1="ASSET_ENTRY_TABLE_TITLE_1" value1="${searchAssetTitle}" />
+		<execute action="PGSearchResults#assertTextEquals" locator-key1="ASSET_ENTRY_TABLE_TYPE_1" value1="${searchAssetType}" />
+
+		<if>
+			<isset var="searchAssetSummary" />
+			<then>
+				<execute action="PGSearchResults#assertTextEquals" locator-key1="ASSET_ENTRY_TABLE_SUMMARY_1" value1="${searchAssetSummary}" />
+			</then>
+		</if>
+	</command>
+</definition>

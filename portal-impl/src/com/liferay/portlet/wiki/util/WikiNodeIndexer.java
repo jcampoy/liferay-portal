@@ -57,10 +57,12 @@ public class WikiNodeIndexer extends BaseIndexer {
 		setPermissionAware(false);
 	}
 
+	@Override
 	public String[] getClassNames() {
 		return CLASS_NAMES;
 	}
 
+	@Override
 	public String getPortletId() {
 		return PORTLET_ID;
 	}
@@ -117,6 +119,14 @@ public class WikiNodeIndexer extends BaseIndexer {
 		WikiNode node = (WikiNode)obj;
 
 		Document document = getDocument(obj);
+
+		if (!node.isInTrash()) {
+			SearchEngineUtil.deleteDocument(
+				getSearchEngineId(), node.getCompanyId(),
+				document.get(Field.UID));
+
+			return;
+		}
 
 		SearchEngineUtil.updateDocument(
 			getSearchEngineId(), node.getCompanyId(), document);

@@ -16,12 +16,12 @@ package com.liferay.portlet.bookmarks.action;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.Constants;
+import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -64,23 +64,24 @@ public class EditEntryAction extends PortletAction {
 
 	@Override
 	public void processAction(
-			ActionMapping mapping, ActionForm form, PortletConfig portletConfig,
-			ActionRequest actionRequest, ActionResponse actionResponse)
+			ActionMapping actionMapping, ActionForm actionForm,
+			PortletConfig portletConfig, ActionRequest actionRequest,
+			ActionResponse actionResponse)
 		throws Exception {
 
 		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
 
 		try {
+			BookmarksEntry entry = null;
+
 			if (cmd.equals(Constants.ADD) || cmd.equals(Constants.UPDATE)) {
-				updateEntry(actionRequest);
+				entry = updateEntry(actionRequest);
 			}
 			else if (cmd.equals(Constants.DELETE)) {
-				deleteEntry(
-					(LiferayPortletConfig)portletConfig, actionRequest, false);
+				deleteEntry(actionRequest, false);
 			}
 			else if (cmd.equals(Constants.MOVE_TO_TRASH)) {
-				deleteEntry(
-					(LiferayPortletConfig)portletConfig, actionRequest, true);
+				deleteEntry(actionRequest, true);
 			}
 			else if (cmd.equals(Constants.RESTORE)) {
 				restoreEntryFromTrash(actionRequest);
@@ -102,6 +103,21 @@ public class EditEntryAction extends PortletAction {
 					ParamUtil.getString(actionRequest, "redirect"));
 
 				if (Validator.isNotNull(redirect)) {
+					if (cmd.equals(Constants.ADD) && (entry != null)) {
+						String portletId = HttpUtil.getParameter(
+							redirect, "p_p_id", false);
+
+						String namespace = PortalUtil.getPortletNamespace(
+							portletId);
+
+						redirect = HttpUtil.addParameter(
+							redirect, namespace + "className",
+							BookmarksEntry.class.getName());
+						redirect = HttpUtil.addParameter(
+							redirect, namespace + "classPK",
+							entry.getEntryId());
+					}
+
 					actionResponse.sendRedirect(redirect);
 				}
 			}
@@ -132,8 +148,9 @@ public class EditEntryAction extends PortletAction {
 
 	@Override
 	public ActionForward render(
-			ActionMapping mapping, ActionForm form, PortletConfig portletConfig,
-			RenderRequest renderRequest, RenderResponse renderResponse)
+			ActionMapping actionMapping, ActionForm actionForm,
+			PortletConfig portletConfig, RenderRequest renderRequest,
+			RenderResponse renderResponse)
 		throws Exception {
 
 		try {
@@ -145,21 +162,21 @@ public class EditEntryAction extends PortletAction {
 
 				SessionErrors.add(renderRequest, e.getClass());
 
-				return mapping.findForward("portlet.bookmarks.error");
+				return actionMapping.findForward("portlet.bookmarks.error");
 			}
 			else {
 				throw e;
 			}
 		}
 
-		return mapping.findForward(
+		return actionMapping.findForward(
 			getForward(renderRequest, "portlet.bookmarks.edit_entry"));
 	}
 
-	protected void deleteEntry(
-			LiferayPortletConfig liferayPortletConfig,
-			ActionRequest actionRequest, boolean moveToTrash)
+	protected void deleteEntry(ActionRequest actionRequest, boolean moveToTrash)
 		throws Exception {
+
+		String deleteEntryTitle = null;
 
 		long[] deleteEntryIds = null;
 
@@ -173,9 +190,16 @@ public class EditEntryAction extends PortletAction {
 				ParamUtil.getString(actionRequest, "deleteEntryIds"), 0L);
 		}
 
-		for (long deleteEntryId : deleteEntryIds) {
+		for (int i = 0; i < deleteEntryIds.length; i++) {
+			long deleteEntryId = deleteEntryIds[i];
+
 			if (moveToTrash) {
-				BookmarksEntryServiceUtil.moveEntryToTrash(deleteEntryId);
+				BookmarksEntry entry =
+					BookmarksEntryServiceUtil.moveEntryToTrash(deleteEntryId);
+
+				if (i == 0) {
+					deleteEntryTitle = entry.getName();
+				}
 			}
 			else {
 				BookmarksEntryServiceUtil.deleteEntry(deleteEntryId);
@@ -186,17 +210,22 @@ public class EditEntryAction extends PortletAction {
 			Map<String, String[]> data = new HashMap<String, String[]>();
 
 			data.put(
+				"deleteEntryClassName",
+				new String[] {BookmarksEntry.class.getName()});
+
+			if (Validator.isNotNull(deleteEntryTitle)) {
+				data.put("deleteEntryTitle", new String[] {deleteEntryTitle});
+			}
+
+			data.put(
 				"restoreEntryIds", ArrayUtil.toStringArray(deleteEntryIds));
 
 			SessionMessages.add(
 				actionRequest,
-				liferayPortletConfig.getPortletId() +
+				PortalUtil.getPortletId(actionRequest) +
 					SessionMessages.KEY_SUFFIX_DELETE_SUCCESS_DATA, data);
 
-			SessionMessages.add(
-				actionRequest,
-				liferayPortletConfig.getPortletId() +
-					SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_SUCCESS_MESSAGE);
+			hideDefaultSuccessMessage(actionRequest);
 		}
 	}
 
@@ -234,7 +263,9 @@ public class EditEntryAction extends PortletAction {
 		BookmarksEntryServiceUtil.unsubscribeEntry(entryId);
 	}
 
-	protected void updateEntry(ActionRequest actionRequest) throws Exception {
+	protected BookmarksEntry updateEntry(ActionRequest actionRequest)
+		throws Exception {
+
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
@@ -249,11 +280,13 @@ public class EditEntryAction extends PortletAction {
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			BookmarksEntry.class.getName(), actionRequest);
 
+		BookmarksEntry entry = null;
+
 		if (entryId <= 0) {
 
 			// Add entry
 
-			BookmarksEntry entry = BookmarksEntryServiceUtil.addEntry(
+			entry = BookmarksEntryServiceUtil.addEntry(
 				groupId, folderId, name, url, description, serviceContext);
 
 			AssetPublisherUtil.addAndStoreSelection(
@@ -264,13 +297,15 @@ public class EditEntryAction extends PortletAction {
 
 			// Update entry
 
-			BookmarksEntryServiceUtil.updateEntry(
+			entry = BookmarksEntryServiceUtil.updateEntry(
 				entryId, groupId, folderId, name, url, description,
 				serviceContext);
 		}
 
 		AssetPublisherUtil.addRecentFolderId(
 			actionRequest, BookmarksEntry.class.getName(), folderId);
+
+		return entry;
 	}
 
 }

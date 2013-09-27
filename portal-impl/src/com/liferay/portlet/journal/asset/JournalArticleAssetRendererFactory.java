@@ -14,7 +14,6 @@
 
 package com.liferay.portlet.journal.asset;
 
-import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
@@ -64,6 +63,7 @@ public class JournalArticleAssetRendererFactory
 
 	public static final String TYPE = "content";
 
+	@Override
 	public AssetRenderer getAssetRenderer(long classPK, int type)
 		throws PortalException, SystemException {
 
@@ -117,6 +117,7 @@ public class JournalArticleAssetRendererFactory
 		return new JournalArticleAssetRenderer(article);
 	}
 
+	@Override
 	public String getClassName() {
 		return JournalArticle.class.getName();
 	}
@@ -132,11 +133,7 @@ public class JournalArticleAssetRendererFactory
 		List<Tuple> fieldNames = getDDMStructureFieldNames(
 			ddmStructure, locale);
 
-		if ((start != QueryUtil.ALL_POS) || (end != QueryUtil.ALL_POS)) {
-			fieldNames = ListUtil.subList(fieldNames, start, end);
-		}
-
-		return fieldNames;
+		return ListUtil.subList(fieldNames, start, end);
 	}
 
 	@Override
@@ -174,6 +171,7 @@ public class JournalArticleAssetRendererFactory
 		return classTypes;
 	}
 
+	@Override
 	public String getType() {
 		return TYPE;
 	}

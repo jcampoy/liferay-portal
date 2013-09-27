@@ -63,21 +63,19 @@ long parentFolderId = BeanParamUtil.getLong(folder, request, "parentFolderId", J
 			}
 			%>
 
-			<portlet:renderURL var="viewFolderURL">
-				<portlet:param name="struts_action" value="/journal/view" />
-				<portlet:param name="folderId" value="<%= String.valueOf(parentFolderId) %>" />
-			</portlet:renderURL>
+			<div class="input-append">
+				<liferay-ui:input-resource id="parentFolderName" url="<%= parentFolderName %>" />
 
-			<aui:a href="<%= viewFolderURL %>" id="parentFolderName"><%= parentFolderName %></aui:a>
+				<aui:button name="selectFolderButton" value="select" />
 
-			<aui:button name="selectFolderButton" value="select" />
+				<%
+				String taglibRemoveFolder = "Liferay.Util.removeFolderSelection('parentFolderId', 'parentFolderName', '" + renderResponse.getNamespace() + "');";
+				%>
 
-			<%
-			String taglibRemoveFolder = "Liferay.Util.removeFolderSelection('parentFolderId', 'parentFolderName', '" + renderResponse.getNamespace() + "');";
-			%>
-
-			<aui:button name="removeFolderButton" onClick="<%= taglibRemoveFolder %>" value="remove" />
+				<aui:button disabled="<%= (parentFolderId <= 0) %>" name="removeFolderButton" onClick="<%= taglibRemoveFolder %>" value="remove" />
+			</div>
 		</aui:field-wrapper>
+
 		<aui:button-row>
 			<aui:button type="submit" value="move" />
 
@@ -98,14 +96,12 @@ long parentFolderId = BeanParamUtil.getLong(folder, request, "parentFolderId", J
 			Liferay.Util.selectEntity(
 				{
 					dialog: {
-						align: Liferay.Util.Window.ALIGN_CENTER,
 						constrain: true,
 						modal: true,
-						stack: true,
 						width: 680
 					},
 					id: '<portlet:namespace />selectFolder',
-					title: '<%= UnicodeLanguageUtil.format(pageContext, "select-x", "folder") %>',
+					title: '<liferay-ui:message arguments="folder" key="select-x" />',
 					uri: '<%= selectFolderURL.toString() %>'
 				},
 				function(event) {
@@ -116,7 +112,7 @@ long parentFolderId = BeanParamUtil.getLong(folder, request, "parentFolderId", J
 						nameValue: event.foldername
 					};
 
-					Liferay.Util.selectFolder(folderData, '<portlet:renderURL><portlet:param name="struts_action" value="/journal/view" /></portlet:renderURL>', '<portlet:namespace />');
+					Liferay.Util.selectFolder(folderData, '<portlet:namespace />');
 				}
 			);
 		}
@@ -127,10 +123,6 @@ long parentFolderId = BeanParamUtil.getLong(folder, request, "parentFolderId", J
 	function <portlet:namespace />saveFolder() {
 		submitForm(document.<portlet:namespace />fm);
 	}
-
-	<c:if test="<%= windowState.equals(WindowState.MAXIMIZED) %>">
-		Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace />file);
-	</c:if>
 </aui:script>
 
 <%

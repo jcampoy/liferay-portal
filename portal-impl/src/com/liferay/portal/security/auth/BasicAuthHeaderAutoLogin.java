@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.util.Base64;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.MapUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.util.Portal;
 import com.liferay.portlet.login.util.LoginUtil;
 
@@ -66,10 +67,12 @@ import javax.servlet.http.HttpServletResponse;
 public class BasicAuthHeaderAutoLogin
 	extends BaseAutoLogin implements AuthVerifier {
 
+	@Override
 	public String getAuthType() {
 		return HttpServletRequest.BASIC_AUTH;
 	}
 
+	@Override
 	public AuthVerifierResult verify(
 			AccessControlContext accessControlContext, Properties properties)
 		throws AuthException {
@@ -109,8 +112,8 @@ public class BasicAuthHeaderAutoLogin
 
 			return authVerifierResult;
 		}
-		catch (AutoLoginException e) {
-			throw new AuthException(e);
+		catch (AutoLoginException ale) {
+			throw new AuthException(ale);
 		}
 	}
 
@@ -137,7 +140,9 @@ public class BasicAuthHeaderAutoLogin
 
 		// We only handle HTTP Basic authentication
 
-		if (!basic.equalsIgnoreCase(HttpServletRequest.BASIC_AUTH)) {
+		if (!StringUtil.equalsIgnoreCase(
+				basic, HttpServletRequest.BASIC_AUTH)) {
+
 			return null;
 		}
 

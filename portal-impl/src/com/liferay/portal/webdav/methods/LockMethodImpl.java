@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.webdav.WebDAVException;
 import com.liferay.portal.kernel.webdav.WebDAVRequest;
 import com.liferay.portal.kernel.webdav.WebDAVStorage;
 import com.liferay.portal.kernel.webdav.WebDAVUtil;
+import com.liferay.portal.kernel.webdav.methods.Method;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
@@ -45,6 +46,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class LockMethodImpl implements Method {
 
+	@Override
 	public int process(WebDAVRequest webDAVRequest) throws WebDAVException {
 		try {
 			return doProcess(webDAVRequest);
@@ -184,7 +186,7 @@ public class LockMethodImpl implements Method {
 	}
 
 	protected String getResponseXML(Lock lock, long depth) throws Exception {
-		StringBundler sb = new StringBundler(20);
+		StringBundler sb = new StringBundler(21);
 
 		long timeoutSecs = lock.getExpirationTime() / Time.SECOND;
 
@@ -205,7 +207,8 @@ public class LockMethodImpl implements Method {
 		sb.append("<D:timeout>");
 
 		if (timeoutSecs > 0) {
-			sb.append("Second-" + timeoutSecs);
+			sb.append("Second-");
+			sb.append(timeoutSecs);
 		}
 		else {
 			sb.append("Infinite");

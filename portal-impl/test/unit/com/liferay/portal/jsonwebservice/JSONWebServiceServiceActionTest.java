@@ -24,8 +24,6 @@ import com.liferay.portal.util.PropsImpl;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
-
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.DynaActionForm;
 
@@ -42,7 +40,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.mock.web.MockServletContext;
 
 /**
  * @author Igor Spasic
@@ -55,7 +52,7 @@ public class JSONWebServiceServiceActionTest
 	extends BaseJSONWebServiceTestCase {
 
 	@BeforeClass
-	public static void init() throws Exception {
+	public static void setUpClass() throws Exception {
 		initPortalServices();
 
 		Class<?> clazz = JSONWebServiceServiceAction.class;
@@ -68,14 +65,11 @@ public class JSONWebServiceServiceActionTest
 
 		PropsUtil.setProps(new PropsImpl());
 
-		ServletContext servletContext = new MockServletContext();
-
-		_jsonWebServiceServiceAction = new JSONWebServiceServiceAction(
-			servletContext, null);
+		_jsonWebServiceServiceAction = new JSONWebServiceServiceAction();
 	}
 
 	@AfterClass
-	public static void tearDown() throws Exception {
+	public static void tearDownClass() throws Exception {
 		PortalClassLoaderUtil.setClassLoader(null);
 	}
 

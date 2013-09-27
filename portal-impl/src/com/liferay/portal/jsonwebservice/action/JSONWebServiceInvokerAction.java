@@ -23,12 +23,15 @@ import com.liferay.portal.kernel.jsonwebservice.JSONWebServiceActionMapping;
 import com.liferay.portal.kernel.jsonwebservice.JSONWebServiceActionsManagerUtil;
 import com.liferay.portal.kernel.util.CamelCaseUtil;
 import com.liferay.portal.kernel.util.CharPool;
+import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.io.IOException;
+
+import java.lang.reflect.Array;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,7 +58,7 @@ public class JSONWebServiceInvokerAction implements JSONWebServiceAction {
 	public JSONWebServiceInvokerAction(HttpServletRequest request) {
 		_request = request;
 
-		_command = request.getParameter("cmd");
+		_command = request.getParameter(Constants.CMD);
 
 		if (_command == null) {
 			try {
@@ -67,10 +70,12 @@ public class JSONWebServiceInvokerAction implements JSONWebServiceAction {
 		}
 	}
 
+	@Override
 	public JSONWebServiceActionMapping getJSONWebServiceActionMapping() {
 		return null;
 	}
 
+	@Override
 	public Object invoke() throws Exception {
 		Object command = JSONFactoryUtil.looseDeserializeSafe(_command);
 
@@ -132,6 +137,7 @@ public class JSONWebServiceInvokerAction implements JSONWebServiceAction {
 
 	public class InvokerResult implements JSONSerializable {
 
+		@Override
 		public String toJSONString() {
 			if (_result == null) {
 				return JSONFactoryUtil.getNullJSON();
@@ -314,11 +320,23 @@ public class JSONWebServiceInvokerAction implements JSONWebServiceAction {
 
 		Class<?> clazz = object.getClass();
 
-		if (clazz.isArray()) {
+		if (!clazz.isArray()) {
+			return null;
+		}
+
+		Class<?> componentType = clazz.getComponentType();
+
+		if (!componentType.isPrimitive()) {
 			return ListUtil.toList((Object[])object);
 		}
 
-		return null;
+		List<Object> list = new ArrayList<Object>();
+
+		for (int i = 0; i < Array.getLength(object); i++) {
+			list.add(Array.get(object, i));
+		}
+
+		return list;
 	}
 
 	private Map<String, Object> _convertObjectToMap(

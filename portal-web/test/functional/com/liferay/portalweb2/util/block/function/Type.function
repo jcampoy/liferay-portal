@@ -1,4 +1,14 @@
 <definition>
+	<command name="clickAtSendKeys">
+		<execute selenium="waitForVisible" />
+
+		<execute selenium="type" argument2="" />
+
+		<execute selenium="clickAt" />
+
+		<execute selenium="sendKeys" />
+	</command>
+
 	<command name="sendKeys">
 		<execute selenium="waitForVisible" />
 
@@ -6,9 +16,13 @@
 	</command>
 
 	<command name="sendKeysApplicationSearch">
-		<execute selenium="waitForElementPresent" argument1="//script[contains(@src,'/aui/aui-live-search/aui-live-search-min.js')]" />
+		<execute selenium="waitForElementPresent" argument1="//script[contains(@src,'/autocomplete-filters/autocomplete-filters-min.js')]" />
 
 		<execute function="Type#sendKeys" />
+	</command>
+
+	<command name="sendKeysNoWait">
+		<execute selenium="sendKeys" />
 	</command>
 
 	<command name="type">
@@ -21,5 +35,15 @@
 		<execute selenium="waitForVisible" />
 
 		<execute selenium="typeFrame" />
+	</command>
+
+	<command name="typeFrameWaitForCKEditor">
+		<execute selenium="waitForVisible" />
+
+		<execute selenium="waitForVisible" argument1="//a[contains(@class,'cke_button__unlink') and contains(@class,'cke_button_disabled')]" />
+
+		<execute selenium="typeFrame" />
+
+		<execute selenium="pause" argument1="1000" />
 	</command>
 </definition>

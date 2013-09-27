@@ -53,13 +53,14 @@ public class TeamFinderImpl
 	public static final String JOIN_BY_USERS_USER_GROUPS =
 		TeamFinder.class.getName() + ".joinByUsersUserGroups";
 
+	@Override
 	public int countByG_N_D(
 			long groupId, String name, String description,
 			LinkedHashMap<String, Object> params)
 		throws SystemException {
 
-		name = StringUtil.lowerCase(name);
-		description = StringUtil.lowerCase(description);
+		name = CustomSQLUtil.keywords(name)[0];
+		description = CustomSQLUtil.keywords(description)[0];
 
 		Session session = null;
 
@@ -105,14 +106,15 @@ public class TeamFinderImpl
 		}
 	}
 
+	@Override
 	public List<Team> findByG_N_D(
 			long groupId, String name, String description,
 			LinkedHashMap<String, Object> params, int start, int end,
 			OrderByComparator obc)
 		throws SystemException {
 
-		name = StringUtil.lowerCase(name);
-		description = StringUtil.lowerCase(description);
+		name = CustomSQLUtil.keywords(name)[0];
+		description = CustomSQLUtil.keywords(description)[0];
 
 		Session session = null;
 

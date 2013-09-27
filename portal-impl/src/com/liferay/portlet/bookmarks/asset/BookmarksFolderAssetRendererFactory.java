@@ -30,8 +30,9 @@ import com.liferay.portlet.bookmarks.service.permission.BookmarksFolderPermissio
 public class BookmarksFolderAssetRendererFactory
 	extends BaseAssetRendererFactory {
 
-	public static final String TYPE = "folder";
+	public static final String TYPE = "bookmark_folder";
 
+	@Override
 	public AssetRenderer getAssetRenderer(long classPK, int type)
 		throws PortalException, SystemException {
 
@@ -46,10 +47,12 @@ public class BookmarksFolderAssetRendererFactory
 		return bookmarksFolderAssetRenderer;
 	}
 
+	@Override
 	public String getClassName() {
 		return BookmarksFolder.class.getName();
 	}
 
+	@Override
 	public String getType() {
 		return TYPE;
 	}

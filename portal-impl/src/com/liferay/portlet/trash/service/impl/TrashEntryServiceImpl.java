@@ -16,6 +16,7 @@ package com.liferay.portlet.trash.service.impl;
 
 import com.liferay.portal.TrashPermissionException;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
@@ -59,6 +60,7 @@ public class TrashEntryServiceImpl extends TrashEntryServiceBaseImpl {
 	 * @throws PortalException if a portal exception occurred
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	@Transactional(noRollbackFor = {TrashPermissionException.class})
 	public void deleteEntries(long groupId)
 		throws PortalException, SystemException {
@@ -107,6 +109,7 @@ public class TrashEntryServiceImpl extends TrashEntryServiceBaseImpl {
 	 *         of the trash entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	@Transactional(noRollbackFor = {TrashPermissionException.class})
 	public void deleteEntries(long[] entryIds)
 		throws PortalException, SystemException {
@@ -143,6 +146,7 @@ public class TrashEntryServiceImpl extends TrashEntryServiceBaseImpl {
 	 *         trash entry
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void deleteEntry(long entryId)
 		throws PortalException, SystemException {
 
@@ -167,6 +171,7 @@ public class TrashEntryServiceImpl extends TrashEntryServiceBaseImpl {
 	 *         permission to delete the entry
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void deleteEntry(String className, long classPK)
 		throws PortalException, SystemException {
 
@@ -191,6 +196,7 @@ public class TrashEntryServiceImpl extends TrashEntryServiceBaseImpl {
 	 * @throws PrincipalException if a principal exception occurred
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public TrashEntryList getEntries(long groupId)
 		throws PrincipalException, SystemException {
 
@@ -211,6 +217,7 @@ public class TrashEntryServiceImpl extends TrashEntryServiceBaseImpl {
 	 * @throws PrincipalException if a system exception occurred
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public TrashEntryList getEntries(
 			long groupId, int start, int end, OrderByComparator obc)
 		throws PrincipalException, SystemException {
@@ -249,22 +256,23 @@ public class TrashEntryServiceImpl extends TrashEntryServiceBaseImpl {
 			}
 		}
 
-		int filteredEntriesCount = filteredEntries.size();
+		int total = filteredEntries.size();
 
-		if ((end != QueryUtil.ALL_POS) && (start != QueryUtil.ALL_POS)) {
-			if (end > filteredEntriesCount) {
-				end = filteredEntriesCount;
-			}
-
-			if (start > filteredEntriesCount) {
-				start = filteredEntriesCount;
-			}
-
-			filteredEntries = filteredEntries.subList(start, end);
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS)) {
+			start = 0;
+			end = total;
 		}
 
+		int[] startAndEnd = SearchPaginationUtil.calculateStartAndEnd(
+			start, end, total);
+
+		start = startAndEnd[0];
+		end = startAndEnd[1];
+
+		filteredEntries = filteredEntries.subList(start, end);
+
 		trashEntriesList.setArray(TrashEntrySoap.toSoapModels(filteredEntries));
-		trashEntriesList.setCount(filteredEntriesCount);
+		trashEntriesList.setCount(total);
 
 		return trashEntriesList;
 	}
@@ -304,6 +312,7 @@ public class TrashEntryServiceImpl extends TrashEntryServiceBaseImpl {
 	 *         location, or if a portal exception occurred
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void moveEntry(
 			String className, long classPK, long destinationContainerModelId,
 			ServiceContext serviceContext)
@@ -311,13 +320,11 @@ public class TrashEntryServiceImpl extends TrashEntryServiceBaseImpl {
 
 		PermissionChecker permissionChecker = getPermissionChecker();
 
-		TrashEntry entry = trashEntryLocalService.getEntry(className, classPK);
-
 		TrashHandler trashHandler = TrashHandlerRegistryUtil.getTrashHandler(
 			className);
 
 		if (!trashHandler.hasTrashPermission(
-				permissionChecker, entry.getGroupId(),
+				permissionChecker, serviceContext.getScopeGroupId(),
 				destinationContainerModelId, TrashActionKeys.MOVE)) {
 
 			throw new TrashPermissionException(TrashPermissionException.MOVE);
@@ -328,24 +335,31 @@ public class TrashEntryServiceImpl extends TrashEntryServiceBaseImpl {
 				permissionChecker, 0, classPK, TrashActionKeys.RESTORE)) {
 
 			throw new TrashPermissionException(
-					TrashPermissionException.RESTORE);
+				TrashPermissionException.RESTORE);
 		}
 
-		trashHandler.checkDuplicateTrashEntry(
-			entry, destinationContainerModelId, StringPool.BLANK);
-
 		if (trashHandler.isInTrash(classPK)) {
+			TrashEntry entry = trashEntryLocalService.getEntry(
+				className, classPK);
+
+			trashHandler.checkDuplicateTrashEntry(
+				entry, destinationContainerModelId, StringPool.BLANK);
+
 			trashHandler.moveTrashEntry(
 				getUserId(), classPK, destinationContainerModelId,
 				serviceContext);
 		}
 		else {
+			trashHandler.checkDuplicateEntry(
+				classPK, destinationContainerModelId, StringPool.BLANK);
+
 			trashHandler.moveEntry(
 				getUserId(), classPK, destinationContainerModelId,
 				serviceContext);
 		}
 	}
 
+	@Override
 	public TrashEntry restoreEntry(long entryId)
 			throws PortalException, SystemException {
 
@@ -391,6 +405,7 @@ public class TrashEntryServiceImpl extends TrashEntryServiceBaseImpl {
 	 *         the trash entry in general
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public TrashEntry restoreEntry(
 			long entryId, long overrideClassPK, String name)
 		throws PortalException, SystemException {

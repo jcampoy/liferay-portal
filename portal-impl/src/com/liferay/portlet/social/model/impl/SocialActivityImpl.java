@@ -18,9 +18,13 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portlet.asset.model.AssetEntry;
 import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
+
+import java.util.Locale;
 
 /**
  * @author Brian Wing Shun Chan
@@ -28,6 +32,7 @@ import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
  */
 public class SocialActivityImpl extends SocialActivityBaseImpl {
 
+	@Override
 	public AssetEntry getAssetEntry() throws SystemException {
 		if ((_assetEntry == null) && Validator.isNotNull(getClassName()) &&
 			(getClassPK() > 0)) {
@@ -39,15 +44,25 @@ public class SocialActivityImpl extends SocialActivityBaseImpl {
 		return _assetEntry;
 	}
 
+	@Override
 	public String getExtraDataValue(String key) throws JSONException {
-		if (_extraDataJSONObject == null) {
-			_extraDataJSONObject = JSONFactoryUtil.createJSONObject(
-				getExtraData());
-		}
+		JSONObject extraDataJSONObject = getExtraDataJSONObject();
 
-		return _extraDataJSONObject.getString(key);
+		return extraDataJSONObject.getString(key);
 	}
 
+	@Override
+	public String getExtraDataValue(String key, Locale locale)
+		throws JSONException {
+
+		JSONObject extraDataJSONObject = getExtraDataJSONObject();
+
+		return LocalizationUtil.getLocalization(
+			extraDataJSONObject.getString(key),
+			LocaleUtil.toLanguageId(locale));
+	}
+
+	@Override
 	public boolean isClassName(String className) {
 		if (className == null) {
 			return false;
@@ -56,6 +71,7 @@ public class SocialActivityImpl extends SocialActivityBaseImpl {
 		return className.equals(getClassName());
 	}
 
+	@Override
 	public void setAssetEntry(AssetEntry assetEntry) {
 		_assetEntry = assetEntry;
 	}
@@ -65,6 +81,27 @@ public class SocialActivityImpl extends SocialActivityBaseImpl {
 		_extraDataJSONObject = null;
 
 		super.setExtraData(extraData);
+	}
+
+	@Override
+	public void setExtraDataValue(String key, String value)
+		throws JSONException {
+
+		JSONObject extraDataJSONObject = getExtraDataJSONObject();
+
+		extraDataJSONObject.put(key, value);
+
+		super.setExtraData(extraDataJSONObject.toString());
+	}
+
+	protected JSONObject getExtraDataJSONObject() throws JSONException {
+		if (_extraDataJSONObject != null) {
+			return _extraDataJSONObject;
+		}
+
+		_extraDataJSONObject = JSONFactoryUtil.createJSONObject(getExtraData());
+
+		return _extraDataJSONObject;
 	}
 
 	private AssetEntry _assetEntry;

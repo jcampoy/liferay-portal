@@ -29,6 +29,16 @@ import java.util.List;
  */
 public class SecurityManagerUtil {
 
+	public static void applySmartStrategy() {
+		if ((_portalSecurityManagerStrategy ==
+				PortalSecurityManagerStrategy.SMART) &&
+			(_originalSecurityManager == null) &&
+			ServerDetector.isWebSphere()) {
+
+			System.setSecurityManager(null);
+		}
+	}
+
 	public static PortalSecurityManager getPortalSecurityManager() {
 		return _portalSecurityManager;
 	}
@@ -37,6 +47,8 @@ public class SecurityManagerUtil {
 		if (_portalSecurityManagerStrategy != null) {
 			return;
 		}
+
+		_originalSecurityManager = System.getSecurityManager();
 
 		_portalSecurityManagerStrategy = PortalSecurityManagerStrategy.parse(
 			PropsValues.PORTAL_SECURITY_MANAGER_STRATEGY);
@@ -47,22 +59,24 @@ public class SecurityManagerUtil {
 				PortalSecurityManagerStrategy.SMART)) {
 
 			loadPortalSecurityManager();
-		}
 
-		if (_portalSecurityManager == null) {
-			_portalSecurityManagerStrategy =
-				PortalSecurityManagerStrategy.DEFAULT;
+			if (_portalSecurityManager == null) {
+				_portalSecurityManagerStrategy =
+					PortalSecurityManagerStrategy.DEFAULT;
 
-			if (_log.isInfoEnabled()) {
-				_log.info(
-					"No portal security manager implementation was located. " +
-						"Continuing with the default security strategy.");
+				if (_log.isInfoEnabled()) {
+					_log.info(
+						"No portal security manager implementation was " +
+							"located. Continuing with the default security " +
+								"strategy.");
+				}
+
+				return;
 			}
-
-			return;
 		}
-		else if (_portalSecurityManagerStrategy ==
-					PortalSecurityManagerStrategy.LIFERAY) {
+
+		if (_portalSecurityManagerStrategy ==
+				PortalSecurityManagerStrategy.LIFERAY) {
 
 			System.setSecurityManager((SecurityManager)_portalSecurityManager);
 		}
@@ -155,6 +169,7 @@ public class SecurityManagerUtil {
 
 	private static Log _log = LogFactoryUtil.getLog(SecurityManagerUtil.class);
 
+	private static SecurityManager _originalSecurityManager;
 	private static PortalSecurityManager _portalSecurityManager;
 	private static PortalSecurityManagerStrategy _portalSecurityManagerStrategy;
 
@@ -163,17 +178,16 @@ public class SecurityManagerUtil {
 		DEFAULT, LIFERAY, NONE, SMART;
 
 		public static PortalSecurityManagerStrategy parse(String value) {
-			if (value.equals("default")) {
+			if (PropsValues.TCK_URL) {
+				return NONE;
+			}
+			else if (value.equals("default")) {
 				return DEFAULT;
 			}
 			else if (value.equals("liferay")) {
 				return LIFERAY;
 			}
 			else if (value.equals("smart")) {
-				if (ServerDetector.isWebSphere()) {
-					return NONE;
-				}
-
 				return SMART;
 			}
 

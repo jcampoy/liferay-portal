@@ -823,7 +823,11 @@
 	</welcome-file-list>
 	<error-page>
 		<error-code>404</error-code>
-		<location>/errors/404.jsp</location>
+		<location>/errors/code.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/errors/code.jsp</location>
 	</error-page>
 	<jsp-config>
 		<taglib>
@@ -909,14 +913,6 @@
 		<taglib>
 			<taglib-uri>http://struts.apache.org/tags-nested</taglib-uri>
 			<taglib-location>/WEB-INF/tld/struts-nested.tld</taglib-location>
-		</taglib>
-		<taglib>
-			<taglib-uri>http://struts.apache.org/tags-tiles</taglib-uri>
-			<taglib-location>/WEB-INF/tld/struts-tiles.tld</taglib-location>
-		</taglib>
-		<taglib>
-			<taglib-uri>http://struts.apache.org/tags-tiles-el</taglib-uri>
-			<taglib-location>/WEB-INF/tld/struts-tiles-el.tld</taglib-location>
 		</taglib>
 	</jsp-config>
 	<security-constraint>

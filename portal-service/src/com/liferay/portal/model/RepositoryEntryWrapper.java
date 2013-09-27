@@ -14,6 +14,9 @@
 
 package com.liferay.portal.model;
 
+import com.liferay.portal.kernel.lar.StagedModelType;
+import com.liferay.portal.kernel.util.Validator;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,8 +26,8 @@ import java.util.Map;
  * This class is a wrapper for {@link RepositoryEntry}.
  * </p>
  *
- * @author    Brian Wing Shun Chan
- * @see       RepositoryEntry
+ * @author Brian Wing Shun Chan
+ * @see RepositoryEntry
  * @generated
  */
 public class RepositoryEntryWrapper implements RepositoryEntry,
@@ -33,14 +36,17 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 		_repositoryEntry = repositoryEntry;
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return RepositoryEntry.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return RepositoryEntry.class.getName();
 	}
 
+	@Override
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
@@ -59,6 +65,7 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 		return attributes;
 	}
 
+	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
 		String uuid = (String)attributes.get("uuid");
 
@@ -133,6 +140,7 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 	*
 	* @return the primary key of this repository entry
 	*/
+	@Override
 	public long getPrimaryKey() {
 		return _repositoryEntry.getPrimaryKey();
 	}
@@ -142,6 +150,7 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 	*
 	* @param primaryKey the primary key of this repository entry
 	*/
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_repositoryEntry.setPrimaryKey(primaryKey);
 	}
@@ -151,6 +160,7 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 	*
 	* @return the uuid of this repository entry
 	*/
+	@Override
 	public java.lang.String getUuid() {
 		return _repositoryEntry.getUuid();
 	}
@@ -160,6 +170,7 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 	*
 	* @param uuid the uuid of this repository entry
 	*/
+	@Override
 	public void setUuid(java.lang.String uuid) {
 		_repositoryEntry.setUuid(uuid);
 	}
@@ -169,6 +180,7 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 	*
 	* @return the repository entry ID of this repository entry
 	*/
+	@Override
 	public long getRepositoryEntryId() {
 		return _repositoryEntry.getRepositoryEntryId();
 	}
@@ -178,6 +190,7 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 	*
 	* @param repositoryEntryId the repository entry ID of this repository entry
 	*/
+	@Override
 	public void setRepositoryEntryId(long repositoryEntryId) {
 		_repositoryEntry.setRepositoryEntryId(repositoryEntryId);
 	}
@@ -187,6 +200,7 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 	*
 	* @return the group ID of this repository entry
 	*/
+	@Override
 	public long getGroupId() {
 		return _repositoryEntry.getGroupId();
 	}
@@ -196,6 +210,7 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 	*
 	* @param groupId the group ID of this repository entry
 	*/
+	@Override
 	public void setGroupId(long groupId) {
 		_repositoryEntry.setGroupId(groupId);
 	}
@@ -205,6 +220,7 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 	*
 	* @return the company ID of this repository entry
 	*/
+	@Override
 	public long getCompanyId() {
 		return _repositoryEntry.getCompanyId();
 	}
@@ -214,6 +230,7 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 	*
 	* @param companyId the company ID of this repository entry
 	*/
+	@Override
 	public void setCompanyId(long companyId) {
 		_repositoryEntry.setCompanyId(companyId);
 	}
@@ -223,6 +240,7 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 	*
 	* @return the user ID of this repository entry
 	*/
+	@Override
 	public long getUserId() {
 		return _repositoryEntry.getUserId();
 	}
@@ -232,6 +250,7 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 	*
 	* @param userId the user ID of this repository entry
 	*/
+	@Override
 	public void setUserId(long userId) {
 		_repositoryEntry.setUserId(userId);
 	}
@@ -242,6 +261,7 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 	* @return the user uuid of this repository entry
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.lang.String getUserUuid()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _repositoryEntry.getUserUuid();
@@ -252,6 +272,7 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 	*
 	* @param userUuid the user uuid of this repository entry
 	*/
+	@Override
 	public void setUserUuid(java.lang.String userUuid) {
 		_repositoryEntry.setUserUuid(userUuid);
 	}
@@ -261,6 +282,7 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 	*
 	* @return the user name of this repository entry
 	*/
+	@Override
 	public java.lang.String getUserName() {
 		return _repositoryEntry.getUserName();
 	}
@@ -270,6 +292,7 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 	*
 	* @param userName the user name of this repository entry
 	*/
+	@Override
 	public void setUserName(java.lang.String userName) {
 		_repositoryEntry.setUserName(userName);
 	}
@@ -279,6 +302,7 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 	*
 	* @return the create date of this repository entry
 	*/
+	@Override
 	public java.util.Date getCreateDate() {
 		return _repositoryEntry.getCreateDate();
 	}
@@ -288,6 +312,7 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 	*
 	* @param createDate the create date of this repository entry
 	*/
+	@Override
 	public void setCreateDate(java.util.Date createDate) {
 		_repositoryEntry.setCreateDate(createDate);
 	}
@@ -297,6 +322,7 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 	*
 	* @return the modified date of this repository entry
 	*/
+	@Override
 	public java.util.Date getModifiedDate() {
 		return _repositoryEntry.getModifiedDate();
 	}
@@ -306,6 +332,7 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 	*
 	* @param modifiedDate the modified date of this repository entry
 	*/
+	@Override
 	public void setModifiedDate(java.util.Date modifiedDate) {
 		_repositoryEntry.setModifiedDate(modifiedDate);
 	}
@@ -315,6 +342,7 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 	*
 	* @return the repository ID of this repository entry
 	*/
+	@Override
 	public long getRepositoryId() {
 		return _repositoryEntry.getRepositoryId();
 	}
@@ -324,6 +352,7 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 	*
 	* @param repositoryId the repository ID of this repository entry
 	*/
+	@Override
 	public void setRepositoryId(long repositoryId) {
 		_repositoryEntry.setRepositoryId(repositoryId);
 	}
@@ -333,6 +362,7 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 	*
 	* @return the mapped ID of this repository entry
 	*/
+	@Override
 	public java.lang.String getMappedId() {
 		return _repositoryEntry.getMappedId();
 	}
@@ -342,6 +372,7 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 	*
 	* @param mappedId the mapped ID of this repository entry
 	*/
+	@Override
 	public void setMappedId(java.lang.String mappedId) {
 		_repositoryEntry.setMappedId(mappedId);
 	}
@@ -351,6 +382,7 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 	*
 	* @return the manual check in required of this repository entry
 	*/
+	@Override
 	public boolean getManualCheckInRequired() {
 		return _repositoryEntry.getManualCheckInRequired();
 	}
@@ -360,6 +392,7 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 	*
 	* @return <code>true</code> if this repository entry is manual check in required; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isManualCheckInRequired() {
 		return _repositoryEntry.isManualCheckInRequired();
 	}
@@ -369,52 +402,64 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 	*
 	* @param manualCheckInRequired the manual check in required of this repository entry
 	*/
+	@Override
 	public void setManualCheckInRequired(boolean manualCheckInRequired) {
 		_repositoryEntry.setManualCheckInRequired(manualCheckInRequired);
 	}
 
+	@Override
 	public boolean isNew() {
 		return _repositoryEntry.isNew();
 	}
 
+	@Override
 	public void setNew(boolean n) {
 		_repositoryEntry.setNew(n);
 	}
 
+	@Override
 	public boolean isCachedModel() {
 		return _repositoryEntry.isCachedModel();
 	}
 
+	@Override
 	public void setCachedModel(boolean cachedModel) {
 		_repositoryEntry.setCachedModel(cachedModel);
 	}
 
+	@Override
 	public boolean isEscapedModel() {
 		return _repositoryEntry.isEscapedModel();
 	}
 
+	@Override
 	public java.io.Serializable getPrimaryKeyObj() {
 		return _repositoryEntry.getPrimaryKeyObj();
 	}
 
+	@Override
 	public void setPrimaryKeyObj(java.io.Serializable primaryKeyObj) {
 		_repositoryEntry.setPrimaryKeyObj(primaryKeyObj);
 	}
 
+	@Override
 	public com.liferay.portlet.expando.model.ExpandoBridge getExpandoBridge() {
 		return _repositoryEntry.getExpandoBridge();
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.model.BaseModel<?> baseModel) {
 		_repositoryEntry.setExpandoBridgeAttributes(baseModel);
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
 		_repositoryEntry.setExpandoBridgeAttributes(expandoBridge);
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_repositoryEntry.setExpandoBridgeAttributes(serviceContext);
@@ -425,6 +470,7 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 		return new RepositoryEntryWrapper((RepositoryEntry)_repositoryEntry.clone());
 	}
 
+	@Override
 	public int compareTo(
 		com.liferay.portal.model.RepositoryEntry repositoryEntry) {
 		return _repositoryEntry.compareTo(repositoryEntry);
@@ -435,14 +481,17 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 		return _repositoryEntry.hashCode();
 	}
 
+	@Override
 	public com.liferay.portal.model.CacheModel<com.liferay.portal.model.RepositoryEntry> toCacheModel() {
 		return _repositoryEntry.toCacheModel();
 	}
 
+	@Override
 	public com.liferay.portal.model.RepositoryEntry toEscapedModel() {
 		return new RepositoryEntryWrapper(_repositoryEntry.toEscapedModel());
 	}
 
+	@Override
 	public com.liferay.portal.model.RepositoryEntry toUnescapedModel() {
 		return new RepositoryEntryWrapper(_repositoryEntry.toUnescapedModel());
 	}
@@ -452,13 +501,40 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 		return _repositoryEntry.toString();
 	}
 
+	@Override
 	public java.lang.String toXmlString() {
 		return _repositoryEntry.toXmlString();
 	}
 
+	@Override
 	public void persist()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_repositoryEntry.persist();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof RepositoryEntryWrapper)) {
+			return false;
+		}
+
+		RepositoryEntryWrapper repositoryEntryWrapper = (RepositoryEntryWrapper)obj;
+
+		if (Validator.equals(_repositoryEntry,
+					repositoryEntryWrapper._repositoryEntry)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	@Override
+	public StagedModelType getStagedModelType() {
+		return _repositoryEntry.getStagedModelType();
 	}
 
 	/**
@@ -468,10 +544,12 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 		return _repositoryEntry;
 	}
 
+	@Override
 	public RepositoryEntry getWrappedModel() {
 		return _repositoryEntry;
 	}
 
+	@Override
 	public void resetOriginalValues() {
 		_repositoryEntry.resetOriginalValues();
 	}

@@ -34,6 +34,7 @@ import org.springframework.transaction.support.TransactionCallback;
 public class CallbackPreferringTransactionExecutor
 	extends BaseTransactionExecutor {
 
+	@Override
 	public Object execute(
 			PlatformTransactionManager platformTransactionManager,
 			TransactionAttribute transactionAttribute,
@@ -45,18 +46,32 @@ public class CallbackPreferringTransactionExecutor
 				(CallbackPreferringPlatformTransactionManager)
 					platformTransactionManager;
 
-		Object result = callbackPreferringPlatformTransactionManager.execute(
-			transactionAttribute,
-			new CallbackPreferringTransactionCallback(
-				transactionAttribute, methodInvocation));
+		try {
+			Object result =
+				callbackPreferringPlatformTransactionManager.execute(
+					transactionAttribute,
+					createTransactionCallback(
+						transactionAttribute, methodInvocation));
 
-		if (result instanceof ThrowableHolder) {
-			ThrowableHolder throwableHolder = (ThrowableHolder)result;
+			if (result instanceof ThrowableHolder) {
+				ThrowableHolder throwableHolder = (ThrowableHolder)result;
 
-			throw throwableHolder.getThrowable();
+				throw throwableHolder.getThrowable();
+			}
+
+			return result;
 		}
+		catch (ThrowableHolderException the) {
+			throw the.getCause();
+		}
+	}
 
-		return result;
+	protected TransactionCallback<Object> createTransactionCallback(
+		TransactionAttribute transactionAttribute,
+		MethodInvocation methodInvocation) {
+
+		return new CallbackPreferringTransactionCallback(
+			transactionAttribute, methodInvocation);
 	}
 
 	protected static class ThrowableHolder {
@@ -73,6 +88,14 @@ public class CallbackPreferringTransactionExecutor
 
 	}
 
+	protected static class ThrowableHolderException extends RuntimeException {
+
+		public ThrowableHolderException(Throwable cause) {
+			super(cause);
+		}
+
+	}
+
 	private class CallbackPreferringTransactionCallback
 		implements TransactionCallback<Object> {
 
@@ -84,6 +107,7 @@ public class CallbackPreferringTransactionExecutor
 			_methodInvocation = methodInvocation;
 		}
 
+		@Override
 		public Object doInTransaction(TransactionStatus transactionStatus) {
 			boolean newTransaction = transactionStatus.isNewTransaction();
 
@@ -119,7 +143,7 @@ public class CallbackPreferringTransactionExecutor
 						throw (RuntimeException)throwable;
 					}
 					else {
-						throw new RuntimeException(throwable);
+						throw new ThrowableHolderException(throwable);
 					}
 				}
 				else {

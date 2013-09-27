@@ -64,20 +64,15 @@ AUI.add(
 						var contentBox = instance.get('contentBox');
 
 						instance._avatar = contentBox.one('#' + randomNamespace + 'avatar');
-						instance._deleteLogoLink = contentBox.one('#' + portletNamespace + randomNamespace + 'deleteLogoLink');
+						instance._deleteLogoButton = contentBox.one('.delete-logo');
 						instance._deleteLogoInput = contentBox.one('#' + portletNamespace + 'deleteLogo');
 					},
 
 					bindUI: function() {
 						var instance = this;
 
-						instance.get('contentBox').delegate('click', instance._openEditLogoWindow, '.edit-logo-link', instance);
-
-						var deleteLogoLink = instance._deleteLogoLink;
-
-						if (deleteLogoLink) {
-							deleteLogoLink.on('click', instance._onDeleteLogoClick, instance);
-						}
+						instance.get('contentBox').delegate('click', instance._openEditLogoWindow, '.edit-logo', instance);
+						instance.get('contentBox').delegate('click', instance._onDeleteLogoClick, '.delete-logo', instance);
 					},
 
 					_changeLogo: function(url) {
@@ -97,9 +92,19 @@ AUI.add(
 
 						var editLogoURL = instance.get('editLogoURL');
 
-						var editLogoWindow = window.open(editLogoURL, 'changeLogo', 'directories=no,height=400,location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,toolbar=no,width=500');
+						Liferay.Util.openWindow(
+							{
+								dialog: {
+									destroyOnHide: true,
+									width: 600
+								},
+								id: instance._portletNamespace + 'changeLogo',
+								title: Liferay.Language.get('upload-image'),
+								uri: editLogoURL
+							}
+						);
 
-						editLogoWindow.focus();
+						event.preventDefault();
 					},
 
 					_uiSetLogoURL: function(value, src) {
@@ -117,7 +122,7 @@ AUI.add(
 						}
 
 						instance._deleteLogoInput.val(deleteLogo);
-						instance._deleteLogoLink.get('parentNode').toggle(!deleteLogo);
+						instance._deleteLogoButton.attr('disabled', deleteLogo ? 'disabled' : '');
 					}
 				}
 			}
@@ -127,6 +132,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-base']
+		requires: ['aui-base', 'liferay-util-window']
 	}
 );

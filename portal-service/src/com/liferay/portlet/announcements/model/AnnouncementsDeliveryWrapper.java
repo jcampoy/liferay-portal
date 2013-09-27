@@ -14,6 +14,7 @@
 
 package com.liferay.portlet.announcements.model;
 
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.ModelWrapper;
 
 import java.util.HashMap;
@@ -24,8 +25,8 @@ import java.util.Map;
  * This class is a wrapper for {@link AnnouncementsDelivery}.
  * </p>
  *
- * @author    Brian Wing Shun Chan
- * @see       AnnouncementsDelivery
+ * @author Brian Wing Shun Chan
+ * @see AnnouncementsDelivery
  * @generated
  */
 public class AnnouncementsDeliveryWrapper implements AnnouncementsDelivery,
@@ -35,14 +36,17 @@ public class AnnouncementsDeliveryWrapper implements AnnouncementsDelivery,
 		_announcementsDelivery = announcementsDelivery;
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return AnnouncementsDelivery.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return AnnouncementsDelivery.class.getName();
 	}
 
+	@Override
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
@@ -57,6 +61,7 @@ public class AnnouncementsDeliveryWrapper implements AnnouncementsDelivery,
 		return attributes;
 	}
 
+	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
 		Long deliveryId = (Long)attributes.get("deliveryId");
 
@@ -106,6 +111,7 @@ public class AnnouncementsDeliveryWrapper implements AnnouncementsDelivery,
 	*
 	* @return the primary key of this announcements delivery
 	*/
+	@Override
 	public long getPrimaryKey() {
 		return _announcementsDelivery.getPrimaryKey();
 	}
@@ -115,6 +121,7 @@ public class AnnouncementsDeliveryWrapper implements AnnouncementsDelivery,
 	*
 	* @param primaryKey the primary key of this announcements delivery
 	*/
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_announcementsDelivery.setPrimaryKey(primaryKey);
 	}
@@ -124,6 +131,7 @@ public class AnnouncementsDeliveryWrapper implements AnnouncementsDelivery,
 	*
 	* @return the delivery ID of this announcements delivery
 	*/
+	@Override
 	public long getDeliveryId() {
 		return _announcementsDelivery.getDeliveryId();
 	}
@@ -133,6 +141,7 @@ public class AnnouncementsDeliveryWrapper implements AnnouncementsDelivery,
 	*
 	* @param deliveryId the delivery ID of this announcements delivery
 	*/
+	@Override
 	public void setDeliveryId(long deliveryId) {
 		_announcementsDelivery.setDeliveryId(deliveryId);
 	}
@@ -142,6 +151,7 @@ public class AnnouncementsDeliveryWrapper implements AnnouncementsDelivery,
 	*
 	* @return the company ID of this announcements delivery
 	*/
+	@Override
 	public long getCompanyId() {
 		return _announcementsDelivery.getCompanyId();
 	}
@@ -151,6 +161,7 @@ public class AnnouncementsDeliveryWrapper implements AnnouncementsDelivery,
 	*
 	* @param companyId the company ID of this announcements delivery
 	*/
+	@Override
 	public void setCompanyId(long companyId) {
 		_announcementsDelivery.setCompanyId(companyId);
 	}
@@ -160,6 +171,7 @@ public class AnnouncementsDeliveryWrapper implements AnnouncementsDelivery,
 	*
 	* @return the user ID of this announcements delivery
 	*/
+	@Override
 	public long getUserId() {
 		return _announcementsDelivery.getUserId();
 	}
@@ -169,6 +181,7 @@ public class AnnouncementsDeliveryWrapper implements AnnouncementsDelivery,
 	*
 	* @param userId the user ID of this announcements delivery
 	*/
+	@Override
 	public void setUserId(long userId) {
 		_announcementsDelivery.setUserId(userId);
 	}
@@ -179,6 +192,7 @@ public class AnnouncementsDeliveryWrapper implements AnnouncementsDelivery,
 	* @return the user uuid of this announcements delivery
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.lang.String getUserUuid()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _announcementsDelivery.getUserUuid();
@@ -189,6 +203,7 @@ public class AnnouncementsDeliveryWrapper implements AnnouncementsDelivery,
 	*
 	* @param userUuid the user uuid of this announcements delivery
 	*/
+	@Override
 	public void setUserUuid(java.lang.String userUuid) {
 		_announcementsDelivery.setUserUuid(userUuid);
 	}
@@ -198,6 +213,7 @@ public class AnnouncementsDeliveryWrapper implements AnnouncementsDelivery,
 	*
 	* @return the type of this announcements delivery
 	*/
+	@Override
 	public java.lang.String getType() {
 		return _announcementsDelivery.getType();
 	}
@@ -207,6 +223,7 @@ public class AnnouncementsDeliveryWrapper implements AnnouncementsDelivery,
 	*
 	* @param type the type of this announcements delivery
 	*/
+	@Override
 	public void setType(java.lang.String type) {
 		_announcementsDelivery.setType(type);
 	}
@@ -216,6 +233,7 @@ public class AnnouncementsDeliveryWrapper implements AnnouncementsDelivery,
 	*
 	* @return the email of this announcements delivery
 	*/
+	@Override
 	public boolean getEmail() {
 		return _announcementsDelivery.getEmail();
 	}
@@ -225,6 +243,7 @@ public class AnnouncementsDeliveryWrapper implements AnnouncementsDelivery,
 	*
 	* @return <code>true</code> if this announcements delivery is email; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isEmail() {
 		return _announcementsDelivery.isEmail();
 	}
@@ -234,6 +253,7 @@ public class AnnouncementsDeliveryWrapper implements AnnouncementsDelivery,
 	*
 	* @param email the email of this announcements delivery
 	*/
+	@Override
 	public void setEmail(boolean email) {
 		_announcementsDelivery.setEmail(email);
 	}
@@ -243,6 +263,7 @@ public class AnnouncementsDeliveryWrapper implements AnnouncementsDelivery,
 	*
 	* @return the sms of this announcements delivery
 	*/
+	@Override
 	public boolean getSms() {
 		return _announcementsDelivery.getSms();
 	}
@@ -252,6 +273,7 @@ public class AnnouncementsDeliveryWrapper implements AnnouncementsDelivery,
 	*
 	* @return <code>true</code> if this announcements delivery is sms; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isSms() {
 		return _announcementsDelivery.isSms();
 	}
@@ -261,6 +283,7 @@ public class AnnouncementsDeliveryWrapper implements AnnouncementsDelivery,
 	*
 	* @param sms the sms of this announcements delivery
 	*/
+	@Override
 	public void setSms(boolean sms) {
 		_announcementsDelivery.setSms(sms);
 	}
@@ -270,6 +293,7 @@ public class AnnouncementsDeliveryWrapper implements AnnouncementsDelivery,
 	*
 	* @return the website of this announcements delivery
 	*/
+	@Override
 	public boolean getWebsite() {
 		return _announcementsDelivery.getWebsite();
 	}
@@ -279,6 +303,7 @@ public class AnnouncementsDeliveryWrapper implements AnnouncementsDelivery,
 	*
 	* @return <code>true</code> if this announcements delivery is website; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isWebsite() {
 		return _announcementsDelivery.isWebsite();
 	}
@@ -288,52 +313,64 @@ public class AnnouncementsDeliveryWrapper implements AnnouncementsDelivery,
 	*
 	* @param website the website of this announcements delivery
 	*/
+	@Override
 	public void setWebsite(boolean website) {
 		_announcementsDelivery.setWebsite(website);
 	}
 
+	@Override
 	public boolean isNew() {
 		return _announcementsDelivery.isNew();
 	}
 
+	@Override
 	public void setNew(boolean n) {
 		_announcementsDelivery.setNew(n);
 	}
 
+	@Override
 	public boolean isCachedModel() {
 		return _announcementsDelivery.isCachedModel();
 	}
 
+	@Override
 	public void setCachedModel(boolean cachedModel) {
 		_announcementsDelivery.setCachedModel(cachedModel);
 	}
 
+	@Override
 	public boolean isEscapedModel() {
 		return _announcementsDelivery.isEscapedModel();
 	}
 
+	@Override
 	public java.io.Serializable getPrimaryKeyObj() {
 		return _announcementsDelivery.getPrimaryKeyObj();
 	}
 
+	@Override
 	public void setPrimaryKeyObj(java.io.Serializable primaryKeyObj) {
 		_announcementsDelivery.setPrimaryKeyObj(primaryKeyObj);
 	}
 
+	@Override
 	public com.liferay.portlet.expando.model.ExpandoBridge getExpandoBridge() {
 		return _announcementsDelivery.getExpandoBridge();
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.model.BaseModel<?> baseModel) {
 		_announcementsDelivery.setExpandoBridgeAttributes(baseModel);
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
 		_announcementsDelivery.setExpandoBridgeAttributes(expandoBridge);
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_announcementsDelivery.setExpandoBridgeAttributes(serviceContext);
@@ -344,6 +381,7 @@ public class AnnouncementsDeliveryWrapper implements AnnouncementsDelivery,
 		return new AnnouncementsDeliveryWrapper((AnnouncementsDelivery)_announcementsDelivery.clone());
 	}
 
+	@Override
 	public int compareTo(
 		com.liferay.portlet.announcements.model.AnnouncementsDelivery announcementsDelivery) {
 		return _announcementsDelivery.compareTo(announcementsDelivery);
@@ -354,14 +392,17 @@ public class AnnouncementsDeliveryWrapper implements AnnouncementsDelivery,
 		return _announcementsDelivery.hashCode();
 	}
 
+	@Override
 	public com.liferay.portal.model.CacheModel<com.liferay.portlet.announcements.model.AnnouncementsDelivery> toCacheModel() {
 		return _announcementsDelivery.toCacheModel();
 	}
 
+	@Override
 	public com.liferay.portlet.announcements.model.AnnouncementsDelivery toEscapedModel() {
 		return new AnnouncementsDeliveryWrapper(_announcementsDelivery.toEscapedModel());
 	}
 
+	@Override
 	public com.liferay.portlet.announcements.model.AnnouncementsDelivery toUnescapedModel() {
 		return new AnnouncementsDeliveryWrapper(_announcementsDelivery.toUnescapedModel());
 	}
@@ -371,13 +412,35 @@ public class AnnouncementsDeliveryWrapper implements AnnouncementsDelivery,
 		return _announcementsDelivery.toString();
 	}
 
+	@Override
 	public java.lang.String toXmlString() {
 		return _announcementsDelivery.toXmlString();
 	}
 
+	@Override
 	public void persist()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_announcementsDelivery.persist();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof AnnouncementsDeliveryWrapper)) {
+			return false;
+		}
+
+		AnnouncementsDeliveryWrapper announcementsDeliveryWrapper = (AnnouncementsDeliveryWrapper)obj;
+
+		if (Validator.equals(_announcementsDelivery,
+					announcementsDeliveryWrapper._announcementsDelivery)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -387,10 +450,12 @@ public class AnnouncementsDeliveryWrapper implements AnnouncementsDelivery,
 		return _announcementsDelivery;
 	}
 
+	@Override
 	public AnnouncementsDelivery getWrappedModel() {
 		return _announcementsDelivery;
 	}
 
+	@Override
 	public void resetOriginalValues() {
 		_announcementsDelivery.resetOriginalValues();
 	}

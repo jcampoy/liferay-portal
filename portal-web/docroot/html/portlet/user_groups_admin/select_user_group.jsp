@@ -45,7 +45,7 @@ portletURL.setParameter("eventName", eventName);
 		/>
 
 		<%
-		UserGroupSearchTerms searchTerms = (UserGroupSearchTerms)searchContainer.getSearchTerms();
+		UserGroupDisplayTerms searchTerms = (UserGroupDisplayTerms)searchContainer.getSearchTerms();
 		%>
 
 		<liferay-ui:search-container-results>
@@ -56,16 +56,19 @@ portletURL.setParameter("eventName", eventName);
 
 				userGroups = UsersAdminUtil.filterUserGroups(permissionChecker, userGroups);
 
-				total = userGroups.size();
+				searchContainer.setTotal(userGroups.size());
+
 				results = ListUtil.subList(userGroups, searchContainer.getStart(), searchContainer.getEnd());
 			}
 			else {
-				results = UserGroupLocalServiceUtil.search(company.getCompanyId(), searchTerms.getKeywords(), null, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
 				total = UserGroupLocalServiceUtil.searchCount(company.getCompanyId(), searchTerms.getKeywords(), null);
+
+				searchContainer.setTotal(total);
+
+				results = UserGroupLocalServiceUtil.search(company.getCompanyId(), searchTerms.getKeywords(), null, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
 			}
 
-			pageContext.setAttribute("results", results);
-			pageContext.setAttribute("total", total);
+			searchContainer.setResults(results);
 			%>
 
 		</liferay-ui:search-container-results>
@@ -105,10 +108,6 @@ portletURL.setParameter("eventName", eventName);
 	</liferay-ui:search-container>
 </aui:form>
 
-<aui:script>
-	Liferay.Util.focusFormField(document.<portlet:namespace />selectUserGroupFm.<portlet:namespace />name);
-</aui:script>
-
 <aui:script use="aui-base">
 	var Util = Liferay.Util;
 
@@ -119,8 +118,8 @@ portletURL.setParameter("eventName", eventName);
 
 			Util.getOpener().Liferay.fire('<%= HtmlUtil.escapeJS(eventName) %>', result);
 
-			Util.getWindow().close();
+			Util.getWindow().hide();
 		},
-		'.selector-button input'
+		'.selector-button'
 	);
 </aui:script>

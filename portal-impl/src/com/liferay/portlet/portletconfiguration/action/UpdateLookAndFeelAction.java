@@ -29,6 +29,7 @@ import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.service.permission.PortletPermissionUtil;
 import com.liferay.portal.struts.JSONAction;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.util.WebKeys;
 import com.liferay.portlet.InvokerPortletImpl;
 import com.liferay.portlet.PortletPreferencesFactoryUtil;
@@ -52,8 +53,8 @@ public class UpdateLookAndFeelAction extends JSONAction {
 
 	@Override
 	public String getJSON(
-			ActionMapping mapping, ActionForm form, HttpServletRequest request,
-			HttpServletResponse response)
+			ActionMapping actionMapping, ActionForm actionForm,
+			HttpServletRequest request, HttpServletResponse response)
 		throws Exception {
 
 		HttpSession session = request.getSession();
@@ -76,7 +77,7 @@ public class UpdateLookAndFeelAction extends JSONAction {
 		}
 
 		PortletPreferences portletSetup =
-			PortletPreferencesFactoryUtil.getLayoutPortletSetup(
+			PortletPreferencesFactoryUtil.getStrictLayoutPortletSetup(
 				layout, portletId);
 
 		String css = ParamUtil.getString(request, "css");
@@ -100,7 +101,8 @@ public class UpdateLookAndFeelAction extends JSONAction {
 
 		JSONObject titles = portletData.getJSONObject("titles");
 
-		Locale[] locales = LanguageUtil.getAvailableLocales();
+		Locale[] locales = LanguageUtil.getAvailableLocales(
+			themeDisplay.getSiteGroupId());
 
 		for (int i = 0; i < locales.length; i++) {
 			String languageId = LocaleUtil.toLanguageId(locales[i]);
@@ -142,14 +144,21 @@ public class UpdateLookAndFeelAction extends JSONAction {
 
 		portletSetup.setValue("portletSetupCss", css);
 
-		JSONObject wapData = jsonObj.getJSONObject("wapData");
+		if (PropsValues.MOBILE_DEVICE_STYLING_WAP_ENABLED) {
+			JSONObject wapData = jsonObj.getJSONObject("wapData");
 
-		String wapTitle = wapData.getString("title");
-		String wapInitialWindowState = wapData.getString("initialWindowState");
+			String wapInitialWindowState = wapData.getString(
+				"initialWindowState");
+			String wapTitle = wapData.getString("title");
 
-		portletSetup.setValue("lfrWapTitle", wapTitle);
-		portletSetup.setValue(
-			"lfrWapInitialWindowState", wapInitialWindowState);
+			portletSetup.setValue(
+				"lfrWapInitialWindowState", wapInitialWindowState);
+			portletSetup.setValue("lfrWapTitle", wapTitle);
+		}
+		else {
+			portletSetup.reset("lfrWapInitialWindowState");
+			portletSetup.reset("lfrWapTitle");
+		}
 
 		portletSetup.store();
 

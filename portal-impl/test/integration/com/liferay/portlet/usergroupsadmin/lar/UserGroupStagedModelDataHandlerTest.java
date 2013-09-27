@@ -23,7 +23,7 @@ import com.liferay.portal.service.UserGroupLocalServiceUtil;
 import com.liferay.portal.test.LiferayIntegrationJUnitTestRunner;
 import com.liferay.portal.test.MainServletExecutionTestListener;
 import com.liferay.portal.test.TransactionalExecutionTestListener;
-import com.liferay.portal.util.dependencies.UserGroupTestUtil;
+import com.liferay.portal.util.UserGroupTestUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -49,6 +49,16 @@ public class UserGroupStagedModelDataHandlerTest
 		throws Exception {
 
 		return UserGroupTestUtil.addUserGroup();
+	}
+
+	@Override
+	protected void deleteStagedModel(
+			StagedModel stagedModel,
+			Map<String, List<StagedModel>> dependentStagedModelsMap,
+			Group group)
+		throws Exception {
+
+		UserGroupLocalServiceUtil.deleteUserGroup((UserGroup)stagedModel);
 	}
 
 	@Override

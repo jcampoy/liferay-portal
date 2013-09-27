@@ -22,6 +22,7 @@ import com.liferay.portal.configuration.easyconf.ClassLoaderComponentConfigurati
 import com.liferay.portal.kernel.configuration.Filter;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.PropertiesUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.Validator;
@@ -77,6 +78,7 @@ public class ConfigurationImpl
 		printSources(companyId, webId);
 	}
 
+	@Override
 	public void addProperties(Properties properties) {
 		try {
 			ComponentProperties componentProperties =
@@ -118,10 +120,12 @@ public class ConfigurationImpl
 		}
 	}
 
+	@Override
 	public void clearCache() {
 		_values.clear();
 	}
 
+	@Override
 	public boolean contains(String key) {
 		Object value = _values.get(key);
 
@@ -144,6 +148,7 @@ public class ConfigurationImpl
 		return true;
 	}
 
+	@Override
 	public String get(String key) {
 		Object value = _values.get(key);
 
@@ -169,6 +174,7 @@ public class ConfigurationImpl
 		return null;
 	}
 
+	@Override
 	public String get(String key, Filter filter) {
 		String filterCacheKey = buildFilterCacheKey(key, filter, false);
 
@@ -200,6 +206,7 @@ public class ConfigurationImpl
 		return null;
 	}
 
+	@Override
 	public String[] getArray(String key) {
 		String cacheKey = _ARRAY_KEY_PREFIX.concat(key);
 
@@ -220,6 +227,7 @@ public class ConfigurationImpl
 		return _emptyArray;
 	}
 
+	@Override
 	public String[] getArray(String key, Filter filter) {
 		String filterCacheKey = buildFilterCacheKey(key, filter, true);
 
@@ -245,6 +253,7 @@ public class ConfigurationImpl
 		return _emptyArray;
 	}
 
+	@Override
 	public Properties getProperties() {
 
 		// For some strange reason, componentProperties.getProperties() returns
@@ -274,12 +283,14 @@ public class ConfigurationImpl
 		return properties;
 	}
 
+	@Override
 	public Properties getProperties(String prefix, boolean removePrefix) {
 		Properties properties = getProperties();
 
 		return PropertiesUtil.getProperties(properties, prefix, removePrefix);
 	}
 
+	@Override
 	public void removeProperties(Properties properties) {
 		try {
 			ComponentProperties componentProperties =
@@ -328,6 +339,7 @@ public class ConfigurationImpl
 		}
 	}
 
+	@Override
 	public void set(String key, String value) {
 		ComponentProperties componentProperties = getComponentProperties();
 
@@ -373,7 +385,7 @@ public class ConfigurationImpl
 
 		Object value = _nullValue;
 
-		if ((array != null) && (array.length > 0)) {
+		if (ArrayUtil.isNotEmpty(array)) {
 
 			// Commons Configuration parses an empty property into a String
 			// array with one String containing one space. It also leaves a

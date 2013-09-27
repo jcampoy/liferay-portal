@@ -17,8 +17,9 @@ package com.liferay.portal.security.pwd;
 import com.liferay.portal.UserPasswordException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.security.RandomUtil;
+import com.liferay.portal.kernel.security.SecureRandomUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
-import com.liferay.portal.kernel.util.Randomizer;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.PasswordPolicy;
@@ -31,6 +32,7 @@ import com.liferay.util.PwdGenerator;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Random;
 
 /**
  * @author Scott Lee
@@ -125,58 +127,62 @@ public class PasswordPolicyToolkit extends BasicToolkit {
 				UserPasswordException.PASSWORD_NOT_CHANGEABLE);
 		}
 
-		if (userId != 0) {
-			User user = UserLocalServiceUtil.getUserById(userId);
+		if (userId == 0) {
+			return;
+		}
 
-			Date passwordModfiedDate = user.getPasswordModifiedDate();
+		User user = UserLocalServiceUtil.getUserById(userId);
 
-			if (passwordModfiedDate != null) {
+		Date passwordModfiedDate = user.getPasswordModifiedDate();
 
-				// LEP-2961
+		if (passwordModfiedDate != null) {
 
-				Date now = new Date();
+			// LEP-2961
 
-				long passwordModificationElapsedTime =
-					now.getTime() - passwordModfiedDate.getTime();
+			Date now = new Date();
 
-				long userCreationElapsedTime =
-					now.getTime() - user.getCreateDate().getTime();
+			long passwordModificationElapsedTime =
+				now.getTime() - passwordModfiedDate.getTime();
 
-				long minAge = passwordPolicy.getMinAge() * 1000;
+			long userCreationElapsedTime =
+				now.getTime() - user.getCreateDate().getTime();
 
-				if ((passwordModificationElapsedTime < minAge) &&
-					(userCreationElapsedTime > minAge)) {
+			long minAge = passwordPolicy.getMinAge() * 1000;
 
-					throw new UserPasswordException(
-						UserPasswordException.PASSWORD_TOO_YOUNG);
-				}
+			if ((passwordModificationElapsedTime < minAge) &&
+				(userCreationElapsedTime > minAge)) {
+
+				throw new UserPasswordException(
+					UserPasswordException.PASSWORD_TOO_YOUNG);
 			}
+		}
 
-			if (PasswordTrackerLocalServiceUtil.isSameAsCurrentPassword(
+		if (PasswordTrackerLocalServiceUtil.isSameAsCurrentPassword(
+				userId, password1)) {
+
+			throw new UserPasswordException(
+				UserPasswordException.PASSWORD_SAME_AS_CURRENT);
+		}
+		else if (!PasswordTrackerLocalServiceUtil.isValidPassword(
 					userId, password1)) {
 
-				throw new UserPasswordException(
-					UserPasswordException.PASSWORD_SAME_AS_CURRENT);
-			}
-			else if (!PasswordTrackerLocalServiceUtil.isValidPassword(
-						userId, password1)) {
-
-				throw new UserPasswordException(
-					UserPasswordException.PASSWORD_ALREADY_USED);
-			}
+			throw new UserPasswordException(
+				UserPasswordException.PASSWORD_ALREADY_USED);
 		}
 	}
 
 	protected String generateDynamic(PasswordPolicy passwordPolicy) {
-		int alphanumericMinLength = Math.max(
-			passwordPolicy.getMinAlphanumeric(),
+		int alphanumericActualMinLength =
 			passwordPolicy.getMinLowerCase() + passwordPolicy.getMinNumbers() +
-				passwordPolicy.getMinUpperCase());
+				passwordPolicy.getMinUpperCase();
+
+		int alphanumericMinLength = Math.max(
+			passwordPolicy.getMinAlphanumeric(), alphanumericActualMinLength);
 		int passwordMinLength = Math.max(
 			passwordPolicy.getMinLength(),
 			alphanumericMinLength + passwordPolicy.getMinSymbols());
 
-		StringBundler sb = new StringBundler(passwordMinLength);
+		StringBundler sb = new StringBundler(6);
 
 		if (passwordPolicy.getMinLowerCase() > 0) {
 			sb.append(
@@ -202,9 +208,8 @@ public class PasswordPolicyToolkit extends BasicToolkit {
 					passwordPolicy.getMinUpperCase(), _upperCaseCharsetArray));
 		}
 
-		if (alphanumericMinLength > passwordPolicy.getMinAlphanumeric()) {
-			int count =
-				alphanumericMinLength - passwordPolicy.getMinAlphanumeric();
+		if (alphanumericMinLength > alphanumericActualMinLength) {
+			int count = alphanumericMinLength - alphanumericActualMinLength;
 
 			sb.append(getRandomString(count, _alphanumericCharsetArray));
 		}
@@ -216,12 +221,18 @@ public class PasswordPolicyToolkit extends BasicToolkit {
 				passwordMinLength -
 					(alphanumericMinLength + passwordPolicy.getMinSymbols());
 
-			sb.append(PwdGenerator.getSecurePassword(_completeCharset, count));
+			sb.append(PwdGenerator.getPassword(_completeCharset, count));
 		}
 
-		Randomizer randomizer = Randomizer.getInstance();
+		if (sb.index() == 0) {
+			sb.append(
+				PwdGenerator.getPassword(
+					_completeCharset,
+					PropsValues.PASSWORDS_DEFAULT_POLICY_MIN_LENGTH));
+		}
 
-		return randomizer.randomize(sb.toString());
+		return RandomUtil.shuffle(
+			new Random(SecureRandomUtil.nextLong()), sb.toString());
 	}
 
 	protected String generateStatic(PasswordPolicy passwordPolicy) {
@@ -229,12 +240,12 @@ public class PasswordPolicyToolkit extends BasicToolkit {
 	}
 
 	protected String getRandomString(int count, char[] chars) {
+		Random random = new Random(SecureRandomUtil.nextInt());
+
 		StringBundler sb = new StringBundler(count);
 
-		Randomizer randomizer = Randomizer.getInstance();
-
 		for (int i = 0; i < count; i++) {
-			int index = randomizer.nextInt(chars.length);
+			int index = random.nextInt(chars.length);
 
 			sb.append(chars[index]);
 		}

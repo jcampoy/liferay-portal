@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dao.orm.Type;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -117,6 +118,7 @@ public class UserFinderImpl
 	public static final String JOIN_BY_SOCIAL_RELATION_TYPE =
 		UserFinder.class.getName() + ".joinBySocialRelationType";
 
+	@Override
 	public int countByUser(long userId, LinkedHashMap<String, Object> params)
 		throws SystemException {
 
@@ -159,6 +161,7 @@ public class UserFinderImpl
 		}
 	}
 
+	@Override
 	public int countByKeywords(
 			long companyId, String keywords, int status,
 			LinkedHashMap<String, Object> params)
@@ -187,6 +190,7 @@ public class UserFinderImpl
 			emailAddresses, status, params, andOperator);
 	}
 
+	@Override
 	public int countByC_FN_MN_LN_SN_EA_S(
 			long companyId, String firstName, String middleName,
 			String lastName, String screenName, String emailAddress, int status,
@@ -204,6 +208,7 @@ public class UserFinderImpl
 			emailAddresses, status, params, andOperator);
 	}
 
+	@Override
 	public int countByC_FN_MN_LN_SN_EA_S(
 			long companyId, String[] firstNames, String[] middleNames,
 			String[] lastNames, String[] screenNames, String[] emailAddresses,
@@ -255,7 +260,7 @@ public class UserFinderImpl
 
 		boolean inherit = GetterUtil.getBoolean(params.get("inherit"));
 
-		boolean doUnionOnGroup = Validator.isNotNull(groupIds) && inherit;
+		boolean doUnionOnGroup = ArrayUtil.isNotEmpty(groupIds) && inherit;
 
 		if (doUnionOnGroup) {
 			params2 = new LinkedHashMap<String, Object>(params1);
@@ -299,7 +304,7 @@ public class UserFinderImpl
 				userGroupIds.toArray(new Long[userGroupIds.size()]));
 		}
 
-		boolean doUnionOnRole = Validator.isNotNull(roleIds) && inherit;
+		boolean doUnionOnRole = ArrayUtil.isNotEmpty(roleIds) && inherit;
 
 		if (doUnionOnRole) {
 			params2 = new LinkedHashMap<String, Object>(params1);
@@ -359,6 +364,7 @@ public class UserFinderImpl
 		}
 	}
 
+	@Override
 	public List<User> findByKeywords(
 			long companyId, String keywords, int status,
 			LinkedHashMap<String, Object> params, int start, int end,
@@ -388,6 +394,7 @@ public class UserFinderImpl
 			emailAddresses, status, params, andOperator, start, end, obc);
 	}
 
+	@Override
 	public List<User> findByNoAnnouncementsDeliveries(String type)
 		throws SystemException {
 
@@ -416,6 +423,7 @@ public class UserFinderImpl
 		}
 	}
 
+	@Override
 	public List<User> findByNoContacts() throws SystemException {
 		Session session = null;
 
@@ -438,6 +446,7 @@ public class UserFinderImpl
 		}
 	}
 
+	@Override
 	public List<User> findByNoGroups() throws SystemException {
 		Session session = null;
 
@@ -460,6 +469,7 @@ public class UserFinderImpl
 		}
 	}
 
+	@Override
 	public List<User> findByC_FN_MN_LN_SN_EA_S(
 			long companyId, String firstName, String middleName,
 			String lastName, String screenName, String emailAddress, int status,
@@ -478,6 +488,7 @@ public class UserFinderImpl
 			emailAddresses, status, params, andOperator, start, end, obc);
 	}
 
+	@Override
 	public List<User> findByC_FN_MN_LN_SN_EA_S(
 			long companyId, String[] firstNames, String[] middleNames,
 			String[] lastNames, String[] screenNames, String[] emailAddresses,
@@ -529,7 +540,7 @@ public class UserFinderImpl
 
 		boolean inherit = GetterUtil.getBoolean(params.get("inherit"));
 
-		boolean doUnionOnGroup = Validator.isNotNull(groupIds) && inherit;
+		boolean doUnionOnGroup = ArrayUtil.isNotEmpty(groupIds) && inherit;
 
 		if (doUnionOnGroup) {
 			params2 = new LinkedHashMap<String, Object>(params1);
@@ -573,7 +584,7 @@ public class UserFinderImpl
 				userGroupIds.toArray(new Long[userGroupIds.size()]));
 		}
 
-		boolean doUnionOnRole = Validator.isNotNull(roleIds) && inherit;
+		boolean doUnionOnRole = ArrayUtil.isNotEmpty(roleIds) && inherit;
 
 		if (doUnionOnRole) {
 			params2 = new LinkedHashMap<String, Object>(params1);

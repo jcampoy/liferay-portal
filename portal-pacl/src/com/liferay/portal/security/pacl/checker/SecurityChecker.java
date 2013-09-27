@@ -16,19 +16,20 @@ package com.liferay.portal.security.pacl.checker;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.security.pacl.Reflection;
 
 import java.security.Permission;
-
-import sun.reflect.Reflection;
 
 /**
  * @author Brian Wing Shun Chan
  */
 public class SecurityChecker extends BaseChecker {
 
+	@Override
 	public void afterPropertiesSet() {
 	}
 
+	@Override
 	public boolean implies(Permission permission) {
 		String name = permission.getName();
 
@@ -63,7 +64,8 @@ public class SecurityChecker extends BaseChecker {
 	}
 
 	protected boolean hasGetPolicy(Permission permission) {
-		int stackIndex = getStackIndex(11, 11, 10);
+		int stackIndex = Reflection.getStackIndex(
+			new int[] {11, 11}, new int[] {11, 10});
 
 		Class<?> callerClass = Reflection.getCallerClass(stackIndex);
 
@@ -77,7 +79,8 @@ public class SecurityChecker extends BaseChecker {
 	}
 
 	protected boolean hasSetPolicy(Permission permission) {
-		int stackIndex = getStackIndex(11, 11, 10);
+		int stackIndex = Reflection.getStackIndex(
+			new int[] {11, 11}, new int[] {11, 10});
 
 		Class<?> callerClass = Reflection.getCallerClass(stackIndex);
 

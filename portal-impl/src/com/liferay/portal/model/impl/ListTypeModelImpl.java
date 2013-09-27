@@ -126,26 +126,32 @@ public class ListTypeModelImpl extends BaseModelImpl<ListType>
 	public ListTypeModelImpl() {
 	}
 
+	@Override
 	public int getPrimaryKey() {
 		return _listTypeId;
 	}
 
+	@Override
 	public void setPrimaryKey(int primaryKey) {
 		setListTypeId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
 		return _listTypeId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Integer)primaryKeyObj).intValue());
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return ListType.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return ListType.class.getName();
 	}
@@ -183,15 +189,18 @@ public class ListTypeModelImpl extends BaseModelImpl<ListType>
 	}
 
 	@JSON
+	@Override
 	public int getListTypeId() {
 		return _listTypeId;
 	}
 
+	@Override
 	public void setListTypeId(int listTypeId) {
 		_listTypeId = listTypeId;
 	}
 
 	@JSON
+	@Override
 	public String getName() {
 		if (_name == null) {
 			return StringPool.BLANK;
@@ -201,6 +210,7 @@ public class ListTypeModelImpl extends BaseModelImpl<ListType>
 		}
 	}
 
+	@Override
 	public void setName(String name) {
 		_columnBitmask = -1L;
 
@@ -208,6 +218,7 @@ public class ListTypeModelImpl extends BaseModelImpl<ListType>
 	}
 
 	@JSON
+	@Override
 	public String getType() {
 		if (_type == null) {
 			return StringPool.BLANK;
@@ -217,6 +228,7 @@ public class ListTypeModelImpl extends BaseModelImpl<ListType>
 		}
 	}
 
+	@Override
 	public void setType(String type) {
 		_columnBitmask |= TYPE_COLUMN_BITMASK;
 
@@ -258,6 +270,7 @@ public class ListTypeModelImpl extends BaseModelImpl<ListType>
 		return listTypeImpl;
 	}
 
+	@Override
 	public int compareTo(ListType listType) {
 		int value = 0;
 
@@ -272,18 +285,15 @@ public class ListTypeModelImpl extends BaseModelImpl<ListType>
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof ListType)) {
 			return false;
 		}
 
-		ListType listType = null;
-
-		try {
-			listType = (ListType)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		ListType listType = (ListType)obj;
 
 		int primaryKey = listType.getPrimaryKey();
 
@@ -349,6 +359,7 @@ public class ListTypeModelImpl extends BaseModelImpl<ListType>
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(13);
 

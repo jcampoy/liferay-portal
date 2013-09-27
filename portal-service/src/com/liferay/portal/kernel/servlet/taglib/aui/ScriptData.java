@@ -16,6 +16,7 @@ package com.liferay.portal.kernel.servlet.taglib.aui;
 
 import com.liferay.portal.kernel.servlet.BrowserSnifferUtil;
 import com.liferay.portal.kernel.util.Mergeable;
+import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -25,8 +26,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
@@ -54,16 +55,12 @@ public class ScriptData implements Mergeable<ScriptData>, Serializable {
 
 	public void mark() {
 		for (PortletData portletData : _portletDataMap.values()) {
-			StringBundler callbackSB = portletData._callbackSB;
-
-			_sbIndexMap.put(callbackSB, callbackSB.index());
-
-			StringBundler rawSB = portletData._rawSB;
-
-			_sbIndexMap.put(rawSB, rawSB.index());
+			_addToSBIndexList(portletData._callbackSB);
+			_addToSBIndexList(portletData._rawSB);
 		}
 	}
 
+	@Override
 	public ScriptData merge(ScriptData scriptData) {
 		if ((scriptData != null) && (scriptData != this)) {
 			_portletDataMap.putAll(scriptData._portletDataMap);
@@ -73,10 +70,10 @@ public class ScriptData implements Mergeable<ScriptData>, Serializable {
 	}
 
 	public void reset() {
-		for (Map.Entry<StringBundler, Integer> entry : _sbIndexMap.entrySet()) {
-			StringBundler sb = entry.getKey();
+		for (ObjectValuePair<StringBundler, Integer> ovp : _sbIndexList) {
+			StringBundler sb = ovp.getKey();
 
-			sb.setIndex(entry.getValue());
+			sb.setIndex(ovp.getValue());
 		}
 	}
 
@@ -93,40 +90,60 @@ public class ScriptData implements Mergeable<ScriptData>, Serializable {
 			callbackSB.append(portletData._callbackSB);
 		}
 
-		if (callbackSB.index() > 0) {
-			String loadMethod = "use";
+		if (callbackSB.index() == 0) {
+			writer.write("\n// ]]>\n</script>");
 
-			if (BrowserSnifferUtil.isIe(request) &&
-				(BrowserSnifferUtil.getMajorVersion(request) < 8)) {
-
-				loadMethod = "ready";
-			}
-
-			writer.write("AUI().");
-			writer.write(loadMethod);
-			writer.write("(");
-
-			Set<String> useSet = new TreeSet<String>();
-
-			for (PortletData portletData : _portletDataMap.values()) {
-				useSet.addAll(portletData._useSet);
-			}
-
-			for (String use : useSet) {
-				writer.write(StringPool.APOSTROPHE);
-				writer.write(use);
-				writer.write(StringPool.APOSTROPHE);
-				writer.write(StringPool.COMMA_AND_SPACE);
-			}
-
-			writer.write("function(A) {");
-
-			callbackSB.writeTo(writer);
-
-			writer.write("});");
+			return;
 		}
 
+		String loadMethod = "use";
+
+		if (BrowserSnifferUtil.isIe(request) &&
+			(BrowserSnifferUtil.getMajorVersion(request) < 8)) {
+
+			loadMethod = "ready";
+		}
+
+		writer.write("AUI().");
+		writer.write(loadMethod);
+		writer.write("(");
+
+		Set<String> useSet = new TreeSet<String>();
+
+		for (PortletData portletData : _portletDataMap.values()) {
+			useSet.addAll(portletData._useSet);
+		}
+
+		for (String use : useSet) {
+			writer.write(StringPool.APOSTROPHE);
+			writer.write(use);
+			writer.write(StringPool.APOSTROPHE);
+			writer.write(StringPool.COMMA_AND_SPACE);
+		}
+
+		writer.write("function(A) {");
+
+		callbackSB.writeTo(writer);
+
+		writer.write("});");
+
 		writer.write("\n// ]]>\n</script>");
+	}
+
+	private void _addToSBIndexList(StringBundler sb) {
+		ObjectValuePair<StringBundler, Integer> ovp =
+			new ObjectValuePair<StringBundler, Integer>(sb, sb.index());
+
+		int index = _sbIndexList.indexOf(ovp);
+
+		if (index == -1) {
+			_sbIndexList.add(ovp);
+		}
+		else {
+			ovp = _sbIndexList.get(index);
+
+			ovp.setValue(sb.index());
+		}
 	}
 
 	private PortletData _getPortletData(String portletId) {
@@ -154,8 +171,8 @@ public class ScriptData implements Mergeable<ScriptData>, Serializable {
 
 	private ConcurrentMap<String, PortletData> _portletDataMap =
 		new ConcurrentHashMap<String, PortletData>();
-	private Map<StringBundler, Integer> _sbIndexMap =
-		new HashMap<StringBundler, Integer>();
+	private List<ObjectValuePair<StringBundler, Integer>> _sbIndexList =
+		new ArrayList<ObjectValuePair<StringBundler, Integer>>();
 
 	private class PortletData implements Serializable {
 

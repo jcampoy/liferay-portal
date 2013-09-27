@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.dao.orm.Type;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UnmodifiableList;
 
 import java.lang.reflect.Field;
@@ -47,6 +48,7 @@ public class SQLQueryImpl extends QueryImpl implements SQLQuery {
 		sqlQuery = true;
 	}
 
+	@Override
 	public SQLQuery addEntity(String alias, Class<?> entityClass) {
 		String columnAliases = null;
 
@@ -90,10 +92,11 @@ public class SQLQueryImpl extends QueryImpl implements SQLQuery {
 		return this;
 	}
 
+	@Override
 	public SQLQuery addScalar(String columnAlias, Type type) {
-		columnAlias = columnAlias.toLowerCase();
+		columnAlias = StringUtil.toLowerCase(columnAlias);
 
-		String q = queryString.toLowerCase();
+		String q = StringUtil.toLowerCase(queryString);
 
 		int fromIndex = q.indexOf("from");
 
@@ -191,7 +194,7 @@ public class SQLQueryImpl extends QueryImpl implements SQLQuery {
 		for (Object[] row : tableColumns) {
 			String name = (String)row[0];
 
-			columns[i++] = name.toUpperCase();
+			columns[i++] = StringUtil.toUpperCase(name);
 		}
 
 		_entityColumns.put(entityClass, columns);

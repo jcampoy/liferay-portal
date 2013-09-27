@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.LiferayPortletURL;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
@@ -251,26 +252,28 @@ public class PortletURLUtil {
 
 		String ppid = ParamUtil.getString(request, "p_p_id");
 
-		if (ppid.equals(portletId)) {
-			String namespace = PortalUtil.getPortletNamespace(portletId);
+		if (!ppid.equals(portletId)) {
+			return sb.toString();
+		}
 
-			Map<String, String[]> parameters = request.getParameterMap();
+		String namespace = PortalUtil.getPortletNamespace(portletId);
 
-			for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
-				String name = entry.getKey();
+		Map<String, String[]> parameters = request.getParameterMap();
 
-				if (!PortalUtil.isReservedParameter(name) &&
-					!name.equals("currentURL") &&
-					!isRefreshURLReservedParameter(name, namespace)) {
+		for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
+			String name = entry.getKey();
 
-					String[] values = entry.getValue();
+			if (!PortalUtil.isReservedParameter(name) &&
+				!name.equals("currentURL") &&
+				!isRefreshURLReservedParameter(name, namespace)) {
 
-					for (int i = 0; i < values.length; i++) {
-						sb.append(StringPool.AMPERSAND);
-						sb.append(name);
-						sb.append(StringPool.EQUAL);
-						sb.append(HttpUtil.encodeURL(values[i]));
-					}
+				String[] values = entry.getValue();
+
+				for (int i = 0; i < values.length; i++) {
+					sb.append(StringPool.AMPERSAND);
+					sb.append(name);
+					sb.append(StringPool.EQUAL);
+					sb.append(HttpUtil.encodeURL(values[i]));
 				}
 			}
 		}
@@ -281,9 +284,7 @@ public class PortletURLUtil {
 	protected static boolean isRefreshURLReservedParameter(
 		String parameter, String namespace) {
 
-		if ((_PORTLET_URL_REFRESH_URL_RESERVED_PARAMETERS == null) ||
-			(_PORTLET_URL_REFRESH_URL_RESERVED_PARAMETERS.length == 0)) {
-
+		if (ArrayUtil.isEmpty(_PORTLET_URL_REFRESH_URL_RESERVED_PARAMETERS)) {
 			return false;
 		}
 
