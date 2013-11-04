@@ -108,32 +108,33 @@ public class PortalLDAPImporterImpl implements PortalLDAPImporter {
 			return;
 		}
 
-		long defaultUserId = UserLocalServiceUtil.getDefaultUserId(companyId);
-
-		if (LockLocalServiceUtil.hasLock(
-				defaultUserId, PortalLDAPImporterUtil.class.getName(),
-				companyId)) {
-
-			if (_log.isDebugEnabled()) {
-				_log.debug(
-					"Skipping LDAP import for company " + companyId +
-						"because another LDAP import is in process");
-			}
-
-			return;
-		}
-
-		LockLocalServiceUtil.lock(
-			defaultUserId, PortalLDAPImporterUtil.class.getName(), companyId,
-			PortalLDAPImporterImpl.class.getName(), false,
-			PropsValues.LDAP_IMPORT_LOCK_EXPIRATION_TIME);
-
 		long threadLocalCompanyId = CompanyThreadLocal.getCompanyId();
 
 		try {
 			if (threadLocalCompanyId == CompanyConstants.SYSTEM) {
 				CompanyThreadLocal.setCompanyId(companyId);
 			}
+
+			long defaultUserId = UserLocalServiceUtil.getDefaultUserId(
+				companyId);
+
+			if (LockLocalServiceUtil.hasLock(
+					defaultUserId, PortalLDAPImporterUtil.class.getName(),
+					companyId)) {
+
+				if (_log.isDebugEnabled()) {
+					_log.debug(
+						"Skipping LDAP import for company " + companyId +
+							"because another LDAP import is in process");
+				}
+
+				return;
+			}
+
+			LockLocalServiceUtil.lock(
+				defaultUserId, PortalLDAPImporterUtil.class.getName(),
+				companyId, PortalLDAPImporterImpl.class.getName(), false,
+				PropsValues.LDAP_IMPORT_LOCK_EXPIRATION_TIME);
 
 			long[] ldapServerIds = StringUtil.split(
 				PrefsPropsUtil.getString(companyId, "ldap.server.ids"), 0L);
