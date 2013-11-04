@@ -19,6 +19,7 @@ import com.liferay.portal.NoSuchUserGroupException;
 import com.liferay.portal.kernel.bean.BeanPropertiesUtil;
 import com.liferay.portal.kernel.cache.PortalCache;
 import com.liferay.portal.kernel.cache.SingleVMPoolUtil;
+import com.liferay.portal.kernel.dao.shard.ShardUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.ldap.LDAPUtil;
@@ -61,9 +62,7 @@ import com.liferay.portlet.expando.service.ExpandoValueLocalServiceUtil;
 import com.liferay.portlet.expando.util.ExpandoConverterUtil;
 
 import java.io.Serializable;
-
 import java.text.ParseException;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -108,12 +107,8 @@ public class PortalLDAPImporterImpl implements PortalLDAPImporter {
 			return;
 		}
 
-		long threadLocalCompanyId = CompanyThreadLocal.getCompanyId();
-
 		try {
-			if (threadLocalCompanyId == CompanyConstants.SYSTEM) {
-				CompanyThreadLocal.setCompanyId(companyId);
-			}
+			ShardUtil.pushCompanyService(companyId);
 
 			long defaultUserId = UserLocalServiceUtil.getDefaultUserId(
 				companyId);
@@ -161,7 +156,7 @@ public class PortalLDAPImporterImpl implements PortalLDAPImporter {
 			LockLocalServiceUtil.unlock(
 				PortalLDAPImporterUtil.class.getName(), companyId);
 
-			CompanyThreadLocal.setCompanyId(threadLocalCompanyId);
+			ShardUtil.popCompanyService();
 		}
 	}
 
