@@ -70,10 +70,12 @@ public class UserIndexer extends BaseIndexer {
 		setStagingAware(false);
 	}
 
+	@Override
 	public String[] getClassNames() {
 		return CLASS_NAMES;
 	}
 
+	@Override
 	public String getPortletId() {
 		return PORTLET_ID;
 	}
@@ -94,27 +96,29 @@ public class UserIndexer extends BaseIndexer {
 		LinkedHashMap<String, Object> params =
 			(LinkedHashMap<String, Object>)searchContext.getAttribute("params");
 
-		if (params != null) {
-			for (Map.Entry<String, Object> entry : params.entrySet()) {
-				String key = entry.getKey();
-				Object value = entry.getValue();
+		if (params == null) {
+			return;
+		}
 
-				if (value == null) {
+		for (Map.Entry<String, Object> entry : params.entrySet()) {
+			String key = entry.getKey();
+			Object value = entry.getValue();
+
+			if (value == null) {
+				continue;
+			}
+
+			Class<?> clazz = value.getClass();
+
+			if (clazz.isArray()) {
+				Object[] values = (Object[])value;
+
+				if (values.length == 0) {
 					continue;
 				}
-
-				Class<?> clazz = value.getClass();
-
-				if (clazz.isArray()) {
-					Object[] values = (Object[])value;
-
-					if (values.length == 0) {
-						continue;
-					}
-				}
-
-				addContextQueryParams(contextQuery, searchContext, key, value);
 			}
+
+			addContextQueryParams(contextQuery, searchContext, key, value);
 		}
 	}
 
@@ -411,8 +415,6 @@ public class UserIndexer extends BaseIndexer {
 	protected void reindexUsers(long companyId)
 		throws PortalException, SystemException {
 
-		final Collection<Document> documents = new ArrayList<Document>();
-
 		ActionableDynamicQuery actionableDynamicQuery =
 			new UserActionableDynamicQuery() {
 
@@ -423,18 +425,16 @@ public class UserIndexer extends BaseIndexer {
 				if (!user.isDefaultUser()) {
 					Document document = getDocument(user);
 
-					documents.add(document);
+					addDocument(document);
 				}
 			}
 
 		};
 
 		actionableDynamicQuery.setCompanyId(companyId);
+		actionableDynamicQuery.setSearchEngineId(getSearchEngineId());
 
 		actionableDynamicQuery.performActions();
-
-		SearchEngineUtil.updateDocuments(
-			getSearchEngineId(), companyId, documents);
 	}
 
 }

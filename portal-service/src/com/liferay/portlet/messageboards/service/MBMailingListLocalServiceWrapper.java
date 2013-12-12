@@ -14,17 +14,18 @@
 
 package com.liferay.portlet.messageboards.service;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.service.ServiceWrapper;
 
 /**
- * <p>
- * This class is a wrapper for {@link MBMailingListLocalService}.
- * </p>
+ * Provides a wrapper for {@link MBMailingListLocalService}.
  *
- * @author    Brian Wing Shun Chan
- * @see       MBMailingListLocalService
+ * @author Brian Wing Shun Chan
+ * @see MBMailingListLocalService
  * @generated
  */
+@ProviderType
 public class MBMailingListLocalServiceWrapper
 	implements MBMailingListLocalService,
 		ServiceWrapper<MBMailingListLocalService> {
@@ -40,6 +41,7 @@ public class MBMailingListLocalServiceWrapper
 	* @return the message boards mailing list that was added
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.messageboards.model.MBMailingList addMBMailingList(
 		com.liferay.portlet.messageboards.model.MBMailingList mbMailingList)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -52,6 +54,7 @@ public class MBMailingListLocalServiceWrapper
 	* @param mailingListId the primary key for the new message boards mailing list
 	* @return the new message boards mailing list
 	*/
+	@Override
 	public com.liferay.portlet.messageboards.model.MBMailingList createMBMailingList(
 		long mailingListId) {
 		return _mbMailingListLocalService.createMBMailingList(mailingListId);
@@ -65,6 +68,7 @@ public class MBMailingListLocalServiceWrapper
 	* @throws PortalException if a message boards mailing list with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.messageboards.model.MBMailingList deleteMBMailingList(
 		long mailingListId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -79,12 +83,14 @@ public class MBMailingListLocalServiceWrapper
 	* @return the message boards mailing list that was removed
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.messageboards.model.MBMailingList deleteMBMailingList(
 		com.liferay.portlet.messageboards.model.MBMailingList mbMailingList)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _mbMailingListLocalService.deleteMBMailingList(mbMailingList);
 	}
 
+	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		return _mbMailingListLocalService.dynamicQuery();
 	}
@@ -96,6 +102,7 @@ public class MBMailingListLocalServiceWrapper
 	* @return the matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
@@ -116,6 +123,7 @@ public class MBMailingListLocalServiceWrapper
 	* @return the range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -137,6 +145,7 @@ public class MBMailingListLocalServiceWrapper
 	* @return the ordered range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -154,16 +163,67 @@ public class MBMailingListLocalServiceWrapper
 	* @return the number of rows that match the dynamic query
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _mbMailingListLocalService.dynamicQueryCount(dynamicQuery);
 	}
 
+	/**
+	* Returns the number of rows that match the dynamic query.
+	*
+	* @param dynamicQuery the dynamic query
+	* @param projection the projection to apply to the query
+	* @return the number of rows that match the dynamic query
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public long dynamicQueryCount(
+		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery,
+		com.liferay.portal.kernel.dao.orm.Projection projection)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _mbMailingListLocalService.dynamicQueryCount(dynamicQuery,
+			projection);
+	}
+
+	@Override
 	public com.liferay.portlet.messageboards.model.MBMailingList fetchMBMailingList(
 		long mailingListId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _mbMailingListLocalService.fetchMBMailingList(mailingListId);
+	}
+
+	/**
+	* Returns the message boards mailing list with the matching UUID and company.
+	*
+	* @param uuid the message boards mailing list's UUID
+	* @param companyId the primary key of the company
+	* @return the matching message boards mailing list, or <code>null</code> if a matching message boards mailing list could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public com.liferay.portlet.messageboards.model.MBMailingList fetchMBMailingListByUuidAndCompanyId(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _mbMailingListLocalService.fetchMBMailingListByUuidAndCompanyId(uuid,
+			companyId);
+	}
+
+	/**
+	* Returns the message boards mailing list matching the UUID and group.
+	*
+	* @param uuid the message boards mailing list's UUID
+	* @param groupId the primary key of the group
+	* @return the matching message boards mailing list, or <code>null</code> if a matching message boards mailing list could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public com.liferay.portlet.messageboards.model.MBMailingList fetchMBMailingListByUuidAndGroupId(
+		java.lang.String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _mbMailingListLocalService.fetchMBMailingListByUuidAndGroupId(uuid,
+			groupId);
 	}
 
 	/**
@@ -174,6 +234,7 @@ public class MBMailingListLocalServiceWrapper
 	* @throws PortalException if a message boards mailing list with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.messageboards.model.MBMailingList getMBMailingList(
 		long mailingListId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -181,11 +242,30 @@ public class MBMailingListLocalServiceWrapper
 		return _mbMailingListLocalService.getMBMailingList(mailingListId);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _mbMailingListLocalService.getPersistedModel(primaryKeyObj);
+	}
+
+	/**
+	* Returns the message boards mailing list with the matching UUID and company.
+	*
+	* @param uuid the message boards mailing list's UUID
+	* @param companyId the primary key of the company
+	* @return the matching message boards mailing list
+	* @throws PortalException if a matching message boards mailing list could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public com.liferay.portlet.messageboards.model.MBMailingList getMBMailingListByUuidAndCompanyId(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _mbMailingListLocalService.getMBMailingListByUuidAndCompanyId(uuid,
+			companyId);
 	}
 
 	/**
@@ -197,6 +277,7 @@ public class MBMailingListLocalServiceWrapper
 	* @throws PortalException if a matching message boards mailing list could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.messageboards.model.MBMailingList getMBMailingListByUuidAndGroupId(
 		java.lang.String uuid, long groupId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -217,6 +298,7 @@ public class MBMailingListLocalServiceWrapper
 	* @return the range of message boards mailing lists
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.messageboards.model.MBMailingList> getMBMailingLists(
 		int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -229,6 +311,7 @@ public class MBMailingListLocalServiceWrapper
 	* @return the number of message boards mailing lists
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getMBMailingListsCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _mbMailingListLocalService.getMBMailingListsCount();
@@ -241,6 +324,7 @@ public class MBMailingListLocalServiceWrapper
 	* @return the message boards mailing list that was updated
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.messageboards.model.MBMailingList updateMBMailingList(
 		com.liferay.portlet.messageboards.model.MBMailingList mbMailingList)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -252,6 +336,7 @@ public class MBMailingListLocalServiceWrapper
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _mbMailingListLocalService.getBeanIdentifier();
 	}
@@ -261,10 +346,12 @@ public class MBMailingListLocalServiceWrapper
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_mbMailingListLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
+	@Override
 	public com.liferay.portlet.messageboards.model.MBMailingList addMailingList(
 		long userId, long groupId, long categoryId,
 		java.lang.String emailAddress, java.lang.String inProtocol,
@@ -284,18 +371,21 @@ public class MBMailingListLocalServiceWrapper
 			outPassword, allowAnonymous, active, serviceContext);
 	}
 
+	@Override
 	public void deleteCategoryMailingList(long groupId, long categoryId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		_mbMailingListLocalService.deleteCategoryMailingList(groupId, categoryId);
 	}
 
+	@Override
 	public void deleteMailingList(long mailingListId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		_mbMailingListLocalService.deleteMailingList(mailingListId);
 	}
 
+	@Override
 	public void deleteMailingList(
 		com.liferay.portlet.messageboards.model.MBMailingList mailingList)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -303,6 +393,7 @@ public class MBMailingListLocalServiceWrapper
 		_mbMailingListLocalService.deleteMailingList(mailingList);
 	}
 
+	@Override
 	public com.liferay.portlet.messageboards.model.MBMailingList getCategoryMailingList(
 		long groupId, long categoryId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -311,6 +402,7 @@ public class MBMailingListLocalServiceWrapper
 			categoryId);
 	}
 
+	@Override
 	public com.liferay.portlet.messageboards.model.MBMailingList updateMailingList(
 		long mailingListId, java.lang.String emailAddress,
 		java.lang.String inProtocol, java.lang.String inServerName,
@@ -345,10 +437,12 @@ public class MBMailingListLocalServiceWrapper
 		_mbMailingListLocalService = mbMailingListLocalService;
 	}
 
+	@Override
 	public MBMailingListLocalService getWrappedService() {
 		return _mbMailingListLocalService;
 	}
 
+	@Override
 	public void setWrappedService(
 		MBMailingListLocalService mbMailingListLocalService) {
 		_mbMailingListLocalService = mbMailingListLocalService;

@@ -29,16 +29,19 @@ import java.util.concurrent.ConcurrentHashMap;
 public class PersistedModelLocalServiceRegistryImpl
 	implements PersistedModelLocalServiceRegistry {
 
+	@Override
 	public PersistedModelLocalService getPersistedModelLocalService(
 		String className) {
 
 		return _persistedModelLocalServices.get(className);
 	}
 
+	@Override
 	public List<PersistedModelLocalService> getPersistedModelLocalServices() {
 		return ListUtil.fromMapValues(_persistedModelLocalServices);
 	}
 
+	@Override
 	public boolean isPermissionedModelLocalService(String className) {
 		PersistedModelLocalService persistedModelLocalService =
 			getPersistedModelLocalService(className);
@@ -56,6 +59,7 @@ public class PersistedModelLocalServiceRegistryImpl
 		return false;
 	}
 
+	@Override
 	public void register(
 		String className,
 		PersistedModelLocalService persistedModelLocalService) {
@@ -64,11 +68,12 @@ public class PersistedModelLocalServiceRegistryImpl
 			_persistedModelLocalServices.put(
 				className, persistedModelLocalService);
 
-		if (oldPersistedModelLocalService != null) {
+		if ((oldPersistedModelLocalService != null) && _log.isWarnEnabled()) {
 			_log.warn("Duplicate class name " + className);
 		}
 	}
 
+	@Override
 	public void unregister(String className) {
 		_persistedModelLocalServices.remove(className);
 	}

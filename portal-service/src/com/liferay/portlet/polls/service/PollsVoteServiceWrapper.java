@@ -14,17 +14,18 @@
 
 package com.liferay.portlet.polls.service;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.service.ServiceWrapper;
 
 /**
- * <p>
- * This class is a wrapper for {@link PollsVoteService}.
- * </p>
+ * Provides a wrapper for {@link PollsVoteService}.
  *
- * @author    Brian Wing Shun Chan
- * @see       PollsVoteService
+ * @author Brian Wing Shun Chan
+ * @see PollsVoteService
  * @generated
  */
+@ProviderType
 public class PollsVoteServiceWrapper implements PollsVoteService,
 	ServiceWrapper<PollsVoteService> {
 	public PollsVoteServiceWrapper(PollsVoteService pollsVoteService) {
@@ -36,6 +37,7 @@ public class PollsVoteServiceWrapper implements PollsVoteService,
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _pollsVoteService.getBeanIdentifier();
 	}
@@ -45,10 +47,12 @@ public class PollsVoteServiceWrapper implements PollsVoteService,
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_pollsVoteService.setBeanIdentifier(beanIdentifier);
 	}
 
+	@Override
 	public com.liferay.portlet.polls.model.PollsVote addVote(long questionId,
 		long choiceId, com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -70,10 +74,12 @@ public class PollsVoteServiceWrapper implements PollsVoteService,
 		_pollsVoteService = pollsVoteService;
 	}
 
+	@Override
 	public PollsVoteService getWrappedService() {
 		return _pollsVoteService;
 	}
 
+	@Override
 	public void setWrappedService(PollsVoteService pollsVoteService) {
 		_pollsVoteService = pollsVoteService;
 	}

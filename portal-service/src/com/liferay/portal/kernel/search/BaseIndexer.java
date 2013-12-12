@@ -29,13 +29,11 @@ import com.liferay.portal.kernel.search.facet.Facet;
 import com.liferay.portal.kernel.search.facet.MultiValueFacet;
 import com.liferay.portal.kernel.search.facet.ScopeFacet;
 import com.liferay.portal.kernel.trash.TrashHandler;
-import com.liferay.portal.kernel.trash.TrashHandlerRegistryUtil;
 import com.liferay.portal.kernel.trash.TrashRenderer;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
-import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.SetUtil;
@@ -44,6 +42,7 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Address;
 import com.liferay.portal.model.AttachedModel;
 import com.liferay.portal.model.AuditedModel;
@@ -53,6 +52,7 @@ import com.liferay.portal.model.Group;
 import com.liferay.portal.model.GroupedModel;
 import com.liferay.portal.model.Region;
 import com.liferay.portal.model.ResourcedModel;
+import com.liferay.portal.model.TrashedModel;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.WorkflowedModel;
 import com.liferay.portal.security.permission.ActionKeys;
@@ -84,7 +84,6 @@ import com.liferay.portlet.messageboards.model.MBMessage;
 import com.liferay.portlet.ratings.model.RatingsStats;
 import com.liferay.portlet.ratings.service.RatingsStatsLocalServiceUtil;
 import com.liferay.portlet.trash.model.TrashEntry;
-import com.liferay.portlet.trash.service.TrashEntryLocalServiceUtil;
 
 import java.io.Serializable;
 
@@ -114,10 +113,12 @@ public abstract class BaseIndexer implements Indexer {
 		_document = new DocumentImpl();
 	}
 
+	@Override
 	public void addRelatedEntryFields(Document document, Object obj)
 		throws Exception {
 	}
 
+	@Override
 	public void delete(long companyId, String uid) throws SearchException {
 		try {
 			SearchEngineUtil.deleteDocument(
@@ -131,6 +132,7 @@ public abstract class BaseIndexer implements Indexer {
 		}
 	}
 
+	@Override
 	public void delete(Object obj) throws SearchException {
 		try {
 			doDelete(obj);
@@ -143,6 +145,7 @@ public abstract class BaseIndexer implements Indexer {
 		}
 	}
 
+	@Override
 	public Document getDocument(Object obj) throws SearchException {
 		try {
 			Document document = doGetDocument(obj);
@@ -177,6 +180,7 @@ public abstract class BaseIndexer implements Indexer {
 		}
 	}
 
+	@Override
 	public BooleanQuery getFacetQuery(
 			String className, SearchContext searchContext)
 		throws Exception {
@@ -199,6 +203,7 @@ public abstract class BaseIndexer implements Indexer {
 		return facetQuery;
 	}
 
+	@Override
 	public BooleanQuery getFullQuery(SearchContext searchContext)
 		throws SearchException {
 
@@ -216,7 +221,7 @@ public abstract class BaseIndexer implements Indexer {
 				entryClassNames = ArrayUtil.append(
 					entryClassNames, MBMessage.class.getName());
 
-				searchContext.setAttribute("discussion", true);
+				searchContext.setAttribute("discussion", Boolean.TRUE);
 			}
 
 			searchContext.setEntryClassNames(entryClassNames);
@@ -254,10 +259,12 @@ public abstract class BaseIndexer implements Indexer {
 		}
 	}
 
+	@Override
 	public IndexerPostProcessor[] getIndexerPostProcessors() {
 		return _indexerPostProcessors;
 	}
 
+	@Override
 	public String getSearchEngineId() {
 		if (_searchEngineId != null) {
 			return _searchEngineId;
@@ -291,6 +298,7 @@ public abstract class BaseIndexer implements Indexer {
 		return _searchEngineId;
 	}
 
+	@Override
 	public String getSortField(String orderByCol) {
 		String sortField = doGetSortField(orderByCol);
 
@@ -301,6 +309,18 @@ public abstract class BaseIndexer implements Indexer {
 		return sortField;
 	}
 
+	@Override
+	public String getSortField(String orderByCol, int sortType) {
+		if ((sortType == Sort.DOUBLE_TYPE) || (sortType == Sort.FLOAT_TYPE) ||
+			(sortType == Sort.INT_TYPE) || (sortType == Sort.LONG_TYPE)) {
+
+			return DocumentImpl.getSortableFieldName(orderByCol);
+		}
+
+		return getSortField(orderByCol);
+	}
+
+	@Override
 	public Summary getSummary(
 			Document document, Locale locale, String snippet,
 			PortletURL portletURL)
@@ -327,6 +347,7 @@ public abstract class BaseIndexer implements Indexer {
 		}
 	}
 
+	@Override
 	public boolean hasPermission(
 			PermissionChecker permissionChecker, String entryClassName,
 			long entryClassPK, String actionId)
@@ -335,6 +356,7 @@ public abstract class BaseIndexer implements Indexer {
 		return true;
 	}
 
+	@Override
 	public boolean isFilterSearch() {
 		return _filterSearch;
 	}
@@ -343,19 +365,23 @@ public abstract class BaseIndexer implements Indexer {
 		return _indexerEnabled;
 	}
 
+	@Override
 	public boolean isPermissionAware() {
 		return _permissionAware;
 	}
 
+	@Override
 	public boolean isStagingAware() {
 		return _stagingAware;
 	}
 
+	@Override
 	public void postProcessContextQuery(
 			BooleanQuery contextQuery, SearchContext searchContext)
 		throws Exception {
 	}
 
+	@Override
 	public void postProcessSearchQuery(
 			BooleanQuery searchQuery, SearchContext searchContext)
 		throws Exception {
@@ -369,6 +395,7 @@ public abstract class BaseIndexer implements Indexer {
 		}
 	}
 
+	@Override
 	public void registerIndexerPostProcessor(
 		IndexerPostProcessor indexerPostProcessor) {
 
@@ -381,6 +408,7 @@ public abstract class BaseIndexer implements Indexer {
 			new IndexerPostProcessor[indexerPostProcessorsList.size()]);
 	}
 
+	@Override
 	public void reindex(Object obj) throws SearchException {
 		try {
 			if (SearchEngineUtil.isIndexReadOnly() || !isIndexerEnabled()) {
@@ -397,6 +425,7 @@ public abstract class BaseIndexer implements Indexer {
 		}
 	}
 
+	@Override
 	public void reindex(String className, long classPK) throws SearchException {
 		try {
 			if (SearchEngineUtil.isIndexReadOnly() || !isIndexerEnabled()) {
@@ -418,6 +447,7 @@ public abstract class BaseIndexer implements Indexer {
 		}
 	}
 
+	@Override
 	public void reindex(String[] ids) throws SearchException {
 		try {
 			if (SearchEngineUtil.isIndexReadOnly() || !isIndexerEnabled()) {
@@ -434,6 +464,7 @@ public abstract class BaseIndexer implements Indexer {
 		}
 	}
 
+	@Override
 	public void reindexDDMStructures(List<Long> ddmStructureIds)
 		throws SearchException {
 
@@ -452,6 +483,7 @@ public abstract class BaseIndexer implements Indexer {
 		}
 	}
 
+	@Override
 	public Hits search(SearchContext searchContext) throws SearchException {
 		try {
 			searchContext.setSearchEngineId(getSearchEngineId());
@@ -492,6 +524,7 @@ public abstract class BaseIndexer implements Indexer {
 		}
 	}
 
+	@Override
 	public void unregisterIndexerPostProcessor(
 		IndexerPostProcessor indexerPostProcessor) {
 
@@ -557,10 +590,8 @@ public abstract class BaseIndexer implements Indexer {
 
 		document.addNumber(Field.VIEW_COUNT, assetEntry.getViewCount());
 
-		Map<Locale, String> titleMap = LocalizationUtil.getLocalizationMap(
-			assetEntry.getTitle(), true);
-
-		document.addLocalizedKeyword("localized_title", titleMap, true);
+		document.addLocalizedKeyword(
+			"localized_title", assetEntry.getTitleMap(), true);
 	}
 
 	/**
@@ -580,12 +611,12 @@ public abstract class BaseIndexer implements Indexer {
 			BooleanQuery contextQuery, SearchContext searchContext)
 		throws Exception {
 
+		searchContext.setAttribute("relatedClassName", Boolean.TRUE);
+
 		String[] relatedEntryClassNames = (String[])searchContext.getAttribute(
 			"relatedEntryClassNames");
 
-		if ((relatedEntryClassNames == null) ||
-			(relatedEntryClassNames.length == 0)) {
-
+		if (ArrayUtil.isEmpty(relatedEntryClassNames)) {
 			return;
 		}
 
@@ -613,6 +644,8 @@ public abstract class BaseIndexer implements Indexer {
 		}
 
 		contextQuery.add(relatedQueries, BooleanClauseOccur.MUST);
+
+		searchContext.setAttribute("relatedClassName", Boolean.FALSE);
 	}
 
 	protected void addSearchArrayQuery(
@@ -728,6 +761,7 @@ public abstract class BaseIndexer implements Indexer {
 
 		multiValueFacet.setFieldName(Field.ASSET_CATEGORY_IDS);
 		multiValueFacet.setStatic(true);
+		multiValueFacet.setValues(searchContext.getAssetCategoryIds());
 
 		searchContext.addFacet(multiValueFacet);
 	}
@@ -759,7 +793,7 @@ public abstract class BaseIndexer implements Indexer {
 					assetCategoryTitles.put(locale, titles);
 				}
 
-				titles.add(title);
+				titles.add(StringUtil.toLowerCase(title));
 			}
 		}
 
@@ -772,10 +806,10 @@ public abstract class BaseIndexer implements Indexer {
 			String[] titlesArray = titles.toArray(new String[0]);
 
 			if (locale.equals(defaultLocale)) {
-				document.addKeyword(field, titlesArray);
+				document.addText(field, titlesArray);
 			}
 
-			document.addKeyword(
+			document.addText(
 				field.concat(StringPool.UNDERLINE).concat(locale.toString()),
 				titlesArray);
 		}
@@ -789,6 +823,7 @@ public abstract class BaseIndexer implements Indexer {
 
 		multiValueFacet.setFieldName(Field.ASSET_TAG_NAMES);
 		multiValueFacet.setStatic(true);
+		multiValueFacet.setValues(searchContext.getAssetTagNames());
 
 		searchContext.addFacet(multiValueFacet);
 	}
@@ -821,10 +856,24 @@ public abstract class BaseIndexer implements Indexer {
 		Set<String> fieldNames = ddmStructure.getFieldNames();
 
 		for (String fieldName : fieldNames) {
-			String name = DDMIndexerUtil.encodeName(
-				ddmStructure.getStructureId(), fieldName);
+			String indexType = ddmStructure.getFieldProperty(
+				fieldName, "indexType");
 
-			addSearchTerm(searchQuery, searchContext, name, false);
+			if (Validator.isNull(indexType)) {
+				continue;
+			}
+
+			String name = DDMIndexerUtil.encodeName(
+				ddmStructure.getStructureId(), fieldName,
+				searchContext.getLocale());
+
+			boolean like = false;
+
+			if (indexType.equals("text")) {
+				like = true;
+			}
+
+			addSearchTerm(searchQuery, searchContext, name, like);
 		}
 	}
 
@@ -879,8 +928,9 @@ public abstract class BaseIndexer implements Indexer {
 
 		MultiValueFacet multiValueFacet = new MultiValueFacet(searchContext);
 
-		multiValueFacet.setFieldName(Field.FOLDER_ID);
+		multiValueFacet.setFieldName(Field.TREE_PATH);
 		multiValueFacet.setStatic(true);
+		multiValueFacet.setValues(searchContext.getFolderIds());
 
 		searchContext.addFacet(multiValueFacet);
 	}
@@ -921,21 +971,6 @@ public abstract class BaseIndexer implements Indexer {
 		multiValueFacet.setStatic(true);
 
 		searchContext.addFacet(multiValueFacet);
-	}
-
-	protected void addSearchLocalizedDDMStructure(
-			BooleanQuery searchQuery, SearchContext searchContext,
-			DDMStructure ddmStructure)
-		throws Exception {
-
-		Set<String> fieldNames = ddmStructure.getFieldNames();
-
-		for (String fieldName : fieldNames) {
-			String name = DDMIndexerUtil.encodeName(
-				ddmStructure.getStructureId(), fieldName);
-
-			addSearchLocalizedTerm(searchQuery, searchContext, name, false);
-		}
 	}
 
 	protected void addSearchLocalizedTerm(
@@ -1008,6 +1043,13 @@ public abstract class BaseIndexer implements Indexer {
 		multiValueFacet.setFieldName(Field.USER_ID);
 		multiValueFacet.setStatic(true);
 
+		long userId = GetterUtil.getLong(
+			searchContext.getAttribute(Field.USER_ID));
+
+		if (userId > 0) {
+			multiValueFacet.setValues(new long[] {userId});
+		}
+
 		searchContext.addFacet(multiValueFacet);
 	}
 
@@ -1033,70 +1075,95 @@ public abstract class BaseIndexer implements Indexer {
 		document.addKeyword(Field.STAGING_GROUP, stagingGroup);
 	}
 
-	protected void addTrashFields(
-			Document document, String className, long classPK, Date removedDate,
-			String removedByUserName, String type)
+	protected void addStatus(
+			BooleanQuery contextQuery, SearchContext searchContext)
+		throws Exception {
+
+		int status = GetterUtil.getInteger(
+			searchContext.getAttribute(Field.STATUS),
+			WorkflowConstants.STATUS_APPROVED);
+
+		if (status != WorkflowConstants.STATUS_ANY) {
+			contextQuery.addRequiredTerm(Field.STATUS, status);
+		}
+		else {
+			BooleanQuery statusQuery = BooleanQueryFactoryUtil.create(
+				searchContext);
+
+			statusQuery.addTerm(
+				Field.STATUS, WorkflowConstants.STATUS_IN_TRASH);
+
+			contextQuery.add(statusQuery, BooleanClauseOccur.MUST_NOT);
+		}
+	}
+
+	protected void addTrashFields(Document document, TrashedModel trashedModel)
 		throws SystemException {
 
-		TrashEntry trashEntry = TrashEntryLocalServiceUtil.fetchEntry(
-			className, classPK);
+		TrashEntry trashEntry = null;
 
-		if (removedDate == null) {
-			if (trashEntry != null) {
-				removedDate = trashEntry.getCreateDate();
-			}
-			else {
-				removedDate = new Date();
+		try {
+			trashEntry = trashedModel.getTrashEntry();
+		}
+		catch (PortalException pe) {
+			if (_log.isDebugEnabled()) {
+				_log.debug("Unable to get trash entry for " + trashedModel);
 			}
 		}
 
-		document.addDate(Field.REMOVED_DATE, removedDate);
+		if (trashEntry == null) {
+			document.addDate(Field.REMOVED_DATE, new Date());
 
-		if (removedByUserName == null) {
-			if (trashEntry != null) {
-				removedByUserName = trashEntry.getUserName();
-			}
-			else {
-				ServiceContext serviceContext =
-					ServiceContextThreadLocal.getServiceContext();
+			ServiceContext serviceContext =
+				ServiceContextThreadLocal.getServiceContext();
 
-				if (serviceContext != null) {
-					try {
-						User user = UserLocalServiceUtil.getUser(
-							serviceContext.getUserId());
-
-						removedByUserName = user.getFullName();
-					}
-					catch (PortalException pe) {
-					}
-				}
-			}
-		}
-
-		if (Validator.isNotNull(removedByUserName)) {
-			document.addKeyword(
-				Field.REMOVED_BY_USER_NAME, removedByUserName, true);
-		}
-
-		if (type == null) {
-			if (trashEntry != null) {
-				TrashHandler trashHandler =
-					TrashHandlerRegistryUtil.getTrashHandler(
-						trashEntry.getClassName());
-
+			if (serviceContext != null) {
 				try {
-					TrashRenderer trashRenderer = trashHandler.getTrashRenderer(
-						trashEntry.getClassPK());
+					User user = UserLocalServiceUtil.getUser(
+						serviceContext.getUserId());
 
-					type = trashRenderer.getType();
+					document.addKeyword(
+						Field.REMOVED_BY_USER_NAME, user.getFullName(), true);
 				}
 				catch (PortalException pe) {
 				}
 			}
 		}
+		else {
+			document.addDate(Field.REMOVED_DATE, trashEntry.getCreateDate());
+			document.addKeyword(
+				Field.REMOVED_BY_USER_NAME, trashEntry.getUserName(), true);
 
-		if (Validator.isNotNull(type)) {
-			document.addKeyword(Field.TYPE, type, true);
+			if (trashedModel.isInTrash() &&
+				!trashedModel.isInTrashExplicitly()) {
+
+				document.addKeyword(
+					Field.ROOT_ENTRY_CLASS_NAME, trashEntry.getClassName());
+				document.addKeyword(
+					Field.ROOT_ENTRY_CLASS_PK, trashEntry.getClassPK());
+			}
+		}
+
+		TrashHandler trashHandler = trashedModel.getTrashHandler();
+
+		try {
+			TrashRenderer trashRenderer = null;
+
+			if ((trashHandler != null) && (trashEntry != null)) {
+				trashRenderer = trashHandler.getTrashRenderer(
+					trashEntry.getClassPK());
+			}
+
+			if (trashRenderer != null) {
+				document.addKeyword(Field.TYPE, trashRenderer.getType(), true);
+			}
+		}
+		catch (PortalException pe) {
+			if (_log.isDebugEnabled()) {
+				_log.debug(
+					"Unable to get trash renderer for " +
+						trashEntry.getClassName());
+			}
 		}
 	}
 
@@ -1327,7 +1394,7 @@ public abstract class BaseIndexer implements Indexer {
 		}
 
 		hits.setDocs(docs.toArray(new Document[docs.size()]));
-		hits.setScores(scores.toArray(new Float[docs.size()]));
+		hits.setScores(scores.toArray(new Float[scores.size()]));
 
 		hits.setSearchTime(
 			(float)(System.currentTimeMillis() - hits.getStart()) /
@@ -1380,13 +1447,15 @@ public abstract class BaseIndexer implements Indexer {
 		addSearchAssetCategoryTitles(
 			document, Field.ASSET_CATEGORY_TITLES, assetCategories);
 
-		String[] assetTagNames = AssetTagLocalServiceUtil.getTagNames(
-			className, classPK);
-
-		document.addText(Field.ASSET_TAG_NAMES, assetTagNames);
+		long classNameId = PortalUtil.getClassNameId(className);
 
 		List<AssetTag> assetTags = AssetTagLocalServiceUtil.getTags(
-			className, classPK);
+			classNameId, classPK);
+
+		String[] assetTagNames = StringUtil.split(
+			ListUtil.toString(assetTags, AssetTag.NAME_ACCESSOR));
+
+		document.addText(Field.ASSET_TAG_NAMES, assetTagNames);
 
 		long[] assetTagsIds = StringUtil.split(
 			ListUtil.toString(assetTags, AssetTag.TAG_ID_ACCESSOR), 0L);
@@ -1440,9 +1509,13 @@ public abstract class BaseIndexer implements Indexer {
 				(WorkflowedModel)workflowedBaseModel;
 
 			document.addKeyword(Field.STATUS, workflowedModel.getStatus());
+		}
 
-			if ((groupedModel != null) && workflowedModel.isInTrash()) {
-				addTrashFields(document, className, classPK, null, null, null);
+		if ((groupedModel != null) && (baseModel instanceof TrashedModel)) {
+			TrashedModel trashedModel = (TrashedModel)baseModel;
+
+			if (trashedModel.isInTrash()) {
+				addTrashFields(document, trashedModel);
 			}
 		}
 
@@ -1468,7 +1541,7 @@ public abstract class BaseIndexer implements Indexer {
 		for (Locale locale : locales) {
 			String countryName = country.getName(locale);
 
-			countryName = countryName.toLowerCase();
+			countryName = StringUtil.toLowerCase(countryName);
 
 			countryNames.add(countryName);
 		}
@@ -1477,7 +1550,7 @@ public abstract class BaseIndexer implements Indexer {
 	}
 
 	/**
-	 * @deprecated As of 6.2 renamed to {@link #getSiteGroupId(long)}
+	 * @deprecated As of 6.2.0 renamed to {@link #getSiteGroupId(long)}
 	 */
 	protected long getParentGroupId(long groupId) {
 		return getSiteGroupId(groupId);
@@ -1553,7 +1626,7 @@ public abstract class BaseIndexer implements Indexer {
 			try {
 				Region region = RegionServiceUtil.getRegion(regionId);
 
-				regions.add(region.getName().toLowerCase());
+				regions.add(StringUtil.toLowerCase(region.getName()));
 			}
 			catch (NoSuchRegionException nsre) {
 				if (_log.isWarnEnabled()) {
@@ -1566,13 +1639,13 @@ public abstract class BaseIndexer implements Indexer {
 		List<String> zips = new ArrayList<String>();
 
 		for (Address address : addresses) {
-			cities.add(address.getCity().toLowerCase());
+			cities.add(StringUtil.toLowerCase(address.getCity()));
 			countries.addAll(getLocalizedCountryNames(address.getCountry()));
-			regions.add(address.getRegion().getName().toLowerCase());
-			streets.add(address.getStreet1().toLowerCase());
-			streets.add(address.getStreet2().toLowerCase());
-			streets.add(address.getStreet3().toLowerCase());
-			zips.add(address.getZip().toLowerCase());
+			regions.add(StringUtil.toLowerCase(address.getRegion().getName()));
+			streets.add(StringUtil.toLowerCase(address.getStreet1()));
+			streets.add(StringUtil.toLowerCase(address.getStreet2()));
+			streets.add(StringUtil.toLowerCase(address.getStreet3()));
+			zips.add(StringUtil.toLowerCase(address.getZip()));
 		}
 
 		document.addText("city", cities.toArray(new String[cities.size()]));

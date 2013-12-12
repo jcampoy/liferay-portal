@@ -16,11 +16,6 @@ package com.liferay.portlet.documentlibrary.service.persistence;
 
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
-import com.liferay.portal.kernel.dao.jdbc.MappingSqlQuery;
-import com.liferay.portal.kernel.dao.jdbc.MappingSqlQueryFactoryUtil;
-import com.liferay.portal.kernel.dao.jdbc.RowMapper;
-import com.liferay.portal.kernel.dao.jdbc.SqlUpdate;
-import com.liferay.portal.kernel.dao.jdbc.SqlUpdateFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
@@ -46,6 +41,8 @@ import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
+import com.liferay.portal.service.persistence.impl.TableMapper;
+import com.liferay.portal.service.persistence.impl.TableMapperFactory;
 
 import com.liferay.portlet.documentlibrary.NoSuchFolderException;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
@@ -56,6 +53,7 @@ import java.io.Serializable;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -120,6 +118,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> findByUuid(String uuid) throws SystemException {
 		return findByUuid(uuid, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
@@ -137,6 +136,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the range of matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> findByUuid(String uuid, int start, int end)
 		throws SystemException {
 		return findByUuid(uuid, start, end, null);
@@ -156,6 +156,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the ordered range of matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> findByUuid(String uuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -276,6 +277,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder findByUuid_First(String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -305,6 +307,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the first matching document library folder, or <code>null</code> if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder fetchByUuid_First(String uuid,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<DLFolder> list = findByUuid(uuid, 0, 1, orderByComparator);
@@ -325,6 +328,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder findByUuid_Last(String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -354,9 +358,14 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the last matching document library folder, or <code>null</code> if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder fetchByUuid_Last(String uuid,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByUuid(uuid);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<DLFolder> list = findByUuid(uuid, count - 1, count,
 				orderByComparator);
@@ -378,6 +387,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a document library folder with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder[] findByUuid_PrevAndNext(long folderId, String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -533,6 +543,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @param uuid the uuid
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByUuid(String uuid) throws SystemException {
 		for (DLFolder dlFolder : findByUuid(uuid, QueryUtil.ALL_POS,
 				QueryUtil.ALL_POS, null)) {
@@ -547,6 +558,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the number of matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByUuid(String uuid) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID;
 
@@ -629,6 +641,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder findByUUID_G(String uuid, long groupId)
 		throws NoSuchFolderException, SystemException {
 		DLFolder dlFolder = fetchByUUID_G(uuid, groupId);
@@ -664,6 +677,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the matching document library folder, or <code>null</code> if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder fetchByUUID_G(String uuid, long groupId)
 		throws SystemException {
 		return fetchByUUID_G(uuid, groupId, true);
@@ -678,6 +692,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the matching document library folder, or <code>null</code> if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder fetchByUUID_G(String uuid, long groupId,
 		boolean retrieveFromCache) throws SystemException {
 		Object[] finderArgs = new Object[] { uuid, groupId };
@@ -784,6 +799,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the document library folder that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder removeByUUID_G(String uuid, long groupId)
 		throws NoSuchFolderException, SystemException {
 		DLFolder dlFolder = findByUUID_G(uuid, groupId);
@@ -799,6 +815,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the number of matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByUUID_G(String uuid, long groupId)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_G;
@@ -898,6 +915,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> findByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		return findByUuid_C(uuid, companyId, QueryUtil.ALL_POS,
@@ -918,6 +936,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the range of matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> findByUuid_C(String uuid, long companyId, int start,
 		int end) throws SystemException {
 		return findByUuid_C(uuid, companyId, start, end, null);
@@ -938,6 +957,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the ordered range of matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> findByUuid_C(String uuid, long companyId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -1068,6 +1088,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder findByUuid_C_First(String uuid, long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -1102,6 +1123,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the first matching document library folder, or <code>null</code> if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder fetchByUuid_C_First(String uuid, long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<DLFolder> list = findByUuid_C(uuid, companyId, 0, 1,
@@ -1124,6 +1146,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder findByUuid_C_Last(String uuid, long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -1158,9 +1181,14 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the last matching document library folder, or <code>null</code> if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder fetchByUuid_C_Last(String uuid, long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByUuid_C(uuid, companyId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<DLFolder> list = findByUuid_C(uuid, companyId, count - 1, count,
 				orderByComparator);
@@ -1183,6 +1211,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a document library folder with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder[] findByUuid_C_PrevAndNext(long folderId, String uuid,
 		long companyId, OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -1343,6 +1372,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @param companyId the company ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		for (DLFolder dlFolder : findByUuid_C(uuid, companyId,
@@ -1359,6 +1389,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the number of matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_C;
@@ -1456,6 +1487,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> findByGroupId(long groupId) throws SystemException {
 		return findByGroupId(groupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
@@ -1473,6 +1505,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the range of matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> findByGroupId(long groupId, int start, int end)
 		throws SystemException {
 		return findByGroupId(groupId, start, end, null);
@@ -1492,6 +1525,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the ordered range of matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> findByGroupId(long groupId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -1598,6 +1632,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder findByGroupId_First(long groupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -1627,6 +1662,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the first matching document library folder, or <code>null</code> if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder fetchByGroupId_First(long groupId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<DLFolder> list = findByGroupId(groupId, 0, 1, orderByComparator);
@@ -1647,6 +1683,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder findByGroupId_Last(long groupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -1676,9 +1713,14 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the last matching document library folder, or <code>null</code> if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder fetchByGroupId_Last(long groupId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByGroupId(groupId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<DLFolder> list = findByGroupId(groupId, count - 1, count,
 				orderByComparator);
@@ -1700,6 +1742,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a document library folder with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder[] findByGroupId_PrevAndNext(long folderId, long groupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -1842,6 +1885,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the matching document library folders that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> filterFindByGroupId(long groupId)
 		throws SystemException {
 		return filterFindByGroupId(groupId, QueryUtil.ALL_POS,
@@ -1861,6 +1905,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the range of matching document library folders that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> filterFindByGroupId(long groupId, int start, int end)
 		throws SystemException {
 		return filterFindByGroupId(groupId, start, end, null);
@@ -1880,6 +1925,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the ordered range of matching document library folders that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> filterFindByGroupId(long groupId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
@@ -1970,6 +2016,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a document library folder with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder[] filterFindByGroupId_PrevAndNext(long folderId,
 		long groupId, OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -2151,6 +2198,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @param groupId the group ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByGroupId(long groupId) throws SystemException {
 		for (DLFolder dlFolder : findByGroupId(groupId, QueryUtil.ALL_POS,
 				QueryUtil.ALL_POS, null)) {
@@ -2165,6 +2213,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the number of matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByGroupId(long groupId) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_GROUPID;
 
@@ -2217,6 +2266,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the number of matching document library folders that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int filterCountByGroupId(long groupId) throws SystemException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return countByGroupId(groupId);
@@ -2289,6 +2339,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> findByCompanyId(long companyId)
 		throws SystemException {
 		return findByCompanyId(companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
@@ -2308,6 +2359,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the range of matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> findByCompanyId(long companyId, int start, int end)
 		throws SystemException {
 		return findByCompanyId(companyId, start, end, null);
@@ -2327,6 +2379,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the ordered range of matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> findByCompanyId(long companyId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -2433,6 +2486,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder findByCompanyId_First(long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -2462,6 +2516,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the first matching document library folder, or <code>null</code> if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder fetchByCompanyId_First(long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<DLFolder> list = findByCompanyId(companyId, 0, 1, orderByComparator);
@@ -2482,6 +2537,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder findByCompanyId_Last(long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -2511,9 +2567,14 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the last matching document library folder, or <code>null</code> if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder fetchByCompanyId_Last(long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByCompanyId(companyId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<DLFolder> list = findByCompanyId(companyId, count - 1, count,
 				orderByComparator);
@@ -2535,6 +2596,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a document library folder with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder[] findByCompanyId_PrevAndNext(long folderId,
 		long companyId, OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -2676,6 +2738,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @param companyId the company ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByCompanyId(long companyId) throws SystemException {
 		for (DLFolder dlFolder : findByCompanyId(companyId, QueryUtil.ALL_POS,
 				QueryUtil.ALL_POS, null)) {
@@ -2690,6 +2753,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the number of matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByCompanyId(long companyId) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_COMPANYID;
 
@@ -2754,6 +2818,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder findByRepositoryId(long repositoryId)
 		throws NoSuchFolderException, SystemException {
 		DLFolder dlFolder = fetchByRepositoryId(repositoryId);
@@ -2785,6 +2850,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the matching document library folder, or <code>null</code> if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder fetchByRepositoryId(long repositoryId)
 		throws SystemException {
 		return fetchByRepositoryId(repositoryId, true);
@@ -2798,6 +2864,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the matching document library folder, or <code>null</code> if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder fetchByRepositoryId(long repositoryId,
 		boolean retrieveFromCache) throws SystemException {
 		Object[] finderArgs = new Object[] { repositoryId };
@@ -2889,6 +2956,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the document library folder that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder removeByRepositoryId(long repositoryId)
 		throws NoSuchFolderException, SystemException {
 		DLFolder dlFolder = findByRepositoryId(repositoryId);
@@ -2903,6 +2971,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the number of matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByRepositoryId(long repositoryId) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_REPOSITORYID;
 
@@ -2978,6 +3047,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> findByG_P(long groupId, long parentFolderId)
 		throws SystemException {
 		return findByG_P(groupId, parentFolderId, QueryUtil.ALL_POS,
@@ -2998,6 +3068,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the range of matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> findByG_P(long groupId, long parentFolderId,
 		int start, int end) throws SystemException {
 		return findByG_P(groupId, parentFolderId, start, end, null);
@@ -3018,6 +3089,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the ordered range of matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> findByG_P(long groupId, long parentFolderId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -3135,6 +3207,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder findByG_P_First(long groupId, long parentFolderId,
 		OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -3169,6 +3242,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the first matching document library folder, or <code>null</code> if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder fetchByG_P_First(long groupId, long parentFolderId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<DLFolder> list = findByG_P(groupId, parentFolderId, 0, 1,
@@ -3191,6 +3265,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder findByG_P_Last(long groupId, long parentFolderId,
 		OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -3225,9 +3300,14 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the last matching document library folder, or <code>null</code> if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder fetchByG_P_Last(long groupId, long parentFolderId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByG_P(groupId, parentFolderId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<DLFolder> list = findByG_P(groupId, parentFolderId, count - 1,
 				count, orderByComparator);
@@ -3250,6 +3330,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a document library folder with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder[] findByG_P_PrevAndNext(long folderId, long groupId,
 		long parentFolderId, OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -3397,6 +3478,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the matching document library folders that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> filterFindByG_P(long groupId, long parentFolderId)
 		throws SystemException {
 		return filterFindByG_P(groupId, parentFolderId, QueryUtil.ALL_POS,
@@ -3417,6 +3499,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the range of matching document library folders that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> filterFindByG_P(long groupId, long parentFolderId,
 		int start, int end) throws SystemException {
 		return filterFindByG_P(groupId, parentFolderId, start, end, null);
@@ -3437,6 +3520,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the ordered range of matching document library folders that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> filterFindByG_P(long groupId, long parentFolderId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -3534,6 +3618,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a document library folder with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder[] filterFindByG_P_PrevAndNext(long folderId, long groupId,
 		long parentFolderId, OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -3720,6 +3805,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @param parentFolderId the parent folder ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByG_P(long groupId, long parentFolderId)
 		throws SystemException {
 		for (DLFolder dlFolder : findByG_P(groupId, parentFolderId,
@@ -3736,6 +3822,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the number of matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByG_P(long groupId, long parentFolderId)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_P;
@@ -3794,6 +3881,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the number of matching document library folders that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int filterCountByG_P(long groupId, long parentFolderId)
 		throws SystemException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
@@ -3842,6 +3930,519 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 
 	private static final String _FINDER_COLUMN_G_P_GROUPID_2 = "dlFolder.groupId = ? AND ";
 	private static final String _FINDER_COLUMN_G_P_PARENTFOLDERID_2 = "dlFolder.parentFolderId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_NOTS = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
+			DLFolderModelImpl.FINDER_CACHE_ENABLED, DLFolderImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_NotS",
+			new String[] {
+				Long.class.getName(), Integer.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_C_NOTS = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
+			DLFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByC_NotS",
+			new String[] { Long.class.getName(), Integer.class.getName() });
+
+	/**
+	 * Returns all the document library folders where companyId = &#63; and status &ne; &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @return the matching document library folders
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<DLFolder> findByC_NotS(long companyId, int status)
+		throws SystemException {
+		return findByC_NotS(companyId, status, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the document library folders where companyId = &#63; and status &ne; &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.documentlibrary.model.impl.DLFolderModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @param start the lower bound of the range of document library folders
+	 * @param end the upper bound of the range of document library folders (not inclusive)
+	 * @return the range of matching document library folders
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<DLFolder> findByC_NotS(long companyId, int status, int start,
+		int end) throws SystemException {
+		return findByC_NotS(companyId, status, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the document library folders where companyId = &#63; and status &ne; &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.documentlibrary.model.impl.DLFolderModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @param start the lower bound of the range of document library folders
+	 * @param end the upper bound of the range of document library folders (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching document library folders
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<DLFolder> findByC_NotS(long companyId, int status, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_NOTS;
+		finderArgs = new Object[] {
+				companyId, status,
+				
+				start, end, orderByComparator
+			};
+
+		List<DLFolder> list = (List<DLFolder>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DLFolder dlFolder : list) {
+				if ((companyId != dlFolder.getCompanyId()) ||
+						(status == dlFolder.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_DLFOLDER_WHERE);
+
+			query.append(_FINDER_COLUMN_C_NOTS_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_NOTS_STATUS_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(DLFolderModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(status);
+
+				if (!pagination) {
+					list = (List<DLFolder>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<DLFolder>(list);
+				}
+				else {
+					list = (List<DLFolder>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first document library folder in the ordered set where companyId = &#63; and status &ne; &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching document library folder
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a matching document library folder could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public DLFolder findByC_NotS_First(long companyId, int status,
+		OrderByComparator orderByComparator)
+		throws NoSuchFolderException, SystemException {
+		DLFolder dlFolder = fetchByC_NotS_First(companyId, status,
+				orderByComparator);
+
+		if (dlFolder != null) {
+			return dlFolder;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchFolderException(msg.toString());
+	}
+
+	/**
+	 * Returns the first document library folder in the ordered set where companyId = &#63; and status &ne; &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching document library folder, or <code>null</code> if a matching document library folder could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public DLFolder fetchByC_NotS_First(long companyId, int status,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<DLFolder> list = findByC_NotS(companyId, status, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last document library folder in the ordered set where companyId = &#63; and status &ne; &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching document library folder
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a matching document library folder could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public DLFolder findByC_NotS_Last(long companyId, int status,
+		OrderByComparator orderByComparator)
+		throws NoSuchFolderException, SystemException {
+		DLFolder dlFolder = fetchByC_NotS_Last(companyId, status,
+				orderByComparator);
+
+		if (dlFolder != null) {
+			return dlFolder;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchFolderException(msg.toString());
+	}
+
+	/**
+	 * Returns the last document library folder in the ordered set where companyId = &#63; and status &ne; &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching document library folder, or <code>null</code> if a matching document library folder could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public DLFolder fetchByC_NotS_Last(long companyId, int status,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByC_NotS(companyId, status);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<DLFolder> list = findByC_NotS(companyId, status, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the document library folders before and after the current document library folder in the ordered set where companyId = &#63; and status &ne; &#63;.
+	 *
+	 * @param folderId the primary key of the current document library folder
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next document library folder
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a document library folder with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public DLFolder[] findByC_NotS_PrevAndNext(long folderId, long companyId,
+		int status, OrderByComparator orderByComparator)
+		throws NoSuchFolderException, SystemException {
+		DLFolder dlFolder = findByPrimaryKey(folderId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			DLFolder[] array = new DLFolderImpl[3];
+
+			array[0] = getByC_NotS_PrevAndNext(session, dlFolder, companyId,
+					status, orderByComparator, true);
+
+			array[1] = dlFolder;
+
+			array[2] = getByC_NotS_PrevAndNext(session, dlFolder, companyId,
+					status, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected DLFolder getByC_NotS_PrevAndNext(Session session,
+		DLFolder dlFolder, long companyId, int status,
+		OrderByComparator orderByComparator, boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_DLFOLDER_WHERE);
+
+		query.append(_FINDER_COLUMN_C_NOTS_COMPANYID_2);
+
+		query.append(_FINDER_COLUMN_C_NOTS_STATUS_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			query.append(DLFolderModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(companyId);
+
+		qPos.add(status);
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(dlFolder);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<DLFolder> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the document library folders where companyId = &#63; and status &ne; &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public void removeByC_NotS(long companyId, int status)
+		throws SystemException {
+		for (DLFolder dlFolder : findByC_NotS(companyId, status,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(dlFolder);
+		}
+	}
+
+	/**
+	 * Returns the number of document library folders where companyId = &#63; and status &ne; &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @return the number of matching document library folders
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public int countByC_NotS(long companyId, int status)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_C_NOTS;
+
+		Object[] finderArgs = new Object[] { companyId, status };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_DLFOLDER_WHERE);
+
+			query.append(_FINDER_COLUMN_C_NOTS_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_NOTS_STATUS_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(status);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_C_NOTS_COMPANYID_2 = "dlFolder.companyId = ? AND ";
+	private static final String _FINDER_COLUMN_C_NOTS_STATUS_2 = "dlFolder.status != ?";
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_P_N = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, DLFolderImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByP_N",
@@ -3870,6 +4471,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> findByP_N(long parentFolderId, String name)
 		throws SystemException {
 		return findByP_N(parentFolderId, name, QueryUtil.ALL_POS,
@@ -3890,6 +4492,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the range of matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> findByP_N(long parentFolderId, String name,
 		int start, int end) throws SystemException {
 		return findByP_N(parentFolderId, name, start, end, null);
@@ -3910,6 +4513,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the ordered range of matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> findByP_N(long parentFolderId, String name,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -4041,6 +4645,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder findByP_N_First(long parentFolderId, String name,
 		OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -4075,6 +4680,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the first matching document library folder, or <code>null</code> if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder fetchByP_N_First(long parentFolderId, String name,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<DLFolder> list = findByP_N(parentFolderId, name, 0, 1,
@@ -4097,6 +4703,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder findByP_N_Last(long parentFolderId, String name,
 		OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -4131,9 +4738,14 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the last matching document library folder, or <code>null</code> if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder fetchByP_N_Last(long parentFolderId, String name,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByP_N(parentFolderId, name);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<DLFolder> list = findByP_N(parentFolderId, name, count - 1, count,
 				orderByComparator);
@@ -4156,6 +4768,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a document library folder with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder[] findByP_N_PrevAndNext(long folderId, long parentFolderId,
 		String name, OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -4316,6 +4929,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @param name the name
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByP_N(long parentFolderId, String name)
 		throws SystemException {
 		for (DLFolder dlFolder : findByP_N(parentFolderId, name,
@@ -4332,6 +4946,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the number of matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByP_N(long parentFolderId, String name)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_P_N;
@@ -4400,6 +5015,433 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	private static final String _FINDER_COLUMN_P_N_NAME_1 = "dlFolder.name IS NULL";
 	private static final String _FINDER_COLUMN_P_N_NAME_2 = "dlFolder.name = ?";
 	private static final String _FINDER_COLUMN_P_N_NAME_3 = "(dlFolder.name IS NULL OR dlFolder.name = '')";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_F_C_P_NOTS =
+		new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
+			DLFolderModelImpl.FINDER_CACHE_ENABLED, DLFolderImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByF_C_P_NotS",
+			new String[] {
+				Long.class.getName(), Long.class.getName(), Long.class.getName(),
+				Integer.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_F_C_P_NOTS =
+		new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
+			DLFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByF_C_P_NotS",
+			new String[] {
+				Long.class.getName(), Long.class.getName(), Long.class.getName(),
+				Integer.class.getName()
+			});
+
+	/**
+	 * Returns all the document library folders where folderId &gt; &#63; and companyId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
+	 *
+	 * @param folderId the folder ID
+	 * @param companyId the company ID
+	 * @param parentFolderId the parent folder ID
+	 * @param status the status
+	 * @return the matching document library folders
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<DLFolder> findByF_C_P_NotS(long folderId, long companyId,
+		long parentFolderId, int status) throws SystemException {
+		return findByF_C_P_NotS(folderId, companyId, parentFolderId, status,
+			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the document library folders where folderId &gt; &#63; and companyId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.documentlibrary.model.impl.DLFolderModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param folderId the folder ID
+	 * @param companyId the company ID
+	 * @param parentFolderId the parent folder ID
+	 * @param status the status
+	 * @param start the lower bound of the range of document library folders
+	 * @param end the upper bound of the range of document library folders (not inclusive)
+	 * @return the range of matching document library folders
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<DLFolder> findByF_C_P_NotS(long folderId, long companyId,
+		long parentFolderId, int status, int start, int end)
+		throws SystemException {
+		return findByF_C_P_NotS(folderId, companyId, parentFolderId, status,
+			start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the document library folders where folderId &gt; &#63; and companyId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.documentlibrary.model.impl.DLFolderModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param folderId the folder ID
+	 * @param companyId the company ID
+	 * @param parentFolderId the parent folder ID
+	 * @param status the status
+	 * @param start the lower bound of the range of document library folders
+	 * @param end the upper bound of the range of document library folders (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching document library folders
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<DLFolder> findByF_C_P_NotS(long folderId, long companyId,
+		long parentFolderId, int status, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_F_C_P_NOTS;
+		finderArgs = new Object[] {
+				folderId, companyId, parentFolderId, status,
+				
+				start, end, orderByComparator
+			};
+
+		List<DLFolder> list = (List<DLFolder>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DLFolder dlFolder : list) {
+				if ((folderId >= dlFolder.getFolderId()) ||
+						(companyId != dlFolder.getCompanyId()) ||
+						(parentFolderId != dlFolder.getParentFolderId()) ||
+						(status == dlFolder.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(6 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(6);
+			}
+
+			query.append(_SQL_SELECT_DLFOLDER_WHERE);
+
+			query.append(_FINDER_COLUMN_F_C_P_NOTS_FOLDERID_2);
+
+			query.append(_FINDER_COLUMN_F_C_P_NOTS_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_F_C_P_NOTS_PARENTFOLDERID_2);
+
+			query.append(_FINDER_COLUMN_F_C_P_NOTS_STATUS_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(DLFolderModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(folderId);
+
+				qPos.add(companyId);
+
+				qPos.add(parentFolderId);
+
+				qPos.add(status);
+
+				if (!pagination) {
+					list = (List<DLFolder>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<DLFolder>(list);
+				}
+				else {
+					list = (List<DLFolder>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first document library folder in the ordered set where folderId &gt; &#63; and companyId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
+	 *
+	 * @param folderId the folder ID
+	 * @param companyId the company ID
+	 * @param parentFolderId the parent folder ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching document library folder
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a matching document library folder could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public DLFolder findByF_C_P_NotS_First(long folderId, long companyId,
+		long parentFolderId, int status, OrderByComparator orderByComparator)
+		throws NoSuchFolderException, SystemException {
+		DLFolder dlFolder = fetchByF_C_P_NotS_First(folderId, companyId,
+				parentFolderId, status, orderByComparator);
+
+		if (dlFolder != null) {
+			return dlFolder;
+		}
+
+		StringBundler msg = new StringBundler(10);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("folderId=");
+		msg.append(folderId);
+
+		msg.append(", companyId=");
+		msg.append(companyId);
+
+		msg.append(", parentFolderId=");
+		msg.append(parentFolderId);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchFolderException(msg.toString());
+	}
+
+	/**
+	 * Returns the first document library folder in the ordered set where folderId &gt; &#63; and companyId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
+	 *
+	 * @param folderId the folder ID
+	 * @param companyId the company ID
+	 * @param parentFolderId the parent folder ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching document library folder, or <code>null</code> if a matching document library folder could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public DLFolder fetchByF_C_P_NotS_First(long folderId, long companyId,
+		long parentFolderId, int status, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<DLFolder> list = findByF_C_P_NotS(folderId, companyId,
+				parentFolderId, status, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last document library folder in the ordered set where folderId &gt; &#63; and companyId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
+	 *
+	 * @param folderId the folder ID
+	 * @param companyId the company ID
+	 * @param parentFolderId the parent folder ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching document library folder
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a matching document library folder could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public DLFolder findByF_C_P_NotS_Last(long folderId, long companyId,
+		long parentFolderId, int status, OrderByComparator orderByComparator)
+		throws NoSuchFolderException, SystemException {
+		DLFolder dlFolder = fetchByF_C_P_NotS_Last(folderId, companyId,
+				parentFolderId, status, orderByComparator);
+
+		if (dlFolder != null) {
+			return dlFolder;
+		}
+
+		StringBundler msg = new StringBundler(10);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("folderId=");
+		msg.append(folderId);
+
+		msg.append(", companyId=");
+		msg.append(companyId);
+
+		msg.append(", parentFolderId=");
+		msg.append(parentFolderId);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchFolderException(msg.toString());
+	}
+
+	/**
+	 * Returns the last document library folder in the ordered set where folderId &gt; &#63; and companyId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
+	 *
+	 * @param folderId the folder ID
+	 * @param companyId the company ID
+	 * @param parentFolderId the parent folder ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching document library folder, or <code>null</code> if a matching document library folder could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public DLFolder fetchByF_C_P_NotS_Last(long folderId, long companyId,
+		long parentFolderId, int status, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByF_C_P_NotS(folderId, companyId, parentFolderId,
+				status);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<DLFolder> list = findByF_C_P_NotS(folderId, companyId,
+				parentFolderId, status, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Removes all the document library folders where folderId &gt; &#63; and companyId = &#63; and parentFolderId = &#63; and status &ne; &#63; from the database.
+	 *
+	 * @param folderId the folder ID
+	 * @param companyId the company ID
+	 * @param parentFolderId the parent folder ID
+	 * @param status the status
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public void removeByF_C_P_NotS(long folderId, long companyId,
+		long parentFolderId, int status) throws SystemException {
+		for (DLFolder dlFolder : findByF_C_P_NotS(folderId, companyId,
+				parentFolderId, status, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+				null)) {
+			remove(dlFolder);
+		}
+	}
+
+	/**
+	 * Returns the number of document library folders where folderId &gt; &#63; and companyId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
+	 *
+	 * @param folderId the folder ID
+	 * @param companyId the company ID
+	 * @param parentFolderId the parent folder ID
+	 * @param status the status
+	 * @return the number of matching document library folders
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public int countByF_C_P_NotS(long folderId, long companyId,
+		long parentFolderId, int status) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_F_C_P_NOTS;
+
+		Object[] finderArgs = new Object[] {
+				folderId, companyId, parentFolderId, status
+			};
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(5);
+
+			query.append(_SQL_COUNT_DLFOLDER_WHERE);
+
+			query.append(_FINDER_COLUMN_F_C_P_NOTS_FOLDERID_2);
+
+			query.append(_FINDER_COLUMN_F_C_P_NOTS_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_F_C_P_NOTS_PARENTFOLDERID_2);
+
+			query.append(_FINDER_COLUMN_F_C_P_NOTS_STATUS_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(folderId);
+
+				qPos.add(companyId);
+
+				qPos.add(parentFolderId);
+
+				qPos.add(status);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_F_C_P_NOTS_FOLDERID_2 = "dlFolder.folderId > ? AND ";
+	private static final String _FINDER_COLUMN_F_C_P_NOTS_COMPANYID_2 = "dlFolder.companyId = ? AND ";
+	private static final String _FINDER_COLUMN_F_C_P_NOTS_PARENTFOLDERID_2 = "dlFolder.parentFolderId = ? AND ";
+	private static final String _FINDER_COLUMN_F_C_P_NOTS_STATUS_2 = "dlFolder.status != ?";
 	public static final FinderPath FINDER_PATH_FETCH_BY_G_P_N = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, DLFolderImpl.class,
 			FINDER_CLASS_NAME_ENTITY, "fetchByG_P_N",
@@ -4428,6 +5470,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder findByG_P_N(long groupId, long parentFolderId, String name)
 		throws NoSuchFolderException, SystemException {
 		DLFolder dlFolder = fetchByG_P_N(groupId, parentFolderId, name);
@@ -4467,6 +5510,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the matching document library folder, or <code>null</code> if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder fetchByG_P_N(long groupId, long parentFolderId, String name)
 		throws SystemException {
 		return fetchByG_P_N(groupId, parentFolderId, name, true);
@@ -4482,6 +5526,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the matching document library folder, or <code>null</code> if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder fetchByG_P_N(long groupId, long parentFolderId,
 		String name, boolean retrieveFromCache) throws SystemException {
 		Object[] finderArgs = new Object[] { groupId, parentFolderId, name };
@@ -4595,6 +5640,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the document library folder that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder removeByG_P_N(long groupId, long parentFolderId, String name)
 		throws NoSuchFolderException, SystemException {
 		DLFolder dlFolder = findByG_P_N(groupId, parentFolderId, name);
@@ -4611,6 +5657,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the number of matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByG_P_N(long groupId, long parentFolderId, String name)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_P_N;
@@ -4725,6 +5772,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> findByG_M_P_H(long groupId, boolean mountPoint,
 		long parentFolderId, boolean hidden) throws SystemException {
 		return findByG_M_P_H(groupId, mountPoint, parentFolderId, hidden,
@@ -4747,6 +5795,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the range of matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> findByG_M_P_H(long groupId, boolean mountPoint,
 		long parentFolderId, boolean hidden, int start, int end)
 		throws SystemException {
@@ -4771,6 +5820,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the ordered range of matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> findByG_M_P_H(long groupId, boolean mountPoint,
 		long parentFolderId, boolean hidden, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
@@ -4902,6 +5952,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder findByG_M_P_H_First(long groupId, boolean mountPoint,
 		long parentFolderId, boolean hidden, OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -4944,6 +5995,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the first matching document library folder, or <code>null</code> if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder fetchByG_M_P_H_First(long groupId, boolean mountPoint,
 		long parentFolderId, boolean hidden, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -4969,6 +6021,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder findByG_M_P_H_Last(long groupId, boolean mountPoint,
 		long parentFolderId, boolean hidden, OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -5011,10 +6064,15 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the last matching document library folder, or <code>null</code> if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder fetchByG_M_P_H_Last(long groupId, boolean mountPoint,
 		long parentFolderId, boolean hidden, OrderByComparator orderByComparator)
 		throws SystemException {
 		int count = countByG_M_P_H(groupId, mountPoint, parentFolderId, hidden);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<DLFolder> list = findByG_M_P_H(groupId, mountPoint,
 				parentFolderId, hidden, count - 1, count, orderByComparator);
@@ -5039,6 +6097,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a document library folder with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder[] findByG_M_P_H_PrevAndNext(long folderId, long groupId,
 		boolean mountPoint, long parentFolderId, boolean hidden,
 		OrderByComparator orderByComparator)
@@ -5198,6 +6257,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the matching document library folders that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> filterFindByG_M_P_H(long groupId, boolean mountPoint,
 		long parentFolderId, boolean hidden) throws SystemException {
 		return filterFindByG_M_P_H(groupId, mountPoint, parentFolderId, hidden,
@@ -5220,6 +6280,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the range of matching document library folders that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> filterFindByG_M_P_H(long groupId, boolean mountPoint,
 		long parentFolderId, boolean hidden, int start, int end)
 		throws SystemException {
@@ -5244,6 +6305,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the ordered range of matching document library folders that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> filterFindByG_M_P_H(long groupId, boolean mountPoint,
 		long parentFolderId, boolean hidden, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
@@ -5351,6 +6413,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a document library folder with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder[] filterFindByG_M_P_H_PrevAndNext(long folderId,
 		long groupId, boolean mountPoint, long parentFolderId, boolean hidden,
 		OrderByComparator orderByComparator)
@@ -5551,6 +6614,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @param hidden the hidden
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByG_M_P_H(long groupId, boolean mountPoint,
 		long parentFolderId, boolean hidden) throws SystemException {
 		for (DLFolder dlFolder : findByG_M_P_H(groupId, mountPoint,
@@ -5570,6 +6634,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the number of matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByG_M_P_H(long groupId, boolean mountPoint,
 		long parentFolderId, boolean hidden) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_M_P_H;
@@ -5640,6 +6705,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the number of matching document library folders that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int filterCountByG_M_P_H(long groupId, boolean mountPoint,
 		long parentFolderId, boolean hidden) throws SystemException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
@@ -5740,6 +6806,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> findByG_P_H_S(long groupId, long parentFolderId,
 		boolean hidden, int status) throws SystemException {
 		return findByG_P_H_S(groupId, parentFolderId, hidden, status,
@@ -5762,6 +6829,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the range of matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> findByG_P_H_S(long groupId, long parentFolderId,
 		boolean hidden, int status, int start, int end)
 		throws SystemException {
@@ -5786,6 +6854,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the ordered range of matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> findByG_P_H_S(long groupId, long parentFolderId,
 		boolean hidden, int status, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
@@ -5915,6 +6984,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder findByG_P_H_S_First(long groupId, long parentFolderId,
 		boolean hidden, int status, OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -5957,6 +7027,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the first matching document library folder, or <code>null</code> if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder fetchByG_P_H_S_First(long groupId, long parentFolderId,
 		boolean hidden, int status, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -5982,6 +7053,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder findByG_P_H_S_Last(long groupId, long parentFolderId,
 		boolean hidden, int status, OrderByComparator orderByComparator)
 		throws NoSuchFolderException, SystemException {
@@ -6024,10 +7096,15 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the last matching document library folder, or <code>null</code> if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder fetchByG_P_H_S_Last(long groupId, long parentFolderId,
 		boolean hidden, int status, OrderByComparator orderByComparator)
 		throws SystemException {
 		int count = countByG_P_H_S(groupId, parentFolderId, hidden, status);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<DLFolder> list = findByG_P_H_S(groupId, parentFolderId, hidden,
 				status, count - 1, count, orderByComparator);
@@ -6052,6 +7129,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a document library folder with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder[] findByG_P_H_S_PrevAndNext(long folderId, long groupId,
 		long parentFolderId, boolean hidden, int status,
 		OrderByComparator orderByComparator)
@@ -6210,6 +7288,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the matching document library folders that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> filterFindByG_P_H_S(long groupId,
 		long parentFolderId, boolean hidden, int status)
 		throws SystemException {
@@ -6233,6 +7312,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the range of matching document library folders that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> filterFindByG_P_H_S(long groupId,
 		long parentFolderId, boolean hidden, int status, int start, int end)
 		throws SystemException {
@@ -6257,6 +7337,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the ordered range of matching document library folders that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> filterFindByG_P_H_S(long groupId,
 		long parentFolderId, boolean hidden, int status, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
@@ -6364,6 +7445,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a document library folder with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder[] filterFindByG_P_H_S_PrevAndNext(long folderId,
 		long groupId, long parentFolderId, boolean hidden, int status,
 		OrderByComparator orderByComparator)
@@ -6563,6 +7645,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @param status the status
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByG_P_H_S(long groupId, long parentFolderId,
 		boolean hidden, int status) throws SystemException {
 		for (DLFolder dlFolder : findByG_P_H_S(groupId, parentFolderId, hidden,
@@ -6581,6 +7664,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the number of matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByG_P_H_S(long groupId, long parentFolderId,
 		boolean hidden, int status) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_P_H_S;
@@ -6651,6 +7735,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the number of matching document library folders that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int filterCountByG_P_H_S(long groupId, long parentFolderId,
 		boolean hidden, int status) throws SystemException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
@@ -6757,6 +7842,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> findByG_M_P_H_S(long groupId, boolean mountPoint,
 		long parentFolderId, boolean hidden, int status)
 		throws SystemException {
@@ -6781,6 +7867,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the range of matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> findByG_M_P_H_S(long groupId, boolean mountPoint,
 		long parentFolderId, boolean hidden, int status, int start, int end)
 		throws SystemException {
@@ -6806,6 +7893,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the ordered range of matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> findByG_M_P_H_S(long groupId, boolean mountPoint,
 		long parentFolderId, boolean hidden, int status, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
@@ -6943,6 +8031,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder findByG_M_P_H_S_First(long groupId, boolean mountPoint,
 		long parentFolderId, boolean hidden, int status,
 		OrderByComparator orderByComparator)
@@ -6990,6 +8079,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the first matching document library folder, or <code>null</code> if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder fetchByG_M_P_H_S_First(long groupId, boolean mountPoint,
 		long parentFolderId, boolean hidden, int status,
 		OrderByComparator orderByComparator) throws SystemException {
@@ -7016,6 +8106,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder findByG_M_P_H_S_Last(long groupId, boolean mountPoint,
 		long parentFolderId, boolean hidden, int status,
 		OrderByComparator orderByComparator)
@@ -7063,11 +8154,16 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the last matching document library folder, or <code>null</code> if a matching document library folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder fetchByG_M_P_H_S_Last(long groupId, boolean mountPoint,
 		long parentFolderId, boolean hidden, int status,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByG_M_P_H_S(groupId, mountPoint, parentFolderId,
 				hidden, status);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<DLFolder> list = findByG_M_P_H_S(groupId, mountPoint,
 				parentFolderId, hidden, status, count - 1, count,
@@ -7094,6 +8190,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a document library folder with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder[] findByG_M_P_H_S_PrevAndNext(long folderId, long groupId,
 		boolean mountPoint, long parentFolderId, boolean hidden, int status,
 		OrderByComparator orderByComparator)
@@ -7260,6 +8357,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the matching document library folders that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> filterFindByG_M_P_H_S(long groupId,
 		boolean mountPoint, long parentFolderId, boolean hidden, int status)
 		throws SystemException {
@@ -7284,6 +8382,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the range of matching document library folders that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> filterFindByG_M_P_H_S(long groupId,
 		boolean mountPoint, long parentFolderId, boolean hidden, int status,
 		int start, int end) throws SystemException {
@@ -7309,6 +8408,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the ordered range of matching document library folders that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> filterFindByG_M_P_H_S(long groupId,
 		boolean mountPoint, long parentFolderId, boolean hidden, int status,
 		int start, int end, OrderByComparator orderByComparator)
@@ -7422,6 +8522,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a document library folder with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder[] filterFindByG_M_P_H_S_PrevAndNext(long folderId,
 		long groupId, boolean mountPoint, long parentFolderId, boolean hidden,
 		int status, OrderByComparator orderByComparator)
@@ -7627,6 +8728,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @param status the status
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByG_M_P_H_S(long groupId, boolean mountPoint,
 		long parentFolderId, boolean hidden, int status)
 		throws SystemException {
@@ -7648,6 +8750,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the number of matching document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByG_M_P_H_S(long groupId, boolean mountPoint,
 		long parentFolderId, boolean hidden, int status)
 		throws SystemException {
@@ -7724,6 +8827,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the number of matching document library folders that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int filterCountByG_M_P_H_S(long groupId, boolean mountPoint,
 		long parentFolderId, boolean hidden, int status)
 		throws SystemException {
@@ -7791,11 +8895,16 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	private static final String _FINDER_COLUMN_G_M_P_H_S_HIDDEN_2_SQL = "dlFolder.hidden_ = ? AND ";
 	private static final String _FINDER_COLUMN_G_M_P_H_S_STATUS_2 = "dlFolder.status = ?";
 
+	public DLFolderPersistenceImpl() {
+		setModelClass(DLFolder.class);
+	}
+
 	/**
 	 * Caches the document library folder in the entity cache if it is enabled.
 	 *
 	 * @param dlFolder the document library folder
 	 */
+	@Override
 	public void cacheResult(DLFolder dlFolder) {
 		EntityCacheUtil.putResult(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderImpl.class, dlFolder.getPrimaryKey(), dlFolder);
@@ -7820,6 +8929,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 *
 	 * @param dlFolders the document library folders
 	 */
+	@Override
 	public void cacheResult(List<DLFolder> dlFolders) {
 		for (DLFolder dlFolder : dlFolders) {
 			if (EntityCacheUtil.getResult(
@@ -8010,6 +9120,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @param folderId the primary key for the new document library folder
 	 * @return the new document library folder
 	 */
+	@Override
 	public DLFolder create(long folderId) {
 		DLFolder dlFolder = new DLFolderImpl();
 
@@ -8031,6 +9142,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a document library folder with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder remove(long folderId)
 		throws NoSuchFolderException, SystemException {
 		return remove((Serializable)folderId);
@@ -8081,15 +9193,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	protected DLFolder removeImpl(DLFolder dlFolder) throws SystemException {
 		dlFolder = toUnwrappedModel(dlFolder);
 
-		try {
-			clearDLFileEntryTypes.clear(dlFolder.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(DLFolderModelImpl.MAPPING_TABLE_DLFILEENTRYTYPES_DLFOLDERS_NAME);
-		}
+		dlFolderToDLFileEntryTypeTableMapper.deleteLeftPrimaryKeyTableMappings(dlFolder.getPrimaryKey());
 
 		Session session = null;
 
@@ -8363,6 +9467,8 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 		clearUniqueFindersCache(dlFolder);
 		cacheUniqueFindersCache(dlFolder);
 
+		dlFolder.resetOriginalValues();
+
 		return dlFolder;
 	}
 
@@ -8387,6 +9493,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 		dlFolderImpl.setRepositoryId(dlFolder.getRepositoryId());
 		dlFolderImpl.setMountPoint(dlFolder.isMountPoint());
 		dlFolderImpl.setParentFolderId(dlFolder.getParentFolderId());
+		dlFolderImpl.setTreePath(dlFolder.getTreePath());
 		dlFolderImpl.setName(dlFolder.getName());
 		dlFolderImpl.setDescription(dlFolder.getDescription());
 		dlFolderImpl.setLastPostDate(dlFolder.getLastPostDate());
@@ -8434,6 +9541,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a document library folder with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder findByPrimaryKey(long folderId)
 		throws NoSuchFolderException, SystemException {
 		return findByPrimaryKey((Serializable)folderId);
@@ -8493,6 +9601,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the document library folder, or <code>null</code> if a document library folder with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DLFolder fetchByPrimaryKey(long folderId) throws SystemException {
 		return fetchByPrimaryKey((Serializable)folderId);
 	}
@@ -8503,6 +9612,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> findAll() throws SystemException {
 		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
@@ -8519,6 +9629,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the range of document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> findAll(int start, int end) throws SystemException {
 		return findAll(start, end, null);
 	}
@@ -8536,6 +9647,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the ordered range of document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DLFolder> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -8621,6 +9733,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 *
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeAll() throws SystemException {
 		for (DLFolder dlFolder : findAll()) {
 			remove(dlFolder);
@@ -8633,6 +9746,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the number of document library folders
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countAll() throws SystemException {
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
 				FINDER_ARGS_EMPTY, this);
@@ -8671,6 +9785,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the document library file entry types associated with the document library folder
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<com.liferay.portlet.documentlibrary.model.DLFileEntryType> getDLFileEntryTypes(
 		long pk) throws SystemException {
 		return getDLFileEntryTypes(pk, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
@@ -8689,23 +9804,10 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the range of document library file entry types associated with the document library folder
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<com.liferay.portlet.documentlibrary.model.DLFileEntryType> getDLFileEntryTypes(
 		long pk, int start, int end) throws SystemException {
 		return getDLFileEntryTypes(pk, start, end, null);
-	}
-
-	public static final FinderPath FINDER_PATH_GET_DLFILEENTRYTYPES = new FinderPath(com.liferay.portlet.documentlibrary.model.impl.DLFileEntryTypeModelImpl.ENTITY_CACHE_ENABLED,
-			DLFolderModelImpl.FINDER_CACHE_ENABLED_DLFILEENTRYTYPES_DLFOLDERS,
-			com.liferay.portlet.documentlibrary.model.impl.DLFileEntryTypeImpl.class,
-			DLFolderModelImpl.MAPPING_TABLE_DLFILEENTRYTYPES_DLFOLDERS_NAME,
-			"getDLFileEntryTypes",
-			new String[] {
-				Long.class.getName(), Integer.class.getName(),
-				Integer.class.getName(), OrderByComparator.class.getName()
-			});
-
-	static {
-		FINDER_PATH_GET_DLFILEENTRYTYPES.setCacheKeyGeneratorCacheName(null);
 	}
 
 	/**
@@ -8722,93 +9824,12 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the ordered range of document library file entry types associated with the document library folder
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<com.liferay.portlet.documentlibrary.model.DLFileEntryType> getDLFileEntryTypes(
 		long pk, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		boolean pagination = true;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			pagination = false;
-			finderArgs = new Object[] { pk };
-		}
-		else {
-			finderArgs = new Object[] { pk, start, end, orderByComparator };
-		}
-
-		List<com.liferay.portlet.documentlibrary.model.DLFileEntryType> list = (List<com.liferay.portlet.documentlibrary.model.DLFileEntryType>)FinderCacheUtil.getResult(FINDER_PATH_GET_DLFILEENTRYTYPES,
-				finderArgs, this);
-
-		if (list == null) {
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				String sql = null;
-
-				if (orderByComparator != null) {
-					sql = _SQL_GETDLFILEENTRYTYPES.concat(ORDER_BY_CLAUSE)
-												  .concat(orderByComparator.getOrderBy());
-				}
-				else {
-					sql = _SQL_GETDLFILEENTRYTYPES;
-
-					if (pagination) {
-						sql = sql.concat(com.liferay.portlet.documentlibrary.model.impl.DLFileEntryTypeModelImpl.ORDER_BY_SQL);
-					}
-				}
-
-				SQLQuery q = session.createSQLQuery(sql);
-
-				q.addEntity("DLFileEntryType",
-					com.liferay.portlet.documentlibrary.model.impl.DLFileEntryTypeImpl.class);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(pk);
-
-				if (!pagination) {
-					list = (List<com.liferay.portlet.documentlibrary.model.DLFileEntryType>)QueryUtil.list(q,
-							getDialect(), start, end, false);
-
-					Collections.sort(list);
-
-					list = new UnmodifiableList<com.liferay.portlet.documentlibrary.model.DLFileEntryType>(list);
-				}
-				else {
-					list = (List<com.liferay.portlet.documentlibrary.model.DLFileEntryType>)QueryUtil.list(q,
-							getDialect(), start, end);
-				}
-
-				dlFileEntryTypePersistence.cacheResult(list);
-
-				FinderCacheUtil.putResult(FINDER_PATH_GET_DLFILEENTRYTYPES,
-					finderArgs, list);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_GET_DLFILEENTRYTYPES,
-					finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	public static final FinderPath FINDER_PATH_GET_DLFILEENTRYTYPES_SIZE = new FinderPath(com.liferay.portlet.documentlibrary.model.impl.DLFileEntryTypeModelImpl.ENTITY_CACHE_ENABLED,
-			DLFolderModelImpl.FINDER_CACHE_ENABLED_DLFILEENTRYTYPES_DLFOLDERS,
-			Long.class,
-			DLFolderModelImpl.MAPPING_TABLE_DLFILEENTRYTYPES_DLFOLDERS_NAME,
-			"getDLFileEntryTypesSize", new String[] { Long.class.getName() });
-
-	static {
-		FINDER_PATH_GET_DLFILEENTRYTYPES_SIZE.setCacheKeyGeneratorCacheName(null);
+		return dlFolderToDLFileEntryTypeTableMapper.getRightBaseModels(pk,
+			start, end, orderByComparator);
 	}
 
 	/**
@@ -8818,52 +9839,12 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return the number of document library file entry types associated with the document library folder
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int getDLFileEntryTypesSize(long pk) throws SystemException {
-		Object[] finderArgs = new Object[] { pk };
+		long[] pks = dlFolderToDLFileEntryTypeTableMapper.getRightPrimaryKeys(pk);
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_GET_DLFILEENTRYTYPES_SIZE,
-				finderArgs, this);
-
-		if (count == null) {
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				SQLQuery q = session.createSQLQuery(_SQL_GETDLFILEENTRYTYPESSIZE);
-
-				q.addScalar(COUNT_COLUMN_NAME,
-					com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(pk);
-
-				count = (Long)q.uniqueResult();
-
-				FinderCacheUtil.putResult(FINDER_PATH_GET_DLFILEENTRYTYPES_SIZE,
-					finderArgs, count);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_GET_DLFILEENTRYTYPES_SIZE,
-					finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
+		return pks.length;
 	}
-
-	public static final FinderPath FINDER_PATH_CONTAINS_DLFILEENTRYTYPE = new FinderPath(com.liferay.portlet.documentlibrary.model.impl.DLFileEntryTypeModelImpl.ENTITY_CACHE_ENABLED,
-			DLFolderModelImpl.FINDER_CACHE_ENABLED_DLFILEENTRYTYPES_DLFOLDERS,
-			Boolean.class,
-			DLFolderModelImpl.MAPPING_TABLE_DLFILEENTRYTYPES_DLFOLDERS_NAME,
-			"containsDLFileEntryType",
-			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns <code>true</code> if the document library file entry type is associated with the document library folder.
@@ -8873,30 +9854,11 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return <code>true</code> if the document library file entry type is associated with the document library folder; <code>false</code> otherwise
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public boolean containsDLFileEntryType(long pk, long dlFileEntryTypePK)
 		throws SystemException {
-		Object[] finderArgs = new Object[] { pk, dlFileEntryTypePK };
-
-		Boolean value = (Boolean)FinderCacheUtil.getResult(FINDER_PATH_CONTAINS_DLFILEENTRYTYPE,
-				finderArgs, this);
-
-		if (value == null) {
-			try {
-				value = Boolean.valueOf(containsDLFileEntryType.contains(pk,
-							dlFileEntryTypePK));
-
-				FinderCacheUtil.putResult(FINDER_PATH_CONTAINS_DLFILEENTRYTYPE,
-					finderArgs, value);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_CONTAINS_DLFILEENTRYTYPE,
-					finderArgs);
-
-				throw processException(e);
-			}
-		}
-
-		return value.booleanValue();
+		return dlFolderToDLFileEntryTypeTableMapper.containsTableMapping(pk,
+			dlFileEntryTypePK);
 	}
 
 	/**
@@ -8906,6 +9868,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @return <code>true</code> if the document library folder has any document library file entry types associated with it; <code>false</code> otherwise
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public boolean containsDLFileEntryTypes(long pk) throws SystemException {
 		if (getDLFileEntryTypesSize(pk) > 0) {
 			return true;
@@ -8922,17 +9885,11 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @param dlFileEntryTypePK the primary key of the document library file entry type
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addDLFileEntryType(long pk, long dlFileEntryTypePK)
 		throws SystemException {
-		try {
-			addDLFileEntryType.add(pk, dlFileEntryTypePK);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(DLFolderModelImpl.MAPPING_TABLE_DLFILEENTRYTYPES_DLFOLDERS_NAME);
-		}
+		dlFolderToDLFileEntryTypeTableMapper.addTableMapping(pk,
+			dlFileEntryTypePK);
 	}
 
 	/**
@@ -8942,18 +9899,12 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @param dlFileEntryType the document library file entry type
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addDLFileEntryType(long pk,
 		com.liferay.portlet.documentlibrary.model.DLFileEntryType dlFileEntryType)
 		throws SystemException {
-		try {
-			addDLFileEntryType.add(pk, dlFileEntryType.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(DLFolderModelImpl.MAPPING_TABLE_DLFILEENTRYTYPES_DLFOLDERS_NAME);
-		}
+		dlFolderToDLFileEntryTypeTableMapper.addTableMapping(pk,
+			dlFileEntryType.getPrimaryKey());
 	}
 
 	/**
@@ -8963,18 +9914,12 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @param dlFileEntryTypePKs the primary keys of the document library file entry types
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addDLFileEntryTypes(long pk, long[] dlFileEntryTypePKs)
 		throws SystemException {
-		try {
-			for (long dlFileEntryTypePK : dlFileEntryTypePKs) {
-				addDLFileEntryType.add(pk, dlFileEntryTypePK);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(DLFolderModelImpl.MAPPING_TABLE_DLFILEENTRYTYPES_DLFOLDERS_NAME);
+		for (long dlFileEntryTypePK : dlFileEntryTypePKs) {
+			dlFolderToDLFileEntryTypeTableMapper.addTableMapping(pk,
+				dlFileEntryTypePK);
 		}
 	}
 
@@ -8985,19 +9930,13 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @param dlFileEntryTypes the document library file entry types
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addDLFileEntryTypes(long pk,
 		List<com.liferay.portlet.documentlibrary.model.DLFileEntryType> dlFileEntryTypes)
 		throws SystemException {
-		try {
-			for (com.liferay.portlet.documentlibrary.model.DLFileEntryType dlFileEntryType : dlFileEntryTypes) {
-				addDLFileEntryType.add(pk, dlFileEntryType.getPrimaryKey());
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(DLFolderModelImpl.MAPPING_TABLE_DLFILEENTRYTYPES_DLFOLDERS_NAME);
+		for (com.liferay.portlet.documentlibrary.model.DLFileEntryType dlFileEntryType : dlFileEntryTypes) {
+			dlFolderToDLFileEntryTypeTableMapper.addTableMapping(pk,
+				dlFileEntryType.getPrimaryKey());
 		}
 	}
 
@@ -9007,16 +9946,9 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @param pk the primary key of the document library folder to clear the associated document library file entry types from
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void clearDLFileEntryTypes(long pk) throws SystemException {
-		try {
-			clearDLFileEntryTypes.clear(pk);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(DLFolderModelImpl.MAPPING_TABLE_DLFILEENTRYTYPES_DLFOLDERS_NAME);
-		}
+		dlFolderToDLFileEntryTypeTableMapper.deleteLeftPrimaryKeyTableMappings(pk);
 	}
 
 	/**
@@ -9026,17 +9958,11 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @param dlFileEntryTypePK the primary key of the document library file entry type
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeDLFileEntryType(long pk, long dlFileEntryTypePK)
 		throws SystemException {
-		try {
-			removeDLFileEntryType.remove(pk, dlFileEntryTypePK);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(DLFolderModelImpl.MAPPING_TABLE_DLFILEENTRYTYPES_DLFOLDERS_NAME);
-		}
+		dlFolderToDLFileEntryTypeTableMapper.deleteTableMapping(pk,
+			dlFileEntryTypePK);
 	}
 
 	/**
@@ -9046,18 +9972,12 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @param dlFileEntryType the document library file entry type
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeDLFileEntryType(long pk,
 		com.liferay.portlet.documentlibrary.model.DLFileEntryType dlFileEntryType)
 		throws SystemException {
-		try {
-			removeDLFileEntryType.remove(pk, dlFileEntryType.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(DLFolderModelImpl.MAPPING_TABLE_DLFILEENTRYTYPES_DLFOLDERS_NAME);
-		}
+		dlFolderToDLFileEntryTypeTableMapper.deleteTableMapping(pk,
+			dlFileEntryType.getPrimaryKey());
 	}
 
 	/**
@@ -9067,18 +9987,12 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @param dlFileEntryTypePKs the primary keys of the document library file entry types
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeDLFileEntryTypes(long pk, long[] dlFileEntryTypePKs)
 		throws SystemException {
-		try {
-			for (long dlFileEntryTypePK : dlFileEntryTypePKs) {
-				removeDLFileEntryType.remove(pk, dlFileEntryTypePK);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(DLFolderModelImpl.MAPPING_TABLE_DLFILEENTRYTYPES_DLFOLDERS_NAME);
+		for (long dlFileEntryTypePK : dlFileEntryTypePKs) {
+			dlFolderToDLFileEntryTypeTableMapper.deleteTableMapping(pk,
+				dlFileEntryTypePK);
 		}
 	}
 
@@ -9089,19 +10003,13 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @param dlFileEntryTypes the document library file entry types
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeDLFileEntryTypes(long pk,
 		List<com.liferay.portlet.documentlibrary.model.DLFileEntryType> dlFileEntryTypes)
 		throws SystemException {
-		try {
-			for (com.liferay.portlet.documentlibrary.model.DLFileEntryType dlFileEntryType : dlFileEntryTypes) {
-				removeDLFileEntryType.remove(pk, dlFileEntryType.getPrimaryKey());
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(DLFolderModelImpl.MAPPING_TABLE_DLFILEENTRYTYPES_DLFOLDERS_NAME);
+		for (com.liferay.portlet.documentlibrary.model.DLFileEntryType dlFileEntryType : dlFileEntryTypes) {
+			dlFolderToDLFileEntryTypeTableMapper.deleteTableMapping(pk,
+				dlFileEntryType.getPrimaryKey());
 		}
 	}
 
@@ -9112,31 +10020,27 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @param dlFileEntryTypePKs the primary keys of the document library file entry types to be associated with the document library folder
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void setDLFileEntryTypes(long pk, long[] dlFileEntryTypePKs)
 		throws SystemException {
-		try {
-			Set<Long> dlFileEntryTypePKSet = SetUtil.fromArray(dlFileEntryTypePKs);
+		Set<Long> newDLFileEntryTypePKsSet = SetUtil.fromArray(dlFileEntryTypePKs);
+		Set<Long> oldDLFileEntryTypePKsSet = SetUtil.fromArray(dlFolderToDLFileEntryTypeTableMapper.getRightPrimaryKeys(
+					pk));
 
-			List<com.liferay.portlet.documentlibrary.model.DLFileEntryType> dlFileEntryTypes =
-				getDLFileEntryTypes(pk);
+		Set<Long> removeDLFileEntryTypePKsSet = new HashSet<Long>(oldDLFileEntryTypePKsSet);
 
-			for (com.liferay.portlet.documentlibrary.model.DLFileEntryType dlFileEntryType : dlFileEntryTypes) {
-				if (!dlFileEntryTypePKSet.remove(
-							dlFileEntryType.getPrimaryKey())) {
-					removeDLFileEntryType.remove(pk,
-						dlFileEntryType.getPrimaryKey());
-				}
-			}
+		removeDLFileEntryTypePKsSet.removeAll(newDLFileEntryTypePKsSet);
 
-			for (Long dlFileEntryTypePK : dlFileEntryTypePKSet) {
-				addDLFileEntryType.add(pk, dlFileEntryTypePK);
-			}
+		for (long removeDLFileEntryTypePK : removeDLFileEntryTypePKsSet) {
+			dlFolderToDLFileEntryTypeTableMapper.deleteTableMapping(pk,
+				removeDLFileEntryTypePK);
 		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(DLFolderModelImpl.MAPPING_TABLE_DLFILEENTRYTYPES_DLFOLDERS_NAME);
+
+		newDLFileEntryTypePKsSet.removeAll(oldDLFileEntryTypePKsSet);
+
+		for (long newDLFileEntryTypePK : newDLFileEntryTypePKsSet) {
+			dlFolderToDLFileEntryTypeTableMapper.addTableMapping(pk,
+				newDLFileEntryTypePK);
 		}
 	}
 
@@ -9147,6 +10051,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @param dlFileEntryTypes the document library file entry types to be associated with the document library folder
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void setDLFileEntryTypes(long pk,
 		List<com.liferay.portlet.documentlibrary.model.DLFileEntryType> dlFileEntryTypes)
 		throws SystemException {
@@ -9199,11 +10104,8 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 			}
 		}
 
-		containsDLFileEntryType = new ContainsDLFileEntryType();
-
-		addDLFileEntryType = new AddDLFileEntryType();
-		clearDLFileEntryTypes = new ClearDLFileEntryTypes();
-		removeDLFileEntryType = new RemoveDLFileEntryType();
+		dlFolderToDLFileEntryTypeTableMapper = TableMapperFactory.getTableMapper("DLFileEntryTypes_DLFolders",
+				"folderId", "fileEntryTypeId", this, dlFileEntryTypePersistence);
 	}
 
 	public void destroy() {
@@ -9215,186 +10117,11 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 
 	@BeanReference(type = DLFileEntryTypePersistence.class)
 	protected DLFileEntryTypePersistence dlFileEntryTypePersistence;
-	protected ContainsDLFileEntryType containsDLFileEntryType;
-	protected AddDLFileEntryType addDLFileEntryType;
-	protected ClearDLFileEntryTypes clearDLFileEntryTypes;
-	protected RemoveDLFileEntryType removeDLFileEntryType;
-
-	protected class ContainsDLFileEntryType {
-		protected ContainsDLFileEntryType() {
-			_mappingSqlQuery = MappingSqlQueryFactoryUtil.getMappingSqlQuery(getDataSource(),
-					"SELECT COUNT(*) AS COUNT_VALUE FROM DLFileEntryTypes_DLFolders WHERE folderId = ? AND fileEntryTypeId = ?",
-					new int[] { java.sql.Types.BIGINT, java.sql.Types.BIGINT },
-					RowMapper.COUNT);
-		}
-
-		protected boolean contains(long folderId, long fileEntryTypeId) {
-			List<Integer> results = _mappingSqlQuery.execute(new Object[] {
-						new Long(folderId), new Long(fileEntryTypeId)
-					});
-
-			if (results.size() > 0) {
-				Integer count = results.get(0);
-
-				if (count.intValue() > 0) {
-					return true;
-				}
-			}
-
-			return false;
-		}
-
-		private MappingSqlQuery<Integer> _mappingSqlQuery;
-	}
-
-	protected class AddDLFileEntryType {
-		protected AddDLFileEntryType() {
-			_sqlUpdate = SqlUpdateFactoryUtil.getSqlUpdate(getDataSource(),
-					"INSERT INTO DLFileEntryTypes_DLFolders (folderId, fileEntryTypeId) VALUES (?, ?)",
-					new int[] { java.sql.Types.BIGINT, java.sql.Types.BIGINT });
-		}
-
-		protected void add(long folderId, long fileEntryTypeId)
-			throws SystemException {
-			if (!containsDLFileEntryType.contains(folderId, fileEntryTypeId)) {
-				ModelListener<com.liferay.portlet.documentlibrary.model.DLFileEntryType>[] dlFileEntryTypeListeners =
-					dlFileEntryTypePersistence.getListeners();
-
-				for (ModelListener<DLFolder> listener : listeners) {
-					listener.onBeforeAddAssociation(folderId,
-						com.liferay.portlet.documentlibrary.model.DLFileEntryType.class.getName(),
-						fileEntryTypeId);
-				}
-
-				for (ModelListener<com.liferay.portlet.documentlibrary.model.DLFileEntryType> listener : dlFileEntryTypeListeners) {
-					listener.onBeforeAddAssociation(fileEntryTypeId,
-						DLFolder.class.getName(), folderId);
-				}
-
-				_sqlUpdate.update(new Object[] {
-						new Long(folderId), new Long(fileEntryTypeId)
-					});
-
-				for (ModelListener<DLFolder> listener : listeners) {
-					listener.onAfterAddAssociation(folderId,
-						com.liferay.portlet.documentlibrary.model.DLFileEntryType.class.getName(),
-						fileEntryTypeId);
-				}
-
-				for (ModelListener<com.liferay.portlet.documentlibrary.model.DLFileEntryType> listener : dlFileEntryTypeListeners) {
-					listener.onAfterAddAssociation(fileEntryTypeId,
-						DLFolder.class.getName(), folderId);
-				}
-			}
-		}
-
-		private SqlUpdate _sqlUpdate;
-	}
-
-	protected class ClearDLFileEntryTypes {
-		protected ClearDLFileEntryTypes() {
-			_sqlUpdate = SqlUpdateFactoryUtil.getSqlUpdate(getDataSource(),
-					"DELETE FROM DLFileEntryTypes_DLFolders WHERE folderId = ?",
-					new int[] { java.sql.Types.BIGINT });
-		}
-
-		protected void clear(long folderId) throws SystemException {
-			ModelListener<com.liferay.portlet.documentlibrary.model.DLFileEntryType>[] dlFileEntryTypeListeners =
-				dlFileEntryTypePersistence.getListeners();
-
-			List<com.liferay.portlet.documentlibrary.model.DLFileEntryType> dlFileEntryTypes =
-				null;
-
-			if ((listeners.length > 0) ||
-					(dlFileEntryTypeListeners.length > 0)) {
-				dlFileEntryTypes = getDLFileEntryTypes(folderId);
-
-				for (com.liferay.portlet.documentlibrary.model.DLFileEntryType dlFileEntryType : dlFileEntryTypes) {
-					for (ModelListener<DLFolder> listener : listeners) {
-						listener.onBeforeRemoveAssociation(folderId,
-							com.liferay.portlet.documentlibrary.model.DLFileEntryType.class.getName(),
-							dlFileEntryType.getPrimaryKey());
-					}
-
-					for (ModelListener<com.liferay.portlet.documentlibrary.model.DLFileEntryType> listener : dlFileEntryTypeListeners) {
-						listener.onBeforeRemoveAssociation(dlFileEntryType.getPrimaryKey(),
-							DLFolder.class.getName(), folderId);
-					}
-				}
-			}
-
-			_sqlUpdate.update(new Object[] { new Long(folderId) });
-
-			if ((listeners.length > 0) ||
-					(dlFileEntryTypeListeners.length > 0)) {
-				for (com.liferay.portlet.documentlibrary.model.DLFileEntryType dlFileEntryType : dlFileEntryTypes) {
-					for (ModelListener<DLFolder> listener : listeners) {
-						listener.onAfterRemoveAssociation(folderId,
-							com.liferay.portlet.documentlibrary.model.DLFileEntryType.class.getName(),
-							dlFileEntryType.getPrimaryKey());
-					}
-
-					for (ModelListener<com.liferay.portlet.documentlibrary.model.DLFileEntryType> listener : dlFileEntryTypeListeners) {
-						listener.onAfterRemoveAssociation(dlFileEntryType.getPrimaryKey(),
-							DLFolder.class.getName(), folderId);
-					}
-				}
-			}
-		}
-
-		private SqlUpdate _sqlUpdate;
-	}
-
-	protected class RemoveDLFileEntryType {
-		protected RemoveDLFileEntryType() {
-			_sqlUpdate = SqlUpdateFactoryUtil.getSqlUpdate(getDataSource(),
-					"DELETE FROM DLFileEntryTypes_DLFolders WHERE folderId = ? AND fileEntryTypeId = ?",
-					new int[] { java.sql.Types.BIGINT, java.sql.Types.BIGINT });
-		}
-
-		protected void remove(long folderId, long fileEntryTypeId)
-			throws SystemException {
-			if (containsDLFileEntryType.contains(folderId, fileEntryTypeId)) {
-				ModelListener<com.liferay.portlet.documentlibrary.model.DLFileEntryType>[] dlFileEntryTypeListeners =
-					dlFileEntryTypePersistence.getListeners();
-
-				for (ModelListener<DLFolder> listener : listeners) {
-					listener.onBeforeRemoveAssociation(folderId,
-						com.liferay.portlet.documentlibrary.model.DLFileEntryType.class.getName(),
-						fileEntryTypeId);
-				}
-
-				for (ModelListener<com.liferay.portlet.documentlibrary.model.DLFileEntryType> listener : dlFileEntryTypeListeners) {
-					listener.onBeforeRemoveAssociation(fileEntryTypeId,
-						DLFolder.class.getName(), folderId);
-				}
-
-				_sqlUpdate.update(new Object[] {
-						new Long(folderId), new Long(fileEntryTypeId)
-					});
-
-				for (ModelListener<DLFolder> listener : listeners) {
-					listener.onAfterRemoveAssociation(folderId,
-						com.liferay.portlet.documentlibrary.model.DLFileEntryType.class.getName(),
-						fileEntryTypeId);
-				}
-
-				for (ModelListener<com.liferay.portlet.documentlibrary.model.DLFileEntryType> listener : dlFileEntryTypeListeners) {
-					listener.onAfterRemoveAssociation(fileEntryTypeId,
-						DLFolder.class.getName(), folderId);
-				}
-			}
-		}
-
-		private SqlUpdate _sqlUpdate;
-	}
-
+	protected TableMapper<DLFolder, com.liferay.portlet.documentlibrary.model.DLFileEntryType> dlFolderToDLFileEntryTypeTableMapper;
 	private static final String _SQL_SELECT_DLFOLDER = "SELECT dlFolder FROM DLFolder dlFolder";
 	private static final String _SQL_SELECT_DLFOLDER_WHERE = "SELECT dlFolder FROM DLFolder dlFolder WHERE ";
 	private static final String _SQL_COUNT_DLFOLDER = "SELECT COUNT(dlFolder) FROM DLFolder dlFolder";
 	private static final String _SQL_COUNT_DLFOLDER_WHERE = "SELECT COUNT(dlFolder) FROM DLFolder dlFolder WHERE ";
-	private static final String _SQL_GETDLFILEENTRYTYPES = "SELECT {DLFileEntryType.*} FROM DLFileEntryType INNER JOIN DLFileEntryTypes_DLFolders ON (DLFileEntryTypes_DLFolders.fileEntryTypeId = DLFileEntryType.fileEntryTypeId) WHERE (DLFileEntryTypes_DLFolders.folderId = ?)";
-	private static final String _SQL_GETDLFILEENTRYTYPESSIZE = "SELECT COUNT(*) AS COUNT_VALUE FROM DLFileEntryTypes_DLFolders WHERE folderId = ?";
 	private static final String _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN = "dlFolder.folderId";
 	private static final String _FILTER_SQL_SELECT_DLFOLDER_WHERE = "SELECT DISTINCT {dlFolder.*} FROM DLFolder dlFolder WHERE ";
 	private static final String _FILTER_SQL_SELECT_DLFOLDER_NO_INLINE_DISTINCT_WHERE_1 =
@@ -9426,6 +10153,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 		};
 
 	private static CacheModel<DLFolder> _nullDLFolderCacheModel = new CacheModel<DLFolder>() {
+			@Override
 			public DLFolder toEntityModel() {
 				return _nullDLFolder;
 			}

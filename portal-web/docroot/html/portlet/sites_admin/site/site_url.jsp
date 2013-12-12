@@ -17,6 +17,7 @@
 <%@ include file="/html/portlet/sites_admin/init.jsp" %>
 
 <%
+Group group = (Group)request.getAttribute("site.group");
 Group liveGroup = (Group)request.getAttribute("site.liveGroup");
 Long liveGroupId = (Long)request.getAttribute("site.liveGroupId");
 Group stagingGroup = (Group)request.getAttribute("site.stagingGroup");
@@ -30,6 +31,8 @@ String privateVirtualHost = ParamUtil.getString(request, "privateVirtualHost", B
 %>
 
 <liferay-ui:error-marker key="errorSection" value="siteUrl" />
+
+<h3><liferay-ui:message key="site-url" /></h3>
 
 <aui:model-context bean="<%= liveGroup %>" model="<%= Group.class %>" />
 
@@ -48,7 +51,26 @@ String privateVirtualHost = ParamUtil.getString(request, "privateVirtualHost", B
 	</c:if>
 
 	<c:if test="<%= gfurle.getType() == GroupFriendlyURLException.DUPLICATE %>">
-		<liferay-ui:message key="please-enter-a-unique-friendly-url" />
+
+		<%
+		long duplicateClassPK = gfurle.getDuplicateClassPK();
+		String duplicateClassName = gfurle.getDuplicateClassName();
+
+		String name = StringPool.BLANK;
+
+		if (duplicateClassName.equals(Group.class.getName())) {
+			Group duplicateGroup = GroupLocalServiceUtil.getGroup(duplicateClassPK);
+
+			name = duplicateGroup.getDescriptiveName(locale);
+		}
+		else if (duplicateClassName.equals(Layout.class.getName())) {
+			Layout duplicateLayout = LayoutLocalServiceUtil.getLayout(duplicateClassPK);
+
+			name = duplicateLayout.getName(locale);
+		}
+		%>
+
+		<liferay-ui:message arguments="<%= new Object[] {ResourceActionsUtil.getModelResource(locale, duplicateClassName), name} %>" key="please-enter-a-unique-friendly-url" />
 	</c:if>
 
 	<c:if test="<%= gfurle.getType() == GroupFriendlyURLException.ENDS_WITH_SLASH %>">
@@ -91,7 +113,7 @@ String privateVirtualHost = ParamUtil.getString(request, "privateVirtualHost", B
 	String taglibLabel = "site-friendly-url";
 
 	if (!liveGroup.hasStagingGroup()) {
-		taglibLabel = "<span class=\"aui-helper-hidden-accessible\">" + LanguageUtil.get(pageContext, taglibLabel) + "</span>";
+		taglibLabel = "<span class=\"hide-accessible\">" + LanguageUtil.get(pageContext, taglibLabel) + "</span>";
 	}
 	%>
 
@@ -140,6 +162,26 @@ String privateVirtualHost = ParamUtil.getString(request, "privateVirtualHost", B
 				}
 			</aui:validator>
 		</aui:input>
+	</c:if>
+</aui:fieldset>
+
+<aui:fieldset label="documents-and-media">
+	<c:if test="<%= (group != null) && !group.isCompany() %>">
+
+		<%
+		UnicodeProperties typeSettingsProperties = null;
+
+		if (liveGroup != null) {
+			typeSettingsProperties = liveGroup.getTypeSettingsProperties();
+		}
+		else {
+			typeSettingsProperties = group.getTypeSettingsProperties();
+		}
+
+		boolean directoryIndexingEnabled = PropertiesParamUtil.getBoolean(typeSettingsProperties, request, "directoryIndexingEnabled");
+		%>
+
+		<aui:input helpMessage='<%= LanguageUtil.format(pageContext, "directory-indexing-help", new Object[] {HtmlUtil.escape(group.getDescriptiveName(themeDisplay.getLocale())), themeDisplay.getPortalURL() + "/documents" + group.getFriendlyURL()}) %>' label="directory-indexing-enabled" name="TypeSettingsProperties--directoryIndexingEnabled--" type="checkbox" value="<%= directoryIndexingEnabled %>" />
 	</c:if>
 </aui:fieldset>
 

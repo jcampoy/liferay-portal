@@ -82,11 +82,11 @@ public class LayoutSetBranchModelImpl extends BaseModelImpl<LayoutSetBranch>
 			{ "wapThemeId", Types.VARCHAR },
 			{ "wapColorSchemeId", Types.VARCHAR },
 			{ "css", Types.CLOB },
-			{ "settings_", Types.VARCHAR },
+			{ "settings_", Types.CLOB },
 			{ "layoutSetPrototypeUuid", Types.VARCHAR },
 			{ "layoutSetPrototypeLinkEnabled", Types.BOOLEAN }
 		};
-	public static final String TABLE_SQL_CREATE = "create table LayoutSetBranch (layoutSetBranchId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,privateLayout BOOLEAN,name VARCHAR(75) null,description STRING null,master BOOLEAN,logo BOOLEAN,logoId LONG,themeId VARCHAR(75) null,colorSchemeId VARCHAR(75) null,wapThemeId VARCHAR(75) null,wapColorSchemeId VARCHAR(75) null,css TEXT null,settings_ STRING null,layoutSetPrototypeUuid VARCHAR(75) null,layoutSetPrototypeLinkEnabled BOOLEAN)";
+	public static final String TABLE_SQL_CREATE = "create table LayoutSetBranch (layoutSetBranchId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,privateLayout BOOLEAN,name VARCHAR(75) null,description STRING null,master BOOLEAN,logo BOOLEAN,logoId LONG,themeId VARCHAR(75) null,colorSchemeId VARCHAR(75) null,wapThemeId VARCHAR(75) null,wapColorSchemeId VARCHAR(75) null,css TEXT null,settings_ TEXT null,layoutSetPrototypeUuid VARCHAR(75) null,layoutSetPrototypeLinkEnabled BOOLEAN)";
 	public static final String TABLE_SQL_DROP = "drop table LayoutSetBranch";
 	public static final String ORDER_BY_JPQL = " ORDER BY layoutSetBranch.name ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY LayoutSetBranch.name ASC";
@@ -103,8 +103,9 @@ public class LayoutSetBranchModelImpl extends BaseModelImpl<LayoutSetBranch>
 				"value.object.column.bitmask.enabled.com.liferay.portal.model.LayoutSetBranch"),
 			true);
 	public static long GROUPID_COLUMN_BITMASK = 1L;
-	public static long NAME_COLUMN_BITMASK = 2L;
-	public static long PRIVATELAYOUT_COLUMN_BITMASK = 4L;
+	public static long MASTER_COLUMN_BITMASK = 2L;
+	public static long NAME_COLUMN_BITMASK = 4L;
+	public static long PRIVATELAYOUT_COLUMN_BITMASK = 8L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -171,26 +172,32 @@ public class LayoutSetBranchModelImpl extends BaseModelImpl<LayoutSetBranch>
 	public LayoutSetBranchModelImpl() {
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _layoutSetBranchId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setLayoutSetBranchId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
 		return _layoutSetBranchId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return LayoutSetBranch.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return LayoutSetBranch.class.getName();
 	}
@@ -357,19 +364,23 @@ public class LayoutSetBranchModelImpl extends BaseModelImpl<LayoutSetBranch>
 	}
 
 	@JSON
+	@Override
 	public long getLayoutSetBranchId() {
 		return _layoutSetBranchId;
 	}
 
+	@Override
 	public void setLayoutSetBranchId(long layoutSetBranchId) {
 		_layoutSetBranchId = layoutSetBranchId;
 	}
 
 	@JSON
+	@Override
 	public long getGroupId() {
 		return _groupId;
 	}
 
+	@Override
 	public void setGroupId(long groupId) {
 		_columnBitmask |= GROUPID_COLUMN_BITMASK;
 
@@ -387,32 +398,39 @@ public class LayoutSetBranchModelImpl extends BaseModelImpl<LayoutSetBranch>
 	}
 
 	@JSON
+	@Override
 	public long getCompanyId() {
 		return _companyId;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
 		_companyId = companyId;
 	}
 
 	@JSON
+	@Override
 	public long getUserId() {
 		return _userId;
 	}
 
+	@Override
 	public void setUserId(long userId) {
 		_userId = userId;
 	}
 
+	@Override
 	public String getUserUuid() throws SystemException {
 		return PortalUtil.getUserValue(getUserId(), "uuid", _userUuid);
 	}
 
+	@Override
 	public void setUserUuid(String userUuid) {
 		_userUuid = userUuid;
 	}
 
 	@JSON
+	@Override
 	public String getUserName() {
 		if (_userName == null) {
 			return StringPool.BLANK;
@@ -422,37 +440,45 @@ public class LayoutSetBranchModelImpl extends BaseModelImpl<LayoutSetBranch>
 		}
 	}
 
+	@Override
 	public void setUserName(String userName) {
 		_userName = userName;
 	}
 
 	@JSON
+	@Override
 	public Date getCreateDate() {
 		return _createDate;
 	}
 
+	@Override
 	public void setCreateDate(Date createDate) {
 		_createDate = createDate;
 	}
 
 	@JSON
+	@Override
 	public Date getModifiedDate() {
 		return _modifiedDate;
 	}
 
+	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		_modifiedDate = modifiedDate;
 	}
 
 	@JSON
+	@Override
 	public boolean getPrivateLayout() {
 		return _privateLayout;
 	}
 
+	@Override
 	public boolean isPrivateLayout() {
 		return _privateLayout;
 	}
 
+	@Override
 	public void setPrivateLayout(boolean privateLayout) {
 		_columnBitmask |= PRIVATELAYOUT_COLUMN_BITMASK;
 
@@ -470,6 +496,7 @@ public class LayoutSetBranchModelImpl extends BaseModelImpl<LayoutSetBranch>
 	}
 
 	@JSON
+	@Override
 	public String getName() {
 		if (_name == null) {
 			return StringPool.BLANK;
@@ -479,6 +506,7 @@ public class LayoutSetBranchModelImpl extends BaseModelImpl<LayoutSetBranch>
 		}
 	}
 
+	@Override
 	public void setName(String name) {
 		_columnBitmask = -1L;
 
@@ -494,6 +522,7 @@ public class LayoutSetBranchModelImpl extends BaseModelImpl<LayoutSetBranch>
 	}
 
 	@JSON
+	@Override
 	public String getDescription() {
 		if (_description == null) {
 			return StringPool.BLANK;
@@ -503,46 +532,68 @@ public class LayoutSetBranchModelImpl extends BaseModelImpl<LayoutSetBranch>
 		}
 	}
 
+	@Override
 	public void setDescription(String description) {
 		_description = description;
 	}
 
 	@JSON
+	@Override
 	public boolean getMaster() {
 		return _master;
 	}
 
+	@Override
 	public boolean isMaster() {
 		return _master;
 	}
 
+	@Override
 	public void setMaster(boolean master) {
+		_columnBitmask |= MASTER_COLUMN_BITMASK;
+
+		if (!_setOriginalMaster) {
+			_setOriginalMaster = true;
+
+			_originalMaster = _master;
+		}
+
 		_master = master;
 	}
 
+	public boolean getOriginalMaster() {
+		return _originalMaster;
+	}
+
 	@JSON
+	@Override
 	public boolean getLogo() {
 		return _logo;
 	}
 
+	@Override
 	public boolean isLogo() {
 		return _logo;
 	}
 
+	@Override
 	public void setLogo(boolean logo) {
 		_logo = logo;
 	}
 
 	@JSON
+	@Override
 	public long getLogoId() {
 		return _logoId;
 	}
 
+	@Override
 	public void setLogoId(long logoId) {
 		_logoId = logoId;
 	}
 
 	@JSON
+	@Override
 	public String getThemeId() {
 		if (_themeId == null) {
 			return StringPool.BLANK;
@@ -552,11 +603,13 @@ public class LayoutSetBranchModelImpl extends BaseModelImpl<LayoutSetBranch>
 		}
 	}
 
+	@Override
 	public void setThemeId(String themeId) {
 		_themeId = themeId;
 	}
 
 	@JSON
+	@Override
 	public String getColorSchemeId() {
 		if (_colorSchemeId == null) {
 			return StringPool.BLANK;
@@ -566,11 +619,13 @@ public class LayoutSetBranchModelImpl extends BaseModelImpl<LayoutSetBranch>
 		}
 	}
 
+	@Override
 	public void setColorSchemeId(String colorSchemeId) {
 		_colorSchemeId = colorSchemeId;
 	}
 
 	@JSON
+	@Override
 	public String getWapThemeId() {
 		if (_wapThemeId == null) {
 			return StringPool.BLANK;
@@ -580,11 +635,13 @@ public class LayoutSetBranchModelImpl extends BaseModelImpl<LayoutSetBranch>
 		}
 	}
 
+	@Override
 	public void setWapThemeId(String wapThemeId) {
 		_wapThemeId = wapThemeId;
 	}
 
 	@JSON
+	@Override
 	public String getWapColorSchemeId() {
 		if (_wapColorSchemeId == null) {
 			return StringPool.BLANK;
@@ -594,11 +651,13 @@ public class LayoutSetBranchModelImpl extends BaseModelImpl<LayoutSetBranch>
 		}
 	}
 
+	@Override
 	public void setWapColorSchemeId(String wapColorSchemeId) {
 		_wapColorSchemeId = wapColorSchemeId;
 	}
 
 	@JSON
+	@Override
 	public String getCss() {
 		if (_css == null) {
 			return StringPool.BLANK;
@@ -608,11 +667,13 @@ public class LayoutSetBranchModelImpl extends BaseModelImpl<LayoutSetBranch>
 		}
 	}
 
+	@Override
 	public void setCss(String css) {
 		_css = css;
 	}
 
 	@JSON
+	@Override
 	public String getSettings() {
 		if (_settings == null) {
 			return StringPool.BLANK;
@@ -622,11 +683,13 @@ public class LayoutSetBranchModelImpl extends BaseModelImpl<LayoutSetBranch>
 		}
 	}
 
+	@Override
 	public void setSettings(String settings) {
 		_settings = settings;
 	}
 
 	@JSON
+	@Override
 	public String getLayoutSetPrototypeUuid() {
 		if (_layoutSetPrototypeUuid == null) {
 			return StringPool.BLANK;
@@ -636,19 +699,23 @@ public class LayoutSetBranchModelImpl extends BaseModelImpl<LayoutSetBranch>
 		}
 	}
 
+	@Override
 	public void setLayoutSetPrototypeUuid(String layoutSetPrototypeUuid) {
 		_layoutSetPrototypeUuid = layoutSetPrototypeUuid;
 	}
 
 	@JSON
+	@Override
 	public boolean getLayoutSetPrototypeLinkEnabled() {
 		return _layoutSetPrototypeLinkEnabled;
 	}
 
+	@Override
 	public boolean isLayoutSetPrototypeLinkEnabled() {
 		return _layoutSetPrototypeLinkEnabled;
 	}
 
+	@Override
 	public void setLayoutSetPrototypeLinkEnabled(
 		boolean layoutSetPrototypeLinkEnabled) {
 		_layoutSetPrototypeLinkEnabled = layoutSetPrototypeLinkEnabled;
@@ -712,6 +779,7 @@ public class LayoutSetBranchModelImpl extends BaseModelImpl<LayoutSetBranch>
 		return layoutSetBranchImpl;
 	}
 
+	@Override
 	public int compareTo(LayoutSetBranch layoutSetBranch) {
 		int value = 0;
 
@@ -726,18 +794,15 @@ public class LayoutSetBranchModelImpl extends BaseModelImpl<LayoutSetBranch>
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof LayoutSetBranch)) {
 			return false;
 		}
 
-		LayoutSetBranch layoutSetBranch = null;
-
-		try {
-			layoutSetBranch = (LayoutSetBranch)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		LayoutSetBranch layoutSetBranch = (LayoutSetBranch)obj;
 
 		long primaryKey = layoutSetBranch.getPrimaryKey();
 
@@ -767,6 +832,10 @@ public class LayoutSetBranchModelImpl extends BaseModelImpl<LayoutSetBranch>
 		layoutSetBranchModelImpl._setOriginalPrivateLayout = false;
 
 		layoutSetBranchModelImpl._originalName = layoutSetBranchModelImpl._name;
+
+		layoutSetBranchModelImpl._originalMaster = layoutSetBranchModelImpl._master;
+
+		layoutSetBranchModelImpl._setOriginalMaster = false;
 
 		layoutSetBranchModelImpl._columnBitmask = 0;
 	}
@@ -946,6 +1015,7 @@ public class LayoutSetBranchModelImpl extends BaseModelImpl<LayoutSetBranch>
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(67);
 
@@ -1064,6 +1134,8 @@ public class LayoutSetBranchModelImpl extends BaseModelImpl<LayoutSetBranch>
 	private String _originalName;
 	private String _description;
 	private boolean _master;
+	private boolean _originalMaster;
+	private boolean _setOriginalMaster;
 	private boolean _logo;
 	private long _logoId;
 	private String _themeId;

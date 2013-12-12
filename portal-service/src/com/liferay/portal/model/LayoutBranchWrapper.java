@@ -14,6 +14,10 @@
 
 package com.liferay.portal.model;
 
+import aQute.bnd.annotation.ProviderType;
+
+import com.liferay.portal.kernel.util.Validator;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,24 +26,28 @@ import java.util.Map;
  * This class is a wrapper for {@link LayoutBranch}.
  * </p>
  *
- * @author    Brian Wing Shun Chan
- * @see       LayoutBranch
+ * @author Brian Wing Shun Chan
+ * @see LayoutBranch
  * @generated
  */
+@ProviderType
 public class LayoutBranchWrapper implements LayoutBranch,
 	ModelWrapper<LayoutBranch> {
 	public LayoutBranchWrapper(LayoutBranch layoutBranch) {
 		_layoutBranch = layoutBranch;
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return LayoutBranch.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return LayoutBranch.class.getName();
 	}
 
+	@Override
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
@@ -57,6 +65,7 @@ public class LayoutBranchWrapper implements LayoutBranch,
 		return attributes;
 	}
 
+	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
 		Long LayoutBranchId = (Long)attributes.get("LayoutBranchId");
 
@@ -124,6 +133,7 @@ public class LayoutBranchWrapper implements LayoutBranch,
 	*
 	* @return the primary key of this layout branch
 	*/
+	@Override
 	public long getPrimaryKey() {
 		return _layoutBranch.getPrimaryKey();
 	}
@@ -133,6 +143,7 @@ public class LayoutBranchWrapper implements LayoutBranch,
 	*
 	* @param primaryKey the primary key of this layout branch
 	*/
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_layoutBranch.setPrimaryKey(primaryKey);
 	}
@@ -142,6 +153,7 @@ public class LayoutBranchWrapper implements LayoutBranch,
 	*
 	* @return the layout branch ID of this layout branch
 	*/
+	@Override
 	public long getLayoutBranchId() {
 		return _layoutBranch.getLayoutBranchId();
 	}
@@ -151,6 +163,7 @@ public class LayoutBranchWrapper implements LayoutBranch,
 	*
 	* @param LayoutBranchId the layout branch ID of this layout branch
 	*/
+	@Override
 	public void setLayoutBranchId(long LayoutBranchId) {
 		_layoutBranch.setLayoutBranchId(LayoutBranchId);
 	}
@@ -160,6 +173,7 @@ public class LayoutBranchWrapper implements LayoutBranch,
 	*
 	* @return the group ID of this layout branch
 	*/
+	@Override
 	public long getGroupId() {
 		return _layoutBranch.getGroupId();
 	}
@@ -169,6 +183,7 @@ public class LayoutBranchWrapper implements LayoutBranch,
 	*
 	* @param groupId the group ID of this layout branch
 	*/
+	@Override
 	public void setGroupId(long groupId) {
 		_layoutBranch.setGroupId(groupId);
 	}
@@ -178,6 +193,7 @@ public class LayoutBranchWrapper implements LayoutBranch,
 	*
 	* @return the company ID of this layout branch
 	*/
+	@Override
 	public long getCompanyId() {
 		return _layoutBranch.getCompanyId();
 	}
@@ -187,6 +203,7 @@ public class LayoutBranchWrapper implements LayoutBranch,
 	*
 	* @param companyId the company ID of this layout branch
 	*/
+	@Override
 	public void setCompanyId(long companyId) {
 		_layoutBranch.setCompanyId(companyId);
 	}
@@ -196,6 +213,7 @@ public class LayoutBranchWrapper implements LayoutBranch,
 	*
 	* @return the user ID of this layout branch
 	*/
+	@Override
 	public long getUserId() {
 		return _layoutBranch.getUserId();
 	}
@@ -205,6 +223,7 @@ public class LayoutBranchWrapper implements LayoutBranch,
 	*
 	* @param userId the user ID of this layout branch
 	*/
+	@Override
 	public void setUserId(long userId) {
 		_layoutBranch.setUserId(userId);
 	}
@@ -215,6 +234,7 @@ public class LayoutBranchWrapper implements LayoutBranch,
 	* @return the user uuid of this layout branch
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.lang.String getUserUuid()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _layoutBranch.getUserUuid();
@@ -225,6 +245,7 @@ public class LayoutBranchWrapper implements LayoutBranch,
 	*
 	* @param userUuid the user uuid of this layout branch
 	*/
+	@Override
 	public void setUserUuid(java.lang.String userUuid) {
 		_layoutBranch.setUserUuid(userUuid);
 	}
@@ -234,6 +255,7 @@ public class LayoutBranchWrapper implements LayoutBranch,
 	*
 	* @return the user name of this layout branch
 	*/
+	@Override
 	public java.lang.String getUserName() {
 		return _layoutBranch.getUserName();
 	}
@@ -243,6 +265,7 @@ public class LayoutBranchWrapper implements LayoutBranch,
 	*
 	* @param userName the user name of this layout branch
 	*/
+	@Override
 	public void setUserName(java.lang.String userName) {
 		_layoutBranch.setUserName(userName);
 	}
@@ -252,6 +275,7 @@ public class LayoutBranchWrapper implements LayoutBranch,
 	*
 	* @return the layout set branch ID of this layout branch
 	*/
+	@Override
 	public long getLayoutSetBranchId() {
 		return _layoutBranch.getLayoutSetBranchId();
 	}
@@ -261,6 +285,7 @@ public class LayoutBranchWrapper implements LayoutBranch,
 	*
 	* @param layoutSetBranchId the layout set branch ID of this layout branch
 	*/
+	@Override
 	public void setLayoutSetBranchId(long layoutSetBranchId) {
 		_layoutBranch.setLayoutSetBranchId(layoutSetBranchId);
 	}
@@ -270,6 +295,7 @@ public class LayoutBranchWrapper implements LayoutBranch,
 	*
 	* @return the plid of this layout branch
 	*/
+	@Override
 	public long getPlid() {
 		return _layoutBranch.getPlid();
 	}
@@ -279,6 +305,7 @@ public class LayoutBranchWrapper implements LayoutBranch,
 	*
 	* @param plid the plid of this layout branch
 	*/
+	@Override
 	public void setPlid(long plid) {
 		_layoutBranch.setPlid(plid);
 	}
@@ -288,6 +315,7 @@ public class LayoutBranchWrapper implements LayoutBranch,
 	*
 	* @return the name of this layout branch
 	*/
+	@Override
 	public java.lang.String getName() {
 		return _layoutBranch.getName();
 	}
@@ -297,6 +325,7 @@ public class LayoutBranchWrapper implements LayoutBranch,
 	*
 	* @param name the name of this layout branch
 	*/
+	@Override
 	public void setName(java.lang.String name) {
 		_layoutBranch.setName(name);
 	}
@@ -306,6 +335,7 @@ public class LayoutBranchWrapper implements LayoutBranch,
 	*
 	* @return the description of this layout branch
 	*/
+	@Override
 	public java.lang.String getDescription() {
 		return _layoutBranch.getDescription();
 	}
@@ -315,6 +345,7 @@ public class LayoutBranchWrapper implements LayoutBranch,
 	*
 	* @param description the description of this layout branch
 	*/
+	@Override
 	public void setDescription(java.lang.String description) {
 		_layoutBranch.setDescription(description);
 	}
@@ -324,6 +355,7 @@ public class LayoutBranchWrapper implements LayoutBranch,
 	*
 	* @return the master of this layout branch
 	*/
+	@Override
 	public boolean getMaster() {
 		return _layoutBranch.getMaster();
 	}
@@ -333,6 +365,7 @@ public class LayoutBranchWrapper implements LayoutBranch,
 	*
 	* @return <code>true</code> if this layout branch is master; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isMaster() {
 		return _layoutBranch.isMaster();
 	}
@@ -342,52 +375,64 @@ public class LayoutBranchWrapper implements LayoutBranch,
 	*
 	* @param master the master of this layout branch
 	*/
+	@Override
 	public void setMaster(boolean master) {
 		_layoutBranch.setMaster(master);
 	}
 
+	@Override
 	public boolean isNew() {
 		return _layoutBranch.isNew();
 	}
 
+	@Override
 	public void setNew(boolean n) {
 		_layoutBranch.setNew(n);
 	}
 
+	@Override
 	public boolean isCachedModel() {
 		return _layoutBranch.isCachedModel();
 	}
 
+	@Override
 	public void setCachedModel(boolean cachedModel) {
 		_layoutBranch.setCachedModel(cachedModel);
 	}
 
+	@Override
 	public boolean isEscapedModel() {
 		return _layoutBranch.isEscapedModel();
 	}
 
+	@Override
 	public java.io.Serializable getPrimaryKeyObj() {
 		return _layoutBranch.getPrimaryKeyObj();
 	}
 
+	@Override
 	public void setPrimaryKeyObj(java.io.Serializable primaryKeyObj) {
 		_layoutBranch.setPrimaryKeyObj(primaryKeyObj);
 	}
 
+	@Override
 	public com.liferay.portlet.expando.model.ExpandoBridge getExpandoBridge() {
 		return _layoutBranch.getExpandoBridge();
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.model.BaseModel<?> baseModel) {
 		_layoutBranch.setExpandoBridgeAttributes(baseModel);
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
 		_layoutBranch.setExpandoBridgeAttributes(expandoBridge);
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_layoutBranch.setExpandoBridgeAttributes(serviceContext);
@@ -398,6 +443,7 @@ public class LayoutBranchWrapper implements LayoutBranch,
 		return new LayoutBranchWrapper((LayoutBranch)_layoutBranch.clone());
 	}
 
+	@Override
 	public int compareTo(com.liferay.portal.model.LayoutBranch layoutBranch) {
 		return _layoutBranch.compareTo(layoutBranch);
 	}
@@ -407,14 +453,17 @@ public class LayoutBranchWrapper implements LayoutBranch,
 		return _layoutBranch.hashCode();
 	}
 
+	@Override
 	public com.liferay.portal.model.CacheModel<com.liferay.portal.model.LayoutBranch> toCacheModel() {
 		return _layoutBranch.toCacheModel();
 	}
 
+	@Override
 	public com.liferay.portal.model.LayoutBranch toEscapedModel() {
 		return new LayoutBranchWrapper(_layoutBranch.toEscapedModel());
 	}
 
+	@Override
 	public com.liferay.portal.model.LayoutBranch toUnescapedModel() {
 		return new LayoutBranchWrapper(_layoutBranch.toUnescapedModel());
 	}
@@ -424,13 +473,34 @@ public class LayoutBranchWrapper implements LayoutBranch,
 		return _layoutBranch.toString();
 	}
 
+	@Override
 	public java.lang.String toXmlString() {
 		return _layoutBranch.toXmlString();
 	}
 
+	@Override
 	public void persist()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_layoutBranch.persist();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof LayoutBranchWrapper)) {
+			return false;
+		}
+
+		LayoutBranchWrapper layoutBranchWrapper = (LayoutBranchWrapper)obj;
+
+		if (Validator.equals(_layoutBranch, layoutBranchWrapper._layoutBranch)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -440,10 +510,12 @@ public class LayoutBranchWrapper implements LayoutBranch,
 		return _layoutBranch;
 	}
 
+	@Override
 	public LayoutBranch getWrappedModel() {
 		return _layoutBranch;
 	}
 
+	@Override
 	public void resetOriginalValues() {
 		_layoutBranch.resetOriginalValues();
 	}

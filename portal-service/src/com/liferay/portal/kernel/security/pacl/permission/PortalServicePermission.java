@@ -74,6 +74,13 @@ public class PortalServicePermission extends BasicPermission {
 		return _shortName;
 	}
 
+	public static interface PACL {
+
+		public void checkService(
+			Object object, Method method, Object[] arguments);
+
+	}
+
 	private static String _createLongName(
 		String name, String servletContextName, String className) {
 
@@ -118,16 +125,10 @@ public class PortalServicePermission extends BasicPermission {
 
 	private static class NoPACL implements PACL {
 
+		@Override
 		public void checkService(
 			Object object, Method method, Object[] arguments) {
 		}
-
-	}
-
-	public static interface PACL {
-
-		public void checkService(
-			Object object, Method method, Object[] arguments);
 
 	}
 

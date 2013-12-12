@@ -14,17 +14,18 @@
 
 package com.liferay.portlet.trash.service;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.service.ServiceWrapper;
 
 /**
- * <p>
- * This class is a wrapper for {@link TrashEntryService}.
- * </p>
+ * Provides a wrapper for {@link TrashEntryService}.
  *
- * @author    Brian Wing Shun Chan
- * @see       TrashEntryService
+ * @author Brian Wing Shun Chan
+ * @see TrashEntryService
  * @generated
  */
+@ProviderType
 public class TrashEntryServiceWrapper implements TrashEntryService,
 	ServiceWrapper<TrashEntryService> {
 	public TrashEntryServiceWrapper(TrashEntryService trashEntryService) {
@@ -36,6 +37,7 @@ public class TrashEntryServiceWrapper implements TrashEntryService,
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _trashEntryService.getBeanIdentifier();
 	}
@@ -45,6 +47,7 @@ public class TrashEntryServiceWrapper implements TrashEntryService,
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_trashEntryService.setBeanIdentifier(beanIdentifier);
 	}
@@ -57,6 +60,7 @@ public class TrashEntryServiceWrapper implements TrashEntryService,
 	* @throws PortalException if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void deleteEntries(long groupId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -72,6 +76,7 @@ public class TrashEntryServiceWrapper implements TrashEntryService,
 	of the trash entries
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void deleteEntries(long[] entryIds)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -93,6 +98,7 @@ public class TrashEntryServiceWrapper implements TrashEntryService,
 	trash entry
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void deleteEntry(long entryId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -115,6 +121,7 @@ public class TrashEntryServiceWrapper implements TrashEntryService,
 	permission to delete the entry
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void deleteEntry(java.lang.String className, long classPK)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -129,6 +136,7 @@ public class TrashEntryServiceWrapper implements TrashEntryService,
 	* @throws PrincipalException if a principal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.trash.model.TrashEntryList getEntries(
 		long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException,
@@ -150,6 +158,7 @@ public class TrashEntryServiceWrapper implements TrashEntryService,
 	* @throws PrincipalException if a system exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.trash.model.TrashEntryList getEntries(
 		long groupId, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator obc)
@@ -193,6 +202,7 @@ public class TrashEntryServiceWrapper implements TrashEntryService,
 	location, or if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void moveEntry(java.lang.String className, long classPK,
 		long destinationContainerModelId,
 		com.liferay.portal.service.ServiceContext serviceContext)
@@ -202,6 +212,7 @@ public class TrashEntryServiceWrapper implements TrashEntryService,
 			destinationContainerModelId, serviceContext);
 	}
 
+	@Override
 	public com.liferay.portlet.trash.model.TrashEntry restoreEntry(long entryId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -247,11 +258,30 @@ public class TrashEntryServiceWrapper implements TrashEntryService,
 	the trash entry in general
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.trash.model.TrashEntry restoreEntry(
 		long entryId, long overrideClassPK, java.lang.String name)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _trashEntryService.restoreEntry(entryId, overrideClassPK, name);
+	}
+
+	@Override
+	public com.liferay.portlet.trash.model.TrashEntry restoreEntry(
+		java.lang.String className, long classPK)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _trashEntryService.restoreEntry(className, classPK);
+	}
+
+	@Override
+	public com.liferay.portlet.trash.model.TrashEntry restoreEntry(
+		java.lang.String className, long classPK, long overrideClassPK,
+		java.lang.String name)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _trashEntryService.restoreEntry(className, classPK,
+			overrideClassPK, name);
 	}
 
 	/**
@@ -268,10 +298,12 @@ public class TrashEntryServiceWrapper implements TrashEntryService,
 		_trashEntryService = trashEntryService;
 	}
 
+	@Override
 	public TrashEntryService getWrappedService() {
 		return _trashEntryService;
 	}
 
+	@Override
 	public void setWrappedService(TrashEntryService trashEntryService) {
 		_trashEntryService = trashEntryService;
 	}

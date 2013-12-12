@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.scripting.BaseScriptingExecutor;
 import com.liferay.portal.kernel.scripting.ExecutionException;
 import com.liferay.portal.kernel.scripting.ScriptingException;
 import com.liferay.portal.kernel.util.AggregateClassLoader;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.util.ClassLoaderUtil;
 
 import groovy.lang.Binding;
@@ -42,6 +43,7 @@ public class GroovyExecutor extends BaseScriptingExecutor {
 		_portalCache.removeAll();
 	}
 
+	@Override
 	public Map<String, Object> eval(
 			Set<String> allowedClasses, Map<String, Object> inputObjects,
 			Set<String> outputNames, String script, ClassLoader... classLoaders)
@@ -73,6 +75,7 @@ public class GroovyExecutor extends BaseScriptingExecutor {
 		return outputObjects;
 	}
 
+	@Override
 	public String getLanguage() {
 		return _LANGUAGE;
 	}
@@ -96,7 +99,7 @@ public class GroovyExecutor extends BaseScriptingExecutor {
 	}
 
 	protected GroovyShell getGroovyShell(ClassLoader[] classLoaders) {
-		if ((classLoaders == null) || (classLoaders.length == 0)) {
+		if (ArrayUtil.isEmpty(classLoaders)) {
 			if (_groovyShell == null) {
 				synchronized (this) {
 					if (_groovyShell == null) {

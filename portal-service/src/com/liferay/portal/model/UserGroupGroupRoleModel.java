@@ -14,6 +14,8 @@
 
 package com.liferay.portal.model;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.persistence.UserGroupGroupRolePK;
 
@@ -34,6 +36,7 @@ import java.io.Serializable;
  * @see com.liferay.portal.model.impl.UserGroupGroupRoleModelImpl
  * @generated
  */
+@ProviderType
 public interface UserGroupGroupRoleModel extends BaseModel<UserGroupGroupRole> {
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -97,41 +100,60 @@ public interface UserGroupGroupRoleModel extends BaseModel<UserGroupGroupRole> {
 	 */
 	public void setRoleId(long roleId);
 
+	@Override
 	public boolean isNew();
 
+	@Override
 	public void setNew(boolean n);
 
+	@Override
 	public boolean isCachedModel();
 
+	@Override
 	public void setCachedModel(boolean cachedModel);
 
+	@Override
 	public boolean isEscapedModel();
 
+	@Override
 	public Serializable getPrimaryKeyObj();
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj);
 
+	@Override
 	public ExpandoBridge getExpandoBridge();
 
+	@Override
 	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
 
+	@Override
 	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
 
+	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
+	@Override
 	public Object clone();
 
+	@Override
 	public int compareTo(UserGroupGroupRole userGroupGroupRole);
 
+	@Override
 	public int hashCode();
 
+	@Override
 	public CacheModel<UserGroupGroupRole> toCacheModel();
 
+	@Override
 	public UserGroupGroupRole toEscapedModel();
 
+	@Override
 	public UserGroupGroupRole toUnescapedModel();
 
+	@Override
 	public String toString();
 
+	@Override
 	public String toXmlString();
 }

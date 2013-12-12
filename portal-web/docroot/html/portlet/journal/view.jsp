@@ -53,28 +53,21 @@ request.setAttribute("view.jsp-folder", folder);
 request.setAttribute("view.jsp-folderId", String.valueOf(folderId));
 %>
 
-<portlet:actionURL var="undoTrashURL">
-	<portlet:param name="struts_action" value="/journal/edit_entry" />
-	<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.RESTORE %>" />
-</portlet:actionURL>
-
-<liferay-ui:trash-undo portletURL="<%= undoTrashURL %>" />
+<liferay-ui:trash-undo />
 
 <div id="<portlet:namespace />journalContainer">
-	<aui:layout cssClass="lfr-app-column-view">
-		<aui:column columnWidth="<%= 20 %>" cssClass="navigation-pane" first="<%= true %>">
+	<aui:row cssClass="lfr-app-column-view">
+		<aui:col cssClass="navigation-pane" width="<%= 25 %>">
 			<liferay-util:include page="/html/portlet/journal/view_folders.jsp" />
 
-			<div class="folder-paginator"></div>
-		</aui:column>
+			<div class="folder-pagination"></div>
+		</aui:col>
 
-		<aui:column columnWidth="80" cssClass="context-pane" last="<%= true %>">
+		<aui:col cssClass="context-pane" last="<%= true %>" width="<%= 75 %>">
 			<liferay-ui:app-view-toolbar
 				includeDisplayStyle="<%= true %>"
 				includeSelectAll="<%= true %>"
-				searchJsp="/html/portlet/journal/article_toolbar_search.jsp"
 			>
-
 				<liferay-util:include page="/html/portlet/journal/toolbar.jsp" />
 			</liferay-ui:app-view-toolbar>
 
@@ -89,10 +82,6 @@ request.setAttribute("view.jsp-folderId", String.valueOf(folderId));
 			portletURL.setParameter("folderId", String.valueOf(folderId));
 			%>
 
-			<div id="<portlet:namespace />advancedSearchContainer">
-				<liferay-util:include page="/html/portlet/journal/article_search.jsp" />
-			</div>
-
 			<aui:form action="<%= portletURL.toString() %>" method="get" name="fm">
 				<aui:input name="<%= Constants.CMD %>" type="hidden" />
 				<aui:input name="redirect" type="hidden" value="<%= currentURL %>" />
@@ -104,10 +93,10 @@ request.setAttribute("view.jsp-folderId", String.valueOf(folderId));
 					<liferay-util:include page="/html/portlet/journal/view_entries.jsp" />
 				</div>
 
-				<div class="article-entries-paginator"></div>
+				<div class="article-entries-pagination"></div>
 			</aui:form>
-		</aui:column>
-	</aui:layout>
+		</aui:col>
+	</aui:row>
 </div>
 
 <%
@@ -120,10 +109,6 @@ entryStart = GetterUtil.getInteger(request.getAttribute("view_entries.jsp-entryS
 folderEnd = GetterUtil.getInteger(request.getAttribute("view_folders.jsp-folderEnd"), folderEnd);
 folderStart = GetterUtil.getInteger(request.getAttribute("view_folders.jsp-folderStart"), folderStart);
 %>
-
-<span id="<portlet:namespace />displayStyleButtonsContainer">
-	<liferay-util:include page="/html/portlet/journal/display_style_buttons.jsp" />
-</span>
 
 <aui:script>
 	Liferay.provide(
@@ -159,6 +144,7 @@ folderStart = GetterUtil.getInteger(request.getAttribute("view_folders.jsp-folde
 					p_p_lifecycle: 0
 				},
 				defaultParentFolderId: '<%= JournalFolderConstants.DEFAULT_PARENT_FOLDER_ID %>',
+				'listViewConfig.useTransition': false,
 				mainUrl: '<%= mainURL %>',
 				strutsAction: '/journal/view'
 			},

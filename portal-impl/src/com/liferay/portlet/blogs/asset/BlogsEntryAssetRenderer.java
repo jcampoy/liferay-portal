@@ -53,10 +53,12 @@ public class BlogsEntryAssetRenderer
 		_entry = entry;
 	}
 
+	@Override
 	public String getClassName() {
 		return BlogsEntry.class.getName();
 	}
 
+	@Override
 	public long getClassPK() {
 		return _entry.getEntryId();
 	}
@@ -76,6 +78,7 @@ public class BlogsEntryAssetRenderer
 		return _entry.getDisplayDate();
 	}
 
+	@Override
 	public long getGroupId() {
 		return _entry.getGroupId();
 	}
@@ -85,12 +88,14 @@ public class BlogsEntryAssetRenderer
 		return themeDisplay.getPathThemeImages() + "/blogs/blogs.png";
 	}
 
+	@Override
 	public String getPortletId() {
 		AssetRendererFactory assetRendererFactory = getAssetRendererFactory();
 
 		return assetRendererFactory.getPortletId();
 	}
 
+	@Override
 	public String getSummary(Locale locale) {
 		String summary = _entry.getDescription();
 
@@ -113,10 +118,12 @@ public class BlogsEntryAssetRenderer
 			"/file_system/large/blog.png";
 	}
 
+	@Override
 	public String getTitle(Locale locale) {
 		return _entry.getTitle();
 	}
 
+	@Override
 	public String getType() {
 		return BlogsEntryAssetRendererFactory.TYPE;
 	}
@@ -148,8 +155,10 @@ public class BlogsEntryAssetRenderer
 			WindowState windowState)
 		throws Exception {
 
-		PortletURL portletURL = liferayPortletResponse.createLiferayPortletURL(
-			PortletKeys.BLOGS, PortletRequest.RENDER_PHASE);
+		AssetRendererFactory assetRendererFactory = getAssetRendererFactory();
+
+		PortletURL portletURL = assetRendererFactory.getURLView(
+			liferayPortletResponse, windowState);
 
 		portletURL.setParameter("struts_action", "/blogs/view_entry");
 		portletURL.setParameter("entryId", String.valueOf(_entry.getEntryId()));
@@ -169,14 +178,17 @@ public class BlogsEntryAssetRenderer
 			"entryId", _entry.getEntryId());
 	}
 
+	@Override
 	public long getUserId() {
 		return _entry.getUserId();
 	}
 
+	@Override
 	public String getUserName() {
 		return _entry.getUserName();
 	}
 
+	@Override
 	public String getUuid() {
 		return _entry.getUuid();
 	}
@@ -203,6 +215,7 @@ public class BlogsEntryAssetRenderer
 		return true;
 	}
 
+	@Override
 	public String render(
 			RenderRequest renderRequest, RenderResponse renderResponse,
 			String template)

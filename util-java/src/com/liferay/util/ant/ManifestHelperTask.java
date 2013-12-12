@@ -14,13 +14,14 @@
 
 package com.liferay.util.ant;
 
-import aQute.lib.osgi.Analyzer;
-import aQute.lib.osgi.Constants;
+import aQute.bnd.osgi.Analyzer;
+import aQute.bnd.osgi.Constants;
 
 import com.liferay.portal.kernel.util.OSDetector;
 import com.liferay.portal.kernel.util.ReleaseInfo;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.io.File;
 
@@ -66,7 +67,16 @@ public class ManifestHelperTask extends Task {
 		path.setRefid(reference);
 	}
 
+	public void setProjectDirPropertyName(String projectDirPropertyName) {
+		_projectDirPropertyName = projectDirPropertyName;
+	}
+
 	protected void doExecute() throws Exception {
+		if (_projectDirPropertyName == null) {
+			throw new BuildException(
+				"Attribute projectDirPropertyName must be set");
+		}
+
 		Project project = getProject();
 
 		project.setProperty("build.revision", getBuildRevision());
@@ -87,7 +97,13 @@ public class ManifestHelperTask extends Task {
 		project.setProperty(
 			"release.info.server.info", ReleaseInfo.getServerInfo());
 		project.setProperty("release.info.vendor", ReleaseInfo.getVendor());
-		project.setProperty("release.info.version", ReleaseInfo.getVersion());
+
+		String releaseInfoVersion = project.getProperty("release.info.version");
+
+		if (Validator.isNull(releaseInfoVersion)) {
+			project.setProperty(
+				"release.info.version", ReleaseInfo.getVersion());
+		}
 
 		if (!_analyze) {
 			return;
@@ -120,6 +136,8 @@ public class ManifestHelperTask extends Task {
 			"export.packages", attributes.getValue(Constants.EXPORT_PACKAGE));
 		project.setProperty(
 			"import.packages", attributes.getValue(Constants.IMPORT_PACKAGE));
+
+		analyzer.close();
 	}
 
 	protected String execute(String command) throws Exception {
@@ -134,7 +152,7 @@ public class ManifestHelperTask extends Task {
 		Project project = getProject();
 
 		File projectDir = new File(
-			project.getBaseDir(), project.getProperty("project.dir"));
+			project.getBaseDir(), project.getProperty(_projectDirPropertyName));
 
 		File gitDir = new File(projectDir, ".git");
 
@@ -171,5 +189,6 @@ public class ManifestHelperTask extends Task {
 
 	private boolean _analyze;
 	private Path _path;
+	private String _projectDirPropertyName;
 
 }

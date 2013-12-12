@@ -36,7 +36,6 @@ if (StateUtil.isStateId(shippingState)) {
 }
 
 String ccType = ParamUtil.getString(request, "ccType");
-String ccNumber = ParamUtil.getString(request, "ccNumber");
 
 Calendar cal = CalendarFactoryUtil.getCalendar();
 
@@ -52,8 +51,6 @@ if (request.getParameter("ccExpMonth") == null) {
 		ccExpMonth++;
 	}
 }
-
-String ccVerNumber = ParamUtil.getString(request, "ccVerNumber");
 
 List addresses = AddressServiceUtil.getAddresses(Contact.class.getName(), contact.getContactId());
 %>
@@ -83,7 +80,7 @@ List addresses = AddressServiceUtil.getAddresses(Contact.class.getName(), contac
 			<liferay-ui:error exception="<%= BillingStreetException.class %>" message="please-enter-a-valid-street" />
 			<liferay-ui:error exception="<%= BillingZipException.class %>" message="please-enter-a-valid-postal-code" />
 
-			<aui:fieldset>
+			<aui:fieldset column="<%= true %>">
 				<c:if test="<%= !addresses.isEmpty() %>">
 
 					<%
@@ -107,8 +104,8 @@ List addresses = AddressServiceUtil.getAddresses(Contact.class.getName(), contac
 					</aui:select>
 				</c:if>
 
-				<aui:column>
-					<aui:input label="first-name" name="billingFirstName" />
+				<aui:col width="<%= 50 %>">
+					<aui:input autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) %>" label="first-name" name="billingFirstName" />
 
 					<aui:input label="last-name" name="billingLastName" />
 
@@ -119,9 +116,9 @@ List addresses = AddressServiceUtil.getAddresses(Contact.class.getName(), contac
 					<aui:input label="street" name="billingStreet" />
 
 					<aui:input label="city" name="billingCity" />
-				</aui:column>
+				</aui:col>
 
-				<aui:column>
+				<aui:col width="<%= 50 %>">
 					<aui:select label="state" name="billingStateSel">
 						<aui:option label="outside-us" />
 
@@ -144,7 +141,7 @@ List addresses = AddressServiceUtil.getAddresses(Contact.class.getName(), contac
 					<aui:input label="country" name="billingCountry" />
 
 					<aui:input label="phone" name="billingPhone" />
-				</aui:column>
+				</aui:col>
 			</aui:fieldset>
 		</liferay-ui:panel>
 
@@ -159,7 +156,7 @@ List addresses = AddressServiceUtil.getAddresses(Contact.class.getName(), contac
 			<liferay-ui:error exception="<%= ShippingStreetException.class %>" message="please-enter-a-valid-street" />
 			<liferay-ui:error exception="<%= ShippingZipException.class %>" message="please-enter-a-valid-postal-code" />
 
-			<aui:fieldset>
+			<aui:fieldset column="<%= true %>">
 				<c:if test="<%= !addresses.isEmpty() %>">
 
 					<%
@@ -183,7 +180,7 @@ List addresses = AddressServiceUtil.getAddresses(Contact.class.getName(), contac
 					</aui:select>
 				</c:if>
 
-				<aui:column>
+				<aui:col width="<%= 50 %>">
 					<aui:input label="first-name" name="shippingFirstName" />
 
 					<aui:input label="last-name" name="shippingLastName" />
@@ -197,9 +194,9 @@ List addresses = AddressServiceUtil.getAddresses(Contact.class.getName(), contac
 					<aui:input label="city" name="shippingCity" />
 
 					<aui:input label="same-as-billing" name="shipToBilling" />
-				</aui:column>
+				</aui:col>
 
-				<aui:column>
+				<aui:col width="<%= 50 %>">
 					<aui:select label="state" name="shippingStateSel">
 						<aui:option label="outside-us" />
 
@@ -222,7 +219,7 @@ List addresses = AddressServiceUtil.getAddresses(Contact.class.getName(), contac
 					<aui:input label="country" name="shippingCountry" />
 
 					<aui:input label="phone" name="shippingPhone" />
-				</aui:column>
+				</aui:col>
 			</aui:fieldset>
 		</liferay-ui:panel>
 
@@ -237,7 +234,7 @@ List addresses = AddressServiceUtil.getAddresses(Contact.class.getName(), contac
 				<liferay-ui:error exception="<%= CCNumberException.class %>" message="please-enter-a-valid-credit-card-number" />
 				<liferay-ui:error exception="<%= CCTypeException.class %>" message="please-enter-a-valid-credit-card-type" />
 
-				<aui:fieldset>
+				<aui:fieldset column="<%= true %>">
 
 					<%
 					for (int i = 0; i < ccTypes.length; i++) {
@@ -268,7 +265,7 @@ List addresses = AddressServiceUtil.getAddresses(Contact.class.getName(), contac
 					<aui:input bean="<%= null %>" label="number" name="ccNumber" />
 
 					<aui:field-wrapper label="expiration-date">
-						<aui:column>
+						<aui:col width="<%= 50 %>">
 							<aui:select label="" name="ccExpMonth">
 
 								<%
@@ -284,9 +281,9 @@ List addresses = AddressServiceUtil.getAddresses(Contact.class.getName(), contac
 								%>
 
 							</aui:select>
-						</aui:column>
+						</aui:col>
 
-						<aui:column>
+						<aui:col width="<%= 50 %>">
 							<aui:select label="" name="ccExpYear">
 
 								<%
@@ -302,7 +299,7 @@ List addresses = AddressServiceUtil.getAddresses(Contact.class.getName(), contac
 								%>
 
 							</aui:select>
-						</aui:column>
+						</aui:col>
 					</aui:field-wrapper>
 
 					<img alt="" src="<%= themeDisplay.getPathThemeImages() %>/shopping/cc_ver_number.png" />
@@ -364,8 +361,4 @@ List addresses = AddressServiceUtil.getAddresses(Contact.class.getName(), contac
 		%>
 
 	}
-
-	<c:if test="<%= windowState.equals(WindowState.MAXIMIZED) %>">
-		Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace />billingFirstName);
-	</c:if>
 </aui:script>

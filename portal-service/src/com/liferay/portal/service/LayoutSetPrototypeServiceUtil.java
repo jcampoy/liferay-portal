@@ -14,15 +14,18 @@
 
 package com.liferay.portal.service;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
 
 /**
- * The utility for the layout set prototype remote service. This utility wraps {@link com.liferay.portal.service.impl.LayoutSetPrototypeServiceImpl} and is the primary access point for service operations in application layer code running on a remote server.
- *
- * <p>
- * This is a remote service. Methods of this service are expected to have security checks based on the propagated JAAS credentials because this service can be accessed remotely.
- * </p>
+ * Provides the remote service utility for LayoutSetPrototype. This utility wraps
+ * {@link com.liferay.portal.service.impl.LayoutSetPrototypeServiceImpl} and is the
+ * primary access point for service operations in application layer code running
+ * on a remote server. Methods of this service are expected to have security
+ * checks based on the propagated JAAS credentials because this service can be
+ * accessed remotely.
  *
  * @author Brian Wing Shun Chan
  * @see LayoutSetPrototypeService
@@ -30,6 +33,7 @@ import com.liferay.portal.kernel.util.ReferenceRegistry;
  * @see com.liferay.portal.service.impl.LayoutSetPrototypeServiceImpl
  * @generated
  */
+@ProviderType
 public class LayoutSetPrototypeServiceUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

@@ -19,7 +19,7 @@
 <%
 int index = ParamUtil.getInteger(request, "index", GetterUtil.getInteger((String)request.getAttribute("configuration.jsp-index")));
 
-String displayActivityCounterName = PrefsParamUtil.getString(preferences, request, "displayActivityCounterName" + index);
+String displayActivityCounterName = PrefsParamUtil.getString(portletPreferences, request, "displayActivityCounterName" + index);
 
 List<String> activityCounterNames = SocialConfigurationUtil.getActivityCounterNames(SocialActivityCounterConstants.TYPE_ACTOR);
 
@@ -30,7 +30,7 @@ activityCounterNames.add(SocialActivityCounterConstants.NAME_USER_ACHIEVEMENTS);
 Collections.sort(activityCounterNames, new SocialActivityCounterNameComparator(locale));
 %>
 
-<div class="aui-field-row query-row">
+<div class="field-row query-row">
 	<aui:select inlineField="<%= true %>" label="" name='<%= "preferences--displayActivityCounterName" + index + "--" %>'>
 
 		<%

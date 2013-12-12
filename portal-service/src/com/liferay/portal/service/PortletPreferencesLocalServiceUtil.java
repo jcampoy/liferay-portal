@@ -14,15 +14,18 @@
 
 package com.liferay.portal.service;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
 
 /**
- * The utility for the portlet preferences local service. This utility wraps {@link com.liferay.portal.service.impl.PortletPreferencesLocalServiceImpl} and is the primary access point for service operations in application layer code running on the local server.
- *
- * <p>
- * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
- * </p>
+ * Provides the local service utility for PortletPreferences. This utility wraps
+ * {@link com.liferay.portal.service.impl.PortletPreferencesLocalServiceImpl} and is the
+ * primary access point for service operations in application layer code running
+ * on the local server. Methods of this service will not have security checks
+ * based on the propagated JAAS credentials because this service can only be
+ * accessed from within the same VM.
  *
  * @author Brian Wing Shun Chan
  * @see PortletPreferencesLocalService
@@ -30,6 +33,7 @@ import com.liferay.portal.kernel.util.ReferenceRegistry;
  * @see com.liferay.portal.service.impl.PortletPreferencesLocalServiceImpl
  * @generated
  */
+@ProviderType
 public class PortletPreferencesLocalServiceUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -164,6 +168,21 @@ public class PortletPreferencesLocalServiceUtil {
 		return getService().dynamicQueryCount(dynamicQuery);
 	}
 
+	/**
+	* Returns the number of rows that match the dynamic query.
+	*
+	* @param dynamicQuery the dynamic query
+	* @param projection the projection to apply to the query
+	* @return the number of rows that match the dynamic query
+	* @throws SystemException if a system exception occurred
+	*/
+	public static long dynamicQueryCount(
+		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery,
+		com.liferay.portal.kernel.dao.orm.Projection projection)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().dynamicQueryCount(dynamicQuery, projection);
+	}
+
 	public static com.liferay.portal.model.PortletPreferences fetchPortletPreferences(
 		long portletPreferencesId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -280,6 +299,21 @@ public class PortletPreferencesLocalServiceUtil {
 		getService().deletePortletPreferencesByPlid(plid);
 	}
 
+	public static javax.portlet.PortletPreferences fetchPreferences(
+		long companyId, long ownerId, int ownerType, long plid,
+		java.lang.String portletId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .fetchPreferences(companyId, ownerId, ownerType, plid,
+			portletId);
+	}
+
+	public static javax.portlet.PortletPreferences fetchPreferences(
+		com.liferay.portal.model.PortletPreferencesIds portletPreferencesIds)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().fetchPreferences(portletPreferencesIds);
+	}
+
 	public static javax.portlet.PortletPreferences getDefaultPreferences(
 		long companyId, java.lang.String portletId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -336,6 +370,29 @@ public class PortletPreferencesLocalServiceUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService()
 				   .getPortletPreferencesCount(ownerType, plid, portletId);
+	}
+
+	public static long getPortletPreferencesCount(int ownerType,
+		java.lang.String portletId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getPortletPreferencesCount(ownerType, portletId);
+	}
+
+	public static long getPortletPreferencesCount(long ownerId, int ownerType,
+		long plid, com.liferay.portal.model.Portlet portlet,
+		boolean excludeDefaultPreferences)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getPortletPreferencesCount(ownerId, ownerType, plid,
+			portlet, excludeDefaultPreferences);
+	}
+
+	public static long getPortletPreferencesCount(long ownerId, int ownerType,
+		java.lang.String portletId, boolean excludeDefaultPreferences)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getPortletPreferencesCount(ownerId, ownerType, portletId,
+			excludeDefaultPreferences);
 	}
 
 	public static javax.portlet.PortletPreferences getPreferences(

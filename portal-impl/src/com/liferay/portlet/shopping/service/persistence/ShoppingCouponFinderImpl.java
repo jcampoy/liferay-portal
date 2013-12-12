@@ -20,7 +20,6 @@ import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dao.orm.Type;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portlet.shopping.model.ShoppingCoupon;
 import com.liferay.portlet.shopping.model.impl.ShoppingCouponImpl;
@@ -42,12 +41,13 @@ public class ShoppingCouponFinderImpl
 	public static final String FIND_BY_G_C_C_A_DT =
 		ShoppingCouponFinder.class.getName() + ".findByG_C_C_A_DT";
 
+	@Override
 	public int countByG_C_C_A_DT(
 			long groupId, long companyId, String code, boolean active,
 			String discountType, boolean andOperator)
 		throws SystemException {
 
-		code = StringUtil.upperCase(code);
+		code = CustomSQLUtil.keywords(code)[0];
 
 		Session session = null;
 
@@ -92,12 +92,13 @@ public class ShoppingCouponFinderImpl
 		}
 	}
 
+	@Override
 	public List<ShoppingCoupon> findByG_C_C_A_DT(
 			long groupId, long companyId, String code, boolean active,
 			String discountType, boolean andOperator, int start, int end)
 		throws SystemException {
 
-		code = StringUtil.upperCase(code);
+		code = CustomSQLUtil.keywords(code)[0];
 
 		Session session = null;
 

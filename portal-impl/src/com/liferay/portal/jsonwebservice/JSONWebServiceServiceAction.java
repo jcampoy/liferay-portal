@@ -23,13 +23,16 @@ import com.liferay.portal.kernel.jsonwebservice.JSONWebServiceActionsManagerUtil
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.upload.UploadException;
-import com.liferay.portal.kernel.util.ContextPathUtil;
+import com.liferay.portal.kernel.util.CharPool;
+import com.liferay.portal.kernel.util.ClassUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.util.WebKeys;
 
 import java.lang.reflect.InvocationTargetException;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -41,25 +44,6 @@ import org.apache.struts.action.ActionMapping;
  * @author Raymond Augé
  */
 public class JSONWebServiceServiceAction extends JSONServiceAction {
-
-	public JSONWebServiceServiceAction(
-		ServletContext servletContext, ClassLoader classLoader) {
-
-		_contextPath = ContextPathUtil.getContextPath(servletContext);
-
-		if (_log.isInfoEnabled()) {
-			int count =
-				JSONWebServiceActionsManagerUtil.getJSONWebServiceActionsCount(
-					_contextPath);
-
-			_log.info("Configured " + count + " actions for " + _contextPath);
-		}
-	}
-
-	public void destroy() {
-		JSONWebServiceActionsManagerUtil.unregisterJSONWebServiceActions(
-			_contextPath);
-	}
 
 	@Override
 	public String getJSON(
@@ -100,10 +84,52 @@ public class JSONWebServiceServiceAction extends JSONServiceAction {
 			return JSONFactoryUtil.serializeThrowable(throwable);
 		}
 		catch (Exception e) {
-			_log.error(e, e);
+			if (_log.isWarnEnabled()) {
+				_log.warn(e, e);
+			}
 
 			return JSONFactoryUtil.serializeException(e);
 		}
+	}
+
+	/**
+	 * @see JSONServiceAction#getCSRFOrigin(HttpServletRequest)
+	 */
+	@Override
+	protected String getCSRFOrigin(HttpServletRequest request) {
+		String uri = request.getRequestURI();
+
+		int x = uri.indexOf("jsonws/");
+
+		if (x < 0) {
+			return ClassUtil.getClassName(this);
+		}
+
+		String path = uri.substring(x + 7);
+
+		String[] pathArray = StringUtil.split(path, CharPool.SLASH);
+
+		if (pathArray.length < 2) {
+			return ClassUtil.getClassName(this);
+		}
+
+		StringBundler sb = new StringBundler(6);
+
+		sb.append(ClassUtil.getClassName(this));
+		sb.append(StringPool.COLON);
+		sb.append(StringPool.SLASH);
+
+		String serviceClassName = pathArray[0];
+
+		sb.append(serviceClassName);
+
+		sb.append(StringPool.SLASH);
+
+		String serviceMethodName = pathArray[1];
+
+		sb.append(serviceMethodName);
+
+		return sb.toString();
 	}
 
 	protected JSONWebServiceAction getJSONWebServiceAction(
@@ -132,7 +158,5 @@ public class JSONWebServiceServiceAction extends JSONServiceAction {
 
 	private static Log _log = LogFactoryUtil.getLog(
 		JSONWebServiceServiceAction.class);
-
-	private String _contextPath;
 
 }

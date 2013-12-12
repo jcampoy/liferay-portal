@@ -28,9 +28,7 @@ import com.liferay.portal.util.PropsValues;
 import java.sql.Connection;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.hibernate.engine.SessionFactoryImplementor;
 
@@ -40,10 +38,7 @@ import org.hibernate.engine.SessionFactoryImplementor;
  */
 public class SessionFactoryImpl implements SessionFactory {
 
-	public static List<PortletSessionFactoryImpl> getPortletSessionFactories() {
-		return portletSessionFactories;
-	}
-
+	@Override
 	public void closeSession(Session session) throws ORMException {
 		if ((session != null) &&
 			!PropsValues.SPRING_HIBERNATE_SESSION_DELEGATED) {
@@ -53,14 +48,12 @@ public class SessionFactoryImpl implements SessionFactory {
 		}
 	}
 
-	public void destroy() {
-		portletSessionFactories.clear();
-	}
-
+	@Override
 	public Session getCurrentSession() throws ORMException {
 		return wrapSession(_sessionFactoryImplementor.getCurrentSession());
 	}
 
+	@Override
 	public Dialect getDialect() throws ORMException {
 		return new DialectImpl(_sessionFactoryImplementor.getDialect());
 	}
@@ -73,10 +66,12 @@ public class SessionFactoryImpl implements SessionFactory {
 		return _sessionFactoryImplementor;
 	}
 
+	@Override
 	public Session openNewSession(Connection connection) throws ORMException {
 		return wrapSession(_sessionFactoryImplementor.openSession(connection));
 	}
 
+	@Override
 	public Session openSession() throws ORMException {
 		org.hibernate.Session session = null;
 
@@ -158,10 +153,6 @@ public class SessionFactoryImpl implements SessionFactory {
 			SPRING_HIBERNATE_SESSION_FACTORY_PRELOAD_CLASSLOADER_CLASSES;
 
 	private static Log _log = LogFactoryUtil.getLog(SessionFactoryImpl.class);
-
-	protected static final List<PortletSessionFactoryImpl>
-		portletSessionFactories =
-			new CopyOnWriteArrayList<PortletSessionFactoryImpl>();
 
 	private ClassLoader _sessionFactoryClassLoader;
 	private SessionFactoryImplementor _sessionFactoryImplementor;

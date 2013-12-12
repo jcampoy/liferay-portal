@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.util.IntegerWrapper;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ServerDetector;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.PortletDisplay;
@@ -85,9 +86,8 @@ public class IconMenuTag extends BaseBodyTagSupport implements BodyTag {
 		}
 		finally {
 			if (!ServerDetector.isResin()) {
-				_align = "right";
 				_cssClass = null;
-				_direction = null;
+				_direction = "left";
 				_endPage = null;
 				_extended = true;
 				_icon = null;
@@ -95,10 +95,12 @@ public class IconMenuTag extends BaseBodyTagSupport implements BodyTag {
 				_localizeMessage = true;
 				_maxDisplayItems = _DEFAULT_MAX_DISPLAY_ITEMS;
 				_message = "actions";
+				_select = false;
 				_showArrow = true;
 				_showExpanded = false;
 				_showWhenSingleIcon = false;
 				_startPage = null;
+				_triggerCssClass = null;
 			}
 		}
 	}
@@ -119,12 +121,7 @@ public class IconMenuTag extends BaseBodyTagSupport implements BodyTag {
 			WebKeys.THEME_DISPLAY);
 
 		if (_direction == null) {
-			if (_align.equals("left")) {
-				_direction = "right";
-			}
-			else {
-				_direction = "left";
-			}
+			_direction = "left";
 		}
 
 		if (_icon == null) {
@@ -158,10 +155,6 @@ public class IconMenuTag extends BaseBodyTagSupport implements BodyTag {
 			String.valueOf(_showWhenSingleIcon));
 
 		return EVAL_BODY_BUFFERED;
-	}
-
-	public void setAlign(String align) {
-		_align = align;
 	}
 
 	public void setCssClass(String cssClass) {
@@ -210,6 +203,10 @@ public class IconMenuTag extends BaseBodyTagSupport implements BodyTag {
 		}
 	}
 
+	public void setSelect(boolean select) {
+		_select = select;
+	}
+
 	public void setShowArrow(boolean showArrow) {
 		_showArrow = showArrow;
 	}
@@ -224,6 +221,14 @@ public class IconMenuTag extends BaseBodyTagSupport implements BodyTag {
 
 	public void setStartPage(String startPage) {
 		_startPage = startPage;
+	}
+
+	public void setTriggerCssClass(String triggerCssClass) {
+		_triggerCssClass = triggerCssClass;
+	}
+
+	public void setUseIconCaret(boolean useIconCaret) {
+		_useIconCaret = useIconCaret;
 	}
 
 	protected String getEndPage() {
@@ -268,75 +273,123 @@ public class IconMenuTag extends BaseBodyTagSupport implements BodyTag {
 					pageContext.getServletContext(), getStartPage())) {
 
 				if (_showExpanded) {
-					jspWriter.write("<div class=\"lfr-component ");
-					jspWriter.write("lfr-menu-list lfr-menu-expanded align-");
-					jspWriter.write(_align);
-					jspWriter.write(" ");
-					jspWriter.print(_cssClass);
+					jspWriter.write("<ul class=\"lfr-menu-expanded ");
+					jspWriter.write("lfr-menu-list");
+
+					if (Validator.isNotNull(_cssClass)) {
+						jspWriter.write(StringPool.SPACE);
+						jspWriter.print(_cssClass);
+					}
+
 					jspWriter.write("\" id=\"");
 					jspWriter.write(_id);
 					jspWriter.write("\">");
 				}
 				else {
-					String message = _message;
+					jspWriter.write("<div class=\"btn-group lfr-icon-menu");
 
-					if (_localizeMessage) {
-						message = LanguageUtil.get(pageContext, _message);
+					if (Validator.isNotNull(_cssClass)) {
+						jspWriter.write(StringPool.SPACE);
+						jspWriter.print(_cssClass);
 					}
 
-					jspWriter.write("<span title=\"");
-					jspWriter.write(message);
-					jspWriter.write("\"><ul class='lfr-component lfr-actions ");
-					jspWriter.write("align-");
-					jspWriter.write(_align);
-					jspWriter.write(" direction-");
+					if (_direction.equals("up")) {
+						jspWriter.write(" dropup");
+					}
+
+					jspWriter.write("\"><a class=\"dropdown-toggle direction-");
 					jspWriter.write(_direction);
 					jspWriter.write(" max-display-items-");
 					jspWriter.write(String.valueOf(_maxDisplayItems));
-					jspWriter.write(" ");
-
-					if (Validator.isNotNull(_cssClass)) {
-						jspWriter.print(_cssClass);
-					}
 
 					if (_disabled) {
 						jspWriter.write(" disabled");
 					}
 
 					if (_extended) {
-						jspWriter.write(" lfr-extended");
+						jspWriter.write(" btn");
 					}
 
-					if (_showArrow) {
-						jspWriter.write(" show-arrow");
+					if (_select) {
+						jspWriter.write(" select");
 					}
 
-					jspWriter.write("\' id=\"");
+					if (Validator.isNotNull(_triggerCssClass)) {
+						jspWriter.write(StringPool.SPACE + _triggerCssClass);
+					}
+
+					String message = _message;
+
+					if (_localizeMessage) {
+						message = LanguageUtil.get(pageContext, _message);
+					}
+
+					jspWriter.write("\" href=\"javascript:;\" id=\"");
 					jspWriter.write(_id);
+					jspWriter.write("\" title=\"");
+					jspWriter.write(message);
 					jspWriter.write("\">");
-					jspWriter.write("<li class=\"lfr-trigger\"><strong>");
-					jspWriter.write(
-						"<a class=\"nobr\" href=\"javascript:;\" id=\"");
-					jspWriter.write(_id);
-					jspWriter.write("Button\">");
+
+					if (_showArrow && _direction.equals("left")) {
+						String caret = "caret";
+
+						if (_useIconCaret) {
+							caret = "icon-caret-left";
+						}
+
+						jspWriter.write("<i class=\"");
+						jspWriter.write(caret);
+						jspWriter.write("\"></i> ");
+					}
+
+					boolean auiImage = false;
 
 					if (Validator.isNotNull(_icon)) {
-						jspWriter.write("<img alt=\"\" src=\"");
-						jspWriter.write(_icon);
-						jspWriter.write("\" />");
+						auiImage = _icon.startsWith(_AUI_PATH);
+
+						if (auiImage) {
+							jspWriter.write(" <i class=\"icon-");
+							jspWriter.write(
+								_icon.substring(_AUI_PATH.length()));
+							jspWriter.write("\"></i> ");
+						}
+						else {
+							jspWriter.write("<img alt=\"\" src=\"");
+							jspWriter.write(_icon);
+							jspWriter.write("\" /> ");
+						}
 					}
 
-					jspWriter.write("<span class=\"taglib-text\">");
-					jspWriter.write(message);
-					jspWriter.write("</span></a></strong>");
+					if (Validator.isNotNull(message)) {
+						jspWriter.write("<span class=\"lfr-icon-menu-text\">");
+						jspWriter.write(message);
+						jspWriter.write("</span>");
+					}
+
+					if (_showArrow && !_direction.equals("left")) {
+						String caret = "caret";
+
+						if (_useIconCaret) {
+							caret = "icon-caret-" + _direction;
+						}
+
+						jspWriter.write(" <i class=\"");
+						jspWriter.write(caret);
+						jspWriter.write("\"></i> ");
+					}
+
+					jspWriter.write("</a>");
 
 					ScriptTag.doTag(
 						null, "liferay-menu",
 						"Liferay.Menu.register('" + _id + "');", bodyContent,
 						pageContext);
-				}
 
-				jspWriter.write("<ul>");
+					jspWriter.write("<ul class=\"dropdown-menu lfr-menu-list");
+					jspWriter.write(" direction-");
+					jspWriter.write(_direction);
+					jspWriter.write("\">");
+				}
 			}
 			else {
 				PortalIncludeUtil.include(pageContext, getStartPage());
@@ -354,15 +407,13 @@ public class IconMenuTag extends BaseBodyTagSupport implements BodyTag {
 				jspWriter.write("</ul>");
 
 				if (_showExpanded) {
-					jspWriter.write("</div>");
-
 					ScriptTag.doTag(
 						null, "liferay-menu",
 						"Liferay.Menu.handleFocus('#" + _id + "menu');",
 						bodyContent, pageContext);
 				}
 				else {
-					jspWriter.write("</li></ul></span>");
+					jspWriter.write("</div>");
 				}
 			}
 			else {
@@ -375,6 +426,8 @@ public class IconMenuTag extends BaseBodyTagSupport implements BodyTag {
 		return EVAL_PAGE;
 	}
 
+	private static final String _AUI_PATH = "../aui/";
+
 	private static final int _DEFAULT_MAX_DISPLAY_ITEMS = GetterUtil.getInteger(
 		PropsUtil.get(PropsKeys.ICON_MENU_MAX_DISPLAY_ITEMS));
 
@@ -383,9 +436,8 @@ public class IconMenuTag extends BaseBodyTagSupport implements BodyTag {
 	private static final String _START_PAGE =
 		"/html/taglib/ui/icon_menu/start.jsp";
 
-	private String _align = "right";
 	private String _cssClass;
-	private String _direction;
+	private String _direction = "left";
 	private boolean _disabled;
 	private String _endPage;
 	private boolean _extended = true;
@@ -394,9 +446,12 @@ public class IconMenuTag extends BaseBodyTagSupport implements BodyTag {
 	private boolean _localizeMessage = true;
 	private int _maxDisplayItems = _DEFAULT_MAX_DISPLAY_ITEMS;
 	private String _message = "actions";
+	private boolean _select;
 	private boolean _showArrow = true;
 	private boolean _showExpanded;
 	private boolean _showWhenSingleIcon;
 	private String _startPage;
+	private String _triggerCssClass;
+	private boolean _useIconCaret;
 
 }

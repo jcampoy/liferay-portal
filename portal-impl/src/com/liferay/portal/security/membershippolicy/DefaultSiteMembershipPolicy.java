@@ -43,6 +43,7 @@ import java.util.Map;
  */
 public class DefaultSiteMembershipPolicy extends BaseSiteMembershipPolicy {
 
+	@Override
 	public void checkMembership(
 			long[] userIds, long[] addGroupIds, long[] removeGroupIds)
 		throws PortalException, SystemException {
@@ -72,6 +73,7 @@ public class DefaultSiteMembershipPolicy extends BaseSiteMembershipPolicy {
 		return true;
 	}
 
+	@Override
 	public void propagateMembership(
 			long[] userIds, long[] addGroupIds, long[] removeGroupIds)
 		throws PortalException, SystemException {
@@ -92,6 +94,7 @@ public class DefaultSiteMembershipPolicy extends BaseSiteMembershipPolicy {
 		}
 	}
 
+	@Override
 	public void verifyPolicy(
 			Group group, Group oldGroup, List<AssetCategory> oldAssetCategories,
 			List<AssetTag> oldAssetTags,
@@ -165,9 +168,10 @@ public class DefaultSiteMembershipPolicy extends BaseSiteMembershipPolicy {
 			new LinkedHashMap<String, Object>();
 
 		groupParams.put("groupsTree", parentGroups);
-		groupParams.put("site", Boolean.TRUE);
 		groupParams.put(
-			"type", GroupConstants.TYPE_SITE_LIMITED_TO_PARENT_SITE_MEMBERS);
+			"membershipRestriction",
+			GroupConstants.MEMBERSHIP_RESTRICTION_TO_PARENT_SITE_MEMBERS);
+		groupParams.put("site", Boolean.TRUE);
 
 		List<Group> childrenGroups = GroupLocalServiceUtil.search(
 			group.getCompanyId(), null, StringPool.BLANK, groupParams,

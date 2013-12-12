@@ -14,17 +14,18 @@
 
 package com.liferay.portlet.messageboards.service;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.service.ServiceWrapper;
 
 /**
- * <p>
- * This class is a wrapper for {@link MBThreadService}.
- * </p>
+ * Provides a wrapper for {@link MBThreadService}.
  *
- * @author    Brian Wing Shun Chan
- * @see       MBThreadService
+ * @author Brian Wing Shun Chan
+ * @see MBThreadService
  * @generated
  */
+@ProviderType
 public class MBThreadServiceWrapper implements MBThreadService,
 	ServiceWrapper<MBThreadService> {
 	public MBThreadServiceWrapper(MBThreadService mbThreadService) {
@@ -36,6 +37,7 @@ public class MBThreadServiceWrapper implements MBThreadService,
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _mbThreadService.getBeanIdentifier();
 	}
@@ -45,16 +47,19 @@ public class MBThreadServiceWrapper implements MBThreadService,
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_mbThreadService.setBeanIdentifier(beanIdentifier);
 	}
 
+	@Override
 	public void deleteThread(long threadId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		_mbThreadService.deleteThread(threadId);
 	}
 
+	@Override
 	public java.util.List<com.liferay.portlet.messageboards.model.MBThread> getGroupThreads(
 		long groupId, long userId, java.util.Date modifiedDate, int status,
 		int start, int end)
@@ -64,6 +69,7 @@ public class MBThreadServiceWrapper implements MBThreadService,
 			status, start, end);
 	}
 
+	@Override
 	public java.util.List<com.liferay.portlet.messageboards.model.MBThread> getGroupThreads(
 		long groupId, long userId, int status, boolean subscribed,
 		boolean includeAnonymous, int start, int end)
@@ -73,6 +79,7 @@ public class MBThreadServiceWrapper implements MBThreadService,
 			subscribed, includeAnonymous, start, end);
 	}
 
+	@Override
 	public java.util.List<com.liferay.portlet.messageboards.model.MBThread> getGroupThreads(
 		long groupId, long userId, int status, boolean subscribed, int start,
 		int end)
@@ -82,6 +89,7 @@ public class MBThreadServiceWrapper implements MBThreadService,
 			subscribed, start, end);
 	}
 
+	@Override
 	public java.util.List<com.liferay.portlet.messageboards.model.MBThread> getGroupThreads(
 		long groupId, long userId, int status, int start, int end)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -90,6 +98,7 @@ public class MBThreadServiceWrapper implements MBThreadService,
 			end);
 	}
 
+	@Override
 	public int getGroupThreadsCount(long groupId, long userId,
 		java.util.Date modifiedDate, int status)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -97,11 +106,13 @@ public class MBThreadServiceWrapper implements MBThreadService,
 			modifiedDate, status);
 	}
 
+	@Override
 	public int getGroupThreadsCount(long groupId, long userId, int status)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _mbThreadService.getGroupThreadsCount(groupId, userId, status);
 	}
 
+	@Override
 	public int getGroupThreadsCount(long groupId, long userId, int status,
 		boolean subscribed)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -109,6 +120,7 @@ public class MBThreadServiceWrapper implements MBThreadService,
 			subscribed);
 	}
 
+	@Override
 	public int getGroupThreadsCount(long groupId, long userId, int status,
 		boolean subscribed, boolean includeAnonymous)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -116,6 +128,7 @@ public class MBThreadServiceWrapper implements MBThreadService,
 			subscribed, includeAnonymous);
 	}
 
+	@Override
 	public java.util.List<com.liferay.portlet.messageboards.model.MBThread> getThreads(
 		long groupId, long categoryId, int status, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -123,17 +136,20 @@ public class MBThreadServiceWrapper implements MBThreadService,
 			end);
 	}
 
+	@Override
 	public int getThreadsCount(long groupId, long categoryId, int status)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _mbThreadService.getThreadsCount(groupId, categoryId, status);
 	}
 
+	@Override
 	public com.liferay.portal.model.Lock lockThread(long threadId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _mbThreadService.lockThread(threadId);
 	}
 
+	@Override
 	public com.liferay.portlet.messageboards.model.MBThread moveThread(
 		long categoryId, long threadId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -141,6 +157,7 @@ public class MBThreadServiceWrapper implements MBThreadService,
 		return _mbThreadService.moveThread(categoryId, threadId);
 	}
 
+	@Override
 	public com.liferay.portlet.messageboards.model.MBThread moveThreadFromTrash(
 		long categoryId, long threadId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -148,6 +165,7 @@ public class MBThreadServiceWrapper implements MBThreadService,
 		return _mbThreadService.moveThreadFromTrash(categoryId, threadId);
 	}
 
+	@Override
 	public com.liferay.portlet.messageboards.model.MBThread moveThreadToTrash(
 		long threadId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -155,12 +173,33 @@ public class MBThreadServiceWrapper implements MBThreadService,
 		return _mbThreadService.moveThreadToTrash(threadId);
 	}
 
+	@Override
 	public void restoreThreadFromTrash(long threadId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		_mbThreadService.restoreThreadFromTrash(threadId);
 	}
 
+	@Override
+	public com.liferay.portal.kernel.search.Hits search(long groupId,
+		long creatorUserId, int status, int start, int end)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _mbThreadService.search(groupId, creatorUserId, status, start,
+			end);
+	}
+
+	@Override
+	public com.liferay.portal.kernel.search.Hits search(long groupId,
+		long creatorUserId, long startDate, long endDate, int status,
+		int start, int end)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _mbThreadService.search(groupId, creatorUserId, startDate,
+			endDate, status, start, end);
+	}
+
+	@Override
 	public com.liferay.portlet.messageboards.model.MBThread splitThread(
 		long messageId, java.lang.String subject,
 		com.liferay.portal.service.ServiceContext serviceContext)
@@ -169,6 +208,7 @@ public class MBThreadServiceWrapper implements MBThreadService,
 		return _mbThreadService.splitThread(messageId, subject, serviceContext);
 	}
 
+	@Override
 	public void unlockThread(long threadId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -189,10 +229,12 @@ public class MBThreadServiceWrapper implements MBThreadService,
 		_mbThreadService = mbThreadService;
 	}
 
+	@Override
 	public MBThreadService getWrappedService() {
 		return _mbThreadService;
 	}
 
+	@Override
 	public void setWrappedService(MBThreadService mbThreadService) {
 		_mbThreadService = mbThreadService;
 	}

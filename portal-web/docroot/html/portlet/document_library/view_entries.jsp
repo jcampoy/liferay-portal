@@ -31,7 +31,7 @@ String dlFileEntryTypeName = LanguageUtil.get(pageContext, "basic-document");
 
 int status = WorkflowConstants.STATUS_APPROVED;
 
-if (permissionChecker.isCompanyAdmin() || permissionChecker.isGroupAdmin(scopeGroupId)) {
+if (permissionChecker.isContentReviewer(user.getCompanyId(), scopeGroupId)) {
 	status = WorkflowConstants.STATUS_ANY;
 }
 
@@ -130,13 +130,28 @@ if (fileEntryTypeId >= 0) {
 	if (fileEntryTypeId > 0) {
 		DLFileEntryType dlFileEntryType = DLFileEntryTypeLocalServiceUtil.getFileEntryType(fileEntryTypeId);
 
-		dlFileEntryTypeName = dlFileEntryType.getName();
+		dlFileEntryTypeName = dlFileEntryType.getName(locale);
 	}
 
 	SearchContext searchContext = SearchContextFactory.getInstance(request);
 
 	searchContext.setAttribute("paginationType", "none");
 	searchContext.setEnd(entryEnd);
+
+	if (orderByCol.equals("creationDate")) {
+		orderByCol = "createDate";
+	}
+	else if (orderByCol.equals("readCount")) {
+		orderByCol = "downloads";
+	}
+	else if (orderByCol.equals("modifiedDate")) {
+		orderByCol = "modified";
+	}
+
+	Sort sort = new Sort(orderByCol, !StringUtil.equalsIgnoreCase(orderByType, "asc"));
+
+	searchContext.setSorts(sort);
+
 	searchContext.setStart(entryStart);
 
 	Hits hits = indexer.search(searchContext);
@@ -145,21 +160,11 @@ if (fileEntryTypeId >= 0) {
 
 	searchContainer.setTotal(total);
 
-	if (total <= entryStart) {
-		entryStart = (searchContainer.getCur() - 1) * searchContainer.getDelta();
-		entryEnd = entryStart + searchContainer.getDelta();
+	Document[] docs = hits.getDocs();
 
-		searchContext.setEnd(entryEnd);
-		searchContext.setStart(entryStart);
+	results = new ArrayList(docs.length);
 
-		hits = indexer.search(searchContext);
-	}
-
-	results = new ArrayList();
-
-	for (int i = 0; i < hits.getDocs().length; i++) {
-		Document doc = hits.doc(i);
-
+	for (Document doc : docs) {
 		long fileEntryId = GetterUtil.getLong(doc.get(Field.ENTRY_CLASS_PK));
 
 		FileEntry fileEntry = null;
@@ -232,7 +237,7 @@ else {
 			entryEnd = entryStart + searchContainer.getDelta();
 		}
 
-		results = DLAppServiceUtil.getGroupFileEntries(repositoryId, groupFileEntriesUserId, folderId, null, status, entryStart, entryEnd, null);
+		results = DLAppServiceUtil.getGroupFileEntries(repositoryId, groupFileEntriesUserId, folderId, null, status, entryStart, entryEnd, searchContainer.getOrderByComparator());
 	}
 }
 
@@ -240,12 +245,12 @@ searchContainer.setResults(results);
 
 request.setAttribute("view.jsp-total", String.valueOf(total));
 
-request.setAttribute("view_entries.jsp-entryStart", String.valueOf(entryStart));
-request.setAttribute("view_entries.jsp-entryEnd", String.valueOf(entryEnd));
+request.setAttribute("view_entries.jsp-entryStart", String.valueOf(searchContainer.getStart()));
+request.setAttribute("view_entries.jsp-entryEnd", String.valueOf(searchContainer.getEnd()));
 %>
 
 <div class="subscribe-action">
-	<c:if test="<%= DLPermission.contains(permissionChecker, scopeGroupId, ActionKeys.SUBSCRIBE) && ((folder == null) || folder.isSupportsSubscribing()) && (DLUtil.getEmailFileEntryAddedEnabled(preferences) || DLUtil.getEmailFileEntryUpdatedEnabled(preferences)) %>">
+	<c:if test="<%= DLPermission.contains(permissionChecker, scopeGroupId, ActionKeys.SUBSCRIBE) && ((folder == null) || folder.isSupportsSubscribing()) && (DLUtil.getEmailFileEntryAddedEnabled(portletPreferences) || DLUtil.getEmailFileEntryUpdatedEnabled(portletPreferences)) %>">
 
 		<%
 		boolean subscribed = false;
@@ -326,27 +331,13 @@ request.setAttribute("view_entries.jsp-entryEnd", String.valueOf(entryEnd));
 </div>
 
 <c:if test="<%= results.isEmpty() %>">
-	<div class="entries-empty portlet-msg-info">
+	<div class="entries-empty alert alert-info">
 		<c:choose>
 			<c:when test="<%= (fileEntryTypeId >= 0) %>">
-				<c:choose>
-					<c:when test="<%= total == 0 %>">
-						<liferay-ui:message arguments="<%= HtmlUtil.escape(dlFileEntryTypeName) %>" key="there-are-no-documents-or-media-files-of-type-x" />
-					</c:when>
-					<c:otherwise>
-						<liferay-ui:message arguments="<%= HtmlUtil.escape(dlFileEntryTypeName) %>" key="there-are-no-documents-or-media-files-of-type-x-on-this-page" />
-					</c:otherwise>
-				</c:choose>
+				<liferay-ui:message arguments="<%= HtmlUtil.escape(dlFileEntryTypeName) %>" key="there-are-no-documents-or-media-files-of-type-x" />
 			</c:when>
 			<c:otherwise>
-				<c:choose>
-					<c:when test="<%= total == 0 %>">
-						<liferay-ui:message key="there-are-no-documents-or-media-files-in-this-folder" />
-					</c:when>
-					<c:otherwise>
-						<liferay-ui:message key="there-are-no-documents-or-media-files-on-this-page" />
-					</c:otherwise>
-				</c:choose>
+				<liferay-ui:message key="there-are-no-documents-or-media-files-in-this-folder" />
 			</c:otherwise>
 		</c:choose>
 	</div>
@@ -398,6 +389,15 @@ for (int i = 0; i < results.size(); i++) {
 				</c:when>
 
 				<c:otherwise>
+
+					<%
+					FileVersion latestFileVersion = fileEntry.getFileVersion();
+
+					if ((user.getUserId() == fileEntry.getUserId()) || permissionChecker.isContentReviewer(user.getCompanyId(), scopeGroupId) || DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.UPDATE)) {
+						latestFileVersion = fileEntry.getLatestFileVersion();
+					}
+					%>
+
 					<liferay-util:buffer var="fileEntryTitle">
 
 						<%
@@ -406,21 +406,14 @@ for (int i = 0; i < results.size(); i++) {
 						rowURL.setParameter("struts_action", "/document_library/view_file_entry");
 						rowURL.setParameter("redirect", HttpUtil.removeParameter(currentURL, liferayPortletResponse.getNamespace() + "ajax"));
 						rowURL.setParameter("fileEntryId", String.valueOf(fileEntry.getFileEntryId()));
-
-						FileVersion latestFileVersion = fileEntry.getFileVersion();
-
-						if ((user.getUserId() == fileEntry.getUserId()) || permissionChecker.isCompanyAdmin() || permissionChecker.isGroupAdmin(scopeGroupId) || DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.UPDATE)) {
-							latestFileVersion = fileEntry.getLatestFileVersion();
-						}
 						%>
 
 						<liferay-ui:app-view-entry
 							displayStyle="list"
 							locked="<%= fileEntry.isCheckedOut() %>"
 							showCheckbox="<%= true %>"
-							status="<%= latestFileVersion.getStatus() %>"
 							thumbnailSrc='<%= themeDisplay.getPathThemeImages() + "/file_system/small/" + DLUtil.getFileIcon(fileEntry.getExtension()) + ".png" %>'
-							title="<%= fileEntry.getTitle() %>"
+							title="<%= latestFileVersion.getTitle() %>"
 							url="<%= rowURL.toString() %>"
 						/>
 					</liferay-util:buffer>
@@ -452,7 +445,7 @@ for (int i = 0; i < results.size(); i++) {
 						}
 
 						if (columnName.equals("create-date")) {
-							row.addText(dateFormatDateTime.format(fileEntry.getCreateDate()));
+							row.addDate(fileEntry.getCreateDate());
 						}
 
 						if (columnName.equals("downloads")) {
@@ -460,7 +453,7 @@ for (int i = 0; i < results.size(); i++) {
 						}
 
 						if (columnName.equals("modified-date")) {
-							row.addText(dateFormatDateTime.format(fileEntry.getModifiedDate()));
+							row.addDate(latestFileVersion.getModifiedDate());
 						}
 
 						if (columnName.equals("name")) {
@@ -472,7 +465,11 @@ for (int i = 0; i < results.size(); i++) {
 						}
 
 						if (columnName.equals("size")) {
-							row.addText(TextFormatter.formatStorageSize(fileEntry.getSize(), locale));
+							row.addText(TextFormatter.formatStorageSize(latestFileVersion.getSize(), locale));
+						}
+
+						if (columnName.equals("status")) {
+							row.addStatus(latestFileVersion.getStatus(), latestFileVersion.getStatusByUserId(), latestFileVersion.getStatusDate());
 						}
 					}
 
@@ -574,7 +571,7 @@ for (int i = 0; i < results.size(); i++) {
 						}
 
 						if (columnName.equals("create-date")) {
-							row.addText(dateFormatDateTime.format(curFolder.getCreateDate()));
+							row.addDate(curFolder.getCreateDate());
 						}
 
 						if (columnName.equals("downloads")) {
@@ -582,7 +579,7 @@ for (int i = 0; i < results.size(); i++) {
 						}
 
 						if (columnName.equals("modified-date")) {
-							row.addText(dateFormatDateTime.format(curFolder.getModifiedDate()));
+							row.addDate(curFolder.getModifiedDate());
 						}
 
 						if (columnName.equals("name")) {
@@ -594,6 +591,10 @@ for (int i = 0; i < results.size(); i++) {
 						}
 
 						if (columnName.equals("size")) {
+							row.addText("--");
+						}
+
+						if (columnName.equals("status")) {
 							row.addText("--");
 						}
 					}
@@ -618,8 +619,8 @@ for (int i = 0; i < results.size(); i++) {
 	Liferay.fire(
 		'<portlet:namespace />pageLoaded',
 		{
-			paginator: {
-				name: 'entryPaginator',
+			pagination: {
+				name: 'entryPagination',
 				state: {
 					page: <%= (total == 0) ? 0 : searchContainer.getCur() %>,
 					rowsPerPage: <%= searchContainer.getDelta() %>,

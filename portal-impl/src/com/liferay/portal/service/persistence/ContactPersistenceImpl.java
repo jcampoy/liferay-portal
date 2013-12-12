@@ -107,6 +107,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @return the matching contacts
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Contact> findByCompanyId(long companyId)
 		throws SystemException {
 		return findByCompanyId(companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
@@ -126,6 +127,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @return the range of matching contacts
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Contact> findByCompanyId(long companyId, int start, int end)
 		throws SystemException {
 		return findByCompanyId(companyId, start, end, null);
@@ -145,6 +147,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @return the ordered range of matching contacts
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Contact> findByCompanyId(long companyId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -251,6 +254,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @throws com.liferay.portal.NoSuchContactException if a matching contact could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Contact findByCompanyId_First(long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchContactException, SystemException {
@@ -280,6 +284,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @return the first matching contact, or <code>null</code> if a matching contact could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Contact fetchByCompanyId_First(long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<Contact> list = findByCompanyId(companyId, 0, 1, orderByComparator);
@@ -300,6 +305,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @throws com.liferay.portal.NoSuchContactException if a matching contact could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Contact findByCompanyId_Last(long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchContactException, SystemException {
@@ -329,9 +335,14 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @return the last matching contact, or <code>null</code> if a matching contact could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Contact fetchByCompanyId_Last(long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByCompanyId(companyId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<Contact> list = findByCompanyId(companyId, count - 1, count,
 				orderByComparator);
@@ -353,6 +364,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @throws com.liferay.portal.NoSuchContactException if a contact with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Contact[] findByCompanyId_PrevAndNext(long contactId,
 		long companyId, OrderByComparator orderByComparator)
 		throws NoSuchContactException, SystemException {
@@ -494,6 +506,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @param companyId the company ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByCompanyId(long companyId) throws SystemException {
 		for (Contact contact : findByCompanyId(companyId, QueryUtil.ALL_POS,
 				QueryUtil.ALL_POS, null)) {
@@ -508,6 +521,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @return the number of matching contacts
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByCompanyId(long companyId) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_COMPANYID;
 
@@ -582,6 +596,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @return the matching contacts
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Contact> findByAccountId(long accountId)
 		throws SystemException {
 		return findByAccountId(accountId, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
@@ -601,6 +616,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @return the range of matching contacts
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Contact> findByAccountId(long accountId, int start, int end)
 		throws SystemException {
 		return findByAccountId(accountId, start, end, null);
@@ -620,6 +636,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @return the ordered range of matching contacts
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Contact> findByAccountId(long accountId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -726,6 +743,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @throws com.liferay.portal.NoSuchContactException if a matching contact could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Contact findByAccountId_First(long accountId,
 		OrderByComparator orderByComparator)
 		throws NoSuchContactException, SystemException {
@@ -755,6 +773,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @return the first matching contact, or <code>null</code> if a matching contact could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Contact fetchByAccountId_First(long accountId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<Contact> list = findByAccountId(accountId, 0, 1, orderByComparator);
@@ -775,6 +794,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @throws com.liferay.portal.NoSuchContactException if a matching contact could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Contact findByAccountId_Last(long accountId,
 		OrderByComparator orderByComparator)
 		throws NoSuchContactException, SystemException {
@@ -804,9 +824,14 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @return the last matching contact, or <code>null</code> if a matching contact could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Contact fetchByAccountId_Last(long accountId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByAccountId(accountId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<Contact> list = findByAccountId(accountId, count - 1, count,
 				orderByComparator);
@@ -828,6 +853,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @throws com.liferay.portal.NoSuchContactException if a contact with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Contact[] findByAccountId_PrevAndNext(long contactId,
 		long accountId, OrderByComparator orderByComparator)
 		throws NoSuchContactException, SystemException {
@@ -969,6 +995,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @param accountId the account ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByAccountId(long accountId) throws SystemException {
 		for (Contact contact : findByAccountId(accountId, QueryUtil.ALL_POS,
 				QueryUtil.ALL_POS, null)) {
@@ -983,6 +1010,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @return the number of matching contacts
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByAccountId(long accountId) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_ACCOUNTID;
 
@@ -1057,6 +1085,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @return the matching contacts
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Contact> findByC_C(long classNameId, long classPK)
 		throws SystemException {
 		return findByC_C(classNameId, classPK, QueryUtil.ALL_POS,
@@ -1077,6 +1106,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @return the range of matching contacts
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Contact> findByC_C(long classNameId, long classPK, int start,
 		int end) throws SystemException {
 		return findByC_C(classNameId, classPK, start, end, null);
@@ -1097,6 +1127,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @return the ordered range of matching contacts
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Contact> findByC_C(long classNameId, long classPK, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -1213,6 +1244,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @throws com.liferay.portal.NoSuchContactException if a matching contact could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Contact findByC_C_First(long classNameId, long classPK,
 		OrderByComparator orderByComparator)
 		throws NoSuchContactException, SystemException {
@@ -1247,6 +1279,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @return the first matching contact, or <code>null</code> if a matching contact could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Contact fetchByC_C_First(long classNameId, long classPK,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<Contact> list = findByC_C(classNameId, classPK, 0, 1,
@@ -1269,6 +1302,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @throws com.liferay.portal.NoSuchContactException if a matching contact could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Contact findByC_C_Last(long classNameId, long classPK,
 		OrderByComparator orderByComparator)
 		throws NoSuchContactException, SystemException {
@@ -1303,9 +1337,14 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @return the last matching contact, or <code>null</code> if a matching contact could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Contact fetchByC_C_Last(long classNameId, long classPK,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByC_C(classNameId, classPK);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<Contact> list = findByC_C(classNameId, classPK, count - 1, count,
 				orderByComparator);
@@ -1328,6 +1367,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @throws com.liferay.portal.NoSuchContactException if a contact with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Contact[] findByC_C_PrevAndNext(long contactId, long classNameId,
 		long classPK, OrderByComparator orderByComparator)
 		throws NoSuchContactException, SystemException {
@@ -1474,6 +1514,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @param classPK the class p k
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByC_C(long classNameId, long classPK)
 		throws SystemException {
 		for (Contact contact : findByC_C(classNameId, classPK,
@@ -1490,6 +1531,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @return the number of matching contacts
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByC_C(long classNameId, long classPK)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_C;
@@ -1543,11 +1585,16 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	private static final String _FINDER_COLUMN_C_C_CLASSNAMEID_2 = "contact.classNameId = ? AND ";
 	private static final String _FINDER_COLUMN_C_C_CLASSPK_2 = "contact.classPK = ?";
 
+	public ContactPersistenceImpl() {
+		setModelClass(Contact.class);
+	}
+
 	/**
 	 * Caches the contact in the entity cache if it is enabled.
 	 *
 	 * @param contact the contact
 	 */
+	@Override
 	public void cacheResult(Contact contact) {
 		EntityCacheUtil.putResult(ContactModelImpl.ENTITY_CACHE_ENABLED,
 			ContactImpl.class, contact.getPrimaryKey(), contact);
@@ -1560,6 +1607,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 *
 	 * @param contacts the contacts
 	 */
+	@Override
 	public void cacheResult(List<Contact> contacts) {
 		for (Contact contact : contacts) {
 			if (EntityCacheUtil.getResult(
@@ -1626,6 +1674,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @param contactId the primary key for the new contact
 	 * @return the new contact
 	 */
+	@Override
 	public Contact create(long contactId) {
 		Contact contact = new ContactImpl();
 
@@ -1643,6 +1692,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @throws com.liferay.portal.NoSuchContactException if a contact with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Contact remove(long contactId)
 		throws NoSuchContactException, SystemException {
 		return remove((Serializable)contactId);
@@ -1820,6 +1870,8 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 		EntityCacheUtil.putResult(ContactModelImpl.ENTITY_CACHE_ENABLED,
 			ContactImpl.class, contact.getPrimaryKey(), contact);
 
+		contact.resetOriginalValues();
+
 		return contact;
 	}
 
@@ -1903,6 +1955,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @throws com.liferay.portal.NoSuchContactException if a contact with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Contact findByPrimaryKey(long contactId)
 		throws NoSuchContactException, SystemException {
 		return findByPrimaryKey((Serializable)contactId);
@@ -1962,6 +2015,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @return the contact, or <code>null</code> if a contact with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Contact fetchByPrimaryKey(long contactId) throws SystemException {
 		return fetchByPrimaryKey((Serializable)contactId);
 	}
@@ -1972,6 +2026,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @return the contacts
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Contact> findAll() throws SystemException {
 		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
@@ -1988,6 +2043,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @return the range of contacts
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Contact> findAll(int start, int end) throws SystemException {
 		return findAll(start, end, null);
 	}
@@ -2005,6 +2061,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @return the ordered range of contacts
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Contact> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -2090,6 +2147,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 *
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeAll() throws SystemException {
 		for (Contact contact : findAll()) {
 			remove(contact);
@@ -2102,6 +2160,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * @return the number of contacts
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countAll() throws SystemException {
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
 				FINDER_ARGS_EMPTY, this);
@@ -2187,6 +2246,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 		};
 
 	private static CacheModel<Contact> _nullContactCacheModel = new CacheModel<Contact>() {
+			@Override
 			public Contact toEntityModel() {
 				return _nullContact;
 			}

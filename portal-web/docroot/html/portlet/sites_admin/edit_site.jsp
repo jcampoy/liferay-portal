@@ -27,6 +27,8 @@ Group group = (Group)request.getAttribute(WebKeys.GROUP);
 
 long groupId = BeanParamUtil.getLong(group, request, "groupId");
 
+long parentGroupId = ParamUtil.getLong(request, "parentGroupSearchContainerPrimaryKeys", GroupConstants.DEFAULT_PARENT_GROUP_ID);
+
 Group liveGroup = null;
 
 long liveGroupId = 0;
@@ -103,36 +105,77 @@ if (!trashEnabled && ArrayUtil.contains(advancedSections, "recycle-bin")) {
 	advancedSections = ArrayUtil.remove(advancedSections, "recycle-bin");
 }
 
+if ((group != null) && group.isCompany()) {
+	mainSections = ArrayUtil.remove(mainSections, "categorization");
+	mainSections = ArrayUtil.remove(mainSections, "site-url");
+	mainSections = ArrayUtil.remove(mainSections, "site-template");
+
+	seoSections = new String[0];
+
+	advancedSections = ArrayUtil.remove(advancedSections, "default-user-associations");
+	advancedSections = ArrayUtil.remove(advancedSections, "analytics");
+	advancedSections = ArrayUtil.remove(advancedSections, "content-sharing");
+
+	miscellaneousSections = new String[0];
+}
+
+if ((group != null) && group.hasLocalOrRemoteStagingGroup()) {
+	advancedSections = ArrayUtil.remove(advancedSections, "staging");
+}
+
 String[][] categorySections = {mainSections, seoSections, advancedSections, miscellaneousSections};
 %>
 
-<c:if test="<%= portletName.equals(PortletKeys.SITES_ADMIN) %>">
-	<liferay-util:include page="/html/portlet/sites_admin/toolbar.jsp">
-		<liferay-util:param name="toolbarItem" value='<%= (group == null) ? "add" : "browse" %>' />
-	</liferay-util:include>
+<c:if test="<%= !portletName.equals(PortletKeys.SITE_SETTINGS) %>">
+
+	<%
+	if (group != null) {
+		PortalUtil.addPortletBreadcrumbEntry(request, group.getDescriptiveName(locale), null);
+		PortalUtil.addPortletBreadcrumbEntry(request, LanguageUtil.get(pageContext, "edit"), currentURL);
+	}
+	else if (parentGroupId != GroupConstants.DEFAULT_PARENT_GROUP_ID) {
+		Group parentGroup = GroupLocalServiceUtil.getGroup(parentGroupId);
+
+		PortalUtil.addPortletBreadcrumbEntry(request, parentGroup.getDescriptiveName(locale), null);
+	}
+	%>
+
 </c:if>
 
-<%
-boolean localizeTitle = true;
-String title = "new-site";
+<c:if test="<%= (group == null) || !layout.isTypeControlPanel() %>">
 
-if (group != null) {
-	localizeTitle= false;
-	title = group.getDescriptiveName(locale);
-}
-else if (layoutSetPrototype != null) {
-	localizeTitle= false;
-	title = layoutSetPrototype.getName(locale);
-}
-%>
+	<%
+	boolean localizeTitle = true;
+	String title = "new-site";
 
-<liferay-ui:header
-	backURL="<%= backURL %>"
-	escapeXml="<%= false %>"
-	localizeTitle="<%= localizeTitle %>"
-	showBackURL="<%= showBackURL %>"
-	title="<%= HtmlUtil.escape(title) %>"
-/>
+	if (group != null) {
+		localizeTitle= false;
+		title = group.getDescriptiveName(locale);
+	}
+	else if (layoutSetPrototype != null) {
+		localizeTitle= false;
+		title = layoutSetPrototype.getName(locale);
+	}
+	else if (parentGroupId != GroupConstants.DEFAULT_PARENT_GROUP_ID) {
+		title = "new-child-site";
+	%>
+
+		<div id="breadcrumb">
+			<liferay-ui:breadcrumb showCurrentGroup="<%= false %>" showCurrentPortlet="<%= false %>" showGuestGroup="<%= false %>" showLayout="<%= false %>" showPortletBreadcrumb="<%= true %>" />
+		</div>
+
+	<%
+	}
+	%>
+
+	<liferay-ui:header
+		backURL="<%= backURL %>"
+		escapeXml="<%= false %>"
+		localizeTitle="<%= localizeTitle %>"
+		showBackURL="<%= showBackURL %>"
+		title="<%= HtmlUtil.escape(title) %>"
+	/>
+</c:if>
 
 <portlet:actionURL var="editSiteURL">
 	<portlet:param name="struts_action" value="/sites_admin/edit_site" />
@@ -140,7 +183,7 @@ else if (layoutSetPrototype != null) {
 
 <aui:form action="<%= editSiteURL %>" method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "saveGroup();" %>'>
 	<aui:input name="<%= Constants.CMD %>" type="hidden" />
-	<aui:input name="redirect" type="hidden" />
+	<aui:input name="redirect" type="hidden" value="<%= currentURL %>" />
 	<aui:input name="closeRedirect" type="hidden" value="<%= closeRedirect %>" />
 	<aui:input name="backURL" type="hidden" value="<%= backURL %>" />
 	<aui:input name="groupId" type="hidden" value="<%= groupId %>" />
@@ -170,12 +213,6 @@ else if (layoutSetPrototype != null) {
 <aui:script>
 	function <portlet:namespace />saveGroup() {
 		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = "<%= (group == null) ? Constants.ADD : Constants.UPDATE %>";
-
-		var redirect = "<portlet:renderURL><portlet:param name="struts_action" value="/sites_admin/edit_site" /><portlet:param name="backURL" value="<%= backURL %>"></portlet:param></portlet:renderURL>";
-
-		redirect += Liferay.Util.getHistoryParam('<portlet:namespace />');
-
-		document.<portlet:namespace />fm.<portlet:namespace />redirect.value = redirect;
 
 		var ok = true;
 
@@ -214,13 +251,13 @@ else if (layoutSetPrototype != null) {
 		</c:if>
 
 		if (ok) {
+			<c:if test="<%= (group != null) && !group.isCompany() %>">
+				<portlet:namespace />saveLocales();
+			</c:if>
+
 			submitForm(document.<portlet:namespace />fm);
 		}
 	}
-
-	<c:if test="<%= windowState.equals(WindowState.MAXIMIZED) %>">
-		Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace />name);
-	</c:if>
 </aui:script>
 
 <aui:script use="aui-base">
@@ -253,16 +290,6 @@ else if (layoutSetPrototype != null) {
 		toggleCompatibleSiteTemplates();
 	}
 </aui:script>
-
-<%
-if (group != null) {
-	PortalUtil.addPortletBreadcrumbEntry(request, group.getDescriptiveName(locale), null);
-	PortalUtil.addPortletBreadcrumbEntry(request, LanguageUtil.get(pageContext, "edit"), currentURL);
-}
-else {
-	PortalUtil.addPortletBreadcrumbEntry(request, LanguageUtil.get(pageContext, "add-site"), currentURL);
-}
-%>
 
 <%!
 private static final String[] _CATEGORY_NAMES = {"basic-information", "search-engine-optimization", "advanced", "miscellaneous"};

@@ -106,6 +106,7 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	 * @return the matching org group roles
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<OrgGroupRole> findByGroupId(long groupId)
 		throws SystemException {
 		return findByGroupId(groupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
@@ -124,6 +125,7 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	 * @return the range of matching org group roles
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<OrgGroupRole> findByGroupId(long groupId, int start, int end)
 		throws SystemException {
 		return findByGroupId(groupId, start, end, null);
@@ -143,6 +145,7 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	 * @return the ordered range of matching org group roles
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<OrgGroupRole> findByGroupId(long groupId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -249,6 +252,7 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	 * @throws com.liferay.portal.NoSuchOrgGroupRoleException if a matching org group role could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public OrgGroupRole findByGroupId_First(long groupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchOrgGroupRoleException, SystemException {
@@ -279,6 +283,7 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	 * @return the first matching org group role, or <code>null</code> if a matching org group role could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public OrgGroupRole fetchByGroupId_First(long groupId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<OrgGroupRole> list = findByGroupId(groupId, 0, 1, orderByComparator);
@@ -299,6 +304,7 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	 * @throws com.liferay.portal.NoSuchOrgGroupRoleException if a matching org group role could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public OrgGroupRole findByGroupId_Last(long groupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchOrgGroupRoleException, SystemException {
@@ -329,9 +335,14 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	 * @return the last matching org group role, or <code>null</code> if a matching org group role could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public OrgGroupRole fetchByGroupId_Last(long groupId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByGroupId(groupId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<OrgGroupRole> list = findByGroupId(groupId, count - 1, count,
 				orderByComparator);
@@ -353,6 +364,7 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	 * @throws com.liferay.portal.NoSuchOrgGroupRoleException if a org group role with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public OrgGroupRole[] findByGroupId_PrevAndNext(
 		OrgGroupRolePK orgGroupRolePK, long groupId,
 		OrderByComparator orderByComparator)
@@ -495,6 +507,7 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	 * @param groupId the group ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByGroupId(long groupId) throws SystemException {
 		for (OrgGroupRole orgGroupRole : findByGroupId(groupId,
 				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
@@ -509,6 +522,7 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	 * @return the number of matching org group roles
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByGroupId(long groupId) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_GROUPID;
 
@@ -582,6 +596,7 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	 * @return the matching org group roles
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<OrgGroupRole> findByRoleId(long roleId)
 		throws SystemException {
 		return findByRoleId(roleId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
@@ -600,6 +615,7 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	 * @return the range of matching org group roles
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<OrgGroupRole> findByRoleId(long roleId, int start, int end)
 		throws SystemException {
 		return findByRoleId(roleId, start, end, null);
@@ -619,6 +635,7 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	 * @return the ordered range of matching org group roles
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<OrgGroupRole> findByRoleId(long roleId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -725,6 +742,7 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	 * @throws com.liferay.portal.NoSuchOrgGroupRoleException if a matching org group role could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public OrgGroupRole findByRoleId_First(long roleId,
 		OrderByComparator orderByComparator)
 		throws NoSuchOrgGroupRoleException, SystemException {
@@ -755,6 +773,7 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	 * @return the first matching org group role, or <code>null</code> if a matching org group role could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public OrgGroupRole fetchByRoleId_First(long roleId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<OrgGroupRole> list = findByRoleId(roleId, 0, 1, orderByComparator);
@@ -775,6 +794,7 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	 * @throws com.liferay.portal.NoSuchOrgGroupRoleException if a matching org group role could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public OrgGroupRole findByRoleId_Last(long roleId,
 		OrderByComparator orderByComparator)
 		throws NoSuchOrgGroupRoleException, SystemException {
@@ -804,9 +824,14 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	 * @return the last matching org group role, or <code>null</code> if a matching org group role could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public OrgGroupRole fetchByRoleId_Last(long roleId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByRoleId(roleId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<OrgGroupRole> list = findByRoleId(roleId, count - 1, count,
 				orderByComparator);
@@ -828,6 +853,7 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	 * @throws com.liferay.portal.NoSuchOrgGroupRoleException if a org group role with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public OrgGroupRole[] findByRoleId_PrevAndNext(
 		OrgGroupRolePK orgGroupRolePK, long roleId,
 		OrderByComparator orderByComparator)
@@ -970,6 +996,7 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	 * @param roleId the role ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByRoleId(long roleId) throws SystemException {
 		for (OrgGroupRole orgGroupRole : findByRoleId(roleId,
 				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
@@ -984,6 +1011,7 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	 * @return the number of matching org group roles
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByRoleId(long roleId) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_ROLEID;
 
@@ -1031,11 +1059,16 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 
 	private static final String _FINDER_COLUMN_ROLEID_ROLEID_2 = "orgGroupRole.id.roleId = ?";
 
+	public OrgGroupRolePersistenceImpl() {
+		setModelClass(OrgGroupRole.class);
+	}
+
 	/**
 	 * Caches the org group role in the entity cache if it is enabled.
 	 *
 	 * @param orgGroupRole the org group role
 	 */
+	@Override
 	public void cacheResult(OrgGroupRole orgGroupRole) {
 		EntityCacheUtil.putResult(OrgGroupRoleModelImpl.ENTITY_CACHE_ENABLED,
 			OrgGroupRoleImpl.class, orgGroupRole.getPrimaryKey(), orgGroupRole);
@@ -1048,6 +1081,7 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	 *
 	 * @param orgGroupRoles the org group roles
 	 */
+	@Override
 	public void cacheResult(List<OrgGroupRole> orgGroupRoles) {
 		for (OrgGroupRole orgGroupRole : orgGroupRoles) {
 			if (EntityCacheUtil.getResult(
@@ -1114,6 +1148,7 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	 * @param orgGroupRolePK the primary key for the new org group role
 	 * @return the new org group role
 	 */
+	@Override
 	public OrgGroupRole create(OrgGroupRolePK orgGroupRolePK) {
 		OrgGroupRole orgGroupRole = new OrgGroupRoleImpl();
 
@@ -1131,6 +1166,7 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	 * @throws com.liferay.portal.NoSuchOrgGroupRoleException if a org group role with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public OrgGroupRole remove(OrgGroupRolePK orgGroupRolePK)
 		throws NoSuchOrgGroupRoleException, SystemException {
 		return remove((Serializable)orgGroupRolePK);
@@ -1286,6 +1322,8 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 		EntityCacheUtil.putResult(OrgGroupRoleModelImpl.ENTITY_CACHE_ENABLED,
 			OrgGroupRoleImpl.class, orgGroupRole.getPrimaryKey(), orgGroupRole);
 
+		orgGroupRole.resetOriginalValues();
+
 		return orgGroupRole;
 	}
 
@@ -1339,6 +1377,7 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	 * @throws com.liferay.portal.NoSuchOrgGroupRoleException if a org group role with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public OrgGroupRole findByPrimaryKey(OrgGroupRolePK orgGroupRolePK)
 		throws NoSuchOrgGroupRoleException, SystemException {
 		return findByPrimaryKey((Serializable)orgGroupRolePK);
@@ -1399,6 +1438,7 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	 * @return the org group role, or <code>null</code> if a org group role with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public OrgGroupRole fetchByPrimaryKey(OrgGroupRolePK orgGroupRolePK)
 		throws SystemException {
 		return fetchByPrimaryKey((Serializable)orgGroupRolePK);
@@ -1410,6 +1450,7 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	 * @return the org group roles
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<OrgGroupRole> findAll() throws SystemException {
 		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
@@ -1426,6 +1467,7 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	 * @return the range of org group roles
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<OrgGroupRole> findAll(int start, int end)
 		throws SystemException {
 		return findAll(start, end, null);
@@ -1444,6 +1486,7 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	 * @return the ordered range of org group roles
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<OrgGroupRole> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -1529,6 +1572,7 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	 *
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeAll() throws SystemException {
 		for (OrgGroupRole orgGroupRole : findAll()) {
 			remove(orgGroupRole);
@@ -1541,6 +1585,7 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	 * @return the number of org group roles
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countAll() throws SystemException {
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
 				FINDER_ARGS_EMPTY, this);
@@ -1626,6 +1671,7 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 		};
 
 	private static CacheModel<OrgGroupRole> _nullOrgGroupRoleCacheModel = new CacheModel<OrgGroupRole>() {
+			@Override
 			public OrgGroupRole toEntityModel() {
 				return _nullOrgGroupRole;
 			}

@@ -14,11 +14,15 @@
 
 package com.liferay.portlet.journal.asset;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.trash.TrashRenderer;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.security.permission.ActionKeys;
+import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.WebKeys;
@@ -27,6 +31,7 @@ import com.liferay.portlet.asset.model.BaseAssetRenderer;
 import com.liferay.portlet.journal.model.JournalFolder;
 import com.liferay.portlet.journal.service.JournalArticleServiceUtil;
 import com.liferay.portlet.journal.service.JournalFolderServiceUtil;
+import com.liferay.portlet.journal.service.permission.JournalFolderPermission;
 import com.liferay.portlet.trash.util.TrashUtil;
 
 import java.util.Date;
@@ -50,10 +55,12 @@ public class JournalFolderAssetRenderer
 		_folder = folder;
 	}
 
+	@Override
 	public String getClassName() {
 		return JournalFolder.class.getName();
 	}
 
+	@Override
 	public long getClassPK() {
 		return _folder.getFolderId();
 	}
@@ -63,6 +70,7 @@ public class JournalFolderAssetRenderer
 		return _folder.getModifiedDate();
 	}
 
+	@Override
 	public long getGroupId() {
 		return _folder.getGroupId();
 	}
@@ -84,12 +92,14 @@ public class JournalFolderAssetRenderer
 		return themeDisplay.getPathThemeImages() + "/common/folder_empty.png";
 	}
 
+	@Override
 	public String getPortletId() {
 		AssetRendererFactory assetRendererFactory = getAssetRendererFactory();
 
 		return assetRendererFactory.getPortletId();
 	}
 
+	@Override
 	public String getSummary(Locale locale) {
 		return HtmlUtil.stripHtml(_folder.getDescription());
 	}
@@ -115,10 +125,12 @@ public class JournalFolderAssetRenderer
 			"/file_system/large/folder_empty_article.png";
 	}
 
+	@Override
 	public String getTitle(Locale locale) {
 		return TrashUtil.getOriginalTitle(_folder.getName());
 	}
 
+	@Override
 	public String getType() {
 		return TYPE;
 	}
@@ -146,8 +158,10 @@ public class JournalFolderAssetRenderer
 			WindowState windowState)
 		throws Exception {
 
-		PortletURL portletURL = liferayPortletResponse.createLiferayPortletURL(
-			PortletKeys.JOURNAL, PortletRequest.RENDER_PHASE);
+		AssetRendererFactory assetRendererFactory = getAssetRendererFactory();
+
+		PortletURL portletURL = assetRendererFactory.getURLView(
+			liferayPortletResponse, windowState);
 
 		portletURL.setParameter("struts_action", "/journal/view");
 		portletURL.setParameter(
@@ -168,18 +182,30 @@ public class JournalFolderAssetRenderer
 			"folderId", _folder.getFolderId());
 	}
 
+	@Override
 	public long getUserId() {
 		return _folder.getUserId();
 	}
 
+	@Override
 	public String getUserName() {
 		return _folder.getUserName();
 	}
 
+	@Override
 	public String getUuid() {
 		return _folder.getUuid();
 	}
 
+	@Override
+	public boolean hasViewPermission(PermissionChecker permissionChecker)
+		throws PortalException, SystemException {
+
+		return JournalFolderPermission.contains(
+			permissionChecker, _folder, ActionKeys.VIEW);
+	}
+
+	@Override
 	public String render(
 			RenderRequest renderRequest, RenderResponse renderResponse,
 			String template)

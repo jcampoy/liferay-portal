@@ -23,8 +23,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import java.util.HashMap;
-import java.util.Map.Entry;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.jcr.Binary;
 import javax.jcr.Session;
@@ -44,6 +44,7 @@ public class JCRSessionInvocationHandler
 		}
 	}
 
+	@Override
 	public void doFinalize() {
 		for (Entry<String, Binary> entry : _binaries.entrySet()) {
 			Binary binary = entry.getValue();
@@ -54,6 +55,7 @@ public class JCRSessionInvocationHandler
 		_session.logout();
 	}
 
+	@Override
 	public Object invoke(Object proxy, Method method, Object[] arguments)
 		throws Throwable {
 

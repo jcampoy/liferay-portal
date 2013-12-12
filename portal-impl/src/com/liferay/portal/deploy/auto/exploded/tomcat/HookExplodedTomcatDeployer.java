@@ -26,6 +26,7 @@ import java.io.File;
 public class HookExplodedTomcatDeployer
 	extends HookAutoDeployer implements ExplodedTomcatDeployer {
 
+	@Override
 	public void explodedTomcatDeploy(
 			File contextFile, File webAppDir, PluginPackage pluginPackage)
 		throws AutoDeployException {
@@ -37,7 +38,6 @@ public class HookExplodedTomcatDeployer
 		catch (Exception e) {
 			throw new AutoDeployException(e);
 		}
-
 	}
 
 }

@@ -47,6 +47,7 @@ import org.junit.runner.notification.Failure;
 public class PluginIntegrationTestHotDeployListener
 	extends BaseHotDeployListener {
 
+	@Override
 	public void invokeDeploy(HotDeployEvent hotDeployEvent)
 		throws HotDeployException {
 
@@ -59,6 +60,7 @@ public class PluginIntegrationTestHotDeployListener
 		}
 	}
 
+	@Override
 	public void invokeUndeploy(HotDeployEvent hotDeployEvent)
 		throws HotDeployException {
 
@@ -83,7 +85,9 @@ public class PluginIntegrationTestHotDeployListener
 	protected void doInvokeUndeploy(HotDeployEvent hotDeployEvent)
 		throws Exception {
 
-		_log.debug("Undeploying tests for " + hotDeployEvent);
+		if (_log.isDebugEnabled()) {
+			_log.debug("Undeploying tests for " + hotDeployEvent);
+		}
 	}
 
 	protected List<Class<?>> getAllClassesInIntegrationJar(

@@ -44,11 +44,13 @@ public class CookieKeys {
 
 	public static final String LOGIN = "LOGIN";
 
-	public static final int MAX_AGE =(int)Time.YEAR;
+	public static final int MAX_AGE = (int)Time.YEAR;
 
 	public static final String PASSWORD = "PASSWORD";
 
 	public static final String REMEMBER_ME = "REMEMBER_ME";
+
+	public static final String REMOTE_PREFERENCE_PREFIX = "REMOTE_PREFERENCE_";
 
 	public static final String SCREEN_NAME = "SCREEN_NAME";
 
@@ -117,30 +119,30 @@ public class CookieKeys {
 
 		String value = _get(request, name, toUpperCase);
 
-		if ((value != null) && isEncodedCookie(name)) {
-			try {
-				String encodedValue = value;
-				String originalValue = new String(
-					UnicodeFormatter.hexToBytes(encodedValue));
-
-				if (_log.isDebugEnabled()) {
-					_log.debug("Get encoded cookie " + name);
-					_log.debug("Hex encoded value " + encodedValue);
-					_log.debug("Original value " + originalValue);
-				}
-
-				return originalValue;
-			}
-			catch (Exception e) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(e.getMessage());
-				}
-
-				return value;
-			}
+		if ((value == null) || !isEncodedCookie(name)) {
+			return value;
 		}
 
-		return value;
+		try {
+			String encodedValue = value;
+			String originalValue = new String(
+				UnicodeFormatter.hexToBytes(encodedValue));
+
+			if (_log.isDebugEnabled()) {
+				_log.debug("Get encoded cookie " + name);
+				_log.debug("Hex encoded value " + encodedValue);
+				_log.debug("Original value " + originalValue);
+			}
+
+			return originalValue;
+		}
+		catch (Exception e) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(e.getMessage());
+			}
+
+			return value;
+		}
 	}
 
 	public static String getDomain(HttpServletRequest request) {
@@ -152,6 +154,10 @@ public class CookieKeys {
 		}
 
 		String host = request.getServerName();
+
+		if (_SESSION_COOKIE_USE_FULL_HOSTNAME) {
+			return StringPool.BLANK;
+		}
 
 		return getDomain(host);
 	}
@@ -238,7 +244,7 @@ public class CookieKeys {
 		Map<String, Cookie> cookieMap = _getCookieMap(request);
 
 		if (toUpperCase) {
-			name = name.toUpperCase();
+			name = StringUtil.toUpperCase(name);
 		}
 
 		Cookie cookie = cookieMap.get(name);
@@ -273,7 +279,7 @@ public class CookieKeys {
 			for (Cookie cookie : cookies) {
 				String cookieName = GetterUtil.getString(cookie.getName());
 
-				cookieName = cookieName.toUpperCase();
+				cookieName = StringUtil.toUpperCase(cookieName);
 
 				cookieMap.put(cookieName, cookie);
 			}
@@ -286,6 +292,10 @@ public class CookieKeys {
 
 	private static final String _SESSION_COOKIE_DOMAIN = PropsUtil.get(
 		PropsKeys.SESSION_COOKIE_DOMAIN);
+
+	private static final boolean _SESSION_COOKIE_USE_FULL_HOSTNAME =
+		GetterUtil.getBoolean(
+			PropsUtil.get(PropsKeys.SESSION_COOKIE_USE_FULL_HOSTNAME));
 
 	private static final boolean _SESSION_ENABLE_PERSISTENT_COOKIES =
 		GetterUtil.getBoolean(

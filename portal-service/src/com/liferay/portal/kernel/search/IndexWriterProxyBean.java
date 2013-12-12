@@ -26,26 +26,45 @@ import java.util.Collection;
 public class IndexWriterProxyBean extends BaseMultiDestinationProxyBean
 	implements IndexWriter {
 
+	@Override
 	public void addDocument(SearchContext searchContext, Document document) {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public void addDocuments(
 		SearchContext searchContext, Collection<Document> documents) {
 
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
+	public void clearQuerySuggestionDictionaryIndexes(
+		SearchContext searchContext) {
+
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void clearSpellCheckerDictionaryIndexes(
+		SearchContext searchContext) {
+
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
 	public void deleteDocument(SearchContext searchContext, String uid) {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public void deleteDocuments(
 		SearchContext searchContext, Collection<String> uids) {
 
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public void deletePortletDocuments(
 		SearchContext searchContext, String portletId) {
 
@@ -63,18 +82,39 @@ public class IndexWriterProxyBean extends BaseMultiDestinationProxyBean
 		return SearchEngineUtil.getSearchWriterDestinationName(searchEngineId);
 	}
 
-	public void indexDictionaries(SearchContext searchContext) {
+	@Override
+	public void indexKeyword(
+		SearchContext searchContext, float weight, String keywordType) {
+
 		throw new UnsupportedOperationException();
 	}
 
-	public void indexDictionary(SearchContext searchContext) {
+	@Override
+	public void indexQuerySuggestionDictionaries(SearchContext searchContext) {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
+	public void indexQuerySuggestionDictionary(SearchContext searchContext) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void indexSpellCheckerDictionaries(SearchContext searchContext) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void indexSpellCheckerDictionary(SearchContext searchContext) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
 	public void updateDocument(SearchContext searchContext, Document document) {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public void updateDocuments(
 		SearchContext searchContext, Collection<Document> documents) {
 

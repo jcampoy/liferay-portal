@@ -56,8 +56,9 @@ public class ViewAction extends PortletAction {
 
 	@Override
 	public void processAction(
-			ActionMapping mapping, ActionForm form, PortletConfig portletConfig,
-			ActionRequest actionRequest, ActionResponse actionResponse)
+			ActionMapping actionMapping, ActionForm actionForm,
+			PortletConfig portletConfig, ActionRequest actionRequest,
+			ActionResponse actionResponse)
 		throws Exception {
 
 		HttpServletRequest request = PortalUtil.getHttpServletRequest(
@@ -74,10 +75,13 @@ public class ViewAction extends PortletAction {
 		Locale locale = LocaleUtil.fromLanguageId(languageId);
 
 		List<Locale> availableLocales = ListUtil.fromArray(
-			LanguageUtil.getAvailableLocales());
+			LanguageUtil.getAvailableLocales(themeDisplay.getSiteGroupId()));
 
 		if (availableLocales.contains(locale)) {
-			if (themeDisplay.isSignedIn()) {
+			boolean persistState = ParamUtil.getBoolean(
+				request, "persistState", true);
+
+			if (themeDisplay.isSignedIn() && (persistState)) {
 				User user = themeDisplay.getUser();
 
 				Contact contact = user.getContact();
@@ -122,24 +126,25 @@ public class ViewAction extends PortletAction {
 		Group group = layout.getGroup();
 
 		if (PortalUtil.isGroupFriendlyURL(
-				layoutURL, group.getFriendlyURL(), layout.getFriendlyURL())) {
+				layoutURL, group.getFriendlyURL(),
+				layout.getFriendlyURL(locale))) {
 
 			if (PropsValues.LOCALE_PREPEND_FRIENDLY_URL_STYLE == 0) {
 				redirect = layoutURL;
 			}
 			else {
 				redirect = PortalUtil.getGroupFriendlyURL(
-					themeDisplay.getScopeGroup(), layout.isPrivateLayout(),
-					themeDisplay, locale);
+					group, layout.isPrivateLayout(), themeDisplay, locale);
 			}
 		}
 		else {
 			if (PropsValues.LOCALE_PREPEND_FRIENDLY_URL_STYLE == 0) {
 				if (themeDisplay.isI18n()) {
-					redirect = layout.getFriendlyURL();
+					redirect = layout.getFriendlyURL(locale);
 				}
 				else {
-					redirect = PortalUtil.getLayoutURL(layout, themeDisplay);
+					redirect = PortalUtil.getLayoutURL(
+						layout, themeDisplay, locale);
 				}
 			}
 			else {
@@ -155,11 +160,12 @@ public class ViewAction extends PortletAction {
 
 	@Override
 	public ActionForward render(
-			ActionMapping mapping, ActionForm form, PortletConfig portletConfig,
-			RenderRequest renderRequest, RenderResponse renderResponse)
+			ActionMapping actionMapping, ActionForm actionForm,
+			PortletConfig portletConfig, RenderRequest renderRequest,
+			RenderResponse renderResponse)
 		throws Exception {
 
-		return mapping.findForward("portlet.language.view");
+		return actionMapping.findForward("portlet.language.view");
 	}
 
 	@Override

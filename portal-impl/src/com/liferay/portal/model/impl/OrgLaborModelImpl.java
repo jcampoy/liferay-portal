@@ -157,26 +157,32 @@ public class OrgLaborModelImpl extends BaseModelImpl<OrgLabor>
 	public OrgLaborModelImpl() {
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _orgLaborId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setOrgLaborId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
 		return _orgLaborId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return OrgLabor.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return OrgLabor.class.getName();
 	}
@@ -312,19 +318,23 @@ public class OrgLaborModelImpl extends BaseModelImpl<OrgLabor>
 	}
 
 	@JSON
+	@Override
 	public long getOrgLaborId() {
 		return _orgLaborId;
 	}
 
+	@Override
 	public void setOrgLaborId(long orgLaborId) {
 		_orgLaborId = orgLaborId;
 	}
 
 	@JSON
+	@Override
 	public long getOrganizationId() {
 		return _organizationId;
 	}
 
+	@Override
 	public void setOrganizationId(long organizationId) {
 		_columnBitmask = -1L;
 
@@ -342,10 +352,12 @@ public class OrgLaborModelImpl extends BaseModelImpl<OrgLabor>
 	}
 
 	@JSON
+	@Override
 	public int getTypeId() {
 		return _typeId;
 	}
 
+	@Override
 	public void setTypeId(int typeId) {
 		_columnBitmask = -1L;
 
@@ -353,127 +365,155 @@ public class OrgLaborModelImpl extends BaseModelImpl<OrgLabor>
 	}
 
 	@JSON
+	@Override
 	public int getSunOpen() {
 		return _sunOpen;
 	}
 
+	@Override
 	public void setSunOpen(int sunOpen) {
 		_sunOpen = sunOpen;
 	}
 
 	@JSON
+	@Override
 	public int getSunClose() {
 		return _sunClose;
 	}
 
+	@Override
 	public void setSunClose(int sunClose) {
 		_sunClose = sunClose;
 	}
 
 	@JSON
+	@Override
 	public int getMonOpen() {
 		return _monOpen;
 	}
 
+	@Override
 	public void setMonOpen(int monOpen) {
 		_monOpen = monOpen;
 	}
 
 	@JSON
+	@Override
 	public int getMonClose() {
 		return _monClose;
 	}
 
+	@Override
 	public void setMonClose(int monClose) {
 		_monClose = monClose;
 	}
 
 	@JSON
+	@Override
 	public int getTueOpen() {
 		return _tueOpen;
 	}
 
+	@Override
 	public void setTueOpen(int tueOpen) {
 		_tueOpen = tueOpen;
 	}
 
 	@JSON
+	@Override
 	public int getTueClose() {
 		return _tueClose;
 	}
 
+	@Override
 	public void setTueClose(int tueClose) {
 		_tueClose = tueClose;
 	}
 
 	@JSON
+	@Override
 	public int getWedOpen() {
 		return _wedOpen;
 	}
 
+	@Override
 	public void setWedOpen(int wedOpen) {
 		_wedOpen = wedOpen;
 	}
 
 	@JSON
+	@Override
 	public int getWedClose() {
 		return _wedClose;
 	}
 
+	@Override
 	public void setWedClose(int wedClose) {
 		_wedClose = wedClose;
 	}
 
 	@JSON
+	@Override
 	public int getThuOpen() {
 		return _thuOpen;
 	}
 
+	@Override
 	public void setThuOpen(int thuOpen) {
 		_thuOpen = thuOpen;
 	}
 
 	@JSON
+	@Override
 	public int getThuClose() {
 		return _thuClose;
 	}
 
+	@Override
 	public void setThuClose(int thuClose) {
 		_thuClose = thuClose;
 	}
 
 	@JSON
+	@Override
 	public int getFriOpen() {
 		return _friOpen;
 	}
 
+	@Override
 	public void setFriOpen(int friOpen) {
 		_friOpen = friOpen;
 	}
 
 	@JSON
+	@Override
 	public int getFriClose() {
 		return _friClose;
 	}
 
+	@Override
 	public void setFriClose(int friClose) {
 		_friClose = friClose;
 	}
 
 	@JSON
+	@Override
 	public int getSatOpen() {
 		return _satOpen;
 	}
 
+	@Override
 	public void setSatOpen(int satOpen) {
 		_satOpen = satOpen;
 	}
 
 	@JSON
+	@Override
 	public int getSatClose() {
 		return _satClose;
 	}
 
+	@Override
 	public void setSatClose(int satClose) {
 		_satClose = satClose;
 	}
@@ -532,6 +572,7 @@ public class OrgLaborModelImpl extends BaseModelImpl<OrgLabor>
 		return orgLaborImpl;
 	}
 
+	@Override
 	public int compareTo(OrgLabor orgLabor) {
 		int value = 0;
 
@@ -568,18 +609,15 @@ public class OrgLaborModelImpl extends BaseModelImpl<OrgLabor>
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof OrgLabor)) {
 			return false;
 		}
 
-		OrgLabor orgLabor = null;
-
-		try {
-			orgLabor = (OrgLabor)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		OrgLabor orgLabor = (OrgLabor)obj;
 
 		long primaryKey = orgLabor.getPrimaryKey();
 
@@ -691,6 +729,7 @@ public class OrgLaborModelImpl extends BaseModelImpl<OrgLabor>
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(55);
 

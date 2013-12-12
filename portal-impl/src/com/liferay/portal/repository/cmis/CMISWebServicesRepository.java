@@ -43,7 +43,7 @@ public class CMISWebServicesRepository extends CMISRepositoryHandler {
 			SessionParameter.BINDING_TYPE, BindingType.WEBSERVICES.value());
 		parameters.put(SessionParameter.COMPRESSION, Boolean.TRUE.toString());
 
-		Locale locale = LocaleUtil.getDefault();
+		Locale locale = LocaleUtil.getSiteDefault();
 
 		parameters.put(
 			SessionParameter.LOCALE_ISO3166_COUNTRY, locale.getCountry());
@@ -93,10 +93,12 @@ public class CMISWebServicesRepository extends CMISRepositoryHandler {
 		return CMISRepositoryUtil.createSession(parameters);
 	}
 
+	@Override
 	public String[] getSupportedConfigurations() {
 		return _SUPPORTED_CONFIGURATIONS;
 	}
 
+	@Override
 	public String[][] getSupportedParameters() {
 		return _SUPPORTED_PARAMETERS;
 	}

@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.softwarecatalog.service.http;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 
@@ -22,13 +24,11 @@ import com.liferay.portlet.softwarecatalog.service.SCLicenseServiceUtil;
 import java.rmi.RemoteException;
 
 /**
- * <p>
- * This class provides a SOAP utility for the
+ * Provides the SOAP utility for the
  * {@link com.liferay.portlet.softwarecatalog.service.SCLicenseServiceUtil} service utility. The
  * static methods of this class calls the same methods of the service utility.
  * However, the signatures are different because it is difficult for SOAP to
  * support certain types.
- * </p>
  *
  * <p>
  * ServiceBuilder follows certain rules in translating the methods. For example,
@@ -57,12 +57,13 @@ import java.rmi.RemoteException;
  * The SOAP utility is only generated for remote services.
  * </p>
  *
- * @author    Brian Wing Shun Chan
- * @see       SCLicenseServiceHttp
- * @see       com.liferay.portlet.softwarecatalog.model.SCLicenseSoap
- * @see       com.liferay.portlet.softwarecatalog.service.SCLicenseServiceUtil
+ * @author Brian Wing Shun Chan
+ * @see SCLicenseServiceHttp
+ * @see com.liferay.portlet.softwarecatalog.model.SCLicenseSoap
+ * @see com.liferay.portlet.softwarecatalog.service.SCLicenseServiceUtil
  * @generated
  */
+@ProviderType
 public class SCLicenseServiceSoap {
 	public static com.liferay.portlet.softwarecatalog.model.SCLicenseSoap addLicense(
 		java.lang.String name, java.lang.String url, boolean openSource,

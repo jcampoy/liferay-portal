@@ -55,42 +55,44 @@ public class SPIConfiguration implements Serializable {
 		String javaExecutable = rootElement.elementText("javaExecutable");
 		String jvmArguments = rootElement.elementText("jvmArguments");
 		String spiAgentClassName = rootElement.elementText("spiAgentClassName");
-		int connectorPort = Integer.parseInt(
+		int connectorPort = GetterUtil.getIntegerStrict(
 			rootElement.elementText("connectorPort"));
 		String baseDir = rootElement.elementText("baseDir");
 		String[] portletIds = StringUtil.split(
 			rootElement.elementText("portletIds"));
 		String[] servletContextNames = StringUtil.split(
 			rootElement.elementText("servletContextNames"));
-		long pingInterval = GetterUtil.getLong(
+		long pingInterval = GetterUtil.getLongStrict(
 			rootElement.elementText("pingInterval"));
-		long registerTimeout = GetterUtil.getLong(
+		long registerTimeout = GetterUtil.getLongStrict(
 			rootElement.elementText("registerTimeout"));
-		long shutdownTimeout = GetterUtil.getLong(
+		long shutdownTimeout = GetterUtil.getLongStrict(
 			rootElement.elementText("shutdownTimeout"));
+		String extraSettings = rootElement.elementText("extraSettings");
 
 		return new SPIConfiguration(
 			id, javaExecutable, jvmArguments, spiAgentClassName, connectorPort,
 			baseDir, portletIds, servletContextNames, pingInterval,
-			registerTimeout, shutdownTimeout);
+			registerTimeout, shutdownTimeout, extraSettings);
 	}
 
 	public SPIConfiguration(
 		String spiId, String spiAgentClassName, int connectorPort,
-		String baseDir, String[] portletIds, String[] servletContextNames) {
+		String baseDir, String[] portletIds, String[] servletContextNames,
+		String extraSettings) {
 
 		this(
 			spiId, JAVA_EXECUTABLE_DEFAULT, JVM_ARGUMENTS_DEFAULT,
 			spiAgentClassName, connectorPort, baseDir, portletIds,
 			servletContextNames, PING_INTERVAL_DEFAULT,
-			REGISTER_TIMEOUT_DEFAULT, SHUTDOWN_TIMEOUT_DEFAULT);
+			REGISTER_TIMEOUT_DEFAULT, SHUTDOWN_TIMEOUT_DEFAULT, extraSettings);
 	}
 
 	public SPIConfiguration(
 		String spiId, String javaExecutable, String jvmArguments,
 		String spiAgentClassName, int connectorPort, String baseDir,
 		String[] portletIds, String[] servletContextNames, long pingInterval,
-		long registerTimeout, long shutdownTimeout) {
+		long registerTimeout, long shutdownTimeout, String extraSettings) {
 
 		_spiId = spiId;
 		_javaExecutable = javaExecutable;
@@ -103,6 +105,7 @@ public class SPIConfiguration implements Serializable {
 		_pingInterval = pingInterval;
 		_registerTimeout = registerTimeout;
 		_shutdownTimeout = shutdownTimeout;
+		_extraSettings = extraSettings;
 	}
 
 	public String getBaseDir() {
@@ -111,6 +114,10 @@ public class SPIConfiguration implements Serializable {
 
 	public int getConnectorPort() {
 		return _connectorPort;
+	}
+
+	public String getExtraSettings() {
+		return _extraSettings;
 	}
 
 	public String getJavaExecutable() {
@@ -151,12 +158,14 @@ public class SPIConfiguration implements Serializable {
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(23);
+		StringBundler sb = new StringBundler(25);
 
 		sb.append("{baseDir=");
 		sb.append(_baseDir);
 		sb.append(", connectorPort=");
 		sb.append(_connectorPort);
+		sb.append(", extraSettings=");
+		sb.append(_extraSettings);
 		sb.append(", javaExecutable=");
 		sb.append(_javaExecutable);
 		sb.append(", jvmArguments=");
@@ -197,6 +206,7 @@ public class SPIConfiguration implements Serializable {
 		element.addElement("pingInterval", _pingInterval);
 		element.addElement("registerTimeout", _registerTimeout);
 		element.addElement("shutdownTimeout", _shutdownTimeout);
+		element.addElement("extraSettings", _extraSettings);
 
 		return element.toXMLString();
 	}
@@ -205,6 +215,7 @@ public class SPIConfiguration implements Serializable {
 
 	private String _baseDir;
 	private int _connectorPort;
+	private String _extraSettings;
 	private String _javaExecutable;
 	private String _jvmArguments;
 	private long _pingInterval;

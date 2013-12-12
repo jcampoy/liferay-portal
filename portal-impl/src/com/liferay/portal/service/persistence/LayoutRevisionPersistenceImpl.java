@@ -112,6 +112,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<LayoutRevision> findByLayoutSetBranchId(long layoutSetBranchId)
 		throws SystemException {
 		return findByLayoutSetBranchId(layoutSetBranchId, QueryUtil.ALL_POS,
@@ -131,6 +132,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the range of matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<LayoutRevision> findByLayoutSetBranchId(
 		long layoutSetBranchId, int start, int end) throws SystemException {
 		return findByLayoutSetBranchId(layoutSetBranchId, start, end, null);
@@ -150,6 +152,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the ordered range of matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<LayoutRevision> findByLayoutSetBranchId(
 		long layoutSetBranchId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
@@ -261,6 +264,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @throws com.liferay.portal.NoSuchLayoutRevisionException if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision findByLayoutSetBranchId_First(
 		long layoutSetBranchId, OrderByComparator orderByComparator)
 		throws NoSuchLayoutRevisionException, SystemException {
@@ -291,6 +295,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the first matching layout revision, or <code>null</code> if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision fetchByLayoutSetBranchId_First(
 		long layoutSetBranchId, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -313,6 +318,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @throws com.liferay.portal.NoSuchLayoutRevisionException if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision findByLayoutSetBranchId_Last(long layoutSetBranchId,
 		OrderByComparator orderByComparator)
 		throws NoSuchLayoutRevisionException, SystemException {
@@ -343,10 +349,15 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the last matching layout revision, or <code>null</code> if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision fetchByLayoutSetBranchId_Last(
 		long layoutSetBranchId, OrderByComparator orderByComparator)
 		throws SystemException {
 		int count = countByLayoutSetBranchId(layoutSetBranchId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<LayoutRevision> list = findByLayoutSetBranchId(layoutSetBranchId,
 				count - 1, count, orderByComparator);
@@ -368,6 +379,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @throws com.liferay.portal.NoSuchLayoutRevisionException if a layout revision with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision[] findByLayoutSetBranchId_PrevAndNext(
 		long layoutRevisionId, long layoutSetBranchId,
 		OrderByComparator orderByComparator)
@@ -510,6 +522,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @param layoutSetBranchId the layout set branch ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByLayoutSetBranchId(long layoutSetBranchId)
 		throws SystemException {
 		for (LayoutRevision layoutRevision : findByLayoutSetBranchId(
@@ -525,6 +538,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the number of matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByLayoutSetBranchId(long layoutSetBranchId)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_LAYOUTSETBRANCHID;
@@ -602,6 +616,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<LayoutRevision> findByPlid(long plid) throws SystemException {
 		return findByPlid(plid, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
@@ -619,6 +634,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the range of matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<LayoutRevision> findByPlid(long plid, int start, int end)
 		throws SystemException {
 		return findByPlid(plid, start, end, null);
@@ -638,6 +654,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the ordered range of matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<LayoutRevision> findByPlid(long plid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -744,6 +761,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @throws com.liferay.portal.NoSuchLayoutRevisionException if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision findByPlid_First(long plid,
 		OrderByComparator orderByComparator)
 		throws NoSuchLayoutRevisionException, SystemException {
@@ -774,6 +792,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the first matching layout revision, or <code>null</code> if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision fetchByPlid_First(long plid,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<LayoutRevision> list = findByPlid(plid, 0, 1, orderByComparator);
@@ -794,6 +813,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @throws com.liferay.portal.NoSuchLayoutRevisionException if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision findByPlid_Last(long plid,
 		OrderByComparator orderByComparator)
 		throws NoSuchLayoutRevisionException, SystemException {
@@ -823,9 +843,14 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the last matching layout revision, or <code>null</code> if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision fetchByPlid_Last(long plid,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByPlid(plid);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<LayoutRevision> list = findByPlid(plid, count - 1, count,
 				orderByComparator);
@@ -847,6 +872,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @throws com.liferay.portal.NoSuchLayoutRevisionException if a layout revision with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision[] findByPlid_PrevAndNext(long layoutRevisionId,
 		long plid, OrderByComparator orderByComparator)
 		throws NoSuchLayoutRevisionException, SystemException {
@@ -988,6 +1014,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @param plid the plid
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByPlid(long plid) throws SystemException {
 		for (LayoutRevision layoutRevision : findByPlid(plid,
 				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
@@ -1002,6 +1029,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the number of matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByPlid(long plid) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_PLID;
 
@@ -1079,6 +1107,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<LayoutRevision> findByL_H(long layoutSetBranchId, boolean head)
 		throws SystemException {
 		return findByL_H(layoutSetBranchId, head, QueryUtil.ALL_POS,
@@ -1099,6 +1128,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the range of matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<LayoutRevision> findByL_H(long layoutSetBranchId, boolean head,
 		int start, int end) throws SystemException {
 		return findByL_H(layoutSetBranchId, head, start, end, null);
@@ -1119,6 +1149,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the ordered range of matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<LayoutRevision> findByL_H(long layoutSetBranchId, boolean head,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -1236,6 +1267,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @throws com.liferay.portal.NoSuchLayoutRevisionException if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision findByL_H_First(long layoutSetBranchId, boolean head,
 		OrderByComparator orderByComparator)
 		throws NoSuchLayoutRevisionException, SystemException {
@@ -1270,6 +1302,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the first matching layout revision, or <code>null</code> if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision fetchByL_H_First(long layoutSetBranchId,
 		boolean head, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -1293,6 +1326,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @throws com.liferay.portal.NoSuchLayoutRevisionException if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision findByL_H_Last(long layoutSetBranchId, boolean head,
 		OrderByComparator orderByComparator)
 		throws NoSuchLayoutRevisionException, SystemException {
@@ -1327,9 +1361,14 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the last matching layout revision, or <code>null</code> if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision fetchByL_H_Last(long layoutSetBranchId, boolean head,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByL_H(layoutSetBranchId, head);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<LayoutRevision> list = findByL_H(layoutSetBranchId, head,
 				count - 1, count, orderByComparator);
@@ -1352,6 +1391,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @throws com.liferay.portal.NoSuchLayoutRevisionException if a layout revision with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision[] findByL_H_PrevAndNext(long layoutRevisionId,
 		long layoutSetBranchId, boolean head,
 		OrderByComparator orderByComparator)
@@ -1499,6 +1539,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @param head the head
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByL_H(long layoutSetBranchId, boolean head)
 		throws SystemException {
 		for (LayoutRevision layoutRevision : findByL_H(layoutSetBranchId, head,
@@ -1515,6 +1556,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the number of matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByL_H(long layoutSetBranchId, boolean head)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_L_H;
@@ -1598,6 +1640,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<LayoutRevision> findByL_P(long layoutSetBranchId, long plid)
 		throws SystemException {
 		return findByL_P(layoutSetBranchId, plid, QueryUtil.ALL_POS,
@@ -1618,6 +1661,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the range of matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<LayoutRevision> findByL_P(long layoutSetBranchId, long plid,
 		int start, int end) throws SystemException {
 		return findByL_P(layoutSetBranchId, plid, start, end, null);
@@ -1638,6 +1682,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the ordered range of matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<LayoutRevision> findByL_P(long layoutSetBranchId, long plid,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -1755,6 +1800,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @throws com.liferay.portal.NoSuchLayoutRevisionException if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision findByL_P_First(long layoutSetBranchId, long plid,
 		OrderByComparator orderByComparator)
 		throws NoSuchLayoutRevisionException, SystemException {
@@ -1789,6 +1835,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the first matching layout revision, or <code>null</code> if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision fetchByL_P_First(long layoutSetBranchId, long plid,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<LayoutRevision> list = findByL_P(layoutSetBranchId, plid, 0, 1,
@@ -1811,6 +1858,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @throws com.liferay.portal.NoSuchLayoutRevisionException if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision findByL_P_Last(long layoutSetBranchId, long plid,
 		OrderByComparator orderByComparator)
 		throws NoSuchLayoutRevisionException, SystemException {
@@ -1845,9 +1893,14 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the last matching layout revision, or <code>null</code> if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision fetchByL_P_Last(long layoutSetBranchId, long plid,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByL_P(layoutSetBranchId, plid);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<LayoutRevision> list = findByL_P(layoutSetBranchId, plid,
 				count - 1, count, orderByComparator);
@@ -1870,6 +1923,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @throws com.liferay.portal.NoSuchLayoutRevisionException if a layout revision with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision[] findByL_P_PrevAndNext(long layoutRevisionId,
 		long layoutSetBranchId, long plid, OrderByComparator orderByComparator)
 		throws NoSuchLayoutRevisionException, SystemException {
@@ -2016,6 +2070,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @param plid the plid
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByL_P(long layoutSetBranchId, long plid)
 		throws SystemException {
 		for (LayoutRevision layoutRevision : findByL_P(layoutSetBranchId, plid,
@@ -2032,6 +2087,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the number of matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByL_P(long layoutSetBranchId, long plid)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_L_P;
@@ -2115,6 +2171,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<LayoutRevision> findByL_S(long layoutSetBranchId, int status)
 		throws SystemException {
 		return findByL_S(layoutSetBranchId, status, QueryUtil.ALL_POS,
@@ -2135,6 +2192,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the range of matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<LayoutRevision> findByL_S(long layoutSetBranchId, int status,
 		int start, int end) throws SystemException {
 		return findByL_S(layoutSetBranchId, status, start, end, null);
@@ -2155,6 +2213,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the ordered range of matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<LayoutRevision> findByL_S(long layoutSetBranchId, int status,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -2272,6 +2331,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @throws com.liferay.portal.NoSuchLayoutRevisionException if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision findByL_S_First(long layoutSetBranchId, int status,
 		OrderByComparator orderByComparator)
 		throws NoSuchLayoutRevisionException, SystemException {
@@ -2306,6 +2366,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the first matching layout revision, or <code>null</code> if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision fetchByL_S_First(long layoutSetBranchId, int status,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<LayoutRevision> list = findByL_S(layoutSetBranchId, status, 0, 1,
@@ -2328,6 +2389,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @throws com.liferay.portal.NoSuchLayoutRevisionException if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision findByL_S_Last(long layoutSetBranchId, int status,
 		OrderByComparator orderByComparator)
 		throws NoSuchLayoutRevisionException, SystemException {
@@ -2362,9 +2424,14 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the last matching layout revision, or <code>null</code> if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision fetchByL_S_Last(long layoutSetBranchId, int status,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByL_S(layoutSetBranchId, status);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<LayoutRevision> list = findByL_S(layoutSetBranchId, status,
 				count - 1, count, orderByComparator);
@@ -2387,6 +2454,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @throws com.liferay.portal.NoSuchLayoutRevisionException if a layout revision with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision[] findByL_S_PrevAndNext(long layoutRevisionId,
 		long layoutSetBranchId, int status, OrderByComparator orderByComparator)
 		throws NoSuchLayoutRevisionException, SystemException {
@@ -2533,6 +2601,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @param status the status
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByL_S(long layoutSetBranchId, int status)
 		throws SystemException {
 		for (LayoutRevision layoutRevision : findByL_S(layoutSetBranchId,
@@ -2549,6 +2618,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the number of matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByL_S(long layoutSetBranchId, int status)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_L_S;
@@ -2632,6 +2702,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<LayoutRevision> findByH_P(boolean head, long plid)
 		throws SystemException {
 		return findByH_P(head, plid, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
@@ -2651,6 +2722,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the range of matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<LayoutRevision> findByH_P(boolean head, long plid, int start,
 		int end) throws SystemException {
 		return findByH_P(head, plid, start, end, null);
@@ -2671,6 +2743,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the ordered range of matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<LayoutRevision> findByH_P(boolean head, long plid, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -2783,6 +2856,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @throws com.liferay.portal.NoSuchLayoutRevisionException if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision findByH_P_First(boolean head, long plid,
 		OrderByComparator orderByComparator)
 		throws NoSuchLayoutRevisionException, SystemException {
@@ -2817,6 +2891,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the first matching layout revision, or <code>null</code> if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision fetchByH_P_First(boolean head, long plid,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<LayoutRevision> list = findByH_P(head, plid, 0, 1,
@@ -2839,6 +2914,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @throws com.liferay.portal.NoSuchLayoutRevisionException if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision findByH_P_Last(boolean head, long plid,
 		OrderByComparator orderByComparator)
 		throws NoSuchLayoutRevisionException, SystemException {
@@ -2873,9 +2949,14 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the last matching layout revision, or <code>null</code> if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision fetchByH_P_Last(boolean head, long plid,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByH_P(head, plid);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<LayoutRevision> list = findByH_P(head, plid, count - 1, count,
 				orderByComparator);
@@ -2898,6 +2979,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @throws com.liferay.portal.NoSuchLayoutRevisionException if a layout revision with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision[] findByH_P_PrevAndNext(long layoutRevisionId,
 		boolean head, long plid, OrderByComparator orderByComparator)
 		throws NoSuchLayoutRevisionException, SystemException {
@@ -3044,6 +3126,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @param plid the plid
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByH_P(boolean head, long plid) throws SystemException {
 		for (LayoutRevision layoutRevision : findByH_P(head, plid,
 				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
@@ -3059,6 +3142,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the number of matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByH_P(boolean head, long plid) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_H_P;
 
@@ -3133,6 +3217,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<LayoutRevision> findByP_NotS(long plid, int status)
 		throws SystemException {
 		return findByP_NotS(plid, status, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
@@ -3153,6 +3238,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the range of matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<LayoutRevision> findByP_NotS(long plid, int status, int start,
 		int end) throws SystemException {
 		return findByP_NotS(plid, status, start, end, null);
@@ -3173,6 +3259,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the ordered range of matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<LayoutRevision> findByP_NotS(long plid, int status, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -3188,7 +3275,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 		if ((list != null) && !list.isEmpty()) {
 			for (LayoutRevision layoutRevision : list) {
 				if ((plid != layoutRevision.getPlid()) ||
-						(status != layoutRevision.getStatus())) {
+						(status == layoutRevision.getStatus())) {
 					list = null;
 
 					break;
@@ -3277,6 +3364,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @throws com.liferay.portal.NoSuchLayoutRevisionException if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision findByP_NotS_First(long plid, int status,
 		OrderByComparator orderByComparator)
 		throws NoSuchLayoutRevisionException, SystemException {
@@ -3311,6 +3399,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the first matching layout revision, or <code>null</code> if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision fetchByP_NotS_First(long plid, int status,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<LayoutRevision> list = findByP_NotS(plid, status, 0, 1,
@@ -3333,6 +3422,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @throws com.liferay.portal.NoSuchLayoutRevisionException if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision findByP_NotS_Last(long plid, int status,
 		OrderByComparator orderByComparator)
 		throws NoSuchLayoutRevisionException, SystemException {
@@ -3367,9 +3457,14 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the last matching layout revision, or <code>null</code> if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision fetchByP_NotS_Last(long plid, int status,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByP_NotS(plid, status);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<LayoutRevision> list = findByP_NotS(plid, status, count - 1,
 				count, orderByComparator);
@@ -3392,6 +3487,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @throws com.liferay.portal.NoSuchLayoutRevisionException if a layout revision with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision[] findByP_NotS_PrevAndNext(long layoutRevisionId,
 		long plid, int status, OrderByComparator orderByComparator)
 		throws NoSuchLayoutRevisionException, SystemException {
@@ -3538,6 +3634,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @param status the status
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByP_NotS(long plid, int status) throws SystemException {
 		for (LayoutRevision layoutRevision : findByP_NotS(plid, status,
 				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
@@ -3553,6 +3650,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the number of matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByP_NotS(long plid, int status) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_P_NOTS;
 
@@ -3641,6 +3739,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<LayoutRevision> findByL_L_P(long layoutSetBranchId,
 		long layoutBranchId, long plid) throws SystemException {
 		return findByL_L_P(layoutSetBranchId, layoutBranchId, plid,
@@ -3662,6 +3761,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the range of matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<LayoutRevision> findByL_L_P(long layoutSetBranchId,
 		long layoutBranchId, long plid, int start, int end)
 		throws SystemException {
@@ -3685,6 +3785,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the ordered range of matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<LayoutRevision> findByL_L_P(long layoutSetBranchId,
 		long layoutBranchId, long plid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
@@ -3808,6 +3909,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @throws com.liferay.portal.NoSuchLayoutRevisionException if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision findByL_L_P_First(long layoutSetBranchId,
 		long layoutBranchId, long plid, OrderByComparator orderByComparator)
 		throws NoSuchLayoutRevisionException, SystemException {
@@ -3846,6 +3948,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the first matching layout revision, or <code>null</code> if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision fetchByL_L_P_First(long layoutSetBranchId,
 		long layoutBranchId, long plid, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -3870,6 +3973,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @throws com.liferay.portal.NoSuchLayoutRevisionException if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision findByL_L_P_Last(long layoutSetBranchId,
 		long layoutBranchId, long plid, OrderByComparator orderByComparator)
 		throws NoSuchLayoutRevisionException, SystemException {
@@ -3908,10 +4012,15 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the last matching layout revision, or <code>null</code> if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision fetchByL_L_P_Last(long layoutSetBranchId,
 		long layoutBranchId, long plid, OrderByComparator orderByComparator)
 		throws SystemException {
 		int count = countByL_L_P(layoutSetBranchId, layoutBranchId, plid);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<LayoutRevision> list = findByL_L_P(layoutSetBranchId,
 				layoutBranchId, plid, count - 1, count, orderByComparator);
@@ -3935,6 +4044,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @throws com.liferay.portal.NoSuchLayoutRevisionException if a layout revision with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision[] findByL_L_P_PrevAndNext(long layoutRevisionId,
 		long layoutSetBranchId, long layoutBranchId, long plid,
 		OrderByComparator orderByComparator)
@@ -4090,6 +4200,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @param plid the plid
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByL_L_P(long layoutSetBranchId, long layoutBranchId,
 		long plid) throws SystemException {
 		for (LayoutRevision layoutRevision : findByL_L_P(layoutSetBranchId,
@@ -4107,6 +4218,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the number of matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByL_L_P(long layoutSetBranchId, long layoutBranchId,
 		long plid) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_L_L_P;
@@ -4203,6 +4315,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<LayoutRevision> findByL_P_P(long layoutSetBranchId,
 		long parentLayoutRevisionId, long plid) throws SystemException {
 		return findByL_P_P(layoutSetBranchId, parentLayoutRevisionId, plid,
@@ -4224,6 +4337,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the range of matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<LayoutRevision> findByL_P_P(long layoutSetBranchId,
 		long parentLayoutRevisionId, long plid, int start, int end)
 		throws SystemException {
@@ -4247,6 +4361,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the ordered range of matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<LayoutRevision> findByL_P_P(long layoutSetBranchId,
 		long parentLayoutRevisionId, long plid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
@@ -4372,6 +4487,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @throws com.liferay.portal.NoSuchLayoutRevisionException if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision findByL_P_P_First(long layoutSetBranchId,
 		long parentLayoutRevisionId, long plid,
 		OrderByComparator orderByComparator)
@@ -4411,6 +4527,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the first matching layout revision, or <code>null</code> if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision fetchByL_P_P_First(long layoutSetBranchId,
 		long parentLayoutRevisionId, long plid,
 		OrderByComparator orderByComparator) throws SystemException {
@@ -4435,6 +4552,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @throws com.liferay.portal.NoSuchLayoutRevisionException if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision findByL_P_P_Last(long layoutSetBranchId,
 		long parentLayoutRevisionId, long plid,
 		OrderByComparator orderByComparator)
@@ -4474,10 +4592,15 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the last matching layout revision, or <code>null</code> if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision fetchByL_P_P_Last(long layoutSetBranchId,
 		long parentLayoutRevisionId, long plid,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByL_P_P(layoutSetBranchId, parentLayoutRevisionId, plid);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<LayoutRevision> list = findByL_P_P(layoutSetBranchId,
 				parentLayoutRevisionId, plid, count - 1, count,
@@ -4502,6 +4625,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @throws com.liferay.portal.NoSuchLayoutRevisionException if a layout revision with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision[] findByL_P_P_PrevAndNext(long layoutRevisionId,
 		long layoutSetBranchId, long parentLayoutRevisionId, long plid,
 		OrderByComparator orderByComparator)
@@ -4657,6 +4781,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @param plid the plid
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByL_P_P(long layoutSetBranchId,
 		long parentLayoutRevisionId, long plid) throws SystemException {
 		for (LayoutRevision layoutRevision : findByL_P_P(layoutSetBranchId,
@@ -4675,6 +4800,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the number of matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByL_P_P(long layoutSetBranchId,
 		long parentLayoutRevisionId, long plid) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_L_P_P;
@@ -4762,6 +4888,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @throws com.liferay.portal.NoSuchLayoutRevisionException if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision findByL_H_P(long layoutSetBranchId, boolean head,
 		long plid) throws NoSuchLayoutRevisionException, SystemException {
 		LayoutRevision layoutRevision = fetchByL_H_P(layoutSetBranchId, head,
@@ -4802,6 +4929,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the matching layout revision, or <code>null</code> if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision fetchByL_H_P(long layoutSetBranchId, boolean head,
 		long plid) throws SystemException {
 		return fetchByL_H_P(layoutSetBranchId, head, plid, true);
@@ -4817,6 +4945,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the matching layout revision, or <code>null</code> if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision fetchByL_H_P(long layoutSetBranchId, boolean head,
 		long plid, boolean retrieveFromCache) throws SystemException {
 		Object[] finderArgs = new Object[] { layoutSetBranchId, head, plid };
@@ -4922,6 +5051,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the layout revision that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision removeByL_H_P(long layoutSetBranchId, boolean head,
 		long plid) throws NoSuchLayoutRevisionException, SystemException {
 		LayoutRevision layoutRevision = findByL_H_P(layoutSetBranchId, head,
@@ -4939,6 +5069,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the number of matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByL_H_P(long layoutSetBranchId, boolean head, long plid)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_L_H_P;
@@ -5036,6 +5167,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<LayoutRevision> findByL_P_S(long layoutSetBranchId, long plid,
 		int status) throws SystemException {
 		return findByL_P_S(layoutSetBranchId, plid, status, QueryUtil.ALL_POS,
@@ -5057,6 +5189,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the range of matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<LayoutRevision> findByL_P_S(long layoutSetBranchId, long plid,
 		int status, int start, int end) throws SystemException {
 		return findByL_P_S(layoutSetBranchId, plid, status, start, end, null);
@@ -5078,6 +5211,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the ordered range of matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<LayoutRevision> findByL_P_S(long layoutSetBranchId, long plid,
 		int status, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -5201,6 +5335,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @throws com.liferay.portal.NoSuchLayoutRevisionException if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision findByL_P_S_First(long layoutSetBranchId, long plid,
 		int status, OrderByComparator orderByComparator)
 		throws NoSuchLayoutRevisionException, SystemException {
@@ -5239,6 +5374,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the first matching layout revision, or <code>null</code> if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision fetchByL_P_S_First(long layoutSetBranchId, long plid,
 		int status, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -5263,6 +5399,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @throws com.liferay.portal.NoSuchLayoutRevisionException if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision findByL_P_S_Last(long layoutSetBranchId, long plid,
 		int status, OrderByComparator orderByComparator)
 		throws NoSuchLayoutRevisionException, SystemException {
@@ -5301,10 +5438,15 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the last matching layout revision, or <code>null</code> if a matching layout revision could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision fetchByL_P_S_Last(long layoutSetBranchId, long plid,
 		int status, OrderByComparator orderByComparator)
 		throws SystemException {
 		int count = countByL_P_S(layoutSetBranchId, plid, status);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<LayoutRevision> list = findByL_P_S(layoutSetBranchId, plid,
 				status, count - 1, count, orderByComparator);
@@ -5328,6 +5470,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @throws com.liferay.portal.NoSuchLayoutRevisionException if a layout revision with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision[] findByL_P_S_PrevAndNext(long layoutRevisionId,
 		long layoutSetBranchId, long plid, int status,
 		OrderByComparator orderByComparator)
@@ -5480,6 +5623,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @param status the status
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByL_P_S(long layoutSetBranchId, long plid, int status)
 		throws SystemException {
 		for (LayoutRevision layoutRevision : findByL_P_S(layoutSetBranchId,
@@ -5497,6 +5641,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the number of matching layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByL_P_S(long layoutSetBranchId, long plid, int status)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_L_P_S;
@@ -5555,11 +5700,16 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	private static final String _FINDER_COLUMN_L_P_S_PLID_2 = "layoutRevision.plid = ? AND ";
 	private static final String _FINDER_COLUMN_L_P_S_STATUS_2 = "layoutRevision.status = ?";
 
+	public LayoutRevisionPersistenceImpl() {
+		setModelClass(LayoutRevision.class);
+	}
+
 	/**
 	 * Caches the layout revision in the entity cache if it is enabled.
 	 *
 	 * @param layoutRevision the layout revision
 	 */
+	@Override
 	public void cacheResult(LayoutRevision layoutRevision) {
 		EntityCacheUtil.putResult(LayoutRevisionModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutRevisionImpl.class, layoutRevision.getPrimaryKey(),
@@ -5579,6 +5729,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 *
 	 * @param layoutRevisions the layout revisions
 	 */
+	@Override
 	public void cacheResult(List<LayoutRevision> layoutRevisions) {
 		for (LayoutRevision layoutRevision : layoutRevisions) {
 			if (EntityCacheUtil.getResult(
@@ -5703,6 +5854,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @param layoutRevisionId the primary key for the new layout revision
 	 * @return the new layout revision
 	 */
+	@Override
 	public LayoutRevision create(long layoutRevisionId) {
 		LayoutRevision layoutRevision = new LayoutRevisionImpl();
 
@@ -5720,6 +5872,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @throws com.liferay.portal.NoSuchLayoutRevisionException if a layout revision with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision remove(long layoutRevisionId)
 		throws NoSuchLayoutRevisionException, SystemException {
 		return remove((Serializable)layoutRevisionId);
@@ -6036,6 +6189,8 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 		clearUniqueFindersCache(layoutRevision);
 		cacheUniqueFindersCache(layoutRevision);
 
+		layoutRevision.resetOriginalValues();
+
 		return layoutRevision;
 	}
 
@@ -6117,6 +6272,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @throws com.liferay.portal.NoSuchLayoutRevisionException if a layout revision with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision findByPrimaryKey(long layoutRevisionId)
 		throws NoSuchLayoutRevisionException, SystemException {
 		return findByPrimaryKey((Serializable)layoutRevisionId);
@@ -6178,6 +6334,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the layout revision, or <code>null</code> if a layout revision with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public LayoutRevision fetchByPrimaryKey(long layoutRevisionId)
 		throws SystemException {
 		return fetchByPrimaryKey((Serializable)layoutRevisionId);
@@ -6189,6 +6346,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<LayoutRevision> findAll() throws SystemException {
 		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
@@ -6205,6 +6363,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the range of layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<LayoutRevision> findAll(int start, int end)
 		throws SystemException {
 		return findAll(start, end, null);
@@ -6223,6 +6382,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the ordered range of layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<LayoutRevision> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -6308,6 +6468,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 *
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeAll() throws SystemException {
 		for (LayoutRevision layoutRevision : findAll()) {
 			remove(layoutRevision);
@@ -6320,6 +6481,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 * @return the number of layout revisions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countAll() throws SystemException {
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
 				FINDER_ARGS_EMPTY, this);
@@ -6405,6 +6567,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 		};
 
 	private static CacheModel<LayoutRevision> _nullLayoutRevisionCacheModel = new CacheModel<LayoutRevision>() {
+			@Override
 			public LayoutRevision toEntityModel() {
 				return _nullLayoutRevision;
 			}

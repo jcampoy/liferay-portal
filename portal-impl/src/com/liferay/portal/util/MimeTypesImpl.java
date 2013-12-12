@@ -79,10 +79,12 @@ public class MimeTypesImpl implements MimeTypes, MimeTypesReaderMetKeys {
 		}
 	}
 
+	@Override
 	public String getContentType(File file) {
 		return getContentType(file, file.getName());
 	}
 
+	@Override
 	public String getContentType(File file, String fileName) {
 		if ((file == null) || !file.exists()) {
 			return getContentType(fileName);
@@ -103,6 +105,7 @@ public class MimeTypesImpl implements MimeTypes, MimeTypesReaderMetKeys {
 		}
 	}
 
+	@Override
 	public String getContentType(InputStream inputStream, String fileName) {
 		if (inputStream == null) {
 			return getContentType(fileName);
@@ -110,16 +113,17 @@ public class MimeTypesImpl implements MimeTypes, MimeTypesReaderMetKeys {
 
 		String contentType = null;
 
+		TikaInputStream tikaInputStream = null;
+
 		try {
-			CloseShieldInputStream closeShieldInputStream =
-				new CloseShieldInputStream(inputStream);
+			tikaInputStream = TikaInputStream.get(
+				new CloseShieldInputStream(inputStream));
 
 			Metadata metadata = new Metadata();
 
 			metadata.set(Metadata.RESOURCE_NAME_KEY, fileName);
 
-			MediaType mediaType = _detector.detect(
-				TikaInputStream.get(closeShieldInputStream), metadata);
+			MediaType mediaType = _detector.detect(tikaInputStream, metadata);
 
 			contentType = mediaType.toString();
 
@@ -144,10 +148,14 @@ public class MimeTypesImpl implements MimeTypes, MimeTypesReaderMetKeys {
 
 			contentType = ContentTypes.APPLICATION_OCTET_STREAM;
 		}
+		finally {
+			StreamUtil.cleanUp(tikaInputStream);
+		}
 
 		return contentType;
 	}
 
+	@Override
 	public String getContentType(String fileName) {
 		if (Validator.isNull(fileName)) {
 			return ContentTypes.APPLICATION_OCTET_STREAM;
@@ -176,6 +184,7 @@ public class MimeTypesImpl implements MimeTypes, MimeTypesReaderMetKeys {
 		return ContentTypes.APPLICATION_OCTET_STREAM;
 	}
 
+	@Override
 	public String getExtensionContentType(String extension) {
 		if (Validator.isNull(extension)) {
 			return ContentTypes.APPLICATION_OCTET_STREAM;
@@ -184,6 +193,7 @@ public class MimeTypesImpl implements MimeTypes, MimeTypesReaderMetKeys {
 		return getContentType("A.".concat(extension));
 	}
 
+	@Override
 	public Set<String> getExtensions(String contentType) {
 		Set<String> extensions = _extensionsMap.get(contentType);
 
@@ -194,6 +204,7 @@ public class MimeTypesImpl implements MimeTypes, MimeTypesReaderMetKeys {
 		return extensions;
 	}
 
+	@Override
 	public boolean isWebImage(String mimeType) {
 		return _webImageMimeTypes.contains(mimeType);
 	}

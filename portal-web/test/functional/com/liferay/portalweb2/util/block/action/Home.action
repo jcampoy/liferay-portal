@@ -1,13 +1,35 @@
 <definition>
+	<command name="assertClick">
+		<case comparator="startsWith" locator-key1="CONTROL_PANEL_">
+			<execute function="AssertClick#assertPartialTextClickAtCPNavigation" />
+		</case>
+
+		<case comparator="startsWith" locator-key1="SITE_ADMINISTRATION_">
+			<execute function="AssertClick#assertPartialTextClickAtCPNavigation" />
+		</case>
+
+		<case comparator="startsWith" locator1="link" >
+			<execute function="AssertClick#assertTextClickAtNavigation" />
+		</case>
+	</command>
+
+	<command name="assertElementNotPresent">
+		<case locator-key1="PAGE_DELETE">
+			<execute function="AssertElementNotPresent#assertElementNotPresentClickDockbar" />
+		</case>
+	</command>
+
 	<command name="click">
-		<case comparator="startsWith" locator-key1="PAGE_DELETE">
-			<execute function="Click#textClick" value1="X" />
+		<case locator-key1="PAGE_DELETE">
+			<execute function="Click#click" />
 		</case>
-		<case comparator="startsWith" locator1="link=">
+
+		<case comparator="startsWith" locator1="//ul[@class='nav control-panel-bar-secondary nav-pills']//a[contains(.,">
 			<execute function="Click#clickAtAndWait" />
 		</case>
-		<case comparator="startsWith" locator1="//a[@role='menuitem' and contains(.,">
-			<execute function="Click#clickAtAndWait" />
+
+		<case comparator="startsWith" locator1="link" >
+			<execute function="Click#clickAtNavigation" />
 		</case>
 	</command>
 
@@ -17,7 +39,17 @@
 		</case>
 	</command>
 
+	<command name="mouseOver">
+		<case comparator="startsWith" locator-key1="PAGE_">
+			<execute function="MouseOver#mouseOverClickNavigation" />
+		</case>
+	</command>
+
 	<command name="isElementPresent">
+		<case comparator="startsWith" locator-key1="CONTROL_PANEL_">
+			<execute function="IsElementPresent#isElementPresentCPNavigation" />
+		</case>
+
 		<case comparator="startsWith" locator-key1="PAGE_">
 			<execute function="IsElementPresent#isElementPresentClickNavigation" />
 		</case>

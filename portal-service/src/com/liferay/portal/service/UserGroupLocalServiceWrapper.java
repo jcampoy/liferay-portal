@@ -14,15 +14,16 @@
 
 package com.liferay.portal.service;
 
+import aQute.bnd.annotation.ProviderType;
+
 /**
- * <p>
- * This class is a wrapper for {@link UserGroupLocalService}.
- * </p>
+ * Provides a wrapper for {@link UserGroupLocalService}.
  *
- * @author    Brian Wing Shun Chan
- * @see       UserGroupLocalService
+ * @author Brian Wing Shun Chan
+ * @see UserGroupLocalService
  * @generated
  */
+@ProviderType
 public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	ServiceWrapper<UserGroupLocalService> {
 	public UserGroupLocalServiceWrapper(
@@ -37,6 +38,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	* @return the user group that was added
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.UserGroup addUserGroup(
 		com.liferay.portal.model.UserGroup userGroup)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -49,6 +51,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	* @param userGroupId the primary key for the new user group
 	* @return the new user group
 	*/
+	@Override
 	public com.liferay.portal.model.UserGroup createUserGroup(long userGroupId) {
 		return _userGroupLocalService.createUserGroup(userGroupId);
 	}
@@ -61,6 +64,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	* @throws PortalException if a user group with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.UserGroup deleteUserGroup(long userGroupId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -75,6 +79,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	* @throws PortalException
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.UserGroup deleteUserGroup(
 		com.liferay.portal.model.UserGroup userGroup)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -82,6 +87,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 		return _userGroupLocalService.deleteUserGroup(userGroup);
 	}
 
+	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		return _userGroupLocalService.dynamicQuery();
 	}
@@ -93,6 +99,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	* @return the matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
@@ -113,6 +120,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	* @return the range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -134,6 +142,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	* @return the ordered range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -151,15 +160,49 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	* @return the number of rows that match the dynamic query
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _userGroupLocalService.dynamicQueryCount(dynamicQuery);
 	}
 
+	/**
+	* Returns the number of rows that match the dynamic query.
+	*
+	* @param dynamicQuery the dynamic query
+	* @param projection the projection to apply to the query
+	* @return the number of rows that match the dynamic query
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public long dynamicQueryCount(
+		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery,
+		com.liferay.portal.kernel.dao.orm.Projection projection)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _userGroupLocalService.dynamicQueryCount(dynamicQuery, projection);
+	}
+
+	@Override
 	public com.liferay.portal.model.UserGroup fetchUserGroup(long userGroupId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _userGroupLocalService.fetchUserGroup(userGroupId);
+	}
+
+	/**
+	* Returns the user group with the matching UUID and company.
+	*
+	* @param uuid the user group's UUID
+	* @param companyId the primary key of the company
+	* @return the matching user group, or <code>null</code> if a matching user group could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public com.liferay.portal.model.UserGroup fetchUserGroupByUuidAndCompanyId(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _userGroupLocalService.fetchUserGroupByUuidAndCompanyId(uuid,
+			companyId);
 	}
 
 	/**
@@ -170,17 +213,37 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	* @throws PortalException if a user group with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.UserGroup getUserGroup(long userGroupId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _userGroupLocalService.getUserGroup(userGroupId);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _userGroupLocalService.getPersistedModel(primaryKeyObj);
+	}
+
+	/**
+	* Returns the user group with the matching UUID and company.
+	*
+	* @param uuid the user group's UUID
+	* @param companyId the primary key of the company
+	* @return the matching user group
+	* @throws PortalException if a matching user group could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public com.liferay.portal.model.UserGroup getUserGroupByUuidAndCompanyId(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _userGroupLocalService.getUserGroupByUuidAndCompanyId(uuid,
+			companyId);
 	}
 
 	/**
@@ -195,6 +258,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	* @return the range of user groups
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portal.model.UserGroup> getUserGroups(
 		int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -207,6 +271,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	* @return the number of user groups
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getUserGroupsCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _userGroupLocalService.getUserGroupsCount();
@@ -219,6 +284,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	* @return the user group that was updated
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.UserGroup updateUserGroup(
 		com.liferay.portal.model.UserGroup userGroup)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -228,6 +294,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void addGroupUserGroup(long groupId, long userGroupId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_userGroupLocalService.addGroupUserGroup(groupId, userGroupId);
@@ -236,6 +303,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void addGroupUserGroup(long groupId,
 		com.liferay.portal.model.UserGroup userGroup)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -245,6 +313,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void addGroupUserGroups(long groupId, long[] userGroupIds)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_userGroupLocalService.addGroupUserGroups(groupId, userGroupIds);
@@ -253,6 +322,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void addGroupUserGroups(long groupId,
 		java.util.List<com.liferay.portal.model.UserGroup> UserGroups)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -262,6 +332,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void clearGroupUserGroups(long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_userGroupLocalService.clearGroupUserGroups(groupId);
@@ -270,6 +341,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void deleteGroupUserGroup(long groupId, long userGroupId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_userGroupLocalService.deleteGroupUserGroup(groupId, userGroupId);
@@ -278,6 +350,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void deleteGroupUserGroup(long groupId,
 		com.liferay.portal.model.UserGroup userGroup)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -287,6 +360,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void deleteGroupUserGroups(long groupId, long[] userGroupIds)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_userGroupLocalService.deleteGroupUserGroups(groupId, userGroupIds);
@@ -295,6 +369,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void deleteGroupUserGroups(long groupId,
 		java.util.List<com.liferay.portal.model.UserGroup> UserGroups)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -304,6 +379,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portal.model.UserGroup> getGroupUserGroups(
 		long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -313,6 +389,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portal.model.UserGroup> getGroupUserGroups(
 		long groupId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -322,6 +399,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portal.model.UserGroup> getGroupUserGroups(
 		long groupId, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
@@ -333,6 +411,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getGroupUserGroupsCount(long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _userGroupLocalService.getGroupUserGroupsCount(groupId);
@@ -341,6 +420,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public boolean hasGroupUserGroup(long groupId, long userGroupId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _userGroupLocalService.hasGroupUserGroup(groupId, userGroupId);
@@ -349,6 +429,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public boolean hasGroupUserGroups(long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _userGroupLocalService.hasGroupUserGroups(groupId);
@@ -357,6 +438,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void setGroupUserGroups(long groupId, long[] userGroupIds)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_userGroupLocalService.setGroupUserGroups(groupId, userGroupIds);
@@ -365,6 +447,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void addTeamUserGroup(long teamId, long userGroupId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_userGroupLocalService.addTeamUserGroup(teamId, userGroupId);
@@ -373,6 +456,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void addTeamUserGroup(long teamId,
 		com.liferay.portal.model.UserGroup userGroup)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -382,6 +466,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void addTeamUserGroups(long teamId, long[] userGroupIds)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_userGroupLocalService.addTeamUserGroups(teamId, userGroupIds);
@@ -390,6 +475,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void addTeamUserGroups(long teamId,
 		java.util.List<com.liferay.portal.model.UserGroup> UserGroups)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -399,6 +485,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void clearTeamUserGroups(long teamId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_userGroupLocalService.clearTeamUserGroups(teamId);
@@ -407,6 +494,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void deleteTeamUserGroup(long teamId, long userGroupId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_userGroupLocalService.deleteTeamUserGroup(teamId, userGroupId);
@@ -415,6 +503,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void deleteTeamUserGroup(long teamId,
 		com.liferay.portal.model.UserGroup userGroup)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -424,6 +513,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void deleteTeamUserGroups(long teamId, long[] userGroupIds)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_userGroupLocalService.deleteTeamUserGroups(teamId, userGroupIds);
@@ -432,6 +522,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void deleteTeamUserGroups(long teamId,
 		java.util.List<com.liferay.portal.model.UserGroup> UserGroups)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -441,6 +532,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portal.model.UserGroup> getTeamUserGroups(
 		long teamId) throws com.liferay.portal.kernel.exception.SystemException {
 		return _userGroupLocalService.getTeamUserGroups(teamId);
@@ -449,6 +541,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portal.model.UserGroup> getTeamUserGroups(
 		long teamId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -458,6 +551,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portal.model.UserGroup> getTeamUserGroups(
 		long teamId, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
@@ -469,6 +563,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getTeamUserGroupsCount(long teamId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _userGroupLocalService.getTeamUserGroupsCount(teamId);
@@ -477,6 +572,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public boolean hasTeamUserGroup(long teamId, long userGroupId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _userGroupLocalService.hasTeamUserGroup(teamId, userGroupId);
@@ -485,6 +581,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public boolean hasTeamUserGroups(long teamId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _userGroupLocalService.hasTeamUserGroups(teamId);
@@ -493,6 +590,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void setTeamUserGroups(long teamId, long[] userGroupIds)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_userGroupLocalService.setTeamUserGroups(teamId, userGroupIds);
@@ -501,6 +599,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void addUserUserGroup(long userId, long userGroupId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_userGroupLocalService.addUserUserGroup(userId, userGroupId);
@@ -509,6 +608,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void addUserUserGroup(long userId,
 		com.liferay.portal.model.UserGroup userGroup)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -518,6 +618,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void addUserUserGroups(long userId, long[] userGroupIds)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_userGroupLocalService.addUserUserGroups(userId, userGroupIds);
@@ -526,6 +627,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void addUserUserGroups(long userId,
 		java.util.List<com.liferay.portal.model.UserGroup> UserGroups)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -535,6 +637,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void clearUserUserGroups(long userId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_userGroupLocalService.clearUserUserGroups(userId);
@@ -543,6 +646,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void deleteUserUserGroup(long userId, long userGroupId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_userGroupLocalService.deleteUserUserGroup(userId, userGroupId);
@@ -551,6 +655,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void deleteUserUserGroup(long userId,
 		com.liferay.portal.model.UserGroup userGroup)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -560,6 +665,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void deleteUserUserGroups(long userId, long[] userGroupIds)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_userGroupLocalService.deleteUserUserGroups(userId, userGroupIds);
@@ -568,6 +674,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void deleteUserUserGroups(long userId,
 		java.util.List<com.liferay.portal.model.UserGroup> UserGroups)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -577,6 +684,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portal.model.UserGroup> getUserUserGroups(
 		long userId) throws com.liferay.portal.kernel.exception.SystemException {
 		return _userGroupLocalService.getUserUserGroups(userId);
@@ -585,6 +693,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portal.model.UserGroup> getUserUserGroups(
 		long userId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -594,6 +703,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portal.model.UserGroup> getUserUserGroups(
 		long userId, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
@@ -605,6 +715,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getUserUserGroupsCount(long userId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _userGroupLocalService.getUserUserGroupsCount(userId);
@@ -613,6 +724,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public boolean hasUserUserGroup(long userId, long userGroupId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _userGroupLocalService.hasUserUserGroup(userId, userGroupId);
@@ -621,6 +733,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public boolean hasUserUserGroups(long userId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _userGroupLocalService.hasUserUserGroups(userId);
@@ -630,6 +743,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	* @throws PortalException
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void setUserUserGroups(long userId, long[] userGroupIds)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -641,6 +755,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _userGroupLocalService.getBeanIdentifier();
 	}
@@ -650,6 +765,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_userGroupLocalService.setBeanIdentifier(beanIdentifier);
 	}
@@ -674,6 +790,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	* @deprecated As of 6.2.0, replaced by {@link #addUserGroup(long, long,
 	String, String, ServiceContext)}
 	*/
+	@Override
 	public com.liferay.portal.model.UserGroup addUserGroup(long userId,
 		long companyId, java.lang.String name, java.lang.String description)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -703,6 +820,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	* @throws PortalException if the user group's information was invalid
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.UserGroup addUserGroup(long userId,
 		long companyId, java.lang.String name, java.lang.String description,
 		com.liferay.portal.service.ServiceContext serviceContext)
@@ -722,6 +840,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	* @throws SystemException if a system exception occurred
 	* @deprecated As of 6.2.0
 	*/
+	@Override
 	public void copyUserGroupLayouts(long userGroupId, long userId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -739,6 +858,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	* @throws SystemException if a system exception occurred
 	* @deprecated As of 6.1.0
 	*/
+	@Override
 	public void copyUserGroupLayouts(long userGroupId, long[] userIds)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -755,23 +875,25 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	* @throws SystemException if a system exception occurred
 	* @deprecated As of 6.1.0
 	*/
+	@Override
 	public void copyUserGroupLayouts(long[] userGroupIds, long userId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		_userGroupLocalService.copyUserGroupLayouts(userGroupIds, userId);
 	}
 
+	@Override
+	public void deleteUserGroups(long companyId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_userGroupLocalService.deleteUserGroups(companyId);
+	}
+
+	@Override
 	public com.liferay.portal.model.UserGroup fetchUserGroup(long companyId,
 		java.lang.String name)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _userGroupLocalService.fetchUserGroup(companyId, name);
-	}
-
-	public com.liferay.portal.model.UserGroup fetchUserGroupByUuidAndCompanyId(
-		java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _userGroupLocalService.fetchUserGroupByUuidAndCompanyId(uuid,
-			companyId);
 	}
 
 	/**
@@ -783,6 +905,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	* @throws PortalException if a user group with the name could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.UserGroup getUserGroup(long companyId,
 		java.lang.String name)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -797,6 +920,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	* @return the user groups belonging to the company
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portal.model.UserGroup> getUserGroups(
 		long companyId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -811,6 +935,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	* @throws PortalException if any one of the user groups could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portal.model.UserGroup> getUserGroups(
 		long[] userGroupIds)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -846,6 +971,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	* @throws SystemException if a system exception occurred
 	* @see com.liferay.portal.service.persistence.UserGroupFinder
 	*/
+	@Override
 	public java.util.List<com.liferay.portal.model.UserGroup> search(
 		long companyId, java.lang.String keywords,
 		java.util.LinkedHashMap<java.lang.String, java.lang.Object> params,
@@ -885,6 +1011,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	* @throws SystemException if a system exception occurred
 	* @see com.liferay.portlet.usergroupsadmin.util.UserGroupIndexer
 	*/
+	@Override
 	public com.liferay.portal.kernel.search.Hits search(long companyId,
 		java.lang.String keywords,
 		java.util.LinkedHashMap<java.lang.String, java.lang.Object> params,
@@ -892,6 +1019,49 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _userGroupLocalService.search(companyId, keywords, params,
 			start, end, sort);
+	}
+
+	/**
+	* Returns an ordered range of all the user groups that match the name and
+	* description.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end -
+	* start</code> instances. <code>start</code> and <code>end</code> are not
+	* primary keys, they are indexes in the result set. Thus, <code>0</code>
+	* refers to the first result in the set. Setting both <code>start</code>
+	* and <code>end</code> to {@link
+	* com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full
+	* result set.
+	* </p>
+	*
+	* @param companyId the primary key of the user group's company
+	* @param name the user group's name (optionally <code>null</code>)
+	* @param description the user group's description (optionally
+	<code>null</code>)
+	* @param params the finder params (optionally <code>null</code>). For more
+	information see {@link
+	com.liferay.portal.service.persistence.UserGroupFinder}
+	* @param andOperator whether every field must match its keywords or just
+	one field
+	* @param start the lower bound of the range of user groups to return
+	* @param end the upper bound of the range of user groups to return (not
+	inclusive)
+	* @param obc the comparator to order the user groups (optionally
+	<code>null</code>)
+	* @return the matching user groups ordered by comparator <code>obc</code>
+	* @throws SystemException if a system exception occurred
+	* @see com.liferay.portal.service.persistence.UserGroupFinder
+	*/
+	@Override
+	public java.util.List<com.liferay.portal.model.UserGroup> search(
+		long companyId, java.lang.String name, java.lang.String description,
+		java.util.LinkedHashMap<java.lang.String, java.lang.Object> params,
+		boolean andOperator, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator obc)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _userGroupLocalService.search(companyId, name, description,
+			params, andOperator, start, end, obc);
 	}
 
 	/**
@@ -927,6 +1097,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	* @throws SystemException if a system exception occurred
 	* @see com.liferay.portal.service.persistence.UserGroupFinder
 	*/
+	@Override
 	public com.liferay.portal.kernel.search.Hits search(long companyId,
 		java.lang.String name, java.lang.String description,
 		java.util.LinkedHashMap<java.lang.String, java.lang.Object> params,
@@ -950,10 +1121,37 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	* @throws SystemException if a system exception occurred
 	* @see com.liferay.portal.service.persistence.UserGroupFinder
 	*/
+	@Override
 	public int searchCount(long companyId, java.lang.String keywords,
 		java.util.LinkedHashMap<java.lang.String, java.lang.Object> params)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _userGroupLocalService.searchCount(companyId, keywords, params);
+	}
+
+	/**
+	* Returns the number of user groups that match the name and description.
+	*
+	* @param companyId the primary key of the user group's company
+	* @param name the user group's name (optionally <code>null</code>)
+	* @param description the user group's description (optionally
+	<code>null</code>)
+	* @param params the finder params (optionally <code>null</code>). For more
+	information see {@link
+	com.liferay.portal.service.persistence.UserGroupFinder}
+	* @param andOperator whether every field must match its keywords or just
+	one field
+	* @return the number of matching user groups
+	* @throws SystemException if a system exception occurred
+	* @see com.liferay.portal.service.persistence.UserGroupFinder
+	*/
+	@Override
+	public int searchCount(long companyId, java.lang.String name,
+		java.lang.String description,
+		java.util.LinkedHashMap<java.lang.String, java.lang.Object> params,
+		boolean andOperator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _userGroupLocalService.searchCount(companyId, name, description,
+			params, andOperator);
 	}
 
 	/**
@@ -963,6 +1161,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	* @param userGroupIds the primary keys of the user groups
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void unsetGroupUserGroups(long groupId, long[] userGroupIds)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_userGroupLocalService.unsetGroupUserGroups(groupId, userGroupIds);
@@ -975,6 +1174,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	* @param userGroupIds the primary keys of the user groups
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void unsetTeamUserGroups(long teamId, long[] userGroupIds)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_userGroupLocalService.unsetTeamUserGroups(teamId, userGroupIds);
@@ -994,6 +1194,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	* @deprecated As of 6.2.0, replaced by {@link #updateUserGroup(long, long,
 	String, String, ServiceContext)}
 	*/
+	@Override
 	public com.liferay.portal.model.UserGroup updateUserGroup(long companyId,
 		long userGroupId, java.lang.String name, java.lang.String description)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -1017,6 +1218,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	found or if the new information was invalid
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.UserGroup updateUserGroup(long companyId,
 		long userGroupId, java.lang.String name, java.lang.String description,
 		com.liferay.portal.service.ServiceContext serviceContext)
@@ -1041,10 +1243,12 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 		_userGroupLocalService = userGroupLocalService;
 	}
 
+	@Override
 	public UserGroupLocalService getWrappedService() {
 		return _userGroupLocalService;
 	}
 
+	@Override
 	public void setWrappedService(UserGroupLocalService userGroupLocalService) {
 		_userGroupLocalService = userGroupLocalService;
 	}

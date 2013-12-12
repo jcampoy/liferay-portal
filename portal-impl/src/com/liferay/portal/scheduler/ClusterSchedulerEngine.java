@@ -14,23 +14,22 @@
 
 package com.liferay.portal.scheduler;
 
-import com.liferay.portal.cluster.ClusterInvokeThreadLocal;
 import com.liferay.portal.cluster.ClusterableContextThreadLocal;
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.bean.IdentifiableBean;
 import com.liferay.portal.kernel.cluster.Address;
+import com.liferay.portal.kernel.cluster.AddressSerializerUtil;
 import com.liferay.portal.kernel.cluster.BaseClusterResponseCallback;
 import com.liferay.portal.kernel.cluster.ClusterEvent;
 import com.liferay.portal.kernel.cluster.ClusterEventListener;
 import com.liferay.portal.kernel.cluster.ClusterExecutorUtil;
 import com.liferay.portal.kernel.cluster.ClusterInvokeAcceptor;
+import com.liferay.portal.kernel.cluster.ClusterInvokeThreadLocal;
 import com.liferay.portal.kernel.cluster.ClusterNodeResponse;
 import com.liferay.portal.kernel.cluster.ClusterNodeResponses;
 import com.liferay.portal.kernel.cluster.ClusterRequest;
 import com.liferay.portal.kernel.cluster.Clusterable;
 import com.liferay.portal.kernel.cluster.FutureClusterResponses;
-import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayInputStream;
-import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
@@ -45,7 +44,6 @@ import com.liferay.portal.kernel.scheduler.TriggerFactoryUtil;
 import com.liferay.portal.kernel.scheduler.TriggerState;
 import com.liferay.portal.kernel.scheduler.messaging.SchedulerResponse;
 import com.liferay.portal.kernel.servlet.PluginContextLifecycleThreadLocal;
-import com.liferay.portal.kernel.util.Base64;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.MethodHandler;
 import com.liferay.portal.kernel.util.MethodKey;
@@ -55,8 +53,6 @@ import com.liferay.portal.model.Lock;
 import com.liferay.portal.service.LockLocalServiceUtil;
 import com.liferay.portal.util.PropsValues;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import java.util.Iterator;
@@ -91,6 +87,7 @@ public class ClusterSchedulerEngine
 	}
 
 	@Clusterable(acceptor = SchedulerClusterInvokeAcceptor.class)
+	@Override
 	public void delete(String groupName) throws SchedulerException {
 		boolean memoryClusteredSlaveJob = isMemoryClusteredSlaveJob(groupName);
 
@@ -112,6 +109,7 @@ public class ClusterSchedulerEngine
 	}
 
 	@Clusterable(acceptor = SchedulerClusterInvokeAcceptor.class)
+	@Override
 	public void delete(String jobName, String groupName)
 		throws SchedulerException {
 
@@ -134,10 +132,12 @@ public class ClusterSchedulerEngine
 		setClusterableThreadLocal(groupName);
 	}
 
+	@Override
 	public String getBeanIdentifier() {
 		return _beanIdentifier;
 	}
 
+	@Override
 	public SchedulerResponse getScheduledJob(String jobName, String groupName)
 		throws SchedulerException {
 
@@ -150,7 +150,7 @@ public class ClusterSchedulerEngine
 			String masterAddressString = getMasterAddressString(false);
 
 			if (!_localClusterNodeAddress.equals(masterAddressString)) {
-				return (SchedulerResponse)callMaster(
+				return callMaster(
 					masterAddressString, _getScheduledJobMethodKey, jobName,
 					objectValuePair.getKey(), storageType);
 			}
@@ -166,6 +166,7 @@ public class ClusterSchedulerEngine
 		}
 	}
 
+	@Override
 	public List<SchedulerResponse> getScheduledJobs()
 		throws SchedulerException {
 
@@ -185,6 +186,7 @@ public class ClusterSchedulerEngine
 		}
 	}
 
+	@Override
 	public List<SchedulerResponse> getScheduledJobs(String groupName)
 		throws SchedulerException {
 
@@ -213,6 +215,7 @@ public class ClusterSchedulerEngine
 		}
 	}
 
+	@Override
 	public void initialize() throws SchedulerException {
 		try {
 			ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
@@ -220,7 +223,7 @@ public class ClusterSchedulerEngine
 			_readLock = readWriteLock.readLock();
 			_writeLock = readWriteLock.writeLock();
 
-			_localClusterNodeAddress = getSerializedString(
+			_localClusterNodeAddress = AddressSerializerUtil.serialize(
 				ClusterExecutorUtil.getLocalClusterNodeAddress());
 
 			_clusterEventListener = new MemorySchedulerClusterEventListener();
@@ -243,6 +246,7 @@ public class ClusterSchedulerEngine
 	}
 
 	@Clusterable(acceptor = SchedulerClusterInvokeAcceptor.class)
+	@Override
 	public void pause(String groupName) throws SchedulerException {
 		boolean memoryClusteredSlaveJob = isMemoryClusteredSlaveJob(groupName);
 
@@ -264,6 +268,7 @@ public class ClusterSchedulerEngine
 	}
 
 	@Clusterable(acceptor = SchedulerClusterInvokeAcceptor.class)
+	@Override
 	public void pause(String jobName, String groupName)
 		throws SchedulerException {
 
@@ -288,6 +293,7 @@ public class ClusterSchedulerEngine
 	}
 
 	@Clusterable(acceptor = SchedulerClusterInvokeAcceptor.class)
+	@Override
 	public void resume(String groupName) throws SchedulerException {
 		boolean memoryClusteredSlaveJob = isMemoryClusteredSlaveJob(groupName);
 
@@ -309,6 +315,7 @@ public class ClusterSchedulerEngine
 	}
 
 	@Clusterable(acceptor = SchedulerClusterInvokeAcceptor.class)
+	@Override
 	public void resume(String jobName, String groupName)
 		throws SchedulerException {
 
@@ -333,6 +340,7 @@ public class ClusterSchedulerEngine
 	}
 
 	@Clusterable(acceptor = SchedulerClusterInvokeAcceptor.class)
+	@Override
 	public void schedule(
 			Trigger trigger, String description, String destinationName,
 			Message message)
@@ -373,10 +381,12 @@ public class ClusterSchedulerEngine
 		setClusterableThreadLocal(groupName);
 	}
 
+	@Override
 	public void setBeanIdentifier(String beanIdentifier) {
 		_beanIdentifier = beanIdentifier;
 	}
 
+	@Override
 	public void shutdown() throws SchedulerException {
 		_portalReady = false;
 
@@ -385,8 +395,7 @@ public class ClusterSchedulerEngine
 				_clusterEventListener);
 
 			LockLocalServiceUtil.unlock(
-				_LOCK_CLASS_NAME, _LOCK_CLASS_NAME, _localClusterNodeAddress,
-				PropsValues.MEMORY_CLUSTER_SCHEDULER_LOCK_CACHE_ENABLED);
+				_LOCK_CLASS_NAME, _LOCK_CLASS_NAME, _localClusterNodeAddress);
 		}
 		catch (Exception e) {
 			throw new SchedulerException("Unable to shutdown scheduler", e);
@@ -395,6 +404,7 @@ public class ClusterSchedulerEngine
 		_schedulerEngine.shutdown();
 	}
 
+	@Override
 	public void start() throws SchedulerException {
 		_schedulerEngine.start();
 
@@ -402,6 +412,7 @@ public class ClusterSchedulerEngine
 	}
 
 	@Clusterable(acceptor = SchedulerClusterInvokeAcceptor.class)
+	@Override
 	public void suppressError(String jobName, String groupName)
 		throws SchedulerException {
 
@@ -422,6 +433,7 @@ public class ClusterSchedulerEngine
 	}
 
 	@Clusterable(acceptor = SchedulerClusterInvokeAcceptor.class)
+	@Override
 	public void unschedule(String groupName) throws SchedulerException {
 		boolean memoryClusteredSlaveJob = isMemoryClusteredSlaveJob(groupName);
 
@@ -443,6 +455,7 @@ public class ClusterSchedulerEngine
 	}
 
 	@Clusterable(acceptor = SchedulerClusterInvokeAcceptor.class)
+	@Override
 	public void unschedule(String jobName, String groupName)
 		throws SchedulerException {
 
@@ -466,6 +479,7 @@ public class ClusterSchedulerEngine
 	}
 
 	@Clusterable(acceptor = SchedulerClusterInvokeAcceptor.class)
+	@Override
 	public void update(Trigger trigger) throws SchedulerException {
 		String jobName = trigger.getJobName();
 		String groupName = trigger.getGroupName();
@@ -511,6 +525,7 @@ public class ClusterSchedulerEngine
 		setClusterableThreadLocal(groupName);
 	}
 
+	@Override
 	public Lock updateMemorySchedulerClusterMaster() throws SchedulerException {
 		getMasterAddressString(false);
 
@@ -524,7 +539,8 @@ public class ClusterSchedulerEngine
 
 		MethodHandler methodHandler = new MethodHandler(methodKey, arguments);
 
-		Address address = (Address)getDeserializedObject(masterAddressString);
+		Address address = AddressSerializerUtil.deserialize(
+			masterAddressString);
 
 		ClusterRequest clusterRequest = ClusterRequest.createUnicastRequest(
 			methodHandler, address);
@@ -549,36 +565,6 @@ public class ClusterSchedulerEngine
 		}
 	}
 
-	protected Object getDeserializedObject(String string)
-		throws SchedulerException {
-
-		byte[] bytes = Base64.decode(string);
-
-		UnsyncByteArrayInputStream byteArrayInputStream =
-			new UnsyncByteArrayInputStream(bytes);
-
-		ObjectInputStream objectInputStream = null;
-
-		try {
-			objectInputStream = new ObjectInputStream(byteArrayInputStream);
-
-			Object object = objectInputStream.readObject();
-
-			return object;
-		}
-		catch (Exception e) {
-			throw new SchedulerException(
-				"Unable to deserialize object from " + string, e);
-		}
-		finally {
-			try {
-				objectInputStream.close();
-			}
-			catch (Exception e) {
-			}
-		}
-	}
-
 	protected String getFullName(String jobName, String groupName) {
 		return groupName.concat(StringPool.PERIOD).concat(jobName);
 	}
@@ -588,33 +574,27 @@ public class ClusterSchedulerEngine
 
 		String owner = null;
 
-		Lock lock = null;
-
 		while (true) {
 			try {
+				Lock lock = null;
+
 				if (owner == null) {
 					lock = LockLocalServiceUtil.lock(
 						_LOCK_CLASS_NAME, _LOCK_CLASS_NAME,
-						_localClusterNodeAddress,
-						PropsValues.
-							MEMORY_CLUSTER_SCHEDULER_LOCK_CACHE_ENABLED);
+						_localClusterNodeAddress);
 				}
 				else {
 					lock = LockLocalServiceUtil.lock(
 						_LOCK_CLASS_NAME, _LOCK_CLASS_NAME, owner,
-						_localClusterNodeAddress,
-						PropsValues.
-							MEMORY_CLUSTER_SCHEDULER_LOCK_CACHE_ENABLED);
+						_localClusterNodeAddress);
 				}
 
-				Address address = (Address)getDeserializedObject(
-					lock.getOwner());
+				owner = lock.getOwner();
+
+				Address address = AddressSerializerUtil.deserialize(owner);
 
 				if (ClusterExecutorUtil.isClusterNodeAlive(address)) {
 					break;
-				}
-				else {
-					owner = lock.getOwner();
 				}
 			}
 			catch (Exception e) {
@@ -626,35 +606,20 @@ public class ClusterSchedulerEngine
 			}
 		}
 
-		boolean master = _localClusterNodeAddress.equals(lock.getOwner());
+		boolean master = _localClusterNodeAddress.equals(owner);
 
 		if (master == _master) {
-			return lock.getOwner();
+			return owner;
 		}
 
 		if (master) {
 			slaveToMaster();
 		}
 		else {
-			masterToSlave(lock.getOwner(), asynchronous);
+			masterToSlave(owner, asynchronous);
 		}
 
-		return lock.getOwner();
-	}
-
-	protected String getSerializedString(Object object) throws Exception {
-		UnsyncByteArrayOutputStream byteArrayOutputStream =
-			new UnsyncByteArrayOutputStream();
-
-		ObjectOutputStream objectOutputStream = new ObjectOutputStream(
-			byteArrayOutputStream);
-
-		objectOutputStream.writeObject(object);
-		objectOutputStream.close();
-
-		byte[] bytes = byteArrayOutputStream.toByteArray();
-
-		return Base64.encode(bytes);
+		return owner;
 	}
 
 	protected void initMemoryClusteredJobs(
@@ -718,7 +683,7 @@ public class ClusterSchedulerEngine
 			MethodHandler methodHandler = new MethodHandler(
 				_getScheduledJobsMethodKey3, StorageType.MEMORY_CLUSTERED);
 
-			Address address = (Address)getDeserializedObject(
+			Address address = AddressSerializerUtil.deserialize(
 				masterAddressString);
 
 			ClusterRequest clusterRequest = ClusterRequest.createUnicastRequest(
@@ -874,7 +839,7 @@ public class ClusterSchedulerEngine
 	}
 
 	@BeanReference(
-		name="com.liferay.portal.scheduler.ClusterSchedulerEngineService")
+		name = "com.liferay.portal.scheduler.ClusterSchedulerEngineService")
 	protected SchedulerEngine schedulerEngine;
 
 	private void _doMasterToSlave(List<SchedulerResponse> schedulerResponses)
@@ -951,6 +916,7 @@ public class ClusterSchedulerEngine
 	private static class SchedulerClusterInvokeAcceptor
 		implements ClusterInvokeAcceptor {
 
+		@Override
 		public boolean accept(Map<String, Serializable> context) {
 			if (ClusterInvokeThreadLocal.isEnabled()) {
 				return true;
@@ -974,6 +940,7 @@ public class ClusterSchedulerEngine
 	private class MemorySchedulerClusterEventListener
 		implements ClusterEventListener {
 
+		@Override
 		public void processClusterEvent(ClusterEvent clusterEvent) {
 			try {
 				getMasterAddressString(true);

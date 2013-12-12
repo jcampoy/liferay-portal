@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.expando.service.http;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 
@@ -22,13 +24,11 @@ import com.liferay.portlet.expando.service.ExpandoColumnServiceUtil;
 import java.rmi.RemoteException;
 
 /**
- * <p>
- * This class provides a SOAP utility for the
+ * Provides the SOAP utility for the
  * {@link com.liferay.portlet.expando.service.ExpandoColumnServiceUtil} service utility. The
  * static methods of this class calls the same methods of the service utility.
  * However, the signatures are different because it is difficult for SOAP to
  * support certain types.
- * </p>
  *
  * <p>
  * ServiceBuilder follows certain rules in translating the methods. For example,
@@ -57,12 +57,13 @@ import java.rmi.RemoteException;
  * The SOAP utility is only generated for remote services.
  * </p>
  *
- * @author    Brian Wing Shun Chan
- * @see       ExpandoColumnServiceHttp
- * @see       com.liferay.portlet.expando.model.ExpandoColumnSoap
- * @see       com.liferay.portlet.expando.service.ExpandoColumnServiceUtil
+ * @author Brian Wing Shun Chan
+ * @see ExpandoColumnServiceHttp
+ * @see com.liferay.portlet.expando.model.ExpandoColumnSoap
+ * @see com.liferay.portlet.expando.service.ExpandoColumnServiceUtil
  * @generated
  */
+@ProviderType
 public class ExpandoColumnServiceSoap {
 	public static com.liferay.portlet.expando.model.ExpandoColumnSoap addColumn(
 		long tableId, java.lang.String name, int type)

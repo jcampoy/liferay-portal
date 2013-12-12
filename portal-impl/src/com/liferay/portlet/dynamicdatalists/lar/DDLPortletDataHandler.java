@@ -16,15 +16,26 @@ package com.liferay.portlet.dynamicdatalists.lar;
 
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.Property;
+import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.lar.BasePortletDataHandler;
 import com.liferay.portal.kernel.lar.PortletDataContext;
+import com.liferay.portal.kernel.lar.PortletDataHandlerBoolean;
 import com.liferay.portal.kernel.lar.StagedModelDataHandlerUtil;
+import com.liferay.portal.kernel.lar.StagedModelType;
 import com.liferay.portal.kernel.xml.Element;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.dynamicdatalists.model.DDLRecordSet;
 import com.liferay.portlet.dynamicdatalists.service.DDLRecordSetLocalServiceUtil;
-import com.liferay.portlet.dynamicdatalists.service.persistence.DDLRecordSetActionableDynamicQuery;
+import com.liferay.portlet.dynamicdatalists.service.permission.DDLPermission;
+import com.liferay.portlet.dynamicdatalists.service.persistence.DDLRecordSetExportActionableDynamicQuery;
+import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
+import com.liferay.portlet.dynamicdatamapping.model.DDMTemplate;
+import com.liferay.portlet.dynamicdatamapping.service.persistence.DDMStructureExportActionableDynamicQuery;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.portlet.PortletPreferences;
@@ -37,8 +48,17 @@ public class DDLPortletDataHandler extends BasePortletDataHandler {
 	public static final String NAMESPACE = "dynamic_data_lists";
 
 	public DDLPortletDataHandler() {
-		setAlwaysExportable(true);
 		setDataLocalized(true);
+		setDeletionSystemEventStagedModelTypes(
+			new StagedModelType(DDLRecordSet.class));
+		setExportControls(
+			new PortletDataHandlerBoolean(
+				NAMESPACE, "record-sets", true, false, null,
+				DDLRecordSet.class.getName()),
+			new PortletDataHandlerBoolean(
+				NAMESPACE, "data-definitions", true, false, null,
+				DDMStructure.class.getName(), DDLRecordSet.class.getName()));
+		setImportControls(getExportControls());
 	}
 
 	@Override
@@ -65,34 +85,34 @@ public class DDLPortletDataHandler extends BasePortletDataHandler {
 			PortletPreferences portletPreferences)
 		throws Exception {
 
-		portletDataContext.addPermissions(
-			"com.liferay.portlet.dynamicdatalist",
-			portletDataContext.getScopeGroupId());
+		portletDataContext.addPortletPermissions(DDLPermission.RESOURCE_NAME);
 
 		Element rootElement = addExportDataRootElement(portletDataContext);
 
-		ActionableDynamicQuery actionableDynamicQuery =
-			new DDLRecordSetActionableDynamicQuery() {
+		if (portletDataContext.getBooleanParameter(
+				NAMESPACE, "data-definitions")) {
 
-			@Override
-			protected void addCriteria(DynamicQuery dynamicQuery) {
-				portletDataContext.addDateRangeCriteria(
-					dynamicQuery, "modifiedDate");
-			}
+			List<DDMTemplate> ddmTemplates = new ArrayList<DDMTemplate>();
 
-			@Override
-			protected void performAction(Object object) throws PortalException {
-				DDLRecordSet recordSet = (DDLRecordSet)object;
+			ActionableDynamicQuery ddmStructureActionableDynamicQuery =
+				getDDMStructureActionableDynamicQuery(
+					portletDataContext, ddmTemplates);
 
+			ddmStructureActionableDynamicQuery.performActions();
+
+			for (DDMTemplate ddmTemplate : ddmTemplates) {
 				StagedModelDataHandlerUtil.exportStagedModel(
-					portletDataContext, recordSet);
+					portletDataContext, ddmTemplate);
 			}
+		}
 
-		};
+		if (portletDataContext.getBooleanParameter(NAMESPACE, "record-sets")) {
+			ActionableDynamicQuery recordSetActionableDynamicQuery =
+				new DDLRecordSetExportActionableDynamicQuery(
+					portletDataContext);
 
-		actionableDynamicQuery.setGroupId(portletDataContext.getScopeGroupId());
-
-		actionableDynamicQuery.performActions();
+			recordSetActionableDynamicQuery.performActions();
+		}
 
 		return getExportDataRootElementString(rootElement);
 	}
@@ -103,22 +123,113 @@ public class DDLPortletDataHandler extends BasePortletDataHandler {
 			PortletPreferences portletPreferences, String data)
 		throws Exception {
 
-		portletDataContext.importPermissions(
-			"com.liferay.portlet.dynamicdatalist",
-			portletDataContext.getSourceGroupId(),
-			portletDataContext.getScopeGroupId());
+		portletDataContext.importPortletPermissions(
+			DDLPermission.RESOURCE_NAME);
 
-		Element recordSetsElement =
-			portletDataContext.getImportDataGroupElement(DDLRecordSet.class);
+		if (portletDataContext.getBooleanParameter(
+				NAMESPACE, "data-definitions")) {
 
-		List<Element> recordSetElements = recordSetsElement.elements();
+			Element ddmStructuresElement =
+				portletDataContext.getImportDataGroupElement(
+					DDMStructure.class);
 
-		for (Element recordSetElement : recordSetElements) {
-			StagedModelDataHandlerUtil.importStagedModel(
-				portletDataContext, recordSetElement);
+			List<Element> ddmStructureElements =
+				ddmStructuresElement.elements();
+
+			for (Element ddmStructureElement : ddmStructureElements) {
+				StagedModelDataHandlerUtil.importStagedModel(
+					portletDataContext, ddmStructureElement);
+			}
+
+			Element ddmTemplatesElement =
+				portletDataContext.getImportDataGroupElement(DDMTemplate.class);
+
+			List<Element> ddmTemplateElements = ddmTemplatesElement.elements();
+
+			for (Element ddmTemplateElement : ddmTemplateElements) {
+				StagedModelDataHandlerUtil.importStagedModel(
+					portletDataContext, ddmTemplateElement);
+			}
+		}
+
+		if (portletDataContext.getBooleanParameter(NAMESPACE, "record-sets")) {
+			Element recordSetsElement =
+				portletDataContext.getImportDataGroupElement(
+					DDLRecordSet.class);
+
+			List<Element> recordSetElements = recordSetsElement.elements();
+
+			for (Element recordSetElement : recordSetElements) {
+				StagedModelDataHandlerUtil.importStagedModel(
+					portletDataContext, recordSetElement);
+			}
 		}
 
 		return portletPreferences;
+	}
+
+	@Override
+	protected void doPrepareManifestSummary(
+			PortletDataContext portletDataContext,
+			PortletPreferences portletPreferences)
+		throws Exception {
+
+		List<DDMTemplate> ddmTemplates = new ArrayList<DDMTemplate>();
+
+		ActionableDynamicQuery ddmStructureActionableDynamicQuery =
+			getDDMStructureActionableDynamicQuery(
+				portletDataContext, ddmTemplates);
+
+		ddmStructureActionableDynamicQuery.performCount();
+
+		ActionableDynamicQuery recordSetActionableDynamicQuery =
+			new DDLRecordSetExportActionableDynamicQuery(portletDataContext);
+
+		recordSetActionableDynamicQuery.performCount();
+	}
+
+	protected ActionableDynamicQuery getDDMStructureActionableDynamicQuery(
+			final PortletDataContext portletDataContext,
+			final List<DDMTemplate> ddmTemplates)
+		throws SystemException {
+
+		return new DDMStructureExportActionableDynamicQuery(
+			portletDataContext) {
+
+			@Override
+			protected void addCriteria(DynamicQuery dynamicQuery) {
+				super.addCriteria(dynamicQuery);
+
+				Property classNameIdProperty = PropertyFactoryUtil.forName(
+					"classNameId");
+
+				long classNameId = PortalUtil.getClassNameId(
+					DDLRecordSet.class);
+
+				dynamicQuery.add(classNameIdProperty.eq(classNameId));
+			}
+
+			@Override
+			protected StagedModelType getStagedModelType() {
+				return new StagedModelType(
+					DDMStructure.class.getName(), DDLRecordSet.class.getName());
+			}
+
+			@Override
+			protected void performAction(Object object) throws PortalException {
+				DDMStructure ddmStructure = (DDMStructure)object;
+
+				StagedModelDataHandlerUtil.exportStagedModel(
+					portletDataContext, ddmStructure);
+
+				try {
+					ddmTemplates.addAll(ddmStructure.getTemplates());
+				}
+				catch (SystemException se) {
+				}
+			}
+
+		};
 	}
 
 }

@@ -16,7 +16,6 @@ package com.liferay.portal.security.pacl.checker;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.security.pacl.PACLConstants;
-import com.liferay.portal.kernel.util.JavaDetector;
 import com.liferay.portal.security.pacl.PACLPolicy;
 import com.liferay.portal.security.pacl.PACLUtil;
 
@@ -31,38 +30,26 @@ import java.util.Set;
  */
 public abstract class BaseChecker implements Checker, PACLConstants {
 
+	@Override
 	public AuthorizationProperty generateAuthorizationProperty(
 		Object... arguments) {
 
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public ClassLoader getClassLoader() {
 		return _paclPolicy.getClassLoader();
 	}
 
+	@Override
 	public PACLPolicy getPACLPolicy() {
 		return _paclPolicy;
 	}
 
+	@Override
 	public String getServletContextName() {
 		return _paclPolicy.getServletContextName();
-	}
-
-	public int getStackIndex(int oracle, int ibm) {
-		return getStackIndex(oracle, ibm, ibm);
-	}
-
-	public int getStackIndex(int oracle, int ibm, int ibm7) {
-		if (JavaDetector.isIBM()) {
-			if (JavaDetector.isJDK6()) {
-				return ibm;
-			}
-
-			return ibm7;
-		}
-
-		return oracle;
 	}
 
 	public boolean isTrustedCaller(
@@ -72,6 +59,7 @@ public abstract class BaseChecker implements Checker, PACLConstants {
 			callerClass, permission, getPACLPolicy());
 	}
 
+	@Override
 	public void setPACLPolicy(PACLPolicy paclPolicy) {
 		_paclPolicy = paclPolicy;
 	}

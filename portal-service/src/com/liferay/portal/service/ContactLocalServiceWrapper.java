@@ -14,15 +14,16 @@
 
 package com.liferay.portal.service;
 
+import aQute.bnd.annotation.ProviderType;
+
 /**
- * <p>
- * This class is a wrapper for {@link ContactLocalService}.
- * </p>
+ * Provides a wrapper for {@link ContactLocalService}.
  *
- * @author    Brian Wing Shun Chan
- * @see       ContactLocalService
+ * @author Brian Wing Shun Chan
+ * @see ContactLocalService
  * @generated
  */
+@ProviderType
 public class ContactLocalServiceWrapper implements ContactLocalService,
 	ServiceWrapper<ContactLocalService> {
 	public ContactLocalServiceWrapper(ContactLocalService contactLocalService) {
@@ -36,6 +37,7 @@ public class ContactLocalServiceWrapper implements ContactLocalService,
 	* @return the contact that was added
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.Contact addContact(
 		com.liferay.portal.model.Contact contact)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -48,6 +50,7 @@ public class ContactLocalServiceWrapper implements ContactLocalService,
 	* @param contactId the primary key for the new contact
 	* @return the new contact
 	*/
+	@Override
 	public com.liferay.portal.model.Contact createContact(long contactId) {
 		return _contactLocalService.createContact(contactId);
 	}
@@ -60,6 +63,7 @@ public class ContactLocalServiceWrapper implements ContactLocalService,
 	* @throws PortalException if a contact with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.Contact deleteContact(long contactId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -73,12 +77,14 @@ public class ContactLocalServiceWrapper implements ContactLocalService,
 	* @return the contact that was removed
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.Contact deleteContact(
 		com.liferay.portal.model.Contact contact)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _contactLocalService.deleteContact(contact);
 	}
 
+	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		return _contactLocalService.dynamicQuery();
 	}
@@ -90,6 +96,7 @@ public class ContactLocalServiceWrapper implements ContactLocalService,
 	* @return the matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
@@ -110,6 +117,7 @@ public class ContactLocalServiceWrapper implements ContactLocalService,
 	* @return the range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -131,6 +139,7 @@ public class ContactLocalServiceWrapper implements ContactLocalService,
 	* @return the ordered range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -148,12 +157,30 @@ public class ContactLocalServiceWrapper implements ContactLocalService,
 	* @return the number of rows that match the dynamic query
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _contactLocalService.dynamicQueryCount(dynamicQuery);
 	}
 
+	/**
+	* Returns the number of rows that match the dynamic query.
+	*
+	* @param dynamicQuery the dynamic query
+	* @param projection the projection to apply to the query
+	* @return the number of rows that match the dynamic query
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public long dynamicQueryCount(
+		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery,
+		com.liferay.portal.kernel.dao.orm.Projection projection)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _contactLocalService.dynamicQueryCount(dynamicQuery, projection);
+	}
+
+	@Override
 	public com.liferay.portal.model.Contact fetchContact(long contactId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _contactLocalService.fetchContact(contactId);
@@ -167,12 +194,14 @@ public class ContactLocalServiceWrapper implements ContactLocalService,
 	* @throws PortalException if a contact with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.Contact getContact(long contactId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _contactLocalService.getContact(contactId);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -192,6 +221,7 @@ public class ContactLocalServiceWrapper implements ContactLocalService,
 	* @return the range of contacts
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portal.model.Contact> getContacts(
 		int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -204,6 +234,7 @@ public class ContactLocalServiceWrapper implements ContactLocalService,
 	* @return the number of contacts
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getContactsCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _contactLocalService.getContactsCount();
@@ -216,6 +247,7 @@ public class ContactLocalServiceWrapper implements ContactLocalService,
 	* @return the contact that was updated
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.Contact updateContact(
 		com.liferay.portal.model.Contact contact)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -227,6 +259,7 @@ public class ContactLocalServiceWrapper implements ContactLocalService,
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _contactLocalService.getBeanIdentifier();
 	}
@@ -236,10 +269,12 @@ public class ContactLocalServiceWrapper implements ContactLocalService,
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_contactLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
+	@Override
 	public com.liferay.portal.model.Contact addContact(long userId,
 		java.lang.String className, long classPK,
 		java.lang.String emailAddress, java.lang.String firstName,
@@ -260,6 +295,7 @@ public class ContactLocalServiceWrapper implements ContactLocalService,
 			ymSn, jobTitle);
 	}
 
+	@Override
 	public java.util.List<com.liferay.portal.model.Contact> getContacts(
 		long classNameId, long classPK, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
@@ -268,11 +304,13 @@ public class ContactLocalServiceWrapper implements ContactLocalService,
 			end, orderByComparator);
 	}
 
+	@Override
 	public int getContactsCount(long classNameId, long classPK)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _contactLocalService.getContactsCount(classNameId, classPK);
 	}
 
+	@Override
 	public com.liferay.portal.model.Contact updateContact(long contactId,
 		java.lang.String emailAddress, java.lang.String firstName,
 		java.lang.String middleName, java.lang.String lastName, int prefixId,
@@ -307,10 +345,12 @@ public class ContactLocalServiceWrapper implements ContactLocalService,
 		_contactLocalService = contactLocalService;
 	}
 
+	@Override
 	public ContactLocalService getWrappedService() {
 		return _contactLocalService;
 	}
 
+	@Override
 	public void setWrappedService(ContactLocalService contactLocalService) {
 		_contactLocalService = contactLocalService;
 	}

@@ -14,6 +14,8 @@
 
 package com.liferay.portal.model;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.util.Accessor;
 
 /**
@@ -25,6 +27,7 @@ import com.liferay.portal.kernel.util.Accessor;
  * @see com.liferay.portal.model.impl.PortletModelImpl
  * @generated
  */
+@ProviderType
 public interface Portlet extends PortletModel, PersistedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -32,6 +35,7 @@ public interface Portlet extends PortletModel, PersistedModel {
 	 * Never modify this interface directly. Add methods to {@link com.liferay.portal.model.impl.PortletImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
 	public static final Accessor<Portlet, String> PORTLET_ID_ACCESSOR = new Accessor<Portlet, String>() {
+			@Override
 			public String get(Portlet portlet) {
 				return portlet.getPortletId();
 			}
@@ -64,29 +68,12 @@ public interface Portlet extends PortletModel, PersistedModel {
 		com.liferay.portal.kernel.scheduler.SchedulerEntry schedulerEntry);
 
 	/**
-	* Creates and returns a copy of this object.
-	*
-	* @return a copy of this object
-	*/
-	public java.lang.Object clone();
-
-	/**
-	* Compares this portlet to the specified object.
-	*
-	* @param portlet the portlet to compare this portlet against
-	* @return the value 0 if the argument portlet is equal to this portlet; a
-	value less than -1 if this portlet is less than the portlet
-	argument; and 1 if this portlet is greater than the portlet
-	argument
-	*/
-	public int compareTo(com.liferay.portal.model.Portlet portlet);
-
-	/**
 	* Checks whether this portlet is equal to the specified object.
 	*
 	* @param obj the object to compare this portlet against
 	* @return <code>true</code> if the portlet is equal to the specified object
 	*/
+	@Override
 	public boolean equals(java.lang.Object obj);
 
 	/**
@@ -200,6 +187,13 @@ public interface Portlet extends PortletModel, PersistedModel {
 	public com.liferay.portal.kernel.portlet.ConfigurationAction getConfigurationActionInstance();
 
 	/**
+	* Returns the servlet context name of the portlet.
+	*
+	* @return the servlet context name of the portlet
+	*/
+	public java.lang.String getContextName();
+
+	/**
 	* Returns the servlet context path of the portlet.
 	*
 	* @return the servlet context path of the portlet
@@ -266,6 +260,14 @@ public interface Portlet extends PortletModel, PersistedModel {
 	* @return the custom attribute display instances of the portlet
 	*/
 	public java.util.List<com.liferay.portlet.expando.model.CustomAttributesDisplay> getCustomAttributesDisplayInstances();
+
+	/**
+	* Returns the name of the dynamic data mapping display class of the
+	* portlet.
+	*
+	* @return the name of the dynamic data mapping display class of the portlet
+	*/
+	public java.lang.String getDDMDisplayClass();
 
 	/**
 	* Get the default plugin settings of the portlet.
@@ -1051,6 +1053,31 @@ public interface Portlet extends PortletModel, PersistedModel {
 	public long getUserId();
 
 	/**
+	* Returns the class loader resource path to the use notification
+	* definitions of the portlet.
+	*
+	* @return the class loader resource path to the use notification
+	definitions of the portlet
+	*/
+	public java.lang.String getUserNotificationDefinitions();
+
+	/**
+	* Returns the names of the classes that represent user notification
+	* handlers associated with the portlet.
+	*
+	* @return the names of the classes that represent user notification
+	handlers associated with the portlet
+	*/
+	public java.util.List<java.lang.String> getUserNotificationHandlerClasses();
+
+	/**
+	* Returns the user notification handler instances of the portlet.
+	*
+	* @return the user notification handler instances of the portlet
+	*/
+	public java.util.List<com.liferay.portal.kernel.notifications.UserNotificationHandler> getUserNotificationHandlerInstances();
+
+	/**
 	* Returns the user principal strategy of the portlet.
 	*
 	* @return the user principal strategy of the portlet
@@ -1312,6 +1339,15 @@ public interface Portlet extends PortletModel, PersistedModel {
 	public boolean isRemoteable();
 
 	/**
+	* Returns <code>true</code> if the portlet will only process namespaced
+	* parameters.
+	*
+	* @return <code>true</code> if the portlet will only process namespaced
+	parameters
+	*/
+	public boolean isRequiresNamespacedParameters();
+
+	/**
 	* Returns <code>true</code> if the portlet restores to the current view
 	* from the maximized state.
 	*
@@ -1521,6 +1557,14 @@ public interface Portlet extends PortletModel, PersistedModel {
 	*/
 	public void setCustomAttributesDisplayClasses(
 		java.util.List<java.lang.String> customAttributesDisplayClasses);
+
+	/**
+	* Sets the name of the dynamic data mapping display class of the portlet.
+	*
+	* @param ddmDisplayClass the name of dynamic data mapping display class of
+	the portlet
+	*/
+	public void setDDMDisplayClass(java.lang.String ddmDisplayClass);
 
 	/**
 	* Sets the default plugin settings of the portlet.
@@ -1972,6 +2016,16 @@ public interface Portlet extends PortletModel, PersistedModel {
 	public void setRenderWeight(int renderWeight);
 
 	/**
+	* Set to <code>true</code> if the portlet will only process namespaced
+	* parameters.
+	*
+	* @param requiresNamespacedParameters boolean value for whether the portlet
+	will only process namespaced parameters
+	*/
+	public void setRequiresNamespacedParameters(
+		boolean requiresNamespacedParameters);
+
+	/**
 	* Sets the resource bundle of the portlet.
 	*
 	* @param resourceBundle the resource bundle of the portlet
@@ -1994,13 +2048,6 @@ public interface Portlet extends PortletModel, PersistedModel {
 	*/
 	public void setRoleMappers(
 		java.util.Map<java.lang.String, java.lang.String> roleMappers);
-
-	/**
-	* Sets a string of ordered comma delimited portlet IDs.
-	*
-	* @param roles a string of ordered comma delimited portlet IDs
-	*/
-	public void setRoles(java.lang.String roles);
 
 	/**
 	* Sets an array of required roles of the portlet.
@@ -2167,6 +2214,26 @@ public interface Portlet extends PortletModel, PersistedModel {
 	default template
 	*/
 	public void setUseDefaultTemplate(boolean useDefaultTemplate);
+
+	/**
+	* Sets the class loader resource path to the user notification definitions
+	* of the portlet.
+	*
+	* @param userNotificationDefinitions the class loader resource path to the
+	user notification definitions of the portlet
+	*/
+	public void setUserNotificationDefinitions(
+		java.lang.String userNotificationDefinitions);
+
+	/**
+	* Sets the names of the classes that represent user notification handlers
+	* associated with the portlet.
+	*
+	* @param userNotificationHandlerClasses the names of the classes that
+	represent user notification handlers associated with the portlet
+	*/
+	public void setUserNotificationHandlerClasses(
+		java.util.List<java.lang.String> userNotificationHandlerClasses);
 
 	/**
 	* Sets the user principal strategy of the portlet.

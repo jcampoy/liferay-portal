@@ -14,6 +14,10 @@
 
 package com.liferay.portal.model;
 
+import aQute.bnd.annotation.ProviderType;
+
+import com.liferay.portal.kernel.util.Validator;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,10 +27,11 @@ import java.util.Map;
  * This class is a wrapper for {@link WorkflowDefinitionLink}.
  * </p>
  *
- * @author    Brian Wing Shun Chan
- * @see       WorkflowDefinitionLink
+ * @author Brian Wing Shun Chan
+ * @see WorkflowDefinitionLink
  * @generated
  */
+@ProviderType
 public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 	ModelWrapper<WorkflowDefinitionLink> {
 	public WorkflowDefinitionLinkWrapper(
@@ -34,14 +39,17 @@ public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 		_workflowDefinitionLink = workflowDefinitionLink;
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return WorkflowDefinitionLink.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return WorkflowDefinitionLink.class.getName();
 	}
 
+	@Override
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
@@ -62,6 +70,7 @@ public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 		return attributes;
 	}
 
+	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
 		Long workflowDefinitionLinkId = (Long)attributes.get(
 				"workflowDefinitionLinkId");
@@ -144,6 +153,7 @@ public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 	*
 	* @return the primary key of this workflow definition link
 	*/
+	@Override
 	public long getPrimaryKey() {
 		return _workflowDefinitionLink.getPrimaryKey();
 	}
@@ -153,6 +163,7 @@ public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 	*
 	* @param primaryKey the primary key of this workflow definition link
 	*/
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_workflowDefinitionLink.setPrimaryKey(primaryKey);
 	}
@@ -162,6 +173,7 @@ public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 	*
 	* @return the workflow definition link ID of this workflow definition link
 	*/
+	@Override
 	public long getWorkflowDefinitionLinkId() {
 		return _workflowDefinitionLink.getWorkflowDefinitionLinkId();
 	}
@@ -171,6 +183,7 @@ public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 	*
 	* @param workflowDefinitionLinkId the workflow definition link ID of this workflow definition link
 	*/
+	@Override
 	public void setWorkflowDefinitionLinkId(long workflowDefinitionLinkId) {
 		_workflowDefinitionLink.setWorkflowDefinitionLinkId(workflowDefinitionLinkId);
 	}
@@ -180,6 +193,7 @@ public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 	*
 	* @return the group ID of this workflow definition link
 	*/
+	@Override
 	public long getGroupId() {
 		return _workflowDefinitionLink.getGroupId();
 	}
@@ -189,6 +203,7 @@ public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 	*
 	* @param groupId the group ID of this workflow definition link
 	*/
+	@Override
 	public void setGroupId(long groupId) {
 		_workflowDefinitionLink.setGroupId(groupId);
 	}
@@ -198,6 +213,7 @@ public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 	*
 	* @return the company ID of this workflow definition link
 	*/
+	@Override
 	public long getCompanyId() {
 		return _workflowDefinitionLink.getCompanyId();
 	}
@@ -207,6 +223,7 @@ public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 	*
 	* @param companyId the company ID of this workflow definition link
 	*/
+	@Override
 	public void setCompanyId(long companyId) {
 		_workflowDefinitionLink.setCompanyId(companyId);
 	}
@@ -216,6 +233,7 @@ public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 	*
 	* @return the user ID of this workflow definition link
 	*/
+	@Override
 	public long getUserId() {
 		return _workflowDefinitionLink.getUserId();
 	}
@@ -225,6 +243,7 @@ public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 	*
 	* @param userId the user ID of this workflow definition link
 	*/
+	@Override
 	public void setUserId(long userId) {
 		_workflowDefinitionLink.setUserId(userId);
 	}
@@ -235,6 +254,7 @@ public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 	* @return the user uuid of this workflow definition link
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.lang.String getUserUuid()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _workflowDefinitionLink.getUserUuid();
@@ -245,6 +265,7 @@ public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 	*
 	* @param userUuid the user uuid of this workflow definition link
 	*/
+	@Override
 	public void setUserUuid(java.lang.String userUuid) {
 		_workflowDefinitionLink.setUserUuid(userUuid);
 	}
@@ -254,6 +275,7 @@ public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 	*
 	* @return the user name of this workflow definition link
 	*/
+	@Override
 	public java.lang.String getUserName() {
 		return _workflowDefinitionLink.getUserName();
 	}
@@ -263,6 +285,7 @@ public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 	*
 	* @param userName the user name of this workflow definition link
 	*/
+	@Override
 	public void setUserName(java.lang.String userName) {
 		_workflowDefinitionLink.setUserName(userName);
 	}
@@ -272,6 +295,7 @@ public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 	*
 	* @return the create date of this workflow definition link
 	*/
+	@Override
 	public java.util.Date getCreateDate() {
 		return _workflowDefinitionLink.getCreateDate();
 	}
@@ -281,6 +305,7 @@ public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 	*
 	* @param createDate the create date of this workflow definition link
 	*/
+	@Override
 	public void setCreateDate(java.util.Date createDate) {
 		_workflowDefinitionLink.setCreateDate(createDate);
 	}
@@ -290,6 +315,7 @@ public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 	*
 	* @return the modified date of this workflow definition link
 	*/
+	@Override
 	public java.util.Date getModifiedDate() {
 		return _workflowDefinitionLink.getModifiedDate();
 	}
@@ -299,6 +325,7 @@ public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 	*
 	* @param modifiedDate the modified date of this workflow definition link
 	*/
+	@Override
 	public void setModifiedDate(java.util.Date modifiedDate) {
 		_workflowDefinitionLink.setModifiedDate(modifiedDate);
 	}
@@ -308,10 +335,12 @@ public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 	*
 	* @return the fully qualified class name of this workflow definition link
 	*/
+	@Override
 	public java.lang.String getClassName() {
 		return _workflowDefinitionLink.getClassName();
 	}
 
+	@Override
 	public void setClassName(java.lang.String className) {
 		_workflowDefinitionLink.setClassName(className);
 	}
@@ -321,6 +350,7 @@ public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 	*
 	* @return the class name ID of this workflow definition link
 	*/
+	@Override
 	public long getClassNameId() {
 		return _workflowDefinitionLink.getClassNameId();
 	}
@@ -330,6 +360,7 @@ public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 	*
 	* @param classNameId the class name ID of this workflow definition link
 	*/
+	@Override
 	public void setClassNameId(long classNameId) {
 		_workflowDefinitionLink.setClassNameId(classNameId);
 	}
@@ -339,6 +370,7 @@ public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 	*
 	* @return the class p k of this workflow definition link
 	*/
+	@Override
 	public long getClassPK() {
 		return _workflowDefinitionLink.getClassPK();
 	}
@@ -348,6 +380,7 @@ public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 	*
 	* @param classPK the class p k of this workflow definition link
 	*/
+	@Override
 	public void setClassPK(long classPK) {
 		_workflowDefinitionLink.setClassPK(classPK);
 	}
@@ -357,6 +390,7 @@ public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 	*
 	* @return the type p k of this workflow definition link
 	*/
+	@Override
 	public long getTypePK() {
 		return _workflowDefinitionLink.getTypePK();
 	}
@@ -366,6 +400,7 @@ public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 	*
 	* @param typePK the type p k of this workflow definition link
 	*/
+	@Override
 	public void setTypePK(long typePK) {
 		_workflowDefinitionLink.setTypePK(typePK);
 	}
@@ -375,6 +410,7 @@ public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 	*
 	* @return the workflow definition name of this workflow definition link
 	*/
+	@Override
 	public java.lang.String getWorkflowDefinitionName() {
 		return _workflowDefinitionLink.getWorkflowDefinitionName();
 	}
@@ -384,6 +420,7 @@ public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 	*
 	* @param workflowDefinitionName the workflow definition name of this workflow definition link
 	*/
+	@Override
 	public void setWorkflowDefinitionName(
 		java.lang.String workflowDefinitionName) {
 		_workflowDefinitionLink.setWorkflowDefinitionName(workflowDefinitionName);
@@ -394,6 +431,7 @@ public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 	*
 	* @return the workflow definition version of this workflow definition link
 	*/
+	@Override
 	public int getWorkflowDefinitionVersion() {
 		return _workflowDefinitionLink.getWorkflowDefinitionVersion();
 	}
@@ -403,52 +441,64 @@ public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 	*
 	* @param workflowDefinitionVersion the workflow definition version of this workflow definition link
 	*/
+	@Override
 	public void setWorkflowDefinitionVersion(int workflowDefinitionVersion) {
 		_workflowDefinitionLink.setWorkflowDefinitionVersion(workflowDefinitionVersion);
 	}
 
+	@Override
 	public boolean isNew() {
 		return _workflowDefinitionLink.isNew();
 	}
 
+	@Override
 	public void setNew(boolean n) {
 		_workflowDefinitionLink.setNew(n);
 	}
 
+	@Override
 	public boolean isCachedModel() {
 		return _workflowDefinitionLink.isCachedModel();
 	}
 
+	@Override
 	public void setCachedModel(boolean cachedModel) {
 		_workflowDefinitionLink.setCachedModel(cachedModel);
 	}
 
+	@Override
 	public boolean isEscapedModel() {
 		return _workflowDefinitionLink.isEscapedModel();
 	}
 
+	@Override
 	public java.io.Serializable getPrimaryKeyObj() {
 		return _workflowDefinitionLink.getPrimaryKeyObj();
 	}
 
+	@Override
 	public void setPrimaryKeyObj(java.io.Serializable primaryKeyObj) {
 		_workflowDefinitionLink.setPrimaryKeyObj(primaryKeyObj);
 	}
 
+	@Override
 	public com.liferay.portlet.expando.model.ExpandoBridge getExpandoBridge() {
 		return _workflowDefinitionLink.getExpandoBridge();
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.model.BaseModel<?> baseModel) {
 		_workflowDefinitionLink.setExpandoBridgeAttributes(baseModel);
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
 		_workflowDefinitionLink.setExpandoBridgeAttributes(expandoBridge);
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_workflowDefinitionLink.setExpandoBridgeAttributes(serviceContext);
@@ -459,6 +509,7 @@ public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 		return new WorkflowDefinitionLinkWrapper((WorkflowDefinitionLink)_workflowDefinitionLink.clone());
 	}
 
+	@Override
 	public int compareTo(
 		com.liferay.portal.model.WorkflowDefinitionLink workflowDefinitionLink) {
 		return _workflowDefinitionLink.compareTo(workflowDefinitionLink);
@@ -469,14 +520,17 @@ public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 		return _workflowDefinitionLink.hashCode();
 	}
 
+	@Override
 	public com.liferay.portal.model.CacheModel<com.liferay.portal.model.WorkflowDefinitionLink> toCacheModel() {
 		return _workflowDefinitionLink.toCacheModel();
 	}
 
+	@Override
 	public com.liferay.portal.model.WorkflowDefinitionLink toEscapedModel() {
 		return new WorkflowDefinitionLinkWrapper(_workflowDefinitionLink.toEscapedModel());
 	}
 
+	@Override
 	public com.liferay.portal.model.WorkflowDefinitionLink toUnescapedModel() {
 		return new WorkflowDefinitionLinkWrapper(_workflowDefinitionLink.toUnescapedModel());
 	}
@@ -486,13 +540,35 @@ public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 		return _workflowDefinitionLink.toString();
 	}
 
+	@Override
 	public java.lang.String toXmlString() {
 		return _workflowDefinitionLink.toXmlString();
 	}
 
+	@Override
 	public void persist()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_workflowDefinitionLink.persist();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof WorkflowDefinitionLinkWrapper)) {
+			return false;
+		}
+
+		WorkflowDefinitionLinkWrapper workflowDefinitionLinkWrapper = (WorkflowDefinitionLinkWrapper)obj;
+
+		if (Validator.equals(_workflowDefinitionLink,
+					workflowDefinitionLinkWrapper._workflowDefinitionLink)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -502,10 +578,12 @@ public class WorkflowDefinitionLinkWrapper implements WorkflowDefinitionLink,
 		return _workflowDefinitionLink;
 	}
 
+	@Override
 	public WorkflowDefinitionLink getWrappedModel() {
 		return _workflowDefinitionLink;
 	}
 
+	@Override
 	public void resetOriginalValues() {
 		_workflowDefinitionLink.resetOriginalValues();
 	}

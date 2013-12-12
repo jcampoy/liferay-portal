@@ -32,6 +32,7 @@ import java.util.List;
 public class PasswordPolicyRelLocalServiceImpl
 	extends PasswordPolicyRelLocalServiceBaseImpl {
 
+	@Override
 	public PasswordPolicyRel addPasswordPolicyRel(
 			long passwordPolicyId, String className, long classPK)
 		throws SystemException {
@@ -45,9 +46,8 @@ public class PasswordPolicyRelLocalServiceImpl
 			if (passwordPolicyRel.getPasswordPolicyId() == passwordPolicyId) {
 				return null;
 			}
-			else {
-				passwordPolicyRelPersistence.remove(passwordPolicyRel);
-			}
+
+			passwordPolicyRelPersistence.remove(passwordPolicyRel);
 		}
 
 		long passwordPolicyRelId = counterLocalService.increment();
@@ -64,6 +64,7 @@ public class PasswordPolicyRelLocalServiceImpl
 		return passwordPolicyRel;
 	}
 
+	@Override
 	public void addPasswordPolicyRels(
 			long passwordPolicyId, String className, long[] classPKs)
 		throws SystemException {
@@ -73,6 +74,7 @@ public class PasswordPolicyRelLocalServiceImpl
 		}
 	}
 
+	@Override
 	public void deletePasswordPolicyRel(
 			long passwordPolicyId, String className, long classPK)
 		throws SystemException {
@@ -87,9 +89,9 @@ public class PasswordPolicyRelLocalServiceImpl
 
 			passwordPolicyRelPersistence.remove(passwordPolicyRel);
 		}
-
 	}
 
+	@Override
 	public void deletePasswordPolicyRel(String className, long classPK)
 		throws SystemException {
 
@@ -105,6 +107,7 @@ public class PasswordPolicyRelLocalServiceImpl
 		}
 	}
 
+	@Override
 	public void deletePasswordPolicyRels(long passwordPolicyId)
 		throws SystemException {
 
@@ -117,6 +120,7 @@ public class PasswordPolicyRelLocalServiceImpl
 		}
 	}
 
+	@Override
 	public void deletePasswordPolicyRels(
 			long passwordPolicyId, String className, long[] classPKs)
 		throws SystemException {
@@ -126,6 +130,7 @@ public class PasswordPolicyRelLocalServiceImpl
 		}
 	}
 
+	@Override
 	public PasswordPolicyRel fetchPasswordPolicyRel(
 			String className, long classPK)
 		throws SystemException {
@@ -135,6 +140,7 @@ public class PasswordPolicyRelLocalServiceImpl
 		return passwordPolicyRelPersistence.fetchByC_C(classNameId, classPK);
 	}
 
+	@Override
 	public PasswordPolicyRel getPasswordPolicyRel(
 			long passwordPolicyId, String className, long classPK)
 		throws PortalException, SystemException {
@@ -164,6 +170,7 @@ public class PasswordPolicyRelLocalServiceImpl
 		throw new NoSuchPasswordPolicyRelException(sb.toString());
 	}
 
+	@Override
 	public PasswordPolicyRel getPasswordPolicyRel(
 			String className, long classPK)
 		throws PortalException, SystemException {
@@ -173,6 +180,7 @@ public class PasswordPolicyRelLocalServiceImpl
 		return passwordPolicyRelPersistence.findByC_C(classNameId, classPK);
 	}
 
+	@Override
 	public boolean hasPasswordPolicyRel(
 			long passwordPolicyId, String className, long classPK)
 		throws SystemException {

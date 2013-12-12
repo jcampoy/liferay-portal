@@ -14,6 +14,8 @@
 
 package com.liferay.portal.service.http;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.service.ListTypeServiceUtil;
@@ -21,13 +23,11 @@ import com.liferay.portal.service.ListTypeServiceUtil;
 import java.rmi.RemoteException;
 
 /**
- * <p>
- * This class provides a SOAP utility for the
+ * Provides the SOAP utility for the
  * {@link com.liferay.portal.service.ListTypeServiceUtil} service utility. The
  * static methods of this class calls the same methods of the service utility.
  * However, the signatures are different because it is difficult for SOAP to
  * support certain types.
- * </p>
  *
  * <p>
  * ServiceBuilder follows certain rules in translating the methods. For example,
@@ -56,12 +56,13 @@ import java.rmi.RemoteException;
  * The SOAP utility is only generated for remote services.
  * </p>
  *
- * @author    Brian Wing Shun Chan
- * @see       ListTypeServiceHttp
- * @see       com.liferay.portal.model.ListTypeSoap
- * @see       com.liferay.portal.service.ListTypeServiceUtil
+ * @author Brian Wing Shun Chan
+ * @see ListTypeServiceHttp
+ * @see com.liferay.portal.model.ListTypeSoap
+ * @see com.liferay.portal.service.ListTypeServiceUtil
  * @generated
  */
+@ProviderType
 public class ListTypeServiceSoap {
 	public static com.liferay.portal.model.ListTypeSoap getListType(
 		int listTypeId) throws RemoteException {

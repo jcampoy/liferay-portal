@@ -120,6 +120,10 @@ public class LayoutPersistenceTest {
 
 		newLayout.setCompanyId(ServiceTestUtil.nextLong());
 
+		newLayout.setUserId(ServiceTestUtil.nextLong());
+
+		newLayout.setUserName(ServiceTestUtil.randomString());
+
 		newLayout.setCreateDate(ServiceTestUtil.nextDate());
 
 		newLayout.setModifiedDate(ServiceTestUtil.nextDate());
@@ -147,8 +151,6 @@ public class LayoutPersistenceTest {
 		newLayout.setHidden(ServiceTestUtil.randomBoolean());
 
 		newLayout.setFriendlyURL(ServiceTestUtil.randomString());
-
-		newLayout.setIconImage(ServiceTestUtil.randomBoolean());
 
 		newLayout.setIconImageId(ServiceTestUtil.nextLong());
 
@@ -179,6 +181,9 @@ public class LayoutPersistenceTest {
 		Assert.assertEquals(existingLayout.getGroupId(), newLayout.getGroupId());
 		Assert.assertEquals(existingLayout.getCompanyId(),
 			newLayout.getCompanyId());
+		Assert.assertEquals(existingLayout.getUserId(), newLayout.getUserId());
+		Assert.assertEquals(existingLayout.getUserName(),
+			newLayout.getUserName());
 		Assert.assertEquals(Time.getShortTimestamp(
 				existingLayout.getCreateDate()),
 			Time.getShortTimestamp(newLayout.getCreateDate()));
@@ -204,8 +209,6 @@ public class LayoutPersistenceTest {
 		Assert.assertEquals(existingLayout.getHidden(), newLayout.getHidden());
 		Assert.assertEquals(existingLayout.getFriendlyURL(),
 			newLayout.getFriendlyURL());
-		Assert.assertEquals(existingLayout.getIconImage(),
-			newLayout.getIconImage());
 		Assert.assertEquals(existingLayout.getIconImageId(),
 			newLayout.getIconImageId());
 		Assert.assertEquals(existingLayout.getThemeId(), newLayout.getThemeId());
@@ -272,12 +275,12 @@ public class LayoutPersistenceTest {
 
 	protected OrderByComparator getOrderByComparator() {
 		return OrderByComparatorFactoryUtil.create("Layout", "uuid", true,
-			"plid", true, "groupId", true, "companyId", true, "createDate",
-			true, "modifiedDate", true, "privateLayout", true, "layoutId",
-			true, "parentLayoutId", true, "name", true, "title", true,
-			"description", true, "keywords", true, "robots", true, "type",
-			true, "typeSettings", true, "hidden", true, "friendlyURL", true,
-			"iconImage", true, "iconImageId", true, "themeId", true,
+			"plid", true, "groupId", true, "companyId", true, "userId", true,
+			"userName", true, "createDate", true, "modifiedDate", true,
+			"privateLayout", true, "layoutId", true, "parentLayoutId", true,
+			"name", true, "title", true, "description", true, "keywords", true,
+			"robots", true, "type", true, "typeSettings", true, "hidden", true,
+			"friendlyURL", true, "iconImageId", true, "themeId", true,
 			"colorSchemeId", true, "wapThemeId", true, "wapColorSchemeId",
 			true, "css", true, "priority", true, "layoutPrototypeUuid", true,
 			"layoutPrototypeLinkEnabled", true, "sourcePrototypeLayoutUuid",
@@ -450,6 +453,10 @@ public class LayoutPersistenceTest {
 
 		layout.setCompanyId(ServiceTestUtil.nextLong());
 
+		layout.setUserId(ServiceTestUtil.nextLong());
+
+		layout.setUserName(ServiceTestUtil.randomString());
+
 		layout.setCreateDate(ServiceTestUtil.nextDate());
 
 		layout.setModifiedDate(ServiceTestUtil.nextDate());
@@ -477,8 +484,6 @@ public class LayoutPersistenceTest {
 		layout.setHidden(ServiceTestUtil.randomBoolean());
 
 		layout.setFriendlyURL(ServiceTestUtil.randomString());
-
-		layout.setIconImage(ServiceTestUtil.randomBoolean());
 
 		layout.setIconImageId(ServiceTestUtil.nextLong());
 

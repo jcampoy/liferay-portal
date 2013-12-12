@@ -16,13 +16,21 @@ package com.liferay.portlet.bookmarks.asset;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
+import com.liferay.portal.kernel.portlet.LiferayPortletURL;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.asset.model.AssetRenderer;
 import com.liferay.portlet.asset.model.BaseAssetRendererFactory;
 import com.liferay.portlet.bookmarks.model.BookmarksFolder;
 import com.liferay.portlet.bookmarks.service.BookmarksFolderLocalServiceUtil;
 import com.liferay.portlet.bookmarks.service.permission.BookmarksFolderPermission;
+
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletURL;
+import javax.portlet.WindowState;
+import javax.portlet.WindowStateException;
 
 /**
  * @author Alexander Chow
@@ -30,8 +38,9 @@ import com.liferay.portlet.bookmarks.service.permission.BookmarksFolderPermissio
 public class BookmarksFolderAssetRendererFactory
 	extends BaseAssetRendererFactory {
 
-	public static final String TYPE = "folder";
+	public static final String TYPE = "bookmark_folder";
 
+	@Override
 	public AssetRenderer getAssetRenderer(long classPK, int type)
 		throws PortalException, SystemException {
 
@@ -46,12 +55,32 @@ public class BookmarksFolderAssetRendererFactory
 		return bookmarksFolderAssetRenderer;
 	}
 
+	@Override
 	public String getClassName() {
 		return BookmarksFolder.class.getName();
 	}
 
+	@Override
 	public String getType() {
 		return TYPE;
+	}
+
+	@Override
+	public PortletURL getURLView(
+		LiferayPortletResponse liferayPortletResponse,
+		WindowState windowState) {
+
+		LiferayPortletURL liferayPortletURL =
+			liferayPortletResponse.createLiferayPortletURL(
+				PortletKeys.BOOKMARKS, PortletRequest.RENDER_PHASE);
+
+		try {
+			liferayPortletURL.setWindowState(windowState);
+		}
+		catch (WindowStateException wse) {
+		}
+
+		return liferayPortletURL;
 	}
 
 	@Override

@@ -16,11 +16,6 @@ package com.liferay.portlet.asset.service.persistence;
 
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
-import com.liferay.portal.kernel.dao.jdbc.MappingSqlQuery;
-import com.liferay.portal.kernel.dao.jdbc.MappingSqlQueryFactoryUtil;
-import com.liferay.portal.kernel.dao.jdbc.RowMapper;
-import com.liferay.portal.kernel.dao.jdbc.SqlUpdate;
-import com.liferay.portal.kernel.dao.jdbc.SqlUpdateFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
@@ -45,6 +40,8 @@ import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
+import com.liferay.portal.service.persistence.impl.TableMapper;
+import com.liferay.portal.service.persistence.impl.TableMapperFactory;
 
 import com.liferay.portlet.asset.NoSuchTagException;
 import com.liferay.portlet.asset.model.AssetTag;
@@ -55,6 +52,7 @@ import java.io.Serializable;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -119,6 +117,7 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @return the matching asset tags
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<AssetTag> findByGroupId(long groupId) throws SystemException {
 		return findByGroupId(groupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
@@ -136,6 +135,7 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @return the range of matching asset tags
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<AssetTag> findByGroupId(long groupId, int start, int end)
 		throws SystemException {
 		return findByGroupId(groupId, start, end, null);
@@ -155,6 +155,7 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @return the ordered range of matching asset tags
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<AssetTag> findByGroupId(long groupId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -261,6 +262,7 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @throws com.liferay.portlet.asset.NoSuchTagException if a matching asset tag could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public AssetTag findByGroupId_First(long groupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchTagException, SystemException {
@@ -290,6 +292,7 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @return the first matching asset tag, or <code>null</code> if a matching asset tag could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public AssetTag fetchByGroupId_First(long groupId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<AssetTag> list = findByGroupId(groupId, 0, 1, orderByComparator);
@@ -310,6 +313,7 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @throws com.liferay.portlet.asset.NoSuchTagException if a matching asset tag could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public AssetTag findByGroupId_Last(long groupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchTagException, SystemException {
@@ -339,9 +343,14 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @return the last matching asset tag, or <code>null</code> if a matching asset tag could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public AssetTag fetchByGroupId_Last(long groupId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByGroupId(groupId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<AssetTag> list = findByGroupId(groupId, count - 1, count,
 				orderByComparator);
@@ -363,6 +372,7 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @throws com.liferay.portlet.asset.NoSuchTagException if a asset tag with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public AssetTag[] findByGroupId_PrevAndNext(long tagId, long groupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchTagException, SystemException {
@@ -505,6 +515,7 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @return the matching asset tags that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<AssetTag> filterFindByGroupId(long groupId)
 		throws SystemException {
 		return filterFindByGroupId(groupId, QueryUtil.ALL_POS,
@@ -524,6 +535,7 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @return the range of matching asset tags that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<AssetTag> filterFindByGroupId(long groupId, int start, int end)
 		throws SystemException {
 		return filterFindByGroupId(groupId, start, end, null);
@@ -543,6 +555,7 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @return the ordered range of matching asset tags that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<AssetTag> filterFindByGroupId(long groupId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
@@ -633,6 +646,7 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @throws com.liferay.portlet.asset.NoSuchTagException if a asset tag with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public AssetTag[] filterFindByGroupId_PrevAndNext(long tagId, long groupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchTagException, SystemException {
@@ -813,6 +827,7 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @param groupId the group ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByGroupId(long groupId) throws SystemException {
 		for (AssetTag assetTag : findByGroupId(groupId, QueryUtil.ALL_POS,
 				QueryUtil.ALL_POS, null)) {
@@ -827,6 +842,7 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @return the number of matching asset tags
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByGroupId(long groupId) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_GROUPID;
 
@@ -879,6 +895,7 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @return the number of matching asset tags that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int filterCountByGroupId(long groupId) throws SystemException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return countByGroupId(groupId);
@@ -941,6 +958,7 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @throws com.liferay.portlet.asset.NoSuchTagException if a matching asset tag could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public AssetTag findByG_N(long groupId, String name)
 		throws NoSuchTagException, SystemException {
 		AssetTag assetTag = fetchByG_N(groupId, name);
@@ -976,6 +994,7 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @return the matching asset tag, or <code>null</code> if a matching asset tag could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public AssetTag fetchByG_N(long groupId, String name)
 		throws SystemException {
 		return fetchByG_N(groupId, name, true);
@@ -990,6 +1009,7 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @return the matching asset tag, or <code>null</code> if a matching asset tag could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public AssetTag fetchByG_N(long groupId, String name,
 		boolean retrieveFromCache) throws SystemException {
 		Object[] finderArgs = new Object[] { groupId, name };
@@ -1103,6 +1123,7 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @return the asset tag that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public AssetTag removeByG_N(long groupId, String name)
 		throws NoSuchTagException, SystemException {
 		AssetTag assetTag = findByG_N(groupId, name);
@@ -1118,6 +1139,7 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @return the number of matching asset tags
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByG_N(long groupId, String name) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_N;
 
@@ -1186,11 +1208,16 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	private static final String _FINDER_COLUMN_G_N_NAME_2 = "assetTag.name = ?";
 	private static final String _FINDER_COLUMN_G_N_NAME_3 = "(assetTag.name IS NULL OR assetTag.name = '')";
 
+	public AssetTagPersistenceImpl() {
+		setModelClass(AssetTag.class);
+	}
+
 	/**
 	 * Caches the asset tag in the entity cache if it is enabled.
 	 *
 	 * @param assetTag the asset tag
 	 */
+	@Override
 	public void cacheResult(AssetTag assetTag) {
 		EntityCacheUtil.putResult(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
 			AssetTagImpl.class, assetTag.getPrimaryKey(), assetTag);
@@ -1206,6 +1233,7 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 *
 	 * @param assetTags the asset tags
 	 */
+	@Override
 	public void cacheResult(List<AssetTag> assetTags) {
 		for (AssetTag assetTag : assetTags) {
 			if (EntityCacheUtil.getResult(
@@ -1323,6 +1351,7 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @param tagId the primary key for the new asset tag
 	 * @return the new asset tag
 	 */
+	@Override
 	public AssetTag create(long tagId) {
 		AssetTag assetTag = new AssetTagImpl();
 
@@ -1340,6 +1369,7 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @throws com.liferay.portlet.asset.NoSuchTagException if a asset tag with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public AssetTag remove(long tagId)
 		throws NoSuchTagException, SystemException {
 		return remove((Serializable)tagId);
@@ -1390,15 +1420,7 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	protected AssetTag removeImpl(AssetTag assetTag) throws SystemException {
 		assetTag = toUnwrappedModel(assetTag);
 
-		try {
-			clearAssetEntries.clear(assetTag.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(AssetTagModelImpl.MAPPING_TABLE_ASSETENTRIES_ASSETTAGS_NAME);
-		}
+		assetTagToAssetEntryTableMapper.deleteLeftPrimaryKeyTableMappings(assetTag.getPrimaryKey());
 
 		Session session = null;
 
@@ -1490,6 +1512,8 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 		clearUniqueFindersCache(assetTag);
 		cacheUniqueFindersCache(assetTag);
 
+		assetTag.resetOriginalValues();
+
 		return assetTag;
 	}
 
@@ -1549,6 +1573,7 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @throws com.liferay.portlet.asset.NoSuchTagException if a asset tag with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public AssetTag findByPrimaryKey(long tagId)
 		throws NoSuchTagException, SystemException {
 		return findByPrimaryKey((Serializable)tagId);
@@ -1608,6 +1633,7 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @return the asset tag, or <code>null</code> if a asset tag with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public AssetTag fetchByPrimaryKey(long tagId) throws SystemException {
 		return fetchByPrimaryKey((Serializable)tagId);
 	}
@@ -1618,6 +1644,7 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @return the asset tags
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<AssetTag> findAll() throws SystemException {
 		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
@@ -1634,6 +1661,7 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @return the range of asset tags
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<AssetTag> findAll(int start, int end) throws SystemException {
 		return findAll(start, end, null);
 	}
@@ -1651,6 +1679,7 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @return the ordered range of asset tags
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<AssetTag> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -1736,6 +1765,7 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 *
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeAll() throws SystemException {
 		for (AssetTag assetTag : findAll()) {
 			remove(assetTag);
@@ -1748,6 +1778,7 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @return the number of asset tags
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countAll() throws SystemException {
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
 				FINDER_ARGS_EMPTY, this);
@@ -1786,6 +1817,7 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @return the asset entries associated with the asset tag
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<com.liferay.portlet.asset.model.AssetEntry> getAssetEntries(
 		long pk) throws SystemException {
 		return getAssetEntries(pk, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
@@ -1804,23 +1836,10 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @return the range of asset entries associated with the asset tag
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<com.liferay.portlet.asset.model.AssetEntry> getAssetEntries(
 		long pk, int start, int end) throws SystemException {
 		return getAssetEntries(pk, start, end, null);
-	}
-
-	public static final FinderPath FINDER_PATH_GET_ASSETENTRIES = new FinderPath(com.liferay.portlet.asset.model.impl.AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
-			AssetTagModelImpl.FINDER_CACHE_ENABLED_ASSETENTRIES_ASSETTAGS,
-			com.liferay.portlet.asset.model.impl.AssetEntryImpl.class,
-			AssetTagModelImpl.MAPPING_TABLE_ASSETENTRIES_ASSETTAGS_NAME,
-			"getAssetEntries",
-			new String[] {
-				Long.class.getName(), Integer.class.getName(),
-				Integer.class.getName(), OrderByComparator.class.getName()
-			});
-
-	static {
-		FINDER_PATH_GET_ASSETENTRIES.setCacheKeyGeneratorCacheName(null);
 	}
 
 	/**
@@ -1837,93 +1856,12 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @return the ordered range of asset entries associated with the asset tag
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<com.liferay.portlet.asset.model.AssetEntry> getAssetEntries(
 		long pk, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		boolean pagination = true;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			pagination = false;
-			finderArgs = new Object[] { pk };
-		}
-		else {
-			finderArgs = new Object[] { pk, start, end, orderByComparator };
-		}
-
-		List<com.liferay.portlet.asset.model.AssetEntry> list = (List<com.liferay.portlet.asset.model.AssetEntry>)FinderCacheUtil.getResult(FINDER_PATH_GET_ASSETENTRIES,
-				finderArgs, this);
-
-		if (list == null) {
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				String sql = null;
-
-				if (orderByComparator != null) {
-					sql = _SQL_GETASSETENTRIES.concat(ORDER_BY_CLAUSE)
-											  .concat(orderByComparator.getOrderBy());
-				}
-				else {
-					sql = _SQL_GETASSETENTRIES;
-
-					if (pagination) {
-						sql = sql.concat(com.liferay.portlet.asset.model.impl.AssetEntryModelImpl.ORDER_BY_SQL);
-					}
-				}
-
-				SQLQuery q = session.createSQLQuery(sql);
-
-				q.addEntity("AssetEntry",
-					com.liferay.portlet.asset.model.impl.AssetEntryImpl.class);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(pk);
-
-				if (!pagination) {
-					list = (List<com.liferay.portlet.asset.model.AssetEntry>)QueryUtil.list(q,
-							getDialect(), start, end, false);
-
-					Collections.sort(list);
-
-					list = new UnmodifiableList<com.liferay.portlet.asset.model.AssetEntry>(list);
-				}
-				else {
-					list = (List<com.liferay.portlet.asset.model.AssetEntry>)QueryUtil.list(q,
-							getDialect(), start, end);
-				}
-
-				assetEntryPersistence.cacheResult(list);
-
-				FinderCacheUtil.putResult(FINDER_PATH_GET_ASSETENTRIES,
-					finderArgs, list);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_GET_ASSETENTRIES,
-					finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	public static final FinderPath FINDER_PATH_GET_ASSETENTRIES_SIZE = new FinderPath(com.liferay.portlet.asset.model.impl.AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
-			AssetTagModelImpl.FINDER_CACHE_ENABLED_ASSETENTRIES_ASSETTAGS,
-			Long.class,
-			AssetTagModelImpl.MAPPING_TABLE_ASSETENTRIES_ASSETTAGS_NAME,
-			"getAssetEntriesSize", new String[] { Long.class.getName() });
-
-	static {
-		FINDER_PATH_GET_ASSETENTRIES_SIZE.setCacheKeyGeneratorCacheName(null);
+		return assetTagToAssetEntryTableMapper.getRightBaseModels(pk, start,
+			end, orderByComparator);
 	}
 
 	/**
@@ -1933,52 +1871,12 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @return the number of asset entries associated with the asset tag
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int getAssetEntriesSize(long pk) throws SystemException {
-		Object[] finderArgs = new Object[] { pk };
+		long[] pks = assetTagToAssetEntryTableMapper.getRightPrimaryKeys(pk);
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_GET_ASSETENTRIES_SIZE,
-				finderArgs, this);
-
-		if (count == null) {
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				SQLQuery q = session.createSQLQuery(_SQL_GETASSETENTRIESSIZE);
-
-				q.addScalar(COUNT_COLUMN_NAME,
-					com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(pk);
-
-				count = (Long)q.uniqueResult();
-
-				FinderCacheUtil.putResult(FINDER_PATH_GET_ASSETENTRIES_SIZE,
-					finderArgs, count);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_GET_ASSETENTRIES_SIZE,
-					finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
+		return pks.length;
 	}
-
-	public static final FinderPath FINDER_PATH_CONTAINS_ASSETENTRY = new FinderPath(com.liferay.portlet.asset.model.impl.AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
-			AssetTagModelImpl.FINDER_CACHE_ENABLED_ASSETENTRIES_ASSETTAGS,
-			Boolean.class,
-			AssetTagModelImpl.MAPPING_TABLE_ASSETENTRIES_ASSETTAGS_NAME,
-			"containsAssetEntry",
-			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns <code>true</code> if the asset entry is associated with the asset tag.
@@ -1988,30 +1886,11 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @return <code>true</code> if the asset entry is associated with the asset tag; <code>false</code> otherwise
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public boolean containsAssetEntry(long pk, long assetEntryPK)
 		throws SystemException {
-		Object[] finderArgs = new Object[] { pk, assetEntryPK };
-
-		Boolean value = (Boolean)FinderCacheUtil.getResult(FINDER_PATH_CONTAINS_ASSETENTRY,
-				finderArgs, this);
-
-		if (value == null) {
-			try {
-				value = Boolean.valueOf(containsAssetEntry.contains(pk,
-							assetEntryPK));
-
-				FinderCacheUtil.putResult(FINDER_PATH_CONTAINS_ASSETENTRY,
-					finderArgs, value);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_CONTAINS_ASSETENTRY,
-					finderArgs);
-
-				throw processException(e);
-			}
-		}
-
-		return value.booleanValue();
+		return assetTagToAssetEntryTableMapper.containsTableMapping(pk,
+			assetEntryPK);
 	}
 
 	/**
@@ -2021,6 +1900,7 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @return <code>true</code> if the asset tag has any asset entries associated with it; <code>false</code> otherwise
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public boolean containsAssetEntries(long pk) throws SystemException {
 		if (getAssetEntriesSize(pk) > 0) {
 			return true;
@@ -2037,17 +1917,10 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @param assetEntryPK the primary key of the asset entry
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addAssetEntry(long pk, long assetEntryPK)
 		throws SystemException {
-		try {
-			addAssetEntry.add(pk, assetEntryPK);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(AssetTagModelImpl.MAPPING_TABLE_ASSETENTRIES_ASSETTAGS_NAME);
-		}
+		assetTagToAssetEntryTableMapper.addTableMapping(pk, assetEntryPK);
 	}
 
 	/**
@@ -2057,18 +1930,12 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @param assetEntry the asset entry
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addAssetEntry(long pk,
 		com.liferay.portlet.asset.model.AssetEntry assetEntry)
 		throws SystemException {
-		try {
-			addAssetEntry.add(pk, assetEntry.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(AssetTagModelImpl.MAPPING_TABLE_ASSETENTRIES_ASSETTAGS_NAME);
-		}
+		assetTagToAssetEntryTableMapper.addTableMapping(pk,
+			assetEntry.getPrimaryKey());
 	}
 
 	/**
@@ -2078,18 +1945,11 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @param assetEntryPKs the primary keys of the asset entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addAssetEntries(long pk, long[] assetEntryPKs)
 		throws SystemException {
-		try {
-			for (long assetEntryPK : assetEntryPKs) {
-				addAssetEntry.add(pk, assetEntryPK);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(AssetTagModelImpl.MAPPING_TABLE_ASSETENTRIES_ASSETTAGS_NAME);
+		for (long assetEntryPK : assetEntryPKs) {
+			assetTagToAssetEntryTableMapper.addTableMapping(pk, assetEntryPK);
 		}
 	}
 
@@ -2100,19 +1960,13 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @param assetEntries the asset entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addAssetEntries(long pk,
 		List<com.liferay.portlet.asset.model.AssetEntry> assetEntries)
 		throws SystemException {
-		try {
-			for (com.liferay.portlet.asset.model.AssetEntry assetEntry : assetEntries) {
-				addAssetEntry.add(pk, assetEntry.getPrimaryKey());
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(AssetTagModelImpl.MAPPING_TABLE_ASSETENTRIES_ASSETTAGS_NAME);
+		for (com.liferay.portlet.asset.model.AssetEntry assetEntry : assetEntries) {
+			assetTagToAssetEntryTableMapper.addTableMapping(pk,
+				assetEntry.getPrimaryKey());
 		}
 	}
 
@@ -2122,16 +1976,9 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @param pk the primary key of the asset tag to clear the associated asset entries from
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void clearAssetEntries(long pk) throws SystemException {
-		try {
-			clearAssetEntries.clear(pk);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(AssetTagModelImpl.MAPPING_TABLE_ASSETENTRIES_ASSETTAGS_NAME);
-		}
+		assetTagToAssetEntryTableMapper.deleteLeftPrimaryKeyTableMappings(pk);
 	}
 
 	/**
@@ -2141,17 +1988,10 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @param assetEntryPK the primary key of the asset entry
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeAssetEntry(long pk, long assetEntryPK)
 		throws SystemException {
-		try {
-			removeAssetEntry.remove(pk, assetEntryPK);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(AssetTagModelImpl.MAPPING_TABLE_ASSETENTRIES_ASSETTAGS_NAME);
-		}
+		assetTagToAssetEntryTableMapper.deleteTableMapping(pk, assetEntryPK);
 	}
 
 	/**
@@ -2161,18 +2001,12 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @param assetEntry the asset entry
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeAssetEntry(long pk,
 		com.liferay.portlet.asset.model.AssetEntry assetEntry)
 		throws SystemException {
-		try {
-			removeAssetEntry.remove(pk, assetEntry.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(AssetTagModelImpl.MAPPING_TABLE_ASSETENTRIES_ASSETTAGS_NAME);
-		}
+		assetTagToAssetEntryTableMapper.deleteTableMapping(pk,
+			assetEntry.getPrimaryKey());
 	}
 
 	/**
@@ -2182,18 +2016,11 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @param assetEntryPKs the primary keys of the asset entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeAssetEntries(long pk, long[] assetEntryPKs)
 		throws SystemException {
-		try {
-			for (long assetEntryPK : assetEntryPKs) {
-				removeAssetEntry.remove(pk, assetEntryPK);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(AssetTagModelImpl.MAPPING_TABLE_ASSETENTRIES_ASSETTAGS_NAME);
+		for (long assetEntryPK : assetEntryPKs) {
+			assetTagToAssetEntryTableMapper.deleteTableMapping(pk, assetEntryPK);
 		}
 	}
 
@@ -2204,19 +2031,13 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @param assetEntries the asset entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeAssetEntries(long pk,
 		List<com.liferay.portlet.asset.model.AssetEntry> assetEntries)
 		throws SystemException {
-		try {
-			for (com.liferay.portlet.asset.model.AssetEntry assetEntry : assetEntries) {
-				removeAssetEntry.remove(pk, assetEntry.getPrimaryKey());
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(AssetTagModelImpl.MAPPING_TABLE_ASSETENTRIES_ASSETTAGS_NAME);
+		for (com.liferay.portlet.asset.model.AssetEntry assetEntry : assetEntries) {
+			assetTagToAssetEntryTableMapper.deleteTableMapping(pk,
+				assetEntry.getPrimaryKey());
 		}
 	}
 
@@ -2227,28 +2048,26 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @param assetEntryPKs the primary keys of the asset entries to be associated with the asset tag
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void setAssetEntries(long pk, long[] assetEntryPKs)
 		throws SystemException {
-		try {
-			Set<Long> assetEntryPKSet = SetUtil.fromArray(assetEntryPKs);
+		Set<Long> newAssetEntryPKsSet = SetUtil.fromArray(assetEntryPKs);
+		Set<Long> oldAssetEntryPKsSet = SetUtil.fromArray(assetTagToAssetEntryTableMapper.getRightPrimaryKeys(
+					pk));
 
-			List<com.liferay.portlet.asset.model.AssetEntry> assetEntries = getAssetEntries(pk);
+		Set<Long> removeAssetEntryPKsSet = new HashSet<Long>(oldAssetEntryPKsSet);
 
-			for (com.liferay.portlet.asset.model.AssetEntry assetEntry : assetEntries) {
-				if (!assetEntryPKSet.remove(assetEntry.getPrimaryKey())) {
-					removeAssetEntry.remove(pk, assetEntry.getPrimaryKey());
-				}
-			}
+		removeAssetEntryPKsSet.removeAll(newAssetEntryPKsSet);
 
-			for (Long assetEntryPK : assetEntryPKSet) {
-				addAssetEntry.add(pk, assetEntryPK);
-			}
+		for (long removeAssetEntryPK : removeAssetEntryPKsSet) {
+			assetTagToAssetEntryTableMapper.deleteTableMapping(pk,
+				removeAssetEntryPK);
 		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(AssetTagModelImpl.MAPPING_TABLE_ASSETENTRIES_ASSETTAGS_NAME);
+
+		newAssetEntryPKsSet.removeAll(oldAssetEntryPKsSet);
+
+		for (long newAssetEntryPK : newAssetEntryPKsSet) {
+			assetTagToAssetEntryTableMapper.addTableMapping(pk, newAssetEntryPK);
 		}
 	}
 
@@ -2259,6 +2078,7 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 * @param assetEntries the asset entries to be associated with the asset tag
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void setAssetEntries(long pk,
 		List<com.liferay.portlet.asset.model.AssetEntry> assetEntries)
 		throws SystemException {
@@ -2305,11 +2125,8 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 			}
 		}
 
-		containsAssetEntry = new ContainsAssetEntry();
-
-		addAssetEntry = new AddAssetEntry();
-		clearAssetEntries = new ClearAssetEntries();
-		removeAssetEntry = new RemoveAssetEntry();
+		assetTagToAssetEntryTableMapper = TableMapperFactory.getTableMapper("AssetEntries_AssetTags",
+				"tagId", "entryId", this, assetEntryPersistence);
 	}
 
 	public void destroy() {
@@ -2321,182 +2138,11 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 
 	@BeanReference(type = AssetEntryPersistence.class)
 	protected AssetEntryPersistence assetEntryPersistence;
-	protected ContainsAssetEntry containsAssetEntry;
-	protected AddAssetEntry addAssetEntry;
-	protected ClearAssetEntries clearAssetEntries;
-	protected RemoveAssetEntry removeAssetEntry;
-
-	protected class ContainsAssetEntry {
-		protected ContainsAssetEntry() {
-			_mappingSqlQuery = MappingSqlQueryFactoryUtil.getMappingSqlQuery(getDataSource(),
-					"SELECT COUNT(*) AS COUNT_VALUE FROM AssetEntries_AssetTags WHERE tagId = ? AND entryId = ?",
-					new int[] { java.sql.Types.BIGINT, java.sql.Types.BIGINT },
-					RowMapper.COUNT);
-		}
-
-		protected boolean contains(long tagId, long entryId) {
-			List<Integer> results = _mappingSqlQuery.execute(new Object[] {
-						new Long(tagId), new Long(entryId)
-					});
-
-			if (results.size() > 0) {
-				Integer count = results.get(0);
-
-				if (count.intValue() > 0) {
-					return true;
-				}
-			}
-
-			return false;
-		}
-
-		private MappingSqlQuery<Integer> _mappingSqlQuery;
-	}
-
-	protected class AddAssetEntry {
-		protected AddAssetEntry() {
-			_sqlUpdate = SqlUpdateFactoryUtil.getSqlUpdate(getDataSource(),
-					"INSERT INTO AssetEntries_AssetTags (tagId, entryId) VALUES (?, ?)",
-					new int[] { java.sql.Types.BIGINT, java.sql.Types.BIGINT });
-		}
-
-		protected void add(long tagId, long entryId) throws SystemException {
-			if (!containsAssetEntry.contains(tagId, entryId)) {
-				ModelListener<com.liferay.portlet.asset.model.AssetEntry>[] assetEntryListeners =
-					assetEntryPersistence.getListeners();
-
-				for (ModelListener<AssetTag> listener : listeners) {
-					listener.onBeforeAddAssociation(tagId,
-						com.liferay.portlet.asset.model.AssetEntry.class.getName(),
-						entryId);
-				}
-
-				for (ModelListener<com.liferay.portlet.asset.model.AssetEntry> listener : assetEntryListeners) {
-					listener.onBeforeAddAssociation(entryId,
-						AssetTag.class.getName(), tagId);
-				}
-
-				_sqlUpdate.update(new Object[] {
-						new Long(tagId), new Long(entryId)
-					});
-
-				for (ModelListener<AssetTag> listener : listeners) {
-					listener.onAfterAddAssociation(tagId,
-						com.liferay.portlet.asset.model.AssetEntry.class.getName(),
-						entryId);
-				}
-
-				for (ModelListener<com.liferay.portlet.asset.model.AssetEntry> listener : assetEntryListeners) {
-					listener.onAfterAddAssociation(entryId,
-						AssetTag.class.getName(), tagId);
-				}
-			}
-		}
-
-		private SqlUpdate _sqlUpdate;
-	}
-
-	protected class ClearAssetEntries {
-		protected ClearAssetEntries() {
-			_sqlUpdate = SqlUpdateFactoryUtil.getSqlUpdate(getDataSource(),
-					"DELETE FROM AssetEntries_AssetTags WHERE tagId = ?",
-					new int[] { java.sql.Types.BIGINT });
-		}
-
-		protected void clear(long tagId) throws SystemException {
-			ModelListener<com.liferay.portlet.asset.model.AssetEntry>[] assetEntryListeners =
-				assetEntryPersistence.getListeners();
-
-			List<com.liferay.portlet.asset.model.AssetEntry> assetEntries = null;
-
-			if ((listeners.length > 0) || (assetEntryListeners.length > 0)) {
-				assetEntries = getAssetEntries(tagId);
-
-				for (com.liferay.portlet.asset.model.AssetEntry assetEntry : assetEntries) {
-					for (ModelListener<AssetTag> listener : listeners) {
-						listener.onBeforeRemoveAssociation(tagId,
-							com.liferay.portlet.asset.model.AssetEntry.class.getName(),
-							assetEntry.getPrimaryKey());
-					}
-
-					for (ModelListener<com.liferay.portlet.asset.model.AssetEntry> listener : assetEntryListeners) {
-						listener.onBeforeRemoveAssociation(assetEntry.getPrimaryKey(),
-							AssetTag.class.getName(), tagId);
-					}
-				}
-			}
-
-			_sqlUpdate.update(new Object[] { new Long(tagId) });
-
-			if ((listeners.length > 0) || (assetEntryListeners.length > 0)) {
-				for (com.liferay.portlet.asset.model.AssetEntry assetEntry : assetEntries) {
-					for (ModelListener<AssetTag> listener : listeners) {
-						listener.onAfterRemoveAssociation(tagId,
-							com.liferay.portlet.asset.model.AssetEntry.class.getName(),
-							assetEntry.getPrimaryKey());
-					}
-
-					for (ModelListener<com.liferay.portlet.asset.model.AssetEntry> listener : assetEntryListeners) {
-						listener.onAfterRemoveAssociation(assetEntry.getPrimaryKey(),
-							AssetTag.class.getName(), tagId);
-					}
-				}
-			}
-		}
-
-		private SqlUpdate _sqlUpdate;
-	}
-
-	protected class RemoveAssetEntry {
-		protected RemoveAssetEntry() {
-			_sqlUpdate = SqlUpdateFactoryUtil.getSqlUpdate(getDataSource(),
-					"DELETE FROM AssetEntries_AssetTags WHERE tagId = ? AND entryId = ?",
-					new int[] { java.sql.Types.BIGINT, java.sql.Types.BIGINT });
-		}
-
-		protected void remove(long tagId, long entryId)
-			throws SystemException {
-			if (containsAssetEntry.contains(tagId, entryId)) {
-				ModelListener<com.liferay.portlet.asset.model.AssetEntry>[] assetEntryListeners =
-					assetEntryPersistence.getListeners();
-
-				for (ModelListener<AssetTag> listener : listeners) {
-					listener.onBeforeRemoveAssociation(tagId,
-						com.liferay.portlet.asset.model.AssetEntry.class.getName(),
-						entryId);
-				}
-
-				for (ModelListener<com.liferay.portlet.asset.model.AssetEntry> listener : assetEntryListeners) {
-					listener.onBeforeRemoveAssociation(entryId,
-						AssetTag.class.getName(), tagId);
-				}
-
-				_sqlUpdate.update(new Object[] {
-						new Long(tagId), new Long(entryId)
-					});
-
-				for (ModelListener<AssetTag> listener : listeners) {
-					listener.onAfterRemoveAssociation(tagId,
-						com.liferay.portlet.asset.model.AssetEntry.class.getName(),
-						entryId);
-				}
-
-				for (ModelListener<com.liferay.portlet.asset.model.AssetEntry> listener : assetEntryListeners) {
-					listener.onAfterRemoveAssociation(entryId,
-						AssetTag.class.getName(), tagId);
-				}
-			}
-		}
-
-		private SqlUpdate _sqlUpdate;
-	}
-
+	protected TableMapper<AssetTag, com.liferay.portlet.asset.model.AssetEntry> assetTagToAssetEntryTableMapper;
 	private static final String _SQL_SELECT_ASSETTAG = "SELECT assetTag FROM AssetTag assetTag";
 	private static final String _SQL_SELECT_ASSETTAG_WHERE = "SELECT assetTag FROM AssetTag assetTag WHERE ";
 	private static final String _SQL_COUNT_ASSETTAG = "SELECT COUNT(assetTag) FROM AssetTag assetTag";
 	private static final String _SQL_COUNT_ASSETTAG_WHERE = "SELECT COUNT(assetTag) FROM AssetTag assetTag WHERE ";
-	private static final String _SQL_GETASSETENTRIES = "SELECT {AssetEntry.*} FROM AssetEntry INNER JOIN AssetEntries_AssetTags ON (AssetEntries_AssetTags.entryId = AssetEntry.entryId) WHERE (AssetEntries_AssetTags.tagId = ?)";
-	private static final String _SQL_GETASSETENTRIESSIZE = "SELECT COUNT(*) AS COUNT_VALUE FROM AssetEntries_AssetTags WHERE tagId = ?";
 	private static final String _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN = "assetTag.tagId";
 	private static final String _FILTER_SQL_SELECT_ASSETTAG_WHERE = "SELECT DISTINCT {assetTag.*} FROM AssetTag assetTag WHERE ";
 	private static final String _FILTER_SQL_SELECT_ASSETTAG_NO_INLINE_DISTINCT_WHERE_1 =
@@ -2525,6 +2171,7 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 		};
 
 	private static CacheModel<AssetTag> _nullAssetTagCacheModel = new CacheModel<AssetTag>() {
+			@Override
 			public AssetTag toEntityModel() {
 				return _nullAssetTag;
 			}

@@ -1,42 +1,21 @@
-.taglib-search-iterator {
-	border-collapse: collapse;
-	width: 100%;
+@import "compass";
+@import "mixins";
 
-	td {
-		padding: 4px;
+.lfr-search-container {
+	margin-top: 1.5em;
+	overflow: auto;
 
-		&.align-center {
-			text-align: center;
-		}
+	@include respond-to(phone, tablet) {
+		@include experimental(overflow-scrolling, touch);
 
-		&.align-left {
-			text-align: left;
-		}
-
-		&.align-right {
-			text-align: right;
-		}
-
-		&.valign-bottom {
-			vertical-align: bottom;
-		}
-
-		&.valign-middle {
-			vertical-align: middle;
-		}
-
-		&.valign-top {
-			vertical-align: top;
+		.searchcontainer-content .table {
+			max-width: none;
 		}
 	}
 }
 
 .taglib-search-iterator-page-iterator-top {
-	padding-bottom: 5px;
-}
-
-.taglib-search-iterator-page-iterator-bottom {
-	padding-top: 5px;
+	margin-bottom: 15px;
 }
 
 .taglib-page-iterator {
@@ -45,104 +24,75 @@
 	overflow: hidden;
 	width: auto;
 
-	.search-results {
-		float: left;
+	.lfr-pagination-buttons {
+		float: right;
+		margin: 0;
+
+		@include respond-to(phone, tablet) {
+			@include respond-to(phone) {
+				float: none;
+				margin-top: 20px;
+				width: 100%;
+			}
+
+			@include respond-to(tablet) {
+				width: 50%;
+			}
+
+			> li {
+				display: inline-block;
+				float: left;
+				width: 50%;
+
+				&.first, &.last {
+					display: none;
+				}
+
+				> a {
+					line-height: 20px;
+					padding: 11px 19px;
+					width: 65%;
+				}
+			}
+		}
 	}
 
-	.search-pages {
-		float: right;
+	.lfr-pagination-config {
+		float: left;
+		line-height: 46px;
 
-		.delta-selector, .page-selector, .page-links {
-			float: left;
-		}
+		@include respond-to(phone) {
+			float: none;
 
-		.page-links {
-			a, span {
-				border-left: 1px solid transparent;
-				display: inline-block;
-				line-height: 1;
-				padding: 2px 15px;
+			.current-page-menu {
+				display: block;
 
-				&.first {
-					border-left-width: 0;
-				}
-
-				&.first, &.previous {
-					padding-right: 5px;
-				}
-
-				&.next, &.last {
-					padding-left: 5px;
+				.btn {
+					display: block;
 				}
 			}
 		}
 
-		.page-selector {
-			margin-left: 10px;
-			margin-right: 10px;
-			padding-left: 10px;
-			padding-right: 10px;
-		}
-	}
-}
-
-.ie6 .taglib-page-iterator .search-pages {
-	.page-selector, .delta-selector {
-		.aui-field-content {
+		.lfr-pagination-delta-selector, .lfr-pagination-page-selector {
 			display: inline;
 		}
-	}
-}
 
-/* Skin */
+		.lfr-pagination-delta-selector {
+			float: none;
 
-.taglib-search-iterator-highlighted {
-	font-weight: bold;
-}
-
-.taglib-page-iterator {
-	.search-results {
-		color: #555;
-	}
-
-	.search-pages .page-links {
-		a, span {
-			background: url() no-repeat 0 0;
-			border-left-color: #ccc;
-
-			&.first, &.previous, &.next, &.last {
-				background-repeat: no-repeat;
-			}
-
-			&.first {
-				background-image: url(@theme_image_path@/arrows/paging_first.png);
-			}
-
-			&.previous {
-				background-image: url(@theme_image_path@/arrows/paging_previous.png);
-			}
-
-			&.next {
-				background-image: url(@theme_image_path@/arrows/paging_next.png);
-			}
-
-			&.last {
-				background-image: url(@theme_image_path@/arrows/paging_last.png);
-			}
-
-			&.next, &.last {
-				background-position: 100% 0;
+			@include respond-to(phone, tablet) {
+				display: none;
 			}
 		}
+	}
 
-		span {
-			&, &.first, &.previous {
-				background-position: 0 100%;
-			}
+	.search-results {
+		float: left;
+		line-height: 46px;
+		margin-left: 10px;
 
-			&.next, &.last {
-				background-position: 100% 100%;
-			}
+		@include respond-to(phone, tablet) {
+			display: none;
 		}
 	}
 }

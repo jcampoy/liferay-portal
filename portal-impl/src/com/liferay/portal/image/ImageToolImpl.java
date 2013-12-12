@@ -22,8 +22,10 @@ import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.pacl.DoPrivileged;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.JavaDetector;
 import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.Image;
 import com.liferay.portal.model.impl.ImageImpl;
 import com.liferay.portal.util.FileImpl;
@@ -33,8 +35,9 @@ import com.sun.media.jai.codec.ImageCodec;
 import com.sun.media.jai.codec.ImageDecoder;
 import com.sun.media.jai.codec.ImageEncoder;
 
-import java.awt.Graphics2D;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBuffer;
 import java.awt.image.IndexColorModel;
@@ -157,6 +160,7 @@ public class ImageToolImpl implements ImageTool {
 		}
 	}
 
+	@Override
 	public Future<RenderedImage> convertCMYKtoRGB(byte[] bytes, String type) {
 		ImageMagick imageMagick = getImageMagick();
 
@@ -177,7 +181,9 @@ public class ImageToolImpl implements ImageTool {
 
 			String[] output = imageMagick.identify(imOperation.getCmdArgs());
 
-			if ((output.length == 1) && output[0].equalsIgnoreCase("CMYK")) {
+			if ((output.length == 1) &&
+				StringUtil.equalsIgnoreCase(output[0], "CMYK")) {
+
 				if (_log.isInfoEnabled()) {
 					_log.info("The image is in the CMYK colorspace");
 				}
@@ -207,6 +213,7 @@ public class ImageToolImpl implements ImageTool {
 		return null;
 	}
 
+	@Override
 	public BufferedImage convertImageType(BufferedImage sourceImage, int type) {
 		BufferedImage targetImage = new BufferedImage(
 			sourceImage.getWidth(), sourceImage.getHeight(), type);
@@ -220,6 +227,23 @@ public class ImageToolImpl implements ImageTool {
 		return targetImage;
 	}
 
+	@Override
+	public RenderedImage crop(
+		RenderedImage renderedImage, int height, int width, int x, int y) {
+
+		Rectangle rectangle = new Rectangle(x, y, width, height);
+
+		Rectangle croppedRectangle = rectangle.intersection(
+			new Rectangle(renderedImage.getWidth(), renderedImage.getHeight()));
+
+		BufferedImage bufferedImage = getBufferedImage(renderedImage);
+
+		return bufferedImage.getSubimage(
+			croppedRectangle.x, croppedRectangle.y, croppedRectangle.width,
+			croppedRectangle.height);
+	}
+
+	@Override
 	public void encodeGIF(RenderedImage renderedImage, OutputStream os)
 		throws IOException {
 
@@ -240,6 +264,7 @@ public class ImageToolImpl implements ImageTool {
 		}
 	}
 
+	@Override
 	public void encodeWBMP(RenderedImage renderedImage, OutputStream os)
 		throws IOException {
 
@@ -284,18 +309,18 @@ public class ImageToolImpl implements ImageTool {
 		}
 	}
 
+	@Override
 	public BufferedImage getBufferedImage(RenderedImage renderedImage) {
 		if (renderedImage instanceof BufferedImage) {
 			return (BufferedImage)renderedImage;
 		}
-		else {
-			RenderedImageAdapter adapter = new RenderedImageAdapter(
-				renderedImage);
 
-			return adapter.getAsBufferedImage();
-		}
+		RenderedImageAdapter adapter = new RenderedImageAdapter(renderedImage);
+
+		return adapter.getAsBufferedImage();
 	}
 
+	@Override
 	public byte[] getBytes(RenderedImage renderedImage, String contentType)
 		throws IOException {
 
@@ -306,26 +331,32 @@ public class ImageToolImpl implements ImageTool {
 		return baos.toByteArray();
 	}
 
+	@Override
 	public Image getDefaultCompanyLogo() {
 		return _defaultCompanyLogo;
 	}
 
+	@Override
 	public Image getDefaultOrganizationLogo() {
 		return _defaultOrganizationLogo;
 	}
 
+	@Override
 	public Image getDefaultSpacer() {
 		return _defaultSpacer;
 	}
 
+	@Override
 	public Image getDefaultUserFemalePortrait() {
 		return _defaultUserFemalePortrait;
 	}
 
+	@Override
 	public Image getDefaultUserMalePortrait() {
 		return _defaultUserMalePortrait;
 	}
 
+	@Override
 	public Image getImage(byte[] bytes) throws IOException {
 		if (bytes == null) {
 			return null;
@@ -356,18 +387,21 @@ public class ImageToolImpl implements ImageTool {
 		return image;
 	}
 
+	@Override
 	public Image getImage(File file) throws IOException {
 		byte[] bytes = _fileUtil.getBytes(file);
 
 		return getImage(bytes);
 	}
 
+	@Override
 	public Image getImage(InputStream is) throws IOException {
 		byte[] bytes = _fileUtil.getBytes(is, -1, true);
 
 		return getImage(bytes);
 	}
 
+	@Override
 	public Image getImage(InputStream is, boolean cleanUpStream)
 		throws IOException {
 
@@ -376,8 +410,9 @@ public class ImageToolImpl implements ImageTool {
 		return getImage(bytes);
 	}
 
+	@Override
 	public boolean isNullOrDefaultSpacer(byte[] bytes) {
-		if ((bytes == null) || (bytes.length == 0) ||
+		if (ArrayUtil.isEmpty(bytes) ||
 			Arrays.equals(bytes, getDefaultSpacer().getTextObj())) {
 
 			return true;
@@ -387,6 +422,7 @@ public class ImageToolImpl implements ImageTool {
 		}
 	}
 
+	@Override
 	public ImageBag read(byte[] bytes) {
 		RenderedImage renderedImage = null;
 		String type = TYPE_NOT_AVAILABLE;
@@ -412,14 +448,17 @@ public class ImageToolImpl implements ImageTool {
 		return new ImageBag(renderedImage, type);
 	}
 
+	@Override
 	public ImageBag read(File file) throws IOException {
 		return read(_fileUtil.getBytes(file));
 	}
 
+	@Override
 	public ImageBag read(InputStream inputStream) throws IOException {
 		return read(_fileUtil.getBytes(inputStream));
 	}
 
+	@Override
 	public RenderedImage scale(RenderedImage renderedImage, int width) {
 		if (width <= 0) {
 			return renderedImage;
@@ -454,6 +493,7 @@ public class ImageToolImpl implements ImageTool {
 		return scaledBufferedImage;
 	}
 
+	@Override
 	public RenderedImage scale(
 		RenderedImage renderedImage, int maxHeight, int maxWidth) {
 
@@ -537,6 +577,7 @@ public class ImageToolImpl implements ImageTool {
 		return scaledBufferedImage;
 	}
 
+	@Override
 	public void write(
 			RenderedImage renderedImage, String contentType, OutputStream os)
 		throws IOException {
@@ -586,10 +627,10 @@ public class ImageToolImpl implements ImageTool {
 				type = "jpeg";
 			}
 
-			ImageDecoder decoder = ImageCodec.createImageDecoder(
+			ImageDecoder imageDecoder = ImageCodec.createImageDecoder(
 				type, new UnsyncByteArrayInputStream(bytes), null);
 
-			renderedImage = decoder.decodeAsRenderedImage();
+			renderedImage = imageDecoder.decodeAsRenderedImage();
 		}
 		catch (IOException ioe) {
 			if (_log.isDebugEnabled()) {
@@ -648,6 +689,7 @@ public class ImageToolImpl implements ImageTool {
 			_type = type;
 		}
 
+		@Override
 		public boolean cancel(boolean mayInterruptIfRunning) {
 			if (_future.isCancelled() || _future.isDone()) {
 				return false;
@@ -658,6 +700,7 @@ public class ImageToolImpl implements ImageTool {
 			return true;
 		}
 
+		@Override
 		public RenderedImage get()
 			throws ExecutionException, InterruptedException {
 
@@ -668,13 +711,14 @@ public class ImageToolImpl implements ImageTool {
 			try {
 				bytes = _fileUtil.getBytes(_outputFile);
 			}
-			catch (IOException e) {
-				throw new ExecutionException(e);
+			catch (IOException ioe) {
+				throw new ExecutionException(ioe);
 			}
 
 			return read(bytes, _type);
 		}
 
+		@Override
 		public RenderedImage get(long timeout, TimeUnit timeUnit)
 			throws ExecutionException, InterruptedException, TimeoutException {
 
@@ -692,10 +736,12 @@ public class ImageToolImpl implements ImageTool {
 			return read(bytes, _type);
 		}
 
+		@Override
 		public boolean isCancelled() {
 			return _future.isCancelled();
 		}
 
+		@Override
 		public boolean isDone() {
 			return _future.isDone();
 		}

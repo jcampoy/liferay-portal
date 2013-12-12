@@ -39,29 +39,32 @@ import java.util.Map;
 public class AssetCategoriesNavigationPortletDisplayTemplateHandler
 	extends BasePortletDisplayTemplateHandler {
 
+	@Override
 	public String getClassName() {
 		return AssetCategory.class.getName();
 	}
 
+	@Override
 	public String getName(Locale locale) {
 		String portletTitle = PortalUtil.getPortletTitle(
-			PortletKeys.TAGS_CATEGORIES_NAVIGATION, locale);
+			PortletKeys.ASSET_CATEGORIES_NAVIGATION, locale);
 
 		return portletTitle.concat(StringPool.SPACE).concat(
 			LanguageUtil.get(locale, "template"));
 	}
 
+	@Override
 	public String getResourceName() {
-		return "com.liferay.portlet.assetcategoriesnavigation";
+		return PortletKeys.ASSET_CATEGORIES_NAVIGATION;
 	}
 
 	@Override
 	public Map<String, TemplateVariableGroup> getTemplateVariableGroups(
-			long classPK, Locale locale)
+			long classPK, String language, Locale locale)
 		throws Exception {
 
 		Map<String, TemplateVariableGroup> templateVariableGroups =
-			super.getTemplateVariableGroups(classPK, locale);
+			super.getTemplateVariableGroups(classPK, language, locale);
 
 		TemplateVariableGroup templateVariableGroup =
 			templateVariableGroups.get("fields");
@@ -70,10 +73,12 @@ public class AssetCategoriesNavigationPortletDisplayTemplateHandler
 
 		templateVariableGroup.addCollectionVariable(
 			"vocabularies", List.class, PortletDisplayTemplateConstants.ENTRIES,
-			"vocabulary", AssetVocabulary.class, "curVocabulary");
+			"vocabulary", AssetVocabulary.class, "curVocabulary", "name");
+
+		String[] restrictedVariables = getRestrictedVariables(language);
 
 		TemplateVariableGroup categoriesServicesTemplateVariableGroup =
-			new TemplateVariableGroup("category-services");
+			new TemplateVariableGroup("category-services", restrictedVariables);
 
 		categoriesServicesTemplateVariableGroup.setAutocompleteEnabled(false);
 

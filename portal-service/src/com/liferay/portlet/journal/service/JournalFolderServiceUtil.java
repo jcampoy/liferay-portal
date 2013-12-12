@@ -14,15 +14,18 @@
 
 package com.liferay.portlet.journal.service;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
 
 /**
- * The utility for the journal folder remote service. This utility wraps {@link com.liferay.portlet.journal.service.impl.JournalFolderServiceImpl} and is the primary access point for service operations in application layer code running on a remote server.
- *
- * <p>
- * This is a remote service. Methods of this service are expected to have security checks based on the propagated JAAS credentials because this service can be accessed remotely.
- * </p>
+ * Provides the remote service utility for JournalFolder. This utility wraps
+ * {@link com.liferay.portlet.journal.service.impl.JournalFolderServiceImpl} and is the
+ * primary access point for service operations in application layer code running
+ * on a remote server. Methods of this service are expected to have security
+ * checks based on the propagated JAAS credentials because this service can be
+ * accessed remotely.
  *
  * @author Brian Wing Shun Chan
  * @see JournalFolderService
@@ -30,6 +33,7 @@ import com.liferay.portal.kernel.util.ReferenceRegistry;
  * @see com.liferay.portlet.journal.service.impl.JournalFolderServiceImpl
  * @generated
  */
+@ProviderType
 public class JournalFolderServiceUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -124,6 +128,15 @@ public class JournalFolderServiceUtil {
 	}
 
 	public static java.util.List<java.lang.Object> getFoldersAndArticles(
+		long groupId, long folderId, int status, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator obc)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getFoldersAndArticles(groupId, folderId, status, start,
+			end, obc);
+	}
+
+	public static java.util.List<java.lang.Object> getFoldersAndArticles(
 		long groupId, long folderId, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator obc)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -151,6 +164,11 @@ public class JournalFolderServiceUtil {
 	public static int getFoldersCount(long groupId, long parentFolderId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService().getFoldersCount(groupId, parentFolderId);
+	}
+
+	public static int getFoldersCount(long groupId, long parentFolderId,
+		int status) throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getFoldersCount(groupId, parentFolderId, status);
 	}
 
 	public static void getSubfolderIds(
@@ -182,10 +200,11 @@ public class JournalFolderServiceUtil {
 				   .moveFolderFromTrash(folderId, parentFolderId, serviceContext);
 	}
 
-	public static void moveFolderToTrash(long folderId)
+	public static com.liferay.portlet.journal.model.JournalFolder moveFolderToTrash(
+		long folderId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		getService().moveFolderToTrash(folderId);
+		return getService().moveFolderToTrash(folderId);
 	}
 
 	public static void restoreFolderFromTrash(long folderId)

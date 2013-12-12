@@ -14,9 +14,14 @@
 
 package com.liferay.portlet.messageboards.model.impl;
 
+import com.liferay.portal.NoSuchModelException;
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSON;
+import com.liferay.portal.kernel.lar.StagedModelType;
+import com.liferay.portal.kernel.trash.TrashHandler;
+import com.liferay.portal.kernel.trash.TrashHandlerRegistryUtil;
 import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
@@ -25,6 +30,8 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.CacheModel;
+import com.liferay.portal.model.ContainerModel;
+import com.liferay.portal.model.TrashedModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -34,6 +41,8 @@ import com.liferay.portlet.expando.util.ExpandoBridgeFactoryUtil;
 import com.liferay.portlet.messageboards.model.MBMessage;
 import com.liferay.portlet.messageboards.model.MBMessageModel;
 import com.liferay.portlet.messageboards.model.MBMessageSoap;
+import com.liferay.portlet.trash.model.TrashEntry;
+import com.liferay.portlet.trash.service.TrashEntryLocalServiceUtil;
 
 import java.io.Serializable;
 
@@ -192,26 +201,32 @@ public class MBMessageModelImpl extends BaseModelImpl<MBMessage>
 	public MBMessageModelImpl() {
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _messageId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setMessageId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
 		return _messageId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return MBMessage.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return MBMessage.class.getName();
 	}
@@ -403,6 +418,7 @@ public class MBMessageModelImpl extends BaseModelImpl<MBMessage>
 	}
 
 	@JSON
+	@Override
 	public String getUuid() {
 		if (_uuid == null) {
 			return StringPool.BLANK;
@@ -412,6 +428,7 @@ public class MBMessageModelImpl extends BaseModelImpl<MBMessage>
 		}
 	}
 
+	@Override
 	public void setUuid(String uuid) {
 		if (_originalUuid == null) {
 			_originalUuid = _uuid;
@@ -425,10 +442,12 @@ public class MBMessageModelImpl extends BaseModelImpl<MBMessage>
 	}
 
 	@JSON
+	@Override
 	public long getMessageId() {
 		return _messageId;
 	}
 
+	@Override
 	public void setMessageId(long messageId) {
 		_columnBitmask = -1L;
 
@@ -436,10 +455,12 @@ public class MBMessageModelImpl extends BaseModelImpl<MBMessage>
 	}
 
 	@JSON
+	@Override
 	public long getGroupId() {
 		return _groupId;
 	}
 
+	@Override
 	public void setGroupId(long groupId) {
 		_columnBitmask |= GROUPID_COLUMN_BITMASK;
 
@@ -457,10 +478,12 @@ public class MBMessageModelImpl extends BaseModelImpl<MBMessage>
 	}
 
 	@JSON
+	@Override
 	public long getCompanyId() {
 		return _companyId;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
 		_columnBitmask |= COMPANYID_COLUMN_BITMASK;
 
@@ -478,10 +501,12 @@ public class MBMessageModelImpl extends BaseModelImpl<MBMessage>
 	}
 
 	@JSON
+	@Override
 	public long getUserId() {
 		return _userId;
 	}
 
+	@Override
 	public void setUserId(long userId) {
 		_columnBitmask |= USERID_COLUMN_BITMASK;
 
@@ -494,10 +519,12 @@ public class MBMessageModelImpl extends BaseModelImpl<MBMessage>
 		_userId = userId;
 	}
 
+	@Override
 	public String getUserUuid() throws SystemException {
 		return PortalUtil.getUserValue(getUserId(), "uuid", _userUuid);
 	}
 
+	@Override
 	public void setUserUuid(String userUuid) {
 		_userUuid = userUuid;
 	}
@@ -507,6 +534,7 @@ public class MBMessageModelImpl extends BaseModelImpl<MBMessage>
 	}
 
 	@JSON
+	@Override
 	public String getUserName() {
 		if (_userName == null) {
 			return StringPool.BLANK;
@@ -516,15 +544,18 @@ public class MBMessageModelImpl extends BaseModelImpl<MBMessage>
 		}
 	}
 
+	@Override
 	public void setUserName(String userName) {
 		_userName = userName;
 	}
 
 	@JSON
+	@Override
 	public Date getCreateDate() {
 		return _createDate;
 	}
 
+	@Override
 	public void setCreateDate(Date createDate) {
 		_columnBitmask = -1L;
 
@@ -532,14 +563,17 @@ public class MBMessageModelImpl extends BaseModelImpl<MBMessage>
 	}
 
 	@JSON
+	@Override
 	public Date getModifiedDate() {
 		return _modifiedDate;
 	}
 
+	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		_modifiedDate = modifiedDate;
 	}
 
+	@Override
 	public String getClassName() {
 		if (getClassNameId() <= 0) {
 			return StringPool.BLANK;
@@ -548,6 +582,7 @@ public class MBMessageModelImpl extends BaseModelImpl<MBMessage>
 		return PortalUtil.getClassName(getClassNameId());
 	}
 
+	@Override
 	public void setClassName(String className) {
 		long classNameId = 0;
 
@@ -559,10 +594,12 @@ public class MBMessageModelImpl extends BaseModelImpl<MBMessage>
 	}
 
 	@JSON
+	@Override
 	public long getClassNameId() {
 		return _classNameId;
 	}
 
+	@Override
 	public void setClassNameId(long classNameId) {
 		_columnBitmask |= CLASSNAMEID_COLUMN_BITMASK;
 
@@ -580,10 +617,12 @@ public class MBMessageModelImpl extends BaseModelImpl<MBMessage>
 	}
 
 	@JSON
+	@Override
 	public long getClassPK() {
 		return _classPK;
 	}
 
+	@Override
 	public void setClassPK(long classPK) {
 		_columnBitmask |= CLASSPK_COLUMN_BITMASK;
 
@@ -601,10 +640,12 @@ public class MBMessageModelImpl extends BaseModelImpl<MBMessage>
 	}
 
 	@JSON
+	@Override
 	public long getCategoryId() {
 		return _categoryId;
 	}
 
+	@Override
 	public void setCategoryId(long categoryId) {
 		_columnBitmask |= CATEGORYID_COLUMN_BITMASK;
 
@@ -622,10 +663,12 @@ public class MBMessageModelImpl extends BaseModelImpl<MBMessage>
 	}
 
 	@JSON
+	@Override
 	public long getThreadId() {
 		return _threadId;
 	}
 
+	@Override
 	public void setThreadId(long threadId) {
 		_columnBitmask |= THREADID_COLUMN_BITMASK;
 
@@ -643,19 +686,23 @@ public class MBMessageModelImpl extends BaseModelImpl<MBMessage>
 	}
 
 	@JSON
+	@Override
 	public long getRootMessageId() {
 		return _rootMessageId;
 	}
 
+	@Override
 	public void setRootMessageId(long rootMessageId) {
 		_rootMessageId = rootMessageId;
 	}
 
 	@JSON
+	@Override
 	public long getParentMessageId() {
 		return _parentMessageId;
 	}
 
+	@Override
 	public void setParentMessageId(long parentMessageId) {
 		_columnBitmask |= PARENTMESSAGEID_COLUMN_BITMASK;
 
@@ -673,6 +720,7 @@ public class MBMessageModelImpl extends BaseModelImpl<MBMessage>
 	}
 
 	@JSON
+	@Override
 	public String getSubject() {
 		if (_subject == null) {
 			return StringPool.BLANK;
@@ -682,11 +730,13 @@ public class MBMessageModelImpl extends BaseModelImpl<MBMessage>
 		}
 	}
 
+	@Override
 	public void setSubject(String subject) {
 		_subject = subject;
 	}
 
 	@JSON
+	@Override
 	public String getBody() {
 		if (_body == null) {
 			return StringPool.BLANK;
@@ -696,11 +746,13 @@ public class MBMessageModelImpl extends BaseModelImpl<MBMessage>
 		}
 	}
 
+	@Override
 	public void setBody(String body) {
 		_body = body;
 	}
 
 	@JSON
+	@Override
 	public String getFormat() {
 		if (_format == null) {
 			return StringPool.BLANK;
@@ -710,54 +762,66 @@ public class MBMessageModelImpl extends BaseModelImpl<MBMessage>
 		}
 	}
 
+	@Override
 	public void setFormat(String format) {
 		_format = format;
 	}
 
 	@JSON
+	@Override
 	public boolean getAnonymous() {
 		return _anonymous;
 	}
 
+	@Override
 	public boolean isAnonymous() {
 		return _anonymous;
 	}
 
+	@Override
 	public void setAnonymous(boolean anonymous) {
 		_anonymous = anonymous;
 	}
 
 	@JSON
+	@Override
 	public double getPriority() {
 		return _priority;
 	}
 
+	@Override
 	public void setPriority(double priority) {
 		_priority = priority;
 	}
 
 	@JSON
+	@Override
 	public boolean getAllowPingbacks() {
 		return _allowPingbacks;
 	}
 
+	@Override
 	public boolean isAllowPingbacks() {
 		return _allowPingbacks;
 	}
 
+	@Override
 	public void setAllowPingbacks(boolean allowPingbacks) {
 		_allowPingbacks = allowPingbacks;
 	}
 
 	@JSON
+	@Override
 	public boolean getAnswer() {
 		return _answer;
 	}
 
+	@Override
 	public boolean isAnswer() {
 		return _answer;
 	}
 
+	@Override
 	public void setAnswer(boolean answer) {
 		_columnBitmask |= ANSWER_COLUMN_BITMASK;
 
@@ -775,10 +839,12 @@ public class MBMessageModelImpl extends BaseModelImpl<MBMessage>
 	}
 
 	@JSON
+	@Override
 	public int getStatus() {
 		return _status;
 	}
 
+	@Override
 	public void setStatus(int status) {
 		_columnBitmask |= STATUS_COLUMN_BITMASK;
 
@@ -796,24 +862,29 @@ public class MBMessageModelImpl extends BaseModelImpl<MBMessage>
 	}
 
 	@JSON
+	@Override
 	public long getStatusByUserId() {
 		return _statusByUserId;
 	}
 
+	@Override
 	public void setStatusByUserId(long statusByUserId) {
 		_statusByUserId = statusByUserId;
 	}
 
+	@Override
 	public String getStatusByUserUuid() throws SystemException {
 		return PortalUtil.getUserValue(getStatusByUserId(), "uuid",
 			_statusByUserUuid);
 	}
 
+	@Override
 	public void setStatusByUserUuid(String statusByUserUuid) {
 		_statusByUserUuid = statusByUserUuid;
 	}
 
 	@JSON
+	@Override
 	public String getStatusByUserName() {
 		if (_statusByUserName == null) {
 			return StringPool.BLANK;
@@ -823,80 +894,84 @@ public class MBMessageModelImpl extends BaseModelImpl<MBMessage>
 		}
 	}
 
+	@Override
 	public void setStatusByUserName(String statusByUserName) {
 		_statusByUserName = statusByUserName;
 	}
 
 	@JSON
+	@Override
 	public Date getStatusDate() {
 		return _statusDate;
 	}
 
+	@Override
 	public void setStatusDate(Date statusDate) {
 		_statusDate = statusDate;
 	}
 
-	/**
-	 * @deprecated As of 6.1.0, replaced by {@link #isApproved}
-	 */
-	public boolean getApproved() {
-		return isApproved();
+	@Override
+	public StagedModelType getStagedModelType() {
+		return new StagedModelType(PortalUtil.getClassNameId(
+				MBMessage.class.getName()), getClassNameId());
 	}
 
-	public boolean isApproved() {
-		if (getStatus() == WorkflowConstants.STATUS_APPROVED) {
-			return true;
+	@Override
+	public TrashEntry getTrashEntry() throws PortalException, SystemException {
+		if (!isInTrash()) {
+			return null;
 		}
-		else {
-			return false;
+
+		TrashEntry trashEntry = TrashEntryLocalServiceUtil.fetchEntry(getModelClassName(),
+				getTrashEntryClassPK());
+
+		if (trashEntry != null) {
+			return trashEntry;
 		}
+
+		TrashHandler trashHandler = getTrashHandler();
+
+		if (!Validator.isNull(trashHandler.getContainerModelClassName())) {
+			ContainerModel containerModel = null;
+
+			try {
+				containerModel = trashHandler.getParentContainerModel(this);
+			}
+			catch (NoSuchModelException nsme) {
+				return null;
+			}
+
+			while (containerModel != null) {
+				if (containerModel instanceof TrashedModel) {
+					TrashedModel trashedModel = (TrashedModel)containerModel;
+
+					return trashedModel.getTrashEntry();
+				}
+
+				trashHandler = TrashHandlerRegistryUtil.getTrashHandler(trashHandler.getContainerModelClassName());
+
+				if (trashHandler == null) {
+					return null;
+				}
+
+				containerModel = trashHandler.getContainerModel(containerModel.getParentContainerModelId());
+			}
+		}
+
+		return null;
 	}
 
-	public boolean isDenied() {
-		if (getStatus() == WorkflowConstants.STATUS_DENIED) {
-			return true;
-		}
-		else {
-			return false;
-		}
+	@Override
+	public long getTrashEntryClassPK() {
+		return getPrimaryKey();
 	}
 
-	public boolean isDraft() {
-		if (getStatus() == WorkflowConstants.STATUS_DRAFT) {
-			return true;
-		}
-		else {
-			return false;
-		}
+	@Override
+	public TrashHandler getTrashHandler() {
+		return TrashHandlerRegistryUtil.getTrashHandler(getModelClassName());
 	}
 
-	public boolean isExpired() {
-		if (getStatus() == WorkflowConstants.STATUS_EXPIRED) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-
-	public boolean isInactive() {
-		if (getStatus() == WorkflowConstants.STATUS_INACTIVE) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-
-	public boolean isIncomplete() {
-		if (getStatus() == WorkflowConstants.STATUS_INCOMPLETE) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-
+	@Override
 	public boolean isInTrash() {
 		if (getStatus() == WorkflowConstants.STATUS_IN_TRASH) {
 			return true;
@@ -906,6 +981,117 @@ public class MBMessageModelImpl extends BaseModelImpl<MBMessage>
 		}
 	}
 
+	@Override
+	public boolean isInTrashContainer() {
+		TrashHandler trashHandler = getTrashHandler();
+
+		if ((trashHandler == null) ||
+				Validator.isNull(trashHandler.getContainerModelClassName())) {
+			return false;
+		}
+
+		try {
+			ContainerModel containerModel = trashHandler.getParentContainerModel(this);
+
+			if (containerModel == null) {
+				return false;
+			}
+
+			if (containerModel instanceof TrashedModel) {
+				return ((TrashedModel)containerModel).isInTrash();
+			}
+		}
+		catch (Exception e) {
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean isInTrashExplicitly() throws SystemException {
+		if (!isInTrash()) {
+			return false;
+		}
+
+		TrashEntry trashEntry = TrashEntryLocalServiceUtil.fetchEntry(getModelClassName(),
+				getTrashEntryClassPK());
+
+		if (trashEntry != null) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * @deprecated As of 6.1.0, replaced by {@link #isApproved}
+	 */
+	@Override
+	public boolean getApproved() {
+		return isApproved();
+	}
+
+	@Override
+	public boolean isApproved() {
+		if (getStatus() == WorkflowConstants.STATUS_APPROVED) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean isDenied() {
+		if (getStatus() == WorkflowConstants.STATUS_DENIED) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean isDraft() {
+		if (getStatus() == WorkflowConstants.STATUS_DRAFT) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean isExpired() {
+		if (getStatus() == WorkflowConstants.STATUS_EXPIRED) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean isInactive() {
+		if (getStatus() == WorkflowConstants.STATUS_INACTIVE) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean isIncomplete() {
+		if (getStatus() == WorkflowConstants.STATUS_INCOMPLETE) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	@Override
 	public boolean isPending() {
 		if (getStatus() == WorkflowConstants.STATUS_PENDING) {
 			return true;
@@ -915,6 +1101,7 @@ public class MBMessageModelImpl extends BaseModelImpl<MBMessage>
 		}
 	}
 
+	@Override
 	public boolean isScheduled() {
 		if (getStatus() == WorkflowConstants.STATUS_SCHEDULED) {
 			return true;
@@ -986,6 +1173,7 @@ public class MBMessageModelImpl extends BaseModelImpl<MBMessage>
 		return mbMessageImpl;
 	}
 
+	@Override
 	public int compareTo(MBMessage mbMessage) {
 		int value = 0;
 
@@ -1014,18 +1202,15 @@ public class MBMessageModelImpl extends BaseModelImpl<MBMessage>
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof MBMessage)) {
 			return false;
 		}
 
-		MBMessage mbMessage = null;
-
-		try {
-			mbMessage = (MBMessage)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		MBMessage mbMessage = (MBMessage)obj;
 
 		long primaryKey = mbMessage.getPrimaryKey();
 
@@ -1264,6 +1449,7 @@ public class MBMessageModelImpl extends BaseModelImpl<MBMessage>
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(79);
 

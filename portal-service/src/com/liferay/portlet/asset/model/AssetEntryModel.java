@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.asset.model;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.LocaleException;
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -44,6 +46,7 @@ import java.util.Map;
  * @see com.liferay.portlet.asset.model.impl.AssetEntryModelImpl
  * @generated
  */
+@ProviderType
 public interface AssetEntryModel extends AttachedModel, BaseModel<AssetEntry>,
 	GroupedModel {
 	/*
@@ -85,6 +88,7 @@ public interface AssetEntryModel extends AttachedModel, BaseModel<AssetEntry>,
 	 *
 	 * @return the group ID of this asset entry
 	 */
+	@Override
 	public long getGroupId();
 
 	/**
@@ -92,6 +96,7 @@ public interface AssetEntryModel extends AttachedModel, BaseModel<AssetEntry>,
 	 *
 	 * @param groupId the group ID of this asset entry
 	 */
+	@Override
 	public void setGroupId(long groupId);
 
 	/**
@@ -99,6 +104,7 @@ public interface AssetEntryModel extends AttachedModel, BaseModel<AssetEntry>,
 	 *
 	 * @return the company ID of this asset entry
 	 */
+	@Override
 	public long getCompanyId();
 
 	/**
@@ -106,6 +112,7 @@ public interface AssetEntryModel extends AttachedModel, BaseModel<AssetEntry>,
 	 *
 	 * @param companyId the company ID of this asset entry
 	 */
+	@Override
 	public void setCompanyId(long companyId);
 
 	/**
@@ -113,6 +120,7 @@ public interface AssetEntryModel extends AttachedModel, BaseModel<AssetEntry>,
 	 *
 	 * @return the user ID of this asset entry
 	 */
+	@Override
 	public long getUserId();
 
 	/**
@@ -120,6 +128,7 @@ public interface AssetEntryModel extends AttachedModel, BaseModel<AssetEntry>,
 	 *
 	 * @param userId the user ID of this asset entry
 	 */
+	@Override
 	public void setUserId(long userId);
 
 	/**
@@ -128,6 +137,7 @@ public interface AssetEntryModel extends AttachedModel, BaseModel<AssetEntry>,
 	 * @return the user uuid of this asset entry
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public String getUserUuid() throws SystemException;
 
 	/**
@@ -135,6 +145,7 @@ public interface AssetEntryModel extends AttachedModel, BaseModel<AssetEntry>,
 	 *
 	 * @param userUuid the user uuid of this asset entry
 	 */
+	@Override
 	public void setUserUuid(String userUuid);
 
 	/**
@@ -143,6 +154,7 @@ public interface AssetEntryModel extends AttachedModel, BaseModel<AssetEntry>,
 	 * @return the user name of this asset entry
 	 */
 	@AutoEscape
+	@Override
 	public String getUserName();
 
 	/**
@@ -150,6 +162,7 @@ public interface AssetEntryModel extends AttachedModel, BaseModel<AssetEntry>,
 	 *
 	 * @param userName the user name of this asset entry
 	 */
+	@Override
 	public void setUserName(String userName);
 
 	/**
@@ -157,6 +170,7 @@ public interface AssetEntryModel extends AttachedModel, BaseModel<AssetEntry>,
 	 *
 	 * @return the create date of this asset entry
 	 */
+	@Override
 	public Date getCreateDate();
 
 	/**
@@ -164,6 +178,7 @@ public interface AssetEntryModel extends AttachedModel, BaseModel<AssetEntry>,
 	 *
 	 * @param createDate the create date of this asset entry
 	 */
+	@Override
 	public void setCreateDate(Date createDate);
 
 	/**
@@ -171,6 +186,7 @@ public interface AssetEntryModel extends AttachedModel, BaseModel<AssetEntry>,
 	 *
 	 * @return the modified date of this asset entry
 	 */
+	@Override
 	public Date getModifiedDate();
 
 	/**
@@ -178,6 +194,7 @@ public interface AssetEntryModel extends AttachedModel, BaseModel<AssetEntry>,
 	 *
 	 * @param modifiedDate the modified date of this asset entry
 	 */
+	@Override
 	public void setModifiedDate(Date modifiedDate);
 
 	/**
@@ -185,6 +202,7 @@ public interface AssetEntryModel extends AttachedModel, BaseModel<AssetEntry>,
 	 *
 	 * @return the fully qualified class name of this asset entry
 	 */
+	@Override
 	public String getClassName();
 
 	public void setClassName(String className);
@@ -194,6 +212,7 @@ public interface AssetEntryModel extends AttachedModel, BaseModel<AssetEntry>,
 	 *
 	 * @return the class name ID of this asset entry
 	 */
+	@Override
 	public long getClassNameId();
 
 	/**
@@ -201,6 +220,7 @@ public interface AssetEntryModel extends AttachedModel, BaseModel<AssetEntry>,
 	 *
 	 * @param classNameId the class name ID of this asset entry
 	 */
+	@Override
 	public void setClassNameId(long classNameId);
 
 	/**
@@ -208,6 +228,7 @@ public interface AssetEntryModel extends AttachedModel, BaseModel<AssetEntry>,
 	 *
 	 * @return the class p k of this asset entry
 	 */
+	@Override
 	public long getClassPK();
 
 	/**
@@ -215,6 +236,7 @@ public interface AssetEntryModel extends AttachedModel, BaseModel<AssetEntry>,
 	 *
 	 * @param classPK the class p k of this asset entry
 	 */
+	@Override
 	public void setClassPK(long classPK);
 
 	/**
@@ -724,44 +746,69 @@ public interface AssetEntryModel extends AttachedModel, BaseModel<AssetEntry>,
 	 */
 	public void setViewCount(int viewCount);
 
+	@Override
 	public boolean isNew();
 
+	@Override
 	public void setNew(boolean n);
 
+	@Override
 	public boolean isCachedModel();
 
+	@Override
 	public void setCachedModel(boolean cachedModel);
 
+	@Override
 	public boolean isEscapedModel();
 
+	@Override
 	public Serializable getPrimaryKeyObj();
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj);
 
+	@Override
 	public ExpandoBridge getExpandoBridge();
 
+	@Override
 	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
 
+	@Override
 	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
 
+	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
+
+	public String[] getAvailableLanguageIds();
+
+	public String getDefaultLanguageId();
+
+	public void prepareLocalizedFieldsForImport() throws LocaleException;
 
 	public void prepareLocalizedFieldsForImport(Locale defaultImportLocale)
 		throws LocaleException;
 
+	@Override
 	public Object clone();
 
+	@Override
 	public int compareTo(AssetEntry assetEntry);
 
+	@Override
 	public int hashCode();
 
+	@Override
 	public CacheModel<AssetEntry> toCacheModel();
 
+	@Override
 	public AssetEntry toEscapedModel();
 
+	@Override
 	public AssetEntry toUnescapedModel();
 
+	@Override
 	public String toString();
 
+	@Override
 	public String toXmlString();
 }

@@ -39,11 +39,13 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.xml.QName;
 import com.liferay.portal.model.Company;
 import com.liferay.portal.model.Layout;
+import com.liferay.portal.model.LayoutTypePortlet;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.PortletApp;
 import com.liferay.portal.model.PublicRenderParameter;
 import com.liferay.portal.model.impl.VirtualLayout;
 import com.liferay.portal.security.auth.AuthTokenUtil;
+import com.liferay.portal.security.auth.AuthTokenWhitelistUtil;
 import com.liferay.portal.security.lang.DoPrivilegedUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.PortletLocalServiceUtil;
@@ -150,16 +152,19 @@ public class PortletURLImpl
 		_portletRequest = portletRequest;
 	}
 
+	@Override
 	public void addParameterIncludedInPath(String name) {
 		_parametersIncludedInPath.add(name);
 	}
 
+	@Override
 	public void addProperty(String key, String value) {
 		if (key == null) {
 			throw new IllegalArgumentException();
 		}
 	}
 
+	@Override
 	public String getCacheability() {
 		return _cacheability;
 	}
@@ -189,6 +194,7 @@ public class PortletURLImpl
 		return _layoutFriendlyURL;
 	}
 
+	@Override
 	public String getLifecycle() {
 		return _lifecycle;
 	}
@@ -201,10 +207,11 @@ public class PortletURLImpl
 		return _namespace;
 	}
 
+	@Override
 	public String getParameter(String name) {
 		String[] values = _params.get(name);
 
-		if ((values != null) && (values.length > 0)) {
+		if (ArrayUtil.isNotEmpty(values)) {
 			return values[0];
 		}
 		else {
@@ -212,10 +219,12 @@ public class PortletURLImpl
 		}
 	}
 
+	@Override
 	public Map<String, String[]> getParameterMap() {
 		return _params;
 	}
 
+	@Override
 	public Set<String> getParametersIncludedInPath() {
 		return _parametersIncludedInPath;
 	}
@@ -244,10 +253,11 @@ public class PortletURLImpl
 		Portlet portlet = getPortlet();
 
 		if (portlet != null) {
-			FriendlyURLMapper mapper = portlet.getFriendlyURLMapperInstance();
+			FriendlyURLMapper friendlyURLMapper =
+				portlet.getFriendlyURLMapperInstance();
 
-			if (mapper != null) {
-				portletFriendlyURLPath = mapper.buildPath(this);
+			if (friendlyURLMapper != null) {
+				portletFriendlyURLPath = friendlyURLMapper.buildPath(this);
 
 				if (_log.isDebugEnabled()) {
 					_log.debug(
@@ -259,10 +269,12 @@ public class PortletURLImpl
 		return portletFriendlyURLPath;
 	}
 
+	@Override
 	public String getPortletId() {
 		return _portletId;
 	}
 
+	@Override
 	public PortletMode getPortletMode() {
 		if (_portletModeString == null) {
 			return null;
@@ -275,10 +287,12 @@ public class PortletURLImpl
 		return _portletRequest;
 	}
 
+	@Override
 	public Set<String> getRemovedParameterNames() {
 		return _removedParameterNames;
 	}
 
+	@Override
 	public Map<String, String> getReservedParameterMap() {
 		if (_reservedParameters != null) {
 			return _reservedParameters;
@@ -343,10 +357,12 @@ public class PortletURLImpl
 		return _reservedParameters;
 	}
 
+	@Override
 	public String getResourceID() {
 		return _resourceID;
 	}
 
+	@Override
 	public WindowState getWindowState() {
 		if (_windowStateString == null) {
 			return null;
@@ -355,22 +371,27 @@ public class PortletURLImpl
 		return WindowStateFactory.getWindowState(_windowStateString);
 	}
 
+	@Override
 	public boolean isAnchor() {
 		return _anchor;
 	}
 
+	@Override
 	public boolean isCopyCurrentRenderParameters() {
 		return _copyCurrentRenderParameters;
 	}
 
+	@Override
 	public boolean isEncrypt() {
 		return _encrypt;
 	}
 
+	@Override
 	public boolean isEscapeXml() {
 		return _escapeXml;
 	}
 
+	@Override
 	public boolean isParameterIncludedInPath(String name) {
 		if (_parametersIncludedInPath.contains(name)) {
 			return true;
@@ -380,17 +401,25 @@ public class PortletURLImpl
 		}
 	}
 
+	@Override
 	public boolean isSecure() {
 		return _secure;
 	}
 
+	@Override
 	public void removePublicRenderParameter(String name) {
 		if (name == null) {
 			throw new IllegalArgumentException();
 		}
 
+		Portlet portlet = getPortlet();
+
+		if (portlet == null) {
+			return;
+		}
+
 		PublicRenderParameter publicRenderParameter =
-			_portlet.getPublicRenderParameter(name);
+			portlet.getPublicRenderParameter(name);
 
 		if (publicRenderParameter == null) {
 			if (_log.isWarnEnabled()) {
@@ -407,12 +436,14 @@ public class PortletURLImpl
 			new String[] {"1"});
 	}
 
+	@Override
 	public void setAnchor(boolean anchor) {
 		_anchor = anchor;
 
 		clearCache();
 	}
 
+	@Override
 	public void setCacheability(String cacheability) {
 		if (cacheability == null) {
 			throw new IllegalArgumentException("Cacheability is null");
@@ -452,58 +483,68 @@ public class PortletURLImpl
 		clearCache();
 	}
 
+	@Override
 	public void setControlPanelCategory(String controlPanelCategory) {
 		_controlPanelCategory = controlPanelCategory;
 
 		clearCache();
 	}
 
+	@Override
 	public void setCopyCurrentRenderParameters(
 		boolean copyCurrentRenderParameters) {
 
 		_copyCurrentRenderParameters = copyCurrentRenderParameters;
 	}
 
+	@Override
 	public void setDoAsGroupId(long doAsGroupId) {
 		_doAsGroupId = doAsGroupId;
 
 		clearCache();
 	}
 
+	@Override
 	public void setDoAsUserId(long doAsUserId) {
 		_doAsUserId = doAsUserId;
 
 		clearCache();
 	}
 
+	@Override
 	public void setDoAsUserLanguageId(String doAsUserLanguageId) {
 		_doAsUserLanguageId = doAsUserLanguageId;
 
 		clearCache();
 	}
 
+	@Override
 	public void setEncrypt(boolean encrypt) {
 		_encrypt = encrypt;
 
 		clearCache();
 	}
 
+	@Override
 	public void setEscapeXml(boolean escapeXml) {
 		_escapeXml = escapeXml;
 
 		clearCache();
 	}
 
+	@Override
 	public void setLifecycle(String lifecycle) {
 		_lifecycle = lifecycle;
 
 		clearCache();
 	}
 
+	@Override
 	public void setParameter(String name, String value) {
 		setParameter(name, value, PropsValues.PORTLET_URL_APPEND_PARAMETERS);
 	}
 
+	@Override
 	public void setParameter(String name, String value, boolean append) {
 		if ((name == null) || (value == null)) {
 			throw new IllegalArgumentException();
@@ -512,10 +553,12 @@ public class PortletURLImpl
 		setParameter(name, new String[] {value}, append);
 	}
 
+	@Override
 	public void setParameter(String name, String[] values) {
 		setParameter(name, values, PropsValues.PORTLET_URL_APPEND_PARAMETERS);
 	}
 
+	@Override
 	public void setParameter(String name, String[] values, boolean append) {
 		if ((name == null) || (values == null)) {
 			throw new IllegalArgumentException();
@@ -546,6 +589,7 @@ public class PortletURLImpl
 		clearCache();
 	}
 
+	@Override
 	public void setParameters(Map<String, String[]> params) {
 		if (params == null) {
 			throw new IllegalArgumentException();
@@ -579,23 +623,29 @@ public class PortletURLImpl
 		clearCache();
 	}
 
+	@Override
 	public void setPlid(long plid) {
 		_plid = plid;
 
 		clearCache();
 	}
 
+	@Override
 	public void setPortletId(String portletId) {
 		_portletId = portletId;
 
 		clearCache();
 	}
 
+	@Override
 	public void setPortletMode(PortletMode portletMode)
 		throws PortletModeException {
 
 		if (_portletRequest != null) {
-			if (!getPortlet().hasPortletMode(
+			Portlet portlet = getPortlet();
+
+			if ((portlet != null) &&
+				!portlet.hasPortletMode(
 					_portletRequest.getResponseContentType(), portletMode)) {
 
 				throw new PortletModeException(
@@ -612,6 +662,7 @@ public class PortletURLImpl
 		setPortletMode(PortletModeFactory.getPortletMode(portletMode));
 	}
 
+	@Override
 	public void setProperty(String key, String value) {
 		if (key == null) {
 			throw new IllegalArgumentException();
@@ -624,22 +675,26 @@ public class PortletURLImpl
 		clearCache();
 	}
 
+	@Override
 	public void setRefererPlid(long refererPlid) {
 		_refererPlid = refererPlid;
 
 		clearCache();
 	}
 
+	@Override
 	public void setRemovedParameterNames(Set<String> removedParameterNames) {
 		_removedParameterNames = removedParameterNames;
 
 		clearCache();
 	}
 
+	@Override
 	public void setResourceID(String resourceID) {
 		_resourceID = resourceID;
 	}
 
+	@Override
 	public void setSecure(boolean secure) {
 		_secure = secure;
 
@@ -650,6 +705,7 @@ public class PortletURLImpl
 		setWindowState(WindowStateFactory.getWindowState(windowState));
 	}
 
+	@Override
 	public void setWindowState(WindowState windowState)
 		throws WindowStateException {
 
@@ -686,10 +742,12 @@ public class PortletURLImpl
 		return _toString;
 	}
 
+	@Override
 	public void write(Writer writer) throws IOException {
 		write(writer, _escapeXml);
 	}
 
+	@Override
 	public void write(Writer writer, boolean escapeXml) throws IOException {
 		String toString = toString();
 
@@ -707,10 +765,17 @@ public class PortletURLImpl
 			return;
 		}
 
-		Set<String> authTokenIgnorePortlets =
-			PortalUtil.getAuthTokenIgnorePortlets();
+		Portlet portlet = getPortlet();
 
-		if (authTokenIgnorePortlets.contains(_portletId)) {
+		if (portlet == null) {
+			return;
+		}
+
+		String strutsAction = getParameter("struts_action");
+
+		if (AuthTokenWhitelistUtil.isPortletCSRFWhitelisted(
+				portlet.getCompanyId(), _portletId, strutsAction)) {
+
 			return;
 		}
 
@@ -725,49 +790,47 @@ public class PortletURLImpl
 			return;
 		}
 
-		HttpServletRequest request = PortalUtil.getOriginalServletRequest(
-			_request);
+		Portlet portlet = getPortlet();
 
-		String ppauth = ParamUtil.getString(request, "p_p_auth");
+		if (portlet == null) {
+			return;
+		}
 
-		String actualPortletAuthenticationToken = AuthTokenUtil.getToken(
-			_request, _plid, _portletId);
+		if (!portlet.isAddDefaultResource()) {
+			return;
+		}
 
-		if (Validator.isNotNull(ppauth) &&
-			ppauth.equals(actualPortletAuthenticationToken)) {
+		String strutsAction = getParameter("struts_action");
 
-			sb.append("p_p_auth");
-			sb.append(StringPool.EQUAL);
-			sb.append(processValue(key, ppauth));
-			sb.append(StringPool.AMPERSAND);
+		if (AuthTokenWhitelistUtil.isPortletInvocationWhitelisted(
+				portlet.getCompanyId(), _portletId, strutsAction)) {
 
 			return;
 		}
 
-		Portlet portlet = (Portlet)_request.getAttribute(
-			WebKeys.RENDER_PORTLET);
+		try {
+			LayoutTypePortlet targetLayoutTypePortlet =
+				(LayoutTypePortlet)getLayout().getLayoutType();
 
-		if (portlet != null) {
-			String portletId = portlet.getPortletId();
-
-			if (portletId.equals(_portletId) ||
-				portletId.equals(PortletKeys.CONTROL_PANEL_MENU) ||
-				!_portlet.isAddDefaultResource()) {
-
+			if (targetLayoutTypePortlet.hasPortletId(_portletId)) {
 				return;
 			}
 		}
+		catch (Exception e) {
+			if (_log.isDebugEnabled()) {
+				_log.debug(e.getMessage(), e);
+			}
+		}
 
-		Set<String> portletAddDefaultResourceCheckWhiteList =
-			PortalUtil.getPortletAddDefaultResourceCheckWhitelist();
-
-		if (portletAddDefaultResourceCheckWhiteList.contains(_portletId)) {
+		if (_portletId.equals(PortletKeys.CONTROL_PANEL_MENU)) {
 			return;
 		}
 
 		sb.append("p_p_auth");
 		sb.append(StringPool.EQUAL);
-		sb.append(processValue(key, actualPortletAuthenticationToken));
+		sb.append(
+			processValue(
+				key, AuthTokenUtil.getToken(_request, _plid, _portletId)));
 		sb.append(StringPool.AMPERSAND);
 	}
 
@@ -803,7 +866,8 @@ public class PortletURLImpl
 
 					if (_secure) {
 						_layoutFriendlyURL = HttpUtil.protocolize(
-							_layoutFriendlyURL, true);
+							_layoutFriendlyURL,
+							PropsValues.WEB_SERVER_HTTPS_PORT, true);
 					}
 				}
 			}
@@ -1041,7 +1105,9 @@ public class PortletURLImpl
 		}
 
 		if (_encrypt) {
-			sb.append(StringPool.AMPERSAND + WebKeys.ENCRYPT + "=1");
+			sb.append(StringPool.AMPERSAND);
+			sb.append(WebKeys.ENCRYPT);
+			sb.append("=1");
 		}
 
 		if (PropsValues.PORTLET_URL_ANCHOR_ENABLE) {
@@ -1329,13 +1395,12 @@ public class PortletURLImpl
 		if (key == null) {
 			return HttpUtil.encodeURL(value);
 		}
-		else {
-			try {
-				return HttpUtil.encodeURL(Encryptor.encrypt(key, value));
-			}
-			catch (EncryptorException ee) {
-				return value;
-			}
+
+		try {
+			return HttpUtil.encodeURL(Encryptor.encrypt(key, value));
+		}
+		catch (EncryptorException ee) {
+			return value;
 		}
 	}
 
@@ -1427,6 +1492,7 @@ public class PortletURLImpl
 
 	private class ToStringPrivilegedAction implements PrivilegedAction<String> {
 
+		@Override
 		public String run() {
 			if (_wsrp) {
 				return generateWSRPToString();

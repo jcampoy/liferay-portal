@@ -15,15 +15,14 @@
 package com.liferay.taglib.aui;
 
 import com.liferay.portal.kernel.servlet.taglib.aui.ToolTag;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.taglib.aui.base.BasePanelTag;
-import com.liferay.util.PwdGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.jsp.JspException;
 
 /**
  * @author Julio Camarero
@@ -37,13 +36,6 @@ public class PanelTag extends BasePanelTag {
 		}
 
 		_toolTags.add(toolTag);
-	}
-
-	@Override
-	public int doEndTag() throws JspException {
-		setCalledSetAttributes(false);
-
-		return super.doEndTag();
 	}
 
 	public List<ToolTag> getToolTags() {
@@ -75,7 +67,7 @@ public class PanelTag extends BasePanelTag {
 		String id = getId();
 
 		if (Validator.isNull(id)) {
-			id = PwdGenerator.getPassword(PwdGenerator.KEY3, 4);
+			id = StringUtil.randomId();
 		}
 
 		setNamespacedAttribute(request, "id", id);

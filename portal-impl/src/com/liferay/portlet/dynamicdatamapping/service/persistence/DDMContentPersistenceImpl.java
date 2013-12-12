@@ -110,6 +110,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @return the matching d d m contents
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DDMContent> findByUuid(String uuid) throws SystemException {
 		return findByUuid(uuid, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
@@ -127,6 +128,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @return the range of matching d d m contents
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DDMContent> findByUuid(String uuid, int start, int end)
 		throws SystemException {
 		return findByUuid(uuid, start, end, null);
@@ -146,6 +148,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @return the ordered range of matching d d m contents
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DDMContent> findByUuid(String uuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -266,6 +269,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @throws com.liferay.portlet.dynamicdatamapping.NoSuchContentException if a matching d d m content could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDMContent findByUuid_First(String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchContentException, SystemException {
@@ -295,6 +299,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @return the first matching d d m content, or <code>null</code> if a matching d d m content could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDMContent fetchByUuid_First(String uuid,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<DDMContent> list = findByUuid(uuid, 0, 1, orderByComparator);
@@ -315,6 +320,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @throws com.liferay.portlet.dynamicdatamapping.NoSuchContentException if a matching d d m content could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDMContent findByUuid_Last(String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchContentException, SystemException {
@@ -344,9 +350,14 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @return the last matching d d m content, or <code>null</code> if a matching d d m content could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDMContent fetchByUuid_Last(String uuid,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByUuid(uuid);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<DDMContent> list = findByUuid(uuid, count - 1, count,
 				orderByComparator);
@@ -368,6 +379,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @throws com.liferay.portlet.dynamicdatamapping.NoSuchContentException if a d d m content with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDMContent[] findByUuid_PrevAndNext(long contentId, String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchContentException, SystemException {
@@ -523,6 +535,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @param uuid the uuid
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByUuid(String uuid) throws SystemException {
 		for (DDMContent ddmContent : findByUuid(uuid, QueryUtil.ALL_POS,
 				QueryUtil.ALL_POS, null)) {
@@ -537,6 +550,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @return the number of matching d d m contents
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByUuid(String uuid) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID;
 
@@ -619,6 +633,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @throws com.liferay.portlet.dynamicdatamapping.NoSuchContentException if a matching d d m content could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDMContent findByUUID_G(String uuid, long groupId)
 		throws NoSuchContentException, SystemException {
 		DDMContent ddmContent = fetchByUUID_G(uuid, groupId);
@@ -654,6 +669,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @return the matching d d m content, or <code>null</code> if a matching d d m content could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDMContent fetchByUUID_G(String uuid, long groupId)
 		throws SystemException {
 		return fetchByUUID_G(uuid, groupId, true);
@@ -668,6 +684,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @return the matching d d m content, or <code>null</code> if a matching d d m content could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDMContent fetchByUUID_G(String uuid, long groupId,
 		boolean retrieveFromCache) throws SystemException {
 		Object[] finderArgs = new Object[] { uuid, groupId };
@@ -774,6 +791,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @return the d d m content that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDMContent removeByUUID_G(String uuid, long groupId)
 		throws NoSuchContentException, SystemException {
 		DDMContent ddmContent = findByUUID_G(uuid, groupId);
@@ -789,6 +807,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @return the number of matching d d m contents
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByUUID_G(String uuid, long groupId)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_G;
@@ -886,6 +905,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @return the matching d d m contents
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DDMContent> findByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		return findByUuid_C(uuid, companyId, QueryUtil.ALL_POS,
@@ -906,6 +926,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @return the range of matching d d m contents
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DDMContent> findByUuid_C(String uuid, long companyId,
 		int start, int end) throws SystemException {
 		return findByUuid_C(uuid, companyId, start, end, null);
@@ -926,6 +947,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @return the ordered range of matching d d m contents
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DDMContent> findByUuid_C(String uuid, long companyId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -1057,6 +1079,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @throws com.liferay.portlet.dynamicdatamapping.NoSuchContentException if a matching d d m content could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDMContent findByUuid_C_First(String uuid, long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchContentException, SystemException {
@@ -1091,6 +1114,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @return the first matching d d m content, or <code>null</code> if a matching d d m content could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDMContent fetchByUuid_C_First(String uuid, long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<DDMContent> list = findByUuid_C(uuid, companyId, 0, 1,
@@ -1113,6 +1137,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @throws com.liferay.portlet.dynamicdatamapping.NoSuchContentException if a matching d d m content could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDMContent findByUuid_C_Last(String uuid, long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchContentException, SystemException {
@@ -1147,9 +1172,14 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @return the last matching d d m content, or <code>null</code> if a matching d d m content could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDMContent fetchByUuid_C_Last(String uuid, long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByUuid_C(uuid, companyId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<DDMContent> list = findByUuid_C(uuid, companyId, count - 1, count,
 				orderByComparator);
@@ -1172,6 +1202,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @throws com.liferay.portlet.dynamicdatamapping.NoSuchContentException if a d d m content with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDMContent[] findByUuid_C_PrevAndNext(long contentId, String uuid,
 		long companyId, OrderByComparator orderByComparator)
 		throws NoSuchContentException, SystemException {
@@ -1332,6 +1363,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @param companyId the company ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		for (DDMContent ddmContent : findByUuid_C(uuid, companyId,
@@ -1348,6 +1380,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @return the number of matching d d m contents
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_C;
@@ -1443,6 +1476,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @return the matching d d m contents
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DDMContent> findByGroupId(long groupId)
 		throws SystemException {
 		return findByGroupId(groupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
@@ -1461,6 +1495,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @return the range of matching d d m contents
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DDMContent> findByGroupId(long groupId, int start, int end)
 		throws SystemException {
 		return findByGroupId(groupId, start, end, null);
@@ -1480,6 +1515,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @return the ordered range of matching d d m contents
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DDMContent> findByGroupId(long groupId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -1586,6 +1622,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @throws com.liferay.portlet.dynamicdatamapping.NoSuchContentException if a matching d d m content could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDMContent findByGroupId_First(long groupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchContentException, SystemException {
@@ -1615,6 +1652,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @return the first matching d d m content, or <code>null</code> if a matching d d m content could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDMContent fetchByGroupId_First(long groupId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<DDMContent> list = findByGroupId(groupId, 0, 1, orderByComparator);
@@ -1635,6 +1673,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @throws com.liferay.portlet.dynamicdatamapping.NoSuchContentException if a matching d d m content could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDMContent findByGroupId_Last(long groupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchContentException, SystemException {
@@ -1664,9 +1703,14 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @return the last matching d d m content, or <code>null</code> if a matching d d m content could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDMContent fetchByGroupId_Last(long groupId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByGroupId(groupId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<DDMContent> list = findByGroupId(groupId, count - 1, count,
 				orderByComparator);
@@ -1688,6 +1732,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @throws com.liferay.portlet.dynamicdatamapping.NoSuchContentException if a d d m content with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDMContent[] findByGroupId_PrevAndNext(long contentId, long groupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchContentException, SystemException {
@@ -1829,6 +1874,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @param groupId the group ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByGroupId(long groupId) throws SystemException {
 		for (DDMContent ddmContent : findByGroupId(groupId, QueryUtil.ALL_POS,
 				QueryUtil.ALL_POS, null)) {
@@ -1843,6 +1889,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @return the number of matching d d m contents
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByGroupId(long groupId) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_GROUPID;
 
@@ -1917,6 +1964,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @return the matching d d m contents
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DDMContent> findByCompanyId(long companyId)
 		throws SystemException {
 		return findByCompanyId(companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
@@ -1936,6 +1984,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @return the range of matching d d m contents
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DDMContent> findByCompanyId(long companyId, int start, int end)
 		throws SystemException {
 		return findByCompanyId(companyId, start, end, null);
@@ -1955,6 +2004,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @return the ordered range of matching d d m contents
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DDMContent> findByCompanyId(long companyId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -2061,6 +2111,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @throws com.liferay.portlet.dynamicdatamapping.NoSuchContentException if a matching d d m content could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDMContent findByCompanyId_First(long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchContentException, SystemException {
@@ -2091,6 +2142,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @return the first matching d d m content, or <code>null</code> if a matching d d m content could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDMContent fetchByCompanyId_First(long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<DDMContent> list = findByCompanyId(companyId, 0, 1,
@@ -2112,6 +2164,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @throws com.liferay.portlet.dynamicdatamapping.NoSuchContentException if a matching d d m content could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDMContent findByCompanyId_Last(long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchContentException, SystemException {
@@ -2142,9 +2195,14 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @return the last matching d d m content, or <code>null</code> if a matching d d m content could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDMContent fetchByCompanyId_Last(long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByCompanyId(companyId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<DDMContent> list = findByCompanyId(companyId, count - 1, count,
 				orderByComparator);
@@ -2166,6 +2224,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @throws com.liferay.portlet.dynamicdatamapping.NoSuchContentException if a d d m content with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDMContent[] findByCompanyId_PrevAndNext(long contentId,
 		long companyId, OrderByComparator orderByComparator)
 		throws NoSuchContentException, SystemException {
@@ -2307,6 +2366,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @param companyId the company ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByCompanyId(long companyId) throws SystemException {
 		for (DDMContent ddmContent : findByCompanyId(companyId,
 				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
@@ -2321,6 +2381,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @return the number of matching d d m contents
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByCompanyId(long companyId) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_COMPANYID;
 
@@ -2368,11 +2429,16 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 
 	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "ddmContent.companyId = ?";
 
+	public DDMContentPersistenceImpl() {
+		setModelClass(DDMContent.class);
+	}
+
 	/**
 	 * Caches the d d m content in the entity cache if it is enabled.
 	 *
 	 * @param ddmContent the d d m content
 	 */
+	@Override
 	public void cacheResult(DDMContent ddmContent) {
 		EntityCacheUtil.putResult(DDMContentModelImpl.ENTITY_CACHE_ENABLED,
 			DDMContentImpl.class, ddmContent.getPrimaryKey(), ddmContent);
@@ -2389,6 +2455,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 *
 	 * @param ddmContents the d d m contents
 	 */
+	@Override
 	public void cacheResult(List<DDMContent> ddmContents) {
 		for (DDMContent ddmContent : ddmContents) {
 			if (EntityCacheUtil.getResult(
@@ -2509,6 +2576,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @param contentId the primary key for the new d d m content
 	 * @return the new d d m content
 	 */
+	@Override
 	public DDMContent create(long contentId) {
 		DDMContent ddmContent = new DDMContentImpl();
 
@@ -2530,6 +2598,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @throws com.liferay.portlet.dynamicdatamapping.NoSuchContentException if a d d m content with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDMContent remove(long contentId)
 		throws NoSuchContentException, SystemException {
 		return remove((Serializable)contentId);
@@ -2734,6 +2803,8 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 		clearUniqueFindersCache(ddmContent);
 		cacheUniqueFindersCache(ddmContent);
 
+		ddmContent.resetOriginalValues();
+
 		return ddmContent;
 	}
 
@@ -2795,6 +2866,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @throws com.liferay.portlet.dynamicdatamapping.NoSuchContentException if a d d m content with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDMContent findByPrimaryKey(long contentId)
 		throws NoSuchContentException, SystemException {
 		return findByPrimaryKey((Serializable)contentId);
@@ -2855,6 +2927,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @return the d d m content, or <code>null</code> if a d d m content with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDMContent fetchByPrimaryKey(long contentId)
 		throws SystemException {
 		return fetchByPrimaryKey((Serializable)contentId);
@@ -2866,6 +2939,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @return the d d m contents
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DDMContent> findAll() throws SystemException {
 		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
@@ -2882,6 +2956,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @return the range of d d m contents
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DDMContent> findAll(int start, int end)
 		throws SystemException {
 		return findAll(start, end, null);
@@ -2900,6 +2975,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @return the ordered range of d d m contents
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DDMContent> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -2985,6 +3061,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 *
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeAll() throws SystemException {
 		for (DDMContent ddmContent : findAll()) {
 			remove(ddmContent);
@@ -2997,6 +3074,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	 * @return the number of d d m contents
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countAll() throws SystemException {
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
 				FINDER_ARGS_EMPTY, this);
@@ -3090,6 +3168,7 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 		};
 
 	private static CacheModel<DDMContent> _nullDDMContentCacheModel = new CacheModel<DDMContent>() {
+			@Override
 			public DDMContent toEntityModel() {
 				return _nullDDMContent;
 			}

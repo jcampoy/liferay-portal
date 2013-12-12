@@ -66,14 +66,17 @@ public class PortletConfigImpl implements LiferayPortletConfig {
 			getInitParameter("copy-request-parameters"));
 	}
 
+	@Override
 	public Map<String, String[]> getContainerRuntimeOptions() {
 		return _portletApp.getContainerRuntimeOptions();
 	}
 
+	@Override
 	public String getDefaultNamespace() {
 		return _portletApp.getDefaultNamespace();
 	}
 
+	@Override
 	public String getInitParameter(String name) {
 		if (name == null) {
 			throw new IllegalArgumentException();
@@ -82,31 +85,38 @@ public class PortletConfigImpl implements LiferayPortletConfig {
 		return _portlet.getInitParams().get(name);
 	}
 
+	@Override
 	public Enumeration<String> getInitParameterNames() {
 		return Collections.enumeration(_portlet.getInitParams().keySet());
 	}
 
+	@Override
 	public Portlet getPortlet() {
 		return _portlet;
 	}
 
+	@Override
 	public PortletContext getPortletContext() {
 		return _portletContext;
 	}
 
+	@Override
 	public String getPortletId() {
 		return _portlet.getPortletId();
 	}
 
+	@Override
 	public String getPortletName() {
 		return _portletName;
 	}
 
+	@Override
 	public Enumeration<QName> getProcessingEventQNames() {
 		return Collections.enumeration(
 			toJavaxQNames(_portlet.getProcessingEvents()));
 	}
 
+	@Override
 	public Enumeration<String> getPublicRenderParameterNames() {
 		List<String> publicRenderParameterNames = new ArrayList<String>();
 
@@ -120,11 +130,13 @@ public class PortletConfigImpl implements LiferayPortletConfig {
 		return Collections.enumeration(publicRenderParameterNames);
 	}
 
+	@Override
 	public Enumeration<QName> getPublishingEventQNames() {
 		return Collections.enumeration(
 			toJavaxQNames(_portlet.getPublishingEvents()));
 	}
 
+	@Override
 	public ResourceBundle getResourceBundle(Locale locale) {
 		String resourceBundleClassName = _portlet.getResourceBundle();
 
@@ -144,43 +156,42 @@ public class PortletConfigImpl implements LiferayPortletConfig {
 
 			return resourceBundle;
 		}
-		else {
-			StringBundler sb = new StringBundler(4);
 
-			sb.append(_portlet.getPortletId());
-			sb.append(locale.getLanguage());
-			sb.append(locale.getCountry());
-			sb.append(locale.getVariant());
+		StringBundler sb = new StringBundler(4);
 
-			String resourceBundleId = sb.toString();
+		sb.append(_portlet.getPortletId());
+		sb.append(locale.getLanguage());
+		sb.append(locale.getCountry());
+		sb.append(locale.getVariant());
 
-			resourceBundle = _resourceBundles.get(resourceBundleId);
+		String resourceBundleId = sb.toString();
 
-			if (resourceBundle == null) {
-				if (!_portletApp.isWARFile() &&
-					resourceBundleClassName.equals(
-						StrutsResourceBundle.class.getName())) {
+		resourceBundle = _resourceBundles.get(resourceBundleId);
 
-					resourceBundle = new StrutsResourceBundle(
-						_portletName, locale);
-				}
-				else {
-					PortletBag portletBag = PortletBagPool.get(
-						_portlet.getRootPortletId());
+		if (resourceBundle == null) {
+			if (!_portletApp.isWARFile() &&
+				resourceBundleClassName.equals(
+					StrutsResourceBundle.class.getName())) {
 
-					resourceBundle = portletBag.getResourceBundle(locale);
-				}
+				resourceBundle = new StrutsResourceBundle(_portletName, locale);
+			}
+			else {
+				PortletBag portletBag = PortletBagPool.get(
+					_portlet.getRootPortletId());
 
-				resourceBundle = new PortletResourceBundle(
-					resourceBundle, _portlet.getPortletInfo());
-
-				_resourceBundles.put(resourceBundleId, resourceBundle);
+				resourceBundle = portletBag.getResourceBundle(locale);
 			}
 
-			return resourceBundle;
+			resourceBundle = new PortletResourceBundle(
+				resourceBundle, _portlet.getPortletInfo());
+
+			_resourceBundles.put(resourceBundleId, resourceBundle);
 		}
+
+		return resourceBundle;
 	}
 
+	@Override
 	public Enumeration<Locale> getSupportedLocales() {
 		List<Locale> supportedLocales = new ArrayList<Locale>();
 
@@ -191,10 +202,12 @@ public class PortletConfigImpl implements LiferayPortletConfig {
 		return Collections.enumeration(supportedLocales);
 	}
 
+	@Override
 	public boolean isCopyRequestParameters() {
 		return _copyRequestParameters;
 	}
 
+	@Override
 	public boolean isWARFile() {
 		return _portletApp.isWARFile();
 	}

@@ -24,6 +24,7 @@ import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.WebKeys;
+import com.liferay.portlet.asset.model.AssetRendererFactory;
 import com.liferay.portlet.asset.model.BaseAssetRenderer;
 import com.liferay.portlet.messageboards.model.MBCategory;
 import com.liferay.portlet.messageboards.service.permission.MBCategoryPermission;
@@ -48,22 +49,27 @@ public class MBCategoryAssetRenderer extends BaseAssetRenderer {
 		_category = category;
 	}
 
+	@Override
 	public String getClassName() {
 		return MBCategory.class.getName();
 	}
 
+	@Override
 	public long getClassPK() {
 		return _category.getCategoryId();
 	}
 
+	@Override
 	public long getGroupId() {
 		return _category.getGroupId();
 	}
 
+	@Override
 	public String getSummary(Locale locale) {
 		return HtmlUtil.stripHtml(_category.getDescription());
 	}
 
+	@Override
 	public String getTitle(Locale locale) {
 		return _category.getName();
 	}
@@ -92,8 +98,10 @@ public class MBCategoryAssetRenderer extends BaseAssetRenderer {
 			WindowState windowState)
 		throws Exception {
 
-		PortletURL portletURL = liferayPortletResponse.createLiferayPortletURL(
-			PortletKeys.MESSAGE_BOARDS, PortletRequest.RENDER_PHASE);
+		AssetRendererFactory assetRendererFactory = getAssetRendererFactory();
+
+		PortletURL portletURL = assetRendererFactory.getURLView(
+			liferayPortletResponse, windowState);
 
 		portletURL.setParameter("struts_action", "/message_boards/view");
 		portletURL.setParameter(
@@ -115,14 +123,17 @@ public class MBCategoryAssetRenderer extends BaseAssetRenderer {
 			_category.getCategoryId());
 	}
 
+	@Override
 	public long getUserId() {
 		return _category.getUserId();
 	}
 
+	@Override
 	public String getUserName() {
 		return _category.getUserName();
 	}
 
+	@Override
 	public String getUuid() {
 		return _category.getUuid();
 	}
@@ -141,9 +152,9 @@ public class MBCategoryAssetRenderer extends BaseAssetRenderer {
 
 		return MBCategoryPermission.contains(
 			permissionChecker, _category, ActionKeys.VIEW);
-
 	}
 
+	@Override
 	public String render(
 			RenderRequest renderRequest, RenderResponse renderResponse,
 			String template)

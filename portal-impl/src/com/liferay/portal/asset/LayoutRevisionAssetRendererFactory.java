@@ -74,7 +74,7 @@ public class LayoutRevisionAssetRendererFactory
 
 		StringBundler sb = new StringBundler();
 
-		sb.append(layoutRevision.getHTMLTitle(LocaleUtil.getDefault()));
+		sb.append(layoutRevision.getHTMLTitle(LocaleUtil.getSiteDefault()));
 		sb.append(" [");
 		sb.append(layoutSetBranch.getName());
 		sb.append("]");
@@ -84,6 +84,7 @@ public class LayoutRevisionAssetRendererFactory
 		return assetEntry;
 	}
 
+	@Override
 	public AssetRenderer getAssetRenderer(long layoutRevisionId, int type)
 		throws PortalException, SystemException {
 
@@ -98,10 +99,12 @@ public class LayoutRevisionAssetRendererFactory
 		return layoutRevisionAssetRenderer;
 	}
 
+	@Override
 	public String getClassName() {
 		return LayoutRevision.class.getName();
 	}
 
+	@Override
 	public String getType() {
 		return TYPE;
 	}

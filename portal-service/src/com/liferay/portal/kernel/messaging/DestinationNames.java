@@ -23,6 +23,11 @@ public interface DestinationNames {
 
 	public static final String AUDIT = "liferay/audit";
 
+	public static final String BACKGROUND_TASK = "liferay/background_task";
+
+	public static final String BACKGROUND_TASK_STATUS =
+		"liferay/background_task_status";
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #SUBSCRIPTION_SENDER}
 	 */
@@ -47,6 +52,9 @@ public interface DestinationNames {
 
 	public static final String DOCUMENT_LIBRARY_RAW_METADATA_PROCESSOR =
 		"liferay/document_library_raw_metadata_processor";
+
+	public static final String DOCUMENT_LIBRARY_SYNC_EVENT_PROCESSOR =
+		"liferay/document_library_sync_event_processor";
 
 	public static final String DOCUMENT_LIBRARY_VIDEO_PROCESSOR =
 		"liferay/document_library_video_processor";
@@ -127,6 +135,9 @@ public interface DestinationNames {
 	public static final String SEARCH_READER = "liferay/search_reader";
 
 	public static final String SEARCH_WRITER = "liferay/search_writer";
+
+	public static final String SUBSCRIPTION_CLEAN_UP =
+		"liferay/subscription_clean_up";
 
 	public static final String SUBSCRIPTION_SENDER =
 		"liferay/subscription_sender";

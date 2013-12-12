@@ -14,15 +14,16 @@
 
 package com.liferay.portal.service;
 
+import aQute.bnd.annotation.ProviderType;
+
 /**
- * <p>
- * This class is a wrapper for {@link LayoutSetService}.
- * </p>
+ * Provides a wrapper for {@link LayoutSetService}.
  *
- * @author    Brian Wing Shun Chan
- * @see       LayoutSetService
+ * @author Brian Wing Shun Chan
+ * @see LayoutSetService
  * @generated
  */
+@ProviderType
 public class LayoutSetServiceWrapper implements LayoutSetService,
 	ServiceWrapper<LayoutSetService> {
 	public LayoutSetServiceWrapper(LayoutSetService layoutSetService) {
@@ -34,6 +35,7 @@ public class LayoutSetServiceWrapper implements LayoutSetService,
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _layoutSetService.getBeanIdentifier();
 	}
@@ -43,6 +45,7 @@ public class LayoutSetServiceWrapper implements LayoutSetService,
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_layoutSetService.setBeanIdentifier(beanIdentifier);
 	}
@@ -67,6 +70,7 @@ public class LayoutSetServiceWrapper implements LayoutSetService,
 	* @throws PortalException if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void updateLayoutSetPrototypeLinkEnabled(long groupId,
 		boolean privateLayout, boolean layoutSetPrototypeLinkEnabled,
 		java.lang.String layoutSetPrototypeUuid)
@@ -76,6 +80,7 @@ public class LayoutSetServiceWrapper implements LayoutSetService,
 			privateLayout, layoutSetPrototypeLinkEnabled, layoutSetPrototypeUuid);
 	}
 
+	@Override
 	public void updateLogo(long groupId, boolean privateLayout, boolean logo,
 		byte[] bytes)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -83,6 +88,7 @@ public class LayoutSetServiceWrapper implements LayoutSetService,
 		_layoutSetService.updateLogo(groupId, privateLayout, logo, bytes);
 	}
 
+	@Override
 	public void updateLogo(long groupId, boolean privateLayout, boolean logo,
 		java.io.File file)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -90,6 +96,7 @@ public class LayoutSetServiceWrapper implements LayoutSetService,
 		_layoutSetService.updateLogo(groupId, privateLayout, logo, file);
 	}
 
+	@Override
 	public void updateLogo(long groupId, boolean privateLayout, boolean logo,
 		java.io.InputStream inputStream)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -97,6 +104,7 @@ public class LayoutSetServiceWrapper implements LayoutSetService,
 		_layoutSetService.updateLogo(groupId, privateLayout, logo, inputStream);
 	}
 
+	@Override
 	public void updateLogo(long groupId, boolean privateLayout, boolean logo,
 		java.io.InputStream inputStream, boolean cleanUpStream)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -105,6 +113,7 @@ public class LayoutSetServiceWrapper implements LayoutSetService,
 			cleanUpStream);
 	}
 
+	@Override
 	public com.liferay.portal.model.LayoutSet updateLookAndFeel(long groupId,
 		boolean privateLayout, java.lang.String themeId,
 		java.lang.String colorSchemeId, java.lang.String css, boolean wapTheme)
@@ -114,6 +123,7 @@ public class LayoutSetServiceWrapper implements LayoutSetService,
 			themeId, colorSchemeId, css, wapTheme);
 	}
 
+	@Override
 	public com.liferay.portal.model.LayoutSet updateSettings(long groupId,
 		boolean privateLayout, java.lang.String settings)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -121,6 +131,7 @@ public class LayoutSetServiceWrapper implements LayoutSetService,
 		return _layoutSetService.updateSettings(groupId, privateLayout, settings);
 	}
 
+	@Override
 	public com.liferay.portal.model.LayoutSet updateVirtualHost(long groupId,
 		boolean privateLayout, java.lang.String virtualHost)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -143,10 +154,12 @@ public class LayoutSetServiceWrapper implements LayoutSetService,
 		_layoutSetService = layoutSetService;
 	}
 
+	@Override
 	public LayoutSetService getWrappedService() {
 		return _layoutSetService;
 	}
 
+	@Override
 	public void setWrappedService(LayoutSetService layoutSetService) {
 		_layoutSetService = layoutSetService;
 	}

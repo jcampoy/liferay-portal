@@ -14,6 +14,10 @@
 
 package com.liferay.portlet.messageboards.model;
 
+import aQute.bnd.annotation.ProviderType;
+
+import com.liferay.portal.kernel.lar.StagedModelType;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.ModelWrapper;
 
 import java.util.Date;
@@ -25,23 +29,27 @@ import java.util.Map;
  * This class is a wrapper for {@link MBMessage}.
  * </p>
  *
- * @author    Brian Wing Shun Chan
- * @see       MBMessage
+ * @author Brian Wing Shun Chan
+ * @see MBMessage
  * @generated
  */
+@ProviderType
 public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	public MBMessageWrapper(MBMessage mbMessage) {
 		_mbMessage = mbMessage;
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return MBMessage.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return MBMessage.class.getName();
 	}
 
+	@Override
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
@@ -74,6 +82,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 		return attributes;
 	}
 
+	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
 		String uuid = (String)attributes.get("uuid");
 
@@ -231,6 +240,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return the primary key of this message-boards message
 	*/
+	@Override
 	public long getPrimaryKey() {
 		return _mbMessage.getPrimaryKey();
 	}
@@ -240,6 +250,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @param primaryKey the primary key of this message-boards message
 	*/
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_mbMessage.setPrimaryKey(primaryKey);
 	}
@@ -249,6 +260,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return the uuid of this message-boards message
 	*/
+	@Override
 	public java.lang.String getUuid() {
 		return _mbMessage.getUuid();
 	}
@@ -258,6 +270,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @param uuid the uuid of this message-boards message
 	*/
+	@Override
 	public void setUuid(java.lang.String uuid) {
 		_mbMessage.setUuid(uuid);
 	}
@@ -267,6 +280,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return the message ID of this message-boards message
 	*/
+	@Override
 	public long getMessageId() {
 		return _mbMessage.getMessageId();
 	}
@@ -276,6 +290,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @param messageId the message ID of this message-boards message
 	*/
+	@Override
 	public void setMessageId(long messageId) {
 		_mbMessage.setMessageId(messageId);
 	}
@@ -285,6 +300,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return the group ID of this message-boards message
 	*/
+	@Override
 	public long getGroupId() {
 		return _mbMessage.getGroupId();
 	}
@@ -294,6 +310,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @param groupId the group ID of this message-boards message
 	*/
+	@Override
 	public void setGroupId(long groupId) {
 		_mbMessage.setGroupId(groupId);
 	}
@@ -303,6 +320,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return the company ID of this message-boards message
 	*/
+	@Override
 	public long getCompanyId() {
 		return _mbMessage.getCompanyId();
 	}
@@ -312,6 +330,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @param companyId the company ID of this message-boards message
 	*/
+	@Override
 	public void setCompanyId(long companyId) {
 		_mbMessage.setCompanyId(companyId);
 	}
@@ -321,6 +340,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return the user ID of this message-boards message
 	*/
+	@Override
 	public long getUserId() {
 		return _mbMessage.getUserId();
 	}
@@ -330,6 +350,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @param userId the user ID of this message-boards message
 	*/
+	@Override
 	public void setUserId(long userId) {
 		_mbMessage.setUserId(userId);
 	}
@@ -340,6 +361,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	* @return the user uuid of this message-boards message
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.lang.String getUserUuid()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _mbMessage.getUserUuid();
@@ -350,6 +372,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @param userUuid the user uuid of this message-boards message
 	*/
+	@Override
 	public void setUserUuid(java.lang.String userUuid) {
 		_mbMessage.setUserUuid(userUuid);
 	}
@@ -359,6 +382,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return the user name of this message-boards message
 	*/
+	@Override
 	public java.lang.String getUserName() {
 		return _mbMessage.getUserName();
 	}
@@ -368,6 +392,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @param userName the user name of this message-boards message
 	*/
+	@Override
 	public void setUserName(java.lang.String userName) {
 		_mbMessage.setUserName(userName);
 	}
@@ -377,6 +402,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return the create date of this message-boards message
 	*/
+	@Override
 	public java.util.Date getCreateDate() {
 		return _mbMessage.getCreateDate();
 	}
@@ -386,6 +412,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @param createDate the create date of this message-boards message
 	*/
+	@Override
 	public void setCreateDate(java.util.Date createDate) {
 		_mbMessage.setCreateDate(createDate);
 	}
@@ -395,6 +422,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return the modified date of this message-boards message
 	*/
+	@Override
 	public java.util.Date getModifiedDate() {
 		return _mbMessage.getModifiedDate();
 	}
@@ -404,6 +432,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @param modifiedDate the modified date of this message-boards message
 	*/
+	@Override
 	public void setModifiedDate(java.util.Date modifiedDate) {
 		_mbMessage.setModifiedDate(modifiedDate);
 	}
@@ -413,10 +442,12 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return the fully qualified class name of this message-boards message
 	*/
+	@Override
 	public java.lang.String getClassName() {
 		return _mbMessage.getClassName();
 	}
 
+	@Override
 	public void setClassName(java.lang.String className) {
 		_mbMessage.setClassName(className);
 	}
@@ -426,6 +457,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return the class name ID of this message-boards message
 	*/
+	@Override
 	public long getClassNameId() {
 		return _mbMessage.getClassNameId();
 	}
@@ -435,6 +467,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @param classNameId the class name ID of this message-boards message
 	*/
+	@Override
 	public void setClassNameId(long classNameId) {
 		_mbMessage.setClassNameId(classNameId);
 	}
@@ -444,6 +477,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return the class p k of this message-boards message
 	*/
+	@Override
 	public long getClassPK() {
 		return _mbMessage.getClassPK();
 	}
@@ -453,6 +487,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @param classPK the class p k of this message-boards message
 	*/
+	@Override
 	public void setClassPK(long classPK) {
 		_mbMessage.setClassPK(classPK);
 	}
@@ -462,6 +497,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return the category ID of this message-boards message
 	*/
+	@Override
 	public long getCategoryId() {
 		return _mbMessage.getCategoryId();
 	}
@@ -471,6 +507,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @param categoryId the category ID of this message-boards message
 	*/
+	@Override
 	public void setCategoryId(long categoryId) {
 		_mbMessage.setCategoryId(categoryId);
 	}
@@ -480,6 +517,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return the thread ID of this message-boards message
 	*/
+	@Override
 	public long getThreadId() {
 		return _mbMessage.getThreadId();
 	}
@@ -489,6 +527,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @param threadId the thread ID of this message-boards message
 	*/
+	@Override
 	public void setThreadId(long threadId) {
 		_mbMessage.setThreadId(threadId);
 	}
@@ -498,6 +537,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return the root message ID of this message-boards message
 	*/
+	@Override
 	public long getRootMessageId() {
 		return _mbMessage.getRootMessageId();
 	}
@@ -507,6 +547,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @param rootMessageId the root message ID of this message-boards message
 	*/
+	@Override
 	public void setRootMessageId(long rootMessageId) {
 		_mbMessage.setRootMessageId(rootMessageId);
 	}
@@ -516,6 +557,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return the parent message ID of this message-boards message
 	*/
+	@Override
 	public long getParentMessageId() {
 		return _mbMessage.getParentMessageId();
 	}
@@ -525,6 +567,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @param parentMessageId the parent message ID of this message-boards message
 	*/
+	@Override
 	public void setParentMessageId(long parentMessageId) {
 		_mbMessage.setParentMessageId(parentMessageId);
 	}
@@ -534,6 +577,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return the subject of this message-boards message
 	*/
+	@Override
 	public java.lang.String getSubject() {
 		return _mbMessage.getSubject();
 	}
@@ -543,6 +587,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @param subject the subject of this message-boards message
 	*/
+	@Override
 	public void setSubject(java.lang.String subject) {
 		_mbMessage.setSubject(subject);
 	}
@@ -552,6 +597,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return the body of this message-boards message
 	*/
+	@Override
 	public java.lang.String getBody() {
 		return _mbMessage.getBody();
 	}
@@ -561,6 +607,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @param body the body of this message-boards message
 	*/
+	@Override
 	public void setBody(java.lang.String body) {
 		_mbMessage.setBody(body);
 	}
@@ -570,6 +617,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return the format of this message-boards message
 	*/
+	@Override
 	public java.lang.String getFormat() {
 		return _mbMessage.getFormat();
 	}
@@ -579,6 +627,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @param format the format of this message-boards message
 	*/
+	@Override
 	public void setFormat(java.lang.String format) {
 		_mbMessage.setFormat(format);
 	}
@@ -588,6 +637,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return the anonymous of this message-boards message
 	*/
+	@Override
 	public boolean getAnonymous() {
 		return _mbMessage.getAnonymous();
 	}
@@ -597,6 +647,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return <code>true</code> if this message-boards message is anonymous; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isAnonymous() {
 		return _mbMessage.isAnonymous();
 	}
@@ -606,6 +657,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @param anonymous the anonymous of this message-boards message
 	*/
+	@Override
 	public void setAnonymous(boolean anonymous) {
 		_mbMessage.setAnonymous(anonymous);
 	}
@@ -615,6 +667,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return the priority of this message-boards message
 	*/
+	@Override
 	public double getPriority() {
 		return _mbMessage.getPriority();
 	}
@@ -624,6 +677,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @param priority the priority of this message-boards message
 	*/
+	@Override
 	public void setPriority(double priority) {
 		_mbMessage.setPriority(priority);
 	}
@@ -633,6 +687,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return the allow pingbacks of this message-boards message
 	*/
+	@Override
 	public boolean getAllowPingbacks() {
 		return _mbMessage.getAllowPingbacks();
 	}
@@ -642,6 +697,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return <code>true</code> if this message-boards message is allow pingbacks; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isAllowPingbacks() {
 		return _mbMessage.isAllowPingbacks();
 	}
@@ -651,6 +707,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @param allowPingbacks the allow pingbacks of this message-boards message
 	*/
+	@Override
 	public void setAllowPingbacks(boolean allowPingbacks) {
 		_mbMessage.setAllowPingbacks(allowPingbacks);
 	}
@@ -660,6 +717,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return the answer of this message-boards message
 	*/
+	@Override
 	public boolean getAnswer() {
 		return _mbMessage.getAnswer();
 	}
@@ -669,6 +727,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return <code>true</code> if this message-boards message is answer; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isAnswer() {
 		return _mbMessage.isAnswer();
 	}
@@ -678,6 +737,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @param answer the answer of this message-boards message
 	*/
+	@Override
 	public void setAnswer(boolean answer) {
 		_mbMessage.setAnswer(answer);
 	}
@@ -687,6 +747,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return the status of this message-boards message
 	*/
+	@Override
 	public int getStatus() {
 		return _mbMessage.getStatus();
 	}
@@ -696,6 +757,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @param status the status of this message-boards message
 	*/
+	@Override
 	public void setStatus(int status) {
 		_mbMessage.setStatus(status);
 	}
@@ -705,6 +767,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return the status by user ID of this message-boards message
 	*/
+	@Override
 	public long getStatusByUserId() {
 		return _mbMessage.getStatusByUserId();
 	}
@@ -714,6 +777,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @param statusByUserId the status by user ID of this message-boards message
 	*/
+	@Override
 	public void setStatusByUserId(long statusByUserId) {
 		_mbMessage.setStatusByUserId(statusByUserId);
 	}
@@ -724,6 +788,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	* @return the status by user uuid of this message-boards message
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.lang.String getStatusByUserUuid()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _mbMessage.getStatusByUserUuid();
@@ -734,6 +799,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @param statusByUserUuid the status by user uuid of this message-boards message
 	*/
+	@Override
 	public void setStatusByUserUuid(java.lang.String statusByUserUuid) {
 		_mbMessage.setStatusByUserUuid(statusByUserUuid);
 	}
@@ -743,6 +809,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return the status by user name of this message-boards message
 	*/
+	@Override
 	public java.lang.String getStatusByUserName() {
 		return _mbMessage.getStatusByUserName();
 	}
@@ -752,6 +819,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @param statusByUserName the status by user name of this message-boards message
 	*/
+	@Override
 	public void setStatusByUserName(java.lang.String statusByUserName) {
 		_mbMessage.setStatusByUserName(statusByUserName);
 	}
@@ -761,6 +829,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return the status date of this message-boards message
 	*/
+	@Override
 	public java.util.Date getStatusDate() {
 		return _mbMessage.getStatusDate();
 	}
@@ -770,13 +839,75 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @param statusDate the status date of this message-boards message
 	*/
+	@Override
 	public void setStatusDate(java.util.Date statusDate) {
 		_mbMessage.setStatusDate(statusDate);
 	}
 
 	/**
+	* Returns the trash entry created when this message-boards message was moved to the Recycle Bin. The trash entry may belong to one of the ancestors of this message-boards message.
+	*
+	* @return the trash entry created when this message-boards message was moved to the Recycle Bin
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public com.liferay.portlet.trash.model.TrashEntry getTrashEntry()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _mbMessage.getTrashEntry();
+	}
+
+	/**
+	* Returns the class primary key of the trash entry for this message-boards message.
+	*
+	* @return the class primary key of the trash entry for this message-boards message
+	*/
+	@Override
+	public long getTrashEntryClassPK() {
+		return _mbMessage.getTrashEntryClassPK();
+	}
+
+	/**
+	* Returns the trash handler for this message-boards message.
+	*
+	* @return the trash handler for this message-boards message
+	*/
+	@Override
+	public com.liferay.portal.kernel.trash.TrashHandler getTrashHandler() {
+		return _mbMessage.getTrashHandler();
+	}
+
+	/**
+	* Returns <code>true</code> if this message-boards message is in the Recycle Bin.
+	*
+	* @return <code>true</code> if this message-boards message is in the Recycle Bin; <code>false</code> otherwise
+	*/
+	@Override
+	public boolean isInTrash() {
+		return _mbMessage.isInTrash();
+	}
+
+	/**
+	* Returns <code>true</code> if the parent of this message-boards message is in the Recycle Bin.
+	*
+	* @return <code>true</code> if the parent of this message-boards message is in the Recycle Bin; <code>false</code> otherwise
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public boolean isInTrashContainer() {
+		return _mbMessage.isInTrashContainer();
+	}
+
+	@Override
+	public boolean isInTrashExplicitly()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _mbMessage.isInTrashExplicitly();
+	}
+
+	/**
 	* @deprecated As of 6.1.0, replaced by {@link #isApproved()}
 	*/
+	@Override
 	public boolean getApproved() {
 		return _mbMessage.getApproved();
 	}
@@ -786,6 +917,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return <code>true</code> if this message-boards message is approved; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isApproved() {
 		return _mbMessage.isApproved();
 	}
@@ -795,6 +927,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return <code>true</code> if this message-boards message is denied; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isDenied() {
 		return _mbMessage.isDenied();
 	}
@@ -804,6 +937,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return <code>true</code> if this message-boards message is a draft; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isDraft() {
 		return _mbMessage.isDraft();
 	}
@@ -813,6 +947,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return <code>true</code> if this message-boards message is expired; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isExpired() {
 		return _mbMessage.isExpired();
 	}
@@ -822,6 +957,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return <code>true</code> if this message-boards message is inactive; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isInactive() {
 		return _mbMessage.isInactive();
 	}
@@ -831,17 +967,9 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return <code>true</code> if this message-boards message is incomplete; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isIncomplete() {
 		return _mbMessage.isIncomplete();
-	}
-
-	/**
-	* Returns <code>true</code> if this message-boards message is in the Recycle Bin.
-	*
-	* @return <code>true</code> if this message-boards message is in the Recycle Bin; <code>false</code> otherwise
-	*/
-	public boolean isInTrash() {
-		return _mbMessage.isInTrash();
 	}
 
 	/**
@@ -849,6 +977,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return <code>true</code> if this message-boards message is pending; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isPending() {
 		return _mbMessage.isPending();
 	}
@@ -858,52 +987,64 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 	*
 	* @return <code>true</code> if this message-boards message is scheduled; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isScheduled() {
 		return _mbMessage.isScheduled();
 	}
 
+	@Override
 	public boolean isNew() {
 		return _mbMessage.isNew();
 	}
 
+	@Override
 	public void setNew(boolean n) {
 		_mbMessage.setNew(n);
 	}
 
+	@Override
 	public boolean isCachedModel() {
 		return _mbMessage.isCachedModel();
 	}
 
+	@Override
 	public void setCachedModel(boolean cachedModel) {
 		_mbMessage.setCachedModel(cachedModel);
 	}
 
+	@Override
 	public boolean isEscapedModel() {
 		return _mbMessage.isEscapedModel();
 	}
 
+	@Override
 	public java.io.Serializable getPrimaryKeyObj() {
 		return _mbMessage.getPrimaryKeyObj();
 	}
 
+	@Override
 	public void setPrimaryKeyObj(java.io.Serializable primaryKeyObj) {
 		_mbMessage.setPrimaryKeyObj(primaryKeyObj);
 	}
 
+	@Override
 	public com.liferay.portlet.expando.model.ExpandoBridge getExpandoBridge() {
 		return _mbMessage.getExpandoBridge();
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.model.BaseModel<?> baseModel) {
 		_mbMessage.setExpandoBridgeAttributes(baseModel);
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
 		_mbMessage.setExpandoBridgeAttributes(expandoBridge);
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_mbMessage.setExpandoBridgeAttributes(serviceContext);
@@ -914,6 +1055,7 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 		return new MBMessageWrapper((MBMessage)_mbMessage.clone());
 	}
 
+	@Override
 	public int compareTo(
 		com.liferay.portlet.messageboards.model.MBMessage mbMessage) {
 		return _mbMessage.compareTo(mbMessage);
@@ -924,14 +1066,17 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 		return _mbMessage.hashCode();
 	}
 
+	@Override
 	public com.liferay.portal.model.CacheModel<com.liferay.portlet.messageboards.model.MBMessage> toCacheModel() {
 		return _mbMessage.toCacheModel();
 	}
 
+	@Override
 	public com.liferay.portlet.messageboards.model.MBMessage toEscapedModel() {
 		return new MBMessageWrapper(_mbMessage.toEscapedModel());
 	}
 
+	@Override
 	public com.liferay.portlet.messageboards.model.MBMessage toUnescapedModel() {
 		return new MBMessageWrapper(_mbMessage.toUnescapedModel());
 	}
@@ -941,32 +1086,38 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 		return _mbMessage.toString();
 	}
 
+	@Override
 	public java.lang.String toXmlString() {
 		return _mbMessage.toXmlString();
 	}
 
+	@Override
 	public void persist()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_mbMessage.persist();
 	}
 
+	@Override
 	public com.liferay.portal.kernel.repository.model.Folder addAttachmentsFolder()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _mbMessage.addAttachmentsFolder();
 	}
 
+	@Override
 	public java.lang.String[] getAssetTagNames()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _mbMessage.getAssetTagNames();
 	}
 
+	@Override
 	public java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> getAttachmentsFileEntries()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _mbMessage.getAttachmentsFileEntries();
 	}
 
+	@Override
 	public java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> getAttachmentsFileEntries(
 		int start, int end)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -974,34 +1125,40 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 		return _mbMessage.getAttachmentsFileEntries(start, end);
 	}
 
+	@Override
 	public int getAttachmentsFileEntriesCount()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _mbMessage.getAttachmentsFileEntriesCount();
 	}
 
+	@Override
 	public long getAttachmentsFolderId()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _mbMessage.getAttachmentsFolderId();
 	}
 
+	@Override
 	public java.lang.String getBody(boolean translate) {
 		return _mbMessage.getBody(translate);
 	}
 
+	@Override
 	public com.liferay.portlet.messageboards.model.MBCategory getCategory()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _mbMessage.getCategory();
 	}
 
+	@Override
 	public java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> getDeletedAttachmentsFileEntries()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _mbMessage.getDeletedAttachmentsFileEntries();
 	}
 
+	@Override
 	public java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> getDeletedAttachmentsFileEntries(
 		int start, int end)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -1009,58 +1166,79 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 		return _mbMessage.getDeletedAttachmentsFileEntries(start, end);
 	}
 
+	@Override
 	public int getDeletedAttachmentsFileEntriesCount()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _mbMessage.getDeletedAttachmentsFileEntriesCount();
 	}
 
+	@Override
 	public com.liferay.portlet.messageboards.model.MBThread getThread()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _mbMessage.getThread();
 	}
 
+	@Override
 	public long getThreadAttachmentsFolderId()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _mbMessage.getThreadAttachmentsFolderId();
 	}
 
-	public com.liferay.portal.model.ContainerModel getTrashContainer()
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _mbMessage.getTrashContainer();
-	}
-
+	@Override
 	public java.lang.String getWorkflowClassName() {
 		return _mbMessage.getWorkflowClassName();
 	}
 
+	@Override
 	public boolean isDiscussion() {
 		return _mbMessage.isDiscussion();
 	}
 
+	@Override
 	public boolean isFormatBBCode() {
 		return _mbMessage.isFormatBBCode();
 	}
 
-	public boolean isInTrashThread()
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _mbMessage.isInTrashThread();
-	}
-
+	@Override
 	public boolean isReply() {
 		return _mbMessage.isReply();
 	}
 
+	@Override
 	public boolean isRoot() {
 		return _mbMessage.isRoot();
 	}
 
+	@Override
 	public void setAttachmentsFolderId(long attachmentsFolderId) {
 		_mbMessage.setAttachmentsFolderId(attachmentsFolderId);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof MBMessageWrapper)) {
+			return false;
+		}
+
+		MBMessageWrapper mbMessageWrapper = (MBMessageWrapper)obj;
+
+		if (Validator.equals(_mbMessage, mbMessageWrapper._mbMessage)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	@Override
+	public StagedModelType getStagedModelType() {
+		return _mbMessage.getStagedModelType();
 	}
 
 	/**
@@ -1070,10 +1248,12 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 		return _mbMessage;
 	}
 
+	@Override
 	public MBMessage getWrappedModel() {
 		return _mbMessage;
 	}
 
+	@Override
 	public void resetOriginalValues() {
 		_mbMessage.resetOriginalValues();
 	}

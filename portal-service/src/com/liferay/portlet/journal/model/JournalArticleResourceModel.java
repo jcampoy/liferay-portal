@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.journal.model;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.CacheModel;
@@ -36,6 +38,7 @@ import java.io.Serializable;
  * @see com.liferay.portlet.journal.model.impl.JournalArticleResourceModelImpl
  * @generated
  */
+@ProviderType
 public interface JournalArticleResourceModel extends BaseModel<JournalArticleResource> {
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -115,41 +118,60 @@ public interface JournalArticleResourceModel extends BaseModel<JournalArticleRes
 	 */
 	public void setArticleId(String articleId);
 
+	@Override
 	public boolean isNew();
 
+	@Override
 	public void setNew(boolean n);
 
+	@Override
 	public boolean isCachedModel();
 
+	@Override
 	public void setCachedModel(boolean cachedModel);
 
+	@Override
 	public boolean isEscapedModel();
 
+	@Override
 	public Serializable getPrimaryKeyObj();
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj);
 
+	@Override
 	public ExpandoBridge getExpandoBridge();
 
+	@Override
 	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
 
+	@Override
 	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
 
+	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
+	@Override
 	public Object clone();
 
+	@Override
 	public int compareTo(JournalArticleResource journalArticleResource);
 
+	@Override
 	public int hashCode();
 
+	@Override
 	public CacheModel<JournalArticleResource> toCacheModel();
 
+	@Override
 	public JournalArticleResource toEscapedModel();
 
+	@Override
 	public JournalArticleResource toUnescapedModel();
 
+	@Override
 	public String toString();
 
+	@Override
 	public String toXmlString();
 }

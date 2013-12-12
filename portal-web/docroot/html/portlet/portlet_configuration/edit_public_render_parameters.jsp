@@ -41,7 +41,7 @@ editPublicRenderParameterURL.setParameter("portletResource", portletResource);
 	<portlet:param name="struts_action" value="/portlet_configuration/edit_public_render_parameters" />
 </portlet:actionURL>
 
-<div class="portlet-msg-info">
+<div class="alert alert-info">
 	<liferay-ui:message arguments='<%= "http://www.liferay.com/community/wiki/-/wiki/Main/Portlet+Communication+Configuration" %>' key="set-up-the-communication-among-the-portlets-that-use-public-render-parameters" />
 </div>
 
@@ -51,10 +51,11 @@ editPublicRenderParameterURL.setParameter("portletResource", portletResource);
 	<aui:input name="returnToFullPageURL" type="hidden" value="<%= returnToFullPageURL %>" />
 	<aui:input name="portletResource" type="hidden" value="<%= portletResource %>" />
 
-	<liferay-ui:search-container>
+	<liferay-ui:search-container
+		total="<%= publicRenderParameterConfigurations.size() %>"
+	>
 		<liferay-ui:search-container-results
 			results="<%= ListUtil.subList(publicRenderParameterConfigurations, searchContainer.getStart(), searchContainer.getEnd()) %>"
-			total="<%= publicRenderParameterConfigurations.size() %>"
 		/>
 
 		<liferay-ui:search-container-row

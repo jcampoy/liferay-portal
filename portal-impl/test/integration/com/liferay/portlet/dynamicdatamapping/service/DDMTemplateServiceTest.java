@@ -21,6 +21,8 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.service.ServiceTestUtil;
 import com.liferay.portal.test.EnvironmentExecutionTestListener;
 import com.liferay.portal.test.LiferayIntegrationJUnitTestRunner;
+import com.liferay.portal.test.Sync;
+import com.liferay.portal.test.SynchronousDestinationExecutionTestListener;
 import com.liferay.portal.test.TransactionalExecutionTestListener;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.TestPropsValues;
@@ -47,9 +49,11 @@ import org.junit.runner.RunWith;
 @ExecutionTestListeners(
 	listeners = {
 		EnvironmentExecutionTestListener.class,
+		SynchronousDestinationExecutionTestListener.class,
 		TransactionalExecutionTestListener.class
 	})
 @RunWith(LiferayIntegrationJUnitTestRunner.class)
+@Sync
 @Transactional
 public class DDMTemplateServiceTest extends BaseDDMServiceTestCase {
 
@@ -61,12 +65,12 @@ public class DDMTemplateServiceTest extends BaseDDMServiceTestCase {
 		try {
 			addTemplate(
 				_classNameId, 0, templateKey, "Test Template 1",
-				DDMTemplateConstants.TEMPLATE_TYPE_FORM,
+				DDMTemplateConstants.TEMPLATE_TYPE_DISPLAY,
 				DDMTemplateConstants.TEMPLATE_MODE_CREATE, language,
 				getTestTemplateScript(language));
 			addTemplate(
 				_classNameId, 0, templateKey, "Test Template 2",
-				DDMTemplateConstants.TEMPLATE_TYPE_FORM,
+				DDMTemplateConstants.TEMPLATE_TYPE_DISPLAY,
 				DDMTemplateConstants.TEMPLATE_MODE_CREATE, language,
 				getTestTemplateScript(language));
 
@@ -83,7 +87,7 @@ public class DDMTemplateServiceTest extends BaseDDMServiceTestCase {
 		try {
 			addTemplate(
 				_classNameId, 0, null, StringPool.BLANK,
-				DDMTemplateConstants.TEMPLATE_TYPE_FORM,
+				DDMTemplateConstants.TEMPLATE_TYPE_DISPLAY,
 				DDMTemplateConstants.TEMPLATE_MODE_CREATE, language,
 				getTestTemplateScript(language));
 
@@ -251,11 +255,11 @@ public class DDMTemplateServiceTest extends BaseDDMServiceTestCase {
 		throws Exception {
 
 		return DDMTemplateLocalServiceUtil.updateTemplate(
-			template.getTemplateId(), template.getNameMap(),
-			template.getDescriptionMap(), template.getType(),
-			template.getMode(), template.getLanguage(), template.getScript(),
-			template.isCacheable(), template.isSmallImage(),
-			template.getSmallImageURL(), null,
+			template.getTemplateId(), template.getClassPK(),
+			template.getNameMap(), template.getDescriptionMap(),
+			template.getType(), template.getMode(), template.getLanguage(),
+			template.getScript(), template.isCacheable(),
+			template.isSmallImage(), template.getSmallImageURL(), null,
 			ServiceTestUtil.getServiceContext());
 	}
 

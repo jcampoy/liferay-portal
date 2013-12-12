@@ -14,6 +14,8 @@
 
 package com.liferay.portal.model;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.service.ServiceContext;
@@ -37,7 +39,8 @@ import java.util.Date;
  * @see com.liferay.portal.model.impl.UserModelImpl
  * @generated
  */
-public interface UserModel extends BaseModel<User> {
+@ProviderType
+public interface UserModel extends BaseModel<User>, StagedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -64,6 +67,7 @@ public interface UserModel extends BaseModel<User> {
 	 * @return the uuid of this user
 	 */
 	@AutoEscape
+	@Override
 	public String getUuid();
 
 	/**
@@ -71,6 +75,7 @@ public interface UserModel extends BaseModel<User> {
 	 *
 	 * @param uuid the uuid of this user
 	 */
+	@Override
 	public void setUuid(String uuid);
 
 	/**
@@ -107,6 +112,7 @@ public interface UserModel extends BaseModel<User> {
 	 *
 	 * @return the company ID of this user
 	 */
+	@Override
 	public long getCompanyId();
 
 	/**
@@ -114,6 +120,7 @@ public interface UserModel extends BaseModel<User> {
 	 *
 	 * @param companyId the company ID of this user
 	 */
+	@Override
 	public void setCompanyId(long companyId);
 
 	/**
@@ -121,6 +128,7 @@ public interface UserModel extends BaseModel<User> {
 	 *
 	 * @return the create date of this user
 	 */
+	@Override
 	public Date getCreateDate();
 
 	/**
@@ -128,6 +136,7 @@ public interface UserModel extends BaseModel<User> {
 	 *
 	 * @param createDate the create date of this user
 	 */
+	@Override
 	public void setCreateDate(Date createDate);
 
 	/**
@@ -135,6 +144,7 @@ public interface UserModel extends BaseModel<User> {
 	 *
 	 * @return the modified date of this user
 	 */
+	@Override
 	public Date getModifiedDate();
 
 	/**
@@ -142,6 +152,7 @@ public interface UserModel extends BaseModel<User> {
 	 *
 	 * @param modifiedDate the modified date of this user
 	 */
+	@Override
 	public void setModifiedDate(Date modifiedDate);
 
 	/**
@@ -693,41 +704,60 @@ public interface UserModel extends BaseModel<User> {
 	 */
 	public void setStatus(int status);
 
+	@Override
 	public boolean isNew();
 
+	@Override
 	public void setNew(boolean n);
 
+	@Override
 	public boolean isCachedModel();
 
+	@Override
 	public void setCachedModel(boolean cachedModel);
 
+	@Override
 	public boolean isEscapedModel();
 
+	@Override
 	public Serializable getPrimaryKeyObj();
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj);
 
+	@Override
 	public ExpandoBridge getExpandoBridge();
 
+	@Override
 	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
 
+	@Override
 	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
 
+	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
+	@Override
 	public Object clone();
 
+	@Override
 	public int compareTo(User user);
 
+	@Override
 	public int hashCode();
 
+	@Override
 	public CacheModel<User> toCacheModel();
 
+	@Override
 	public User toEscapedModel();
 
+	@Override
 	public User toUnescapedModel();
 
+	@Override
 	public String toString();
 
+	@Override
 	public String toXmlString();
 }

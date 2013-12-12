@@ -61,7 +61,7 @@ if (step == 1) {
 				title="site-roles"
 			/>
 
-			<div class="portlet-msg-info">
+			<div class="alert alert-info">
 				<liferay-ui:message key="please-select-a-site-to-which-you-will-assign-a-site-role" />
 			</div>
 
@@ -71,18 +71,11 @@ if (step == 1) {
 
 			<liferay-ui:search-container
 				searchContainer="<%= new GroupSearch(renderRequest, portletURL) %>"
+				total="<%= groups.size() %>"
 			>
-				<liferay-ui:search-container-results>
-
-					<%
-					total = groups.size();
-					results = ListUtil.subList(groups, searchContainer.getStart(), searchContainer.getEnd());
-
-					pageContext.setAttribute("results", results);
-					pageContext.setAttribute("total", total);
-					%>
-
-				</liferay-ui:search-container-results>
+				<liferay-ui:search-container-results
+					results="<%= ListUtil.subList(groups, searchContainer.getStart(), searchContainer.getEnd()) %>"
+				/>
 
 				<liferay-ui:search-container-row
 					className="com.liferay.portal.model.Group"
@@ -132,7 +125,7 @@ if (step == 1) {
 
 						submitForm(document.<portlet:namespace />selectSiteRoleFm, "<%= portletURL.toString() %>");
 					},
-					'.group-selector-button input'
+					'.group-selector-button'
 				);
 			</aui:script>
 		</c:when>
@@ -154,13 +147,18 @@ if (step == 1) {
 			Group group = GroupServiceUtil.getGroup(groupId);
 
 			portletURL.setParameter("step", "1");
-
-			String breadcrumbs = "<a href=\"" + portletURL.toString() + "\">" + LanguageUtil.get(pageContext, "sites") + "</a> &raquo; " + HtmlUtil.escape(group.getDescriptiveName(locale));
 			%>
 
-			<div class="breadcrumbs">
-				<%= breadcrumbs %>
-			</div>
+			<c:if test="<%= selUser != null %>">
+
+				<%
+				String breadcrumbs = "<a href=\"" + portletURL.toString() + "\">" + LanguageUtil.get(pageContext, "sites") + "</a> &raquo; " + HtmlUtil.escape(group.getDescriptiveName(locale));
+				%>
+
+				<div class="breadcrumbs">
+					<%= breadcrumbs %>
+				</div>
+			</c:if>
 
 			<%
 			portletURL.setParameter("step", "2");
@@ -189,16 +187,19 @@ if (step == 1) {
 
 						roles = UsersAdminUtil.filterGroupRoles(permissionChecker, groupId, roles);
 
-						total = roles.size();
+						searchContainer.setTotal(roles.size());
+
 						results = ListUtil.subList(roles, searchContainer.getStart(), searchContainer.getEnd());
 					}
 					else {
-						results = RoleLocalServiceUtil.search(company.getCompanyId(), searchTerms.getKeywords(), new Integer[] {RoleConstants.TYPE_SITE}, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
 						total = RoleLocalServiceUtil.searchCount(company.getCompanyId(), searchTerms.getKeywords(), new Integer[] {RoleConstants.TYPE_SITE});
+
+						searchContainer.setTotal(total);
+
+						results = RoleLocalServiceUtil.search(company.getCompanyId(), searchTerms.getKeywords(), new Integer[] {RoleConstants.TYPE_SITE}, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
 					}
 
-					pageContext.setAttribute("results", results);
-					pageContext.setAttribute("total", total);
+					searchContainer.setResults(results);
 					%>
 
 				</liferay-ui:search-container-results>
@@ -222,8 +223,8 @@ if (step == 1) {
 							<%
 							Map<String, Object> data = new HashMap<String, Object>();
 
+							data.put("groupdescriptivename", HtmlUtil.escapeAttribute(group.getDescriptiveName(locale)));
 							data.put("groupid", group.getGroupId());
-							data.put("groupname", HtmlUtil.escapeAttribute(group.getDescriptiveName(locale)));
 							data.put("roleid", role.getRoleId());
 							data.put("roletitle", HtmlUtil.escapeAttribute(role.getTitle(locale)));
 							data.put("searchcontainername", "siteRoles");
@@ -237,10 +238,6 @@ if (step == 1) {
 				<liferay-ui:search-iterator />
 			</liferay-ui:search-container>
 
-			<aui:script>
-				Liferay.Util.focusFormField(document.<portlet:namespace />selectSiteRoleFm.<portlet:namespace />name);
-			</aui:script>
-
 			<aui:script use="aui-base">
 				var Util = Liferay.Util;
 
@@ -251,9 +248,9 @@ if (step == 1) {
 
 						Util.getOpener().Liferay.fire('<%= HtmlUtil.escapeJS(eventName) %>', result);
 
-						Util.getWindow().close();
+						Util.getWindow().hide();
 					},
-					'.selector-button input'
+					'.selector-button'
 				);
 			</aui:script>
 		</c:when>

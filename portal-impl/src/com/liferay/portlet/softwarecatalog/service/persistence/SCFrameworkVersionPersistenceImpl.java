@@ -16,11 +16,6 @@ package com.liferay.portlet.softwarecatalog.service.persistence;
 
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
-import com.liferay.portal.kernel.dao.jdbc.MappingSqlQuery;
-import com.liferay.portal.kernel.dao.jdbc.MappingSqlQueryFactoryUtil;
-import com.liferay.portal.kernel.dao.jdbc.RowMapper;
-import com.liferay.portal.kernel.dao.jdbc.SqlUpdate;
-import com.liferay.portal.kernel.dao.jdbc.SqlUpdateFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
@@ -44,6 +39,8 @@ import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
+import com.liferay.portal.service.persistence.impl.TableMapper;
+import com.liferay.portal.service.persistence.impl.TableMapperFactory;
 
 import com.liferay.portlet.softwarecatalog.NoSuchFrameworkVersionException;
 import com.liferay.portlet.softwarecatalog.model.SCFrameworkVersion;
@@ -54,6 +51,7 @@ import java.io.Serializable;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -122,6 +120,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return the matching s c framework versions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SCFrameworkVersion> findByGroupId(long groupId)
 		throws SystemException {
 		return findByGroupId(groupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
@@ -140,6 +139,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return the range of matching s c framework versions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SCFrameworkVersion> findByGroupId(long groupId, int start,
 		int end) throws SystemException {
 		return findByGroupId(groupId, start, end, null);
@@ -159,6 +159,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return the ordered range of matching s c framework versions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SCFrameworkVersion> findByGroupId(long groupId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -265,6 +266,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @throws com.liferay.portlet.softwarecatalog.NoSuchFrameworkVersionException if a matching s c framework version could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SCFrameworkVersion findByGroupId_First(long groupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchFrameworkVersionException, SystemException {
@@ -295,6 +297,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return the first matching s c framework version, or <code>null</code> if a matching s c framework version could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SCFrameworkVersion fetchByGroupId_First(long groupId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<SCFrameworkVersion> list = findByGroupId(groupId, 0, 1,
@@ -316,6 +319,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @throws com.liferay.portlet.softwarecatalog.NoSuchFrameworkVersionException if a matching s c framework version could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SCFrameworkVersion findByGroupId_Last(long groupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchFrameworkVersionException, SystemException {
@@ -346,9 +350,14 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return the last matching s c framework version, or <code>null</code> if a matching s c framework version could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SCFrameworkVersion fetchByGroupId_Last(long groupId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByGroupId(groupId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<SCFrameworkVersion> list = findByGroupId(groupId, count - 1,
 				count, orderByComparator);
@@ -370,6 +379,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @throws com.liferay.portlet.softwarecatalog.NoSuchFrameworkVersionException if a s c framework version with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SCFrameworkVersion[] findByGroupId_PrevAndNext(
 		long frameworkVersionId, long groupId,
 		OrderByComparator orderByComparator)
@@ -513,6 +523,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return the matching s c framework versions that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SCFrameworkVersion> filterFindByGroupId(long groupId)
 		throws SystemException {
 		return filterFindByGroupId(groupId, QueryUtil.ALL_POS,
@@ -532,6 +543,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return the range of matching s c framework versions that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SCFrameworkVersion> filterFindByGroupId(long groupId,
 		int start, int end) throws SystemException {
 		return filterFindByGroupId(groupId, start, end, null);
@@ -551,6 +563,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return the ordered range of matching s c framework versions that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SCFrameworkVersion> filterFindByGroupId(long groupId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -643,6 +656,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @throws com.liferay.portlet.softwarecatalog.NoSuchFrameworkVersionException if a s c framework version with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SCFrameworkVersion[] filterFindByGroupId_PrevAndNext(
 		long frameworkVersionId, long groupId,
 		OrderByComparator orderByComparator)
@@ -825,6 +839,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @param groupId the group ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByGroupId(long groupId) throws SystemException {
 		for (SCFrameworkVersion scFrameworkVersion : findByGroupId(groupId,
 				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
@@ -839,6 +854,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return the number of matching s c framework versions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByGroupId(long groupId) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_GROUPID;
 
@@ -891,6 +907,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return the number of matching s c framework versions that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int filterCountByGroupId(long groupId) throws SystemException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return countByGroupId(groupId);
@@ -964,6 +981,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return the matching s c framework versions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SCFrameworkVersion> findByCompanyId(long companyId)
 		throws SystemException {
 		return findByCompanyId(companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
@@ -983,6 +1001,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return the range of matching s c framework versions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SCFrameworkVersion> findByCompanyId(long companyId, int start,
 		int end) throws SystemException {
 		return findByCompanyId(companyId, start, end, null);
@@ -1002,6 +1021,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return the ordered range of matching s c framework versions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SCFrameworkVersion> findByCompanyId(long companyId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -1108,6 +1128,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @throws com.liferay.portlet.softwarecatalog.NoSuchFrameworkVersionException if a matching s c framework version could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SCFrameworkVersion findByCompanyId_First(long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchFrameworkVersionException, SystemException {
@@ -1138,6 +1159,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return the first matching s c framework version, or <code>null</code> if a matching s c framework version could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SCFrameworkVersion fetchByCompanyId_First(long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<SCFrameworkVersion> list = findByCompanyId(companyId, 0, 1,
@@ -1159,6 +1181,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @throws com.liferay.portlet.softwarecatalog.NoSuchFrameworkVersionException if a matching s c framework version could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SCFrameworkVersion findByCompanyId_Last(long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchFrameworkVersionException, SystemException {
@@ -1189,9 +1212,14 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return the last matching s c framework version, or <code>null</code> if a matching s c framework version could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SCFrameworkVersion fetchByCompanyId_Last(long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByCompanyId(companyId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<SCFrameworkVersion> list = findByCompanyId(companyId, count - 1,
 				count, orderByComparator);
@@ -1213,6 +1241,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @throws com.liferay.portlet.softwarecatalog.NoSuchFrameworkVersionException if a s c framework version with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SCFrameworkVersion[] findByCompanyId_PrevAndNext(
 		long frameworkVersionId, long companyId,
 		OrderByComparator orderByComparator)
@@ -1355,6 +1384,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @param companyId the company ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByCompanyId(long companyId) throws SystemException {
 		for (SCFrameworkVersion scFrameworkVersion : findByCompanyId(
 				companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
@@ -1369,6 +1399,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return the number of matching s c framework versions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByCompanyId(long companyId) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_COMPANYID;
 
@@ -1446,6 +1477,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return the matching s c framework versions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SCFrameworkVersion> findByG_A(long groupId, boolean active)
 		throws SystemException {
 		return findByG_A(groupId, active, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
@@ -1466,6 +1498,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return the range of matching s c framework versions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SCFrameworkVersion> findByG_A(long groupId, boolean active,
 		int start, int end) throws SystemException {
 		return findByG_A(groupId, active, start, end, null);
@@ -1486,6 +1519,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return the ordered range of matching s c framework versions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SCFrameworkVersion> findByG_A(long groupId, boolean active,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -1603,6 +1637,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @throws com.liferay.portlet.softwarecatalog.NoSuchFrameworkVersionException if a matching s c framework version could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SCFrameworkVersion findByG_A_First(long groupId, boolean active,
 		OrderByComparator orderByComparator)
 		throws NoSuchFrameworkVersionException, SystemException {
@@ -1637,6 +1672,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return the first matching s c framework version, or <code>null</code> if a matching s c framework version could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SCFrameworkVersion fetchByG_A_First(long groupId, boolean active,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<SCFrameworkVersion> list = findByG_A(groupId, active, 0, 1,
@@ -1659,6 +1695,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @throws com.liferay.portlet.softwarecatalog.NoSuchFrameworkVersionException if a matching s c framework version could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SCFrameworkVersion findByG_A_Last(long groupId, boolean active,
 		OrderByComparator orderByComparator)
 		throws NoSuchFrameworkVersionException, SystemException {
@@ -1693,9 +1730,14 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return the last matching s c framework version, or <code>null</code> if a matching s c framework version could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SCFrameworkVersion fetchByG_A_Last(long groupId, boolean active,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByG_A(groupId, active);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<SCFrameworkVersion> list = findByG_A(groupId, active, count - 1,
 				count, orderByComparator);
@@ -1718,6 +1760,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @throws com.liferay.portlet.softwarecatalog.NoSuchFrameworkVersionException if a s c framework version with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SCFrameworkVersion[] findByG_A_PrevAndNext(long frameworkVersionId,
 		long groupId, boolean active, OrderByComparator orderByComparator)
 		throws NoSuchFrameworkVersionException, SystemException {
@@ -1865,6 +1908,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return the matching s c framework versions that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SCFrameworkVersion> filterFindByG_A(long groupId, boolean active)
 		throws SystemException {
 		return filterFindByG_A(groupId, active, QueryUtil.ALL_POS,
@@ -1885,6 +1929,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return the range of matching s c framework versions that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SCFrameworkVersion> filterFindByG_A(long groupId,
 		boolean active, int start, int end) throws SystemException {
 		return filterFindByG_A(groupId, active, start, end, null);
@@ -1905,6 +1950,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return the ordered range of matching s c framework versions that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SCFrameworkVersion> filterFindByG_A(long groupId,
 		boolean active, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -2002,6 +2048,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @throws com.liferay.portlet.softwarecatalog.NoSuchFrameworkVersionException if a s c framework version with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SCFrameworkVersion[] filterFindByG_A_PrevAndNext(
 		long frameworkVersionId, long groupId, boolean active,
 		OrderByComparator orderByComparator)
@@ -2189,6 +2236,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @param active the active
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByG_A(long groupId, boolean active)
 		throws SystemException {
 		for (SCFrameworkVersion scFrameworkVersion : findByG_A(groupId, active,
@@ -2205,6 +2253,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return the number of matching s c framework versions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByG_A(long groupId, boolean active)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_A;
@@ -2263,6 +2312,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return the number of matching s c framework versions that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int filterCountByG_A(long groupId, boolean active)
 		throws SystemException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
@@ -2313,11 +2363,16 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	private static final String _FINDER_COLUMN_G_A_ACTIVE_2 = "scFrameworkVersion.active = ?";
 	private static final String _FINDER_COLUMN_G_A_ACTIVE_2_SQL = "scFrameworkVersion.active_ = ?";
 
+	public SCFrameworkVersionPersistenceImpl() {
+		setModelClass(SCFrameworkVersion.class);
+	}
+
 	/**
 	 * Caches the s c framework version in the entity cache if it is enabled.
 	 *
 	 * @param scFrameworkVersion the s c framework version
 	 */
+	@Override
 	public void cacheResult(SCFrameworkVersion scFrameworkVersion) {
 		EntityCacheUtil.putResult(SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
 			SCFrameworkVersionImpl.class, scFrameworkVersion.getPrimaryKey(),
@@ -2331,6 +2386,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 *
 	 * @param scFrameworkVersions the s c framework versions
 	 */
+	@Override
 	public void cacheResult(List<SCFrameworkVersion> scFrameworkVersions) {
 		for (SCFrameworkVersion scFrameworkVersion : scFrameworkVersions) {
 			if (EntityCacheUtil.getResult(
@@ -2398,6 +2454,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @param frameworkVersionId the primary key for the new s c framework version
 	 * @return the new s c framework version
 	 */
+	@Override
 	public SCFrameworkVersion create(long frameworkVersionId) {
 		SCFrameworkVersion scFrameworkVersion = new SCFrameworkVersionImpl();
 
@@ -2415,6 +2472,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @throws com.liferay.portlet.softwarecatalog.NoSuchFrameworkVersionException if a s c framework version with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SCFrameworkVersion remove(long frameworkVersionId)
 		throws NoSuchFrameworkVersionException, SystemException {
 		return remove((Serializable)frameworkVersionId);
@@ -2466,15 +2524,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 		SCFrameworkVersion scFrameworkVersion) throws SystemException {
 		scFrameworkVersion = toUnwrappedModel(scFrameworkVersion);
 
-		try {
-			clearSCProductVersions.clear(scFrameworkVersion.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(SCFrameworkVersionModelImpl.MAPPING_TABLE_SCFRAMEWORKVERSI_SCPRODUCTVERS_NAME);
-		}
+		scFrameworkVersionToSCProductVersionTableMapper.deleteLeftPrimaryKeyTableMappings(scFrameworkVersion.getPrimaryKey());
 
 		Session session = null;
 
@@ -2604,6 +2654,8 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 			SCFrameworkVersionImpl.class, scFrameworkVersion.getPrimaryKey(),
 			scFrameworkVersion);
 
+		scFrameworkVersion.resetOriginalValues();
+
 		return scFrameworkVersion;
 	}
 
@@ -2666,6 +2718,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @throws com.liferay.portlet.softwarecatalog.NoSuchFrameworkVersionException if a s c framework version with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SCFrameworkVersion findByPrimaryKey(long frameworkVersionId)
 		throws NoSuchFrameworkVersionException, SystemException {
 		return findByPrimaryKey((Serializable)frameworkVersionId);
@@ -2727,6 +2780,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return the s c framework version, or <code>null</code> if a s c framework version with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SCFrameworkVersion fetchByPrimaryKey(long frameworkVersionId)
 		throws SystemException {
 		return fetchByPrimaryKey((Serializable)frameworkVersionId);
@@ -2738,6 +2792,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return the s c framework versions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SCFrameworkVersion> findAll() throws SystemException {
 		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
@@ -2754,6 +2809,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return the range of s c framework versions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SCFrameworkVersion> findAll(int start, int end)
 		throws SystemException {
 		return findAll(start, end, null);
@@ -2772,6 +2828,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return the ordered range of s c framework versions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SCFrameworkVersion> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -2857,6 +2914,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 *
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeAll() throws SystemException {
 		for (SCFrameworkVersion scFrameworkVersion : findAll()) {
 			remove(scFrameworkVersion);
@@ -2869,6 +2927,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return the number of s c framework versions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countAll() throws SystemException {
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
 				FINDER_ARGS_EMPTY, this);
@@ -2907,6 +2966,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return the s c product versions associated with the s c framework version
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<com.liferay.portlet.softwarecatalog.model.SCProductVersion> getSCProductVersions(
 		long pk) throws SystemException {
 		return getSCProductVersions(pk, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
@@ -2925,23 +2985,10 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return the range of s c product versions associated with the s c framework version
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<com.liferay.portlet.softwarecatalog.model.SCProductVersion> getSCProductVersions(
 		long pk, int start, int end) throws SystemException {
 		return getSCProductVersions(pk, start, end, null);
-	}
-
-	public static final FinderPath FINDER_PATH_GET_SCPRODUCTVERSIONS = new FinderPath(com.liferay.portlet.softwarecatalog.model.impl.SCProductVersionModelImpl.ENTITY_CACHE_ENABLED,
-			SCFrameworkVersionModelImpl.FINDER_CACHE_ENABLED_SCFRAMEWORKVERSI_SCPRODUCTVERS,
-			com.liferay.portlet.softwarecatalog.model.impl.SCProductVersionImpl.class,
-			SCFrameworkVersionModelImpl.MAPPING_TABLE_SCFRAMEWORKVERSI_SCPRODUCTVERS_NAME,
-			"getSCProductVersions",
-			new String[] {
-				Long.class.getName(), Integer.class.getName(),
-				Integer.class.getName(), OrderByComparator.class.getName()
-			});
-
-	static {
-		FINDER_PATH_GET_SCPRODUCTVERSIONS.setCacheKeyGeneratorCacheName(null);
 	}
 
 	/**
@@ -2958,93 +3005,12 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return the ordered range of s c product versions associated with the s c framework version
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<com.liferay.portlet.softwarecatalog.model.SCProductVersion> getSCProductVersions(
 		long pk, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		boolean pagination = true;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			pagination = false;
-			finderArgs = new Object[] { pk };
-		}
-		else {
-			finderArgs = new Object[] { pk, start, end, orderByComparator };
-		}
-
-		List<com.liferay.portlet.softwarecatalog.model.SCProductVersion> list = (List<com.liferay.portlet.softwarecatalog.model.SCProductVersion>)FinderCacheUtil.getResult(FINDER_PATH_GET_SCPRODUCTVERSIONS,
-				finderArgs, this);
-
-		if (list == null) {
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				String sql = null;
-
-				if (orderByComparator != null) {
-					sql = _SQL_GETSCPRODUCTVERSIONS.concat(ORDER_BY_CLAUSE)
-												   .concat(orderByComparator.getOrderBy());
-				}
-				else {
-					sql = _SQL_GETSCPRODUCTVERSIONS;
-
-					if (pagination) {
-						sql = sql.concat(com.liferay.portlet.softwarecatalog.model.impl.SCProductVersionModelImpl.ORDER_BY_SQL);
-					}
-				}
-
-				SQLQuery q = session.createSQLQuery(sql);
-
-				q.addEntity("SCProductVersion",
-					com.liferay.portlet.softwarecatalog.model.impl.SCProductVersionImpl.class);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(pk);
-
-				if (!pagination) {
-					list = (List<com.liferay.portlet.softwarecatalog.model.SCProductVersion>)QueryUtil.list(q,
-							getDialect(), start, end, false);
-
-					Collections.sort(list);
-
-					list = new UnmodifiableList<com.liferay.portlet.softwarecatalog.model.SCProductVersion>(list);
-				}
-				else {
-					list = (List<com.liferay.portlet.softwarecatalog.model.SCProductVersion>)QueryUtil.list(q,
-							getDialect(), start, end);
-				}
-
-				scProductVersionPersistence.cacheResult(list);
-
-				FinderCacheUtil.putResult(FINDER_PATH_GET_SCPRODUCTVERSIONS,
-					finderArgs, list);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_GET_SCPRODUCTVERSIONS,
-					finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	public static final FinderPath FINDER_PATH_GET_SCPRODUCTVERSIONS_SIZE = new FinderPath(com.liferay.portlet.softwarecatalog.model.impl.SCProductVersionModelImpl.ENTITY_CACHE_ENABLED,
-			SCFrameworkVersionModelImpl.FINDER_CACHE_ENABLED_SCFRAMEWORKVERSI_SCPRODUCTVERS,
-			Long.class,
-			SCFrameworkVersionModelImpl.MAPPING_TABLE_SCFRAMEWORKVERSI_SCPRODUCTVERS_NAME,
-			"getSCProductVersionsSize", new String[] { Long.class.getName() });
-
-	static {
-		FINDER_PATH_GET_SCPRODUCTVERSIONS_SIZE.setCacheKeyGeneratorCacheName(null);
+		return scFrameworkVersionToSCProductVersionTableMapper.getRightBaseModels(pk,
+			start, end, orderByComparator);
 	}
 
 	/**
@@ -3054,52 +3020,12 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return the number of s c product versions associated with the s c framework version
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int getSCProductVersionsSize(long pk) throws SystemException {
-		Object[] finderArgs = new Object[] { pk };
+		long[] pks = scFrameworkVersionToSCProductVersionTableMapper.getRightPrimaryKeys(pk);
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_GET_SCPRODUCTVERSIONS_SIZE,
-				finderArgs, this);
-
-		if (count == null) {
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				SQLQuery q = session.createSQLQuery(_SQL_GETSCPRODUCTVERSIONSSIZE);
-
-				q.addScalar(COUNT_COLUMN_NAME,
-					com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(pk);
-
-				count = (Long)q.uniqueResult();
-
-				FinderCacheUtil.putResult(FINDER_PATH_GET_SCPRODUCTVERSIONS_SIZE,
-					finderArgs, count);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_GET_SCPRODUCTVERSIONS_SIZE,
-					finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
+		return pks.length;
 	}
-
-	public static final FinderPath FINDER_PATH_CONTAINS_SCPRODUCTVERSION = new FinderPath(com.liferay.portlet.softwarecatalog.model.impl.SCProductVersionModelImpl.ENTITY_CACHE_ENABLED,
-			SCFrameworkVersionModelImpl.FINDER_CACHE_ENABLED_SCFRAMEWORKVERSI_SCPRODUCTVERS,
-			Boolean.class,
-			SCFrameworkVersionModelImpl.MAPPING_TABLE_SCFRAMEWORKVERSI_SCPRODUCTVERS_NAME,
-			"containsSCProductVersion",
-			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns <code>true</code> if the s c product version is associated with the s c framework version.
@@ -3109,30 +3035,11 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return <code>true</code> if the s c product version is associated with the s c framework version; <code>false</code> otherwise
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public boolean containsSCProductVersion(long pk, long scProductVersionPK)
 		throws SystemException {
-		Object[] finderArgs = new Object[] { pk, scProductVersionPK };
-
-		Boolean value = (Boolean)FinderCacheUtil.getResult(FINDER_PATH_CONTAINS_SCPRODUCTVERSION,
-				finderArgs, this);
-
-		if (value == null) {
-			try {
-				value = Boolean.valueOf(containsSCProductVersion.contains(pk,
-							scProductVersionPK));
-
-				FinderCacheUtil.putResult(FINDER_PATH_CONTAINS_SCPRODUCTVERSION,
-					finderArgs, value);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_CONTAINS_SCPRODUCTVERSION,
-					finderArgs);
-
-				throw processException(e);
-			}
-		}
-
-		return value.booleanValue();
+		return scFrameworkVersionToSCProductVersionTableMapper.containsTableMapping(pk,
+			scProductVersionPK);
 	}
 
 	/**
@@ -3142,6 +3049,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @return <code>true</code> if the s c framework version has any s c product versions associated with it; <code>false</code> otherwise
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public boolean containsSCProductVersions(long pk) throws SystemException {
 		if (getSCProductVersionsSize(pk) > 0) {
 			return true;
@@ -3158,17 +3066,11 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @param scProductVersionPK the primary key of the s c product version
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addSCProductVersion(long pk, long scProductVersionPK)
 		throws SystemException {
-		try {
-			addSCProductVersion.add(pk, scProductVersionPK);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(SCFrameworkVersionModelImpl.MAPPING_TABLE_SCFRAMEWORKVERSI_SCPRODUCTVERS_NAME);
-		}
+		scFrameworkVersionToSCProductVersionTableMapper.addTableMapping(pk,
+			scProductVersionPK);
 	}
 
 	/**
@@ -3178,18 +3080,12 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @param scProductVersion the s c product version
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addSCProductVersion(long pk,
 		com.liferay.portlet.softwarecatalog.model.SCProductVersion scProductVersion)
 		throws SystemException {
-		try {
-			addSCProductVersion.add(pk, scProductVersion.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(SCFrameworkVersionModelImpl.MAPPING_TABLE_SCFRAMEWORKVERSI_SCPRODUCTVERS_NAME);
-		}
+		scFrameworkVersionToSCProductVersionTableMapper.addTableMapping(pk,
+			scProductVersion.getPrimaryKey());
 	}
 
 	/**
@@ -3199,18 +3095,12 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @param scProductVersionPKs the primary keys of the s c product versions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addSCProductVersions(long pk, long[] scProductVersionPKs)
 		throws SystemException {
-		try {
-			for (long scProductVersionPK : scProductVersionPKs) {
-				addSCProductVersion.add(pk, scProductVersionPK);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(SCFrameworkVersionModelImpl.MAPPING_TABLE_SCFRAMEWORKVERSI_SCPRODUCTVERS_NAME);
+		for (long scProductVersionPK : scProductVersionPKs) {
+			scFrameworkVersionToSCProductVersionTableMapper.addTableMapping(pk,
+				scProductVersionPK);
 		}
 	}
 
@@ -3221,19 +3111,13 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @param scProductVersions the s c product versions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addSCProductVersions(long pk,
 		List<com.liferay.portlet.softwarecatalog.model.SCProductVersion> scProductVersions)
 		throws SystemException {
-		try {
-			for (com.liferay.portlet.softwarecatalog.model.SCProductVersion scProductVersion : scProductVersions) {
-				addSCProductVersion.add(pk, scProductVersion.getPrimaryKey());
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(SCFrameworkVersionModelImpl.MAPPING_TABLE_SCFRAMEWORKVERSI_SCPRODUCTVERS_NAME);
+		for (com.liferay.portlet.softwarecatalog.model.SCProductVersion scProductVersion : scProductVersions) {
+			scFrameworkVersionToSCProductVersionTableMapper.addTableMapping(pk,
+				scProductVersion.getPrimaryKey());
 		}
 	}
 
@@ -3243,16 +3127,9 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @param pk the primary key of the s c framework version to clear the associated s c product versions from
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void clearSCProductVersions(long pk) throws SystemException {
-		try {
-			clearSCProductVersions.clear(pk);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(SCFrameworkVersionModelImpl.MAPPING_TABLE_SCFRAMEWORKVERSI_SCPRODUCTVERS_NAME);
-		}
+		scFrameworkVersionToSCProductVersionTableMapper.deleteLeftPrimaryKeyTableMappings(pk);
 	}
 
 	/**
@@ -3262,17 +3139,11 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @param scProductVersionPK the primary key of the s c product version
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeSCProductVersion(long pk, long scProductVersionPK)
 		throws SystemException {
-		try {
-			removeSCProductVersion.remove(pk, scProductVersionPK);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(SCFrameworkVersionModelImpl.MAPPING_TABLE_SCFRAMEWORKVERSI_SCPRODUCTVERS_NAME);
-		}
+		scFrameworkVersionToSCProductVersionTableMapper.deleteTableMapping(pk,
+			scProductVersionPK);
 	}
 
 	/**
@@ -3282,18 +3153,12 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @param scProductVersion the s c product version
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeSCProductVersion(long pk,
 		com.liferay.portlet.softwarecatalog.model.SCProductVersion scProductVersion)
 		throws SystemException {
-		try {
-			removeSCProductVersion.remove(pk, scProductVersion.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(SCFrameworkVersionModelImpl.MAPPING_TABLE_SCFRAMEWORKVERSI_SCPRODUCTVERS_NAME);
-		}
+		scFrameworkVersionToSCProductVersionTableMapper.deleteTableMapping(pk,
+			scProductVersion.getPrimaryKey());
 	}
 
 	/**
@@ -3303,18 +3168,12 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @param scProductVersionPKs the primary keys of the s c product versions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeSCProductVersions(long pk, long[] scProductVersionPKs)
 		throws SystemException {
-		try {
-			for (long scProductVersionPK : scProductVersionPKs) {
-				removeSCProductVersion.remove(pk, scProductVersionPK);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(SCFrameworkVersionModelImpl.MAPPING_TABLE_SCFRAMEWORKVERSI_SCPRODUCTVERS_NAME);
+		for (long scProductVersionPK : scProductVersionPKs) {
+			scFrameworkVersionToSCProductVersionTableMapper.deleteTableMapping(pk,
+				scProductVersionPK);
 		}
 	}
 
@@ -3325,20 +3184,13 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @param scProductVersions the s c product versions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeSCProductVersions(long pk,
 		List<com.liferay.portlet.softwarecatalog.model.SCProductVersion> scProductVersions)
 		throws SystemException {
-		try {
-			for (com.liferay.portlet.softwarecatalog.model.SCProductVersion scProductVersion : scProductVersions) {
-				removeSCProductVersion.remove(pk,
-					scProductVersion.getPrimaryKey());
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(SCFrameworkVersionModelImpl.MAPPING_TABLE_SCFRAMEWORKVERSI_SCPRODUCTVERS_NAME);
+		for (com.liferay.portlet.softwarecatalog.model.SCProductVersion scProductVersion : scProductVersions) {
+			scFrameworkVersionToSCProductVersionTableMapper.deleteTableMapping(pk,
+				scProductVersion.getPrimaryKey());
 		}
 	}
 
@@ -3349,31 +3201,27 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @param scProductVersionPKs the primary keys of the s c product versions to be associated with the s c framework version
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void setSCProductVersions(long pk, long[] scProductVersionPKs)
 		throws SystemException {
-		try {
-			Set<Long> scProductVersionPKSet = SetUtil.fromArray(scProductVersionPKs);
+		Set<Long> newSCProductVersionPKsSet = SetUtil.fromArray(scProductVersionPKs);
+		Set<Long> oldSCProductVersionPKsSet = SetUtil.fromArray(scFrameworkVersionToSCProductVersionTableMapper.getRightPrimaryKeys(
+					pk));
 
-			List<com.liferay.portlet.softwarecatalog.model.SCProductVersion> scProductVersions =
-				getSCProductVersions(pk);
+		Set<Long> removeSCProductVersionPKsSet = new HashSet<Long>(oldSCProductVersionPKsSet);
 
-			for (com.liferay.portlet.softwarecatalog.model.SCProductVersion scProductVersion : scProductVersions) {
-				if (!scProductVersionPKSet.remove(
-							scProductVersion.getPrimaryKey())) {
-					removeSCProductVersion.remove(pk,
-						scProductVersion.getPrimaryKey());
-				}
-			}
+		removeSCProductVersionPKsSet.removeAll(newSCProductVersionPKsSet);
 
-			for (Long scProductVersionPK : scProductVersionPKSet) {
-				addSCProductVersion.add(pk, scProductVersionPK);
-			}
+		for (long removeSCProductVersionPK : removeSCProductVersionPKsSet) {
+			scFrameworkVersionToSCProductVersionTableMapper.deleteTableMapping(pk,
+				removeSCProductVersionPK);
 		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(SCFrameworkVersionModelImpl.MAPPING_TABLE_SCFRAMEWORKVERSI_SCPRODUCTVERS_NAME);
+
+		newSCProductVersionPKsSet.removeAll(oldSCProductVersionPKsSet);
+
+		for (long newSCProductVersionPK : newSCProductVersionPKsSet) {
+			scFrameworkVersionToSCProductVersionTableMapper.addTableMapping(pk,
+				newSCProductVersionPK);
 		}
 	}
 
@@ -3384,6 +3232,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	 * @param scProductVersions the s c product versions to be associated with the s c framework version
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void setSCProductVersions(long pk,
 		List<com.liferay.portlet.softwarecatalog.model.SCProductVersion> scProductVersions)
 		throws SystemException {
@@ -3436,11 +3285,9 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 			}
 		}
 
-		containsSCProductVersion = new ContainsSCProductVersion();
-
-		addSCProductVersion = new AddSCProductVersion();
-		clearSCProductVersions = new ClearSCProductVersions();
-		removeSCProductVersion = new RemoveSCProductVersion();
+		scFrameworkVersionToSCProductVersionTableMapper = TableMapperFactory.getTableMapper("SCFrameworkVersi_SCProductVers",
+				"frameworkVersionId", "productVersionId", this,
+				scProductVersionPersistence);
 	}
 
 	public void destroy() {
@@ -3452,191 +3299,11 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 
 	@BeanReference(type = SCProductVersionPersistence.class)
 	protected SCProductVersionPersistence scProductVersionPersistence;
-	protected ContainsSCProductVersion containsSCProductVersion;
-	protected AddSCProductVersion addSCProductVersion;
-	protected ClearSCProductVersions clearSCProductVersions;
-	protected RemoveSCProductVersion removeSCProductVersion;
-
-	protected class ContainsSCProductVersion {
-		protected ContainsSCProductVersion() {
-			_mappingSqlQuery = MappingSqlQueryFactoryUtil.getMappingSqlQuery(getDataSource(),
-					"SELECT COUNT(*) AS COUNT_VALUE FROM SCFrameworkVersi_SCProductVers WHERE frameworkVersionId = ? AND productVersionId = ?",
-					new int[] { java.sql.Types.BIGINT, java.sql.Types.BIGINT },
-					RowMapper.COUNT);
-		}
-
-		protected boolean contains(long frameworkVersionId,
-			long productVersionId) {
-			List<Integer> results = _mappingSqlQuery.execute(new Object[] {
-						new Long(frameworkVersionId), new Long(productVersionId)
-					});
-
-			if (results.size() > 0) {
-				Integer count = results.get(0);
-
-				if (count.intValue() > 0) {
-					return true;
-				}
-			}
-
-			return false;
-		}
-
-		private MappingSqlQuery<Integer> _mappingSqlQuery;
-	}
-
-	protected class AddSCProductVersion {
-		protected AddSCProductVersion() {
-			_sqlUpdate = SqlUpdateFactoryUtil.getSqlUpdate(getDataSource(),
-					"INSERT INTO SCFrameworkVersi_SCProductVers (frameworkVersionId, productVersionId) VALUES (?, ?)",
-					new int[] { java.sql.Types.BIGINT, java.sql.Types.BIGINT });
-		}
-
-		protected void add(long frameworkVersionId, long productVersionId)
-			throws SystemException {
-			if (!containsSCProductVersion.contains(frameworkVersionId,
-						productVersionId)) {
-				ModelListener<com.liferay.portlet.softwarecatalog.model.SCProductVersion>[] scProductVersionListeners =
-					scProductVersionPersistence.getListeners();
-
-				for (ModelListener<SCFrameworkVersion> listener : listeners) {
-					listener.onBeforeAddAssociation(frameworkVersionId,
-						com.liferay.portlet.softwarecatalog.model.SCProductVersion.class.getName(),
-						productVersionId);
-				}
-
-				for (ModelListener<com.liferay.portlet.softwarecatalog.model.SCProductVersion> listener : scProductVersionListeners) {
-					listener.onBeforeAddAssociation(productVersionId,
-						SCFrameworkVersion.class.getName(), frameworkVersionId);
-				}
-
-				_sqlUpdate.update(new Object[] {
-						new Long(frameworkVersionId), new Long(productVersionId)
-					});
-
-				for (ModelListener<SCFrameworkVersion> listener : listeners) {
-					listener.onAfterAddAssociation(frameworkVersionId,
-						com.liferay.portlet.softwarecatalog.model.SCProductVersion.class.getName(),
-						productVersionId);
-				}
-
-				for (ModelListener<com.liferay.portlet.softwarecatalog.model.SCProductVersion> listener : scProductVersionListeners) {
-					listener.onAfterAddAssociation(productVersionId,
-						SCFrameworkVersion.class.getName(), frameworkVersionId);
-				}
-			}
-		}
-
-		private SqlUpdate _sqlUpdate;
-	}
-
-	protected class ClearSCProductVersions {
-		protected ClearSCProductVersions() {
-			_sqlUpdate = SqlUpdateFactoryUtil.getSqlUpdate(getDataSource(),
-					"DELETE FROM SCFrameworkVersi_SCProductVers WHERE frameworkVersionId = ?",
-					new int[] { java.sql.Types.BIGINT });
-		}
-
-		protected void clear(long frameworkVersionId) throws SystemException {
-			ModelListener<com.liferay.portlet.softwarecatalog.model.SCProductVersion>[] scProductVersionListeners =
-				scProductVersionPersistence.getListeners();
-
-			List<com.liferay.portlet.softwarecatalog.model.SCProductVersion> scProductVersions =
-				null;
-
-			if ((listeners.length > 0) ||
-					(scProductVersionListeners.length > 0)) {
-				scProductVersions = getSCProductVersions(frameworkVersionId);
-
-				for (com.liferay.portlet.softwarecatalog.model.SCProductVersion scProductVersion : scProductVersions) {
-					for (ModelListener<SCFrameworkVersion> listener : listeners) {
-						listener.onBeforeRemoveAssociation(frameworkVersionId,
-							com.liferay.portlet.softwarecatalog.model.SCProductVersion.class.getName(),
-							scProductVersion.getPrimaryKey());
-					}
-
-					for (ModelListener<com.liferay.portlet.softwarecatalog.model.SCProductVersion> listener : scProductVersionListeners) {
-						listener.onBeforeRemoveAssociation(scProductVersion.getPrimaryKey(),
-							SCFrameworkVersion.class.getName(),
-							frameworkVersionId);
-					}
-				}
-			}
-
-			_sqlUpdate.update(new Object[] { new Long(frameworkVersionId) });
-
-			if ((listeners.length > 0) ||
-					(scProductVersionListeners.length > 0)) {
-				for (com.liferay.portlet.softwarecatalog.model.SCProductVersion scProductVersion : scProductVersions) {
-					for (ModelListener<SCFrameworkVersion> listener : listeners) {
-						listener.onAfterRemoveAssociation(frameworkVersionId,
-							com.liferay.portlet.softwarecatalog.model.SCProductVersion.class.getName(),
-							scProductVersion.getPrimaryKey());
-					}
-
-					for (ModelListener<com.liferay.portlet.softwarecatalog.model.SCProductVersion> listener : scProductVersionListeners) {
-						listener.onAfterRemoveAssociation(scProductVersion.getPrimaryKey(),
-							SCFrameworkVersion.class.getName(),
-							frameworkVersionId);
-					}
-				}
-			}
-		}
-
-		private SqlUpdate _sqlUpdate;
-	}
-
-	protected class RemoveSCProductVersion {
-		protected RemoveSCProductVersion() {
-			_sqlUpdate = SqlUpdateFactoryUtil.getSqlUpdate(getDataSource(),
-					"DELETE FROM SCFrameworkVersi_SCProductVers WHERE frameworkVersionId = ? AND productVersionId = ?",
-					new int[] { java.sql.Types.BIGINT, java.sql.Types.BIGINT });
-		}
-
-		protected void remove(long frameworkVersionId, long productVersionId)
-			throws SystemException {
-			if (containsSCProductVersion.contains(frameworkVersionId,
-						productVersionId)) {
-				ModelListener<com.liferay.portlet.softwarecatalog.model.SCProductVersion>[] scProductVersionListeners =
-					scProductVersionPersistence.getListeners();
-
-				for (ModelListener<SCFrameworkVersion> listener : listeners) {
-					listener.onBeforeRemoveAssociation(frameworkVersionId,
-						com.liferay.portlet.softwarecatalog.model.SCProductVersion.class.getName(),
-						productVersionId);
-				}
-
-				for (ModelListener<com.liferay.portlet.softwarecatalog.model.SCProductVersion> listener : scProductVersionListeners) {
-					listener.onBeforeRemoveAssociation(productVersionId,
-						SCFrameworkVersion.class.getName(), frameworkVersionId);
-				}
-
-				_sqlUpdate.update(new Object[] {
-						new Long(frameworkVersionId), new Long(productVersionId)
-					});
-
-				for (ModelListener<SCFrameworkVersion> listener : listeners) {
-					listener.onAfterRemoveAssociation(frameworkVersionId,
-						com.liferay.portlet.softwarecatalog.model.SCProductVersion.class.getName(),
-						productVersionId);
-				}
-
-				for (ModelListener<com.liferay.portlet.softwarecatalog.model.SCProductVersion> listener : scProductVersionListeners) {
-					listener.onAfterRemoveAssociation(productVersionId,
-						SCFrameworkVersion.class.getName(), frameworkVersionId);
-				}
-			}
-		}
-
-		private SqlUpdate _sqlUpdate;
-	}
-
+	protected TableMapper<SCFrameworkVersion, com.liferay.portlet.softwarecatalog.model.SCProductVersion> scFrameworkVersionToSCProductVersionTableMapper;
 	private static final String _SQL_SELECT_SCFRAMEWORKVERSION = "SELECT scFrameworkVersion FROM SCFrameworkVersion scFrameworkVersion";
 	private static final String _SQL_SELECT_SCFRAMEWORKVERSION_WHERE = "SELECT scFrameworkVersion FROM SCFrameworkVersion scFrameworkVersion WHERE ";
 	private static final String _SQL_COUNT_SCFRAMEWORKVERSION = "SELECT COUNT(scFrameworkVersion) FROM SCFrameworkVersion scFrameworkVersion";
 	private static final String _SQL_COUNT_SCFRAMEWORKVERSION_WHERE = "SELECT COUNT(scFrameworkVersion) FROM SCFrameworkVersion scFrameworkVersion WHERE ";
-	private static final String _SQL_GETSCPRODUCTVERSIONS = "SELECT {SCProductVersion.*} FROM SCProductVersion INNER JOIN SCFrameworkVersi_SCProductVers ON (SCFrameworkVersi_SCProductVers.productVersionId = SCProductVersion.productVersionId) WHERE (SCFrameworkVersi_SCProductVers.frameworkVersionId = ?)";
-	private static final String _SQL_GETSCPRODUCTVERSIONSSIZE = "SELECT COUNT(*) AS COUNT_VALUE FROM SCFrameworkVersi_SCProductVers WHERE frameworkVersionId = ?";
 	private static final String _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN = "scFrameworkVersion.frameworkVersionId";
 	private static final String _FILTER_SQL_SELECT_SCFRAMEWORKVERSION_WHERE = "SELECT DISTINCT {scFrameworkVersion.*} FROM SCFrameworkVersion scFrameworkVersion WHERE ";
 	private static final String _FILTER_SQL_SELECT_SCFRAMEWORKVERSION_NO_INLINE_DISTINCT_WHERE_1 =
@@ -3669,6 +3336,7 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 
 	private static CacheModel<SCFrameworkVersion> _nullSCFrameworkVersionCacheModel =
 		new CacheModel<SCFrameworkVersion>() {
+			@Override
 			public SCFrameworkVersion toEntityModel() {
 				return _nullSCFrameworkVersion;
 			}

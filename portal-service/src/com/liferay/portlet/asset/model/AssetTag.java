@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.asset.model;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.util.Accessor;
 import com.liferay.portal.model.PersistedModel;
 
@@ -26,6 +28,7 @@ import com.liferay.portal.model.PersistedModel;
  * @see com.liferay.portlet.asset.model.impl.AssetTagModelImpl
  * @generated
  */
+@ProviderType
 public interface AssetTag extends AssetTagModel, PersistedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -33,12 +36,14 @@ public interface AssetTag extends AssetTagModel, PersistedModel {
 	 * Never modify this interface directly. Add methods to {@link com.liferay.portlet.asset.model.impl.AssetTagImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
 	public static final Accessor<AssetTag, Long> TAG_ID_ACCESSOR = new Accessor<AssetTag, Long>() {
+			@Override
 			public Long get(AssetTag assetTag) {
 				return assetTag.getTagId();
 			}
 		};
 
 	public static final Accessor<AssetTag, String> NAME_ACCESSOR = new Accessor<AssetTag, String>() {
+			@Override
 			public String get(AssetTag assetTag) {
 				return assetTag.getName();
 			}

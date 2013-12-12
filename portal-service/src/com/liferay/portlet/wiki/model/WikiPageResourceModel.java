@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.wiki.model;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.CacheModel;
@@ -36,6 +38,7 @@ import java.io.Serializable;
  * @see com.liferay.portlet.wiki.model.impl.WikiPageResourceModelImpl
  * @generated
  */
+@ProviderType
 public interface WikiPageResourceModel extends BaseModel<WikiPageResource> {
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -115,41 +118,60 @@ public interface WikiPageResourceModel extends BaseModel<WikiPageResource> {
 	 */
 	public void setTitle(String title);
 
+	@Override
 	public boolean isNew();
 
+	@Override
 	public void setNew(boolean n);
 
+	@Override
 	public boolean isCachedModel();
 
+	@Override
 	public void setCachedModel(boolean cachedModel);
 
+	@Override
 	public boolean isEscapedModel();
 
+	@Override
 	public Serializable getPrimaryKeyObj();
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj);
 
+	@Override
 	public ExpandoBridge getExpandoBridge();
 
+	@Override
 	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
 
+	@Override
 	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
 
+	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
+	@Override
 	public Object clone();
 
+	@Override
 	public int compareTo(WikiPageResource wikiPageResource);
 
+	@Override
 	public int hashCode();
 
+	@Override
 	public CacheModel<WikiPageResource> toCacheModel();
 
+	@Override
 	public WikiPageResource toEscapedModel();
 
+	@Override
 	public WikiPageResource toUnescapedModel();
 
+	@Override
 	public String toString();
 
+	@Override
 	public String toXmlString();
 }

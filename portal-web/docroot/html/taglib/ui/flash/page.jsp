@@ -17,9 +17,8 @@
 <%@ include file="/html/taglib/init.jsp" %>
 
 <%
-String randomNamespace = PortalUtil.generateRandomKey(request, "taglib_ui_flash_page") + StringPool.UNDERLINE;
+String randomNamespace = StringUtil.randomId() + StringPool.UNDERLINE;
 
-String align = (String)request.getAttribute("liferay-ui:flash:align");
 String allowFullScreen = (String)request.getAttribute("liferay-ui:flash:allowFullScreen");
 String allowScriptAccess = (String)request.getAttribute("liferay-ui:flash:allowScriptAccess");
 String base = (String)request.getAttribute("liferay-ui:flash:base");
@@ -43,7 +42,7 @@ String wmode = (String)request.getAttribute("liferay-ui:flash:wmode");
 
 <div id="<%= randomNamespace %>flashcontent" style="height: <%= height %>; width: <%= width %>;"></div>
 
-<aui:script use="aui-swf">
+<aui:script use="aui-swf-deprecated">
 	new A.SWF(
 		{
 			boundingBox: '#<%= randomNamespace %>flashcontent',

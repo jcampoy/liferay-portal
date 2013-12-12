@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.servlet.URLEncoder;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutConstants;
@@ -34,8 +35,10 @@ import com.liferay.portal.model.PortletURLListener;
 import com.liferay.portal.security.lang.DoPrivilegedUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.PortletLocalServiceUtil;
+import com.liferay.portal.struts.StrutsActionPortletURL;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.util.WebKeys;
 
 import java.io.Writer;
@@ -105,6 +108,7 @@ public abstract class PortletResponseImpl implements LiferayPortletResponse {
 		return (PortletResponseImpl)portletResponse;
 	}
 
+	@Override
 	public void addDateHeader(String name, long date) {
 		if (Validator.isNull(name)) {
 			throw new IllegalArgumentException();
@@ -122,6 +126,7 @@ public abstract class PortletResponseImpl implements LiferayPortletResponse {
 		}
 	}
 
+	@Override
 	public void addHeader(String name, String value) {
 		if (Validator.isNull(name)) {
 			throw new IllegalArgumentException();
@@ -139,6 +144,7 @@ public abstract class PortletResponseImpl implements LiferayPortletResponse {
 		}
 	}
 
+	@Override
 	public void addIntHeader(String name, int value) {
 		if (Validator.isNull(name)) {
 			throw new IllegalArgumentException();
@@ -156,6 +162,7 @@ public abstract class PortletResponseImpl implements LiferayPortletResponse {
 		}
 	}
 
+	@Override
 	public void addProperty(Cookie cookie) {
 		if (cookie == null) {
 			throw new IllegalArgumentException();
@@ -173,12 +180,15 @@ public abstract class PortletResponseImpl implements LiferayPortletResponse {
 		}
 	}
 
+	@Override
 	public void addProperty(String key, Element element) {
 		if (key == null) {
 			throw new IllegalArgumentException();
 		}
 
-		if (key.equalsIgnoreCase(MimeResponse.MARKUP_HEAD_ELEMENT)) {
+		if (StringUtil.equalsIgnoreCase(
+				key, MimeResponse.MARKUP_HEAD_ELEMENT)) {
+
 			List<Element> values = _markupHeadElements.get(key);
 
 			if (values != null) {
@@ -201,6 +211,7 @@ public abstract class PortletResponseImpl implements LiferayPortletResponse {
 		}
 	}
 
+	@Override
 	public void addProperty(String key, String value) {
 		if (Validator.isNull(key)) {
 			throw new IllegalArgumentException();
@@ -209,15 +220,18 @@ public abstract class PortletResponseImpl implements LiferayPortletResponse {
 		addHeader(key, value);
 	}
 
+	@Override
 	public PortletURL createActionURL() {
 		return createActionURL(_portletName);
 	}
 
+	@Override
 	public LiferayPortletURL createActionURL(String portletName) {
 		return createLiferayPortletURL(
 			portletName, PortletRequest.ACTION_PHASE);
 	}
 
+	@Override
 	public Element createElement(String tagName) throws DOMException {
 		if (_document == null) {
 			try {
@@ -238,12 +252,14 @@ public abstract class PortletResponseImpl implements LiferayPortletResponse {
 		return _document.createElement(tagName);
 	}
 
+	@Override
 	public LiferayPortletURL createLiferayPortletURL(
 		long plid, String portletName, String lifecycle) {
 
 		return createLiferayPortletURL(plid, portletName, lifecycle, true);
 	}
 
+	@Override
 	public LiferayPortletURL createLiferayPortletURL(
 		long plid, String portletName, String lifecycle,
 		boolean includeLinkToLayoutUuid) {
@@ -253,34 +269,41 @@ public abstract class PortletResponseImpl implements LiferayPortletResponse {
 				plid, portletName, lifecycle, includeLinkToLayoutUuid));
 	}
 
+	@Override
 	public LiferayPortletURL createLiferayPortletURL(String lifecycle) {
 		return createLiferayPortletURL(_portletName, lifecycle);
 	}
 
+	@Override
 	public LiferayPortletURL createLiferayPortletURL(
 		String portletName, String lifecycle) {
 
 		return createLiferayPortletURL(_plid, portletName, lifecycle);
 	}
 
+	@Override
 	public PortletURL createRenderURL() {
 		return createRenderURL(_portletName);
 	}
 
+	@Override
 	public LiferayPortletURL createRenderURL(String portletName) {
 		return createLiferayPortletURL(
 			portletName, PortletRequest.RENDER_PHASE);
 	}
 
+	@Override
 	public ResourceURL createResourceURL() {
 		return createResourceURL(_portletName);
 	}
 
+	@Override
 	public LiferayPortletURL createResourceURL(String portletName) {
 		return createLiferayPortletURL(
 			portletName, PortletRequest.RESOURCE_PHASE);
 	}
 
+	@Override
 	public String encodeURL(String path) {
 		if ((path == null) ||
 			(!path.startsWith("#") && !path.startsWith("/") &&
@@ -308,12 +331,14 @@ public abstract class PortletResponseImpl implements LiferayPortletResponse {
 		return _portletRequestImpl.getHttpServletRequest();
 	}
 
+	@Override
 	public HttpServletResponse getHttpServletResponse() {
 		return _response;
 	}
 
 	public abstract String getLifecycle();
 
+	@Override
 	public String getNamespace() {
 		if (_wsrp) {
 			return "wsrp_rewrite_";
@@ -352,6 +377,7 @@ public abstract class PortletResponseImpl implements LiferayPortletResponse {
 		return _portletRequestImpl;
 	}
 
+	@Override
 	public Map<String, String[]> getProperties() {
 		Map<String, String[]> properties =
 			new LinkedHashMap<String, String[]>();
@@ -376,6 +402,7 @@ public abstract class PortletResponseImpl implements LiferayPortletResponse {
 		return _urlEncoder;
 	}
 
+	@Override
 	public void setDateHeader(String name, long date) {
 		if (Validator.isNull(name)) {
 			throw new IllegalArgumentException();
@@ -389,6 +416,7 @@ public abstract class PortletResponseImpl implements LiferayPortletResponse {
 		}
 	}
 
+	@Override
 	public void setHeader(String name, String value) {
 		if (Validator.isNull(name)) {
 			throw new IllegalArgumentException();
@@ -402,6 +430,7 @@ public abstract class PortletResponseImpl implements LiferayPortletResponse {
 		}
 	}
 
+	@Override
 	public void setIntHeader(String name, int value) {
 		if (Validator.isNull(name)) {
 			throw new IllegalArgumentException();
@@ -428,6 +457,7 @@ public abstract class PortletResponseImpl implements LiferayPortletResponse {
 		}
 	}
 
+	@Override
 	public void setProperty(String key, String value) {
 		if (key == null) {
 			throw new IllegalArgumentException();
@@ -491,6 +521,7 @@ public abstract class PortletResponseImpl implements LiferayPortletResponse {
 		}
 	}
 
+	@Override
 	public void transferMarkupHeadElements() {
 		List<Element> elements = _markupHeadElements.get(
 			MimeResponse.MARKUP_HEAD_ELEMENT);
@@ -563,6 +594,13 @@ public abstract class PortletResponseImpl implements LiferayPortletResponse {
 			String linkToLayoutUuid = GetterUtil.getString(
 				_portletSetup.getValue("portletSetupLinkToLayoutUuid", null));
 
+			if (PropsValues.PORTLET_CROSS_LAYOUT_INVOCATION_MODE.equals(
+					"render") &&
+				!PortletRequest.RENDER_PHASE.equals(lifecycle)) {
+
+				includeLinkToLayoutUuid = false;
+			}
+
 			if (Validator.isNotNull(linkToLayoutUuid) &&
 				includeLinkToLayoutUuid) {
 
@@ -597,29 +635,37 @@ public abstract class PortletResponseImpl implements LiferayPortletResponse {
 		if (portlet.getPortletId().equals(portletName) &&
 			Validator.isNotNull(portletURLClass)) {
 
-			try {
-				Constructor<? extends PortletURLImpl> constructor =
-					_constructors.get(portletURLClass);
+			if (portletURLClass.equals(
+					StrutsActionPortletURL.class.getName())) {
 
-				if (constructor == null) {
-					Class<?> portletURLClassObj = Class.forName(
-						portletURLClass);
-
-					constructor = (Constructor<? extends PortletURLImpl>)
-						portletURLClassObj.getConstructor(
-							new Class[] {
-								com.liferay.portlet.PortletResponseImpl.class,
-								long.class, String.class
-							});
-
-					_constructors.put(portletURLClass, constructor);
-				}
-
-				portletURLImpl = constructor.newInstance(
-					new Object[] {this, plid, lifecycle});
+				portletURLImpl = new StrutsActionPortletURL(
+					this, plid, lifecycle);
 			}
-			catch (Exception e) {
-				_log.error(e);
+			else {
+				try {
+					Constructor<? extends PortletURLImpl> constructor =
+						_constructors.get(portletURLClass);
+
+					if (constructor == null) {
+						Class<?> portletURLClassObj = Class.forName(
+							portletURLClass);
+
+						constructor = (Constructor<? extends PortletURLImpl>)
+							portletURLClassObj.getConstructor(
+								new Class[] {
+									PortletResponseImpl.class, long.class,
+									String.class
+								});
+
+						_constructors.put(portletURLClass, constructor);
+					}
+
+					portletURLImpl = constructor.newInstance(
+						new Object[] {this, plid, lifecycle});
+				}
+				catch (Exception e) {
+					_log.error(e);
+				}
 			}
 		}
 
@@ -722,6 +768,7 @@ public abstract class PortletResponseImpl implements LiferayPortletResponse {
 			_includeLinkToLayoutUuid = includeLinkToLayoutUuid;
 		}
 
+		@Override
 		public LiferayPortletURL run() {
 			return doCreateLiferayPortletURL(
 				_plid, _portletName, _lifecycle, _includeLinkToLayoutUuid);

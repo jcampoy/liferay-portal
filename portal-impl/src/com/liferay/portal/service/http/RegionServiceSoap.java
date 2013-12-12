@@ -14,6 +14,8 @@
 
 package com.liferay.portal.service.http;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.service.RegionServiceUtil;
@@ -21,13 +23,11 @@ import com.liferay.portal.service.RegionServiceUtil;
 import java.rmi.RemoteException;
 
 /**
- * <p>
- * This class provides a SOAP utility for the
+ * Provides the SOAP utility for the
  * {@link com.liferay.portal.service.RegionServiceUtil} service utility. The
  * static methods of this class calls the same methods of the service utility.
  * However, the signatures are different because it is difficult for SOAP to
  * support certain types.
- * </p>
  *
  * <p>
  * ServiceBuilder follows certain rules in translating the methods. For example,
@@ -56,12 +56,13 @@ import java.rmi.RemoteException;
  * The SOAP utility is only generated for remote services.
  * </p>
  *
- * @author    Brian Wing Shun Chan
- * @see       RegionServiceHttp
- * @see       com.liferay.portal.model.RegionSoap
- * @see       com.liferay.portal.service.RegionServiceUtil
+ * @author Brian Wing Shun Chan
+ * @see RegionServiceHttp
+ * @see com.liferay.portal.model.RegionSoap
+ * @see com.liferay.portal.service.RegionServiceUtil
  * @generated
  */
+@ProviderType
 public class RegionServiceSoap {
 	public static com.liferay.portal.model.RegionSoap addRegion(
 		long countryId, java.lang.String regionCode, java.lang.String name,

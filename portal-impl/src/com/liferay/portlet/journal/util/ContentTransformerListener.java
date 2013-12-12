@@ -113,7 +113,9 @@ public class ContentTransformerListener extends BaseTransformerListener {
 			}
 		}
 		catch (Exception e) {
-			_log.warn(e.getMessage());
+			if (_log.isWarnEnabled()) {
+				_log.warn(e.getMessage());
+			}
 		}
 
 		return script;
@@ -122,7 +124,8 @@ public class ContentTransformerListener extends BaseTransformerListener {
 	protected void replace(Element root, Map<String, String> tokens)
 		throws Exception {
 
-		long groupId = GetterUtil.getLong(tokens.get("group_id"));
+		long articleGroupId = GetterUtil.getLong(
+			tokens.get("article_group_id"));
 
 		for (Element el : root.elements()) {
 			Element dynamicContent = el.element("dynamic-content");
@@ -149,7 +152,7 @@ public class ContentTransformerListener extends BaseTransformerListener {
 
 						JournalArticle article =
 							JournalArticleLocalServiceUtil.getArticle(
-								groupId, articleId);
+								articleGroupId, articleId);
 
 						dynamicContent.clearContent();
 						dynamicContent.addCDATA(
@@ -188,7 +191,9 @@ public class ContentTransformerListener extends BaseTransformerListener {
 			xml = DDMXMLUtil.formatXML(document);
 		}
 		catch (Exception e) {
-			_log.warn(e.getMessage());
+			if (_log.isWarnEnabled()) {
+				_log.warn(e.getMessage());
+			}
 		}
 
 		return xml;

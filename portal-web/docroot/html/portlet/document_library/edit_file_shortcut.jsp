@@ -91,7 +91,7 @@ portletURL.setParameter("fileShortcutId", String.valueOf(fileShortcutId));
 	<liferay-ui:error exception="<%= NoSuchFileEntryException.class %>" message="the-document-could-not-be-found" />
 
 	<aui:fieldset>
-		<div class="portlet-msg-info">
+		<div class="alert alert-info">
 			<liferay-ui:message key="you-can-create-a-shortcut-to-any-document-that-you-have-read-access-for" />
 		</div>
 
@@ -101,11 +101,11 @@ portletURL.setParameter("fileShortcutId", String.valueOf(fileShortcutId));
 			String toGroupName = BeanPropertiesUtil.getString(toGroup, "name");
 			%>
 
-			<span id="<portlet:namespace />toGroupName">
-			<%= toGroupName %>
-			</span>
+			<div class="input-append">
+				<liferay-ui:input-resource id="toGroupName" url="<%= toGroupName %>" />
 
-			<aui:button name="selectGroupButton" value="select" />
+				<aui:button name="selectGroupButton" value="select" />
+			</div>
 		</aui:field-wrapper>
 
 		<aui:field-wrapper label="document">
@@ -114,11 +114,11 @@ portletURL.setParameter("fileShortcutId", String.valueOf(fileShortcutId));
 			String toFileEntryTitle = BeanPropertiesUtil.getString(toFileEntry, "title");
 			%>
 
-			<span id="<portlet:namespace />toFileEntryTitle">
-			<%= toFileEntryTitle %>
-			</span>
+			<div class="input-append">
+				<liferay-ui:input-resource id="toFileEntryTitle" url="<%= toFileEntryTitle %>" />
 
-			<aui:button disabled="<%= (toGroup == null) %>" name="selectToFileEntryButton" value="select" />
+				<aui:button disabled="<%= (toGroup == null) %>" name="selectToFileEntryButton" value="select" />
+			</div>
 		</aui:field-wrapper>
 
 		<c:if test="<%= fileShortcut == null %>">
@@ -146,20 +146,20 @@ portletURL.setParameter("fileShortcutId", String.valueOf(fileShortcutId));
 </portlet:renderURL>
 
 <aui:script use="aui-base,escape">
+	var selectToFileEntryButton = A.one('#<portlet:namespace />selectToFileEntryButton');
+
 	A.one('#<portlet:namespace />selectGroupButton').on(
 		'click',
 		function(event) {
 			Liferay.Util.selectEntity(
 				{
 					dialog: {
-						align: Liferay.Util.Window.ALIGN_CENTER,
 						constrain: true,
 						modal: true,
-						stack: true,
 						width: 680
 					},
 					id: '<portlet:namespace />selectGroup',
-					title: '<%= UnicodeLanguageUtil.format(pageContext, "select-x", "site") %>',
+					title: '<liferay-ui:message arguments="site" key="select-x" />',
 					uri: '<%= selectGroupURL.toString() %>'
 				},
 				function(event) {
@@ -172,35 +172,26 @@ portletURL.setParameter("fileShortcutId", String.valueOf(fileShortcutId));
 					document.<portlet:namespace />fm.<portlet:namespace />toGroupId.value = event.groupid;
 					document.<portlet:namespace />fm.<portlet:namespace />toFileEntryId.value = 0;
 
-					var nameEl = document.getElementById("<portlet:namespace />toGroupName");
+					document.getElementById('<portlet:namespace />toGroupName').value = A.Escape.html(event.groupdescriptivename);
 
-					nameEl.innerHTML = A.Escape.html(event.groupname) + "&nbsp;";
-
-					var button = A.one('#<portlet:namespace />selectToFileEntryButton');
-
-					if (button) {
-						button.set('disabled', false);
-						button.ancestor('.aui-button').removeClass('aui-button-disabled');
-					}
+					Liferay.Util.toggleDisabled(selectToFileEntryButton, false);
 				}
 			);
 		}
 	);
 
-	A.one('#<portlet:namespace />selectToFileEntryButton').on(
+	selectToFileEntryButton.on(
 		'click',
 		function(event) {
 			Liferay.Util.selectEntity(
 				{
 					dialog: {
-						align: Liferay.Util.Window.ALIGN_CENTER,
 						constrain: true,
 						modal: true,
-						stack: true,
 						width: 680
 					},
 					id: <portlet:namespace />createSelectFileEntryId(),
-					title: '<%= UnicodeLanguageUtil.format(pageContext, "select-x", "file") %>',
+					title: '<liferay-ui:message arguments="file" key="select-x" />',
 					uri: <portlet:namespace />createSelectFileEntryURL('<%= selectFileEntryURL.toString() %>')
 				},
 				function(event) {
@@ -225,19 +216,14 @@ portletURL.setParameter("fileShortcutId", String.valueOf(fileShortcutId));
 
 	function <portlet:namespace />saveFileShortcut() {
 		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = "<%= (fileShortcut == null) ? Constants.ADD : Constants.UPDATE %>";
+
 		submitForm(document.<portlet:namespace />fm);
 	}
 
 	function <portlet:namespace />selectFileEntry(fileEntryId, title) {
 		document.<portlet:namespace />fm.<portlet:namespace />toFileEntryId.value = fileEntryId;
 
-		var titleEl = document.getElementById("<portlet:namespace />toFileEntryTitle");
-
-		if (title != "") {
-			title += "&nbsp;";
-		}
-
-		titleEl.innerHTML = title;
+		document.getElementById('<portlet:namespace />toFileEntryTitle').value = title;
 	}
 </aui:script>
 

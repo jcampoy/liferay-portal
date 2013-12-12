@@ -114,6 +114,7 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 	 * @return the matching announcements deliveries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<AnnouncementsDelivery> findByUserId(long userId)
 		throws SystemException {
 		return findByUserId(userId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
@@ -132,6 +133,7 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 	 * @return the range of matching announcements deliveries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<AnnouncementsDelivery> findByUserId(long userId, int start,
 		int end) throws SystemException {
 		return findByUserId(userId, start, end, null);
@@ -151,6 +153,7 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 	 * @return the ordered range of matching announcements deliveries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<AnnouncementsDelivery> findByUserId(long userId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -257,6 +260,7 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 	 * @throws com.liferay.portlet.announcements.NoSuchDeliveryException if a matching announcements delivery could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public AnnouncementsDelivery findByUserId_First(long userId,
 		OrderByComparator orderByComparator)
 		throws NoSuchDeliveryException, SystemException {
@@ -287,6 +291,7 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 	 * @return the first matching announcements delivery, or <code>null</code> if a matching announcements delivery could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public AnnouncementsDelivery fetchByUserId_First(long userId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<AnnouncementsDelivery> list = findByUserId(userId, 0, 1,
@@ -308,6 +313,7 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 	 * @throws com.liferay.portlet.announcements.NoSuchDeliveryException if a matching announcements delivery could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public AnnouncementsDelivery findByUserId_Last(long userId,
 		OrderByComparator orderByComparator)
 		throws NoSuchDeliveryException, SystemException {
@@ -338,9 +344,14 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 	 * @return the last matching announcements delivery, or <code>null</code> if a matching announcements delivery could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public AnnouncementsDelivery fetchByUserId_Last(long userId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByUserId(userId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<AnnouncementsDelivery> list = findByUserId(userId, count - 1,
 				count, orderByComparator);
@@ -362,6 +373,7 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 	 * @throws com.liferay.portlet.announcements.NoSuchDeliveryException if a announcements delivery with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public AnnouncementsDelivery[] findByUserId_PrevAndNext(long deliveryId,
 		long userId, OrderByComparator orderByComparator)
 		throws NoSuchDeliveryException, SystemException {
@@ -503,6 +515,7 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 	 * @param userId the user ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByUserId(long userId) throws SystemException {
 		for (AnnouncementsDelivery announcementsDelivery : findByUserId(
 				userId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
@@ -517,6 +530,7 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 	 * @return the number of matching announcements deliveries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByUserId(long userId) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_USERID;
 
@@ -584,6 +598,7 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 	 * @throws com.liferay.portlet.announcements.NoSuchDeliveryException if a matching announcements delivery could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public AnnouncementsDelivery findByU_T(long userId, String type)
 		throws NoSuchDeliveryException, SystemException {
 		AnnouncementsDelivery announcementsDelivery = fetchByU_T(userId, type);
@@ -619,6 +634,7 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 	 * @return the matching announcements delivery, or <code>null</code> if a matching announcements delivery could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public AnnouncementsDelivery fetchByU_T(long userId, String type)
 		throws SystemException {
 		return fetchByU_T(userId, type, true);
@@ -633,6 +649,7 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 	 * @return the matching announcements delivery, or <code>null</code> if a matching announcements delivery could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public AnnouncementsDelivery fetchByU_T(long userId, String type,
 		boolean retrieveFromCache) throws SystemException {
 		Object[] finderArgs = new Object[] { userId, type };
@@ -739,6 +756,7 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 	 * @return the announcements delivery that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public AnnouncementsDelivery removeByU_T(long userId, String type)
 		throws NoSuchDeliveryException, SystemException {
 		AnnouncementsDelivery announcementsDelivery = findByU_T(userId, type);
@@ -754,6 +772,7 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 	 * @return the number of matching announcements deliveries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByU_T(long userId, String type) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_U_T;
 
@@ -822,11 +841,16 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 	private static final String _FINDER_COLUMN_U_T_TYPE_2 = "announcementsDelivery.type = ?";
 	private static final String _FINDER_COLUMN_U_T_TYPE_3 = "(announcementsDelivery.type IS NULL OR announcementsDelivery.type = '')";
 
+	public AnnouncementsDeliveryPersistenceImpl() {
+		setModelClass(AnnouncementsDelivery.class);
+	}
+
 	/**
 	 * Caches the announcements delivery in the entity cache if it is enabled.
 	 *
 	 * @param announcementsDelivery the announcements delivery
 	 */
+	@Override
 	public void cacheResult(AnnouncementsDelivery announcementsDelivery) {
 		EntityCacheUtil.putResult(AnnouncementsDeliveryModelImpl.ENTITY_CACHE_ENABLED,
 			AnnouncementsDeliveryImpl.class,
@@ -846,6 +870,7 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 	 *
 	 * @param announcementsDeliveries the announcements deliveries
 	 */
+	@Override
 	public void cacheResult(List<AnnouncementsDelivery> announcementsDeliveries) {
 		for (AnnouncementsDelivery announcementsDelivery : announcementsDeliveries) {
 			if (EntityCacheUtil.getResult(
@@ -974,6 +999,7 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 	 * @param deliveryId the primary key for the new announcements delivery
 	 * @return the new announcements delivery
 	 */
+	@Override
 	public AnnouncementsDelivery create(long deliveryId) {
 		AnnouncementsDelivery announcementsDelivery = new AnnouncementsDeliveryImpl();
 
@@ -991,6 +1017,7 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 	 * @throws com.liferay.portlet.announcements.NoSuchDeliveryException if a announcements delivery with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public AnnouncementsDelivery remove(long deliveryId)
 		throws NoSuchDeliveryException, SystemException {
 		return remove((Serializable)deliveryId);
@@ -1133,6 +1160,8 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 		clearUniqueFindersCache(announcementsDelivery);
 		cacheUniqueFindersCache(announcementsDelivery);
 
+		announcementsDelivery.resetOriginalValues();
+
 		return announcementsDelivery;
 	}
 
@@ -1191,6 +1220,7 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 	 * @throws com.liferay.portlet.announcements.NoSuchDeliveryException if a announcements delivery with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public AnnouncementsDelivery findByPrimaryKey(long deliveryId)
 		throws NoSuchDeliveryException, SystemException {
 		return findByPrimaryKey((Serializable)deliveryId);
@@ -1252,6 +1282,7 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 	 * @return the announcements delivery, or <code>null</code> if a announcements delivery with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public AnnouncementsDelivery fetchByPrimaryKey(long deliveryId)
 		throws SystemException {
 		return fetchByPrimaryKey((Serializable)deliveryId);
@@ -1263,6 +1294,7 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 	 * @return the announcements deliveries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<AnnouncementsDelivery> findAll() throws SystemException {
 		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
@@ -1279,6 +1311,7 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 	 * @return the range of announcements deliveries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<AnnouncementsDelivery> findAll(int start, int end)
 		throws SystemException {
 		return findAll(start, end, null);
@@ -1297,6 +1330,7 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 	 * @return the ordered range of announcements deliveries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<AnnouncementsDelivery> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -1382,6 +1416,7 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 	 *
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeAll() throws SystemException {
 		for (AnnouncementsDelivery announcementsDelivery : findAll()) {
 			remove(announcementsDelivery);
@@ -1394,6 +1429,7 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 	 * @return the number of announcements deliveries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countAll() throws SystemException {
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
 				FINDER_ARGS_EMPTY, this);
@@ -1488,6 +1524,7 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 
 	private static CacheModel<AnnouncementsDelivery> _nullAnnouncementsDeliveryCacheModel =
 		new CacheModel<AnnouncementsDelivery>() {
+			@Override
 			public AnnouncementsDelivery toEntityModel() {
 				return _nullAnnouncementsDelivery;
 			}

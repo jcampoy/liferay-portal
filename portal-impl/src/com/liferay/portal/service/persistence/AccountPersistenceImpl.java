@@ -80,11 +80,16 @@ public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 			AccountModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 
+	public AccountPersistenceImpl() {
+		setModelClass(Account.class);
+	}
+
 	/**
 	 * Caches the account in the entity cache if it is enabled.
 	 *
 	 * @param account the account
 	 */
+	@Override
 	public void cacheResult(Account account) {
 		EntityCacheUtil.putResult(AccountModelImpl.ENTITY_CACHE_ENABLED,
 			AccountImpl.class, account.getPrimaryKey(), account);
@@ -97,6 +102,7 @@ public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 	 *
 	 * @param accounts the accounts
 	 */
+	@Override
 	public void cacheResult(List<Account> accounts) {
 		for (Account account : accounts) {
 			if (EntityCacheUtil.getResult(
@@ -163,6 +169,7 @@ public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 	 * @param accountId the primary key for the new account
 	 * @return the new account
 	 */
+	@Override
 	public Account create(long accountId) {
 		Account account = new AccountImpl();
 
@@ -180,6 +187,7 @@ public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 	 * @throws com.liferay.portal.NoSuchAccountException if a account with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Account remove(long accountId)
 		throws NoSuchAccountException, SystemException {
 		return remove((Serializable)accountId);
@@ -294,6 +302,8 @@ public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 		EntityCacheUtil.putResult(AccountModelImpl.ENTITY_CACHE_ENABLED,
 			AccountImpl.class, account.getPrimaryKey(), account);
 
+		account.resetOriginalValues();
+
 		return account;
 	}
 
@@ -360,6 +370,7 @@ public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 	 * @throws com.liferay.portal.NoSuchAccountException if a account with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Account findByPrimaryKey(long accountId)
 		throws NoSuchAccountException, SystemException {
 		return findByPrimaryKey((Serializable)accountId);
@@ -419,6 +430,7 @@ public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 	 * @return the account, or <code>null</code> if a account with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Account fetchByPrimaryKey(long accountId) throws SystemException {
 		return fetchByPrimaryKey((Serializable)accountId);
 	}
@@ -429,6 +441,7 @@ public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 	 * @return the accounts
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Account> findAll() throws SystemException {
 		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
@@ -445,6 +458,7 @@ public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 	 * @return the range of accounts
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Account> findAll(int start, int end) throws SystemException {
 		return findAll(start, end, null);
 	}
@@ -462,6 +476,7 @@ public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 	 * @return the ordered range of accounts
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Account> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -547,6 +562,7 @@ public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 	 *
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeAll() throws SystemException {
 		for (Account account : findAll()) {
 			remove(account);
@@ -559,6 +575,7 @@ public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 	 * @return the number of accounts
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countAll() throws SystemException {
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
 				FINDER_ARGS_EMPTY, this);
@@ -649,6 +666,7 @@ public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 		};
 
 	private static CacheModel<Account> _nullAccountCacheModel = new CacheModel<Account>() {
+			@Override
 			public Account toEntityModel() {
 				return _nullAccount;
 			}

@@ -14,15 +14,18 @@
 
 package com.liferay.portlet.bookmarks.service;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
 
 /**
- * The utility for the bookmarks folder remote service. This utility wraps {@link com.liferay.portlet.bookmarks.service.impl.BookmarksFolderServiceImpl} and is the primary access point for service operations in application layer code running on a remote server.
- *
- * <p>
- * This is a remote service. Methods of this service are expected to have security checks based on the propagated JAAS credentials because this service can be accessed remotely.
- * </p>
+ * Provides the remote service utility for BookmarksFolder. This utility wraps
+ * {@link com.liferay.portlet.bookmarks.service.impl.BookmarksFolderServiceImpl} and is the
+ * primary access point for service operations in application layer code running
+ * on a remote server. Methods of this service are expected to have security
+ * checks based on the propagated JAAS credentials because this service can be
+ * accessed remotely.
  *
  * @author Brian Wing Shun Chan
  * @see BookmarksFolderService
@@ -30,6 +33,7 @@ import com.liferay.portal.kernel.util.ReferenceRegistry;
  * @see com.liferay.portlet.bookmarks.service.impl.BookmarksFolderServiceImpl
  * @generated
  */
+@ProviderType
 public class BookmarksFolderServiceUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -181,10 +185,11 @@ public class BookmarksFolderServiceUtil {
 		return getService().moveFolderFromTrash(folderId, parentFolderId);
 	}
 
-	public static void moveFolderToTrash(long folderId)
+	public static com.liferay.portlet.bookmarks.model.BookmarksFolder moveFolderToTrash(
+		long folderId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		getService().moveFolderToTrash(folderId);
+		return getService().moveFolderToTrash(folderId);
 	}
 
 	public static void restoreFolderFromTrash(long folderId)

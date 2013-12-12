@@ -14,6 +14,8 @@
 
 package com.liferay.portal.model;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.service.ServiceContext;
@@ -35,6 +37,7 @@ import java.io.Serializable;
  * @see com.liferay.portal.model.impl.UserIdMapperModelImpl
  * @generated
  */
+@ProviderType
 public interface UserIdMapperModel extends BaseModel<UserIdMapper> {
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -144,41 +147,60 @@ public interface UserIdMapperModel extends BaseModel<UserIdMapper> {
 	 */
 	public void setExternalUserId(String externalUserId);
 
+	@Override
 	public boolean isNew();
 
+	@Override
 	public void setNew(boolean n);
 
+	@Override
 	public boolean isCachedModel();
 
+	@Override
 	public void setCachedModel(boolean cachedModel);
 
+	@Override
 	public boolean isEscapedModel();
 
+	@Override
 	public Serializable getPrimaryKeyObj();
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj);
 
+	@Override
 	public ExpandoBridge getExpandoBridge();
 
+	@Override
 	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
 
+	@Override
 	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
 
+	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
+	@Override
 	public Object clone();
 
+	@Override
 	public int compareTo(UserIdMapper userIdMapper);
 
+	@Override
 	public int hashCode();
 
+	@Override
 	public CacheModel<UserIdMapper> toCacheModel();
 
+	@Override
 	public UserIdMapper toEscapedModel();
 
+	@Override
 	public UserIdMapper toUnescapedModel();
 
+	@Override
 	public String toString();
 
+	@Override
 	public String toXmlString();
 }

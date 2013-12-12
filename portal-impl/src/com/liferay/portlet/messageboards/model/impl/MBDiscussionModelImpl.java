@@ -16,6 +16,7 @@ package com.liferay.portlet.messageboards.model.impl;
 
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.lar.StagedModelType;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -102,26 +103,32 @@ public class MBDiscussionModelImpl extends BaseModelImpl<MBDiscussion>
 	public MBDiscussionModelImpl() {
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _discussionId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setDiscussionId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
 		return _discussionId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return MBDiscussion.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return MBDiscussion.class.getName();
 	}
@@ -214,6 +221,7 @@ public class MBDiscussionModelImpl extends BaseModelImpl<MBDiscussion>
 		}
 	}
 
+	@Override
 	public String getUuid() {
 		if (_uuid == null) {
 			return StringPool.BLANK;
@@ -223,6 +231,7 @@ public class MBDiscussionModelImpl extends BaseModelImpl<MBDiscussion>
 		}
 	}
 
+	@Override
 	public void setUuid(String uuid) {
 		if (_originalUuid == null) {
 			_originalUuid = _uuid;
@@ -235,18 +244,22 @@ public class MBDiscussionModelImpl extends BaseModelImpl<MBDiscussion>
 		return GetterUtil.getString(_originalUuid);
 	}
 
+	@Override
 	public long getDiscussionId() {
 		return _discussionId;
 	}
 
+	@Override
 	public void setDiscussionId(long discussionId) {
 		_discussionId = discussionId;
 	}
 
+	@Override
 	public long getGroupId() {
 		return _groupId;
 	}
 
+	@Override
 	public void setGroupId(long groupId) {
 		_columnBitmask |= GROUPID_COLUMN_BITMASK;
 
@@ -263,10 +276,12 @@ public class MBDiscussionModelImpl extends BaseModelImpl<MBDiscussion>
 		return _originalGroupId;
 	}
 
+	@Override
 	public long getCompanyId() {
 		return _companyId;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
 		_columnBitmask |= COMPANYID_COLUMN_BITMASK;
 
@@ -283,22 +298,27 @@ public class MBDiscussionModelImpl extends BaseModelImpl<MBDiscussion>
 		return _originalCompanyId;
 	}
 
+	@Override
 	public long getUserId() {
 		return _userId;
 	}
 
+	@Override
 	public void setUserId(long userId) {
 		_userId = userId;
 	}
 
+	@Override
 	public String getUserUuid() throws SystemException {
 		return PortalUtil.getUserValue(getUserId(), "uuid", _userUuid);
 	}
 
+	@Override
 	public void setUserUuid(String userUuid) {
 		_userUuid = userUuid;
 	}
 
+	@Override
 	public String getUserName() {
 		if (_userName == null) {
 			return StringPool.BLANK;
@@ -308,26 +328,32 @@ public class MBDiscussionModelImpl extends BaseModelImpl<MBDiscussion>
 		}
 	}
 
+	@Override
 	public void setUserName(String userName) {
 		_userName = userName;
 	}
 
+	@Override
 	public Date getCreateDate() {
 		return _createDate;
 	}
 
+	@Override
 	public void setCreateDate(Date createDate) {
 		_createDate = createDate;
 	}
 
+	@Override
 	public Date getModifiedDate() {
 		return _modifiedDate;
 	}
 
+	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		_modifiedDate = modifiedDate;
 	}
 
+	@Override
 	public String getClassName() {
 		if (getClassNameId() <= 0) {
 			return StringPool.BLANK;
@@ -336,6 +362,7 @@ public class MBDiscussionModelImpl extends BaseModelImpl<MBDiscussion>
 		return PortalUtil.getClassName(getClassNameId());
 	}
 
+	@Override
 	public void setClassName(String className) {
 		long classNameId = 0;
 
@@ -346,10 +373,12 @@ public class MBDiscussionModelImpl extends BaseModelImpl<MBDiscussion>
 		setClassNameId(classNameId);
 	}
 
+	@Override
 	public long getClassNameId() {
 		return _classNameId;
 	}
 
+	@Override
 	public void setClassNameId(long classNameId) {
 		_columnBitmask |= CLASSNAMEID_COLUMN_BITMASK;
 
@@ -366,10 +395,12 @@ public class MBDiscussionModelImpl extends BaseModelImpl<MBDiscussion>
 		return _originalClassNameId;
 	}
 
+	@Override
 	public long getClassPK() {
 		return _classPK;
 	}
 
+	@Override
 	public void setClassPK(long classPK) {
 		_columnBitmask |= CLASSPK_COLUMN_BITMASK;
 
@@ -386,10 +417,12 @@ public class MBDiscussionModelImpl extends BaseModelImpl<MBDiscussion>
 		return _originalClassPK;
 	}
 
+	@Override
 	public long getThreadId() {
 		return _threadId;
 	}
 
+	@Override
 	public void setThreadId(long threadId) {
 		_columnBitmask |= THREADID_COLUMN_BITMASK;
 
@@ -404,6 +437,12 @@ public class MBDiscussionModelImpl extends BaseModelImpl<MBDiscussion>
 
 	public long getOriginalThreadId() {
 		return _originalThreadId;
+	}
+
+	@Override
+	public StagedModelType getStagedModelType() {
+		return new StagedModelType(PortalUtil.getClassNameId(
+				MBDiscussion.class.getName()), getClassNameId());
 	}
 
 	public long getColumnBitmask() {
@@ -454,6 +493,7 @@ public class MBDiscussionModelImpl extends BaseModelImpl<MBDiscussion>
 		return mbDiscussionImpl;
 	}
 
+	@Override
 	public int compareTo(MBDiscussion mbDiscussion) {
 		long primaryKey = mbDiscussion.getPrimaryKey();
 
@@ -470,18 +510,15 @@ public class MBDiscussionModelImpl extends BaseModelImpl<MBDiscussion>
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof MBDiscussion)) {
 			return false;
 		}
 
-		MBDiscussion mbDiscussion = null;
-
-		try {
-			mbDiscussion = (MBDiscussion)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		MBDiscussion mbDiscussion = (MBDiscussion)obj;
 
 		long primaryKey = mbDiscussion.getPrimaryKey();
 
@@ -613,6 +650,7 @@ public class MBDiscussionModelImpl extends BaseModelImpl<MBDiscussion>
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(37);
 

@@ -64,6 +64,7 @@ import java.util.List;
 public class ShoppingItemLocalServiceImpl
 	extends ShoppingItemLocalServiceBaseImpl {
 
+	@Override
 	public void addBookItems(
 			long userId, long groupId, long categoryId, String[] isbns)
 		throws PortalException, SystemException {
@@ -76,6 +77,7 @@ public class ShoppingItemLocalServiceImpl
 		}
 	}
 
+	@Override
 	public ShoppingItem addItem(
 			long userId, long groupId, long categoryId, String sku, String name,
 			String description, String properties, String fieldsQuantities,
@@ -90,7 +92,7 @@ public class ShoppingItemLocalServiceImpl
 		// Item
 
 		User user = userPersistence.findByPrimaryKey(userId);
-		sku = sku.trim().toUpperCase();
+		sku = StringUtil.toUpperCase(sku.trim());
 
 		byte[] smallImageBytes = null;
 		byte[] mediumImageBytes = null;
@@ -221,6 +223,7 @@ public class ShoppingItemLocalServiceImpl
 		return item;
 	}
 
+	@Override
 	public void addItemResources(
 			long itemId, boolean addGroupPermissions,
 			boolean addGuestPermissions)
@@ -231,6 +234,7 @@ public class ShoppingItemLocalServiceImpl
 		addItemResources(item, addGroupPermissions, addGuestPermissions);
 	}
 
+	@Override
 	public void addItemResources(
 			long itemId, String[] groupPermissions, String[] guestPermissions)
 		throws PortalException, SystemException {
@@ -240,6 +244,7 @@ public class ShoppingItemLocalServiceImpl
 		addItemResources(item, groupPermissions, guestPermissions);
 	}
 
+	@Override
 	public void addItemResources(
 			ShoppingItem item, boolean addGroupPermissions,
 			boolean addGuestPermissions)
@@ -251,6 +256,7 @@ public class ShoppingItemLocalServiceImpl
 			addGroupPermissions, addGuestPermissions);
 	}
 
+	@Override
 	public void addItemResources(
 			ShoppingItem item, String[] groupPermissions,
 			String[] guestPermissions)
@@ -262,6 +268,7 @@ public class ShoppingItemLocalServiceImpl
 			guestPermissions);
 	}
 
+	@Override
 	public void deleteItem(long itemId)
 		throws PortalException, SystemException {
 
@@ -270,6 +277,7 @@ public class ShoppingItemLocalServiceImpl
 		deleteItem(item);
 	}
 
+	@Override
 	public void deleteItem(ShoppingItem item)
 		throws PortalException, SystemException {
 
@@ -298,6 +306,7 @@ public class ShoppingItemLocalServiceImpl
 		shoppingItemPricePersistence.removeByItemId(item.getItemId());
 	}
 
+	@Override
 	public void deleteItems(long groupId, long categoryId)
 		throws PortalException, SystemException {
 
@@ -309,12 +318,14 @@ public class ShoppingItemLocalServiceImpl
 		}
 	}
 
+	@Override
 	public int getCategoriesItemsCount(long groupId, List<Long> categoryIds)
 		throws SystemException {
 
 		return shoppingItemFinder.countByG_C(groupId, categoryIds);
 	}
 
+	@Override
 	public List<ShoppingItem> getFeaturedItems(
 			long groupId, long categoryId, int numOfItems)
 		throws SystemException {
@@ -343,42 +354,49 @@ public class ShoppingItemLocalServiceImpl
 		return featuredItems;
 	}
 
+	@Override
 	public ShoppingItem getItem(long itemId)
 		throws PortalException, SystemException {
 
 		return shoppingItemPersistence.findByPrimaryKey(itemId);
 	}
 
+	@Override
 	public ShoppingItem getItem(long companyId, String sku)
 		throws PortalException, SystemException {
 
 		return shoppingItemPersistence.findByC_S(companyId, sku);
 	}
 
+	@Override
 	public ShoppingItem getItemByLargeImageId(long largeImageId)
 		throws PortalException, SystemException {
 
 		return shoppingItemPersistence.findByLargeImageId(largeImageId);
 	}
 
+	@Override
 	public ShoppingItem getItemByMediumImageId(long mediumImageId)
 		throws PortalException, SystemException {
 
 		return shoppingItemPersistence.findByMediumImageId(mediumImageId);
 	}
 
+	@Override
 	public ShoppingItem getItemBySmallImageId(long smallImageId)
 		throws PortalException, SystemException {
 
 		return shoppingItemPersistence.findBySmallImageId(smallImageId);
 	}
 
+	@Override
 	public List<ShoppingItem> getItems(long groupId, long categoryId)
 		throws SystemException {
 
 		return shoppingItemPersistence.findByG_C(groupId, categoryId);
 	}
 
+	@Override
 	public List<ShoppingItem> getItems(
 			long groupId, long categoryId, int start, int end,
 			OrderByComparator obc)
@@ -388,12 +406,14 @@ public class ShoppingItemLocalServiceImpl
 			groupId, categoryId, start, end, obc);
 	}
 
+	@Override
 	public int getItemsCount(long groupId, long categoryId)
 		throws SystemException {
 
 		return shoppingItemPersistence.countByG_C(groupId, categoryId);
 	}
 
+	@Override
 	public ShoppingItem[] getItemsPrevAndNext(
 			long itemId, OrderByComparator obc)
 		throws PortalException, SystemException {
@@ -404,6 +424,7 @@ public class ShoppingItemLocalServiceImpl
 			item.getItemId(), item.getGroupId(), item.getCategoryId(), obc);
 	}
 
+	@Override
 	public List<ShoppingItem> getSaleItems(
 			long groupId, long categoryId, int numOfItems)
 		throws SystemException {
@@ -432,6 +453,7 @@ public class ShoppingItemLocalServiceImpl
 		return saleItems;
 	}
 
+	@Override
 	public List<ShoppingItem> search(
 			long groupId, long[] categoryIds, String keywords, int start,
 			int end)
@@ -441,6 +463,7 @@ public class ShoppingItemLocalServiceImpl
 			groupId, categoryIds, keywords, start, end);
 	}
 
+	@Override
 	public int searchCount(long groupId, long[] categoryIds, String keywords)
 		throws SystemException {
 
@@ -448,6 +471,7 @@ public class ShoppingItemLocalServiceImpl
 			groupId, categoryIds, keywords);
 	}
 
+	@Override
 	public ShoppingItem updateItem(
 			long userId, long itemId, long groupId, long categoryId, String sku,
 			String name, String description, String properties,
@@ -466,7 +490,7 @@ public class ShoppingItemLocalServiceImpl
 
 		User user = userPersistence.findByPrimaryKey(userId);
 		categoryId = getCategory(item, categoryId);
-		sku = sku.trim().toUpperCase();
+		sku = StringUtil.toUpperCase(sku.trim());
 
 		byte[] smallImageBytes = null;
 		byte[] mediumImageBytes = null;
@@ -641,8 +665,7 @@ public class ShoppingItemLocalServiceImpl
 			String smallImageURL = StringPool.BLANK;
 			File smallImageFile = new File(
 				tmpDir + File.separatorChar +
-				PwdGenerator.getPassword(
-					PwdGenerator.KEY1 + PwdGenerator.KEY2, 12) + ".jpg");
+					PwdGenerator.getPassword(8, PwdGenerator.KEY2) + ".jpg");
 
 			byte[] smallImageBytes = HttpUtil.URLtoByteArray(
 				amazonRankings.getSmallImageURL());
@@ -664,8 +687,7 @@ public class ShoppingItemLocalServiceImpl
 			String mediumImageURL = StringPool.BLANK;
 			File mediumImageFile = new File(
 				tmpDir + File.separatorChar +
-				PwdGenerator.getPassword(
-					PwdGenerator.KEY1 + PwdGenerator.KEY2, 12) + ".jpg");
+					PwdGenerator.getPassword(8, PwdGenerator.KEY2) + ".jpg");
 
 			byte[] mediumImageBytes = HttpUtil.URLtoByteArray(
 				amazonRankings.getMediumImageURL());
@@ -687,8 +709,7 @@ public class ShoppingItemLocalServiceImpl
 			String largeImageURL = StringPool.BLANK;
 			File largeImageFile = new File(
 				tmpDir + File.separatorChar +
-				PwdGenerator.getPassword(
-					PwdGenerator.KEY1 + PwdGenerator.KEY2, 12) + ".jpg");
+					PwdGenerator.getPassword(8, PwdGenerator.KEY2) + ".jpg");
 
 			byte[] largeImageBytes = HttpUtil.URLtoByteArray(
 				amazonRankings.getLargeImageURL());
@@ -738,7 +759,7 @@ public class ShoppingItemLocalServiceImpl
 
 		String publisher =
 			amazonRankings.getManufacturer() + "; (" +
-			amazonRankings.getReleaseDateAsString() + ")";
+				amazonRankings.getReleaseDateAsString() + ")";
 
 		String properties =
 			"ISBN=" + isbn + "\nAuthor=" + authors + "\nPublisher=" + publisher;
@@ -915,39 +936,41 @@ public class ShoppingItemLocalServiceImpl
 
 		// Large image
 
-		if (largeImage && Validator.isNull(largeImageURL) &&
-			(largeImageFile != null) && (largeImageBytes != null)) {
+		if (!largeImage || Validator.isNotNull(largeImageURL) ||
+			(largeImageFile == null) || (largeImageBytes == null)) {
 
-			String largeImageName = largeImageFile.getName();
+			return;
+		}
 
-			if (largeImageName != null) {
-				boolean validLargeImageExtension = false;
+		String largeImageName = largeImageFile.getName();
 
-				for (int i = 0; i < imageExtensions.length; i++) {
-					if (StringPool.STAR.equals(imageExtensions[i]) ||
-						StringUtil.endsWith(
-							largeImageName, imageExtensions[i])) {
+		if (largeImageName != null) {
+			boolean validLargeImageExtension = false;
 
-						validLargeImageExtension = true;
+			for (int i = 0; i < imageExtensions.length; i++) {
+				if (StringPool.STAR.equals(imageExtensions[i]) ||
+					StringUtil.endsWith(
+						largeImageName, imageExtensions[i])) {
 
-						break;
-					}
-				}
+					validLargeImageExtension = true;
 
-				if (!validLargeImageExtension) {
-					throw new ItemLargeImageNameException(largeImageName);
+					break;
 				}
 			}
 
-			long largeImageMaxSize = PrefsPropsUtil.getLong(
-				PropsKeys.SHOPPING_IMAGE_LARGE_MAX_SIZE);
-
-			if ((largeImageMaxSize > 0) &&
-				((largeImageBytes == null) ||
-				 (largeImageBytes.length > largeImageMaxSize))) {
-
-				throw new ItemLargeImageSizeException();
+			if (!validLargeImageExtension) {
+				throw new ItemLargeImageNameException(largeImageName);
 			}
+		}
+
+		long largeImageMaxSize = PrefsPropsUtil.getLong(
+			PropsKeys.SHOPPING_IMAGE_LARGE_MAX_SIZE);
+
+		if ((largeImageMaxSize > 0) &&
+			((largeImageBytes == null) ||
+			 (largeImageBytes.length > largeImageMaxSize))) {
+
+			throw new ItemLargeImageSizeException();
 		}
 	}
 

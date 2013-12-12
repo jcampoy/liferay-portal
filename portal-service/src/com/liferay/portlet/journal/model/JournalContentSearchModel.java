@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.journal.model;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.CacheModel;
@@ -36,6 +38,7 @@ import java.io.Serializable;
  * @see com.liferay.portlet.journal.model.impl.JournalContentSearchModelImpl
  * @generated
  */
+@ProviderType
 public interface JournalContentSearchModel extends BaseModel<JournalContentSearch> {
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -164,41 +167,60 @@ public interface JournalContentSearchModel extends BaseModel<JournalContentSearc
 	 */
 	public void setArticleId(String articleId);
 
+	@Override
 	public boolean isNew();
 
+	@Override
 	public void setNew(boolean n);
 
+	@Override
 	public boolean isCachedModel();
 
+	@Override
 	public void setCachedModel(boolean cachedModel);
 
+	@Override
 	public boolean isEscapedModel();
 
+	@Override
 	public Serializable getPrimaryKeyObj();
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj);
 
+	@Override
 	public ExpandoBridge getExpandoBridge();
 
+	@Override
 	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
 
+	@Override
 	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
 
+	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
+	@Override
 	public Object clone();
 
+	@Override
 	public int compareTo(JournalContentSearch journalContentSearch);
 
+	@Override
 	public int hashCode();
 
+	@Override
 	public CacheModel<JournalContentSearch> toCacheModel();
 
+	@Override
 	public JournalContentSearch toEscapedModel();
 
+	@Override
 	public JournalContentSearch toUnescapedModel();
 
+	@Override
 	public String toString();
 
+	@Override
 	public String toXmlString();
 }

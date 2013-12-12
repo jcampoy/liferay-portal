@@ -52,6 +52,7 @@ public class URLTemplateResource implements TemplateResource {
 
 		_templateId = templateId;
 		_templateURL = templateURL;
+		_templateURLExternalForm = templateURL.toExternalForm();
 	}
 
 	@Override
@@ -67,7 +68,8 @@ public class URLTemplateResource implements TemplateResource {
 		URLTemplateResource urlTemplateResource = (URLTemplateResource)obj;
 
 		if (_templateId.equals(urlTemplateResource._templateId) &&
-			_templateURL.equals(urlTemplateResource._templateURL)) {
+			_templateURLExternalForm.equals(
+				urlTemplateResource._templateURLExternalForm)) {
 
 			return true;
 		}
@@ -75,6 +77,7 @@ public class URLTemplateResource implements TemplateResource {
 		return false;
 	}
 
+	@Override
 	public long getLastModified() {
 		URLConnection urlConnection = null;
 
@@ -92,9 +95,8 @@ public class URLTemplateResource implements TemplateResource {
 				if (protocol.equals("file")) {
 					return new File(url.getFile()).lastModified();
 				}
-				else {
-					urlConnection = url.openConnection();
-				}
+
+				urlConnection = url.openConnection();
 			}
 
 			return urlConnection.getLastModified();
@@ -117,6 +119,7 @@ public class URLTemplateResource implements TemplateResource {
 		}
 	}
 
+	@Override
 	public Reader getReader() throws IOException {
 		URLConnection urlConnection = _templateURL.openConnection();
 
@@ -124,28 +127,35 @@ public class URLTemplateResource implements TemplateResource {
 			urlConnection.getInputStream(), TemplateConstants.DEFAUT_ENCODING);
 	}
 
+	@Override
 	public String getTemplateId() {
 		return _templateId;
 	}
 
 	@Override
 	public int hashCode() {
-		return _templateId.hashCode() * 11 + _templateURL.hashCode();
+		return _templateId.hashCode() * 11 +
+			_templateURLExternalForm.hashCode();
 	}
 
+	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
 		_templateId = objectInput.readUTF();
-		_templateURL = new URL(objectInput.readUTF());
+		_templateURLExternalForm = objectInput.readUTF();
+
+		_templateURL = new URL(_templateURLExternalForm);
 	}
 
+	@Override
 	public void writeExternal(ObjectOutput objectOutput) throws IOException {
 		objectOutput.writeUTF(_templateId);
-		objectOutput.writeUTF(_templateURL.toExternalForm());
+		objectOutput.writeUTF(_templateURLExternalForm);
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(URLTemplateResource.class);
 
 	private String _templateId;
 	private URL _templateURL;
+	private String _templateURLExternalForm;
 
 }

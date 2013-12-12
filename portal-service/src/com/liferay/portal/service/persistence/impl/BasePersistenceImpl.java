@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.dao.orm.Dialect;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.ORMException;
 import com.liferay.portal.kernel.dao.orm.OrderFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.Projection;
 import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dao.orm.SessionFactory;
@@ -65,23 +66,41 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 
 	public static final String COUNT_COLUMN_NAME = "COUNT_VALUE";
 
+	@Override
 	public void clearCache() {
 	}
 
+	@Override
 	public void clearCache(List<T> model) {
 	}
 
+	@Override
 	public void clearCache(T model) {
 	}
 
+	@Override
 	public void closeSession(Session session) {
 		_sessionFactory.closeSession(session);
 	}
 
+	@Override
 	public long countWithDynamicQuery(DynamicQuery dynamicQuery)
 		throws SystemException {
 
-		dynamicQuery.setProjection(ProjectionFactoryUtil.rowCount());
+		return countWithDynamicQuery(
+			dynamicQuery, ProjectionFactoryUtil.rowCount());
+	}
+
+	@Override
+	public long countWithDynamicQuery(
+			DynamicQuery dynamicQuery, Projection projection)
+		throws SystemException {
+
+		if (projection == null) {
+			projection = ProjectionFactoryUtil.rowCount();
+		}
+
+		dynamicQuery.setProjection(projection);
 
 		List<Long> results = findWithDynamicQuery(dynamicQuery);
 
@@ -93,11 +112,13 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 		}
 	}
 
+	@Override
 	@SuppressWarnings("unused")
 	public T fetchByPrimaryKey(Serializable primaryKey) throws SystemException {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	@SuppressWarnings("unused")
 	public T findByPrimaryKey(Serializable primaryKey)
 		throws NoSuchModelException, SystemException {
@@ -105,6 +126,7 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public List findWithDynamicQuery(DynamicQuery dynamicQuery)
 		throws SystemException {
@@ -126,6 +148,7 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 		}
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public List findWithDynamicQuery(
 			DynamicQuery dynamicQuery, int start, int end)
@@ -150,6 +173,7 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 		}
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public List findWithDynamicQuery(
 			DynamicQuery dynamicQuery, int start, int end,
@@ -161,6 +185,7 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 		return findWithDynamicQuery(dynamicQuery, start, end);
 	}
 
+	@Override
 	public void flush() throws SystemException {
 		try {
 			Session session = _sessionFactory.getCurrentSession();
@@ -174,10 +199,12 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 		}
 	}
 
+	@Override
 	public Session getCurrentSession() throws ORMException {
 		return _sessionFactory.getCurrentSession();
 	}
 
+	@Override
 	public DataSource getDataSource() {
 		return _dataSource;
 	}
@@ -186,22 +213,32 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 		return _db;
 	}
 
+	@Override
 	public Dialect getDialect() {
 		return _dialect;
 	}
 
+	@Override
 	public ModelListener<T>[] getListeners() {
 		return listeners;
 	}
 
+	@Override
+	public Class<T> getModelClass() {
+		return _modelClass;
+	}
+
+	@Override
 	public Session openNewSession(Connection connection) throws ORMException {
 		return _sessionFactory.openNewSession(connection);
 	}
 
+	@Override
 	public Session openSession() throws ORMException {
 		return _sessionFactory.openSession();
 	}
 
+	@Override
 	public SystemException processException(Exception e) {
 		if (!(e instanceof ORMException)) {
 			_log.error("Caught unexpected exception " + e.getClass().getName());
@@ -214,6 +251,7 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 		return new SystemException(e);
 	}
 
+	@Override
 	public void registerListener(ModelListener<T> listener) {
 		List<ModelListener<T>> listenersList = ListUtil.fromArray(listeners);
 
@@ -223,6 +261,7 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 			new ModelListener[listenersList.size()]);
 	}
 
+	@Override
 	@SuppressWarnings("unused")
 	public T remove(Serializable primaryKey)
 		throws NoSuchModelException, SystemException {
@@ -230,6 +269,7 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public T remove(T model) throws SystemException {
 		if (model instanceof ModelWrapper) {
 			ModelWrapper<T> modelWrapper = (ModelWrapper<T>)model;
@@ -250,6 +290,7 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 		return model;
 	}
 
+	@Override
 	public void setDataSource(DataSource dataSource) {
 		_dataSource = dataSource;
 	}
@@ -260,6 +301,7 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 		_db = DBFactoryUtil.getDB(_dialect);
 	}
 
+	@Override
 	public void unregisterListener(ModelListener<T> listener) {
 		List<ModelListener<T>> listenersList = ListUtil.fromArray(listeners);
 
@@ -269,6 +311,7 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 			new ModelListener[listenersList.size()]);
 	}
 
+	@Override
 	public T update(T model) throws SystemException {
 		if (model instanceof ModelWrapper) {
 			ModelWrapper<T> modelWrapper = (ModelWrapper<T>)model;
@@ -304,6 +347,7 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 	/**
 	 * @deprecated As of 6.2.0, replaced by {@link #update(BaseModel)}}
 	 */
+	@Override
 	public T update(T model, boolean merge) throws SystemException {
 		if (model instanceof ModelWrapper) {
 			ModelWrapper<T> modelWrapper = (ModelWrapper<T>)model;
@@ -340,12 +384,14 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 	 * @deprecated As of 6.2.0, replaced by {@link #update(BaseModel,
 	 *             ServiceContext)}}
 	 */
+	@Override
 	public T update(T model, boolean merge, ServiceContext serviceContext)
 		throws SystemException {
 
 		return update(model, serviceContext);
 	}
 
+	@Override
 	public T update(T model, ServiceContext serviceContext)
 		throws SystemException {
 
@@ -440,6 +486,10 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 		throw new UnsupportedOperationException();
 	}
 
+	protected void setModelClass(Class<T> modelClass) {
+		_modelClass = modelClass;
+	}
+
 	/**
 	 * Updates the model instance in the database or adds it if it does not yet
 	 * exist. {@link #remove(BaseModel)} depends on this method to implement the
@@ -491,6 +541,7 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 	private DataSource _dataSource;
 	private DB _db;
 	private Dialect _dialect;
+	private Class<T> _modelClass;
 	private SessionFactory _sessionFactory;
 
 }

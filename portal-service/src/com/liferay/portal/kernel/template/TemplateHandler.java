@@ -14,6 +14,8 @@
 
 package com.liferay.portal.kernel.template;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.xml.Element;
 
 import java.util.List;
@@ -23,6 +25,7 @@ import java.util.Map;
 /**
  * @author Juan Fernández
  */
+@ProviderType
 public interface TemplateHandler {
 
 	/**
@@ -60,6 +63,10 @@ public interface TemplateHandler {
 	 */
 	public String getResourceName();
 
+	public String[] getRestrictedVariables(String language);
+
+	public String getTemplatesHelpContent(String language);
+
 	/**
 	 * Returns the path to the help template.
 	 *
@@ -79,7 +86,7 @@ public interface TemplateHandler {
 	public String getTemplatesHelpPropertyKey();
 
 	public Map<String, TemplateVariableGroup> getTemplateVariableGroups(
-			long classPK, Locale locale)
+			long classPK, String language, Locale locale)
 		throws Exception;
 
 }

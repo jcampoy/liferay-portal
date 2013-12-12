@@ -14,6 +14,8 @@
 
 package com.liferay.portal.model;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.util.Accessor;
 
 /**
@@ -25,6 +27,7 @@ import com.liferay.portal.kernel.util.Accessor;
  * @see com.liferay.portal.model.impl.LayoutModelImpl
  * @generated
  */
+@ProviderType
 public interface Layout extends LayoutModel, PersistedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -32,6 +35,7 @@ public interface Layout extends LayoutModel, PersistedModel {
 	 * Never modify this interface directly. Add methods to {@link com.liferay.portal.model.impl.LayoutImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
 	public static final Accessor<Layout, Long> LAYOUT_ID_ACCESSOR = new Accessor<Layout, Long>() {
+			@Override
 			public Long get(Layout layout) {
 				return layout.getLayoutId();
 			}
@@ -68,6 +72,14 @@ public interface Layout extends LayoutModel, PersistedModel {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
+	public java.lang.String getFriendlyURL(java.util.Locale locale);
+
+	public java.util.Map<java.util.Locale, java.lang.String> getFriendlyURLMap()
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public java.lang.String getFriendlyURLsXML()
+		throws com.liferay.portal.kernel.exception.SystemException;
+
 	public com.liferay.portal.model.Group getGroup()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
@@ -75,6 +87,8 @@ public interface Layout extends LayoutModel, PersistedModel {
 	public java.lang.String getHTMLTitle(java.util.Locale locale);
 
 	public java.lang.String getHTMLTitle(java.lang.String localeLanguageId);
+
+	public boolean getIconImage();
 
 	public com.liferay.portal.model.LayoutSet getLayoutSet()
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -114,8 +128,6 @@ public interface Layout extends LayoutModel, PersistedModel {
 	public java.lang.String getThemeSetting(java.lang.String key,
 		java.lang.String device);
 
-	public java.lang.String getTypeSettings();
-
 	public com.liferay.portal.kernel.util.UnicodeProperties getTypeSettingsProperties();
 
 	public java.lang.String getTypeSettingsProperty(java.lang.String key);
@@ -153,6 +165,8 @@ public interface Layout extends LayoutModel, PersistedModel {
 
 	public boolean isFirstParent();
 
+	public boolean isIconImage();
+
 	public boolean isInheritLookAndFeel();
 
 	public boolean isInheritWapLookAndFeel();
@@ -182,13 +196,7 @@ public interface Layout extends LayoutModel, PersistedModel {
 
 	public boolean isTypeURL();
 
-	public void setGroupId(long groupId);
-
 	public void setLayoutSet(com.liferay.portal.model.LayoutSet layoutSet);
-
-	public void setPrivateLayout(boolean privateLayout);
-
-	public void setTypeSettings(java.lang.String typeSettings);
 
 	public void setTypeSettingsProperties(
 		com.liferay.portal.kernel.util.UnicodeProperties typeSettingsProperties);

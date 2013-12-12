@@ -17,8 +17,7 @@ package com.liferay.portlet;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.HashCode;
-import com.liferay.portal.kernel.util.HashCodeFactoryUtil;
+import com.liferay.portal.kernel.util.HashUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.PortalPreferencesLocalServiceUtil;
@@ -40,39 +39,38 @@ public class PortalPreferencesImpl
 	implements Cloneable, PortalPreferences, Serializable {
 
 	public PortalPreferencesImpl() {
-		this(0, 0, 0, null, Collections.<String, Preference>emptyMap(), false);
+		this(0, 0, null, Collections.<String, Preference>emptyMap(), false);
 	}
 
 	public PortalPreferencesImpl(
-		long companyId, long ownerId, int ownerType, String xml,
+		long ownerId, int ownerType, String xml,
 		Map<String, Preference> preferences, boolean signedIn) {
 
-		super(companyId, ownerId, ownerType, xml, preferences);
+		super(ownerId, ownerType, xml, preferences);
 
 		_signedIn = signedIn;
 	}
 
 	@Override
-	public Object clone() {
+	public PortalPreferencesImpl clone() {
 		return new PortalPreferencesImpl(
-			getCompanyId(), getOwnerId(), getOwnerType(), getOriginalXML(),
+			getOwnerId(), getOwnerType(), getOriginalXML(),
 			getOriginalPreferences(), isSignedIn());
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof PortalPreferencesImpl)) {
 			return false;
 		}
 
 		PortalPreferencesImpl portalPreferences = (PortalPreferencesImpl)obj;
 
-		if (this == portalPreferences) {
-			return true;
-		}
-
-		if ((getCompanyId() == portalPreferences.getCompanyId()) &&
-			(getOwnerId() == portalPreferences.getOwnerId()) &&
+		if ((getOwnerId() == portalPreferences.getOwnerId()) &&
 			(getOwnerType() == portalPreferences.getOwnerType()) &&
 			getPreferences().equals(portalPreferences.getPreferences())) {
 
@@ -83,6 +81,7 @@ public class PortalPreferencesImpl
 		}
 	}
 
+	@Override
 	public long getUserId() {
 		return _userId;
 	}
@@ -92,16 +91,19 @@ public class PortalPreferencesImpl
 		return getValue(namespace, key, null);
 	}
 
+	@Override
 	public String getValue(String namespace, String key, String defaultValue) {
 		key = _encodeKey(namespace, key);
 
 		return super.getValue(key, defaultValue);
 	}
 
+	@Override
 	public String[] getValues(String namespace, String key) {
 		return getValues(namespace, key, null);
 	}
 
+	@Override
 	public String[] getValues(
 		String namespace, String key, String[] defaultValue) {
 
@@ -112,16 +114,15 @@ public class PortalPreferencesImpl
 
 	@Override
 	public int hashCode() {
-		HashCode hashCode = HashCodeFactoryUtil.getHashCode();
+		int hashCode = HashUtil.hash(0, getOwnerId());
 
-		hashCode.append(getCompanyId());
-		hashCode.append(getOwnerId());
-		hashCode.append(getOwnerType());
-		hashCode.append(getPreferences());
+		hashCode = HashUtil.hash(hashCode, getOwnerType());
+		hashCode = HashUtil.hash(hashCode, getPreferences());
 
-		return hashCode.toHashCode();
+		return hashCode;
 	}
 
+	@Override
 	public boolean isSignedIn() {
 		return _signedIn;
 	}
@@ -137,6 +138,7 @@ public class PortalPreferencesImpl
 		modifiedPreferences.remove(key);
 	}
 
+	@Override
 	public void resetValues(String namespace) {
 		try {
 			Map<String, Preference> preferences = getPreferences();
@@ -156,14 +158,17 @@ public class PortalPreferencesImpl
 		}
 	}
 
+	@Override
 	public void setSignedIn(boolean signedIn) {
 		_signedIn = signedIn;
 	}
 
+	@Override
 	public void setUserId(long userId) {
 		_userId = userId;
 	}
 
+	@Override
 	public void setValue(String namespace, String key, String value) {
 		if (Validator.isNull(key) || key.equals(_RANDOM_KEY)) {
 			return;
@@ -188,6 +193,7 @@ public class PortalPreferencesImpl
 		}
 	}
 
+	@Override
 	public void setValues(String namespace, String key, String[] values) {
 		if (Validator.isNull(key) || key.equals(_RANDOM_KEY)) {
 			return;
@@ -234,7 +240,8 @@ public class PortalPreferencesImpl
 
 	private static final String _RANDOM_KEY = "r";
 
-	private static Log _log = LogFactoryUtil.getLog(PortalPreferences.class);
+	private static Log _log = LogFactoryUtil.getLog(
+		PortalPreferencesImpl.class);
 
 	private boolean _signedIn;
 	private long _userId;

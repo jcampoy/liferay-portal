@@ -16,20 +16,22 @@ package com.liferay.portal.search.lucene;
 
 import com.browseengine.bobo.api.BoboBrowser;
 import com.browseengine.bobo.api.BoboIndexReader;
+import com.browseengine.bobo.api.BoboSubBrowser;
 import com.browseengine.bobo.api.Browsable;
 import com.browseengine.bobo.api.BrowseHit;
 import com.browseengine.bobo.api.BrowseRequest;
 import com.browseengine.bobo.api.BrowseResult;
 import com.browseengine.bobo.api.FacetAccessible;
-import com.browseengine.bobo.api.FacetSpec.FacetSortSpec;
 import com.browseengine.bobo.api.FacetSpec;
-import com.browseengine.bobo.facets.FacetHandler.TermCountSize;
+import com.browseengine.bobo.api.FacetSpec.FacetSortSpec;
 import com.browseengine.bobo.facets.FacetHandler;
+import com.browseengine.bobo.facets.FacetHandler.TermCountSize;
 import com.browseengine.bobo.facets.impl.MultiValueFacetHandler;
 import com.browseengine.bobo.facets.impl.RangeFacetHandler;
 import com.browseengine.bobo.facets.impl.SimpleFacetHandler;
 
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
@@ -54,6 +56,7 @@ import com.liferay.portal.kernel.search.facet.SimpleFacet;
 import com.liferay.portal.kernel.search.facet.collector.FacetCollector;
 import com.liferay.portal.kernel.search.facet.config.FacetConfiguration;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.ReflectionUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Time;
@@ -74,6 +77,7 @@ import org.apache.lucene.document.NumericField;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Explanation;
+import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.SortField;
 import org.apache.lucene.search.TopFieldDocs;
@@ -85,6 +89,7 @@ import org.apache.lucene.search.highlight.TokenGroup;
  */
 public class LuceneIndexSearcher extends BaseIndexSearcher {
 
+	@Override
 	public Hits search(SearchContext searchContext, Query query)
 		throws SearchException {
 
@@ -94,10 +99,10 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 
 		Hits hits = null;
 
-		org.apache.lucene.search.IndexSearcher indexSearcher = null;
+		IndexSearcher indexSearcher = null;
 		Map<String, Facet> facets = null;
+		BoboBrowser boboBrowser = null;
 		BrowseRequest browseRequest = null;
-		Browsable browsable = null;
 
 		try {
 			indexSearcher = LuceneHelperUtil.getSearcher(
@@ -179,8 +184,18 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 				for (int i = 0; i < sorts.length; i++) {
 					Sort sort = sorts[i];
 
-					sortFields[i] = new SortField(
-						sort.getFieldName(), sort.getType(), sort.isReverse());
+					if ((sort.getType() == Sort.STRING_TYPE) &&
+						(searchContext.getLocale() != null)) {
+
+						sortFields[i] = new SortField(
+							sort.getFieldName(), searchContext.getLocale(),
+							sort.isReverse());
+					}
+					else {
+						sortFields[i] = new SortField(
+							sort.getFieldName(), sort.getType(),
+							sort.isReverse());
+					}
 				}
 			}
 
@@ -209,11 +224,11 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 					query));
 			browseRequest.setSort(sortFields);
 
-			browsable = new BoboBrowser(boboIndexReader);
+			boboBrowser = new BoboBrowser(boboIndexReader);
 
 			long startTime = System.currentTimeMillis();
 
-			BrowseResult browseResult = browsable.browse(browseRequest);
+			BrowseResult browseResult = boboBrowser.browse(browseRequest);
 
 			BrowseHit[] browseHits = browseResult.getHits();
 
@@ -248,9 +263,9 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 			try {
 				long startTime = System.currentTimeMillis();
 
-				BrowseResult result = browsable.browse(browseRequest);
+				BrowseResult browseResult = boboBrowser.browse(browseRequest);
 
-				BrowseHit[] browseHits = result.getHits();
+				BrowseHit[] browseHits = browseResult.getHits();
 
 				long endTime = System.currentTimeMillis();
 
@@ -261,7 +276,8 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 					searchTime, searchContext.getStart(),
 					searchContext.getEnd());
 
-				Map<String, FacetAccessible> facetMap = result.getFacetMap();
+				Map<String, FacetAccessible> facetMap =
+					browseResult.getFacetMap();
 
 				for (Map.Entry<String, FacetAccessible> entry :
 						facetMap.entrySet()) {
@@ -292,16 +308,9 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 			throw new SearchException(e);
 		}
 		finally {
-			close(browsable);
+			cleanUp(boboBrowser);
 
-			if (indexSearcher != null) {
-				try {
-					indexSearcher.close();
-				}
-				catch (IOException ioe) {
-					_log.error(ioe, ioe);
-				}
-			}
+			LuceneHelperUtil.cleanUp(indexSearcher);
 		}
 
 		if (_log.isDebugEnabled()) {
@@ -313,6 +322,7 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 		return hits;
 	}
 
+	@Override
 	public Hits search(
 			String searchEngineId, long companyId, Query query, Sort[] sorts,
 			int start, int end)
@@ -324,7 +334,7 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 
 		Hits hits = null;
 
-		org.apache.lucene.search.IndexSearcher indexSearcher = null;
+		IndexSearcher indexSearcher = null;
 		org.apache.lucene.search.Sort luceneSort = null;
 
 		try {
@@ -398,14 +408,7 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 			throw new SearchException(e);
 		}
 		finally {
-			if (indexSearcher != null) {
-				try {
-					indexSearcher.close();
-				}
-				catch (IOException ioe) {
-					_log.error(ioe, ioe);
-				}
-			}
+			LuceneHelperUtil.cleanUp(indexSearcher);
 		}
 
 		if (_log.isDebugEnabled()) {
@@ -417,14 +420,58 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 		return hits;
 	}
 
-	@SuppressWarnings("deprecation")
-	protected void close(Browsable browsable) {
-		if (browsable != null) {
-			try {
-				browsable.close();
+	protected void cleanUp(BoboBrowser boboBrowser) {
+		if (boboBrowser == null) {
+			return;
+		}
+
+		try {
+			boboBrowser.close();
+		}
+		catch (IOException ioe) {
+			_log.error(ioe, ioe);
+		}
+
+		Browsable[] browsables = boboBrowser.getSubBrowsers();
+
+		for (Browsable browsable : browsables) {
+			if (!(browsable instanceof BoboSubBrowser)) {
+				continue;
 			}
-			catch (IOException ioe) {
-				_log.error(ioe, ioe);
+
+			BoboSubBrowser boboSubBrowser = (BoboSubBrowser)browsable;
+
+			BoboIndexReader boboIndexReader = boboSubBrowser.getIndexReader();
+
+			try {
+				ThreadLocal<?> threadLocal =
+					(ThreadLocal<?>)_runtimeFacetDataMapField.get(
+						boboIndexReader);
+
+				threadLocal.remove();
+
+				_runtimeFacetDataMapField.set(boboIndexReader, null);
+			}
+			catch (Exception e) {
+				_log.error(
+					"Unable to clean up BoboIndexReader#_runtimeFacetDataMap",
+					e);
+			}
+
+			try {
+				ThreadLocal<?> threadLocal =
+					(ThreadLocal<?>)_runtimeFacetHandlerMapField.get(
+						boboIndexReader);
+
+				threadLocal.remove();
+
+				_runtimeFacetHandlerMapField.set(boboIndexReader, null);
+			}
+			catch (Exception e) {
+				_log.error(
+					"Unable to clean up BoboIndexReader#" +
+						"_runtimeFacetHandlerMap",
+					e);
 			}
 		}
 	}
@@ -494,20 +541,18 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 			TermCollectingFormatter termCollectingFormatter =
 				new TermCollectingFormatter();
 
-			if ((values != null) && (values.length > 0)) {
+			if (ArrayUtil.isNotEmpty(values)) {
 				snippet = LuceneHelperUtil.getSnippet(
 					luceneQuery, snippetField, StringUtil.merge(values),
 					termCollectingFormatter);
 			}
 
-			if ((values == null) || (values.length == 0) ||
-				Validator.isNull(snippet)) {
-
+			if (ArrayUtil.isEmpty(values) || Validator.isNull(snippet)) {
 				snippetField = field;
 
 				values = doc.getValues(snippetField);
 
-				if (Validator.isNull(values)) {
+				if (ArrayUtil.isEmpty(values)) {
 					return StringPool.BLANK;
 				}
 
@@ -534,17 +579,22 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 	}
 
 	protected Hits toHits(
-			org.apache.lucene.search.IndexSearcher indexSearcher,
-			HitDocs hitDocs, Query query, long startTime, float searchTime,
-			int start, int end)
+			IndexSearcher indexSearcher, HitDocs hitDocs, Query query,
+			long startTime, float searchTime, int start, int end)
 		throws IOException, ParseException {
 
-		int length = hitDocs.getTotalHits();
+		int total = hitDocs.getTotalHits();
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS)) {
 			start = 0;
-			end = length;
+			end = total;
 		}
+
+		int[] startAndEnd = SearchPaginationUtil.calculateStartAndEnd(
+			start, end, total);
+
+		start = startAndEnd[0];
+		end = startAndEnd[1];
 
 		Set<String> queryTerms = new HashSet<String>();
 
@@ -562,89 +612,96 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 
 		Hits hits = new HitsImpl();
 
-		if ((start > -1) && (start <= end)) {
-			if (end > length) {
-				end = length;
-			}
-
-			if (start > end) {
-				start = end;
-			}
-
-			int subsetTotal = end - start;
-
-			if (subsetTotal > PropsValues.INDEX_SEARCH_LIMIT) {
-				subsetTotal = PropsValues.INDEX_SEARCH_LIMIT;
-			}
-
-			List<Document> subsetDocs = new ArrayList<Document>(subsetTotal);
-			List<Float> subsetScores = new ArrayList<Float>(subsetTotal);
-
-			QueryConfig queryConfig = query.getQueryConfig();
-
-			for (int i = start; i < start + subsetTotal; i++) {
-				int docId = hitDocs.getDocId(i);
-
-				org.apache.lucene.document.Document document =
-					indexSearcher.doc(docId);
-
-				Document subsetDocument = getDocument(document);
-
-				if (queryConfig.isHighlightEnabled()) {
-					Locale locale = queryConfig.getLocale();
-
-					getSnippet(
-						document, query, Field.CONTENT, locale, subsetDocument,
-						queryTerms);
-					getSnippet(
-						document, query, Field.DESCRIPTION, locale,
-						subsetDocument, queryTerms);
-					getSnippet(
-						document, query, Field.TITLE, locale, subsetDocument,
-						queryTerms);
-				}
-
-				subsetDocs.add(subsetDocument);
-
-				Float subsetScore = hitDocs.getScore(i);
-
-				if (scoredFieldNamesCount > 0) {
-					subsetScore = subsetScore / scoredFieldNamesCount;
-				}
-
-				subsetScores.add(subsetScore);
-
-				if (_log.isDebugEnabled()) {
-					try {
-						Explanation explanation = indexSearcher.explain(
-							luceneQuery, docId);
-
-						_log.debug(explanation.toString());
-					}
-					catch (Exception e) {
-					}
-				}
-			}
-
-			if (!queryConfig.isHighlightEnabled()) {
-				queryTerms = getQueryTerms(query);
-			}
-
-			hits.setDocs(subsetDocs.toArray(new Document[subsetDocs.size()]));
-			hits.setLength(length);
-			hits.setQuery(query);
-			hits.setQueryTerms(
-				queryTerms.toArray(new String[queryTerms.size()]));
-			hits.setScores(
-				subsetScores.toArray(new Float[subsetScores.size()]));
-			hits.setSearchTime(searchTime);
-			hits.setStart(startTime);
+		if ((start < 0) || (start > end)) {
+			return hits;
 		}
+
+		int subsetTotal = end - start;
+
+		if (subsetTotal > PropsValues.INDEX_SEARCH_LIMIT) {
+			subsetTotal = PropsValues.INDEX_SEARCH_LIMIT;
+		}
+
+		List<Document> subsetDocs = new ArrayList<Document>(subsetTotal);
+		List<Float> subsetScores = new ArrayList<Float>(subsetTotal);
+
+		QueryConfig queryConfig = query.getQueryConfig();
+
+		for (int i = start; i < start + subsetTotal; i++) {
+			int docId = hitDocs.getDocId(i);
+
+			org.apache.lucene.document.Document document = indexSearcher.doc(
+				docId);
+
+			Document subsetDocument = getDocument(document);
+
+			if (queryConfig.isHighlightEnabled()) {
+				Locale locale = queryConfig.getLocale();
+
+				getSnippet(
+					document, query, Field.CONTENT, locale, subsetDocument,
+					queryTerms);
+				getSnippet(
+					document, query, Field.DESCRIPTION, locale, subsetDocument,
+					queryTerms);
+				getSnippet(
+					document, query, Field.TITLE, locale, subsetDocument,
+					queryTerms);
+			}
+
+			subsetDocs.add(subsetDocument);
+
+			Float subsetScore = hitDocs.getScore(i);
+
+			if (scoredFieldNamesCount > 0) {
+				subsetScore = subsetScore / scoredFieldNamesCount;
+			}
+
+			subsetScores.add(subsetScore);
+
+			if (_log.isDebugEnabled()) {
+				try {
+					Explanation explanation = indexSearcher.explain(
+						luceneQuery, docId);
+
+					_log.debug(explanation.toString());
+				}
+				catch (Exception e) {
+				}
+			}
+		}
+
+		if (!queryConfig.isHighlightEnabled()) {
+			queryTerms = getQueryTerms(query);
+		}
+
+		hits.setDocs(subsetDocs.toArray(new Document[subsetDocs.size()]));
+		hits.setLength(total);
+		hits.setQuery(query);
+		hits.setQueryTerms(queryTerms.toArray(new String[queryTerms.size()]));
+		hits.setScores(subsetScores.toArray(new Float[subsetScores.size()]));
+		hits.setSearchTime(searchTime);
+		hits.setStart(startTime);
 
 		return hits;
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(LuceneIndexSearcher.class);
+
+	private static java.lang.reflect.Field _runtimeFacetDataMapField;
+	private static java.lang.reflect.Field _runtimeFacetHandlerMapField;
+
+	static {
+		try {
+			_runtimeFacetDataMapField = ReflectionUtil.getDeclaredField(
+				BoboIndexReader.class, "_runtimeFacetDataMap");
+			_runtimeFacetHandlerMapField = ReflectionUtil.getDeclaredField(
+				BoboIndexReader.class, "_runtimeFacetHandlerMap");
+		}
+		catch (Exception e) {
+			throw new ExceptionInInitializerError(e);
+		}
+	}
 
 	private class HitDocs {
 
@@ -704,6 +761,7 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 			return _terms;
 		}
 
+		@Override
 		public String highlightTerm(
 			String originalText, TokenGroup tokenGroup) {
 

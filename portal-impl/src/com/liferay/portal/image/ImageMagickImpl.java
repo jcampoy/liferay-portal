@@ -50,6 +50,7 @@ public class ImageMagickImpl implements ImageMagick {
 		return _instance;
 	}
 
+	@Override
 	public Future<?> convert(List<String> arguments) throws Exception {
 		if (!isEnabled()) {
 			throw new IllegalStateException(
@@ -68,6 +69,7 @@ public class ImageMagickImpl implements ImageMagick {
 		return processTask;
 	}
 
+	@Override
 	public void destroy() {
 		if (_processExecutor == null) {
 			return;
@@ -80,8 +82,9 @@ public class ImageMagickImpl implements ImageMagick {
 		_processExecutor = null;
 	}
 
+	@Override
 	public String getGlobalSearchPath() throws Exception {
-		PortletPreferences preferences = PrefsPropsUtil.getPreferences();
+		PortletPreferences preferences = PrefsPropsUtil.getPreferences(true);
 
 		String globalSearchPath = preferences.getValue(
 			PropsKeys.IMAGEMAGICK_GLOBAL_SEARCH_PATH, null);
@@ -106,6 +109,7 @@ public class ImageMagickImpl implements ImageMagick {
 			PropsKeys.IMAGEMAGICK_GLOBAL_SEARCH_PATH, new Filter(filterName));
 	}
 
+	@Override
 	public Properties getResourceLimitsProperties() throws Exception {
 		Properties resourceLimitsProperties = PrefsPropsUtil.getProperties(
 			PropsKeys.IMAGEMAGICK_RESOURCE_LIMIT, true);
@@ -118,6 +122,7 @@ public class ImageMagickImpl implements ImageMagick {
 		return resourceLimitsProperties;
 	}
 
+	@Override
 	public String[] identify(List<String> arguments) throws Exception {
 		if (!isEnabled()) {
 			throw new IllegalStateException(
@@ -149,6 +154,7 @@ public class ImageMagickImpl implements ImageMagick {
 		return new String[0];
 	}
 
+	@Override
 	public boolean isEnabled() {
 		boolean enabled = false;
 
@@ -156,10 +162,12 @@ public class ImageMagickImpl implements ImageMagick {
 			enabled = PrefsPropsUtil.getBoolean(PropsKeys.IMAGEMAGICK_ENABLED);
 		}
 		catch (Exception e) {
-			_log.warn(e, e);
+			if (_log.isWarnEnabled()) {
+				_log.warn(e, e);
+			}
 		}
 
-		if (!enabled && !_warned) {
+		if (!enabled && !_warned && _log.isWarnEnabled()) {
 			StringBundler sb = new StringBundler(7);
 
 			sb.append("Liferay is not configured to use ImageMagick and ");
@@ -178,6 +186,7 @@ public class ImageMagickImpl implements ImageMagick {
 		return enabled;
 	}
 
+	@Override
 	public void reset() {
 		if (isEnabled()) {
 			try {

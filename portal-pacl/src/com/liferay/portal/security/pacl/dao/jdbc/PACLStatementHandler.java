@@ -14,6 +14,7 @@
 
 package com.liferay.portal.security.pacl.dao.jdbc;
 
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.security.pacl.PACLPolicy;
 
 import java.lang.reflect.InvocationHandler;
@@ -32,6 +33,7 @@ public class PACLStatementHandler implements InvocationHandler {
 		_paclPolicy = paclPolicy;
 	}
 
+	@Override
 	public Object invoke(Object proxy, Method method, Object[] arguments)
 		throws Throwable {
 
@@ -42,7 +44,7 @@ public class PACLStatementHandler implements InvocationHandler {
 				methodName.equals("executeQuery") ||
 				methodName.equals("executeUpdate")) {
 
-				if ((arguments != null) && (arguments.length > 0)) {
+				if (ArrayUtil.isNotEmpty(arguments)) {
 					String sql = (String)arguments[0];
 
 					if (!_paclPolicy.hasSQL(sql)) {

@@ -17,7 +17,6 @@ package com.liferay.portal.freemarker;
 import com.liferay.portal.kernel.io.unsync.UnsyncStringWriter;
 import com.liferay.portal.kernel.template.StringTemplateResource;
 import com.liferay.portal.kernel.template.Template;
-import com.liferay.portal.kernel.template.TemplateContextType;
 import com.liferay.portal.kernel.template.TemplateException;
 import com.liferay.portal.kernel.template.TemplateResource;
 import com.liferay.portal.kernel.util.ReflectionUtil;
@@ -83,7 +82,7 @@ public class FreeMarkerTemplateTest {
 	public void testGet() throws Exception {
 		Template template = new FreeMarkerTemplate(
 			new MockTemplateResource(_TEMPLATE_FILE_NAME), null, null,
-			_configuration, _templateContextHelper);
+			_configuration, _templateContextHelper, false);
 
 		template.put(_TEST_KEY, _TEST_VALUE);
 
@@ -102,7 +101,7 @@ public class FreeMarkerTemplateTest {
 	public void testPrepare() throws Exception {
 		Template template = new FreeMarkerTemplate(
 			new MockTemplateResource(_TEMPLATE_FILE_NAME), null, null,
-			_configuration, _templateContextHelper);
+			_configuration, _templateContextHelper, false);
 
 		template.put(_TEST_KEY, _TEST_VALUE);
 
@@ -123,7 +122,7 @@ public class FreeMarkerTemplateTest {
 	public void testProcessTemplate1() throws Exception {
 		Template template = new FreeMarkerTemplate(
 			new MockTemplateResource(_TEMPLATE_FILE_NAME), null, null,
-			_configuration, _templateContextHelper);
+			_configuration, _templateContextHelper, false);
 
 		template.put(_TEST_KEY, _TEST_VALUE);
 
@@ -140,7 +139,7 @@ public class FreeMarkerTemplateTest {
 	public void testProcessTemplate2() throws Exception {
 		Template template = new FreeMarkerTemplate(
 			new MockTemplateResource(_WRONG_TEMPLATE_ID), null, null,
-			_configuration, _templateContextHelper);
+			_configuration, _templateContextHelper, false);
 
 		template.put(_TEST_KEY, _TEST_VALUE);
 
@@ -169,7 +168,7 @@ public class FreeMarkerTemplateTest {
 		Template template = new FreeMarkerTemplate(
 			new StringTemplateResource(
 				_WRONG_TEMPLATE_ID, _TEST_TEMPLATE_CONTENT), null, null,
-			_configuration, _templateContextHelper);
+			_configuration, _templateContextHelper, false);
 
 		template.put(_TEST_KEY, _TEST_VALUE);
 
@@ -187,7 +186,7 @@ public class FreeMarkerTemplateTest {
 		Template template = new FreeMarkerTemplate(
 			new MockTemplateResource(_TEMPLATE_FILE_NAME),
 			new MockTemplateResource(_WRONG_ERROR_TEMPLATE_ID), null,
-			_configuration, _templateContextHelper);
+			_configuration, _templateContextHelper, false);
 
 		template.put(_TEST_KEY, _TEST_VALUE);
 
@@ -205,7 +204,7 @@ public class FreeMarkerTemplateTest {
 		Template template = new FreeMarkerTemplate(
 			new MockTemplateResource(_WRONG_TEMPLATE_ID),
 			new MockTemplateResource(_TEMPLATE_FILE_NAME), null, _configuration,
-			_templateContextHelper);
+			_templateContextHelper, false);
 
 		template.put(_TEST_KEY, _TEST_VALUE);
 
@@ -223,7 +222,7 @@ public class FreeMarkerTemplateTest {
 		Template template = new FreeMarkerTemplate(
 			new MockTemplateResource(_WRONG_TEMPLATE_ID),
 			new MockTemplateResource(_WRONG_ERROR_TEMPLATE_ID), null,
-			_configuration, _templateContextHelper);
+			_configuration, _templateContextHelper, false);
 
 		template.put(_TEST_KEY, _TEST_VALUE);
 
@@ -253,7 +252,7 @@ public class FreeMarkerTemplateTest {
 			new MockTemplateResource(_WRONG_TEMPLATE_ID),
 			new StringTemplateResource(
 				_WRONG_ERROR_TEMPLATE_ID, _TEST_TEMPLATE_CONTENT),
-			null, _configuration, _templateContextHelper);
+			null, _configuration, _templateContextHelper, false);
 
 		template.put(_TEST_KEY, _TEST_VALUE);
 
@@ -274,7 +273,7 @@ public class FreeMarkerTemplateTest {
 
 		Template template = new FreeMarkerTemplate(
 			new MockTemplateResource(_TEMPLATE_FILE_NAME), null, context,
-			_configuration, _templateContextHelper);
+			_configuration, _templateContextHelper, false);
 
 		UnsyncStringWriter unsyncStringWriter = new UnsyncStringWriter();
 
@@ -305,7 +304,7 @@ public class FreeMarkerTemplateTest {
 
 		@Override
 		public Map<String, Object> getHelperUtilities(
-			TemplateContextType templateContextType) {
+			ClassLoader classLoader, boolean restricted) {
 
 			return Collections.emptyMap();
 		}
@@ -338,10 +337,12 @@ public class FreeMarkerTemplateTest {
 			_templateId = templateId;
 		}
 
+		@Override
 		public long getLastModified() {
 			return _lastModified;
 		}
 
+		@Override
 		public Reader getReader() throws IOException {
 			if (_templateId.equals(_TEMPLATE_FILE_NAME)) {
 				return new StringReader(_TEST_TEMPLATE_CONTENT);
@@ -352,15 +353,18 @@ public class FreeMarkerTemplateTest {
 				0);
 		}
 
+		@Override
 		public String getTemplateId() {
 			return _templateId;
 		}
 
+		@Override
 		public void readExternal(ObjectInput objectInput) throws IOException {
 			_lastModified = objectInput.readLong();
 			_templateId = objectInput.readUTF();
 		}
 
+		@Override
 		public void writeExternal(ObjectOutput objectOutput)
 			throws IOException {
 

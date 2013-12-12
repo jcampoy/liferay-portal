@@ -11,9 +11,14 @@ import ${packagePath}.service.ClpSerializer;
 </#if>
 
 import com.liferay.portal.LocaleException;
+import com.liferay.portal.NoSuchModelException;
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.lar.StagedModelType;
+import com.liferay.portal.kernel.trash.TrashHandler;
+import com.liferay.portal.kernel.trash.TrashHandlerRegistryUtil;
 import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
@@ -25,8 +30,12 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.BaseModel;
+import com.liferay.portal.model.ContainerModel;
+import com.liferay.portal.model.TrashedModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.trash.model.TrashEntry;
+import com.liferay.portlet.trash.service.TrashEntryLocalServiceUtil;
 
 import java.io.Serializable;
 
@@ -38,20 +47,25 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class ${entity.name}Clp extends BaseModelImpl<${entity.name}> implements ${entity.name} {
 
 	public ${entity.name}Clp() {
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return ${entity.name}.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return ${entity.name}.class.getName();
 	}
 
+	@Override
 	public ${entity.PKClassName} getPrimaryKey() {
 		<#if entity.hasCompoundPK()>
 			return new ${entity.PKClassName}(
@@ -70,6 +84,7 @@ public class ${entity.name}Clp extends BaseModelImpl<${entity.name}> implements 
 		</#if>
 	}
 
+	@Override
 	public void setPrimaryKey(${entity.PKClassName} primaryKey) {
 		<#if entity.hasCompoundPK()>
 			<#list entity.PKList as column>
@@ -80,6 +95,7 @@ public class ${entity.name}Clp extends BaseModelImpl<${entity.name}> implements 
 		</#if>
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
 		<#if entity.hasCompoundPK()>
 			return new ${entity.PKClassName}(
@@ -98,6 +114,7 @@ public class ${entity.name}Clp extends BaseModelImpl<${entity.name}> implements 
 		</#if>
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(
 
@@ -154,6 +171,7 @@ public class ${entity.name}Clp extends BaseModelImpl<${entity.name}> implements 
 
 	<#list entity.regularColList as column>
 		<#if column.name == "classNameId">
+			@Override
 			public String getClassName() {
 				if (getClassNameId() <= 0) {
 					return StringPool.BLANK;
@@ -162,6 +180,7 @@ public class ${entity.name}Clp extends BaseModelImpl<${entity.name}> implements 
 				return PortalUtil.getClassName(getClassNameId());
 			}
 
+			@Override
 			public void setClassName(String className) {
 				long classNameId = 0;
 
@@ -173,52 +192,62 @@ public class ${entity.name}Clp extends BaseModelImpl<${entity.name}> implements 
 			}
 		</#if>
 
+		@Override
 		public ${column.type} get${column.methodName}() {
 			return _${column.name};
 		}
 
 		<#if column.localized>
+			@Override
 			public String get${column.methodName}(Locale locale) {
 				String languageId = LocaleUtil.toLanguageId(locale);
 
 				return get${column.methodName}(languageId);
 			}
 
+			@Override
 			public String get${column.methodName}(Locale locale, boolean useDefault) {
 				String languageId = LocaleUtil.toLanguageId(locale);
 
 				return get${column.methodName}(languageId, useDefault);
 			}
 
+			@Override
 			public String get${column.methodName}(String languageId) {
 				return LocalizationUtil.getLocalization(get${column.methodName}(), languageId);
 			}
 
+			@Override
 			public String get${column.methodName}(String languageId, boolean useDefault) {
 				return LocalizationUtil.getLocalization(get${column.methodName}(), languageId, useDefault);
 			}
 
+			@Override
 			public String get${column.methodName}CurrentLanguageId() {
 				return _${column.name}CurrentLanguageId;
 			}
 
+			@Override
 			public String get${column.methodName}CurrentValue() {
 				Locale locale = getLocale(_${column.name}CurrentLanguageId);
 
 				return get${column.methodName}(locale);
 			}
 
+			@Override
 			public Map<Locale, String> get${column.methodName}Map() {
 				return LocalizationUtil.getLocalizationMap(get${column.methodName}());
 			}
 		</#if>
 
 		<#if column.type== "boolean">
+			@Override
 			public ${column.type} is${column.methodName}() {
 				return _${column.name};
 			}
 		</#if>
 
+		@Override
 		public void set${column.methodName}(${column.type} ${column.name}) {
 			_${column.name} = ${column.name};
 
@@ -237,10 +266,12 @@ public class ${entity.name}Clp extends BaseModelImpl<${entity.name}> implements 
 		}
 
 		<#if column.localized>
+			@Override
 			public void set${column.methodName}(String ${column.name}, Locale locale) {
 				set${column.methodName}(${column.name}, locale, LocaleUtil.getDefault());
 			}
 
+			@Override
 			public void set${column.methodName}(String ${column.name}, Locale locale, Locale defaultLocale) {
 				String languageId = LocaleUtil.toLanguageId(locale);
 				String defaultLanguageId = LocaleUtil.toLanguageId(defaultLocale);
@@ -253,14 +284,17 @@ public class ${entity.name}Clp extends BaseModelImpl<${entity.name}> implements 
 				}
 			}
 
+			@Override
 			public void set${column.methodName}CurrentLanguageId(String languageId) {
 				_${column.name}CurrentLanguageId = languageId;
 			}
 
+			@Override
 			public void set${column.methodName}Map(Map<Locale, String> ${column.name}Map) {
 				set${column.methodName}Map(${column.name}Map, LocaleUtil.getDefault());
 			}
 
+			@Override
 			public void set${column.methodName}Map(Map<Locale, String> ${column.name}Map, Locale defaultLocale) {
 				if (${column.name}Map == null) {
 					return;
@@ -288,6 +322,7 @@ public class ${entity.name}Clp extends BaseModelImpl<${entity.name}> implements 
 		</#if>
 
 		<#if (column.name == "resourcePrimKey") && entity.isResourcedModel()>
+			@Override
 			public boolean isResourceMain() {
 				return _resourceMain;
 			}
@@ -298,10 +333,12 @@ public class ${entity.name}Clp extends BaseModelImpl<${entity.name}> implements 
 		</#if>
 
 		<#if column.userUuid>
+			@Override
 			public String get${column.methodUserUuidName}() throws SystemException {
 				return PortalUtil.getUserValue(get${column.methodName}(), "uuid", _${column.userUuidName});
 			}
 
+			@Override
 			public void set${column.methodUserUuidName}(String ${column.userUuidName}) {
 				_${column.userUuidName} = ${column.userUuidName};
 			}
@@ -310,6 +347,7 @@ public class ${entity.name}Clp extends BaseModelImpl<${entity.name}> implements 
 
 	<#list methods as method>
 		<#if !method.isConstructor() && !method.isStatic() && method.isPublic() && !(entity.isResourcedModel() && (method.name == "isResourceMain") && (method.parameters?size == 0))>
+			@Override
 			public ${serviceBuilder.getTypeGenericsName(method.returns)} ${method.name} (
 
 			<#assign parameters = method.parameters>
@@ -422,68 +460,80 @@ public class ${entity.name}Clp extends BaseModelImpl<${entity.name}> implements 
 		</#if>
 	</#if>
 
-	<#if entity.isWorkflowEnabled()>
-		/**
-		 * @deprecated As of 6.1.0, replaced by {@link #isApproved}
-		 */
-		public boolean getApproved() {
-			return isApproved();
+	<#if entity.isStagedModel()>
+		@Override
+		public StagedModelType getStagedModelType() {
+			<#if entity.isTypedModel()>
+				return new StagedModelType(PortalUtil.getClassNameId(${entity.name}.class.getName()), getClassNameId());
+			<#else>
+				return new StagedModelType(PortalUtil.getClassNameId(${entity.name}.class.getName()));
+			</#if>
+		}
+	</#if>
+
+	<#if entity.isTrashEnabled()>
+		<#if !entity.isWorkflowEnabled()>
+			@Override
+			public int getStatus() {
+				return 0;
+			}
+		</#if>
+
+		@Override
+		public TrashEntry getTrashEntry() throws PortalException, SystemException {
+			if (!isInTrash()) {
+				return null;
+			}
+
+			TrashEntry trashEntry = TrashEntryLocalServiceUtil.fetchEntry(getModelClassName(), getTrashEntryClassPK());
+
+			if (trashEntry != null) {
+				return trashEntry;
+			}
+
+			TrashHandler trashHandler = getTrashHandler();
+
+			if (!Validator.isNull(trashHandler.getContainerModelClassName())) {
+				ContainerModel containerModel = null;
+
+				try {
+					containerModel = trashHandler.getParentContainerModel(this);
+				}
+				catch (NoSuchModelException nsme) {
+	            	return null;
+				}
+
+				while (containerModel != null) {
+					if (containerModel instanceof TrashedModel) {
+						TrashedModel trashedModel = (TrashedModel)containerModel;
+
+						return trashedModel.getTrashEntry();
+					}
+
+					trashHandler = TrashHandlerRegistryUtil.getTrashHandler(trashHandler.getContainerModelClassName());
+
+					if (trashHandler == null) {
+						return null;
+					}
+
+					containerModel = trashHandler.getContainerModel(containerModel.getParentContainerModelId());
+				}
+			}
+
+			return null;
 		}
 
-		public boolean isApproved() {
-			if (getStatus() == WorkflowConstants.STATUS_APPROVED) {
-				return true;
-			}
-			else {
-				return false;
-			}
+		@Override
+		public long getTrashEntryClassPK() {
+			return getPrimaryKey();
 		}
 
-		public boolean isDenied() {
-			if (getStatus() == WorkflowConstants.STATUS_DENIED) {
-				return true;
-			}
-			else {
-				return false;
-			}
+		@Override
+		public TrashHandler getTrashHandler() {
+			return TrashHandlerRegistryUtil.getTrashHandler(getModelClassName());
 		}
 
-		public boolean isDraft() {
-			if (getStatus() == WorkflowConstants.STATUS_DRAFT) {
-				return true;
-			}
-			else {
-				return false;
-			}
-		}
-
-		public boolean isExpired() {
-			if (getStatus() == WorkflowConstants.STATUS_EXPIRED) {
-				return true;
-			}
-			else {
-				return false;
-			}
-		}
-
-		public boolean isInactive() {
-			if (getStatus() == WorkflowConstants.STATUS_INACTIVE) {
-				return true;
-			}
-			else {
-				return false;
-			}
-		}
-
-		public boolean isIncomplete() {
-			if (getStatus() == WorkflowConstants.STATUS_INCOMPLETE) {
-				return true;
-			}
-			else {
-				return false;
-			}
-		}
-
+		@Override
 		public boolean isInTrash() {
 			if (getStatus() == WorkflowConstants.STATUS_IN_TRASH) {
 				return true;
@@ -493,6 +543,117 @@ public class ${entity.name}Clp extends BaseModelImpl<${entity.name}> implements 
 			}
 		}
 
+		@Override
+		public boolean isInTrashContainer() {
+			TrashHandler trashHandler = getTrashHandler();
+
+			if ((trashHandler == null) || Validator.isNull(trashHandler.getContainerModelClassName())) {
+				return false;
+			}
+
+			try {
+				ContainerModel containerModel = trashHandler.getParentContainerModel(this);
+
+				if (containerModel == null) {
+					return false;
+				}
+
+				if (containerModel instanceof TrashedModel) {
+					return ((TrashedModel)containerModel).isInTrash();
+				}
+			}
+			catch (Exception e) {
+			}
+
+			return false;
+		}
+
+		@Override
+		public boolean isInTrashExplicitly() throws SystemException {
+			if (!isInTrash()) {
+				return false;
+			}
+
+			TrashEntry trashEntry = TrashEntryLocalServiceUtil.fetchEntry(getModelClassName(), getTrashEntryClassPK());
+
+			if (trashEntry != null) {
+				return true;
+			}
+
+			return false;
+		}
+	</#if>
+
+	<#if entity.isWorkflowEnabled()>
+		/**
+		 * @deprecated As of 6.1.0, replaced by {@link #isApproved}
+		 */
+		@Override
+		public boolean getApproved() {
+			return isApproved();
+		}
+
+		@Override
+		public boolean isApproved() {
+			if (getStatus() == WorkflowConstants.STATUS_APPROVED) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+
+		@Override
+		public boolean isDenied() {
+			if (getStatus() == WorkflowConstants.STATUS_DENIED) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+
+		@Override
+		public boolean isDraft() {
+			if (getStatus() == WorkflowConstants.STATUS_DRAFT) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+
+		@Override
+		public boolean isExpired() {
+			if (getStatus() == WorkflowConstants.STATUS_EXPIRED) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+
+		@Override
+		public boolean isInactive() {
+			if (getStatus() == WorkflowConstants.STATUS_INACTIVE) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+
+		@Override
+		public boolean isIncomplete() {
+			if (getStatus() == WorkflowConstants.STATUS_INCOMPLETE) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+
+		@Override
 		public boolean isPending() {
 			if (getStatus() == WorkflowConstants.STATUS_PENDING) {
 				return true;
@@ -502,6 +663,7 @@ public class ${entity.name}Clp extends BaseModelImpl<${entity.name}> implements 
 			}
 		}
 
+		@Override
 		public boolean isScheduled() {
 			if (getStatus() == WorkflowConstants.STATUS_SCHEDULED) {
 				return true;
@@ -558,6 +720,7 @@ public class ${entity.name}Clp extends BaseModelImpl<${entity.name}> implements 
 	}
 
 	<#if entity.hasLocalService() && entity.hasColumns()>
+		@Override
 		public void persist() throws SystemException {
 			if (this.isNew()) {
 				${entity.name}LocalServiceUtil.add${entity.name}(this);
@@ -569,12 +732,66 @@ public class ${entity.name}Clp extends BaseModelImpl<${entity.name}> implements 
 	</#if>
 
 	<#if entity.hasLocalizedColumn()>
-		@SuppressWarnings("unused")
-		public void prepareLocalizedFieldsForImport(Locale defaultImportLocale) throws LocaleException {
+		@Override
+		public String[] getAvailableLanguageIds() {
+			Set<String> availableLanguageIds = new TreeSet<String>();
 
 			<#list entity.regularColList as column>
 				<#if column.localized>
-					set${column.methodName}(get${column.methodName}(defaultImportLocale), defaultImportLocale, defaultImportLocale);
+					Map<Locale, String> ${column.name}Map = get${column.methodName}Map();
+
+					for (Map.Entry<Locale, String> entry : ${column.name}Map.entrySet()) {
+						Locale locale = entry.getKey();
+						String value = entry.getValue();
+
+						if (Validator.isNotNull(value)) {
+							availableLanguageIds.add(LocaleUtil.toLanguageId(locale));
+						}
+					}
+				</#if>
+			</#list>
+
+			return availableLanguageIds.toArray(new String[availableLanguageIds.size()]);
+		}
+
+		@Override
+		public String getDefaultLanguageId() {
+			<#list entity.regularColList as column>
+				<#if column.localized>
+					String xml = get${column.methodName}();
+
+					if (xml == null) {
+						return StringPool.BLANK;
+					}
+
+					return LocalizationUtil.getDefaultLanguageId(xml);
+					<#break>
+				</#if>
+			</#list>
+		}
+
+		@Override
+		public void prepareLocalizedFieldsForImport() throws LocaleException {
+			prepareLocalizedFieldsForImport (null);
+		}
+
+		@Override
+		@SuppressWarnings("unused")
+		public void prepareLocalizedFieldsForImport(Locale defaultImportLocale) throws LocaleException {
+			Locale defaultLocale = LocaleUtil.getDefault();
+
+			String modelDefaultLanguageId = getDefaultLanguageId();
+
+			<#list entity.regularColList as column>
+				<#if column.localized>
+					String ${column.name} = get${column.methodName}(defaultLocale);
+
+					if (Validator.isNull(${column.name})) {
+						set${column.methodName}(get${column.methodName}(modelDefaultLanguageId), defaultLocale);
+					}
+					else {
+					  set${column.methodName}(get${column.methodName}(defaultLocale), defaultLocale, defaultLocale);
+					}
 				</#if>
 			</#list>
 		}
@@ -604,6 +821,7 @@ public class ${entity.name}Clp extends BaseModelImpl<${entity.name}> implements 
 		return clone;
 	}
 
+	@Override
 	public int compareTo(${entity.name} ${entity.varName}) {
 		<#if entity.isOrdered()>
 			int value = 0;
@@ -670,18 +888,15 @@ public class ${entity.name}Clp extends BaseModelImpl<${entity.name}> implements 
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof ${entity.name}Clp)) {
 			return false;
 		}
 
-		${entity.name}Clp ${entity.varName} = null;
-
-		try {
-			${entity.varName} = (${entity.name}Clp)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		${entity.name}Clp ${entity.varName} = (${entity.name}Clp)obj;
 
 		${entity.PKClassName} primaryKey = ${entity.varName}.getPrimaryKey();
 
@@ -732,6 +947,7 @@ public class ${entity.name}Clp extends BaseModelImpl<${entity.name}> implements 
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(${entity.regularColList?size * 3 + 4});
 

@@ -30,6 +30,7 @@ import com.liferay.portal.kernel.util.ReleaseInfo;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.ThemeFactoryUtil;
+import com.liferay.portal.kernel.util.UniqueList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.Element;
@@ -68,6 +69,7 @@ import javax.servlet.ServletContext;
  */
 public class ThemeLocalServiceImpl extends ThemeLocalServiceBaseImpl {
 
+	@Override
 	public ColorScheme fetchColorScheme(
 		long companyId, String themeId, String colorSchemeId) {
 
@@ -84,6 +86,7 @@ public class ThemeLocalServiceImpl extends ThemeLocalServiceBaseImpl {
 		return colorSchemesMap.get(colorSchemeId);
 	}
 
+	@Override
 	public Theme fetchTheme(long companyId, String themeId) {
 		themeId = GetterUtil.getString(themeId);
 
@@ -92,6 +95,7 @@ public class ThemeLocalServiceImpl extends ThemeLocalServiceBaseImpl {
 		return themes.get(themeId);
 	}
 
+	@Override
 	public ColorScheme getColorScheme(
 			long companyId, String themeId, String colorSchemeId,
 			boolean wapTheme)
@@ -132,6 +136,56 @@ public class ThemeLocalServiceImpl extends ThemeLocalServiceBaseImpl {
 		return colorScheme;
 	}
 
+	@Override
+	public List<Theme> getControlPanelThemes(
+			long companyId, long userId, boolean wapTheme)
+		throws SystemException {
+
+		List<Theme> themes = getThemes(companyId);
+
+		themes = PluginUtil.restrictPlugins(themes, companyId, userId);
+
+		Iterator<Theme> itr = themes.iterator();
+
+		while (itr.hasNext()) {
+			Theme theme = itr.next();
+
+			if (!theme.isControlPanelTheme() ||
+				(theme.isWapTheme() != wapTheme)) {
+
+				itr.remove();
+			}
+		}
+
+		return themes;
+	}
+
+	@Override
+	public List<Theme> getPageThemes(
+			long companyId, long groupId, long userId, boolean wapTheme)
+		throws SystemException {
+
+		List<Theme> themes = getThemes(companyId);
+
+		themes = PluginUtil.restrictPlugins(themes, companyId, userId);
+
+		Iterator<Theme> itr = themes.iterator();
+
+		while (itr.hasNext()) {
+			Theme theme = itr.next();
+
+			if (!theme.isPageTheme() ||
+				!theme.isGroupAvailable(groupId) ||
+				(theme.isWapTheme() != wapTheme)) {
+
+				itr.remove();
+			}
+		}
+
+		return themes;
+	}
+
+	@Override
 	public Theme getTheme(long companyId, String themeId, boolean wapTheme)
 		throws SystemException {
 
@@ -181,6 +235,7 @@ public class ThemeLocalServiceImpl extends ThemeLocalServiceBaseImpl {
 		return theme;
 	}
 
+	@Override
 	public List<Theme> getThemes(long companyId) {
 		Map<String, Theme> themes = _getThemes(companyId);
 
@@ -189,30 +244,18 @@ public class ThemeLocalServiceImpl extends ThemeLocalServiceBaseImpl {
 		return ListUtil.sort(themesList);
 	}
 
+	/**
+	 * @deprecated As of 7.0.0, replaced by {@link #getPageThemes}
+	 */
+	@Override
 	public List<Theme> getThemes(
 			long companyId, long groupId, long userId, boolean wapTheme)
 		throws SystemException {
 
-		List<Theme> themes = getThemes(companyId);
-
-		themes = PluginUtil.restrictPlugins(themes, companyId, userId);
-
-		Iterator<Theme> itr = themes.iterator();
-
-		while (itr.hasNext()) {
-			Theme theme = itr.next();
-
-			if (theme.getThemeId().equals("controlpanel") ||
-				!theme.isGroupAvailable(groupId) ||
-				(theme.isWapTheme() != wapTheme)) {
-
-				itr.remove();
-			}
-		}
-
-		return themes;
+		return getPageThemes(companyId, groupId, userId, wapTheme);
 	}
 
+	@Override
 	public List<Theme> getWARThemes() {
 		List<Theme> themes = ListUtil.fromMapValues(_themes);
 
@@ -229,7 +272,8 @@ public class ThemeLocalServiceImpl extends ThemeLocalServiceBaseImpl {
 		return themes;
 	}
 
-	public List<String> init(
+	@Override
+	public List<Theme> init(
 		ServletContext servletContext, String themesPath,
 		boolean loadFromServletContext, String[] xmls,
 		PluginPackage pluginPackage) {
@@ -239,38 +283,35 @@ public class ThemeLocalServiceImpl extends ThemeLocalServiceBaseImpl {
 			pluginPackage);
 	}
 
-	public List<String> init(
+	@Override
+	public List<Theme> init(
 		String servletContextName, ServletContext servletContext,
 		String themesPath, boolean loadFromServletContext, String[] xmls,
 		PluginPackage pluginPackage) {
 
-		List<String> themeIdsList = new ArrayList<String>();
+		List<Theme> themes = new UniqueList<Theme>();
 
 		try {
 			for (String xml : xmls) {
-				Set<String> themeIds = _readThemes(
-					servletContextName, servletContext, themesPath,
-					loadFromServletContext, xml, pluginPackage);
-
-				for (String themeId : themeIds) {
-					if (!themeIdsList.contains(themeId)) {
-						themeIdsList.add(themeId);
-					}
-				}
+				themes.addAll(
+					_readThemes(
+						servletContextName, servletContext, themesPath,
+						loadFromServletContext, xml, pluginPackage));
 			}
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			_log.error(e, e);
 		}
 
 		_themesPool.clear();
 
-		return themeIdsList;
+		return themes;
 	}
 
-	public void uninstallThemes(List<String> themeIds) {
-		for (int i = 0; i < themeIds.size(); i++) {
-			String themeId = themeIds.get(i);
+	@Override
+	public void uninstallThemes(List<Theme> themes) {
+		for (Theme theme : themes) {
+			String themeId = theme.getThemeId();
 
 			_themes.remove(themeId);
 
@@ -441,16 +482,16 @@ public class ThemeLocalServiceImpl extends ThemeLocalServiceBaseImpl {
 		}
 	}
 
-	private Set<String> _readThemes(
+	private Set<Theme> _readThemes(
 			String servletContextName, ServletContext servletContext,
 			String themesPath, boolean loadFromServletContext, String xml,
 			PluginPackage pluginPackage)
 		throws Exception {
 
-		Set<String> themeIds = new HashSet<String>();
+		Set<Theme> themes = new HashSet<Theme>();
 
 		if (xml == null) {
-			return themeIds;
+			return themes;
 		}
 
 		Document document = SAXReaderUtil.read(xml, true);
@@ -483,7 +524,7 @@ public class ThemeLocalServiceImpl extends ThemeLocalServiceBaseImpl {
 				"Themes in this WAR are not compatible with " +
 					ReleaseInfo.getServerInfo());
 
-			return themeIds;
+			return themes;
 		}
 
 		ThemeCompanyLimit companyLimit = null;
@@ -554,8 +595,6 @@ public class ThemeLocalServiceImpl extends ThemeLocalServiceBaseImpl {
 			themeId = PortalUtil.getJsSafePortletId(themeId);
 
 			themeContextReplace.addValue("theme-id", themeId);
-
-			themeIds.add(themeId);
 
 			Theme theme = _themes.get(themeId);
 
@@ -663,6 +702,12 @@ public class ThemeLocalServiceImpl extends ThemeLocalServiceBaseImpl {
 				}
 			}
 
+			theme.setControlPanelTheme(
+				GetterUtil.getBoolean(
+					themeElement.elementText("control-panel-theme")));
+			theme.setPageTheme(
+				GetterUtil.getBoolean(
+					themeElement.elementText("page-theme"), true));
 			theme.setWapTheme(
 				GetterUtil.getBoolean(
 					themeElement.elementText("wap-theme"), theme.isWapTheme()));
@@ -713,9 +758,11 @@ public class ThemeLocalServiceImpl extends ThemeLocalServiceBaseImpl {
 			if (!_themes.containsKey(themeId)) {
 				_themes.put(themeId, theme);
 			}
+
+			themes.add(theme);
 		}
 
-		return themeIds;
+		return themes;
 	}
 
 	private void _setSpriteImages(

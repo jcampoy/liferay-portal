@@ -14,15 +14,16 @@
 
 package com.liferay.portal.service;
 
+import aQute.bnd.annotation.ProviderType;
+
 /**
- * <p>
- * This class is a wrapper for {@link PluginSettingLocalService}.
- * </p>
+ * Provides a wrapper for {@link PluginSettingLocalService}.
  *
- * @author    Brian Wing Shun Chan
- * @see       PluginSettingLocalService
+ * @author Brian Wing Shun Chan
+ * @see PluginSettingLocalService
  * @generated
  */
+@ProviderType
 public class PluginSettingLocalServiceWrapper
 	implements PluginSettingLocalService,
 		ServiceWrapper<PluginSettingLocalService> {
@@ -38,6 +39,7 @@ public class PluginSettingLocalServiceWrapper
 	* @return the plugin setting that was added
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.PluginSetting addPluginSetting(
 		com.liferay.portal.model.PluginSetting pluginSetting)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -50,6 +52,7 @@ public class PluginSettingLocalServiceWrapper
 	* @param pluginSettingId the primary key for the new plugin setting
 	* @return the new plugin setting
 	*/
+	@Override
 	public com.liferay.portal.model.PluginSetting createPluginSetting(
 		long pluginSettingId) {
 		return _pluginSettingLocalService.createPluginSetting(pluginSettingId);
@@ -63,6 +66,7 @@ public class PluginSettingLocalServiceWrapper
 	* @throws PortalException if a plugin setting with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.PluginSetting deletePluginSetting(
 		long pluginSettingId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -77,12 +81,14 @@ public class PluginSettingLocalServiceWrapper
 	* @return the plugin setting that was removed
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.PluginSetting deletePluginSetting(
 		com.liferay.portal.model.PluginSetting pluginSetting)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _pluginSettingLocalService.deletePluginSetting(pluginSetting);
 	}
 
+	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		return _pluginSettingLocalService.dynamicQuery();
 	}
@@ -94,6 +100,7 @@ public class PluginSettingLocalServiceWrapper
 	* @return the matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
@@ -114,6 +121,7 @@ public class PluginSettingLocalServiceWrapper
 	* @return the range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -135,6 +143,7 @@ public class PluginSettingLocalServiceWrapper
 	* @return the ordered range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -152,12 +161,31 @@ public class PluginSettingLocalServiceWrapper
 	* @return the number of rows that match the dynamic query
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _pluginSettingLocalService.dynamicQueryCount(dynamicQuery);
 	}
 
+	/**
+	* Returns the number of rows that match the dynamic query.
+	*
+	* @param dynamicQuery the dynamic query
+	* @param projection the projection to apply to the query
+	* @return the number of rows that match the dynamic query
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public long dynamicQueryCount(
+		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery,
+		com.liferay.portal.kernel.dao.orm.Projection projection)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _pluginSettingLocalService.dynamicQueryCount(dynamicQuery,
+			projection);
+	}
+
+	@Override
 	public com.liferay.portal.model.PluginSetting fetchPluginSetting(
 		long pluginSettingId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -172,6 +200,7 @@ public class PluginSettingLocalServiceWrapper
 	* @throws PortalException if a plugin setting with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.PluginSetting getPluginSetting(
 		long pluginSettingId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -179,6 +208,7 @@ public class PluginSettingLocalServiceWrapper
 		return _pluginSettingLocalService.getPluginSetting(pluginSettingId);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -198,6 +228,7 @@ public class PluginSettingLocalServiceWrapper
 	* @return the range of plugin settings
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portal.model.PluginSetting> getPluginSettings(
 		int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -210,6 +241,7 @@ public class PluginSettingLocalServiceWrapper
 	* @return the number of plugin settings
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getPluginSettingsCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _pluginSettingLocalService.getPluginSettingsCount();
@@ -222,6 +254,7 @@ public class PluginSettingLocalServiceWrapper
 	* @return the plugin setting that was updated
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.PluginSetting updatePluginSetting(
 		com.liferay.portal.model.PluginSetting pluginSetting)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -233,6 +266,7 @@ public class PluginSettingLocalServiceWrapper
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _pluginSettingLocalService.getBeanIdentifier();
 	}
@@ -242,20 +276,24 @@ public class PluginSettingLocalServiceWrapper
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_pluginSettingLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
+	@Override
 	public void checkPermission(long userId, java.lang.String pluginId,
 		java.lang.String pluginType)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		_pluginSettingLocalService.checkPermission(userId, pluginId, pluginType);
 	}
 
+	@Override
 	public com.liferay.portal.model.PluginSetting getDefaultPluginSetting() {
 		return _pluginSettingLocalService.getDefaultPluginSetting();
 	}
 
+	@Override
 	public com.liferay.portal.model.PluginSetting getPluginSetting(
 		long companyId, java.lang.String pluginId, java.lang.String pluginType)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -263,12 +301,14 @@ public class PluginSettingLocalServiceWrapper
 			pluginType);
 	}
 
+	@Override
 	public boolean hasPermission(long userId, java.lang.String pluginId,
 		java.lang.String pluginType) {
 		return _pluginSettingLocalService.hasPermission(userId, pluginId,
 			pluginType);
 	}
 
+	@Override
 	public com.liferay.portal.model.PluginSetting updatePluginSetting(
 		long companyId, java.lang.String pluginId, java.lang.String pluginType,
 		java.lang.String roles, boolean active)
@@ -292,10 +332,12 @@ public class PluginSettingLocalServiceWrapper
 		_pluginSettingLocalService = pluginSettingLocalService;
 	}
 
+	@Override
 	public PluginSettingLocalService getWrappedService() {
 		return _pluginSettingLocalService;
 	}
 
+	@Override
 	public void setWrappedService(
 		PluginSettingLocalService pluginSettingLocalService) {
 		_pluginSettingLocalService = pluginSettingLocalService;

@@ -19,8 +19,110 @@
 	<td></td>
 </tr>
 <tr>
-	<td>HOME_URL</td>
+	<td>API_AXIS_URL</td>
+	<td>/api/axis</td>
+	<td></td>
+</tr>
+<tr>
+	<td>API_JSON_URL</td>
+	<td>/api/jsonws/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>GUEST_URL</td>
 	<td>/web/guest/home/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>GUEST_PRIVATE_URL</td>
+	<td>/group/guest/home/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>GUEST_PRIVATE_STAGING_URL</td>
+	<td>/group/guest-staging/home/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>GUEST_STAGING_URL</td>
+	<td>/web/guest-staging/home/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>ORGANIZATION_URL</td>
+	<td>/web/organization-name/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>ORGANIZATION_PRIVATE_URL</td>
+	<td>/group/organization-name/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>ORGANIZATION_PRIVATE_STAGING_URL</td>
+	<td>/group/organization-name-staging/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>ORGANIZATION_STAGING_URL</td>
+	<td>/web/organization-name-staging/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SITE_URL</td>
+	<td>/web/site-name/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SITE_PRIVATE_URL</td>
+	<td>/group/site-name/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SITE_PRIVATE_STAGING_URL</td>
+	<td>/group/site-name-staging/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SITE_STAGING_URL</td>
+	<td>/web/site-name-staging/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SITE_NAME</td>
+	<td>//h1[@class='site-title']/a/span</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SCOPE_SELECTOR</td>
+	<td>//a[@id='_145_controlPanelSiteSelector']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>CONTENT_SCOPE_SELECTOR</td>
+	<td>//div[contains(@class,'lfr-title-scope-selector')]/div/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+<!--SCOPE_SELECTOR_MENULIST-->
+<tr>
+	<td>SCOPE_SELECTOR_MENULIST_ITEM</td>
+	<td>//ul[@aria-labelledby='_145_controlPanelSiteSelector']/li/a[contains(.,'${key_siteScopeName}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+<!--CONTENT_SCOPE_SELECTOR_MENULIST-->
+<tr>
+	<td>CONTENT_SCOPE_SELECTOR_MENULIST_ITEM</td>
+	<td>//ul[contains(@class,'lfr-menu-list')]/li/a[contains(.,'${key_contentScopeName}')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -30,18 +132,48 @@
 </tr>
 <!--PAGE-->
 <tr>
+	<td>PAGE</td>
+	<td>//li[contains(@class,'lfr-nav-item')]/a[contains(.,'${key_pageName}')]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>PAGE_1</td>
-	<td>xPath=(//li[contains(@class,'lfr-nav-deletable')])[1]/a/span</td>
+	<td>xpath=(//li[contains(@class,'lfr-nav-deletable')])[1]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>PAGE_1_CHILD_PAGE_1</td>
+	<td>xpath=(//li[contains(@class,'lfr-nav-deletable')])[1]/ul[contains(@class,'child-menu')]/li/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>PAGE_1_CHILD_PAGE_2</td>
+	<td>xpath=(//li[contains(@class,'lfr-nav-deletable')])[1]/ul[contains(@class,'child-menu')]/li/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>PAGE_1_CHILD_PAGE_3</td>
+	<td>xpath=(//li[contains(@class,'lfr-nav-deletable')])[1]/ul[contains(@class,'child-menu')]/li/a</td>
 	<td></td>
 </tr>
 <tr>
 	<td>PAGE_2</td>
-	<td>xPath=(//li[contains(@class,'lfr-nav-deletable')])[2]/a/span</td>
+	<td>xpath=(//li[contains(@class,'lfr-nav-deletable')])[2]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>PAGE_2_GUEST_VIEW</td>
+	<td>xpath=(//li[contains(@class,'lfr-nav-item')])[2]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>PAGE_2_STAGING</td>
+	<td>//nav[@id='navigation']/ul/li[2]/a/span</td>
 	<td></td>
 </tr>
 <tr>
 	<td>PAGE_3</td>
-	<td>xPath=(//li[contains(@class,'lfr-nav-deletable')])[3]/a/span</td>
+	<td>xpath=(//li[contains(@class,'lfr-nav-deletable')])[3]/a</td>
 	<td></td>
 </tr>
 <tr>
@@ -50,18 +182,34 @@
 	<td></td>
 </tr>
 <tr>
-	<td>PAGE_DELETE_1</td>
-	<td>xPath=(//li[contains(@class,'lfr-nav-deletable')])[1]/span[@class='delete-tab']</td>
+	<td>PAGE_DELETE</td>
+	<td>//li[contains(@class,'lfr-nav-deletable') and contains(@class,'lfr-nav-hover')]/span[@class='delete-tab']</td>
 	<td></td>
 </tr>
 <tr>
-	<td>PAGE_DELETE_2</td>
-	<td>xPath=(//li[contains(@class,'lfr-nav-deletable')])[2]/span[@class='delete-tab']</td>
+	<td>PAGE_NAVIGATION_BAR</td>
+	<td>//nav[@id='navigation']</td>
 	<td></td>
 </tr>
 <tr>
-	<td>PAGE_DELETE_3</td>
-	<td>xPath=(//li[contains(@class,'lfr-nav-deletable')])[3]/span[@class='delete-tab']</td>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+<!--BREADCRUMB-->
+<tr>
+	<td>BREADCRUMB_1</td>
+	<td>xpath=(//nav[@id='breadcrumbs']/ul/li/a)[1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>BREADCRUMB_2</td>
+	<td>xpath=(//nav[@id='breadcrumbs']/ul/li/a)[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>BREADCRUMB_3</td>
+	<td>xpath=(//nav[@id='breadcrumbs']/ul/li/a)[3]</td>
 	<td></td>
 </tr>
 <tr>
@@ -72,7 +220,7 @@
 <!--NEW_PAGE-->
 <tr>
 	<td>NEW_PAGE_FIELD</td>
-	<td>//li[@class='add-page']//input[contains(@class,'input-text')]</td>
+	<td>//input[@type='text']</td>
 	<td></td>
 </tr>
 <tr>
@@ -81,11 +229,26 @@
 	<td></td>
 </tr>
 <tr>
+	<td>NEW_PAGE_SAVE_BUTTON</td>
+	<td>//button/i[@class='icon-ok']</td>
+	<td></td>
+</tr>
+<tr>
 	<td></td>
 	<td></td>
 	<td></td>
 </tr>
 <!--PORTLET-->
+<tr>
+	<td>PORTLET_LOADING_ANIMATION</td>
+	<td>//div[contains(@class,'loading-animation') and contains(@class,'portlet-boundary')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>PORTLET</td>
+	<td>//section[header/h1[contains(.,'${key_portletName}')]]</td>
+	<td></td>
+</tr>
 <tr>
 	<td>PORTLET_1</td>
 	<td>xpath=(//section)[1]</td>
@@ -99,6 +262,53 @@
 <tr>
 	<td>PORTLET_3</td>
 	<td>xpath=(//section)[3]</td>
+	<td></td>
+</tr>
+<tr>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+<!--CONTROL_PANEL-->
+<tr>
+	<td>CONTROL_PANEL_INFO_MESSAGE</td>
+	<td>//div[contains(@class,'alert') and contains(@class,'alert-info')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>CONTROL_PANEL_NAVIGATION</td>
+	<td>//a[contains(.,'${key_portletName}') and contains(@id,'_190_controlPanelPortletLink')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+<!--SITE_ADMINISTRATION-->
+<tr>
+	<td>SITE_ADMINISTRATION_CATEGORY_COLLAPSED</td>
+	<td>//div[contains(@class,'toggler-header-collapsed')]/div[contains(.,'${key_portletCategoryName}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SITE_ADMINISTRATION_CATEGORY_EXPANDED</td>
+	<td>//div[contains(@class,'toggler-header-expanded')]/div[contains(.,'${key_portletCategoryName}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SITE_ADMINISTRATION_NAVIGATION</td>
+	<td>//ul[@class='category-portlets']/li[contains(.,'${key_portletName}')]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SITE_ADMINISTRATION_USERS</td>
+	<td>//div[@id='panel-manage-site_administration.users']/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SITE_ADMINISTRATION_USERS_SITE_MEMBERSHIPS</td>
+	<td>//ul[@class='category-portlets']/li[contains(.,'Site Memberships')]/a</td>
 	<td></td>
 </tr>
 </tbody>

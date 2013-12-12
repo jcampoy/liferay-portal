@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.ratings.model;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.AttachedModel;
@@ -41,6 +43,7 @@ import java.util.Date;
  * @see com.liferay.portlet.ratings.model.impl.RatingsEntryModelImpl
  * @generated
  */
+@ProviderType
 public interface RatingsEntryModel extends AttachedModel, AuditedModel,
 	BaseModel<RatingsEntry> {
 	/*
@@ -82,6 +85,7 @@ public interface RatingsEntryModel extends AttachedModel, AuditedModel,
 	 *
 	 * @return the company ID of this ratings entry
 	 */
+	@Override
 	public long getCompanyId();
 
 	/**
@@ -89,6 +93,7 @@ public interface RatingsEntryModel extends AttachedModel, AuditedModel,
 	 *
 	 * @param companyId the company ID of this ratings entry
 	 */
+	@Override
 	public void setCompanyId(long companyId);
 
 	/**
@@ -96,6 +101,7 @@ public interface RatingsEntryModel extends AttachedModel, AuditedModel,
 	 *
 	 * @return the user ID of this ratings entry
 	 */
+	@Override
 	public long getUserId();
 
 	/**
@@ -103,6 +109,7 @@ public interface RatingsEntryModel extends AttachedModel, AuditedModel,
 	 *
 	 * @param userId the user ID of this ratings entry
 	 */
+	@Override
 	public void setUserId(long userId);
 
 	/**
@@ -111,6 +118,7 @@ public interface RatingsEntryModel extends AttachedModel, AuditedModel,
 	 * @return the user uuid of this ratings entry
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public String getUserUuid() throws SystemException;
 
 	/**
@@ -118,6 +126,7 @@ public interface RatingsEntryModel extends AttachedModel, AuditedModel,
 	 *
 	 * @param userUuid the user uuid of this ratings entry
 	 */
+	@Override
 	public void setUserUuid(String userUuid);
 
 	/**
@@ -126,6 +135,7 @@ public interface RatingsEntryModel extends AttachedModel, AuditedModel,
 	 * @return the user name of this ratings entry
 	 */
 	@AutoEscape
+	@Override
 	public String getUserName();
 
 	/**
@@ -133,6 +143,7 @@ public interface RatingsEntryModel extends AttachedModel, AuditedModel,
 	 *
 	 * @param userName the user name of this ratings entry
 	 */
+	@Override
 	public void setUserName(String userName);
 
 	/**
@@ -140,6 +151,7 @@ public interface RatingsEntryModel extends AttachedModel, AuditedModel,
 	 *
 	 * @return the create date of this ratings entry
 	 */
+	@Override
 	public Date getCreateDate();
 
 	/**
@@ -147,6 +159,7 @@ public interface RatingsEntryModel extends AttachedModel, AuditedModel,
 	 *
 	 * @param createDate the create date of this ratings entry
 	 */
+	@Override
 	public void setCreateDate(Date createDate);
 
 	/**
@@ -154,6 +167,7 @@ public interface RatingsEntryModel extends AttachedModel, AuditedModel,
 	 *
 	 * @return the modified date of this ratings entry
 	 */
+	@Override
 	public Date getModifiedDate();
 
 	/**
@@ -161,6 +175,7 @@ public interface RatingsEntryModel extends AttachedModel, AuditedModel,
 	 *
 	 * @param modifiedDate the modified date of this ratings entry
 	 */
+	@Override
 	public void setModifiedDate(Date modifiedDate);
 
 	/**
@@ -168,6 +183,7 @@ public interface RatingsEntryModel extends AttachedModel, AuditedModel,
 	 *
 	 * @return the fully qualified class name of this ratings entry
 	 */
+	@Override
 	public String getClassName();
 
 	public void setClassName(String className);
@@ -177,6 +193,7 @@ public interface RatingsEntryModel extends AttachedModel, AuditedModel,
 	 *
 	 * @return the class name ID of this ratings entry
 	 */
+	@Override
 	public long getClassNameId();
 
 	/**
@@ -184,6 +201,7 @@ public interface RatingsEntryModel extends AttachedModel, AuditedModel,
 	 *
 	 * @param classNameId the class name ID of this ratings entry
 	 */
+	@Override
 	public void setClassNameId(long classNameId);
 
 	/**
@@ -191,6 +209,7 @@ public interface RatingsEntryModel extends AttachedModel, AuditedModel,
 	 *
 	 * @return the class p k of this ratings entry
 	 */
+	@Override
 	public long getClassPK();
 
 	/**
@@ -198,6 +217,7 @@ public interface RatingsEntryModel extends AttachedModel, AuditedModel,
 	 *
 	 * @param classPK the class p k of this ratings entry
 	 */
+	@Override
 	public void setClassPK(long classPK);
 
 	/**
@@ -214,41 +234,60 @@ public interface RatingsEntryModel extends AttachedModel, AuditedModel,
 	 */
 	public void setScore(double score);
 
+	@Override
 	public boolean isNew();
 
+	@Override
 	public void setNew(boolean n);
 
+	@Override
 	public boolean isCachedModel();
 
+	@Override
 	public void setCachedModel(boolean cachedModel);
 
+	@Override
 	public boolean isEscapedModel();
 
+	@Override
 	public Serializable getPrimaryKeyObj();
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj);
 
+	@Override
 	public ExpandoBridge getExpandoBridge();
 
+	@Override
 	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
 
+	@Override
 	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
 
+	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
+	@Override
 	public Object clone();
 
+	@Override
 	public int compareTo(RatingsEntry ratingsEntry);
 
+	@Override
 	public int hashCode();
 
+	@Override
 	public CacheModel<RatingsEntry> toCacheModel();
 
+	@Override
 	public RatingsEntry toEscapedModel();
 
+	@Override
 	public RatingsEntry toUnescapedModel();
 
+	@Override
 	public String toString();
 
+	@Override
 	public String toXmlString();
 }

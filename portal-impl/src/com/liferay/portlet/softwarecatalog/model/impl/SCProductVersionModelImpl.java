@@ -168,26 +168,32 @@ public class SCProductVersionModelImpl extends BaseModelImpl<SCProductVersion>
 	public SCProductVersionModelImpl() {
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _productVersionId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setProductVersionId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
 		return _productVersionId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return SCProductVersion.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return SCProductVersion.class.getName();
 	}
@@ -288,41 +294,50 @@ public class SCProductVersionModelImpl extends BaseModelImpl<SCProductVersion>
 	}
 
 	@JSON
+	@Override
 	public long getProductVersionId() {
 		return _productVersionId;
 	}
 
+	@Override
 	public void setProductVersionId(long productVersionId) {
 		_productVersionId = productVersionId;
 	}
 
 	@JSON
+	@Override
 	public long getCompanyId() {
 		return _companyId;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
 		_companyId = companyId;
 	}
 
 	@JSON
+	@Override
 	public long getUserId() {
 		return _userId;
 	}
 
+	@Override
 	public void setUserId(long userId) {
 		_userId = userId;
 	}
 
+	@Override
 	public String getUserUuid() throws SystemException {
 		return PortalUtil.getUserValue(getUserId(), "uuid", _userUuid);
 	}
 
+	@Override
 	public void setUserUuid(String userUuid) {
 		_userUuid = userUuid;
 	}
 
 	@JSON
+	@Override
 	public String getUserName() {
 		if (_userName == null) {
 			return StringPool.BLANK;
@@ -332,15 +347,18 @@ public class SCProductVersionModelImpl extends BaseModelImpl<SCProductVersion>
 		}
 	}
 
+	@Override
 	public void setUserName(String userName) {
 		_userName = userName;
 	}
 
 	@JSON
+	@Override
 	public Date getCreateDate() {
 		return _createDate;
 	}
 
+	@Override
 	public void setCreateDate(Date createDate) {
 		_columnBitmask = -1L;
 
@@ -348,19 +366,23 @@ public class SCProductVersionModelImpl extends BaseModelImpl<SCProductVersion>
 	}
 
 	@JSON
+	@Override
 	public Date getModifiedDate() {
 		return _modifiedDate;
 	}
 
+	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		_modifiedDate = modifiedDate;
 	}
 
 	@JSON
+	@Override
 	public long getProductEntryId() {
 		return _productEntryId;
 	}
 
+	@Override
 	public void setProductEntryId(long productEntryId) {
 		_columnBitmask |= PRODUCTENTRYID_COLUMN_BITMASK;
 
@@ -378,6 +400,7 @@ public class SCProductVersionModelImpl extends BaseModelImpl<SCProductVersion>
 	}
 
 	@JSON
+	@Override
 	public String getVersion() {
 		if (_version == null) {
 			return StringPool.BLANK;
@@ -387,11 +410,13 @@ public class SCProductVersionModelImpl extends BaseModelImpl<SCProductVersion>
 		}
 	}
 
+	@Override
 	public void setVersion(String version) {
 		_version = version;
 	}
 
 	@JSON
+	@Override
 	public String getChangeLog() {
 		if (_changeLog == null) {
 			return StringPool.BLANK;
@@ -401,11 +426,13 @@ public class SCProductVersionModelImpl extends BaseModelImpl<SCProductVersion>
 		}
 	}
 
+	@Override
 	public void setChangeLog(String changeLog) {
 		_changeLog = changeLog;
 	}
 
 	@JSON
+	@Override
 	public String getDownloadPageURL() {
 		if (_downloadPageURL == null) {
 			return StringPool.BLANK;
@@ -415,11 +442,13 @@ public class SCProductVersionModelImpl extends BaseModelImpl<SCProductVersion>
 		}
 	}
 
+	@Override
 	public void setDownloadPageURL(String downloadPageURL) {
 		_downloadPageURL = downloadPageURL;
 	}
 
 	@JSON
+	@Override
 	public String getDirectDownloadURL() {
 		if (_directDownloadURL == null) {
 			return StringPool.BLANK;
@@ -429,6 +458,7 @@ public class SCProductVersionModelImpl extends BaseModelImpl<SCProductVersion>
 		}
 	}
 
+	@Override
 	public void setDirectDownloadURL(String directDownloadURL) {
 		_columnBitmask |= DIRECTDOWNLOADURL_COLUMN_BITMASK;
 
@@ -444,14 +474,17 @@ public class SCProductVersionModelImpl extends BaseModelImpl<SCProductVersion>
 	}
 
 	@JSON
+	@Override
 	public boolean getRepoStoreArtifact() {
 		return _repoStoreArtifact;
 	}
 
+	@Override
 	public boolean isRepoStoreArtifact() {
 		return _repoStoreArtifact;
 	}
 
+	@Override
 	public void setRepoStoreArtifact(boolean repoStoreArtifact) {
 		_repoStoreArtifact = repoStoreArtifact;
 	}
@@ -505,6 +538,7 @@ public class SCProductVersionModelImpl extends BaseModelImpl<SCProductVersion>
 		return scProductVersionImpl;
 	}
 
+	@Override
 	public int compareTo(SCProductVersion scProductVersion) {
 		int value = 0;
 
@@ -522,18 +556,15 @@ public class SCProductVersionModelImpl extends BaseModelImpl<SCProductVersion>
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof SCProductVersion)) {
 			return false;
 		}
 
-		SCProductVersion scProductVersion = null;
-
-		try {
-			scProductVersion = (SCProductVersion)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		SCProductVersion scProductVersion = (SCProductVersion)obj;
 
 		long primaryKey = scProductVersion.getPrimaryKey();
 
@@ -671,6 +702,7 @@ public class SCProductVersionModelImpl extends BaseModelImpl<SCProductVersion>
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(40);
 

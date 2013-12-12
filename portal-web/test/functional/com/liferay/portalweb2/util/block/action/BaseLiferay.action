@@ -1,7 +1,22 @@
 <definition>
+	<command name="addSelection">
+		<default>
+			<execute function="AddSelection#addSelection" />
+		</default>
+	</command>
+
 	<command name="assertChecked">
 		<default>
 			<execute function="AssertChecked#assertChecked" />
+		</default>
+	</command>
+
+	<command name="assertClick">
+		<case comparator="contains" locator1="/input">
+			<execute function="AssertClick#assertValueClickAt" />
+		</case>
+		<default>
+			<execute function="AssertClick#assertTextClickAt" />
 		</default>
 	</command>
 
@@ -17,9 +32,21 @@
 		</default>
 	</command>
 
+	<command name="assertLocation">
+		<default>
+			<execute function="AssertLocation#assertLocation" />
+		</default>
+	</command>
+
 	<command name="assertNotChecked">
 		<default>
 			<execute function="AssertNotChecked#assertNotChecked" />
+		</default>
+	</command>
+
+	<command name="assertSelectedLabel">
+		<default>
+			<execute function="AssertSelectedLabel#assertSelectedLabel" />
 		</default>
 	</command>
 
@@ -86,6 +113,18 @@
 		</default>
 	</command>
 
+	<command name="doubleClick">
+		<default>
+			<execute function="DoubleClick#doubleClickAt" />
+		</default>
+	</command>
+
+	<command name="downloadTempFile">
+		<default>
+			<execute function="DownloadTempFile#downloadTempFile" />
+		</default>
+	</command>
+
 	<command name="dragAndDrop">
 		<default>
 			<execute function="DragAndDrop#dragAndDrop" />
@@ -122,6 +161,18 @@
 		</default>
 	</command>
 
+	<command name="keyPress">
+		<default>
+			<execute function="KeyPress#keyPress" />
+		</default>
+	</command>
+
+	<command name="makeVisible">
+		<default>
+			<execute function="MakeVisible#makeVisible" />
+		</default>
+	</command>
+
 	<command name="mouseOver">
 		<default>
 			<execute function="MouseOver#mouseOver" />
@@ -140,9 +191,36 @@
 		</default>
 	</command>
 
+	<command name="pause">
+		<default>
+			<execute function="Pause#pause" />
+		</default>
+	</command>
+
+	<command name="refresh">
+		<default>
+			<execute function="Refresh#refresh" />
+		</default>
+	</command>
+
 	<command name="select">
 		<default>
 			<execute function="Select#select" />
+		</default>
+	</command>
+
+	<command name="selectFrame">
+		<case comparator="contains" locator1="/iframe">
+			<execute function="SelectFrame#selectFrame" />
+		</case>
+		<default>
+			<execute function="SelectFrame#selectFrameTop" />
+		</default>
+	</command>
+
+	<command name="selectFrameTop">
+		<default>
+			<execute function="SelectFrameTop#selectFrameTop" />
 		</default>
 	</command>
 
@@ -161,6 +239,24 @@
 	<command name="uncheck">
 		<default>
 			<execute function="Uncheck#clickAt" />
+		</default>
+	</command>
+
+	<command name="uploadCommonFile">
+		<default>
+			<execute function="UploadCommonFile#uploadCommonFile" />
+		</default>
+	</command>
+
+	<command name="uploadFile">
+		<default>
+			<execute function="UploadFile#uploadFile" />
+		</default>
+	</command>
+
+	<command name="uploadTempFile">
+		<default>
+			<execute function="UploadTempFile#uploadTempFile" />
 		</default>
 	</command>
 </definition>

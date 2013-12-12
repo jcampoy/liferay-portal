@@ -18,12 +18,12 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
+import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.HttpUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.User;
-import com.liferay.portal.security.lang.DoPrivilegedBean;
 import com.liferay.portal.service.ServiceContext;
-import com.liferay.portal.util.HttpImpl;
 import com.liferay.portlet.softwarecatalog.DuplicateProductVersionDirectDownloadURLException;
 import com.liferay.portlet.softwarecatalog.ProductVersionChangeLogException;
 import com.liferay.portlet.softwarecatalog.ProductVersionDownloadURLException;
@@ -39,10 +39,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.httpclient.HostConfiguration;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.GetMethod;
-
 /**
  * @author Jorge Ferrer
  * @author Brian Wing Shun Chan
@@ -50,6 +46,7 @@ import org.apache.commons.httpclient.methods.GetMethod;
 public class SCProductVersionLocalServiceImpl
 	extends SCProductVersionLocalServiceBaseImpl {
 
+	@Override
 	public SCProductVersion addProductVersion(
 			long userId, long productEntryId, String version, String changeLog,
 			String downloadPageURL, String directDownloadURL,
@@ -62,7 +59,7 @@ public class SCProductVersionLocalServiceImpl
 		User user = userPersistence.findByPrimaryKey(userId);
 		SCProductEntry productEntry =
 			scProductEntryPersistence.findByPrimaryKey(productEntryId);
-		directDownloadURL = directDownloadURL.trim().toLowerCase();
+		directDownloadURL = StringUtil.toLowerCase(directDownloadURL.trim());
 		Date now = new Date();
 
 		validate(
@@ -109,6 +106,7 @@ public class SCProductVersionLocalServiceImpl
 		return productVersion;
 	}
 
+	@Override
 	public void deleteProductVersion(long productVersionId)
 		throws PortalException, SystemException {
 
@@ -118,12 +116,14 @@ public class SCProductVersionLocalServiceImpl
 		deleteProductVersion(productVersion);
 	}
 
+	@Override
 	public void deleteProductVersion(SCProductVersion productVersion)
 		throws SystemException {
 
 		scProductVersionPersistence.remove(productVersion);
 	}
 
+	@Override
 	public void deleteProductVersions(long productEntryId)
 		throws SystemException {
 
@@ -135,12 +135,14 @@ public class SCProductVersionLocalServiceImpl
 		}
 	}
 
+	@Override
 	public SCProductVersion getProductVersion(long productVersionId)
 		throws PortalException, SystemException {
 
 		return scProductVersionPersistence.findByPrimaryKey(productVersionId);
 	}
 
+	@Override
 	public SCProductVersion getProductVersionByDirectDownloadURL(
 			String directDownloadURL)
 		throws PortalException, SystemException {
@@ -149,6 +151,7 @@ public class SCProductVersionLocalServiceImpl
 			directDownloadURL);
 	}
 
+	@Override
 	public List<SCProductVersion> getProductVersions(
 			long productEntryId, int start, int end)
 		throws SystemException {
@@ -157,6 +160,7 @@ public class SCProductVersionLocalServiceImpl
 			productEntryId, start, end);
 	}
 
+	@Override
 	public int getProductVersionsCount(long productEntryId)
 		throws SystemException {
 
@@ -164,6 +168,7 @@ public class SCProductVersionLocalServiceImpl
 			productEntryId);
 	}
 
+	@Override
 	public SCProductVersion updateProductVersion(
 			long productVersionId, String version, String changeLog,
 			String downloadPageURL, String directDownloadURL,
@@ -173,7 +178,7 @@ public class SCProductVersionLocalServiceImpl
 
 		// Product version
 
-		directDownloadURL = directDownloadURL.trim().toLowerCase();
+		directDownloadURL = StringUtil.toLowerCase(directDownloadURL.trim());
 		Date now = new Date();
 
 		validate(
@@ -221,31 +226,16 @@ public class SCProductVersionLocalServiceImpl
 		throws PortalException {
 
 		try {
-			HttpImpl httpImpl = null;
+			Http.Options options = new Http.Options();
 
-			Object httpObject = HttpUtil.getHttp();
+			options.setLocation(directDownloadURL);
+			options.setPost(false);
 
-			if (httpObject instanceof DoPrivilegedBean) {
-				DoPrivilegedBean doPrivilegedBean =
-					(DoPrivilegedBean)httpObject;
+			HttpUtil.URLtoByteArray(options);
 
-				httpImpl = (HttpImpl)doPrivilegedBean.getActualBean();
-			}
-			else {
-				httpImpl = (HttpImpl)httpObject;
-			}
+			Http.Response response = options.getResponse();
 
-			HostConfiguration hostConfiguration = httpImpl.getHostConfiguration(
-				directDownloadURL);
-
-			HttpClient httpClient = httpImpl.getClient(hostConfiguration);
-
-			GetMethod getFileMethod = new GetMethod(directDownloadURL);
-
-			int responseCode = httpClient.executeMethod(
-				hostConfiguration, getFileMethod);
-
-			if (responseCode != HttpServletResponse.SC_OK) {
+			if (response.getResponseCode() != HttpServletResponse.SC_OK) {
 				throw new UnavailableProductVersionDirectDownloadURLException();
 			}
 		}

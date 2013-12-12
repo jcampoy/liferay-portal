@@ -44,6 +44,7 @@
 
 package com.liferay.util.cal;
 
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CalendarFactoryUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
@@ -373,6 +374,8 @@ public class Recurrence implements Serializable {
 		myCurrent.setTimeZone(TimeZoneUtil.getTimeZone(StringPool.UTC));
 		myCurrent.setMinimalDaysInFirstWeek(4);
 		myCurrent.setFirstDayOfWeek(dtStart.getFirstDayOfWeek());
+		myCurrent.set(Calendar.SECOND, 0);
+		myCurrent.set(Calendar.MILLISECOND, 0);
 
 		if (myCurrent.getTime().getTime() < dtStart.getTime().getTime()) {
 
@@ -543,6 +546,8 @@ public class Recurrence implements Serializable {
 
 		dtStart.setMinimalDaysInFirstWeek(4);
 		dtStart.setFirstDayOfWeek(oldStart);
+		dtStart.set(Calendar.SECOND, 0);
+		dtStart.set(Calendar.MILLISECOND, 0);
 	}
 
 	/**
@@ -687,7 +692,7 @@ public class Recurrence implements Serializable {
 	protected static long getMonthNumber(Calendar cal) {
 		return
 			((cal.get(Calendar.YEAR) - 1970) * 12L) +
-				(cal.get(Calendar.MONTH) - Calendar.JANUARY);
+				((cal.get(Calendar.MONTH) - Calendar.JANUARY));
 	}
 
 	/**
@@ -721,7 +726,7 @@ public class Recurrence implements Serializable {
 
 		long weekEpoch =
 			(tempCal.getFirstDayOfWeek() - Calendar.THURSDAY) * 24L * 60 * 60 *
-				1000L;
+				1000;
 
 		return
 			(tempCal.getTime().getTime() - weekEpoch) /
@@ -931,7 +936,7 @@ public class Recurrence implements Serializable {
 	 * @return boolean
 	 */
 	protected boolean matchesByDay(Calendar candidate) {
-		if ((byDay == null) || (byDay.length == 0)) {
+		if (ArrayUtil.isEmpty(byDay)) {
 
 			/* No byDay rules, so it matches trivially */
 
@@ -957,7 +962,7 @@ public class Recurrence implements Serializable {
 	protected boolean matchesByField(
 		int[] array, int field, Calendar candidate, boolean allowNegative) {
 
-		if ((array == null) || (array.length == 0)) {
+		if (ArrayUtil.isEmpty(array)) {
 
 			/* No rules, so it matches trivially */
 

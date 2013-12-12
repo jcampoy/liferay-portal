@@ -54,7 +54,7 @@ private void _buildCategoryBreadcrumb(HttpServletRequest request, MBCategory cat
 
 	Collections.reverse(ancestorCategories);
 
-	sb.append("<ul class=\"lfr-component subscription-breadcrumbs\">");
+	sb.append("<ul class=\"breadcrumb\">");
 
 	for (int i = 0; i < ancestorCategories.size(); i++) {
 		MBCategory ancestorCategory = ancestorCategories.get(i);
@@ -71,13 +71,15 @@ private void _buildCategoryBreadcrumb(HttpServletRequest request, MBCategory cat
 		}
 
 		sb.append("<li");
-		sb.append(" class=\"" + cssClass + "\">");
+		sb.append(" class=\"");
+		sb.append(cssClass);
+		sb.append("\">");
 		sb.append("<a href=\"");
 		sb.append(HtmlUtil.escape(portletURL.toString()));
 		sb.append("\">");
 		sb.append(ancestorCategory.getName());
 		sb.append("</a>");
-
+		sb.append("<span class=\"divider\">/</span>");
 		sb.append("</li>");
 	}
 
@@ -86,7 +88,7 @@ private void _buildCategoryBreadcrumb(HttpServletRequest request, MBCategory cat
 	portletURL.setParameter("struts_action", "/message_boards/view");
 	portletURL.setParameter("mbCategoryId", String.valueOf(category.getCategoryId()));
 
-	sb.append("<li class=\"last\">");
+	sb.append("<li class=\"active last\">");
 	sb.append("<strong>");
 	sb.append("<a href=\"");
 	sb.append(HtmlUtil.escape(portletURL.toString()));

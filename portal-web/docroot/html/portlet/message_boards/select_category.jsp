@@ -52,7 +52,7 @@ else {
 	%>
 
 	<liferay-ui:search-container
-		headerNames="category,num-of-categories,num-of-threads,num-of-posts,"
+		headerNames="category[message-board],num-of-categories,num-of-threads,num-of-posts,"
 		iteratorURL="<%= portletURL %>"
 		total="<%= MBCategoryServiceUtil.getCategoriesCount(scopeGroupId, categoryId, WorkflowConstants.STATUS_APPROVED) %>"
 	>
@@ -75,7 +75,7 @@ else {
 			<liferay-ui:search-container-column-text
 				buffer="buffer"
 				href="<%= rowURL %>"
-				name="category"
+				name="category[message-board]"
 			>
 
 				<%
@@ -146,8 +146,8 @@ else {
 
 			Util.getOpener().Liferay.fire('<%= HtmlUtil.escapeJS(eventName) %>', result);
 
-			Util.getWindow().close();
+			Util.getWindow().hide();
 		},
-		'.selector-button input'
+		'.selector-button'
 	);
 </aui:script>

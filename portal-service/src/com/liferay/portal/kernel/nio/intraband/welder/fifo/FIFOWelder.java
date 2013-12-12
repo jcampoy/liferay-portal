@@ -14,13 +14,13 @@
 
 package com.liferay.portal.kernel.nio.intraband.welder.fifo;
 
+import com.liferay.portal.kernel.io.AutoDeleteFileInputStream;
 import com.liferay.portal.kernel.nio.intraband.Intraband;
 import com.liferay.portal.kernel.nio.intraband.RegistrationReference;
 import com.liferay.portal.kernel.nio.intraband.welder.BaseWelder;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -57,7 +57,7 @@ public class FIFOWelder extends BaseWelder {
 	}
 
 	@Override
-	protected RegistrationReference weldClient(Intraband intraBand)
+	protected RegistrationReference weldClient(Intraband intraband)
 		throws IOException {
 
 		// Write, then read
@@ -66,21 +66,21 @@ public class FIFOWelder extends BaseWelder {
 
 		writeFileChannel = fileOutputStream.getChannel();
 
-		FileInputStream fileInputStream = new AutoRemoveFileInputStream(
+		FileInputStream fileInputStream = new AutoDeleteFileInputStream(
 			outputFIFOFile);
 
 		readFileChannel = fileInputStream.getChannel();
 
-		return intraBand.registerChannel(readFileChannel, writeFileChannel);
+		return intraband.registerChannel(readFileChannel, writeFileChannel);
 	}
 
 	@Override
-	protected RegistrationReference weldServer(Intraband intraBand)
+	protected RegistrationReference weldServer(Intraband intraband)
 		throws IOException {
 
 		// Read, then write
 
-		FileInputStream fileInputStream = new AutoRemoveFileInputStream(
+		FileInputStream fileInputStream = new AutoDeleteFileInputStream(
 			inputFIFOFile);
 
 		readFileChannel = fileInputStream.getChannel();
@@ -90,7 +90,7 @@ public class FIFOWelder extends BaseWelder {
 
 		writeFileChannel = fileOutputStream.getChannel();
 
-		return intraBand.registerChannel(readFileChannel, writeFileChannel);
+		return intraband.registerChannel(readFileChannel, writeFileChannel);
 	}
 
 	protected static final AtomicLong idCounter = new AtomicLong(
@@ -100,28 +100,5 @@ public class FIFOWelder extends BaseWelder {
 	protected final File outputFIFOFile;
 	protected transient FileChannel readFileChannel;
 	protected transient FileChannel writeFileChannel;
-
-	protected static class AutoRemoveFileInputStream extends FileInputStream {
-
-		public AutoRemoveFileInputStream(File file)
-			throws FileNotFoundException {
-
-			super(file);
-
-			_file = file;
-		}
-
-		@Override
-		public void close() throws IOException {
-			super.close();
-
-			if (!_file.delete()) {
-				_file.deleteOnExit();
-			}
-		}
-
-		private final File _file;
-
-	}
 
 }

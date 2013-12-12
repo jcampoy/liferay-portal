@@ -35,6 +35,7 @@ import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+import javax.portlet.WindowState;
 
 /**
  * @author Julio Camarero
@@ -48,10 +49,12 @@ public class BookmarksEntryAssetRenderer
 		_entry = entry;
 	}
 
+	@Override
 	public String getClassName() {
 		return BookmarksEntry.class.getName();
 	}
 
+	@Override
 	public long getClassPK() {
 		return _entry.getEntryId();
 	}
@@ -61,6 +64,7 @@ public class BookmarksEntryAssetRenderer
 		return _entry.getModifiedDate();
 	}
 
+	@Override
 	public long getGroupId() {
 		return _entry.getGroupId();
 	}
@@ -70,12 +74,14 @@ public class BookmarksEntryAssetRenderer
 		return themeDisplay.getPathThemeImages() + "/ratings/star_hover.png";
 	}
 
+	@Override
 	public String getPortletId() {
 		AssetRendererFactory assetRendererFactory = getAssetRendererFactory();
 
 		return assetRendererFactory.getPortletId();
 	}
 
+	@Override
 	public String getSummary(Locale locale) {
 		return HtmlUtil.stripHtml(_entry.getDescription());
 	}
@@ -91,10 +97,12 @@ public class BookmarksEntryAssetRenderer
 			"/file_system/large/bookmark.png";
 	}
 
+	@Override
 	public String getTitle(Locale locale) {
 		return _entry.getName();
 	}
 
+	@Override
 	public String getType() {
 		return BookmarksEntryAssetRendererFactory.TYPE;
 	}
@@ -118,6 +126,24 @@ public class BookmarksEntryAssetRenderer
 	}
 
 	@Override
+	public PortletURL getURLView(
+			LiferayPortletResponse liferayPortletResponse,
+			WindowState windowState)
+		throws Exception {
+
+		AssetRendererFactory assetRendererFactory = getAssetRendererFactory();
+
+		PortletURL portletURL = assetRendererFactory.getURLView(
+			liferayPortletResponse, windowState);
+
+		portletURL.setParameter("struts_action", "/bookmarks/view_entry");
+		portletURL.setParameter("entryId", String.valueOf(_entry.getEntryId()));
+		portletURL.setWindowState(windowState);
+
+		return portletURL;
+	}
+
+	@Override
 	public String getURLViewInContext(
 		LiferayPortletRequest liferayPortletRequest,
 		LiferayPortletResponse liferayPortletResponse,
@@ -128,14 +154,17 @@ public class BookmarksEntryAssetRenderer
 			"entryId", _entry.getEntryId());
 	}
 
+	@Override
 	public long getUserId() {
 		return _entry.getUserId();
 	}
 
+	@Override
 	public String getUserName() {
 		return _entry.getUserName();
 	}
 
+	@Override
 	public String getUuid() {
 		return _entry.getUuid();
 	}
@@ -169,6 +198,7 @@ public class BookmarksEntryAssetRenderer
 		return true;
 	}
 
+	@Override
 	public String render(
 			RenderRequest renderRequest, RenderResponse renderResponse,
 			String template)

@@ -16,6 +16,7 @@ package com.liferay.portlet.social.model.impl;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portlet.social.model.SocialActivity;
 import com.liferay.portlet.social.model.SocialActivityFeedEntry;
@@ -44,6 +45,7 @@ public class SocialActivityInterpreterImpl
 		}
 	}
 
+	@Override
 	public String[] getClassNames() {
 		return _activityInterpreter.getClassNames();
 	}
@@ -52,6 +54,7 @@ public class SocialActivityInterpreterImpl
 		return _portletId;
 	}
 
+	@Override
 	public String getSelector() {
 		return _activityInterpreter.getSelector();
 	}
@@ -65,18 +68,31 @@ public class SocialActivityInterpreterImpl
 		}
 	}
 
+	@Override
+	public boolean hasPermission(
+			PermissionChecker permissionChecker, SocialActivity activity,
+			String actionId, ServiceContext serviceContext)
+		throws Exception {
+
+		return _activityInterpreter.hasPermission(
+			permissionChecker, activity, actionId, serviceContext);
+	}
+
+	@Override
 	public SocialActivityFeedEntry interpret(
 		SocialActivity activity, ServiceContext serviceContext) {
 
 		return _activityInterpreter.interpret(activity, serviceContext);
 	}
 
+	@Override
 	public SocialActivityFeedEntry interpret(
 		SocialActivitySet activitySet, ServiceContext serviceContext) {
 
 		return _activityInterpreter.interpret(activitySet, serviceContext);
 	}
 
+	@Override
 	public void updateActivitySet(long activityId)
 		throws PortalException, SystemException {
 

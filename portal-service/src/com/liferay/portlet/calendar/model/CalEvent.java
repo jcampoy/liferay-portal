@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.calendar.model;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.model.PersistedModel;
 
 /**
@@ -25,6 +27,7 @@ import com.liferay.portal.model.PersistedModel;
  * @see com.liferay.portlet.calendar.model.impl.CalEventModelImpl
  * @generated
  */
+@ProviderType
 public interface CalEvent extends CalEventModel, PersistedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -32,8 +35,6 @@ public interface CalEvent extends CalEventModel, PersistedModel {
 	 * Never modify this interface directly. Add methods to {@link com.liferay.portlet.calendar.model.impl.CalEventImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
 	public com.liferay.portal.kernel.cal.TZSRecurrence getRecurrenceObj();
-
-	public void setRecurrence(java.lang.String recurrence);
 
 	public void setRecurrenceObj(
 		com.liferay.portal.kernel.cal.TZSRecurrence recurrenceObj);

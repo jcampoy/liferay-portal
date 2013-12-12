@@ -14,15 +14,16 @@
 
 package com.liferay.portal.service;
 
+import aQute.bnd.annotation.ProviderType;
+
 /**
- * <p>
- * This class is a wrapper for {@link CompanyLocalService}.
- * </p>
+ * Provides a wrapper for {@link CompanyLocalService}.
  *
- * @author    Brian Wing Shun Chan
- * @see       CompanyLocalService
+ * @author Brian Wing Shun Chan
+ * @see CompanyLocalService
  * @generated
  */
+@ProviderType
 public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	ServiceWrapper<CompanyLocalService> {
 	public CompanyLocalServiceWrapper(CompanyLocalService companyLocalService) {
@@ -36,6 +37,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	* @return the company that was added
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.Company addCompany(
 		com.liferay.portal.model.Company company)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -48,6 +50,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	* @param companyId the primary key for the new company
 	* @return the new company
 	*/
+	@Override
 	public com.liferay.portal.model.Company createCompany(long companyId) {
 		return _companyLocalService.createCompany(companyId);
 	}
@@ -60,6 +63,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	* @throws PortalException if a company with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.Company deleteCompany(long companyId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -73,12 +77,14 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	* @return the company that was removed
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.Company deleteCompany(
 		com.liferay.portal.model.Company company)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _companyLocalService.deleteCompany(company);
 	}
 
+	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		return _companyLocalService.dynamicQuery();
 	}
@@ -90,6 +96,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	* @return the matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
@@ -110,6 +117,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	* @return the range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -131,6 +139,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	* @return the ordered range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -148,12 +157,30 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	* @return the number of rows that match the dynamic query
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _companyLocalService.dynamicQueryCount(dynamicQuery);
 	}
 
+	/**
+	* Returns the number of rows that match the dynamic query.
+	*
+	* @param dynamicQuery the dynamic query
+	* @param projection the projection to apply to the query
+	* @return the number of rows that match the dynamic query
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public long dynamicQueryCount(
+		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery,
+		com.liferay.portal.kernel.dao.orm.Projection projection)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _companyLocalService.dynamicQueryCount(dynamicQuery, projection);
+	}
+
+	@Override
 	public com.liferay.portal.model.Company fetchCompany(long companyId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _companyLocalService.fetchCompany(companyId);
@@ -167,12 +194,14 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	* @throws PortalException if a company with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.Company getCompany(long companyId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _companyLocalService.getCompany(companyId);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -192,6 +221,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	* @return the range of companies
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portal.model.Company> getCompanies(
 		int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -204,6 +234,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	* @return the number of companies
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getCompaniesCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _companyLocalService.getCompaniesCount();
@@ -216,6 +247,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	* @return the company that was updated
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.Company updateCompany(
 		com.liferay.portal.model.Company company)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -227,6 +259,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _companyLocalService.getBeanIdentifier();
 	}
@@ -236,6 +269,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_companyLocalService.setBeanIdentifier(beanIdentifier);
 	}
@@ -257,6 +291,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	domain was invalid
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.Company addCompany(java.lang.String webId,
 		java.lang.String virtualHostname, java.lang.String mx,
 		java.lang.String shardName, boolean system, int maxUsers, boolean active)
@@ -277,6 +312,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	* @throws PortalException if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.Company checkCompany(java.lang.String webId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -297,6 +333,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	* @throws PortalException if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.Company checkCompany(
 		java.lang.String webId, java.lang.String mx, java.lang.String shardName)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -313,6 +350,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void checkCompanyKey(long companyId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -327,10 +365,11 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	found or if the company's logo could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public void deleteLogo(long companyId)
+	@Override
+	public com.liferay.portal.model.Company deleteLogo(long companyId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		_companyLocalService.deleteLogo(companyId);
+		return _companyLocalService.deleteLogo(companyId);
 	}
 
 	/**
@@ -341,6 +380,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.Company fetchCompanyById(long companyId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _companyLocalService.fetchCompanyById(companyId);
@@ -354,6 +394,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	company with the virtual host could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.Company fetchCompanyByVirtualHost(
 		java.lang.String virtualHostname)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -366,6 +407,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	* @return the companies
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portal.model.Company> getCompanies()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _companyLocalService.getCompanies();
@@ -379,6 +421,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	* @return the companies used by WSRP
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portal.model.Company> getCompanies(
 		boolean system)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -393,6 +436,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	* @return the number of companies used by WSRP
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getCompaniesCount(boolean system)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _companyLocalService.getCompaniesCount(system);
@@ -407,6 +451,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.Company getCompanyById(long companyId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -421,6 +466,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	* @throws PortalException if the company with the logo could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.Company getCompanyByLogoId(long logoId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -436,6 +482,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.Company getCompanyByMx(java.lang.String mx)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -452,6 +499,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	company
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.Company getCompanyByVirtualHost(
 		java.lang.String virtualHostname)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -468,6 +516,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.Company getCompanyByWebId(
 		java.lang.String webId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -484,6 +533,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	otherwise
 	* @throws Exception if a user with the primary key could not be found
 	*/
+	@Override
 	public long getCompanyIdByUserId(long userId) throws java.lang.Exception {
 		return _companyLocalService.getCompanyIdByUserId(userId);
 	}
@@ -499,6 +549,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	* @param keys the company's preferences keys to be remove
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void removePreferences(long companyId, java.lang.String[] keys)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_companyLocalService.removePreferences(companyId, keys);
@@ -522,6 +573,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	* @return the matching assets in the company
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.kernel.search.Hits search(long companyId,
 		long userId, java.lang.String keywords, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -548,6 +600,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	* @return the matching assets in the portlet within the company
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.kernel.search.Hits search(long companyId,
 		long userId, java.lang.String portletId, long groupId,
 		java.lang.String type, java.lang.String keywords, int start, int end)
@@ -570,6 +623,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	or if the new information was invalid
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.Company updateCompany(long companyId,
 		java.lang.String virtualHostname, java.lang.String mx, int maxUsers,
 		boolean active)
@@ -577,6 +631,50 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _companyLocalService.updateCompany(companyId, virtualHostname,
 			mx, maxUsers, active);
+	}
+
+	/**
+	* Update the company with additional account information.
+	*
+	* @param companyId the primary key of the company
+	* @param virtualHostname the company's virtual host name
+	* @param mx the company's mail domain
+	* @param homeURL the company's home URL (optionally <code>null</code>)
+	* @param logo whether to update the company's logo
+	* @param logoBytes the new logo image data
+	* @param name the company's account name(optionally <code>null</code>)
+	* @param legalName the company's account legal name (optionally
+	<code>null</code>)
+	* @param legalId the company's account legal ID (optionally
+	<code>null</code>)
+	* @param legalType the company's account legal type (optionally
+	<code>null</code>)
+	* @param sicCode the company's account SIC code (optionally
+	<code>null</code>)
+	* @param tickerSymbol the company's account ticker symbol (optionally
+	<code>null</code>)
+	* @param industry the company's account industry (optionally
+	<code>null</code>)
+	* @param type the company's account type (optionally <code>null</code>)
+	* @param size the company's account size (optionally <code>null</code>)
+	* @return the company with the primary key
+	* @throws PortalException if a company with the primary key could not be
+	found or if the new information was invalid
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public com.liferay.portal.model.Company updateCompany(long companyId,
+		java.lang.String virtualHostname, java.lang.String mx,
+		java.lang.String homeURL, boolean logo, byte[] logoBytes,
+		java.lang.String name, java.lang.String legalName,
+		java.lang.String legalId, java.lang.String legalType,
+		java.lang.String sicCode, java.lang.String tickerSymbol,
+		java.lang.String industry, java.lang.String type, java.lang.String size)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _companyLocalService.updateCompany(companyId, virtualHostname,
+			mx, homeURL, logo, logoBytes, name, legalName, legalId, legalType,
+			sicCode, tickerSymbol, industry, type, size);
 	}
 
 	/**
@@ -599,13 +697,19 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	<code>null</code>)
 	* @param industry the company's account industry (optionally
 	<code>null</code>)
-	* @param type the company's account type (optionally <code>null</code>)
-	* @param size the company's account size (optionally <code>null</code>)
+	* @param type the company's account type (optionally
+	<code>null</code>)
+	* @param size the company's account size (optionally
+	<code>null</code>)
 	* @return the company with the primary key
-	* @throws PortalException if a company with the primary key could not be
-	found or if the new information was invalid
+	* @throws PortalException if a company with the primary key could not
+	be found or if the new information was invalid
 	* @throws SystemException if a system exception occurred
+	* @deprecated As of 7.0.0, replaced by {@link #updateCompany(long, String,
+	String, String, boolean, byte[], String, String, String,
+	String, String, String, String, String, String)}
 	*/
+	@Override
 	public com.liferay.portal.model.Company updateCompany(long companyId,
 		java.lang.String virtualHostname, java.lang.String mx,
 		java.lang.String homeURL, java.lang.String name,
@@ -629,6 +733,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	* @throws PortalException if the company's default user could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void updateDisplay(long companyId, java.lang.String languageId,
 		java.lang.String timeZoneId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -646,6 +751,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	the logo's image was corrupted
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.Company updateLogo(long companyId,
 		byte[] bytes)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -663,6 +769,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	the logo's image was corrupted
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.Company updateLogo(long companyId,
 		java.io.File file)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -680,6 +787,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	the company's logo image was corrupted
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.Company updateLogo(long companyId,
 		java.io.InputStream is)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -698,6 +806,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	not supported
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void updatePreferences(long companyId,
 		com.liferay.portal.kernel.util.UnicodeProperties properties)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -724,6 +833,7 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 	logo instead of the enterprise logo
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void updateSecurity(long companyId, java.lang.String authType,
 		boolean autoLogin, boolean sendPassword, boolean strangers,
 		boolean strangersWithMx, boolean strangersVerify, boolean siteLogo)
@@ -747,10 +857,12 @@ public class CompanyLocalServiceWrapper implements CompanyLocalService,
 		_companyLocalService = companyLocalService;
 	}
 
+	@Override
 	public CompanyLocalService getWrappedService() {
 		return _companyLocalService;
 	}
 
+	@Override
 	public void setWrappedService(CompanyLocalService companyLocalService) {
 		_companyLocalService = companyLocalService;
 	}

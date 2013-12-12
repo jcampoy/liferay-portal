@@ -16,6 +16,7 @@ package com.liferay.portlet.dynamicdatalists.service.impl;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portlet.dynamicdatalists.model.DDLRecordSet;
@@ -23,6 +24,7 @@ import com.liferay.portlet.dynamicdatalists.service.base.DDLRecordSetServiceBase
 import com.liferay.portlet.dynamicdatalists.service.permission.DDLPermission;
 import com.liferay.portlet.dynamicdatalists.service.permission.DDLRecordSetPermission;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -35,6 +37,7 @@ import java.util.Map;
  */
 public class DDLRecordSetServiceImpl extends DDLRecordSetServiceBaseImpl {
 
+	@Override
 	public DDLRecordSet addRecordSet(
 			long groupId, long ddmStructureId, String recordSetKey,
 			Map<Locale, String> nameMap, Map<Locale, String> descriptionMap,
@@ -49,6 +52,7 @@ public class DDLRecordSetServiceImpl extends DDLRecordSetServiceBaseImpl {
 			descriptionMap, minDisplayRows, scope, serviceContext);
 	}
 
+	@Override
 	public void deleteRecordSet(long recordSetId)
 		throws PortalException, SystemException {
 
@@ -58,6 +62,7 @@ public class DDLRecordSetServiceImpl extends DDLRecordSetServiceBaseImpl {
 		ddlRecordSetLocalService.deleteRecordSet(recordSetId);
 	}
 
+	@Override
 	public DDLRecordSet getRecordSet(long recordSetId)
 		throws PortalException, SystemException {
 
@@ -67,6 +72,48 @@ public class DDLRecordSetServiceImpl extends DDLRecordSetServiceBaseImpl {
 		return ddlRecordSetLocalService.getRecordSet(recordSetId);
 	}
 
+	@Override
+	public List<DDLRecordSet> search(
+			long companyId, long groupId, String keywords, int scope, int start,
+			int end, OrderByComparator orderByComparator)
+		throws SystemException {
+
+		return ddlRecordSetFinder.filterFindByKeywords(
+			companyId, groupId, keywords, scope, start, end, orderByComparator);
+	}
+
+	@Override
+	public List<DDLRecordSet> search(
+			long companyId, long groupId, String name, String description,
+			int scope, boolean andOperator, int start, int end,
+			OrderByComparator orderByComparator)
+		throws SystemException {
+
+		return ddlRecordSetFinder.filterFindByC_G_N_D_S(
+			companyId, groupId, name, description, scope, andOperator, start,
+			end, orderByComparator);
+	}
+
+	@Override
+	public int searchCount(
+			long companyId, long groupId, String keywords, int scope)
+		throws SystemException {
+
+		return ddlRecordSetFinder.filterCountByKeywords(
+			companyId, groupId, keywords, scope);
+	}
+
+	@Override
+	public int searchCount(
+			long companyId, long groupId, String name, String description,
+			int scope, boolean andOperator)
+		throws SystemException {
+
+		return ddlRecordSetFinder.filterCountByC_G_N_D_S(
+			companyId, groupId, name, description, scope, andOperator);
+	}
+
+	@Override
 	public DDLRecordSet updateMinDisplayRows(
 			long recordSetId, int minDisplayRows, ServiceContext serviceContext)
 		throws PortalException, SystemException {
@@ -78,6 +125,7 @@ public class DDLRecordSetServiceImpl extends DDLRecordSetServiceBaseImpl {
 			recordSetId, minDisplayRows, serviceContext);
 	}
 
+	@Override
 	public DDLRecordSet updateRecordSet(
 			long recordSetId, long ddmStructureId, Map<Locale, String> nameMap,
 			Map<Locale, String> descriptionMap, int minDisplayRows,
@@ -92,6 +140,7 @@ public class DDLRecordSetServiceImpl extends DDLRecordSetServiceBaseImpl {
 			minDisplayRows, serviceContext);
 	}
 
+	@Override
 	public DDLRecordSet updateRecordSet(
 			long groupId, long ddmStructureId, String recordSetKey,
 			Map<Locale, String> nameMap, Map<Locale, String> descriptionMap,

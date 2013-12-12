@@ -213,6 +213,7 @@ public class S3Store extends BaseStore {
 		}
 	}
 
+	@Override
 	public String[] getFileNames(long companyId, long repositoryId)
 		throws SystemException {
 
@@ -327,7 +328,7 @@ public class S3Store extends BaseStore {
 
 				x = oldKey.indexOf(CharPool.SLASH, x + 1);
 
-				String newKey = newPrefix + oldKey.substring(x + 1);
+				String newKey = newPrefix + oldKey.substring(x);
 
 				S3Object newS3Object = new S3Object(_s3Bucket, newKey);
 
@@ -349,6 +350,7 @@ public class S3Store extends BaseStore {
 		}
 	}
 
+	@Override
 	public void updateFile(
 			long companyId, long repositoryId, String fileName,
 			String newFileName)
@@ -381,7 +383,7 @@ public class S3Store extends BaseStore {
 				x = oldKey.indexOf(CharPool.SLASH, x + 1);
 				x = oldKey.indexOf(CharPool.SLASH, x + 1);
 
-				String newKey = newPrefix + oldKey.substring(x + 1);
+				String newKey = newPrefix + oldKey.substring(x);
 
 				S3Object newS3Object = new S3Object(_s3Bucket, newKey);
 
@@ -556,13 +558,7 @@ public class S3Store extends BaseStore {
 	}
 
 	protected String getKey(long companyId, long repositoryId) {
-		StringBundler sb = new StringBundler(4);
-
-		sb.append(companyId);
-		sb.append(StringPool.SLASH);
-		sb.append(repositoryId);
-
-		return sb.toString();
+		return companyId + StringPool.SLASH + repositoryId;
 	}
 
 	protected String getKey(

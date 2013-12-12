@@ -24,7 +24,6 @@ String type = (String)request.getAttribute("liferay-ui:search:type");
 
 String id = searchContainer.getId(request, namespace);
 
-int start = searchContainer.getStart();
 int end = searchContainer.getEnd();
 int total = searchContainer.getTotal();
 List resultRows = searchContainer.getResultRows();
@@ -57,160 +56,163 @@ if (iteratorURL != null) {
 }
 
 List<String> primaryKeys = new ArrayList<String>();
-
-int sortColumnIndex = -1;
 %>
 
 <c:if test="<%= resultRows.isEmpty() && (emptyResultsMessage != null) %>">
-	<div class="portlet-msg-info">
+	<div class="alert alert-info">
 		<%= LanguageUtil.get(pageContext, emptyResultsMessage) %>
 	</div>
 </c:if>
 
-<div class="lfr-search-container <%= resultRows.isEmpty() ? "aui-helper-hidden" : StringPool.BLANK %>">
+<div class="lfr-search-container <%= resultRows.isEmpty() ? "hide" : StringPool.BLANK %>">
 	<c:if test="<%= PropsValues.SEARCH_CONTAINER_SHOW_PAGINATION_TOP && (resultRows.size() > 10) && paginate %>">
 		<div class="taglib-search-iterator-page-iterator-top">
 			<liferay-ui:search-paginator id='<%= id + "PageIteratorTop" %>' searchContainer="<%= searchContainer %>" type="<%= type %>" />
 		</div>
 	</c:if>
 
-	<div class="results-grid" id="<%= namespace + id %>SearchContainer">
-		<table class="taglib-search-iterator">
+	<div id="<%= namespace + id %>SearchContainer">
+		<table class="table table-bordered table-hover table-striped">
 
 		<c:if test="<%= headerNames != null %>">
-			<tr class="portlet-section-header results-header">
+			<thead class="table-columns">
+				<tr>
 
-			<%
-			for (int i = 0; i < headerNames.size(); i++) {
-				String headerName = headerNames.get(i);
+				<%
+				for (int i = 0; i < headerNames.size(); i++) {
+					String headerName = headerNames.get(i);
 
-				String normalizedHeaderName = null;
+					String normalizedHeaderName = null;
 
-				if (i < normalizedHeaderNames.size()) {
-					normalizedHeaderName = normalizedHeaderNames.get(i);
-				}
+					if (i < normalizedHeaderNames.size()) {
+						normalizedHeaderName = normalizedHeaderNames.get(i);
+					}
 
-				if (Validator.isNull(normalizedHeaderName)) {
-					normalizedHeaderName = String.valueOf(i +1);
-				}
+					if (Validator.isNull(normalizedHeaderName)) {
+						normalizedHeaderName = String.valueOf(i +1);
+					}
 
-				String orderKey = null;
-				String orderByType = null;
-				boolean orderCurrentHeader = false;
+					String orderKey = null;
+					String orderByType = null;
+					boolean orderCurrentHeader = false;
 
-				if (orderableHeaders != null) {
-					orderKey = (String)orderableHeaders.get(headerName);
+					if (orderableHeaders != null) {
+						orderKey = (String)orderableHeaders.get(headerName);
 
-					if (orderKey != null) {
-						orderByType = searchContainer.getOrderByType();
+						if (orderKey != null) {
+							orderByType = searchContainer.getOrderByType();
 
-						if (orderKey.equals(searchContainer.getOrderByCol())) {
-							orderCurrentHeader = true;
+							if (orderKey.equals(searchContainer.getOrderByCol())) {
+								orderCurrentHeader = true;
+							}
 						}
 					}
-				}
 
-				String cssClass = StringPool.BLANK;
+					String cssClass = StringPool.BLANK;
 
-				if (headerNames.size() == 1) {
-					cssClass = "only";
-				}
-				else if (i == 0) {
-					cssClass = "first";
-				}
-				else if (i == (headerNames.size() - 1)) {
-					cssClass = "last";
-				}
-
-				if (orderCurrentHeader) {
-					cssClass += " sort-column";
-
-					cssClass += " sort-" + HtmlUtil.escapeAttribute(orderByType);
-
-					sortColumnIndex = i;
-
-					if (orderByType.equals("asc")) {
-						orderByType = "desc";
+					if (headerNames.size() == 1) {
+						cssClass = "only";
 					}
-					else {
-						orderByType = "asc";
+					else if (i == 0) {
+						cssClass = "table-first-header";
 					}
-				}
-			%>
+					else if (i == (headerNames.size() - 1)) {
+						cssClass = "table-last-header";
+					}
 
-				<th class="col-<%= i + 1 %> col-<%= normalizedHeaderName %> <%= cssClass %>" id="<%= namespace + id %>_col-<%= normalizedHeaderName %>"
+					if (orderCurrentHeader) {
+						cssClass += " table-sorted";
 
-					<%--
+						if (HtmlUtil.escapeAttribute(orderByType).equals("desc")) {
+							cssClass += " table-sorted-desc";
+						}
 
-					// Maximize the width of the second column if and only if the first
-					// column is a row checker and there is only one second column.
+						if (orderByType.equals("asc")) {
+							orderByType = "desc";
+						}
+						else {
+							orderByType = "asc";
+						}
+					}
+				%>
 
-					--%>
+					<th class="<%= cssClass %>" id="<%= namespace + id %>_col-<%= normalizedHeaderName %>"
 
-					<c:if test="<%= (rowChecker != null) && (headerNames.size() == 2) && (i == 1) %>">
-						width="95%"
-					</c:if>
-				>
+						<%--
 
-					<c:if test="<%= orderKey != null %>">
-						<span class="result-column-name">
+						// Minimize the width of the first column if and only if
+						// it is a row checker.
+
+						--%>
+
+						<c:if test="<%= (rowChecker != null) && (i == 0) %>">
+							width="1%"
+						</c:if>
+					>
+
+						<c:if test="<%= orderKey != null %>">
+							<div class="table-sort-liner">
+
+								<%
+								String orderByJS = searchContainer.getOrderByJS();
+								%>
+
+								<c:choose>
+									<c:when test="<%= Validator.isNull(orderByJS) %>">
+
+										<%
+										url = HttpUtil.setParameter(url, namespace + searchContainer.getOrderByColParam(), orderKey);
+										url = HttpUtil.setParameter(url, namespace + searchContainer.getOrderByTypeParam(), orderByType);
+										%>
+
+										<a href="<%= url %>">
+									</c:when>
+									<c:otherwise>
+										<a href="<%= StringUtil.replace(orderByJS, new String[] { "orderKey", "orderByType" }, new String[] { orderKey, orderByType }) %>">
+									</c:otherwise>
+								</c:choose>
+						</c:if>
 
 							<%
-							String orderByJS = searchContainer.getOrderByJS();
+							String headerNameValue = null;
+
+							if ((rowChecker == null) || (i > 0)) {
+								headerNameValue = LanguageUtil.get(pageContext, HtmlUtil.escape(headerName));
+							}
+							else {
+								headerNameValue = headerName;
+							}
 							%>
 
 							<c:choose>
-								<c:when test="<%= Validator.isNull(orderByJS) %>">
-
-									<%
-									url = HttpUtil.setParameter(url, namespace + searchContainer.getOrderByColParam(), orderKey);
-									url = HttpUtil.setParameter(url, namespace + searchContainer.getOrderByTypeParam(), orderByType);
-									%>
-
-									<a href="<%= url %>">
+								<c:when test="<%= Validator.isNull(headerNameValue) %>">
+									<%= StringPool.NBSP %>
 								</c:when>
 								<c:otherwise>
-									<a href="<%= StringUtil.replace(orderByJS, new String[] { "orderKey", "orderByType" }, new String[] { orderKey, orderByType }) %>">
+									<%= headerNameValue %>
 								</c:otherwise>
 							</c:choose>
-					</c:if>
 
-						<%
-						String headerNameValue = null;
+						<c:if test="<%= orderKey != null %>">
+									<span class="table-sort-indicator"></span>
+								</a>
+							</div>
+						</c:if>
+					</th>
 
-						if ((rowChecker == null) || (i > 0)) {
-							headerNameValue = LanguageUtil.get(pageContext, HtmlUtil.escape(headerName));
-						}
-						else {
-							headerNameValue = headerName;
-						}
-						%>
+				<%
+				}
+				%>
 
-						<c:choose>
-							<c:when test="<%= Validator.isNull(headerNameValue) %>">
-								<%= StringPool.NBSP %>
-							</c:when>
-							<c:otherwise>
-								<%= headerNameValue %>
-							</c:otherwise>
-						</c:choose>
-
-					<c:if test="<%= orderKey != null %>">
-							</a>
-						</span>
-					</c:if>
-				</th>
-
-			<%
-			}
-			%>
-
-			</tr>
+				</tr>
+			</thead>
 		</c:if>
 
+		<tbody class="table-data">
+
 		<c:if test="<%= resultRows.isEmpty() && (emptyResultsMessage != null) %>">
-			<tr class="portlet-section-body results-row last">
-				<td class="align-center only" colspan="<%= (headerNames == null) ? 1 : headerNames.size() %>">
+			<tr>
+				<td class="table-cell">
 					<%= LanguageUtil.get(pageContext, emptyResultsMessage) %>
 				</td>
 			</tr>
@@ -222,43 +224,17 @@ int sortColumnIndex = -1;
 		for (int i = 0; i < resultRows.size(); i++) {
 			ResultRow row = (ResultRow)resultRows.get(i);
 
-			String rowClassName = _ROW_CLASS_NAME_ALTERNATE + " results-row alt";
-			String rowClassHoverName = _ROW_CLASS_NAME_ALTERNATE_HOVER + " results-row alt " + _CLASS_NAME_HOVER;
-
 			primaryKeys.add(HtmlUtil.escape(row.getPrimaryKey()));
-
-			if (MathUtil.isEven(i)) {
-				rowClassName = _ROW_CLASS_NAME_BODY + " results-row";
-				rowClassHoverName = _ROW_CLASS_NAME_BODY_HOVER + " results-row " + _CLASS_NAME_HOVER;
-			}
-
-			if (Validator.isNotNull(row.getClassName())) {
-				rowClassName += " " + row.getClassName();
-			}
-
-			if (Validator.isNotNull(row.getClassHoverName())) {
-				rowClassHoverName += " " + row.getClassHoverName();
-			}
-
-			if (row.isRestricted()) {
-				rowClassName += " restricted";
-				rowClassHoverName += " restricted";
-			}
-
-			if ((i + 1) == resultRows.size()) {
-				rowClassName += " last";
-				rowClassHoverName += " last";
-			}
-
-			row.setClassName(rowClassName);
-			row.setClassHoverName(rowClassHoverName);
 
 			request.setAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW, row);
 
 			List entries = row.getEntries();
 
+			boolean rowIsChecked = false;
+
 			if (rowChecker != null) {
-				boolean rowIsChecked = rowChecker.isChecked(row.getObject());
+				rowIsChecked = rowChecker.isChecked(row.getObject());
+
 				boolean rowIsDisabled = rowChecker.isDisabled(row.getObject());
 
 				if (!rowIsChecked) {
@@ -281,7 +257,7 @@ int sortColumnIndex = -1;
 			Map<String, Object> data = row.getData();
 		%>
 
-			<tr class="<%= rowClassName %>" <%= AUIUtil.buildData(data) %>>
+			<tr class="<%= GetterUtil.getString(row.getClassName()) %> <%= rowIsChecked ? "info" : StringPool.BLANK %>" <%= AUIUtil.buildData(data) %>>
 
 			<%
 			for (int j = 0; j < entries.size(); j++) {
@@ -312,19 +288,9 @@ int sortColumnIndex = -1;
 				else if ((j + 1) == entries.size()) {
 					columnClassName += " last";
 				}
-
-				if (j == sortColumnIndex) {
-					columnClassName += " sort-column";
-				}
 			%>
 
-				<td class="align-<%= entry.getAlign() %> col-<%= j + 1 %><%= row.isBold() ? " taglib-search-iterator-highlighted" : "" %> col-<%= normalizedHeaderName %> <%= columnClassName %> valign-<%= entry.getValign() %>" colspan="<%= entry.getColspan() %>"
-					<c:if test="<%= (headerNames != null) && (headerNames.size() >= (j + 1)) %>">
-						headers="<%= namespace + id %>_col-<%= normalizedHeaderName %>"
-					</c:if>
-
-					id="<%= namespace + id %>_col-<%= normalizedHeaderName %>_row-<%= row.getRowId() %>"
-				>
+				<td class="table-cell <%= columnClassName %>">
 
 					<%
 					entry.print(pageContext);
@@ -344,13 +310,13 @@ int sortColumnIndex = -1;
 		%>
 
 		<c:if test="<%= headerNames != null %>">
-			<tr class="lfr-template portlet-section-body results-row">
+			<tr class="lfr-template">
 
 				<%
 				for (int i = 0; i < headerNames.size(); i++) {
 				%>
 
-					<td></td>
+					<td class="table-cell"></td>
 
 				<%
 				}
@@ -359,6 +325,7 @@ int sortColumnIndex = -1;
 			</tr>
 		</c:if>
 
+		</tbody>
 		</table>
 	</div>
 
@@ -376,7 +343,7 @@ int sortColumnIndex = -1;
 </c:if>
 
 <c:if test="<%= Validator.isNotNull(id) %>">
-	<input id="<%= namespace + id %>PrimaryKeys" name="<%= id %>PrimaryKeys" type="hidden" value="<%= StringUtil.merge(primaryKeys) %>" />
+	<input id="<%= namespace + id %>PrimaryKeys" name="<%= namespace + id %>PrimaryKeys" type="hidden" value="<%= StringUtil.merge(primaryKeys) %>" />
 
 	<aui:script use="liferay-search-container">
 		new Liferay.SearchContainer(
@@ -396,11 +363,9 @@ int sortColumnIndex = -1;
 <%!
 private static final String _CLASS_NAME_HOVER = "hover";
 
-private static final String _ROW_CLASS_NAME_ALTERNATE = "portlet-section-alternate";
+private static final String _ROW_CLASS_NAME_ALTERNATE = "";
 
-private static final String _ROW_CLASS_NAME_ALTERNATE_HOVER = "portlet-section-alternate-hover";
+private static final String _ROW_CLASS_NAME_ALTERNATE_HOVER = "-hover";
 
-private static final String _ROW_CLASS_NAME_BODY = "portlet-section-body";
-
-private static final String _ROW_CLASS_NAME_BODY_HOVER = "portlet-section-body-hover";
+private static final String _ROW_CLASS_NAME_BODY = "";
 %>

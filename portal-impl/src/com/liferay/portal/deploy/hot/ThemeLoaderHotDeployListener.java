@@ -30,6 +30,7 @@ import javax.servlet.ServletContext;
  */
 public class ThemeLoaderHotDeployListener extends BaseHotDeployListener {
 
+	@Override
 	public void invokeDeploy(HotDeployEvent hotDeployEvent)
 		throws HotDeployException {
 
@@ -38,10 +39,14 @@ public class ThemeLoaderHotDeployListener extends BaseHotDeployListener {
 		}
 		catch (Throwable t) {
 			throwHotDeployException(
-				hotDeployEvent, "Error registering theme loader for ", t);
+				hotDeployEvent,
+				"Error registering theme loader for " +
+					hotDeployEvent.getServletContextName(),
+				t);
 		}
 	}
 
+	@Override
 	public void invokeUndeploy(HotDeployEvent hotDeployEvent)
 		throws HotDeployException {
 
@@ -50,7 +55,10 @@ public class ThemeLoaderHotDeployListener extends BaseHotDeployListener {
 		}
 		catch (Throwable t) {
 			throwHotDeployException(
-				hotDeployEvent, "Error unregistering theme loader for ", t);
+				hotDeployEvent,
+				"Error unregistering theme loader for " +
+					hotDeployEvent.getServletContextName(),
+				t);
 		}
 	}
 

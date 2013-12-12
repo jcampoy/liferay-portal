@@ -15,6 +15,7 @@
 package com.liferay.portal.tools.servicebuilder;
 
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.TextFormatter;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -91,12 +92,21 @@ public class EntityColumn implements Cloneable, Comparable<EntityColumn> {
 			isContainerModel(), isParentContainerModel());
 	}
 
+	@Override
 	public int compareTo(EntityColumn entityColumn) {
 		return _name.compareTo(entityColumn._name);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof EntityColumn)) {
+			return false;
+		}
+
 		EntityColumn col = (EntityColumn)obj;
 
 		String name = col.getName();
@@ -339,7 +349,7 @@ public class EntityColumn implements Cloneable, Comparable<EntityColumn> {
 	}
 
 	public void setArrayableOperator(String arrayableOperator) {
-		_arrayableOperator = arrayableOperator.toUpperCase();
+		_arrayableOperator = StringUtil.toUpperCase(arrayableOperator);
 	}
 
 	public void setCaseSensitive(boolean caseSensitive) {

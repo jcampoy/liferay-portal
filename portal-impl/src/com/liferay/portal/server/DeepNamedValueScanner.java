@@ -40,7 +40,7 @@ import java.util.Set;
 public class DeepNamedValueScanner {
 
 	public DeepNamedValueScanner(String value) {
-		_value = value.toLowerCase();
+		_value = StringUtil.toLowerCase(value);
 	}
 
 	public DeepNamedValueScanner(String value, boolean visit) {
@@ -238,9 +238,13 @@ public class DeepNamedValueScanner {
 	private boolean _isAcceptClass(Class<?> targetClass) {
 		String targetClassName = targetClass.getName();
 
-		targetClassName = targetClassName.toLowerCase();
+		targetClassName = StringUtil.toLowerCase(targetClassName);
 
 		if (targetClassName.startsWith("java.")) {
+			return false;
+		}
+
+		if (targetClassName.startsWith("org.eclipse.osgi.")) {
 			return false;
 		}
 
@@ -255,7 +259,6 @@ public class DeepNamedValueScanner {
 		if (_excludedClassNames != null) {
 			for (String excludedClassName : _excludedClassNames) {
 				if (targetClassName.contains(excludedClassName)) {
-
 					return false;
 				}
 			}
@@ -265,7 +268,6 @@ public class DeepNamedValueScanner {
 			boolean accept = false;
 
 			for (String includedClassName : _includedClassNames) {
-
 				if (targetClassName.contains(includedClassName)) {
 					accept = true;
 
@@ -290,12 +292,11 @@ public class DeepNamedValueScanner {
 			return true;
 		}
 
-		name = name.toLowerCase();
+		name = StringUtil.toLowerCase(name);
 
 		if (_excludedNames != null) {
 			for (String excludedNames : _excludedNames) {
 				if (name.contains(excludedNames)) {
-
 					return false;
 				}
 			}
@@ -317,7 +318,7 @@ public class DeepNamedValueScanner {
 
 		_matchingCount++;
 
-		name = name.toLowerCase();
+		name = StringUtil.toLowerCase(name);
 
 		if (name.contains(_value)) {
 			if (_skipFirstCount > 0) {
@@ -341,7 +342,7 @@ public class DeepNamedValueScanner {
 
 		_matchingCount++;
 
-		name = name.toLowerCase();
+		name = StringUtil.toLowerCase(name);
 
 		if (name.contains(_value)) {
 			if (_skipFirstCount > 0) {
@@ -437,7 +438,6 @@ public class DeepNamedValueScanner {
 					_scan(element);
 				}
 			}
-
 		}
 		else if (_visitLists && (target instanceof List)) {
 			_scanCollection((List<Object>)target);
@@ -559,6 +559,7 @@ public class DeepNamedValueScanner {
 		extends ObjectValuePair<String, IntegerWrapper>
 		implements Comparable<Dataset> {
 
+		@Override
 		public int compareTo(Dataset dataset) {
 			IntegerWrapper integerWrapper = dataset.getValue();
 

@@ -64,7 +64,7 @@ else {
 
 <h3><liferay-ui:message key="addresses" /></h3>
 
-<div class="portlet-msg-info">
+<div class="alert alert-info">
 	<liferay-ui:message key="street-1-and-city-are-required-fields.-postal-code-could-be-required-in-some-countries" />
 </div>
 
@@ -132,6 +132,7 @@ else {
 				{
 					contentBox: '#<portlet:namespace />addresses > fieldset',
 					fieldIndexes: '<portlet:namespace />addressesIndexes',
+					namespace: '<portlet:namespace />',
 					on: {
 						'clone': function(event) {
 							var row = event.row;
@@ -151,14 +152,14 @@ else {
 										selectDesc: 'nameCurrentValue',
 										selectSort: '<%= true %>',
 										selectId: 'countryId',
-										selectVal: ''
+										selectVal: '0'
 									},
 									{
 										select: '<portlet:namespace />addressRegionId' + guid,
 										selectData: Liferay.Address.getRegions,
 										selectDesc: 'name',
 										selectId: 'regionId',
-										selectVal: ''
+										selectVal: '0'
 									}
 								]
 							);

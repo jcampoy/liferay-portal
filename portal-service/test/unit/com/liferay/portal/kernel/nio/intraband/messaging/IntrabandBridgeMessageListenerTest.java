@@ -14,7 +14,6 @@
 
 package com.liferay.portal.kernel.nio.intraband.messaging;
 
-import com.liferay.portal.kernel.io.Deserializer;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.nio.intraband.Datagram;
 import com.liferay.portal.kernel.nio.intraband.MockIntraband;
@@ -24,6 +23,8 @@ import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.ReflectionUtil;
 
 import java.lang.reflect.Field;
+
+import java.nio.ByteBuffer;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
@@ -40,14 +41,14 @@ public class IntrabandBridgeMessageListenerTest {
 
 	@Test
 	public void testConstructor() throws Exception {
-		IntrabandBridgeMessageListener intraBandBridgeMessageListener =
+		IntrabandBridgeMessageListener intrabandBridgeMessageListener =
 			new IntrabandBridgeMessageListener(_mockRegistrationReference);
 
 		Assert.assertSame(
-			_mockIntraband, getIntraband(intraBandBridgeMessageListener));
+			_mockIntraband, getIntraband(intrabandBridgeMessageListener));
 		Assert.assertSame(
 			_mockRegistrationReference,
-			getRegistrationReference(intraBandBridgeMessageListener));
+			getRegistrationReference(intrabandBridgeMessageListener));
 	}
 
 	@Test
@@ -55,48 +56,54 @@ public class IntrabandBridgeMessageListenerTest {
 		PortalClassLoaderUtil.setClassLoader(
 			IntrabandBridgeMessageListenerTest.class.getClassLoader());
 
-		IntrabandBridgeMessageListener intraBandBridgeMessageListener =
+		IntrabandBridgeMessageListener intrabandBridgeMessageListener =
 			new IntrabandBridgeMessageListener(_mockRegistrationReference);
 
 		Message message = new Message();
+
+		message.setDestinationName(
+			IntrabandBridgeMessageListenerTest.class.getName());
 
 		String payload = "payload";
 
 		message.setPayload(payload);
 
-		intraBandBridgeMessageListener.receive(message);
+		intrabandBridgeMessageListener.receive(message);
 
 		Datagram datagram = _mockIntraband.getDatagram();
 
-		Deserializer deserializer = new Deserializer(
-			datagram.getDataByteBuffer());
+		ByteBuffer byteBuffer = datagram.getDataByteBuffer();
 
-		Message receivedMessage = deserializer.readObject();
+		MessageRoutingBag receivedMessageRoutingBag =
+			MessageRoutingBag.fromByteArray(byteBuffer.array());
 
-		Assert.assertNotNull(receivedMessage);
+		Assert.assertNotNull(receivedMessageRoutingBag);
+
+		Message receivedMessage = receivedMessageRoutingBag.getMessage();
+
 		Assert.assertEquals(payload, receivedMessage.getPayload());
 	}
 
 	private static MockIntraband getIntraband(
-			IntrabandBridgeMessageListener intraBandBridgeMessageListener)
+			IntrabandBridgeMessageListener intrabandBridgeMessageListener)
 		throws Exception {
 
-		Field intraBandField = ReflectionUtil.getDeclaredField(
-			IntrabandBridgeMessageListener.class, "_intraBand");
+		Field intrabandField = ReflectionUtil.getDeclaredField(
+			IntrabandBridgeMessageListener.class, "_intraband");
 
-		return (MockIntraband)intraBandField.get(
-			intraBandBridgeMessageListener);
+		return (MockIntraband)intrabandField.get(
+			intrabandBridgeMessageListener);
 	}
 
 	private static MockRegistrationReference getRegistrationReference(
-			IntrabandBridgeMessageListener intraBandBridgeMessageListener)
+			IntrabandBridgeMessageListener intrabandBridgeMessageListener)
 		throws Exception {
 
 		Field registrationReferenceField = ReflectionUtil.getDeclaredField(
 			IntrabandBridgeMessageListener.class, "_registrationReference");
 
 		return (MockRegistrationReference)registrationReferenceField.get(
-			intraBandBridgeMessageListener);
+			intrabandBridgeMessageListener);
 	}
 
 	private MockIntraband _mockIntraband = new MockIntraband();

@@ -49,6 +49,12 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class SitesUtil {
 
+	public static void addMergeFailFriendlyURLLayout(Layout layout)
+		throws PortalException, SystemException {
+
+		getSites().addMergeFailFriendlyURLLayout(layout);
+	}
+
 	public static void addPortletBreadcrumbEntries(
 			Group group, HttpServletRequest request,
 			RenderResponse renderResponse)
@@ -166,6 +172,13 @@ public class SitesUtil {
 		return getSites().getMergeFailCount(layoutSetPrototype);
 	}
 
+	public static List<Layout> getMergeFailFriendlyURLLayouts(
+			LayoutSet layoutSet)
+		throws PortalException, SystemException {
+
+		return getSites().getMergeFailFriendlyURLLayouts(layoutSet);
+	}
+
 	public static Sites getSites() {
 		PortalRuntimePermission.checkGetBeanProperty(SitesUtil.class);
 
@@ -185,6 +198,13 @@ public class SitesUtil {
 		throws SystemException {
 
 		return getSites().isContentSharingWithChildrenEnabled(group);
+	}
+
+	public static boolean isFirstLayout(
+			long groupId, boolean privateLayout, long layoutId)
+		throws SystemException {
+
+		return getSites().isFirstLayout(groupId, privateLayout, layoutId);
 	}
 
 	public static boolean isLayoutDeleteable(Layout layout) {
@@ -272,6 +292,12 @@ public class SitesUtil {
 		throws Exception {
 
 		getSites().mergeLayoutSetProtypeLayouts(group, layoutSet);
+	}
+
+	public static void removeMergeFailFriendlyURLLayouts(LayoutSet layoutSet)
+		throws SystemException {
+
+		getSites().removeMergeFailFriendlyURLLayouts(layoutSet);
 	}
 
 	public static void resetPrototype(Layout layout)

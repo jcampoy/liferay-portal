@@ -37,7 +37,6 @@ import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
 import com.liferay.portlet.dynamicdatamapping.model.DDMTemplate;
 import com.liferay.portlet.dynamicdatamapping.service.DDMTemplateLocalServiceUtil;
 import com.liferay.portlet.journal.NoSuchArticleException;
-import com.liferay.portlet.journal.NoSuchTemplateException;
 import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.service.JournalArticleLocalServiceUtil;
 import com.liferay.portlet.journal.service.JournalContentSearchLocalServiceUtil;
@@ -53,6 +52,7 @@ import javax.portlet.PortletPreferences;
 public class JournalContentPortletLayoutListener
 	implements PortletLayoutListener {
 
+	@Override
 	public void onAddToLayout(String portletId, long plid)
 		throws PortletLayoutListenerException {
 
@@ -82,6 +82,7 @@ public class JournalContentPortletLayoutListener
 		}
 	}
 
+	@Override
 	public void onMoveInLayout(String portletId, long plid)
 		throws PortletLayoutListenerException {
 
@@ -90,6 +91,7 @@ public class JournalContentPortletLayoutListener
 		}
 	}
 
+	@Override
 	public void onRemoveFromLayout(String portletId, long plid)
 		throws PortletLayoutListenerException {
 
@@ -170,19 +172,9 @@ public class JournalContentPortletLayoutListener
 		List<String> portletIds = getRuntimePortletIds(article.getContent());
 
 		if (Validator.isNotNull(article.getTemplateId())) {
-			DDMTemplate ddmTemplate = null;
-
-			try {
-				ddmTemplate = DDMTemplateLocalServiceUtil.getTemplate(
-					scopeGroupId, PortalUtil.getClassNameId(DDMStructure.class),
-					article.getTemplateId());
-			}
-			catch (NoSuchTemplateException nste) {
-				ddmTemplate = DDMTemplateLocalServiceUtil.getTemplate(
-					group.getGroupId(),
-					PortalUtil.getClassNameId(DDMStructure.class),
-					article.getTemplateId());
-			}
+			DDMTemplate ddmTemplate = DDMTemplateLocalServiceUtil.getTemplate(
+				scopeGroupId, PortalUtil.getClassNameId(DDMStructure.class),
+				article.getTemplateId(), true);
 
 			portletIds.addAll(getRuntimePortletIds(ddmTemplate.getScript()));
 		}

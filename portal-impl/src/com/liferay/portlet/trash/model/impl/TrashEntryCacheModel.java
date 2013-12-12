@@ -38,7 +38,7 @@ public class TrashEntryCacheModel implements CacheModel<TrashEntry>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(21);
+		StringBundler sb = new StringBundler(23);
 
 		sb.append("{entryId=");
 		sb.append(entryId);
@@ -56,6 +56,8 @@ public class TrashEntryCacheModel implements CacheModel<TrashEntry>,
 		sb.append(classNameId);
 		sb.append(", classPK=");
 		sb.append(classPK);
+		sb.append(", systemEventSetKey=");
+		sb.append(systemEventSetKey);
 		sb.append(", typeSettings=");
 		sb.append(typeSettings);
 		sb.append(", status=");
@@ -65,6 +67,7 @@ public class TrashEntryCacheModel implements CacheModel<TrashEntry>,
 		return sb.toString();
 	}
 
+	@Override
 	public TrashEntry toEntityModel() {
 		TrashEntryImpl trashEntryImpl = new TrashEntryImpl();
 
@@ -89,6 +92,7 @@ public class TrashEntryCacheModel implements CacheModel<TrashEntry>,
 
 		trashEntryImpl.setClassNameId(classNameId);
 		trashEntryImpl.setClassPK(classPK);
+		trashEntryImpl.setSystemEventSetKey(systemEventSetKey);
 
 		if (typeSettings == null) {
 			trashEntryImpl.setTypeSettings(StringPool.BLANK);
@@ -104,6 +108,7 @@ public class TrashEntryCacheModel implements CacheModel<TrashEntry>,
 		return trashEntryImpl;
 	}
 
+	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
 		entryId = objectInput.readLong();
 		groupId = objectInput.readLong();
@@ -113,10 +118,12 @@ public class TrashEntryCacheModel implements CacheModel<TrashEntry>,
 		createDate = objectInput.readLong();
 		classNameId = objectInput.readLong();
 		classPK = objectInput.readLong();
+		systemEventSetKey = objectInput.readLong();
 		typeSettings = objectInput.readUTF();
 		status = objectInput.readInt();
 	}
 
+	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
 		objectOutput.writeLong(entryId);
@@ -134,6 +141,7 @@ public class TrashEntryCacheModel implements CacheModel<TrashEntry>,
 		objectOutput.writeLong(createDate);
 		objectOutput.writeLong(classNameId);
 		objectOutput.writeLong(classPK);
+		objectOutput.writeLong(systemEventSetKey);
 
 		if (typeSettings == null) {
 			objectOutput.writeUTF(StringPool.BLANK);
@@ -153,6 +161,7 @@ public class TrashEntryCacheModel implements CacheModel<TrashEntry>,
 	public long createDate;
 	public long classNameId;
 	public long classPK;
+	public long systemEventSetKey;
 	public String typeSettings;
 	public int status;
 }

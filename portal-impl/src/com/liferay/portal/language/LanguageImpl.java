@@ -14,14 +14,17 @@
 
 package com.liferay.portal.language;
 
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.language.LanguageWrapper;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.pacl.DoPrivileged;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.CookieKeys;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -30,10 +33,13 @@ import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Time;
+import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CompanyConstants;
+import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
@@ -66,20 +72,24 @@ import javax.servlet.jsp.PageContext;
 /**
  * @author Brian Wing Shun Chan
  * @author Andrius Vitkauskas
+ * @author Eduardo Lundgren
  */
 @DoPrivileged
 public class LanguageImpl implements Language {
 
+	@Override
 	public String format(
 		Locale locale, String pattern, List<Object> arguments) {
 
 		return format(locale, pattern, arguments.toArray(), true);
 	}
 
+	@Override
 	public String format(Locale locale, String pattern, Object argument) {
 		return format(locale, pattern, new Object[] {argument}, true);
 	}
 
+	@Override
 	public String format(
 		Locale locale, String pattern, Object argument,
 		boolean translateArguments) {
@@ -88,10 +98,12 @@ public class LanguageImpl implements Language {
 			locale, pattern, new Object[] {argument}, translateArguments);
 	}
 
+	@Override
 	public String format(Locale locale, String pattern, Object[] arguments) {
 		return format(locale, pattern, arguments, true);
 	}
 
+	@Override
 	public String format(
 		Locale locale, String pattern, Object[] arguments,
 		boolean translateArguments) {
@@ -105,7 +117,7 @@ public class LanguageImpl implements Language {
 		try {
 			pattern = get(locale, pattern);
 
-			if ((arguments != null) && (arguments.length > 0)) {
+			if (ArrayUtil.isNotEmpty(arguments)) {
 				pattern = _escapePattern(pattern);
 
 				Object[] formattedArguments = new Object[arguments.length];
@@ -135,6 +147,7 @@ public class LanguageImpl implements Language {
 		return value;
 	}
 
+	@Override
 	public String format(
 		PageContext pageContext, String pattern, LanguageWrapper argument) {
 
@@ -142,6 +155,7 @@ public class LanguageImpl implements Language {
 			pageContext, pattern, new LanguageWrapper[] {argument}, true);
 	}
 
+	@Override
 	public String format(
 		PageContext pageContext, String pattern, LanguageWrapper argument,
 		boolean translateArguments) {
@@ -151,12 +165,14 @@ public class LanguageImpl implements Language {
 			translateArguments);
 	}
 
+	@Override
 	public String format(
 		PageContext pageContext, String pattern, LanguageWrapper[] arguments) {
 
 		return format(pageContext, pattern, arguments, true);
 	}
 
+	@Override
 	public String format(
 		PageContext pageContext, String pattern, LanguageWrapper[] arguments,
 		boolean translateArguments) {
@@ -170,7 +186,7 @@ public class LanguageImpl implements Language {
 		try {
 			pattern = get(pageContext, pattern);
 
-			if ((arguments != null) && (arguments.length > 0)) {
+			if (ArrayUtil.isNotEmpty(arguments)) {
 				pattern = _escapePattern(pattern);
 
 				Object[] formattedArguments = new Object[arguments.length];
@@ -205,12 +221,14 @@ public class LanguageImpl implements Language {
 		return value;
 	}
 
+	@Override
 	public String format(
 		PageContext pageContext, String pattern, Object argument) {
 
 		return format(pageContext, pattern, new Object[] {argument}, true);
 	}
 
+	@Override
 	public String format(
 		PageContext pageContext, String pattern, Object argument,
 		boolean translateArguments) {
@@ -219,12 +237,14 @@ public class LanguageImpl implements Language {
 			pageContext, pattern, new Object[] {argument}, translateArguments);
 	}
 
+	@Override
 	public String format(
 		PageContext pageContext, String pattern, Object[] arguments) {
 
 		return format(pageContext, pattern, arguments, true);
 	}
 
+	@Override
 	public String format(
 		PageContext pageContext, String pattern, Object[] arguments,
 		boolean translateArguments) {
@@ -238,7 +258,7 @@ public class LanguageImpl implements Language {
 		try {
 			pattern = get(pageContext, pattern);
 
-			if ((arguments != null) && (arguments.length > 0)) {
+			if (ArrayUtil.isNotEmpty(arguments)) {
 				pattern = _escapePattern(pattern);
 
 				Object[] formattedArguments = new Object[arguments.length];
@@ -268,6 +288,7 @@ public class LanguageImpl implements Language {
 		return value;
 	}
 
+	@Override
 	public String format(
 		PortletConfig portletConfig, Locale locale, String pattern,
 		Object argument) {
@@ -276,6 +297,7 @@ public class LanguageImpl implements Language {
 			portletConfig, locale, pattern, new Object[] {argument}, true);
 	}
 
+	@Override
 	public String format(
 		PortletConfig portletConfig, Locale locale, String pattern,
 		Object argument, boolean translateArguments) {
@@ -285,6 +307,7 @@ public class LanguageImpl implements Language {
 			translateArguments);
 	}
 
+	@Override
 	public String format(
 		PortletConfig portletConfig, Locale locale, String pattern,
 		Object[] arguments) {
@@ -292,6 +315,7 @@ public class LanguageImpl implements Language {
 		return format(portletConfig, locale, pattern, arguments, true);
 	}
 
+	@Override
 	public String format(
 		PortletConfig portletConfig, Locale locale, String pattern,
 		Object[] arguments, boolean translateArguments) {
@@ -305,7 +329,7 @@ public class LanguageImpl implements Language {
 		try {
 			pattern = get(portletConfig, locale, pattern);
 
-			if ((arguments != null) && (arguments.length > 0)) {
+			if (ArrayUtil.isNotEmpty(arguments)) {
 				pattern = _escapePattern(pattern);
 
 				Object[] formattedArguments = new Object[arguments.length];
@@ -335,10 +359,12 @@ public class LanguageImpl implements Language {
 		return value;
 	}
 
+	@Override
 	public String get(Locale locale, String key) {
 		return get(locale, key, key);
 	}
 
+	@Override
 	public String get(Locale locale, String key, String defaultValue) {
 		if (PropsValues.TRANSLATIONS_DISABLED) {
 			return key;
@@ -375,10 +401,12 @@ public class LanguageImpl implements Language {
 		return value;
 	}
 
+	@Override
 	public String get(PageContext pageContext, String key) {
 		return get(pageContext, key, key);
 	}
 
+	@Override
 	public String get(
 		PageContext pageContext, String key, String defaultValue) {
 
@@ -394,10 +422,12 @@ public class LanguageImpl implements Language {
 		}
 	}
 
+	@Override
 	public String get(PortletConfig portletConfig, Locale locale, String key) {
 		return get(portletConfig, locale, key, key);
 	}
 
+	@Override
 	public String get(
 		PortletConfig portletConfig, Locale locale, String key,
 		String defaultValue) {
@@ -414,14 +444,61 @@ public class LanguageImpl implements Language {
 		}
 	}
 
+	@Override
 	public Locale[] getAvailableLocales() {
 		return _getInstance()._locales;
 	}
 
+	@Override
+	public Locale[] getAvailableLocales(long groupId) {
+		if (groupId <= 0) {
+			return getAvailableLocales();
+		}
+
+		try {
+			if (isInheritLocales(groupId)) {
+				return getAvailableLocales();
+			}
+		}
+		catch (Exception e) {
+		}
+
+		Locale[] locales = _groupLocalesMap.get(groupId);
+
+		if (locales != null) {
+			return locales;
+		}
+
+		_initGroupLocales(groupId);
+
+		return _groupLocalesMap.get(groupId);
+	}
+
+	@Override
+	public String getBCP47LanguageId(HttpServletRequest request) {
+		Locale locale = PortalUtil.getLocale(request);
+
+		return getBCP47LanguageId(locale);
+	}
+
+	@Override
+	public String getBCP47LanguageId(Locale locale) {
+		return LocaleUtil.toBCP47LanguageId(locale);
+	}
+
+	@Override
+	public String getBCP47LanguageId(PortletRequest portletRequest) {
+		Locale locale = PortalUtil.getLocale(portletRequest);
+
+		return getBCP47LanguageId(locale);
+	}
+
+	@Override
 	public String getCharset(Locale locale) {
 		return _getInstance()._getCharset(locale);
 	}
 
+	@Override
 	public String getLanguageId(HttpServletRequest request) {
 		String languageId = ParamUtil.getString(request, "languageId");
 
@@ -438,10 +515,12 @@ public class LanguageImpl implements Language {
 		return getLanguageId(locale);
 	}
 
+	@Override
 	public String getLanguageId(Locale locale) {
 		return LocaleUtil.toLanguageId(locale);
 	}
 
+	@Override
 	public String getLanguageId(PortletRequest portletRequest) {
 		HttpServletRequest request = PortalUtil.getHttpServletRequest(
 			portletRequest);
@@ -449,10 +528,12 @@ public class LanguageImpl implements Language {
 		return getLanguageId(request);
 	}
 
+	@Override
 	public Locale getLocale(String languageCode) {
 		return _getInstance()._getLocale(languageCode);
 	}
 
+	@Override
 	public Locale[] getSupportedLocales() {
 		List<Locale> supportedLocales = new ArrayList<Locale>();
 
@@ -467,10 +548,12 @@ public class LanguageImpl implements Language {
 		return supportedLocales.toArray(new Locale[supportedLocales.size()]);
 	}
 
+	@Override
 	public String getTimeDescription(Locale locale, long milliseconds) {
 		return getTimeDescription(locale, milliseconds, false);
 	}
 
+	@Override
 	public String getTimeDescription(
 		Locale locale, long milliseconds, boolean approximate) {
 
@@ -486,8 +569,8 @@ public class LanguageImpl implements Language {
 			value = x.concat(StringPool.SPACE).concat(
 				get(
 					locale,
-					description.substring(
-						pos + 1, description.length()).toLowerCase()));
+					StringUtil.toLowerCase(
+						description.substring(pos + 1, description.length()))));
 		}
 		catch (Exception e) {
 			if (_log.isWarnEnabled()) {
@@ -498,16 +581,19 @@ public class LanguageImpl implements Language {
 		return value;
 	}
 
+	@Override
 	public String getTimeDescription(Locale locale, Long milliseconds) {
 		return getTimeDescription(locale, milliseconds.longValue());
 	}
 
+	@Override
 	public String getTimeDescription(
 		PageContext pageContext, long milliseconds) {
 
 		return getTimeDescription(pageContext, milliseconds, false);
 	}
 
+	@Override
 	public String getTimeDescription(
 		PageContext pageContext, long milliseconds, boolean approximate) {
 
@@ -523,8 +609,8 @@ public class LanguageImpl implements Language {
 			value = x.concat(StringPool.SPACE).concat(
 				get(
 					pageContext,
-					description.substring(
-						pos + 1, description.length()).toLowerCase()));
+					StringUtil.toLowerCase(
+						description.substring(pos + 1, description.length()))));
 		}
 		catch (Exception e) {
 			if (_log.isWarnEnabled()) {
@@ -535,36 +621,121 @@ public class LanguageImpl implements Language {
 		return value;
 	}
 
+	@Override
 	public String getTimeDescription(
 		PageContext pageContext, Long milliseconds) {
 
 		return getTimeDescription(pageContext, milliseconds.longValue());
 	}
 
+	@Override
 	public void init() {
 		_instances.clear();
 	}
 
+	@Override
 	public boolean isAvailableLanguageCode(String languageCode) {
 		return _getInstance()._localesMap.containsKey(languageCode);
 	}
 
+	@Override
 	public boolean isAvailableLocale(Locale locale) {
 		return _getInstance()._localesSet.contains(locale);
 	}
 
+	@Override
+	public boolean isAvailableLocale(long groupId, Locale locale) {
+		if (groupId <= 0) {
+			return isAvailableLocale(locale);
+		}
+
+		try {
+			if (isInheritLocales(groupId)) {
+				return isAvailableLocale(locale);
+			}
+		}
+		catch (Exception e) {
+		}
+
+		Set<Locale> localesSet = _groupLocalesSet.get(groupId);
+
+		if (localesSet != null) {
+			return localesSet.contains(locale);
+		}
+
+		_initGroupLocales(groupId);
+
+		localesSet = _groupLocalesSet.get(groupId);
+
+		return localesSet.contains(locale);
+	}
+
+	@Override
+	public boolean isAvailableLocale(long groupId, String languageId) {
+		Locale[] locales = getAvailableLocales(groupId);
+
+		for (Locale locale : locales) {
+			if (languageId.equals(locale.toString())) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean isAvailableLocale(String languageId) {
+		Locale[] locales = getAvailableLocales();
+
+		for (Locale locale : locales) {
+			if (languageId.equals(locale.toString())) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	@Override
 	public boolean isBetaLocale(Locale locale) {
 		return _getInstance()._localesBetaSet.contains(locale);
 	}
 
+	@Override
 	public boolean isDuplicateLanguageCode(String languageCode) {
 		return _getInstance()._duplicateLanguageCodes.contains(languageCode);
 	}
 
+	@Override
+	public boolean isInheritLocales(long groupId)
+		throws PortalException, SystemException {
+
+		Group group = GroupLocalServiceUtil.getGroup(groupId);
+
+		Group liveGroup = group;
+
+		if (group.isStagingGroup()) {
+			liveGroup = group.getLiveGroup();
+		}
+
+		UnicodeProperties groupTypeSettings =
+			liveGroup.getTypeSettingsProperties();
+
+		return GetterUtil.getBoolean(
+			groupTypeSettings.getProperty("inheritLocales"), true);
+	}
+
+	@Override
+	public void resetAvailableGroupLocales(long groupId) {
+		_resetAvailableGroupLocales(groupId);
+	}
+
+	@Override
 	public void resetAvailableLocales(long companyId) {
 		_resetAvailableLocales(companyId);
 	}
 
+	@Override
 	public void updateCookie(
 		HttpServletRequest request, HttpServletResponse response,
 		Locale locale) {
@@ -599,27 +770,27 @@ public class LanguageImpl implements Language {
 	}
 
 	private LanguageImpl(long companyId) {
-		String[] localesArray = PropsValues.LOCALES;
+		String[] languageIds = PropsValues.LOCALES;
 
 		if (companyId != CompanyConstants.SYSTEM) {
 			try {
-				localesArray = PrefsPropsUtil.getStringArray(
+				languageIds = PrefsPropsUtil.getStringArray(
 					companyId, PropsKeys.LOCALES, StringPool.COMMA,
 					PropsValues.LOCALES_ENABLED);
 			}
 			catch (SystemException se) {
-				localesArray = PropsValues.LOCALES_ENABLED;
+				languageIds = PropsValues.LOCALES_ENABLED;
 			}
 		}
 
 		_charEncodings = new HashMap<String, String>();
 		_duplicateLanguageCodes = new HashSet<String>();
-		_locales = new Locale[localesArray.length];
-		_localesMap = new HashMap<String, Locale>(localesArray.length);
-		_localesSet = new HashSet<Locale>(localesArray.length);
+		_locales = new Locale[languageIds.length];
+		_localesMap = new HashMap<String, Locale>(languageIds.length);
+		_localesSet = new HashSet<Locale>(languageIds.length);
 
-		for (int i = 0; i < localesArray.length; i++) {
-			String languageId = localesArray[i];
+		for (int i = 0; i < languageIds.length; i++) {
+			String languageId = languageIds[i];
 
 			Locale locale = LocaleUtil.fromLanguageId(languageId, false);
 
@@ -684,7 +855,16 @@ public class LanguageImpl implements Language {
 			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
 				WebKeys.THEME_DISPLAY);
 
-			locale = themeDisplay.getLocale();
+			if (themeDisplay != null) {
+				locale = themeDisplay.getLocale();
+			}
+			else {
+				locale = request.getLocale();
+
+				if (!isAvailableLocale(locale)) {
+					locale = LocaleUtil.getDefault();
+				}
+			}
 
 			portletConfig = (PortletConfig)request.getAttribute(
 				JavaConstants.JAVAX_PORTLET_CONFIG);
@@ -772,6 +952,58 @@ public class LanguageImpl implements Language {
 		return ResourceBundleUtil.getString(resourceBundle, key);
 	}
 
+	private void _initGroupLocales(long groupId) {
+		String[] languageIds = null;
+
+		try {
+			Group group = GroupLocalServiceUtil.getGroup(groupId);
+
+			UnicodeProperties typeSettingsProperties =
+				group.getTypeSettingsProperties();
+
+			languageIds = StringUtil.split(
+				typeSettingsProperties.getProperty(PropsKeys.LOCALES));
+		}
+		catch (Exception e) {
+			languageIds = PropsValues.LOCALES_ENABLED;
+		}
+
+		Locale[] locales = new Locale[languageIds.length];
+		Map<String, Locale> localesMap = new HashMap<String, Locale>(
+			languageIds.length);
+		Set<Locale> localesSet = new HashSet<Locale>(languageIds.length);
+
+		for (int i = 0; i < languageIds.length; i++) {
+			String languageId = languageIds[i];
+
+			Locale locale = LocaleUtil.fromLanguageId(languageId, false);
+
+			String language = languageId;
+
+			int pos = languageId.indexOf(CharPool.UNDERLINE);
+
+			if (pos > 0) {
+				language = languageId.substring(0, pos);
+			}
+
+			locales[i] = locale;
+
+			if (!localesMap.containsKey(language)) {
+				localesMap.put(language, locale);
+			}
+
+			localesSet.add(locale);
+		}
+
+		_groupLocalesMap.put(groupId, locales);
+		_groupLocalesSet.put(groupId, localesSet);
+	}
+
+	private void _resetAvailableGroupLocales(long groupId) {
+		_groupLocalesMap.remove(groupId);
+		_groupLocalesSet.remove(groupId);
+	}
+
 	private void _resetAvailableLocales(long companyId) {
 		_instances.remove(companyId);
 	}
@@ -783,6 +1015,10 @@ public class LanguageImpl implements Language {
 
 	private Map<String, String> _charEncodings;
 	private Set<String> _duplicateLanguageCodes;
+	private Map<Long, Locale[]> _groupLocalesMap =
+		new HashMap<Long, Locale[]>();
+	private Map<Long, Set<Locale>> _groupLocalesSet =
+		new HashMap<Long, Set<Locale>>();
 	private Locale[] _locales;
 	private Set<Locale> _localesBetaSet;
 	private Map<String, Locale> _localesMap;

@@ -53,7 +53,7 @@ long folderId = ParamUtil.getLong(request, "folderId");
 	<aui:model-context bean="<%= repository %>" model="<%= Repository.class %>" />
 
 	<aui:fieldset>
-		<aui:input name="name" />
+		<aui:input autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) %>" name="name" />
 
 		<aui:input name="description" />
 
@@ -100,7 +100,7 @@ long folderId = ParamUtil.getLong(request, "folderId");
 					%>
 
 							<dt>
-								<%= LanguageUtil.get(pageContext, StringUtil.replace(supportedParameter.toLowerCase(), CharPool.UNDERLINE, CharPool.DASH)) %>
+								<%= LanguageUtil.get(pageContext, StringUtil.replace(StringUtil.toLowerCase(supportedParameter), CharPool.UNDERLINE, CharPool.DASH)) %>
 							</dt>
 							<dd>
 								<%= supportedParameterValue %>
@@ -130,7 +130,7 @@ long folderId = ParamUtil.getLong(request, "folderId");
 	</aui:fieldset>
 </aui:form>
 
-<div class="aui-helper-hidden" id="<portlet:namespace />settingsSupported">
+<div class="hide" id="<portlet:namespace />settingsSupported">
 
 	<%
 	for (String dlRepositoryImpl : RepositoryFactoryUtil.getRepositoryClassNames()) {
@@ -143,9 +143,9 @@ long folderId = ParamUtil.getLong(request, "folderId");
 		for (String supportedConfiguration : supportedConfigurations) {
 		%>
 
-			<div class="settings-configuration <%= ((supportedConfigurations.length == 1) ? "aui-helper-hidden" : "") %>" id="<portlet:namespace />repository-<%= className %>-wrapper">
-				<aui:select id='<%= "repository-" + className %>' inputCssClass="repository-configuration" label="repository-configuration" name="settings--configuration-type--">
-					<aui:option label="<%= LanguageUtil.get(pageContext, StringUtil.replace(supportedConfiguration.toLowerCase(), CharPool.UNDERLINE, CharPool.DASH)) %>" selected="<%= supportedConfiguration.equals(supportedConfigurations[0]) %>" value="<%= supportedConfiguration %>" />
+			<div class="settings-configuration <%= ((supportedConfigurations.length == 1) ? "hide" : "") %>" id="<portlet:namespace />repository-<%= className %>-wrapper">
+				<aui:select cssClass="repository-configuration" id='<%= "repository-" + className %>' label="repository-configuration" name="settings--configuration-type--">
+					<aui:option label="<%= LanguageUtil.get(pageContext, StringUtil.replace(StringUtil.toLowerCase(supportedConfiguration), CharPool.UNDERLINE, CharPool.DASH)) %>" selected="<%= supportedConfiguration.equals(supportedConfigurations[0]) %>" value="<%= supportedConfiguration %>" />
 				</aui:select>
 			</div>
 			<div class="settings-parameters" id="<portlet:namespace />repository-<%= className %>-configuration-<%= supportedConfiguration %>">
@@ -156,7 +156,7 @@ long folderId = ParamUtil.getLong(request, "folderId");
 				for (String supportedParameter : supportedParameters) {
 				%>
 
-					<aui:input label="<%= LanguageUtil.get(pageContext, StringUtil.replace(supportedParameter.toLowerCase(), CharPool.UNDERLINE, CharPool.DASH)) %>" name='<%= "settings--" + supportedParameter + "--" %>' type="text" value="" />
+					<aui:input label="<%= LanguageUtil.get(pageContext, StringUtil.replace(StringUtil.toLowerCase(supportedParameter), CharPool.UNDERLINE, CharPool.DASH)) %>" name='<%= "settings--" + supportedParameter + "--" %>' type="text" value="" />
 
 				<%
 				}
@@ -177,8 +177,13 @@ long folderId = ParamUtil.getLong(request, "folderId");
 	var settingsParameters = A.one('#<portlet:namespace />settingsParameters');
 
 	var showConfiguration = function(select) {
-		settingsSupported.append(settingsConfiguration.all('.settings-configuration'));
-		settingsSupported.append(settingsParameters.all('.settings-parameters'));
+		if (settingsConfiguration) {
+			settingsSupported.append(settingsConfiguration.all('.settings-configuration'));
+		}
+
+		if (settingsParameters) {
+			settingsSupported.append(settingsParameters.all('.settings-parameters'));
+		}
 
 		var value = select.val();
 		var className = value.split('.').pop();
@@ -189,8 +194,13 @@ long folderId = ParamUtil.getLong(request, "folderId");
 		if (selectRepositoryConfiguration) {
 			var repositoryParameters = A.one('#<portlet:namespace />repository-' + className + '-configuration-' + selectRepositoryConfiguration.val());
 
-			settingsConfiguration.append(repositoryConfiguration);
-			settingsParameters.append(repositoryParameters);
+			if (settingsConfiguration) {
+				settingsConfiguration.append(repositoryConfiguration);
+			}
+
+			if (settingsParameters) {
+				settingsParameters.append(repositoryParameters);
+			}
 		}
 	};
 
@@ -207,16 +217,18 @@ long folderId = ParamUtil.getLong(request, "folderId");
 
 	var selectRepositoryTypes = A.one('#<portlet:namespace />repositoryTypes');
 
-	selectRepositoryTypes.on(
-		'change',
-		function(event) {
-			showConfiguration(event.currentTarget);
-		}
-	);
+	if (selectRepositoryTypes) {
+		selectRepositoryTypes.on(
+			'change',
+			function(event) {
+				showConfiguration(event.currentTarget);
+			}
+		);
 
-	showConfiguration(selectRepositoryTypes);
+		showConfiguration(selectRepositoryTypes);
+	}
 
-	var selectConfiguration = A.all('.repository-configuration')
+	var selectConfiguration = A.all('.repository-configuration');
 
 	selectConfiguration.on('change', showParameters);
 </aui:script>

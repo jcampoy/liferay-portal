@@ -56,8 +56,8 @@ public class GetArticleAction extends Action {
 
 	@Override
 	public ActionForward execute(
-			ActionMapping mapping, ActionForm form, HttpServletRequest request,
-			HttpServletResponse response)
+			ActionMapping actionMapping, ActionForm actionForm,
+			HttpServletRequest request, HttpServletResponse response)
 		throws Exception {
 
 		try {
@@ -145,35 +145,35 @@ public class GetArticleAction extends Action {
 
 		String templateId = article.getTemplateId();
 
-		if (Validator.isNotNull(templateId)) {
-			DDMTemplate ddmTemplate = null;
+		if (Validator.isNull(templateId)) {
+			return;
+		}
 
-			try {
-				ddmTemplate = DDMTemplateLocalServiceUtil.getTemplate(
-					article.getGroupId(),
-					PortalUtil.getClassNameId(DDMStructure.class), templateId);
+		try {
+			DDMTemplate ddmTemplate = DDMTemplateLocalServiceUtil.getTemplate(
+				article.getGroupId(),
+				PortalUtil.getClassNameId(DDMStructure.class), templateId,
+				true);
 
-				if (Validator.equals(
-						ddmTemplate.getLanguage(),
-						TemplateConstants.LANG_TYPE_XSL)) {
+			if (Validator.equals(
+					ddmTemplate.getLanguage(),
+					TemplateConstants.LANG_TYPE_XSL)) {
 
-					url =
-						themeDisplay.getPathMain() +
-							"/journal/get_template?groupId=" +
-								article.getGroupId() + "&templateId=" +
-									templateId;
+				url =
+					themeDisplay.getPathMain() +
+						"/journal/get_template?groupId=" +
+							article.getGroupId() + "&templateId=" + templateId;
 
-					arguments.clear();
+				arguments.clear();
 
-					arguments.put("type", "text/xsl");
-					arguments.put("href", url);
-					arguments.put("title", "xsl");
+				arguments.put("type", "text/xsl");
+				arguments.put("href", url);
+				arguments.put("title", "xsl");
 
-					addStyleSheet(doc, url, arguments);
-				}
+				addStyleSheet(doc, url, arguments);
 			}
-			catch (Exception e) {
-			}
+		}
+		catch (Exception e) {
 		}
 	}
 

@@ -1,26 +1,36 @@
-<#if (maxBlogsEntryCount > 0)>
-	<#list 1..maxBlogsEntryCount as blogsEntryCount>
-		<#assign blogsEntry = dataFactory.newBlogsEntry(groupId, blogsEntryCount)>
+<#assign blogsEntryModels = dataFactory.newBlogsEntryModels(groupId)>
 
-		insert into BlogsEntry values ('${blogsEntry.uuid}', ${blogsEntry.entryId}, ${blogsEntry.groupId}, ${blogsEntry.companyId}, ${blogsEntry.userId}, '${blogsEntry.userName}', '${dataFactory.getDateString(blogsEntry.createDate)}', '${dataFactory.getDateString(blogsEntry.modifiedDate)}', '${blogsEntry.title}', '${blogsEntry.urlTitle}', '${blogsEntry.description}', '${blogsEntry.content}', '${dataFactory.getDateString(blogsEntry.displayDate)}', ${blogsEntry.allowPingbacks?string}, ${blogsEntry.allowTrackbacks?string}, '${blogsEntry.trackbacks}', ${blogsEntry.smallImage?string}, ${blogsEntry.smallImageId}, '${blogsEntry.smallImageURL}', ${blogsEntry.status}, ${blogsEntry.statusByUserId}, '${blogsEntry.statusByUserName}', '${dataFactory.getDateString(blogsEntry.statusDate)}');
+<#list blogsEntryModels as blogsEntryModel>
+	insert into BlogsEntry values ('${blogsEntryModel.uuid}', ${blogsEntryModel.entryId}, ${blogsEntryModel.groupId}, ${blogsEntryModel.companyId}, ${blogsEntryModel.userId}, '${blogsEntryModel.userName}', '${dataFactory.getDateString(blogsEntryModel.createDate)}', '${dataFactory.getDateString(blogsEntryModel.modifiedDate)}', '${blogsEntryModel.title}', '${blogsEntryModel.urlTitle}', '${blogsEntryModel.description}', '${blogsEntryModel.content}', '${dataFactory.getDateString(blogsEntryModel.displayDate)}', ${blogsEntryModel.allowPingbacks?string}, ${blogsEntryModel.allowTrackbacks?string}, '${blogsEntryModel.trackbacks}', ${blogsEntryModel.smallImage?string}, ${blogsEntryModel.smallImageId}, '${blogsEntryModel.smallImageURL}', ${blogsEntryModel.status}, ${blogsEntryModel.statusByUserId}, '${blogsEntryModel.statusByUserName}', '${dataFactory.getDateString(blogsEntryModel.statusDate)}');
 
-		<@insertAssetEntry
-			_entry = blogsEntry
-			_currentIndex = blogsEntryCount
-		/>
+	<@insertResourcePermissions
+		_entry = blogsEntryModel
+	/>
 
-		<#assign mbThreadId = counter.get()>
-		<#assign mbRootMessageId = counter.get()>
+	<@insertAssetEntry
+		_entry = blogsEntryModel
+		_categoryAndTag = true
+	/>
 
-		<@insertMBDiscussion
-			_classNameId = dataFactory.blogsEntryClassNameId
-			_classPK = blogsEntry.entryId
-			_groupId = groupId
-			_maxCommentCount = maxBlogsEntryCommentCount
-			_mbRootMessageId = mbRootMessageId
-			_mbThreadId = mbThreadId
-		/>
+	<#assign mbThreadId = dataFactory.getCounterNext()>
+	<#assign mbRootMessageId = dataFactory.getCounterNext()>
 
-		${writerBlogsCSV.write(blogsEntry.entryId + "," + blogsEntry.urlTitle + "," + mbThreadId + "," + mbRootMessageId + "\n")}
-	</#list>
-</#if>
+	<@insertMBDiscussion
+		_classNameId = dataFactory.blogsEntryClassNameId
+		_classPK = blogsEntryModel.entryId
+		_groupId = groupId
+		_maxCommentCount = dataFactory.maxBlogsEntryCommentCount
+		_mbRootMessageId = mbRootMessageId
+		_mbThreadId = mbThreadId
+	/>
+
+	<@insertSubscription
+		_entry = blogsEntryModel
+	/>
+
+	<@insertSocialActivity
+		_entry = blogsEntryModel
+	/>
+
+	${blogCSVWriter.write(blogsEntryModel.entryId + "," + blogsEntryModel.urlTitle + "," + mbThreadId + "," + mbRootMessageId + "\n")}
+</#list>

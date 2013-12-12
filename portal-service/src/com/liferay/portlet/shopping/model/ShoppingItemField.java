@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.shopping.model;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.model.PersistedModel;
 
 /**
@@ -25,6 +27,7 @@ import com.liferay.portal.model.PersistedModel;
  * @see com.liferay.portlet.shopping.model.impl.ShoppingItemFieldModelImpl
  * @generated
  */
+@ProviderType
 public interface ShoppingItemField extends ShoppingItemFieldModel, PersistedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -32,8 +35,6 @@ public interface ShoppingItemField extends ShoppingItemFieldModel, PersistedMode
 	 * Never modify this interface directly. Add methods to {@link com.liferay.portlet.shopping.model.impl.ShoppingItemFieldImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
 	public java.lang.String[] getValuesArray();
-
-	public void setValues(java.lang.String values);
 
 	public void setValuesArray(java.lang.String[] valuesArray);
 }

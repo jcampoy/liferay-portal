@@ -111,6 +111,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @return the matching membership requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MembershipRequest> findByGroupId(long groupId)
 		throws SystemException {
 		return findByGroupId(groupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
@@ -129,6 +130,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @return the range of matching membership requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MembershipRequest> findByGroupId(long groupId, int start,
 		int end) throws SystemException {
 		return findByGroupId(groupId, start, end, null);
@@ -148,6 +150,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @return the ordered range of matching membership requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MembershipRequest> findByGroupId(long groupId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -254,6 +257,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @throws com.liferay.portal.NoSuchMembershipRequestException if a matching membership request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MembershipRequest findByGroupId_First(long groupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchMembershipRequestException, SystemException {
@@ -284,6 +288,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @return the first matching membership request, or <code>null</code> if a matching membership request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MembershipRequest fetchByGroupId_First(long groupId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<MembershipRequest> list = findByGroupId(groupId, 0, 1,
@@ -305,6 +310,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @throws com.liferay.portal.NoSuchMembershipRequestException if a matching membership request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MembershipRequest findByGroupId_Last(long groupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchMembershipRequestException, SystemException {
@@ -335,9 +341,14 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @return the last matching membership request, or <code>null</code> if a matching membership request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MembershipRequest fetchByGroupId_Last(long groupId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByGroupId(groupId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<MembershipRequest> list = findByGroupId(groupId, count - 1, count,
 				orderByComparator);
@@ -359,6 +370,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @throws com.liferay.portal.NoSuchMembershipRequestException if a membership request with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MembershipRequest[] findByGroupId_PrevAndNext(
 		long membershipRequestId, long groupId,
 		OrderByComparator orderByComparator)
@@ -501,6 +513,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @param groupId the group ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByGroupId(long groupId) throws SystemException {
 		for (MembershipRequest membershipRequest : findByGroupId(groupId,
 				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
@@ -515,6 +528,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @return the number of matching membership requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByGroupId(long groupId) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_GROUPID;
 
@@ -591,6 +605,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @return the matching membership requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MembershipRequest> findByUserId(long userId)
 		throws SystemException {
 		return findByUserId(userId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
@@ -609,6 +624,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @return the range of matching membership requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MembershipRequest> findByUserId(long userId, int start, int end)
 		throws SystemException {
 		return findByUserId(userId, start, end, null);
@@ -628,6 +644,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @return the ordered range of matching membership requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MembershipRequest> findByUserId(long userId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -734,6 +751,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @throws com.liferay.portal.NoSuchMembershipRequestException if a matching membership request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MembershipRequest findByUserId_First(long userId,
 		OrderByComparator orderByComparator)
 		throws NoSuchMembershipRequestException, SystemException {
@@ -764,6 +782,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @return the first matching membership request, or <code>null</code> if a matching membership request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MembershipRequest fetchByUserId_First(long userId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<MembershipRequest> list = findByUserId(userId, 0, 1,
@@ -785,6 +804,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @throws com.liferay.portal.NoSuchMembershipRequestException if a matching membership request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MembershipRequest findByUserId_Last(long userId,
 		OrderByComparator orderByComparator)
 		throws NoSuchMembershipRequestException, SystemException {
@@ -815,9 +835,14 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @return the last matching membership request, or <code>null</code> if a matching membership request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MembershipRequest fetchByUserId_Last(long userId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByUserId(userId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<MembershipRequest> list = findByUserId(userId, count - 1, count,
 				orderByComparator);
@@ -839,6 +864,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @throws com.liferay.portal.NoSuchMembershipRequestException if a membership request with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MembershipRequest[] findByUserId_PrevAndNext(
 		long membershipRequestId, long userId,
 		OrderByComparator orderByComparator)
@@ -981,6 +1007,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @param userId the user ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByUserId(long userId) throws SystemException {
 		for (MembershipRequest membershipRequest : findByUserId(userId,
 				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
@@ -995,6 +1022,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @return the number of matching membership requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByUserId(long userId) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_USERID;
 
@@ -1072,6 +1100,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @return the matching membership requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MembershipRequest> findByG_S(long groupId, int statusId)
 		throws SystemException {
 		return findByG_S(groupId, statusId, QueryUtil.ALL_POS,
@@ -1092,6 +1121,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @return the range of matching membership requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MembershipRequest> findByG_S(long groupId, int statusId,
 		int start, int end) throws SystemException {
 		return findByG_S(groupId, statusId, start, end, null);
@@ -1112,6 +1142,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @return the ordered range of matching membership requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MembershipRequest> findByG_S(long groupId, int statusId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -1229,6 +1260,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @throws com.liferay.portal.NoSuchMembershipRequestException if a matching membership request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MembershipRequest findByG_S_First(long groupId, int statusId,
 		OrderByComparator orderByComparator)
 		throws NoSuchMembershipRequestException, SystemException {
@@ -1263,6 +1295,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @return the first matching membership request, or <code>null</code> if a matching membership request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MembershipRequest fetchByG_S_First(long groupId, int statusId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<MembershipRequest> list = findByG_S(groupId, statusId, 0, 1,
@@ -1285,6 +1318,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @throws com.liferay.portal.NoSuchMembershipRequestException if a matching membership request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MembershipRequest findByG_S_Last(long groupId, int statusId,
 		OrderByComparator orderByComparator)
 		throws NoSuchMembershipRequestException, SystemException {
@@ -1319,9 +1353,14 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @return the last matching membership request, or <code>null</code> if a matching membership request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MembershipRequest fetchByG_S_Last(long groupId, int statusId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByG_S(groupId, statusId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<MembershipRequest> list = findByG_S(groupId, statusId, count - 1,
 				count, orderByComparator);
@@ -1344,6 +1383,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @throws com.liferay.portal.NoSuchMembershipRequestException if a membership request with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MembershipRequest[] findByG_S_PrevAndNext(long membershipRequestId,
 		long groupId, int statusId, OrderByComparator orderByComparator)
 		throws NoSuchMembershipRequestException, SystemException {
@@ -1490,6 +1530,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @param statusId the status ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByG_S(long groupId, int statusId)
 		throws SystemException {
 		for (MembershipRequest membershipRequest : findByG_S(groupId, statusId,
@@ -1506,6 +1547,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @return the number of matching membership requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByG_S(long groupId, int statusId) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_S;
 
@@ -1597,6 +1639,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @return the matching membership requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MembershipRequest> findByG_U_S(long groupId, long userId,
 		int statusId) throws SystemException {
 		return findByG_U_S(groupId, userId, statusId, QueryUtil.ALL_POS,
@@ -1618,6 +1661,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @return the range of matching membership requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MembershipRequest> findByG_U_S(long groupId, long userId,
 		int statusId, int start, int end) throws SystemException {
 		return findByG_U_S(groupId, userId, statusId, start, end, null);
@@ -1639,6 +1683,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @return the ordered range of matching membership requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MembershipRequest> findByG_U_S(long groupId, long userId,
 		int statusId, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -1762,6 +1807,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @throws com.liferay.portal.NoSuchMembershipRequestException if a matching membership request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MembershipRequest findByG_U_S_First(long groupId, long userId,
 		int statusId, OrderByComparator orderByComparator)
 		throws NoSuchMembershipRequestException, SystemException {
@@ -1800,6 +1846,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @return the first matching membership request, or <code>null</code> if a matching membership request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MembershipRequest fetchByG_U_S_First(long groupId, long userId,
 		int statusId, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -1824,6 +1871,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @throws com.liferay.portal.NoSuchMembershipRequestException if a matching membership request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MembershipRequest findByG_U_S_Last(long groupId, long userId,
 		int statusId, OrderByComparator orderByComparator)
 		throws NoSuchMembershipRequestException, SystemException {
@@ -1862,10 +1910,15 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @return the last matching membership request, or <code>null</code> if a matching membership request could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MembershipRequest fetchByG_U_S_Last(long groupId, long userId,
 		int statusId, OrderByComparator orderByComparator)
 		throws SystemException {
 		int count = countByG_U_S(groupId, userId, statusId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<MembershipRequest> list = findByG_U_S(groupId, userId, statusId,
 				count - 1, count, orderByComparator);
@@ -1889,6 +1942,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @throws com.liferay.portal.NoSuchMembershipRequestException if a membership request with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MembershipRequest[] findByG_U_S_PrevAndNext(
 		long membershipRequestId, long groupId, long userId, int statusId,
 		OrderByComparator orderByComparator)
@@ -2041,6 +2095,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @param statusId the status ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByG_U_S(long groupId, long userId, int statusId)
 		throws SystemException {
 		for (MembershipRequest membershipRequest : findByG_U_S(groupId, userId,
@@ -2058,6 +2113,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @return the number of matching membership requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByG_U_S(long groupId, long userId, int statusId)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_U_S;
@@ -2116,11 +2172,16 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	private static final String _FINDER_COLUMN_G_U_S_USERID_2 = "membershipRequest.userId = ? AND ";
 	private static final String _FINDER_COLUMN_G_U_S_STATUSID_2 = "membershipRequest.statusId = ?";
 
+	public MembershipRequestPersistenceImpl() {
+		setModelClass(MembershipRequest.class);
+	}
+
 	/**
 	 * Caches the membership request in the entity cache if it is enabled.
 	 *
 	 * @param membershipRequest the membership request
 	 */
+	@Override
 	public void cacheResult(MembershipRequest membershipRequest) {
 		EntityCacheUtil.putResult(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
 			MembershipRequestImpl.class, membershipRequest.getPrimaryKey(),
@@ -2134,6 +2195,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 *
 	 * @param membershipRequests the membership requests
 	 */
+	@Override
 	public void cacheResult(List<MembershipRequest> membershipRequests) {
 		for (MembershipRequest membershipRequest : membershipRequests) {
 			if (EntityCacheUtil.getResult(
@@ -2201,6 +2263,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @param membershipRequestId the primary key for the new membership request
 	 * @return the new membership request
 	 */
+	@Override
 	public MembershipRequest create(long membershipRequestId) {
 		MembershipRequest membershipRequest = new MembershipRequestImpl();
 
@@ -2218,6 +2281,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @throws com.liferay.portal.NoSuchMembershipRequestException if a membership request with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MembershipRequest remove(long membershipRequestId)
 		throws NoSuchMembershipRequestException, SystemException {
 		return remove((Serializable)membershipRequestId);
@@ -2418,6 +2482,8 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 			MembershipRequestImpl.class, membershipRequest.getPrimaryKey(),
 			membershipRequest);
 
+		membershipRequest.resetOriginalValues();
+
 		return membershipRequest;
 	}
 
@@ -2479,6 +2545,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @throws com.liferay.portal.NoSuchMembershipRequestException if a membership request with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MembershipRequest findByPrimaryKey(long membershipRequestId)
 		throws NoSuchMembershipRequestException, SystemException {
 		return findByPrimaryKey((Serializable)membershipRequestId);
@@ -2540,6 +2607,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @return the membership request, or <code>null</code> if a membership request with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MembershipRequest fetchByPrimaryKey(long membershipRequestId)
 		throws SystemException {
 		return fetchByPrimaryKey((Serializable)membershipRequestId);
@@ -2551,6 +2619,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @return the membership requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MembershipRequest> findAll() throws SystemException {
 		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
@@ -2567,6 +2636,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @return the range of membership requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MembershipRequest> findAll(int start, int end)
 		throws SystemException {
 		return findAll(start, end, null);
@@ -2585,6 +2655,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @return the ordered range of membership requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MembershipRequest> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -2670,6 +2741,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 *
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeAll() throws SystemException {
 		for (MembershipRequest membershipRequest : findAll()) {
 			remove(membershipRequest);
@@ -2682,6 +2754,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	 * @return the number of membership requests
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countAll() throws SystemException {
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
 				FINDER_ARGS_EMPTY, this);
@@ -2768,6 +2841,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 
 	private static CacheModel<MembershipRequest> _nullMembershipRequestCacheModel =
 		new CacheModel<MembershipRequest>() {
+			@Override
 			public MembershipRequest toEntityModel() {
 				return _nullMembershipRequest;
 			}

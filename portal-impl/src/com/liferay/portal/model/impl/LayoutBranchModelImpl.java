@@ -149,26 +149,32 @@ public class LayoutBranchModelImpl extends BaseModelImpl<LayoutBranch>
 	public LayoutBranchModelImpl() {
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _LayoutBranchId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setLayoutBranchId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
 		return _LayoutBranchId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return LayoutBranch.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return LayoutBranch.class.getName();
 	}
@@ -255,50 +261,61 @@ public class LayoutBranchModelImpl extends BaseModelImpl<LayoutBranch>
 	}
 
 	@JSON
+	@Override
 	public long getLayoutBranchId() {
 		return _LayoutBranchId;
 	}
 
+	@Override
 	public void setLayoutBranchId(long LayoutBranchId) {
 		_LayoutBranchId = LayoutBranchId;
 	}
 
 	@JSON
+	@Override
 	public long getGroupId() {
 		return _groupId;
 	}
 
+	@Override
 	public void setGroupId(long groupId) {
 		_groupId = groupId;
 	}
 
 	@JSON
+	@Override
 	public long getCompanyId() {
 		return _companyId;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
 		_companyId = companyId;
 	}
 
 	@JSON
+	@Override
 	public long getUserId() {
 		return _userId;
 	}
 
+	@Override
 	public void setUserId(long userId) {
 		_userId = userId;
 	}
 
+	@Override
 	public String getUserUuid() throws SystemException {
 		return PortalUtil.getUserValue(getUserId(), "uuid", _userUuid);
 	}
 
+	@Override
 	public void setUserUuid(String userUuid) {
 		_userUuid = userUuid;
 	}
 
 	@JSON
+	@Override
 	public String getUserName() {
 		if (_userName == null) {
 			return StringPool.BLANK;
@@ -308,15 +325,18 @@ public class LayoutBranchModelImpl extends BaseModelImpl<LayoutBranch>
 		}
 	}
 
+	@Override
 	public void setUserName(String userName) {
 		_userName = userName;
 	}
 
 	@JSON
+	@Override
 	public long getLayoutSetBranchId() {
 		return _layoutSetBranchId;
 	}
 
+	@Override
 	public void setLayoutSetBranchId(long layoutSetBranchId) {
 		_columnBitmask |= LAYOUTSETBRANCHID_COLUMN_BITMASK;
 
@@ -334,10 +354,12 @@ public class LayoutBranchModelImpl extends BaseModelImpl<LayoutBranch>
 	}
 
 	@JSON
+	@Override
 	public long getPlid() {
 		return _plid;
 	}
 
+	@Override
 	public void setPlid(long plid) {
 		_columnBitmask |= PLID_COLUMN_BITMASK;
 
@@ -355,6 +377,7 @@ public class LayoutBranchModelImpl extends BaseModelImpl<LayoutBranch>
 	}
 
 	@JSON
+	@Override
 	public String getName() {
 		if (_name == null) {
 			return StringPool.BLANK;
@@ -364,6 +387,7 @@ public class LayoutBranchModelImpl extends BaseModelImpl<LayoutBranch>
 		}
 	}
 
+	@Override
 	public void setName(String name) {
 		_columnBitmask |= NAME_COLUMN_BITMASK;
 
@@ -379,6 +403,7 @@ public class LayoutBranchModelImpl extends BaseModelImpl<LayoutBranch>
 	}
 
 	@JSON
+	@Override
 	public String getDescription() {
 		if (_description == null) {
 			return StringPool.BLANK;
@@ -388,19 +413,23 @@ public class LayoutBranchModelImpl extends BaseModelImpl<LayoutBranch>
 		}
 	}
 
+	@Override
 	public void setDescription(String description) {
 		_description = description;
 	}
 
 	@JSON
+	@Override
 	public boolean getMaster() {
 		return _master;
 	}
 
+	@Override
 	public boolean isMaster() {
 		return _master;
 	}
 
+	@Override
 	public void setMaster(boolean master) {
 		_columnBitmask |= MASTER_COLUMN_BITMASK;
 
@@ -464,6 +493,7 @@ public class LayoutBranchModelImpl extends BaseModelImpl<LayoutBranch>
 		return layoutBranchImpl;
 	}
 
+	@Override
 	public int compareTo(LayoutBranch layoutBranch) {
 		long primaryKey = layoutBranch.getPrimaryKey();
 
@@ -480,18 +510,15 @@ public class LayoutBranchModelImpl extends BaseModelImpl<LayoutBranch>
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof LayoutBranch)) {
 			return false;
 		}
 
-		LayoutBranch layoutBranch = null;
-
-		try {
-			layoutBranch = (LayoutBranch)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		LayoutBranch layoutBranch = (LayoutBranch)obj;
 
 		long primaryKey = layoutBranch.getPrimaryKey();
 
@@ -603,6 +630,7 @@ public class LayoutBranchModelImpl extends BaseModelImpl<LayoutBranch>
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(34);
 

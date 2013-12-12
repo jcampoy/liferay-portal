@@ -20,11 +20,13 @@ import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.StagedModel;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.ServiceTestUtil;
 import com.liferay.portal.test.LiferayIntegrationJUnitTestRunner;
 import com.liferay.portal.test.MainServletExecutionTestListener;
 import com.liferay.portal.test.TransactionalExecutionTestListener;
+import com.liferay.portal.util.RoleTestUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -49,7 +51,7 @@ public class RoleStagedModelDataHandlerTest
 			Map<String, List<StagedModel>> dependentStagedModelsMap)
 		throws Exception {
 
-		return ServiceTestUtil.addRole(
+		return RoleTestUtil.addRole(
 			ServiceTestUtil.randomString(), RoleConstants.TYPE_REGULAR);
 	}
 
@@ -67,6 +69,25 @@ public class RoleStagedModelDataHandlerTest
 	@Override
 	protected Class<? extends StagedModel> getStagedModelClass() {
 		return Role.class;
+	}
+
+	@Override
+	protected void initExport() throws Exception {
+		super.initExport();
+
+		Group companyGroup = GroupLocalServiceUtil.getCompanyGroup(
+			portletDataContext.getCompanyId());
+
+		rootElement.addAttribute(
+			"company-group-id", String.valueOf(companyGroup.getGroupId()));
+
+		Group userPersonalSiteGroup =
+			GroupLocalServiceUtil.getUserPersonalSiteGroup(
+				portletDataContext.getCompanyId());
+
+		rootElement.addAttribute(
+			"user-personal-site-group-id",
+			String.valueOf(userPersonalSiteGroup.getGroupId()));
 	}
 
 }

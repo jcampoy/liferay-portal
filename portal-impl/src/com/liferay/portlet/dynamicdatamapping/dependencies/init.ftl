@@ -9,7 +9,7 @@
 <#assign cssClass = "">
 
 <#if fieldStructure.width??>
-	<#assign cssClass = "aui-w" + fieldStructure.width>
+	<#assign cssClass = "w" + fieldStructure.width>
 </#if>
 
 <#-- Repeatable -->
@@ -138,8 +138,6 @@
 <#function getFileEntryURL fileEntry>
 	<#return themeDisplay.getPathContext() + "/documents/" + fileEntry.getRepositoryId()?c + "/" + fileEntry.getFolderId()?c + "/" +  httpUtil.encodeURL(htmlUtil.unescape(fileEntry.getTitle()), true) + "/" + fileEntry.getUuid()>
 </#function>
-
-<#assign jsonFactoryUtil = utilLocator.findUtil("com.liferay.portal.kernel.json.JSONFactory")>
 
 <#function getFileJSONObject fieldValue>
 	<#return jsonFactoryUtil.createJSONObject(fieldValue)>>

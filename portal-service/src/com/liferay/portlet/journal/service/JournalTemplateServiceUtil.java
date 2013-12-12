@@ -14,22 +14,28 @@
 
 package com.liferay.portlet.journal.service;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
 
 /**
- * The utility for the journal template remote service. This utility wraps {@link com.liferay.portlet.journal.service.impl.JournalTemplateServiceImpl} and is the primary access point for service operations in application layer code running on a remote server.
- *
- * <p>
- * This is a remote service. Methods of this service are expected to have security checks based on the propagated JAAS credentials because this service can be accessed remotely.
- * </p>
+ * Provides the remote service utility for JournalTemplate. This utility wraps
+ * {@link com.liferay.portlet.journal.service.impl.JournalTemplateServiceImpl} and is the
+ * primary access point for service operations in application layer code running
+ * on a remote server. Methods of this service are expected to have security
+ * checks based on the propagated JAAS credentials because this service can be
+ * accessed remotely.
  *
  * @author Brian Wing Shun Chan
  * @see JournalTemplateService
  * @see com.liferay.portlet.journal.service.base.JournalTemplateServiceBaseImpl
  * @see com.liferay.portlet.journal.service.impl.JournalTemplateServiceImpl
+ * @deprecated As of 6.2.0, since Web Content Administration now uses the
+Dynamic Data Mapping framework to handle templates
  * @generated
  */
+@ProviderType
 public class JournalTemplateServiceUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -106,7 +112,8 @@ public class JournalTemplateServiceUtil {
 
 	public static java.util.List<com.liferay.portlet.journal.model.JournalTemplate> getStructureTemplates(
 		long groupId, java.lang.String structureId)
-		throws com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
 		return getService().getStructureTemplates(groupId, structureId);
 	}
 

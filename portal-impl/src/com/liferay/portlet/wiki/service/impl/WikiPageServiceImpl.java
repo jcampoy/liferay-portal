@@ -17,6 +17,7 @@ package com.liferay.portlet.wiki.service.impl;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.util.CalendarFactoryUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
@@ -72,6 +73,7 @@ import java.util.Locale;
  */
 public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 
+	@Override
 	public WikiPage addPage(
 			long nodeId, String title, String content, String summary,
 			boolean minorEdit, ServiceContext serviceContext)
@@ -85,6 +87,7 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 			serviceContext);
 	}
 
+	@Override
 	public WikiPage addPage(
 			long nodeId, String title, String content, String summary,
 			boolean minorEdit, String format, String parentTitle,
@@ -100,6 +103,7 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 			redirectTitle, serviceContext);
 	}
 
+	@Override
 	public void addPageAttachment(
 			long nodeId, String title, String fileName, File file,
 			String mimeType)
@@ -112,6 +116,7 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 			getUserId(), nodeId, title, fileName, file, mimeType);
 	}
 
+	@Override
 	public void addPageAttachment(
 			long nodeId, String title, String fileName, InputStream inputStream,
 			String mimeType)
@@ -124,6 +129,7 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 			getUserId(), nodeId, title, fileName, inputStream, mimeType);
 	}
 
+	@Override
 	public void addPageAttachments(
 			long nodeId, String title,
 			List<ObjectValuePair<String, InputStream>> inputStreamOVPs)
@@ -136,6 +142,7 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 			getUserId(), nodeId, title, inputStreamOVPs);
 	}
 
+	@Override
 	public void addTempPageAttachment(
 			long nodeId, String fileName, String tempFolderName,
 			InputStream inputStream, String mimeType)
@@ -151,6 +158,7 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 			inputStream, mimeType);
 	}
 
+	@Override
 	public void changeParent(
 			long nodeId, String title, String newParentTitle,
 			ServiceContext serviceContext)
@@ -166,6 +174,20 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 			getUserId(), nodeId, title, newParentTitle, serviceContext);
 	}
 
+	@Override
+	public void copyPageAttachments(
+			long templateNodeId, String templateTitle, long nodeId,
+			String title)
+		throws PortalException, SystemException {
+
+		WikiNodePermission.check(
+			getPermissionChecker(), nodeId, ActionKeys.ADD_ATTACHMENT);
+
+		wikiPageLocalService.copyPageAttachments(
+			getUserId(), templateNodeId, templateTitle, nodeId, title);
+	}
+
+	@Override
 	public void deletePage(long nodeId, String title)
 		throws PortalException, SystemException {
 
@@ -179,12 +201,14 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 	 * @deprecated As of 6.2.0 replaced by {@link #discardDraft(long, String,
 	 *             double)}
 	 */
+	@Override
 	public void deletePage(long nodeId, String title, double version)
 		throws PortalException, SystemException {
 
 		discardDraft(nodeId, title, version);
 	}
 
+	@Override
 	public void deletePageAttachment(long nodeId, String title, String fileName)
 		throws PortalException, SystemException {
 
@@ -194,6 +218,7 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 		wikiPageLocalService.deletePageAttachment(nodeId, title, fileName);
 	}
 
+	@Override
 	public void deletePageAttachments(long nodeId, String title)
 		throws PortalException, SystemException {
 
@@ -203,6 +228,7 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 		wikiPageLocalService.deletePageAttachments(nodeId, title);
 	}
 
+	@Override
 	public void deleteTempPageAttachment(
 			long nodeId, String fileName, String tempFolderName)
 		throws PortalException, SystemException {
@@ -216,6 +242,7 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 			node.getGroupId(), getUserId(), fileName, tempFolderName);
 	}
 
+	@Override
 	public void deleteTrashPageAttachments(long nodeId, String title)
 		throws PortalException, SystemException {
 
@@ -225,6 +252,7 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 		wikiPageLocalService.deleteTrashPageAttachments(nodeId, title);
 	}
 
+	@Override
 	public void discardDraft(long nodeId, String title, double version)
 		throws PortalException, SystemException {
 
@@ -234,6 +262,17 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 		wikiPageLocalService.discardDraft(nodeId, title, version);
 	}
 
+	@Override
+	public WikiPage fetchPage(long nodeId, String title, double version)
+		throws PortalException, SystemException {
+
+		WikiPagePermission.check(
+			getPermissionChecker(), nodeId, title, version, ActionKeys.VIEW);
+
+		return wikiPageLocalService.fetchPage(nodeId, title, version);
+	}
+
+	@Override
 	public List<WikiPage> getChildren(
 			long groupId, long nodeId, boolean head, String parentTitle)
 		throws PortalException, SystemException {
@@ -246,6 +285,7 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 			WorkflowConstants.STATUS_APPROVED);
 	}
 
+	@Override
 	public WikiPage getDraftPage(long nodeId, String title)
 		throws PortalException, SystemException {
 
@@ -255,6 +295,7 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 		return wikiPageLocalService.getDraftPage(nodeId, title);
 	}
 
+	@Override
 	public List<WikiPage> getNodePages(long nodeId, int max)
 		throws PortalException, SystemException {
 
@@ -290,6 +331,7 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 	 * @deprecated As of 6.2.0, replaced by {@link #getNodePagesRSS(long, int,
 	 *             String, double, String, String, String, String)}
 	 */
+	@Override
 	public String getNodePagesRSS(
 			long nodeId, int max, String type, double version,
 			String displayStyle, String feedURL, String entryURL)
@@ -299,6 +341,7 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 			nodeId, max, type, version, displayStyle, feedURL, entryURL, null);
 	}
 
+	@Override
 	public String getNodePagesRSS(
 			long nodeId, int max, String type, double version,
 			String displayStyle, String feedURL, String entryURL,
@@ -318,6 +361,7 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 			pages, false, null);
 	}
 
+	@Override
 	public List<WikiPage> getOrphans(long groupId, long nodeId)
 		throws PortalException, SystemException {
 
@@ -330,6 +374,7 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 		return WikiUtil.filterOrphans(pages);
 	}
 
+	@Override
 	public WikiPage getPage(long groupId, long nodeId, String title)
 		throws PortalException, SystemException {
 
@@ -344,6 +389,7 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 		}
 	}
 
+	@Override
 	public WikiPage getPage(long nodeId, String title)
 		throws PortalException, SystemException {
 
@@ -353,6 +399,7 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 		return wikiPageLocalService.getPage(nodeId, title);
 	}
 
+	@Override
 	public WikiPage getPage(long nodeId, String title, Boolean head)
 		throws PortalException, SystemException {
 
@@ -362,6 +409,7 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 		return wikiPageLocalService.getPage(nodeId, title, head);
 	}
 
+	@Override
 	public WikiPage getPage(long nodeId, String title, double version)
 		throws PortalException, SystemException {
 
@@ -371,6 +419,7 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 		return wikiPageLocalService.getPage(nodeId, title, version);
 	}
 
+	@Override
 	public List<WikiPage> getPages(
 			long groupId, long nodeId, boolean head, int status, int start,
 			int end, OrderByComparator obc)
@@ -389,6 +438,7 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 		}
 	}
 
+	@Override
 	public List<WikiPage> getPages(
 			long groupId, long userId, long nodeId, int status, int start,
 			int end)
@@ -409,6 +459,7 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 		}
 	}
 
+	@Override
 	public int getPagesCount(long groupId, long nodeId, boolean head)
 		throws PortalException, SystemException {
 
@@ -419,6 +470,7 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 			groupId, nodeId, head, WorkflowConstants.STATUS_APPROVED);
 	}
 
+	@Override
 	public int getPagesCount(long groupId, long userId, long nodeId, int status)
 		throws PortalException, SystemException {
 
@@ -440,6 +492,7 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 	 *             String, int, String, double, String, String, String, String,
 	 *             java.util.Locale)}
 	 */
+	@Override
 	public String getPagesRSS(
 			long companyId, long nodeId, String title, int max, String type,
 			double version, String displayStyle, String feedURL,
@@ -451,6 +504,7 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 			entryURL, null, locale);
 	}
 
+	@Override
 	public String getPagesRSS(
 			long companyId, long nodeId, String title, int max, String type,
 			double version, String displayStyle, String feedURL,
@@ -468,6 +522,7 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 			entryURL, attachmentURLPrefix, pages, true, locale);
 	}
 
+	@Override
 	public List<WikiPage> getRecentChanges(
 			long groupId, long nodeId, int start, int end)
 		throws PortalException, SystemException {
@@ -483,6 +538,7 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 			groupId, nodeId, calendar.getTime(), false, start, end);
 	}
 
+	@Override
 	public int getRecentChangesCount(long groupId, long nodeId)
 		throws PortalException, SystemException {
 
@@ -497,6 +553,7 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 			groupId, nodeId, calendar.getTime(), false);
 	}
 
+	@Override
 	public String[] getTempPageAttachmentNames(
 			long nodeId, String tempFolderName)
 		throws PortalException, SystemException {
@@ -510,6 +567,7 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 			node.getGroupId(), getUserId(), tempFolderName);
 	}
 
+	@Override
 	public void movePage(
 			long nodeId, String title, String newTitle,
 			ServiceContext serviceContext)
@@ -525,7 +583,8 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 			getUserId(), nodeId, title, newTitle, serviceContext);
 	}
 
-	public long movePageAttachmentToTrash(
+	@Override
+	public FileEntry movePageAttachmentToTrash(
 			long nodeId, String title, String fileName)
 		throws PortalException, SystemException {
 
@@ -536,25 +595,28 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 			getUserId(), nodeId, title, fileName);
 	}
 
-	public void movePageToTrash(long nodeId, String title)
+	@Override
+	public WikiPage movePageToTrash(long nodeId, String title)
 		throws PortalException, SystemException {
 
 		WikiPagePermission.check(
 			getPermissionChecker(), nodeId, title, ActionKeys.DELETE);
 
-		wikiPageLocalService.movePageToTrash(getUserId(), nodeId, title);
+		return wikiPageLocalService.movePageToTrash(getUserId(), nodeId, title);
 	}
 
-	public void movePageToTrash(long nodeId, String title, double version)
+	@Override
+	public WikiPage movePageToTrash(long nodeId, String title, double version)
 		throws PortalException, SystemException {
 
 		WikiPagePermission.check(
 			getPermissionChecker(), nodeId, title, version, ActionKeys.DELETE);
 
-		wikiPageLocalService.movePageToTrash(
+		return wikiPageLocalService.movePageToTrash(
 			getUserId(), nodeId, title, version);
 	}
 
+	@Override
 	public void restorePageAttachmentFromTrash(
 			long nodeId, String title, String fileName)
 		throws PortalException, SystemException {
@@ -566,6 +628,7 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 			getUserId(), nodeId, title, fileName);
 	}
 
+	@Override
 	public void restorePageFromTrash(long resourcePrimKey)
 		throws PortalException, SystemException {
 
@@ -577,6 +640,7 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 		wikiPageLocalService.restorePageFromTrash(getUserId(), page);
 	}
 
+	@Override
 	public WikiPage revertPage(
 			long nodeId, String title, double version,
 			ServiceContext serviceContext)
@@ -589,6 +653,7 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 			getUserId(), nodeId, title, version, serviceContext);
 	}
 
+	@Override
 	public void subscribePage(long nodeId, String title)
 		throws PortalException, SystemException {
 
@@ -598,6 +663,7 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 		wikiPageLocalService.subscribePage(getUserId(), nodeId, title);
 	}
 
+	@Override
 	public void unsubscribePage(long nodeId, String title)
 		throws PortalException, SystemException {
 
@@ -607,6 +673,7 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 		wikiPageLocalService.unsubscribePage(getUserId(), nodeId, title);
 	}
 
+	@Override
 	public WikiPage updatePage(
 			long nodeId, String title, double version, String content,
 			String summary, boolean minorEdit, String format,

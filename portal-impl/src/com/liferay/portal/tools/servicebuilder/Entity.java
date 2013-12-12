@@ -44,6 +44,7 @@ public class Entity {
 	public static final Accessor<Entity, String> NAME_ACCESSOR =
 		new Accessor<Entity, String>() {
 
+			@Override
 			public String get(Entity entity) {
 				return entity.getName();
 			}
@@ -87,8 +88,8 @@ public class Entity {
 	public Entity(String name) {
 		this(
 			null, null, null, name, null, null, null, false, false, false, true,
-			null, null, null, null, null, true, false, null, null, null, null,
-			null, null, null, null, null);
+			null, null, null, null, null, true, false, false, false, false,
+			null, null, null, null, null, null, null, null, null);
 	}
 
 	public Entity(
@@ -97,7 +98,8 @@ public class Entity {
 		boolean uuidAccessor, boolean localService, boolean remoteService,
 		String persistenceClass, String finderClass, String dataSource,
 		String sessionFactory, String txManager, boolean cacheEnabled,
-		boolean jsonEnabled, List<EntityColumn> pkList,
+		boolean dynamicUpdateEnabled, boolean jsonEnabled, boolean trashEnabled,
+		boolean deprecated, List<EntityColumn> pkList,
 		List<EntityColumn> regularColList, List<EntityColumn> blobList,
 		List<EntityColumn> collectionList, List<EntityColumn> columnList,
 		EntityOrder order, List<EntityFinder> finderList,
@@ -122,7 +124,10 @@ public class Entity {
 			sessionFactory, DEFAULT_SESSION_FACTORY);
 		_txManager = GetterUtil.getString(txManager, DEFAULT_TX_MANAGER);
 		_cacheEnabled = cacheEnabled;
+		_dynamicUpdateEnabled = dynamicUpdateEnabled;
 		_jsonEnabled = jsonEnabled;
+		_trashEnabled = trashEnabled;
+		_deprecated = deprecated;
 		_pkList = pkList;
 		_regularColList = regularColList;
 		_blobList = blobList;
@@ -171,6 +176,14 @@ public class Entity {
 
 	@Override
 	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof Entity)) {
+			return false;
+		}
+
 		Entity entity = (Entity)obj;
 
 		String name = entity.getName();
@@ -311,22 +324,20 @@ public class Entity {
 		if (hasCompoundPK()) {
 			return _name + "PK";
 		}
-		else {
-			EntityColumn col = _getPKColumn();
 
-			return col.getType();
-		}
+		EntityColumn col = _getPKColumn();
+
+		return col.getType();
 	}
 
 	public String getPKDBName() {
 		if (hasCompoundPK()) {
 			return getVarName() + "PK";
 		}
-		else {
-			EntityColumn col = _getPKColumn();
 
-			return col.getDBName();
-		}
+		EntityColumn col = _getPKColumn();
+
+		return col.getDBName();
 	}
 
 	public List<EntityColumn> getPKList() {
@@ -337,22 +348,20 @@ public class Entity {
 		if (hasCompoundPK()) {
 			return getVarName() + "PK";
 		}
-		else {
-			EntityColumn col = _getPKColumn();
 
-			return col.getName();
-		}
+		EntityColumn col = _getPKColumn();
+
+		return col.getName();
 	}
 
 	public String getPKVarNames() {
 		if (hasCompoundPK()) {
 			return getVarName() + "PKs";
 		}
-		else {
-			EntityColumn col = _getPKColumn();
 
-			return col.getNames();
-		}
+		EntityColumn col = _getPKColumn();
+
+		return col.getNames();
 	}
 
 	public String getPortletName() {
@@ -543,15 +552,14 @@ public class Entity {
 		if (hasCompoundPK()) {
 			return false;
 		}
-		else {
-			EntityColumn col = _getPKColumn();
 
-			if (col.isPrimitiveType(includeWrappers)) {
-				return true;
-			}
-			else {
-				return false;
-			}
+		EntityColumn col = _getPKColumn();
+
+		if (col.isPrimitiveType(includeWrappers)) {
+			return true;
+		}
+		else {
+			return false;
 		}
 	}
 
@@ -568,18 +576,16 @@ public class Entity {
 	}
 
 	public boolean isAttachedModel() {
-		if (hasColumn("classNameId") && hasColumn("classPK")) {
-			EntityColumn classNameIdCol = getColumn("classNameId");
+		if (!isTypedModel()) {
+			return false;
+		}
 
-			String classNameIdColType = classNameIdCol.getType();
-
+		if (hasColumn("classPK")) {
 			EntityColumn classPKCol = getColumn("classPK");
 
 			String classPKColType = classPKCol.getType();
 
-			if (classNameIdColType.equals("long") &&
-				classPKColType.equals("long")) {
-
+			if (classPKColType.equals("long")) {
 				return true;
 			}
 		}
@@ -631,6 +637,14 @@ public class Entity {
 		else {
 			return false;
 		}
+	}
+
+	public boolean isDeprecated() {
+		return _deprecated;
+	}
+
+	public boolean isDynamicUpdateEnabled() {
+		return _dynamicUpdateEnabled;
 	}
 
 	public boolean isGroupedModel() {
@@ -733,6 +747,14 @@ public class Entity {
 		}
 	}
 
+	public boolean isStagedAuditedModel() {
+		if (isAuditedModel() && isStagedModel()) {
+			return true;
+		}
+
+		return false;
+	}
+
 	public boolean isStagedGroupedModel() {
 		if (isGroupedModel() && isStagedModel()) {
 			return true;
@@ -742,8 +764,37 @@ public class Entity {
 	}
 
 	public boolean isStagedModel() {
-		if (hasUuid() && isAuditedModel()) {
+		if (hasUuid() && hasColumn("companyId") &&
+			hasColumn("createDate", "Date") &&
+			hasColumn("modifiedDate", "Date")) {
+
 			return true;
+		}
+
+		return false;
+	}
+
+	public boolean isTrashEnabled() {
+		return _trashEnabled;
+	}
+
+	public boolean isTreeModel() {
+		if (hasColumn("treePath")) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public boolean isTypedModel() {
+		if (hasColumn("classNameId")) {
+			EntityColumn classNameIdCol = getColumn("classNameId");
+
+			String classNameIdColType = classNameIdCol.getType();
+
+			if (classNameIdColType.equals("long")) {
+				return true;
+			}
 		}
 
 		return false;
@@ -788,6 +839,8 @@ public class Entity {
 	private List<EntityColumn> _columnList;
 	private boolean _containerModel;
 	private String _dataSource;
+	private boolean _deprecated;
+	private boolean _dynamicUpdateEnabled;
 	private String _finderClass;
 	private List<EntityColumn> _finderColumnsList;
 	private List<EntityFinder> _finderList;
@@ -809,6 +862,7 @@ public class Entity {
 	private String _sessionFactory;
 	private String _table;
 	private List<String> _transients;
+	private boolean _trashEnabled;
 	private String _txManager;
 	private List<String> _txRequiredList;
 	private boolean _uuid;

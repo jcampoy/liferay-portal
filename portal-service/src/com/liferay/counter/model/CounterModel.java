@@ -14,6 +14,8 @@
 
 package com.liferay.counter.model;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.CacheModel;
@@ -36,6 +38,7 @@ import java.io.Serializable;
  * @see com.liferay.counter.model.impl.CounterModelImpl
  * @generated
  */
+@ProviderType
 public interface CounterModel extends BaseModel<Counter> {
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -86,41 +89,60 @@ public interface CounterModel extends BaseModel<Counter> {
 	 */
 	public void setCurrentId(long currentId);
 
+	@Override
 	public boolean isNew();
 
+	@Override
 	public void setNew(boolean n);
 
+	@Override
 	public boolean isCachedModel();
 
+	@Override
 	public void setCachedModel(boolean cachedModel);
 
+	@Override
 	public boolean isEscapedModel();
 
+	@Override
 	public Serializable getPrimaryKeyObj();
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj);
 
+	@Override
 	public ExpandoBridge getExpandoBridge();
 
+	@Override
 	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
 
+	@Override
 	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
 
+	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
+	@Override
 	public Object clone();
 
+	@Override
 	public int compareTo(Counter counter);
 
+	@Override
 	public int hashCode();
 
+	@Override
 	public CacheModel<Counter> toCacheModel();
 
+	@Override
 	public Counter toEscapedModel();
 
+	@Override
 	public Counter toUnescapedModel();
 
+	@Override
 	public String toString();
 
+	@Override
 	public String toXmlString();
 }

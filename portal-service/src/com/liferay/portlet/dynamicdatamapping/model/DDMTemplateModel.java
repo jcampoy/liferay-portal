@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.dynamicdatamapping.model;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.LocaleException;
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -44,6 +46,7 @@ import java.util.Map;
  * @see com.liferay.portlet.dynamicdatamapping.model.impl.DDMTemplateModelImpl
  * @generated
  */
+@ProviderType
 public interface DDMTemplateModel extends AttachedModel, BaseModel<DDMTemplate>,
 	StagedGroupedModel {
 	/*
@@ -72,6 +75,7 @@ public interface DDMTemplateModel extends AttachedModel, BaseModel<DDMTemplate>,
 	 * @return the uuid of this d d m template
 	 */
 	@AutoEscape
+	@Override
 	public String getUuid();
 
 	/**
@@ -79,6 +83,7 @@ public interface DDMTemplateModel extends AttachedModel, BaseModel<DDMTemplate>,
 	 *
 	 * @param uuid the uuid of this d d m template
 	 */
+	@Override
 	public void setUuid(String uuid);
 
 	/**
@@ -100,6 +105,7 @@ public interface DDMTemplateModel extends AttachedModel, BaseModel<DDMTemplate>,
 	 *
 	 * @return the group ID of this d d m template
 	 */
+	@Override
 	public long getGroupId();
 
 	/**
@@ -107,6 +113,7 @@ public interface DDMTemplateModel extends AttachedModel, BaseModel<DDMTemplate>,
 	 *
 	 * @param groupId the group ID of this d d m template
 	 */
+	@Override
 	public void setGroupId(long groupId);
 
 	/**
@@ -114,6 +121,7 @@ public interface DDMTemplateModel extends AttachedModel, BaseModel<DDMTemplate>,
 	 *
 	 * @return the company ID of this d d m template
 	 */
+	@Override
 	public long getCompanyId();
 
 	/**
@@ -121,6 +129,7 @@ public interface DDMTemplateModel extends AttachedModel, BaseModel<DDMTemplate>,
 	 *
 	 * @param companyId the company ID of this d d m template
 	 */
+	@Override
 	public void setCompanyId(long companyId);
 
 	/**
@@ -128,6 +137,7 @@ public interface DDMTemplateModel extends AttachedModel, BaseModel<DDMTemplate>,
 	 *
 	 * @return the user ID of this d d m template
 	 */
+	@Override
 	public long getUserId();
 
 	/**
@@ -135,6 +145,7 @@ public interface DDMTemplateModel extends AttachedModel, BaseModel<DDMTemplate>,
 	 *
 	 * @param userId the user ID of this d d m template
 	 */
+	@Override
 	public void setUserId(long userId);
 
 	/**
@@ -143,6 +154,7 @@ public interface DDMTemplateModel extends AttachedModel, BaseModel<DDMTemplate>,
 	 * @return the user uuid of this d d m template
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public String getUserUuid() throws SystemException;
 
 	/**
@@ -150,6 +162,7 @@ public interface DDMTemplateModel extends AttachedModel, BaseModel<DDMTemplate>,
 	 *
 	 * @param userUuid the user uuid of this d d m template
 	 */
+	@Override
 	public void setUserUuid(String userUuid);
 
 	/**
@@ -158,6 +171,7 @@ public interface DDMTemplateModel extends AttachedModel, BaseModel<DDMTemplate>,
 	 * @return the user name of this d d m template
 	 */
 	@AutoEscape
+	@Override
 	public String getUserName();
 
 	/**
@@ -165,6 +179,7 @@ public interface DDMTemplateModel extends AttachedModel, BaseModel<DDMTemplate>,
 	 *
 	 * @param userName the user name of this d d m template
 	 */
+	@Override
 	public void setUserName(String userName);
 
 	/**
@@ -172,6 +187,7 @@ public interface DDMTemplateModel extends AttachedModel, BaseModel<DDMTemplate>,
 	 *
 	 * @return the create date of this d d m template
 	 */
+	@Override
 	public Date getCreateDate();
 
 	/**
@@ -179,6 +195,7 @@ public interface DDMTemplateModel extends AttachedModel, BaseModel<DDMTemplate>,
 	 *
 	 * @param createDate the create date of this d d m template
 	 */
+	@Override
 	public void setCreateDate(Date createDate);
 
 	/**
@@ -186,6 +203,7 @@ public interface DDMTemplateModel extends AttachedModel, BaseModel<DDMTemplate>,
 	 *
 	 * @return the modified date of this d d m template
 	 */
+	@Override
 	public Date getModifiedDate();
 
 	/**
@@ -193,6 +211,7 @@ public interface DDMTemplateModel extends AttachedModel, BaseModel<DDMTemplate>,
 	 *
 	 * @param modifiedDate the modified date of this d d m template
 	 */
+	@Override
 	public void setModifiedDate(Date modifiedDate);
 
 	/**
@@ -200,6 +219,7 @@ public interface DDMTemplateModel extends AttachedModel, BaseModel<DDMTemplate>,
 	 *
 	 * @return the fully qualified class name of this d d m template
 	 */
+	@Override
 	public String getClassName();
 
 	public void setClassName(String className);
@@ -209,6 +229,7 @@ public interface DDMTemplateModel extends AttachedModel, BaseModel<DDMTemplate>,
 	 *
 	 * @return the class name ID of this d d m template
 	 */
+	@Override
 	public long getClassNameId();
 
 	/**
@@ -216,6 +237,7 @@ public interface DDMTemplateModel extends AttachedModel, BaseModel<DDMTemplate>,
 	 *
 	 * @param classNameId the class name ID of this d d m template
 	 */
+	@Override
 	public void setClassNameId(long classNameId);
 
 	/**
@@ -223,6 +245,7 @@ public interface DDMTemplateModel extends AttachedModel, BaseModel<DDMTemplate>,
 	 *
 	 * @return the class p k of this d d m template
 	 */
+	@Override
 	public long getClassPK();
 
 	/**
@@ -230,6 +253,7 @@ public interface DDMTemplateModel extends AttachedModel, BaseModel<DDMTemplate>,
 	 *
 	 * @param classPK the class p k of this d d m template
 	 */
+	@Override
 	public void setClassPK(long classPK);
 
 	/**
@@ -578,44 +602,69 @@ public interface DDMTemplateModel extends AttachedModel, BaseModel<DDMTemplate>,
 	 */
 	public void setSmallImageURL(String smallImageURL);
 
+	@Override
 	public boolean isNew();
 
+	@Override
 	public void setNew(boolean n);
 
+	@Override
 	public boolean isCachedModel();
 
+	@Override
 	public void setCachedModel(boolean cachedModel);
 
+	@Override
 	public boolean isEscapedModel();
 
+	@Override
 	public Serializable getPrimaryKeyObj();
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj);
 
+	@Override
 	public ExpandoBridge getExpandoBridge();
 
+	@Override
 	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
 
+	@Override
 	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
 
+	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
+
+	public String[] getAvailableLanguageIds();
+
+	public String getDefaultLanguageId();
+
+	public void prepareLocalizedFieldsForImport() throws LocaleException;
 
 	public void prepareLocalizedFieldsForImport(Locale defaultImportLocale)
 		throws LocaleException;
 
+	@Override
 	public Object clone();
 
+	@Override
 	public int compareTo(DDMTemplate ddmTemplate);
 
+	@Override
 	public int hashCode();
 
+	@Override
 	public CacheModel<DDMTemplate> toCacheModel();
 
+	@Override
 	public DDMTemplate toEscapedModel();
 
+	@Override
 	public DDMTemplate toUnescapedModel();
 
+	@Override
 	public String toString();
 
+	@Override
 	public String toXmlString();
 }

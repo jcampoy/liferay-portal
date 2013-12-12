@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.softwarecatalog.model;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.service.ServiceContext;
@@ -35,6 +37,7 @@ import java.io.Serializable;
  * @see com.liferay.portlet.softwarecatalog.model.impl.SCProductScreenshotModelImpl
  * @generated
  */
+@ProviderType
 public interface SCProductScreenshotModel extends BaseModel<SCProductScreenshot> {
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -154,41 +157,60 @@ public interface SCProductScreenshotModel extends BaseModel<SCProductScreenshot>
 	 */
 	public void setPriority(int priority);
 
+	@Override
 	public boolean isNew();
 
+	@Override
 	public void setNew(boolean n);
 
+	@Override
 	public boolean isCachedModel();
 
+	@Override
 	public void setCachedModel(boolean cachedModel);
 
+	@Override
 	public boolean isEscapedModel();
 
+	@Override
 	public Serializable getPrimaryKeyObj();
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj);
 
+	@Override
 	public ExpandoBridge getExpandoBridge();
 
+	@Override
 	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
 
+	@Override
 	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
 
+	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
+	@Override
 	public Object clone();
 
+	@Override
 	public int compareTo(SCProductScreenshot scProductScreenshot);
 
+	@Override
 	public int hashCode();
 
+	@Override
 	public CacheModel<SCProductScreenshot> toCacheModel();
 
+	@Override
 	public SCProductScreenshot toEscapedModel();
 
+	@Override
 	public SCProductScreenshot toUnescapedModel();
 
+	@Override
 	public String toString();
 
+	@Override
 	public String toXmlString();
 }

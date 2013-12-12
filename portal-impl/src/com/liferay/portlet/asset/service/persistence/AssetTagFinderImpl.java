@@ -28,8 +28,10 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.asset.NoSuchTagException;
 import com.liferay.portlet.asset.model.AssetTag;
+import com.liferay.portlet.asset.model.AssetTagConstants;
 import com.liferay.portlet.asset.model.impl.AssetTagImpl;
 import com.liferay.util.dao.orm.CustomSQLUtil;
 
@@ -65,30 +67,35 @@ public class AssetTagFinderImpl
 	public static final String FIND_BY_G_N_S_E =
 			AssetTagFinder.class.getName() + ".findByG_N_S_E";
 
+	@Override
 	public int countByG_C_N(long groupId, long classNameId, String name)
 		throws SystemException {
 
 		return doCountByG_C_N(groupId, classNameId, name, false);
 	}
 
+	@Override
 	public int countByG_N_P(long groupId, String name, String[] tagProperties)
 		throws SystemException {
 
 		return doCountByG_N_P(groupId, name, tagProperties, false);
 	}
 
+	@Override
 	public int filterCountByG_N(long groupId, String name)
 		throws SystemException {
 
 		return doCountByG_N(groupId, name, true);
 	}
 
+	@Override
 	public int filterCountByG_C_N(long groupId, long classNameId, String name)
 		throws SystemException {
 
 		return doCountByG_C_N(groupId, classNameId, name, true);
 	}
 
+	@Override
 	public int filterCountByG_N_P(
 			long groupId, String name, String[] tagProperties)
 		throws SystemException {
@@ -96,12 +103,14 @@ public class AssetTagFinderImpl
 		return doCountByG_N_P(groupId, name, tagProperties, true);
 	}
 
+	@Override
 	public AssetTag filterFindByG_N(long groupId, String name)
 		throws NoSuchTagException, SystemException {
 
 		return doFindByG_N(groupId, name, true);
 	}
 
+	@Override
 	public List<AssetTag> filterFindByG_C_N(
 			long groupId, long classNameId, String name, int start, int end,
 			OrderByComparator obc)
@@ -110,6 +119,7 @@ public class AssetTagFinderImpl
 		return doFindByG_C_N(groupId, classNameId, name, start, end, obc, true);
 	}
 
+	@Override
 	public List<AssetTag> filterFindByG_N_P(
 			long[] groupIds, String name, String[] tagProperties, int start,
 			int end, OrderByComparator obc)
@@ -119,12 +129,14 @@ public class AssetTagFinderImpl
 			groupIds, name, tagProperties, start, end, obc, true);
 	}
 
+	@Override
 	public AssetTag findByG_N(long groupId, String name)
 		throws NoSuchTagException, SystemException {
 
 		return doFindByG_N(groupId, name, false);
 	}
 
+	@Override
 	public List<AssetTag> findByG_C_N(
 			long groupId, long classNameId, String name, int start, int end,
 			OrderByComparator obc)
@@ -134,6 +146,7 @@ public class AssetTagFinderImpl
 			groupId, classNameId, name, start, end, obc, false);
 	}
 
+	@Override
 	public List<AssetTag> findByG_N_P(
 			long[] groupIds, String name, String[] tagProperties, int start,
 			int end, OrderByComparator obc)
@@ -143,6 +156,7 @@ public class AssetTagFinderImpl
 			groupIds, name, tagProperties, start, end, obc, false);
 	}
 
+	@Override
 	public List<AssetTag> findByG_N_S_E(
 			long groupId, String name, int startPeriod, int endPeriod,
 			int periodLength)
@@ -204,7 +218,8 @@ public class AssetTagFinderImpl
 
 			if (inlineSQLHelper) {
 				sql = InlineSQLHelperUtil.replacePermissionCheck(
-					sql, AssetTag.class.getName(), "AssetTag.tagId", groupId);
+					sql, AssetTag.class.getName(), "AssetTag.tagId",
+					PortalUtil.getSiteGroupId(groupId));
 			}
 
 			SQLQuery q = session.createSQLQuery(sql);
@@ -250,10 +265,11 @@ public class AssetTagFinderImpl
 
 			if (inlineSQLHelper) {
 				sql = InlineSQLHelperUtil.replacePermissionCheck(
-					sql, AssetTag.class.getName(), "AssetTag.tagId", groupId);
+					sql, AssetTag.class.getName(), "AssetTag.tagId",
+					PortalUtil.getSiteGroupId(groupId));
 			}
 
-			SQLQuery q = session.createSQLQuery(sql);
+			SQLQuery q = session.createSynchronizedSQLQuery(sql);
 
 			q.addScalar(COUNT_COLUMN_NAME, Type.LONG);
 
@@ -339,7 +355,7 @@ public class AssetTagFinderImpl
 			long groupId, String name, boolean inlineSQLHelper)
 		throws NoSuchTagException, SystemException {
 
-		name = name.trim().toLowerCase();
+		name = StringUtil.toLowerCase(name.trim());
 
 		Session session = null;
 
@@ -403,7 +419,8 @@ public class AssetTagFinderImpl
 
 			if (inlineSQLHelper) {
 				sql = InlineSQLHelperUtil.replacePermissionCheck(
-					sql, AssetTag.class.getName(), "AssetTag.tagId", groupId);
+					sql, AssetTag.class.getName(), "AssetTag.tagId",
+					PortalUtil.getSiteGroupId(groupId));
 			}
 
 			SQLQuery q = session.createSQLQuery(sql);
@@ -497,29 +514,33 @@ public class AssetTagFinderImpl
 		if (tagProperties.length == 0) {
 			return StringPool.BLANK;
 		}
-		else {
-			StringBundler sb = new StringBundler(tagProperties.length * 3 + 1);
 
-			sb.append(" INNER JOIN AssetTagProperty ON ");
-			sb.append(" (AssetTagProperty.tagId = AssetTag.tagId) AND ");
+		StringBundler sb = new StringBundler(tagProperties.length * 3 + 1);
 
-			for (int i = 0; i < tagProperties.length; i++) {
-				sb.append("(AssetTagProperty.key_ = ? AND ");
-				sb.append("AssetTagProperty.value = ?) ");
+		sb.append(" INNER JOIN AssetTagProperty ON ");
+		sb.append(" (AssetTagProperty.tagId = AssetTag.tagId) AND ");
 
-				if ((i + 1) < tagProperties.length) {
-					sb.append(" AND ");
-				}
+		for (int i = 0; i < tagProperties.length; i++) {
+			sb.append("(AssetTagProperty.key_ = ? AND ");
+			sb.append("AssetTagProperty.value = ?) ");
+
+			if ((i + 1) < tagProperties.length) {
+				sb.append(" AND ");
 			}
-
-			return sb.toString();
 		}
+
+		return sb.toString();
 	}
 
 	protected void setJoin(QueryPos qPos, String[] tagProperties) {
 		for (String tagProperty : tagProperties) {
 			String[] tagPropertyParts = StringUtil.split(
-				tagProperty, CharPool.COLON);
+				tagProperty, AssetTagConstants.PROPERTY_KEY_VALUE_SEPARATOR);
+
+			if (tagPropertyParts.length <= 1) {
+				tagPropertyParts = StringUtil.split(
+					tagProperty, CharPool.COLON);
+			}
 
 			String key = StringPool.BLANK;
 

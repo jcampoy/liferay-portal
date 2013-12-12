@@ -1,3 +1,5 @@
+@import "compass";
+
 .portlet-asset-publisher, .portlet-message-boards, .portlet-trash {
 	.category-buttons {
 		clear: both;
@@ -6,51 +8,13 @@
 
 	.category-subscriptions {
 		clear: both;
+		margin-bottom: 1em;
 		overflow: hidden;
 	}
 
 	.category-subscription-types {
 		float: right;
-	}
-
-	.subscription-breadcrumbs {
-		color: #999;
-
-		li {
-			background: url(@theme_image_path@/arrows/10_right.png) no-repeat 100% 50%;
-			display: inline-block;
-			margin-right: 3px;
-			padding-right: 10px;
-
-			&.last {
-				background-image: none;
-				display: block;
-				font-size: 1.4em;
-			}
-
-			a {
-				text-decoration: none;
-
-				&:hover {
-					text-decoration: underline;
-				}
-			}
-		}
-	}
-
-	.code {
-		background: #FFF;
-		border: 1px solid #777;
-		font-family: monospace;
-		overflow-x: auto;
-		white-space: pre;
-	}
-
-	.code-lines {
-		border-right: 1px solid #CCC;
-		color: #000;
-		margin-right: 5px;
-		padding: 0px 5px 0px 5px;
+		margin-bottom: 0;
 	}
 
 	.quote {
@@ -112,10 +76,15 @@
 	.message-container {
 		border: 1px solid #CCC;
 		margin: 5px 0 0 0;
+		overflow: auto;
 
 		table {
 			border-collapse: collapse;
 			table-layout: fixed;
+		}
+
+		.lfr-code table {
+			table-layout: auto;
 		}
 
 		td {
@@ -175,11 +144,6 @@
 
 	.taglib-custom-attributes-list {
 		margin-bottom: 1em;
-
-		label {
-			display: block;
-			font-weight: bold;
-		}
 	}
 
 	.message-boards-panels {
@@ -255,6 +219,7 @@
 
 	.toggle_id_message_boards_view_message_thread {
 		border: 1px solid #CCC;
+		clear: both;
 		margin: 5px 0 0 0;
 		width: 100%;
 	}
@@ -284,6 +249,7 @@
 
 	.message-container .thread-message-view, .thread-view {
 		border-collapse: collapse;
+		min-width: 400px;
 		padding: 0;
 		width: 100%;
 	}
@@ -324,6 +290,16 @@
 		}
 	}
 
+	.category-title {
+		@include ellipsis;
+
+		font-weight: bold;
+	}
+
+	.category-description {
+		@include hyphenation;
+	}
+
 	.subcategories {
 		text-decoration: underline;
 	}
@@ -334,17 +310,13 @@
 	}
 
 	.threads-panel {
-		margin-top: 2em;
+		margin-top: 1em;
 	}
 
 	.displayStyle-question {
 		.action-question {
 			.taglib-text {
 				display: none;
-			}
-
-			.lfr-actions .lfr-trigger strong {
-				min-width: 0;
 			}
 		}
 
@@ -397,11 +369,6 @@
 		}
 	}
 
-	.top-links .category-search {
-		float: right;
-		margin: 0 0 0.5em 0.5em;
-	}
-
 	.search-root-entry {
 		color: #999;
 		float: right;
@@ -428,19 +395,17 @@
 	}
 }
 
+.ie8 {
+	.question-details {
+		white-space: normal;
+	}
+}
+
 .trash-restore-popup {
-	.aui-form {
+	.form {
 		fieldset {
 			margin-bottom: 0;
 			padding: 0 15px;
 		}
-
-		.new-file-name .aui-field-input {
-			width: 100%;
-		}
-	}
-
-	.portlet-msg-alert {
-		margin: 10px 0;
 	}
 }

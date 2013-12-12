@@ -14,15 +14,18 @@
 
 package com.liferay.portlet.dynamicdatamapping.service;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
 
 /**
- * The utility for the d d m structure remote service. This utility wraps {@link com.liferay.portlet.dynamicdatamapping.service.impl.DDMStructureServiceImpl} and is the primary access point for service operations in application layer code running on a remote server.
- *
- * <p>
- * This is a remote service. Methods of this service are expected to have security checks based on the propagated JAAS credentials because this service can be accessed remotely.
- * </p>
+ * Provides the remote service utility for DDMStructure. This utility wraps
+ * {@link com.liferay.portlet.dynamicdatamapping.service.impl.DDMStructureServiceImpl} and is the
+ * primary access point for service operations in application layer code running
+ * on a remote server. Methods of this service are expected to have security
+ * checks based on the propagated JAAS credentials because this service can be
+ * accessed remotely.
  *
  * @author Brian Wing Shun Chan
  * @see DDMStructureService
@@ -30,6 +33,7 @@ import com.liferay.portal.kernel.util.ReferenceRegistry;
  * @see com.liferay.portlet.dynamicdatamapping.service.impl.DDMStructureServiceImpl
  * @generated
  */
+@ProviderType
 public class DDMStructureServiceUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

@@ -37,11 +37,11 @@
 		</table>
 	</c:if>
 
-	<div id="<portlet:namespace />note"><%= StringUtil.replace(HtmlUtil.escape(data), "&lt;br /&gt;", "<br />") %></div>
+	<div class="note-content" id="<portlet:namespace />note"><%= StringUtil.replace(HtmlUtil.escape(data), "&lt;br /&gt;", "<br />") %></div>
 </div>
 
 <c:if test="<%= portletDisplay.isShowConfigurationIcon() %>">
-	<aui:script use="aui-editable,aui-io-request">
+	<aui:script use="aui-editable-deprecated,aui-io-request">
 		var quickNotePad = A.one('#<portlet:namespace />pad');
 
 		if (quickNotePad) {

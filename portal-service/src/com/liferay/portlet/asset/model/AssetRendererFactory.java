@@ -27,6 +27,7 @@ import java.util.Map;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
+import javax.portlet.WindowState;
 
 /**
  * @author Jorge Ferrer
@@ -82,6 +83,11 @@ public interface AssetRendererFactory {
 			LiferayPortletResponse liferayPortletResponse)
 		throws PortalException, SystemException;
 
+	public PortletURL getURLView(
+			LiferayPortletResponse liferayPortletResponse,
+			WindowState windowState)
+		throws PortalException, SystemException;
+
 	public boolean hasClassTypeFieldNames(long classTypeId, Locale locale)
 		throws Exception;
 
@@ -89,6 +95,8 @@ public interface AssetRendererFactory {
 			PermissionChecker permissionChecker, long entryClassPK,
 			String actionId)
 		throws Exception;
+
+	public boolean isActive(long companyId);
 
 	public boolean isCategorizable();
 

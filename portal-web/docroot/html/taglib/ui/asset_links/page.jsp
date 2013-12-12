@@ -51,6 +51,10 @@ if (assetEntryId > 0) {
 
 				AssetRendererFactory assetRendererFactory = AssetRendererFactoryRegistryUtil.getAssetRendererFactoryByClassName(PortalUtil.getClassName(assetLinkEntry.getClassNameId()));
 
+				if (!assetRendererFactory.isActive(company.getCompanyId())) {
+					continue;
+				}
+
 				AssetRenderer assetRenderer = assetRendererFactory.getAssetRenderer(assetLinkEntry.getClassPK());
 
 				if (assetRenderer.hasViewPermission(permissionChecker)) {
@@ -59,6 +63,7 @@ if (assetEntryId > 0) {
 					LiferayPortletURL assetPublisherURL = new PortletURLImpl(request, PortletKeys.ASSET_PUBLISHER, plid, PortletRequest.RENDER_PHASE);
 
 					assetPublisherURL.setParameter("struts_action", "/asset_publisher/view_content");
+					assetPublisherURL.setParameter("redirect", currentURL);
 					assetPublisherURL.setParameter("assetEntryId", String.valueOf(assetLinkEntry.getEntryId()));
 					assetPublisherURL.setParameter("type", assetRendererFactory.getType());
 
@@ -77,6 +82,8 @@ if (assetEntryId > 0) {
 					viewFullContentURLString = HttpUtil.setParameter(viewFullContentURLString, "redirect", currentURL);
 
 					String urlViewInContext = assetRenderer.getURLViewInContext((LiferayPortletRequest)portletRequest, (LiferayPortletResponse)portletResponse, viewFullContentURLString);
+
+					urlViewInContext = HttpUtil.setParameter(urlViewInContext, "inheritRedirect", true);
 			%>
 
 					<li class="asset-links-list-item">

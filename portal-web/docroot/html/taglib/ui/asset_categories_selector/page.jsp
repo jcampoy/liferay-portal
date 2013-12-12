@@ -72,7 +72,7 @@ if (Validator.isNotNull(className)) {
 
 		String curCategoryIdsParam = request.getParameter(hiddenInput + StringPool.UNDERLINE + vocabulary.getVocabularyId());
 
-		if (curCategoryIdsParam != null) {
+		if (Validator.isNotNull(curCategoryIdsParam)) {
 			curCategoryIds = curCategoryIdsParam;
 			curCategoryNames = StringPool.BLANK;
 		}
@@ -80,8 +80,8 @@ if (Validator.isNotNull(className)) {
 		String[] categoryIdsTitles = _getCategoryIdsTitles(curCategoryIds, curCategoryNames, vocabulary.getVocabularyId(), themeDisplay);
 	%>
 
-		<span class="aui-field-content">
-			<label class="aui-field-label" id="<%= namespace %>assetCategoriesLabel_<%= vocabulary.getVocabularyId() %>">
+		<span class="field-content">
+			<label id="<%= namespace %>assetCategoriesLabel_<%= vocabulary.getVocabularyId() %>">
 				<%= vocabulary.getTitle(locale) %>
 
 				<c:if test="<%= vocabulary.getGroupId() == themeDisplay.getCompanyGroupId() %>">
@@ -89,7 +89,7 @@ if (Validator.isNotNull(className)) {
 				</c:if>
 
 				<c:if test="<%= vocabulary.isRequired(classNameId) %>">
-					<span class="aui-label-required">(<liferay-ui:message key="required" />)</span>
+					<span class="label-required">(<liferay-ui:message key="required" />)</span>
 				</c:if>
 			</label>
 
@@ -109,6 +109,7 @@ if (Validator.isNotNull(className)) {
 					instanceVar: '<%= namespace + randomNamespace %>',
 					labelNode: '#<%= namespace %>assetCategoriesLabel_<%= vocabulary.getVocabularyId() %>',
 					maxEntries: <%= maxEntries %>,
+					moreResultsLabel: '<%= UnicodeLanguageUtil.get(pageContext, "load-more-results") %>',
 					portalModelResource: <%= Validator.isNotNull(className) && (ResourceActionsUtil.isPortalModelResource(className) || className.equals(Group.class.getName())) %>,
 					singleSelect: <%= !vocabulary.isMultiValued() %>,
 					title: '<%= UnicodeLanguageUtil.format(pageContext, "select-x", vocabulary.getTitle(locale)) %>',
@@ -145,6 +146,7 @@ else {
 				hiddenInput: '#<%= namespace + hiddenInput %>',
 				instanceVar: '<%= namespace + randomNamespace %>',
 				maxEntries: <%= maxEntries %>,
+				moreResultsLabel: '<%= UnicodeLanguageUtil.get(pageContext, "load-more-results") %>',
 				portalModelResource: <%= Validator.isNotNull(className) && (ResourceActionsUtil.isPortalModelResource(className) || className.equals(Group.class.getName())) %>,
 				vocabularyGroupIds: '<%= vocabularyGroupIds.toString() %>',
 				vocabularyIds: '<%= ListUtil.toString(vocabularies, "vocabularyId") %>'
@@ -206,7 +208,7 @@ private String[] _getCategoryIdsTitles(String categoryIds, String categoryNames,
 				categoryNamesSb.append(_CATEGORY_SEPARATOR);
 			}
 
-			if(categoryIdsSb.index() > 0){
+			if (categoryIdsSb.index() > 0) {
 				categoryIdsSb.setIndex(categoryIdsSb.index() - 1);
 				categoryNamesSb.setIndex(categoryNamesSb.index() - 1);
 

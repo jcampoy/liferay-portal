@@ -112,6 +112,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @return the matching social activity settings
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialActivitySetting> findByGroupId(long groupId)
 		throws SystemException {
 		return findByGroupId(groupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
@@ -130,6 +131,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @return the range of matching social activity settings
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialActivitySetting> findByGroupId(long groupId, int start,
 		int end) throws SystemException {
 		return findByGroupId(groupId, start, end, null);
@@ -149,6 +151,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @return the ordered range of matching social activity settings
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialActivitySetting> findByGroupId(long groupId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -255,6 +258,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialActivitySetting findByGroupId_First(long groupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchActivitySettingException, SystemException {
@@ -285,6 +289,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @return the first matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialActivitySetting fetchByGroupId_First(long groupId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<SocialActivitySetting> list = findByGroupId(groupId, 0, 1,
@@ -306,6 +311,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialActivitySetting findByGroupId_Last(long groupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchActivitySettingException, SystemException {
@@ -336,9 +342,14 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @return the last matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialActivitySetting fetchByGroupId_Last(long groupId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByGroupId(groupId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<SocialActivitySetting> list = findByGroupId(groupId, count - 1,
 				count, orderByComparator);
@@ -360,6 +371,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a social activity setting with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialActivitySetting[] findByGroupId_PrevAndNext(
 		long activitySettingId, long groupId,
 		OrderByComparator orderByComparator)
@@ -502,6 +514,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @param groupId the group ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByGroupId(long groupId) throws SystemException {
 		for (SocialActivitySetting socialActivitySetting : findByGroupId(
 				groupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
@@ -516,6 +529,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @return the number of matching social activity settings
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByGroupId(long groupId) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_GROUPID;
 
@@ -592,6 +606,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @return the matching social activity settings
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialActivitySetting> findByG_C(long groupId, long classNameId)
 		throws SystemException {
 		return findByG_C(groupId, classNameId, QueryUtil.ALL_POS,
@@ -612,6 +627,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @return the range of matching social activity settings
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialActivitySetting> findByG_C(long groupId,
 		long classNameId, int start, int end) throws SystemException {
 		return findByG_C(groupId, classNameId, start, end, null);
@@ -632,6 +648,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @return the ordered range of matching social activity settings
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialActivitySetting> findByG_C(long groupId,
 		long classNameId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
@@ -749,6 +766,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialActivitySetting findByG_C_First(long groupId,
 		long classNameId, OrderByComparator orderByComparator)
 		throws NoSuchActivitySettingException, SystemException {
@@ -783,6 +801,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @return the first matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialActivitySetting fetchByG_C_First(long groupId,
 		long classNameId, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -806,6 +825,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialActivitySetting findByG_C_Last(long groupId, long classNameId,
 		OrderByComparator orderByComparator)
 		throws NoSuchActivitySettingException, SystemException {
@@ -840,10 +860,15 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @return the last matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialActivitySetting fetchByG_C_Last(long groupId,
 		long classNameId, OrderByComparator orderByComparator)
 		throws SystemException {
 		int count = countByG_C(groupId, classNameId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<SocialActivitySetting> list = findByG_C(groupId, classNameId,
 				count - 1, count, orderByComparator);
@@ -866,6 +891,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a social activity setting with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialActivitySetting[] findByG_C_PrevAndNext(
 		long activitySettingId, long groupId, long classNameId,
 		OrderByComparator orderByComparator)
@@ -1013,6 +1039,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @param classNameId the class name ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByG_C(long groupId, long classNameId)
 		throws SystemException {
 		for (SocialActivitySetting socialActivitySetting : findByG_C(groupId,
@@ -1029,6 +1056,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @return the number of matching social activity settings
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByG_C(long groupId, long classNameId)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_C;
@@ -1111,6 +1139,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @return the matching social activity settings
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialActivitySetting> findByG_A(long groupId, int activityType)
 		throws SystemException {
 		return findByG_A(groupId, activityType, QueryUtil.ALL_POS,
@@ -1131,6 +1160,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @return the range of matching social activity settings
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialActivitySetting> findByG_A(long groupId,
 		int activityType, int start, int end) throws SystemException {
 		return findByG_A(groupId, activityType, start, end, null);
@@ -1151,6 +1181,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @return the ordered range of matching social activity settings
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialActivitySetting> findByG_A(long groupId,
 		int activityType, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
@@ -1268,6 +1299,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialActivitySetting findByG_A_First(long groupId,
 		int activityType, OrderByComparator orderByComparator)
 		throws NoSuchActivitySettingException, SystemException {
@@ -1302,6 +1334,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @return the first matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialActivitySetting fetchByG_A_First(long groupId,
 		int activityType, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -1325,6 +1358,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialActivitySetting findByG_A_Last(long groupId, int activityType,
 		OrderByComparator orderByComparator)
 		throws NoSuchActivitySettingException, SystemException {
@@ -1359,10 +1393,15 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @return the last matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialActivitySetting fetchByG_A_Last(long groupId,
 		int activityType, OrderByComparator orderByComparator)
 		throws SystemException {
 		int count = countByG_A(groupId, activityType);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<SocialActivitySetting> list = findByG_A(groupId, activityType,
 				count - 1, count, orderByComparator);
@@ -1385,6 +1424,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a social activity setting with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialActivitySetting[] findByG_A_PrevAndNext(
 		long activitySettingId, long groupId, int activityType,
 		OrderByComparator orderByComparator)
@@ -1532,6 +1572,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @param activityType the activity type
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByG_A(long groupId, int activityType)
 		throws SystemException {
 		for (SocialActivitySetting socialActivitySetting : findByG_A(groupId,
@@ -1548,6 +1589,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @return the number of matching social activity settings
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByG_A(long groupId, int activityType)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_A;
@@ -1639,6 +1681,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @return the matching social activity settings
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialActivitySetting> findByG_C_A(long groupId,
 		long classNameId, int activityType) throws SystemException {
 		return findByG_C_A(groupId, classNameId, activityType,
@@ -1660,6 +1703,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @return the range of matching social activity settings
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialActivitySetting> findByG_C_A(long groupId,
 		long classNameId, int activityType, int start, int end)
 		throws SystemException {
@@ -1682,6 +1726,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @return the ordered range of matching social activity settings
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialActivitySetting> findByG_C_A(long groupId,
 		long classNameId, int activityType, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
@@ -1805,6 +1850,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialActivitySetting findByG_C_A_First(long groupId,
 		long classNameId, int activityType, OrderByComparator orderByComparator)
 		throws NoSuchActivitySettingException, SystemException {
@@ -1843,6 +1889,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @return the first matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialActivitySetting fetchByG_C_A_First(long groupId,
 		long classNameId, int activityType, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -1867,6 +1914,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialActivitySetting findByG_C_A_Last(long groupId,
 		long classNameId, int activityType, OrderByComparator orderByComparator)
 		throws NoSuchActivitySettingException, SystemException {
@@ -1905,10 +1953,15 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @return the last matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialActivitySetting fetchByG_C_A_Last(long groupId,
 		long classNameId, int activityType, OrderByComparator orderByComparator)
 		throws SystemException {
 		int count = countByG_C_A(groupId, classNameId, activityType);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<SocialActivitySetting> list = findByG_C_A(groupId, classNameId,
 				activityType, count - 1, count, orderByComparator);
@@ -1932,6 +1985,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a social activity setting with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialActivitySetting[] findByG_C_A_PrevAndNext(
 		long activitySettingId, long groupId, long classNameId,
 		int activityType, OrderByComparator orderByComparator)
@@ -2085,6 +2139,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @param activityType the activity type
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByG_C_A(long groupId, long classNameId, int activityType)
 		throws SystemException {
 		for (SocialActivitySetting socialActivitySetting : findByG_C_A(
@@ -2103,6 +2158,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @return the number of matching social activity settings
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByG_C_A(long groupId, long classNameId, int activityType)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_C_A;
@@ -2191,6 +2247,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialActivitySetting findByG_C_A_N(long groupId, long classNameId,
 		int activityType, String name)
 		throws NoSuchActivitySettingException, SystemException {
@@ -2236,6 +2293,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @return the matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialActivitySetting fetchByG_C_A_N(long groupId, long classNameId,
 		int activityType, String name) throws SystemException {
 		return fetchByG_C_A_N(groupId, classNameId, activityType, name, true);
@@ -2252,6 +2310,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @return the matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialActivitySetting fetchByG_C_A_N(long groupId, long classNameId,
 		int activityType, String name, boolean retrieveFromCache)
 		throws SystemException {
@@ -2382,6 +2441,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @return the social activity setting that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialActivitySetting removeByG_C_A_N(long groupId,
 		long classNameId, int activityType, String name)
 		throws NoSuchActivitySettingException, SystemException {
@@ -2401,6 +2461,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @return the number of matching social activity settings
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByG_C_A_N(long groupId, long classNameId, int activityType,
 		String name) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_C_A_N;
@@ -2482,11 +2543,16 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	private static final String _FINDER_COLUMN_G_C_A_N_NAME_2 = "socialActivitySetting.name = ?";
 	private static final String _FINDER_COLUMN_G_C_A_N_NAME_3 = "(socialActivitySetting.name IS NULL OR socialActivitySetting.name = '')";
 
+	public SocialActivitySettingPersistenceImpl() {
+		setModelClass(SocialActivitySetting.class);
+	}
+
 	/**
 	 * Caches the social activity setting in the entity cache if it is enabled.
 	 *
 	 * @param socialActivitySetting the social activity setting
 	 */
+	@Override
 	public void cacheResult(SocialActivitySetting socialActivitySetting) {
 		EntityCacheUtil.putResult(SocialActivitySettingModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivitySettingImpl.class,
@@ -2508,6 +2574,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 *
 	 * @param socialActivitySettings the social activity settings
 	 */
+	@Override
 	public void cacheResult(List<SocialActivitySetting> socialActivitySettings) {
 		for (SocialActivitySetting socialActivitySetting : socialActivitySettings) {
 			if (EntityCacheUtil.getResult(
@@ -2644,6 +2711,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @param activitySettingId the primary key for the new social activity setting
 	 * @return the new social activity setting
 	 */
+	@Override
 	public SocialActivitySetting create(long activitySettingId) {
 		SocialActivitySetting socialActivitySetting = new SocialActivitySettingImpl();
 
@@ -2661,6 +2729,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a social activity setting with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialActivitySetting remove(long activitySettingId)
 		throws NoSuchActivitySettingException, SystemException {
 		return remove((Serializable)activitySettingId);
@@ -2868,6 +2937,8 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 		clearUniqueFindersCache(socialActivitySetting);
 		cacheUniqueFindersCache(socialActivitySetting);
 
+		socialActivitySetting.resetOriginalValues();
+
 		return socialActivitySetting;
 	}
 
@@ -2926,6 +2997,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a social activity setting with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialActivitySetting findByPrimaryKey(long activitySettingId)
 		throws NoSuchActivitySettingException, SystemException {
 		return findByPrimaryKey((Serializable)activitySettingId);
@@ -2987,6 +3059,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @return the social activity setting, or <code>null</code> if a social activity setting with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public SocialActivitySetting fetchByPrimaryKey(long activitySettingId)
 		throws SystemException {
 		return fetchByPrimaryKey((Serializable)activitySettingId);
@@ -2998,6 +3071,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @return the social activity settings
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialActivitySetting> findAll() throws SystemException {
 		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
@@ -3014,6 +3088,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @return the range of social activity settings
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialActivitySetting> findAll(int start, int end)
 		throws SystemException {
 		return findAll(start, end, null);
@@ -3032,6 +3107,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @return the ordered range of social activity settings
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<SocialActivitySetting> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -3117,6 +3193,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 *
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeAll() throws SystemException {
 		for (SocialActivitySetting socialActivitySetting : findAll()) {
 			remove(socialActivitySetting);
@@ -3129,6 +3206,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 * @return the number of social activity settings
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countAll() throws SystemException {
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
 				FINDER_ARGS_EMPTY, this);
@@ -3215,6 +3293,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 
 	private static CacheModel<SocialActivitySetting> _nullSocialActivitySettingCacheModel =
 		new CacheModel<SocialActivitySetting>() {
+			@Override
 			public SocialActivitySetting toEntityModel() {
 				return _nullSocialActivitySetting;
 			}

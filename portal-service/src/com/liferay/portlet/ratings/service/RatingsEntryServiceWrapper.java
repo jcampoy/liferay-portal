@@ -14,17 +14,18 @@
 
 package com.liferay.portlet.ratings.service;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.service.ServiceWrapper;
 
 /**
- * <p>
- * This class is a wrapper for {@link RatingsEntryService}.
- * </p>
+ * Provides a wrapper for {@link RatingsEntryService}.
  *
- * @author    Brian Wing Shun Chan
- * @see       RatingsEntryService
+ * @author Brian Wing Shun Chan
+ * @see RatingsEntryService
  * @generated
  */
+@ProviderType
 public class RatingsEntryServiceWrapper implements RatingsEntryService,
 	ServiceWrapper<RatingsEntryService> {
 	public RatingsEntryServiceWrapper(RatingsEntryService ratingsEntryService) {
@@ -36,6 +37,7 @@ public class RatingsEntryServiceWrapper implements RatingsEntryService,
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _ratingsEntryService.getBeanIdentifier();
 	}
@@ -45,16 +47,19 @@ public class RatingsEntryServiceWrapper implements RatingsEntryService,
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_ratingsEntryService.setBeanIdentifier(beanIdentifier);
 	}
 
+	@Override
 	public void deleteEntry(java.lang.String className, long classPK)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		_ratingsEntryService.deleteEntry(className, classPK);
 	}
 
+	@Override
 	public com.liferay.portlet.ratings.model.RatingsEntry updateEntry(
 		java.lang.String className, long classPK, double score)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -77,10 +82,12 @@ public class RatingsEntryServiceWrapper implements RatingsEntryService,
 		_ratingsEntryService = ratingsEntryService;
 	}
 
+	@Override
 	public RatingsEntryService getWrappedService() {
 		return _ratingsEntryService;
 	}
 
+	@Override
 	public void setWrappedService(RatingsEntryService ratingsEntryService) {
 		_ratingsEntryService = ratingsEntryService;
 	}

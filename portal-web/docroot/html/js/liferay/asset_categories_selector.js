@@ -58,6 +58,7 @@ AUI.add(
 		 *
 		 * Optional
 		 * maxEntries {Number}: The maximum number of entries that will be loaded. The default value is -1, which will load all categories.
+		 * moreResultsLabel {String}: The localized label for link "Load more results".
 		 * portalModelResource {boolean}: Whether the asset model is on the portal level.
 		 */
 
@@ -98,11 +99,16 @@ AUI.add(
 						validator: Lang.isNumber,
 						value: -1
 					},
+					moreResultsLabel: {
+						validator: '_isValidString',
+						value: Liferay.Language.get('load-more-results')
+					},
 					singleSelect: {
 						validator: Lang.isBoolean,
 						value: false
 					},
 					title: {
+						validator: '_isValidString',
 						value: Liferay.Language.get('select-categories')
 					},
 					vocabularyIds: {
@@ -146,7 +152,7 @@ AUI.add(
 
 						instance._renderIcons();
 
-						instance.inputContainer.addClass('aui-helper-hidden-accessible');
+						instance.inputContainer.addClass('hide-accessible');
 
 						instance._applyARIARoles();
 					},
@@ -287,7 +293,7 @@ AUI.add(
 										vocabularyIds: vocabularyIds,
 
 										'$categoriesCount = /assetcategory/get-vocabulary-categories-count': {
-											'groupId': themeDisplay.getScopeGroupId(),
+											'@groupId': '$vocabularies.groupId',
 											'@vocabularyId': '$vocabularies.vocabularyId'
 										}
 									}
@@ -364,7 +370,7 @@ AUI.add(
 								processSearchResults
 							);
 
-							var input = popup.searchField.get('node');
+							var input = popup.searchField;
 
 							input.on('keyup', searchCategoriesTask);
 
@@ -378,6 +384,12 @@ AUI.add(
 						popup.entriesNode.append(searchResults);
 
 						instance._searchBuffer = [];
+					},
+
+					_isValidString: function(value) {
+						var instance = this;
+
+						return Lang.isString(value) && value.length;
 					},
 
 					_onBoundingBoxClick: EMPTY_FN,
@@ -408,6 +420,8 @@ AUI.add(
 						};
 
 						entry[matchKey] = entryMatchKey;
+
+						entry.value = A.Lang.String.unescapeHTML(entry.value);
 
 						instance.entries.add(entry);
 					},
@@ -512,12 +526,11 @@ AUI.add(
 							{
 								children: [
 									{
-										handler: {
-											context: instance,
-											fn: instance._showSelectPopup
-										},
-										icon: 'search',
+										icon: 'icon-search',
 										label: Liferay.Language.get('select'),
+										on: {
+											click: A.bind('_showSelectPopup', instance)
+										},
 										title: instance.get('title')
 									}
 								]
@@ -571,7 +584,7 @@ AUI.add(
 
 						var popup = instance._popup;
 
-						popup.set('title', Liferay.Language.get('categories'));
+						popup.titleNode.html(Liferay.Language.get('categories'));
 
 						popup.entriesNode.addClass(CSS_TAGS_LIST);
 
@@ -597,9 +610,7 @@ AUI.add(
 							instance._bindSearchHandle.detach();
 						}
 
-						var searchField = popup.searchField.get(BOUNDING_BOX);
-
-						instance._bindSearchHandle = searchField.once('focus', instance._initSearch, instance);
+						instance._bindSearchHandle = popup.searchField.once('focus', instance._initSearch, instance);
 					},
 
 					_vocabulariesIterator: function(item, index, collection) {
@@ -615,14 +626,6 @@ AUI.add(
 
 						var treeId = 'vocabulary' + vocabularyId;
 
-						var vocabularyRootNode = {
-							alwaysShowHitArea: true,
-							id: treeId,
-							label: vocabularyTitle,
-							leaf: false,
-							type: 'io'
-						};
-
 						var paginatorConfig = {
 							offsetParam: 'start'
 						};
@@ -631,13 +634,22 @@ AUI.add(
 
 						if (maxEntries > 0) {
 							paginatorConfig.limit = maxEntries;
-							paginatorConfig.moreResultsLabel = Liferay.Language.get('load-more-results');
+							paginatorConfig.moreResultsLabel = instance.get('moreResultsLabel');
 							paginatorConfig.total = item.categoriesCount;
 						}
 						else {
 							paginatorConfig.end = -1;
 							paginatorConfig.start = -1;
 						}
+
+						var vocabularyRootNode = {
+							alwaysShowHitArea: true,
+							id: treeId,
+							label: vocabularyTitle,
+							leaf: false,
+							paginator: paginatorConfig,
+							type: 'io'
+						};
 
 						instance.TREEVIEWS[vocabularyId] = new A.TreeView(
 							{
@@ -663,8 +675,7 @@ AUI.add(
 									},
 									formatter: A.bind('_formatJSONResult', instance),
 									url: themeDisplay.getPathMain() + '/asset/get_categories'
-								},
-								paginator: paginatorConfig
+								}
 							}
 						).render(popup.entriesNode);
 					}

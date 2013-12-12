@@ -51,6 +51,7 @@ public class HtmlImpl implements Html {
 
 	public static final int ESCAPE_MODE_URL = 5;
 
+	@Override
 	public String escape(String text) {
 		if (text == null) {
 			return null;
@@ -133,15 +134,15 @@ public class HtmlImpl implements Html {
 		if (sb == null) {
 			return text;
 		}
-		else {
-			if (lastReplacementIndex < text.length()) {
-				sb.append(text.substring(lastReplacementIndex));
-			}
 
-			return sb.toString();
+		if (lastReplacementIndex < text.length()) {
+			sb.append(text.substring(lastReplacementIndex));
 		}
+
+		return sb.toString();
 	}
 
+	@Override
 	public String escape(String text, int type) {
 		if (text == null) {
 			return null;
@@ -176,7 +177,7 @@ public class HtmlImpl implements Html {
 		for (int i = 0; i < text.length(); i++) {
 			char c = text.charAt(i);
 
-			if (Character.isLetterOrDigit(c) ||
+			if ((c > 255) || Character.isLetterOrDigit(c) ||
 				(c == CharPool.DASH) || (c == CharPool.UNDERLINE)) {
 
 				sb.append(c);
@@ -203,14 +204,17 @@ public class HtmlImpl implements Html {
 		}
 	}
 
+	@Override
 	public String escapeAttribute(String attribute) {
 		return escape(attribute, ESCAPE_MODE_ATTRIBUTE);
 	}
 
+	@Override
 	public String escapeCSS(String css) {
 		return escape(css, ESCAPE_MODE_CSS);
 	}
 
+	@Override
 	public String escapeHREF(String href) {
 		if (href == null) {
 			return null;
@@ -221,7 +225,7 @@ public class HtmlImpl implements Html {
 		}
 
 		if (href.indexOf(StringPool.COLON) == 10) {
-			String protocol = href.substring(0, 10).toLowerCase();
+			String protocol = StringUtil.toLowerCase(href.substring(0, 10));
 
 			if (protocol.equals("javascript")) {
 				href = StringUtil.replaceFirst(href, StringPool.COLON, "%3a");
@@ -231,14 +235,17 @@ public class HtmlImpl implements Html {
 		return escapeAttribute(href);
 	}
 
+	@Override
 	public String escapeJS(String js) {
 		return escape(js, ESCAPE_MODE_JS);
 	}
 
+	@Override
 	public String escapeURL(String url) {
 		return escape(url, ESCAPE_MODE_URL);
 	}
 
+	@Override
 	public String escapeXPath(String xPath) {
 		if (Validator.isNull(xPath)) {
 			return xPath;
@@ -270,6 +277,7 @@ public class HtmlImpl implements Html {
 		return sb.toString();
 	}
 
+	@Override
 	public String escapeXPathAttribute(String xPathAttribute) {
 		boolean hasApostrophe = xPathAttribute.contains(StringPool.APOSTROPHE);
 		boolean hasQuote = xPathAttribute.contains(StringPool.QUOTE);
@@ -289,6 +297,7 @@ public class HtmlImpl implements Html {
 		return StringPool.QUOTE.concat(xPathAttribute).concat(StringPool.QUOTE);
 	}
 
+	@Override
 	public String extractText(String html) {
 		if (html == null) {
 			return null;
@@ -301,10 +310,12 @@ public class HtmlImpl implements Html {
 		return textExtractor.toString();
 	}
 
+	@Override
 	public String fromInputSafe(String text) {
 		return StringUtil.replace(text, "&amp;", "&");
 	}
 
+	@Override
 	public String render(String html) {
 		if (html == null) {
 			return null;
@@ -317,18 +328,31 @@ public class HtmlImpl implements Html {
 		return renderer.toString();
 	}
 
+	@Override
 	public String replaceMsWordCharacters(String text) {
 		return StringUtil.replace(text, _MS_WORD_UNICODE, _MS_WORD_HTML);
 	}
 
+	@Override
+	public String replaceNewLine(String text) {
+		if (text == null) {
+			return null;
+		}
+
+		return text.replaceAll("\r?\n", "<br />");
+	}
+
+	@Override
 	public String stripBetween(String text, String tag) {
 		return StringUtil.stripBetween(text, "<" + tag, "</" + tag + ">");
 	}
 
+	@Override
 	public String stripComments(String text) {
 		return StringUtil.stripBetween(text, "<!--", "-->");
 	}
 
+	@Override
 	public String stripHtml(String text) {
 		if (text == null) {
 			return null;
@@ -379,6 +403,7 @@ public class HtmlImpl implements Html {
 		return sb.toString();
 	}
 
+	@Override
 	public String toInputSafe(String text) {
 		return StringUtil.replace(
 			text,
@@ -386,6 +411,7 @@ public class HtmlImpl implements Html {
 			new String[] {"&amp;", "&quot;"});
 	}
 
+	@Override
 	public String unescape(String text) {
 		if (text == null) {
 			return null;
@@ -415,6 +441,7 @@ public class HtmlImpl implements Html {
 		return text;
 	}
 
+	@Override
 	public String unescapeCDATA(String text) {
 		if (text == null) {
 			return null;
@@ -430,6 +457,7 @@ public class HtmlImpl implements Html {
 		return text;
 	}
 
+	@Override
 	public String wordBreak(String text, int columns) {
 		StringBundler sb = new StringBundler();
 
@@ -524,35 +552,36 @@ public class HtmlImpl implements Html {
 
 		x = text.indexOf(">", x);
 
-		if (x >= 0) {
+		if (x < 0) {
+			return pos;
+		}
 
-			// Check if preceding character is / (i.e. is this instance of
-			// <abc/>)
+		// Check if preceding character is / (i.e. is this instance of <abc/>)
 
-			if (text.charAt(x-1) != '/') {
+		if (text.charAt(x-1) == '/') {
+			return pos;
+		}
 
-				// Search for the ending </abc> tag
+		// Search for the ending </abc> tag
 
-				for (;;) {
-					x = text.indexOf("</", x);
+		while (true) {
+			x = text.indexOf("</", x);
 
-					if (x >= 0) {
-						if (isTag(tag, text, x + 2)) {
-							pos = x;
+			if (x >= 0) {
+				if (isTag(tag, text, x + 2)) {
+					pos = x;
 
-							break;
-						}
-						else {
-
-							// Skip past "</"
-
-							x += 2;
-						}
-					}
-					else {
-						break;
-					}
+					break;
 				}
+				else {
+
+					// Skip past "</"
+
+					x += 2;
+				}
+			}
+			else {
+				break;
 			}
 		}
 

@@ -33,8 +33,10 @@ boolean groupTrashEnabled = PropertiesParamUtil.getBoolean(groupTypeSettings, re
 double trashEntriesMaxAge = PropertiesParamUtil.getInteger(groupTypeSettings, request, "trashEntriesMaxAge", PrefsPropsUtil.getInteger(company.getCompanyId(), PropsKeys.TRASH_ENTRIES_MAX_AGE)) / 1440.0;
 %>
 
+<h3><liferay-ui:message key="recycle-bin" /></h3>
+
 <aui:fieldset>
-	<aui:input class="aui-field-label" id="trashEnabled" label="enable-recycle-bin" name="trashEnabled" type="checkbox" value="<%= groupTrashEnabled %>" />
+	<aui:input id="trashEnabled" label="enable-recycle-bin" name="trashEnabled" type="checkbox" value="<%= groupTrashEnabled %>" />
 
 	<div class="trash-entries-max-age">
 		<aui:input disabled="<%= !groupTrashEnabled %>" helpMessage="trash-entries-max-age-help" label="trash-entries-max-age" name="trashEntriesMaxAge" type="text" value="<%= (trashEntriesMaxAge % 1 == 0) ? GetterUtil.getInteger(trashEntriesMaxAge) : String.valueOf(trashEntriesMaxAge) %>">
@@ -69,7 +71,7 @@ double trashEntriesMaxAge = PropertiesParamUtil.getInteger(groupTypeSettings, re
 			if (trashEntriesMaxAge) {
 				trashEntriesMaxAge.attr('disabled', !trashEnabled);
 
-				trashEntriesMaxAge.ancestor('.aui-field').toggleClass('aui-field-disabled', !trashEnabled);
+				trashEntriesMaxAge.ancestor('.field').toggleClass('field-disabled', !trashEnabled);
 			}
 		}
 	);

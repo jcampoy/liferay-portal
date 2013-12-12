@@ -108,6 +108,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 * @return the matching ratings entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<RatingsEntry> findByC_C(long classNameId, long classPK)
 		throws SystemException {
 		return findByC_C(classNameId, classPK, QueryUtil.ALL_POS,
@@ -128,6 +129,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 * @return the range of matching ratings entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<RatingsEntry> findByC_C(long classNameId, long classPK,
 		int start, int end) throws SystemException {
 		return findByC_C(classNameId, classPK, start, end, null);
@@ -148,6 +150,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 * @return the ordered range of matching ratings entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<RatingsEntry> findByC_C(long classNameId, long classPK,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -265,6 +268,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 * @throws com.liferay.portlet.ratings.NoSuchEntryException if a matching ratings entry could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RatingsEntry findByC_C_First(long classNameId, long classPK,
 		OrderByComparator orderByComparator)
 		throws NoSuchEntryException, SystemException {
@@ -299,6 +303,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 * @return the first matching ratings entry, or <code>null</code> if a matching ratings entry could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RatingsEntry fetchByC_C_First(long classNameId, long classPK,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<RatingsEntry> list = findByC_C(classNameId, classPK, 0, 1,
@@ -321,6 +326,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 * @throws com.liferay.portlet.ratings.NoSuchEntryException if a matching ratings entry could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RatingsEntry findByC_C_Last(long classNameId, long classPK,
 		OrderByComparator orderByComparator)
 		throws NoSuchEntryException, SystemException {
@@ -355,9 +361,14 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 * @return the last matching ratings entry, or <code>null</code> if a matching ratings entry could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RatingsEntry fetchByC_C_Last(long classNameId, long classPK,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByC_C(classNameId, classPK);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<RatingsEntry> list = findByC_C(classNameId, classPK, count - 1,
 				count, orderByComparator);
@@ -380,6 +391,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 * @throws com.liferay.portlet.ratings.NoSuchEntryException if a ratings entry with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RatingsEntry[] findByC_C_PrevAndNext(long entryId, long classNameId,
 		long classPK, OrderByComparator orderByComparator)
 		throws NoSuchEntryException, SystemException {
@@ -526,6 +538,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 * @param classPK the class p k
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByC_C(long classNameId, long classPK)
 		throws SystemException {
 		for (RatingsEntry ratingsEntry : findByC_C(classNameId, classPK,
@@ -542,6 +555,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 * @return the number of matching ratings entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByC_C(long classNameId, long classPK)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_C;
@@ -620,6 +634,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 * @throws com.liferay.portlet.ratings.NoSuchEntryException if a matching ratings entry could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RatingsEntry findByU_C_C(long userId, long classNameId, long classPK)
 		throws NoSuchEntryException, SystemException {
 		RatingsEntry ratingsEntry = fetchByU_C_C(userId, classNameId, classPK);
@@ -659,6 +674,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 * @return the matching ratings entry, or <code>null</code> if a matching ratings entry could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RatingsEntry fetchByU_C_C(long userId, long classNameId, long classPK)
 		throws SystemException {
 		return fetchByU_C_C(userId, classNameId, classPK, true);
@@ -674,6 +690,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 * @return the matching ratings entry, or <code>null</code> if a matching ratings entry could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RatingsEntry fetchByU_C_C(long userId, long classNameId,
 		long classPK, boolean retrieveFromCache) throws SystemException {
 		Object[] finderArgs = new Object[] { userId, classNameId, classPK };
@@ -772,6 +789,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 * @return the ratings entry that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RatingsEntry removeByU_C_C(long userId, long classNameId,
 		long classPK) throws NoSuchEntryException, SystemException {
 		RatingsEntry ratingsEntry = findByU_C_C(userId, classNameId, classPK);
@@ -788,6 +806,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 * @return the number of matching ratings entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByU_C_C(long userId, long classNameId, long classPK)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_U_C_C;
@@ -882,6 +901,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 * @return the matching ratings entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<RatingsEntry> findByC_C_S(long classNameId, long classPK,
 		double score) throws SystemException {
 		return findByC_C_S(classNameId, classPK, score, QueryUtil.ALL_POS,
@@ -903,6 +923,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 * @return the range of matching ratings entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<RatingsEntry> findByC_C_S(long classNameId, long classPK,
 		double score, int start, int end) throws SystemException {
 		return findByC_C_S(classNameId, classPK, score, start, end, null);
@@ -924,6 +945,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 * @return the ordered range of matching ratings entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<RatingsEntry> findByC_C_S(long classNameId, long classPK,
 		double score, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -1047,6 +1069,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 * @throws com.liferay.portlet.ratings.NoSuchEntryException if a matching ratings entry could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RatingsEntry findByC_C_S_First(long classNameId, long classPK,
 		double score, OrderByComparator orderByComparator)
 		throws NoSuchEntryException, SystemException {
@@ -1085,6 +1108,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 * @return the first matching ratings entry, or <code>null</code> if a matching ratings entry could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RatingsEntry fetchByC_C_S_First(long classNameId, long classPK,
 		double score, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -1109,6 +1133,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 * @throws com.liferay.portlet.ratings.NoSuchEntryException if a matching ratings entry could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RatingsEntry findByC_C_S_Last(long classNameId, long classPK,
 		double score, OrderByComparator orderByComparator)
 		throws NoSuchEntryException, SystemException {
@@ -1147,10 +1172,15 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 * @return the last matching ratings entry, or <code>null</code> if a matching ratings entry could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RatingsEntry fetchByC_C_S_Last(long classNameId, long classPK,
 		double score, OrderByComparator orderByComparator)
 		throws SystemException {
 		int count = countByC_C_S(classNameId, classPK, score);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<RatingsEntry> list = findByC_C_S(classNameId, classPK, score,
 				count - 1, count, orderByComparator);
@@ -1174,6 +1204,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 * @throws com.liferay.portlet.ratings.NoSuchEntryException if a ratings entry with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RatingsEntry[] findByC_C_S_PrevAndNext(long entryId,
 		long classNameId, long classPK, double score,
 		OrderByComparator orderByComparator)
@@ -1326,6 +1357,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 * @param score the score
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByC_C_S(long classNameId, long classPK, double score)
 		throws SystemException {
 		for (RatingsEntry ratingsEntry : findByC_C_S(classNameId, classPK,
@@ -1343,6 +1375,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 * @return the number of matching ratings entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByC_C_S(long classNameId, long classPK, double score)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_C_S;
@@ -1401,11 +1434,16 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	private static final String _FINDER_COLUMN_C_C_S_CLASSPK_2 = "ratingsEntry.classPK = ? AND ";
 	private static final String _FINDER_COLUMN_C_C_S_SCORE_2 = "ratingsEntry.score = ?";
 
+	public RatingsEntryPersistenceImpl() {
+		setModelClass(RatingsEntry.class);
+	}
+
 	/**
 	 * Caches the ratings entry in the entity cache if it is enabled.
 	 *
 	 * @param ratingsEntry the ratings entry
 	 */
+	@Override
 	public void cacheResult(RatingsEntry ratingsEntry) {
 		EntityCacheUtil.putResult(RatingsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			RatingsEntryImpl.class, ratingsEntry.getPrimaryKey(), ratingsEntry);
@@ -1424,6 +1462,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 *
 	 * @param ratingsEntries the ratings entries
 	 */
+	@Override
 	public void cacheResult(List<RatingsEntry> ratingsEntries) {
 		for (RatingsEntry ratingsEntry : ratingsEntries) {
 			if (EntityCacheUtil.getResult(
@@ -1548,6 +1587,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 * @param entryId the primary key for the new ratings entry
 	 * @return the new ratings entry
 	 */
+	@Override
 	public RatingsEntry create(long entryId) {
 		RatingsEntry ratingsEntry = new RatingsEntryImpl();
 
@@ -1565,6 +1605,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 * @throws com.liferay.portlet.ratings.NoSuchEntryException if a ratings entry with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RatingsEntry remove(long entryId)
 		throws NoSuchEntryException, SystemException {
 		return remove((Serializable)entryId);
@@ -1733,6 +1774,8 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 		clearUniqueFindersCache(ratingsEntry);
 		cacheUniqueFindersCache(ratingsEntry);
 
+		ratingsEntry.resetOriginalValues();
+
 		return ratingsEntry;
 	}
 
@@ -1792,6 +1835,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 * @throws com.liferay.portlet.ratings.NoSuchEntryException if a ratings entry with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RatingsEntry findByPrimaryKey(long entryId)
 		throws NoSuchEntryException, SystemException {
 		return findByPrimaryKey((Serializable)entryId);
@@ -1852,6 +1896,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 * @return the ratings entry, or <code>null</code> if a ratings entry with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RatingsEntry fetchByPrimaryKey(long entryId)
 		throws SystemException {
 		return fetchByPrimaryKey((Serializable)entryId);
@@ -1863,6 +1908,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 * @return the ratings entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<RatingsEntry> findAll() throws SystemException {
 		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
@@ -1879,6 +1925,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 * @return the range of ratings entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<RatingsEntry> findAll(int start, int end)
 		throws SystemException {
 		return findAll(start, end, null);
@@ -1897,6 +1944,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 * @return the ordered range of ratings entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<RatingsEntry> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -1982,6 +2030,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 *
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeAll() throws SystemException {
 		for (RatingsEntry ratingsEntry : findAll()) {
 			remove(ratingsEntry);
@@ -1994,6 +2043,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 * @return the number of ratings entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countAll() throws SystemException {
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
 				FINDER_ARGS_EMPTY, this);
@@ -2079,6 +2129,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 		};
 
 	private static CacheModel<RatingsEntry> _nullRatingsEntryCacheModel = new CacheModel<RatingsEntry>() {
+			@Override
 			public RatingsEntry toEntityModel() {
 				return _nullRatingsEntry;
 			}

@@ -15,6 +15,9 @@
 package com.liferay.portal.jsonwebservice.action;
 
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONSerializable;
+import com.liferay.portal.kernel.json.JSONSerializer;
 import com.liferay.portal.kernel.jsonwebservice.JSONWebServiceAction;
 import com.liferay.portal.kernel.jsonwebservice.JSONWebServiceActionMapping;
 import com.liferay.portal.kernel.jsonwebservice.JSONWebServiceActionsManagerUtil;
@@ -28,8 +31,8 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -54,14 +57,16 @@ public class JSONWebServiceDiscoverAction implements JSONWebServiceAction {
 		_discover = StringUtil.split(discover);
 	}
 
+	@Override
 	public JSONWebServiceActionMapping getJSONWebServiceActionMapping() {
 		return null;
 	}
 
+	@Override
 	public Object invoke() throws Exception {
 		Map<String, Object> resultsMap = new LinkedHashMap<String, Object>();
 
-		Map<String, Object> jsonWebServiceActionMappingMaps =
+		List<Map<String, Object>> jsonWebServiceActionMappingMaps =
 			_buildJsonWebServiceActionMappingMaps();
 
 		resultsMap.put("actions", jsonWebServiceActionMappingMaps);
@@ -71,25 +76,43 @@ public class JSONWebServiceDiscoverAction implements JSONWebServiceAction {
 		resultsMap.put("baseURL", _baseURL);
 
 		if (_discover.length > 0) {
-			resultsMap.put("discover", Arrays.toString(_discover));
+			resultsMap.put("discover", _discover);
 		}
 
-		return resultsMap;
+		return new DiscoveryContent(resultsMap);
 	}
 
-	private Map<String, Object> _buildJsonWebServiceActionMappingMaps()
+	public static class DiscoveryContent implements JSONSerializable {
+
+		public DiscoveryContent(Map<String, Object> resultsMap) {
+			_resultsMap = resultsMap;
+		}
+
+		@Override
+		public String toJSONString() {
+			JSONSerializer jsonSerializer =
+				JSONFactoryUtil.createJSONSerializer();
+
+			return jsonSerializer.serializeDeep(_resultsMap);
+		}
+
+		private Map<String, Object> _resultsMap;
+
+	}
+
+	private List<Map<String, Object>> _buildJsonWebServiceActionMappingMaps()
 		throws PortalException {
 
-		List<JSONWebServiceActionMapping> jsonWebServiceActionMappingMaps =
+		List<JSONWebServiceActionMapping> jsonWebServiceActionMappings =
 			JSONWebServiceActionsManagerUtil.getJSONWebServiceActionMappings(
 				_contextPath);
 
-		Map<String, Object> jsonWebServiceActionMappingsMap =
-			new LinkedHashMap<String, Object>(
-				jsonWebServiceActionMappingMaps.size());
+		List<Map<String, Object>> jsonWebServiceActionMappingMaps =
+			new ArrayList<Map<String, Object>>(
+				jsonWebServiceActionMappings.size());
 
 		for (JSONWebServiceActionMapping jsonWebServiceActionMapping :
-				jsonWebServiceActionMappingMaps) {
+				jsonWebServiceActionMappings) {
 
 			String path = jsonWebServiceActionMapping.getPath();
 
@@ -106,8 +129,8 @@ public class JSONWebServiceDiscoverAction implements JSONWebServiceAction {
 			MethodParameter[] methodParameters =
 				jsonWebServiceActionMapping.getMethodParameters();
 
-			Map<String, Object> parameterMap =
-				new LinkedHashMap<String, Object>(methodParameters.length);
+			List<Map<String, String>> parametersList =
+				new ArrayList<Map<String, String>>(methodParameters.length);
 
 			for (MethodParameter methodParameter : methodParameters) {
 				Class<?>[] genericTypes = null;
@@ -115,16 +138,22 @@ public class JSONWebServiceDiscoverAction implements JSONWebServiceAction {
 				try {
 					genericTypes = methodParameter.getGenericTypes();
 				}
-				catch (ClassNotFoundException e) {
-					throw new PortalException(e);
+				catch (ClassNotFoundException cnfe) {
+					throw new PortalException(cnfe);
 				}
 
+				Map<String, String> parameterMap =
+					new HashMap<String, String>();
+
+				parameterMap.put("name", methodParameter.getName());
 				parameterMap.put(
-					methodParameter.getName(),
+					"type",
 					_formatType(methodParameter.getType(), genericTypes));
+
+				parametersList.add(parameterMap);
 			}
 
-			jsonWebServiceActionMappingMap.put("parameters", parameterMap);
+			jsonWebServiceActionMappingMap.put("parameters", parametersList);
 
 			jsonWebServiceActionMappingMap.put("path", path);
 
@@ -133,11 +162,10 @@ public class JSONWebServiceDiscoverAction implements JSONWebServiceAction {
 			jsonWebServiceActionMappingMap.put(
 				"response", _formatType(actionMethod.getReturnType(), null));
 
-			jsonWebServiceActionMappingsMap.put(
-				path, jsonWebServiceActionMappingMap);
+			jsonWebServiceActionMappingMaps.add(jsonWebServiceActionMappingMap);
 		}
 
-		return jsonWebServiceActionMappingsMap;
+		return jsonWebServiceActionMappingMaps;
 	}
 
 	private String _formatType(Class<?> type, Class<?>[] genericTypes) {

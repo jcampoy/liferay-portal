@@ -20,7 +20,6 @@
 JournalArticle article = (JournalArticle)request.getAttribute(WebKeys.JOURNAL_ARTICLE);
 
 boolean smallImage = BeanParamUtil.getBoolean(article, request, "smallImage");
-String smallImageURL = BeanParamUtil.getString(article, request, "smallImageURL");
 
 String defaultLanguageId = (String)request.getAttribute("edit_article.jsp-defaultLanguageId");
 String toLanguageId = (String)request.getAttribute("edit_article.jsp-toLanguageId");
@@ -59,28 +58,28 @@ String toLanguageId = (String)request.getAttribute("edit_article.jsp-toLanguageI
 				<aui:input label="use-small-image" name="smallImage" />
 			</div>
 
-			<div class="lfr-journal-small-image-content aui-toggler-content-collapsed">
-				<aui:layout>
+			<div class="lfr-journal-small-image-content toggler-content-collapsed">
+				<aui:row>
 					<c:if test="<%= smallImage && (article != null) %>">
-						<aui:column>
+						<aui:col width="<%= 50 %>">
 							<img alt="<liferay-ui:message key="preview" />" class="lfr-journal-small-image-preview" src="<%= Validator.isNotNull(article.getSmallImageURL()) ? article.getSmallImageURL() : themeDisplay.getPathImage() + "/template?img_id=" + article.getSmallImageId() + "&t=" + WebServerServletTokenUtil.getToken(article.getSmallImageId()) %>" />
-						</aui:column>
+						</aui:col>
 					</c:if>
 
-					<aui:column>
+					<aui:col width="<%= (smallImage && (article != null)) ? 50 : 100 %>">
 						<aui:fieldset>
-							<aui:input inlineField="<%= true %>" inputCssClass="lfr-journal-small-image-type" label="small-image-url" name="type" type="radio" />
+							<aui:input cssClass="lfr-journal-small-image-type" inlineField="<%= true %>" label="small-image-url" name="smallImageType" type="radio" />
 
-							<aui:input inlineField="<%= true %>" inputCssClass="lfr-journal-small-image-value" label="" name="smallImageURL" />
+							<aui:input cssClass="lfr-journal-small-image-value" inlineField="<%= true %>" label="" name="smallImageURL" />
 						</aui:fieldset>
 
 						<aui:fieldset>
-							<aui:input inlineField="<%= true %>" inputCssClass="lfr-journal-small-image-type" label="small-image" name="type" type="radio" />
+							<aui:input cssClass="lfr-journal-small-image-type" inlineField="<%= true %>" label="small-image" name="smallImageType" type="radio" />
 
-							<aui:input inlineField="<%= true %>" inputCssClass="lfr-journal-small-image-value" label="" name="smallFile" type="file" />
+							<aui:input cssClass="lfr-journal-small-image-value" inlineField="<%= true %>" label="" name="smallFile" type="file" />
 						</aui:fieldset>
-					</aui:column>
-				</aui:layout>
+					</aui:col>
+				</aui:row>
 			</div>
 		</div>
 
@@ -127,7 +126,7 @@ String toLanguageId = (String)request.getAttribute("edit_article.jsp-toLanguageI
 
 							if (expanded) {
 								types.each(
-									function (item, index, collection) {
+									function(item, index, collection) {
 										if (item.get('checked')) {
 											values.item(index).set('disabled', false);
 										}

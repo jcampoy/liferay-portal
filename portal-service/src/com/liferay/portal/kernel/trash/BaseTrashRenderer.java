@@ -16,6 +16,7 @@ package com.liferay.portal.kernel.trash;
 
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portlet.trash.util.TrashUtil;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.RenderRequest;
@@ -26,6 +27,7 @@ import javax.portlet.RenderResponse;
  */
 public abstract class BaseTrashRenderer implements TrashRenderer {
 
+	@Override
 	public String getIconPath(PortletRequest portletRequest) {
 		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
@@ -37,6 +39,12 @@ public abstract class BaseTrashRenderer implements TrashRenderer {
 		return themeDisplay.getPathThemeImages() + "/common/page.png";
 	}
 
+	@Override
+	public String getNewName(String oldName, String token) {
+		return TrashUtil.getNewName(oldName, token);
+	}
+
+	@Override
 	public String render(
 			RenderRequest renderRequest, RenderResponse renderResponse,
 			String template)
@@ -45,6 +53,7 @@ public abstract class BaseTrashRenderer implements TrashRenderer {
 		return null;
 	}
 
+	@Override
 	public String renderActions(
 			RenderRequest renderRequest, RenderResponse renderResponse)
 		throws Exception {

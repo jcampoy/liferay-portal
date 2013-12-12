@@ -45,6 +45,7 @@ public class ICQConnector implements Observer {
 		_instance._send(to, msg);
 	}
 
+	@Override
 	public void update(Observable obs, Object obj) {
 		_connecting = false;
 
@@ -77,7 +78,9 @@ public class ICQConnector implements Observer {
 			}
 		}
 		catch (Exception e) {
-			_log.warn(e);
+			if (_log.isWarnEnabled()) {
+				_log.warn(e);
+			}
 		}
 	}
 

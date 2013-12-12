@@ -14,6 +14,7 @@
 
 package com.liferay.portal.kernel.search;
 
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -41,6 +42,7 @@ public class SearchContextFactory {
 
 		searchContext.setCompanyId(themeDisplay.getCompanyId());
 		searchContext.setGroupIds(new long[] {themeDisplay.getScopeGroupId()});
+		searchContext.setLayout(themeDisplay.getLayout());
 		searchContext.setLocale(themeDisplay.getLocale());
 		searchContext.setTimeZone(themeDisplay.getTimeZone());
 		searchContext.setUserId(themeDisplay.getUserId());
@@ -56,7 +58,7 @@ public class SearchContextFactory {
 			String name = entry.getKey();
 			String[] values = entry.getValue();
 
-			if ((values != null) && (values.length > 0)) {
+			if (ArrayUtil.isNotEmpty(values)) {
 				if (values.length == 1) {
 					attributes.put(name, values[0]);
 				}

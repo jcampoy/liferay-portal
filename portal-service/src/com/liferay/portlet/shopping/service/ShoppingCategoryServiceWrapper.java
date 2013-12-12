@@ -14,17 +14,18 @@
 
 package com.liferay.portlet.shopping.service;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.service.ServiceWrapper;
 
 /**
- * <p>
- * This class is a wrapper for {@link ShoppingCategoryService}.
- * </p>
+ * Provides a wrapper for {@link ShoppingCategoryService}.
  *
- * @author    Brian Wing Shun Chan
- * @see       ShoppingCategoryService
+ * @author Brian Wing Shun Chan
+ * @see ShoppingCategoryService
  * @generated
  */
+@ProviderType
 public class ShoppingCategoryServiceWrapper implements ShoppingCategoryService,
 	ServiceWrapper<ShoppingCategoryService> {
 	public ShoppingCategoryServiceWrapper(
@@ -37,6 +38,7 @@ public class ShoppingCategoryServiceWrapper implements ShoppingCategoryService,
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _shoppingCategoryService.getBeanIdentifier();
 	}
@@ -46,10 +48,12 @@ public class ShoppingCategoryServiceWrapper implements ShoppingCategoryService,
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_shoppingCategoryService.setBeanIdentifier(beanIdentifier);
 	}
 
+	@Override
 	public com.liferay.portlet.shopping.model.ShoppingCategory addCategory(
 		long parentCategoryId, java.lang.String name,
 		java.lang.String description,
@@ -60,18 +64,21 @@ public class ShoppingCategoryServiceWrapper implements ShoppingCategoryService,
 			description, serviceContext);
 	}
 
+	@Override
 	public void deleteCategory(long categoryId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		_shoppingCategoryService.deleteCategory(categoryId);
 	}
 
+	@Override
 	public java.util.List<com.liferay.portlet.shopping.model.ShoppingCategory> getCategories(
 		long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _shoppingCategoryService.getCategories(groupId);
 	}
 
+	@Override
 	public java.util.List<com.liferay.portlet.shopping.model.ShoppingCategory> getCategories(
 		long groupId, long parentCategoryId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -79,12 +86,14 @@ public class ShoppingCategoryServiceWrapper implements ShoppingCategoryService,
 			parentCategoryId, start, end);
 	}
 
+	@Override
 	public int getCategoriesCount(long groupId, long parentCategoryId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _shoppingCategoryService.getCategoriesCount(groupId,
 			parentCategoryId);
 	}
 
+	@Override
 	public com.liferay.portlet.shopping.model.ShoppingCategory getCategory(
 		long categoryId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -92,6 +101,7 @@ public class ShoppingCategoryServiceWrapper implements ShoppingCategoryService,
 		return _shoppingCategoryService.getCategory(categoryId);
 	}
 
+	@Override
 	public void getSubcategoryIds(java.util.List<java.lang.Long> categoryIds,
 		long groupId, long categoryId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -99,6 +109,7 @@ public class ShoppingCategoryServiceWrapper implements ShoppingCategoryService,
 			categoryId);
 	}
 
+	@Override
 	public com.liferay.portlet.shopping.model.ShoppingCategory updateCategory(
 		long categoryId, long parentCategoryId, java.lang.String name,
 		java.lang.String description, boolean mergeWithParentCategory,
@@ -125,10 +136,12 @@ public class ShoppingCategoryServiceWrapper implements ShoppingCategoryService,
 		_shoppingCategoryService = shoppingCategoryService;
 	}
 
+	@Override
 	public ShoppingCategoryService getWrappedService() {
 		return _shoppingCategoryService;
 	}
 
+	@Override
 	public void setWrappedService(
 		ShoppingCategoryService shoppingCategoryService) {
 		_shoppingCategoryService = shoppingCategoryService;

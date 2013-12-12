@@ -32,11 +32,12 @@ if (Validator.isNotNull(viewUsersRedirect)) {
 
 <liferay-ui:search-container
 	searchContainer="<%= new UserSearch(renderRequest, portletURL) %>"
+	var="userSearchContainer"
 >
 	<aui:input disabled="<%= true %>" name="usersRedirect" type="hidden" value="<%= portletURL.toString() %>" />
 
 	<%
-	UserSearchTerms searchTerms = (UserSearchTerms)searchContainer.getSearchTerms();
+	UserSearchTerms searchTerms = (UserSearchTerms)userSearchContainer.getSearchTerms();
 
 	long organizationId = searchTerms.getOrganizationId();
 	long userGroupId = searchTerms.getUserGroupId();
@@ -74,9 +75,9 @@ if (Validator.isNotNull(viewUsersRedirect)) {
 		<h3><%= LanguageUtil.format(pageContext, "users-of-x", HtmlUtil.escape(userGroup.getName())) %></h3>
 	</c:if>
 
-	<liferay-ui:search-form
-		page="/html/portlet/directory/user_search.jsp"
-	/>
+	<aui:nav-bar>
+		<aui:nav-bar-search cssClass="pull-right" file="/html/portlet/directory/user_search.jsp" searchContainer="<%= userSearchContainer %>" />
+	</aui:nav-bar>
 
 	<%
 	LinkedHashMap<String, Object> userParams = new LinkedHashMap<String, Object>();
@@ -132,7 +133,7 @@ if (Validator.isNotNull(viewUsersRedirect)) {
 		<liferay-portlet:renderURL varImpl="rowURL">
 			<portlet:param name="struts_action" value="/directory/view_user" />
 			<portlet:param name="tabs1" value="<%= HtmlUtil.escape(tabs1) %>" />
-			<portlet:param name="redirect" value="<%= searchContainer.getIteratorURL().toString() %>" />
+			<portlet:param name="redirect" value="<%= userSearchContainer.getIteratorURL().toString() %>" />
 			<portlet:param name="p_u_i_d" value="<%= String.valueOf(user2.getUserId()) %>" />
 		</liferay-portlet:renderURL>
 

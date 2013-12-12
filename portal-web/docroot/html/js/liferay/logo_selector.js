@@ -14,8 +14,22 @@ AUI.add(
 						value: ''
 					},
 
-					editLogoURL: {
+					editLogoFn: {
+						setter: function(value) {
+							var fn = function() {};
+
+							if (value && value !== '') {
+								fn = window[value] || fn;
+							}
+
+							return fn;
+						},
+						validator: A.Lang.isString,
 						value: ''
+					},
+
+					editLogoURL: {
+						value: '',
 					},
 
 					logoDisplaySelector: {
@@ -46,7 +60,7 @@ AUI.add(
 						instance._portletNamespace = instance.get('portletNamespace');
 						instance._randomNamespace = instance.get('randomNamespace');
 
-						window[instance._portletNamespace + 'changeLogo'] = A.bind('_changeLogo', instance);
+						window[instance._randomNamespace + 'changeLogo'] = A.bind('_changeLogo', instance);
 					},
 
 					renderUI: function() {
@@ -55,35 +69,29 @@ AUI.add(
 						var portletNamespace = instance._portletNamespace;
 						var randomNamespace = instance._randomNamespace;
 
-						var logoDisplaySelector = instance.get('logoDisplaySelector');
-
-						if (logoDisplaySelector) {
-							instance._logoDisplay = A.one(logoDisplaySelector);
-						}
-
 						var contentBox = instance.get('contentBox');
 
 						instance._avatar = contentBox.one('#' + randomNamespace + 'avatar');
-						instance._deleteLogoLink = contentBox.one('#' + portletNamespace + randomNamespace + 'deleteLogoLink');
+						instance._deleteLogoButton = contentBox.one('.delete-logo');
 						instance._deleteLogoInput = contentBox.one('#' + portletNamespace + 'deleteLogo');
+						instance._fileEntryIdInput = contentBox.one('#' + portletNamespace + 'fileEntryId');
 					},
 
 					bindUI: function() {
 						var instance = this;
 
-						instance.get('contentBox').delegate('click', instance._openEditLogoWindow, '.edit-logo-link', instance);
-
-						var deleteLogoLink = instance._deleteLogoLink;
-
-						if (deleteLogoLink) {
-							deleteLogoLink.on('click', instance._onDeleteLogoClick, instance);
-						}
+						instance.get('contentBox').delegate('click', instance._openEditLogoWindow, '.edit-logo', instance);
+						instance.get('contentBox').delegate('click', instance._onDeleteLogoClick, '.delete-logo', instance);
 					},
 
-					_changeLogo: function(url) {
+					_changeLogo: function(url, fileEntryId) {
 						var instance = this;
 
 						instance.set('logoURL', url);
+
+						if (fileEntryId) {
+							instance._fileEntryIdInput.val(fileEntryId);
+						}
 					},
 
 					_onDeleteLogoClick: function(event) {
@@ -97,27 +105,45 @@ AUI.add(
 
 						var editLogoURL = instance.get('editLogoURL');
 
-						var editLogoWindow = window.open(editLogoURL, 'changeLogo', 'directories=no,height=400,location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,toolbar=no,width=500');
+						Liferay.Util.openWindow(
+							{
+								dialog: {
+									destroyOnHide: true,
+									width: 600
+								},
+								id: instance._portletNamespace + 'changeLogo',
+								title: Liferay.Language.get('upload-image'),
+								uri: editLogoURL
+							}
+						);
 
-						editLogoWindow.focus();
+						event.preventDefault();
 					},
 
 					_uiSetLogoURL: function(value, src) {
 						var instance = this;
 
 						var logoURL = value;
-						var logoDisplay = instance._logoDisplay;
+
+						var logoDisplaySelector = instance.get('logoDisplaySelector');
 
 						var deleteLogo = src == DELETE_LOGO;
 
 						instance._avatar.attr('src', logoURL);
 
-						if (logoDisplay) {
-							logoDisplay.attr('src', logoURL);
+						if (logoDisplaySelector) {
+							var logoDisplay = A.one(logoDisplaySelector);
+
+							if (logoDisplay) {
+								logoDisplay.attr('src', logoURL);
+							}
 						}
 
+						instance.get('editLogoFn').apply(instance, [logoURL, deleteLogo]);
+
 						instance._deleteLogoInput.val(deleteLogo);
-						instance._deleteLogoLink.get('parentNode').toggle(!deleteLogo);
+						instance._deleteLogoButton.attr('disabled', deleteLogo ? 'disabled' : '');
+						instance._deleteLogoButton.toggleClass('disabled', deleteLogo);
 					}
 				}
 			}
@@ -127,6 +153,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-base']
+		requires: ['aui-base', 'liferay-util-window']
 	}
 );

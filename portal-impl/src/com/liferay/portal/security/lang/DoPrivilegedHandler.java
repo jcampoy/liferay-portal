@@ -43,10 +43,12 @@ public class DoPrivilegedHandler
 		_initNotPrivilegedMethods();
 	}
 
+	@Override
 	public Object getActualBean() {
 		return _bean;
 	}
 
+	@Override
 	public Object invoke(Object proxy, Method method, Object[] arguments)
 		throws Throwable {
 
@@ -82,7 +84,7 @@ public class DoPrivilegedHandler
 
 			return _bean.equals(object);
 		}
-		else if (!SecurityManagerUtil.isActive() || _isNotPrivileged(method)) {
+		else if (_isNotPrivileged(method)) {
 			return method.invoke(_bean, arguments);
 		}
 
@@ -160,6 +162,7 @@ public class DoPrivilegedHandler
 			_arguments = arguments;
 		}
 
+		@Override
 		public Object run() throws Exception {
 			return _method.invoke(_bean, _arguments);
 		}
@@ -186,14 +189,6 @@ public class DoPrivilegedHandler
 
 		@Override
 		public boolean equals(Object obj) {
-			if (this == obj) {
-				return true;
-			}
-
-			if (!(obj instanceof MethodKey)) {
-				return false;
-			}
-
 			MethodKey methodKey = (MethodKey)obj;
 
 			// Note again that this check is not symmetrical. This method key's

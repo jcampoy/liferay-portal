@@ -12,7 +12,7 @@
 		}
 	}
 
-	.aui-rating-content {
+	.rating-content {
 		display: block;
 	}
 
@@ -22,24 +22,29 @@
 
 	&.thumbs {
 		float: left;
-		margin: 0;
+		margin: 10px 0;
 
-		.aui-thumbrating {
+		.thumbrating {
 			height: 20px;
 
-			.aui-rating-label-element {
+			.rating-label {
+				display: inline-block;
 				padding: 0 5px;
 			}
 		}
 	}
+
+	.rating-input-container .rating-input {
+		margin-left: 1px;
+	}
 }
 
-.js .taglib-ratings .liferay-rating-vote .aui-field {
+.js .taglib-ratings .liferay-rating-vote .rating-input-container {
 	display: none;
 }
 
 .ie6 .taglib-ratings {
-	.aui-rating-content {
+	.rating-content {
 		display: inline;
 	}
 

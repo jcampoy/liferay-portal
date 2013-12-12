@@ -18,13 +18,16 @@ import com.liferay.portal.PhoneNumberException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.format.PhoneNumberFormatUtil;
+import com.liferay.portal.kernel.systemevent.SystemEvent;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Account;
 import com.liferay.portal.model.Contact;
 import com.liferay.portal.model.ListTypeConstants;
 import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.Phone;
+import com.liferay.portal.model.SystemEventConstants;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.base.PhoneLocalServiceBaseImpl;
 import com.liferay.portal.util.PortalUtil;
 
@@ -36,9 +39,26 @@ import java.util.List;
  */
 public class PhoneLocalServiceImpl extends PhoneLocalServiceBaseImpl {
 
+	/**
+	 * @deprecated As of 6.2.0, replaced by {@link #addPhone(long, String, long,
+	 *             String, String, int, boolean, ServiceContext)}
+	 */
+	@Override
 	public Phone addPhone(
 			long userId, String className, long classPK, String number,
 			String extension, int typeId, boolean primary)
+		throws PortalException, SystemException {
+
+		return addPhone(
+			userId, className, classPK, number, extension, typeId, primary,
+			new ServiceContext());
+	}
+
+	@Override
+	public Phone addPhone(
+			long userId, String className, long classPK, String number,
+			String extension, int typeId, boolean primary,
+			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		User user = userPersistence.findByPrimaryKey(userId);
@@ -53,11 +73,12 @@ public class PhoneLocalServiceImpl extends PhoneLocalServiceBaseImpl {
 
 		Phone phone = phonePersistence.create(phoneId);
 
+		phone.setUuid(serviceContext.getUuid());
 		phone.setCompanyId(user.getCompanyId());
 		phone.setUserId(user.getUserId());
 		phone.setUserName(user.getFullName());
-		phone.setCreateDate(now);
-		phone.setModifiedDate(now);
+		phone.setCreateDate(serviceContext.getCreateDate(now));
+		phone.setModifiedDate(serviceContext.getModifiedDate(now));
 		phone.setClassNameId(classNameId);
 		phone.setClassPK(classPK);
 		phone.setNumber(number);
@@ -70,6 +91,26 @@ public class PhoneLocalServiceImpl extends PhoneLocalServiceBaseImpl {
 		return phone;
 	}
 
+	@Override
+	public Phone deletePhone(long phoneId)
+		throws PortalException, SystemException {
+
+		Phone phone = phonePersistence.findByPrimaryKey(phoneId);
+
+		return phoneLocalService.deletePhone(phone);
+	}
+
+	@Override
+	@SystemEvent(
+		action = SystemEventConstants.ACTION_SKIP,
+		type = SystemEventConstants.TYPE_DELETE)
+	public Phone deletePhone(Phone phone) throws SystemException {
+		phonePersistence.remove(phone);
+
+		return phone;
+	}
+
+	@Override
 	public void deletePhones(long companyId, String className, long classPK)
 		throws SystemException {
 
@@ -79,14 +120,16 @@ public class PhoneLocalServiceImpl extends PhoneLocalServiceBaseImpl {
 			companyId, classNameId, classPK);
 
 		for (Phone phone : phones) {
-			deletePhone(phone);
+			phoneLocalService.deletePhone(phone);
 		}
 	}
 
+	@Override
 	public List<Phone> getPhones() throws SystemException {
 		return phonePersistence.findAll();
 	}
 
+	@Override
 	public List<Phone> getPhones(long companyId, String className, long classPK)
 		throws SystemException {
 
@@ -95,6 +138,7 @@ public class PhoneLocalServiceImpl extends PhoneLocalServiceBaseImpl {
 		return phonePersistence.findByC_C_C(companyId, classNameId, classPK);
 	}
 
+	@Override
 	public Phone updatePhone(
 			long phoneId, String number, String extension, int typeId,
 			boolean primary)

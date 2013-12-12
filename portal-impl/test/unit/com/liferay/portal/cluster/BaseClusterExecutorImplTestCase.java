@@ -33,8 +33,10 @@ import com.liferay.portal.kernel.executor.PortalExecutorManager;
 import com.liferay.portal.kernel.executor.PortalExecutorManagerUtil;
 import com.liferay.portal.kernel.portlet.PortletClassLoaderUtil;
 import com.liferay.portal.kernel.test.JDKLoggerTestUtil;
+import com.liferay.portal.kernel.util.ClassLoaderPool;
 import com.liferay.portal.kernel.util.MethodKey;
 import com.liferay.portal.kernel.util.PropsUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.util.PortalImpl;
 import com.liferay.portal.util.PortalUtil;
@@ -308,6 +310,7 @@ public abstract class BaseClusterExecutorImplTestCase
 
 	protected class MockClusterEventListener implements ClusterEventListener {
 
+		@Override
 		public void processClusterEvent(ClusterEvent clusterEvent) {
 			try {
 				ClusterEventType clusterEventType =
@@ -474,10 +477,12 @@ public abstract class BaseClusterExecutorImplTestCase
 
 	protected class MockPortalExecutorManager implements PortalExecutorManager {
 
+		@Override
 		public <T> Future<T> execute(String name, Callable<T> callable) {
 			return _threadPoolExecutor.submit(callable);
 		}
 
+		@Override
 		public <T> T execute(
 				String name, Callable<T> callable, long timeout,
 				TimeUnit timeUnit)
@@ -488,26 +493,31 @@ public abstract class BaseClusterExecutorImplTestCase
 			return future.get(timeout, timeUnit);
 		}
 
+		@Override
 		public ThreadPoolExecutor getPortalExecutor(String name) {
 			return _threadPoolExecutor;
 		}
 
+		@Override
 		public ThreadPoolExecutor getPortalExecutor(
 			String name, boolean createIfAbsent) {
 
 			return _threadPoolExecutor;
 		}
 
+		@Override
 		public ThreadPoolExecutor registerPortalExecutor(
 			String name, ThreadPoolExecutor threadPoolExecutor) {
 
 			return _threadPoolExecutor;
 		}
 
+		@Override
 		public void shutdown() {
 			shutdown(false);
 		}
 
+		@Override
 		public void shutdown(boolean interrupt) {
 			if (interrupt) {
 				_threadPoolExecutor.shutdownNow();
@@ -517,10 +527,12 @@ public abstract class BaseClusterExecutorImplTestCase
 			}
 		}
 
+		@Override
 		public void shutdown(String name) {
 			shutdown(name, false);
 		}
 
+		@Override
 		public void shutdown(String name, boolean interrupt) {
 			if (interrupt) {
 				_threadPoolExecutor.shutdownNow();
@@ -557,24 +569,33 @@ public abstract class BaseClusterExecutorImplTestCase
 			new MockPortalExecutorManager());
 
 		if (loadSpringXML) {
+			String servletContextName = StringUtil.randomId();
+
 			Class<?> clazz = getClass();
 
 			ClassLoader classLoader = clazz.getClassLoader();
 
-			PortletClassLoaderUtil.setClassLoader(classLoader);
+			ClassLoaderPool.register(servletContextName, classLoader);
+			PortletClassLoaderUtil.setServletContextName(servletContextName);
 
-			ApplicationContext applicationContext =
-				new FileSystemXmlApplicationContext(
-					"portal-impl/test/unit/com/liferay/portal/cluster/" +
-						"test-spring.xml");
+			try {
+				ApplicationContext applicationContext =
+					new FileSystemXmlApplicationContext(
+						"portal-impl/test/unit/com/liferay/portal/cluster/" +
+							"test-spring.xml");
 
-			BeanLocator beanLocator = new BeanLocatorImpl(
-				classLoader, applicationContext);
+				BeanLocator beanLocator = new BeanLocatorImpl(
+					classLoader, applicationContext);
 
-			PortalBeanLocatorUtil.setBeanLocator(beanLocator);
+				PortalBeanLocatorUtil.setBeanLocator(beanLocator);
 
-			PortletBeanLocatorUtil.setBeanLocator(
-				SERVLET_CONTEXT_NAME, beanLocator);
+				PortletBeanLocatorUtil.setBeanLocator(
+					SERVLET_CONTEXT_NAME, beanLocator);
+			}
+			finally {
+				ClassLoaderPool.unregister(servletContextName);
+				PortletClassLoaderUtil.setServletContextName(null);
+			}
 		}
 
 		JDKLoggerTestUtil.configureJDKLogger(

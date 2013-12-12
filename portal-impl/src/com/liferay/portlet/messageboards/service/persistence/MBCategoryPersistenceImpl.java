@@ -115,6 +115,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> findByUuid(String uuid) throws SystemException {
 		return findByUuid(uuid, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
@@ -132,6 +133,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the range of matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> findByUuid(String uuid, int start, int end)
 		throws SystemException {
 		return findByUuid(uuid, start, end, null);
@@ -151,6 +153,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the ordered range of matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> findByUuid(String uuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -271,6 +274,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a matching message boards category could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory findByUuid_First(String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchCategoryException, SystemException {
@@ -300,6 +304,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the first matching message boards category, or <code>null</code> if a matching message boards category could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory fetchByUuid_First(String uuid,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<MBCategory> list = findByUuid(uuid, 0, 1, orderByComparator);
@@ -320,6 +325,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a matching message boards category could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory findByUuid_Last(String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchCategoryException, SystemException {
@@ -349,9 +355,14 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the last matching message boards category, or <code>null</code> if a matching message boards category could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory fetchByUuid_Last(String uuid,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByUuid(uuid);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<MBCategory> list = findByUuid(uuid, count - 1, count,
 				orderByComparator);
@@ -373,6 +384,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a message boards category with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory[] findByUuid_PrevAndNext(long categoryId, String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchCategoryException, SystemException {
@@ -528,6 +540,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @param uuid the uuid
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByUuid(String uuid) throws SystemException {
 		for (MBCategory mbCategory : findByUuid(uuid, QueryUtil.ALL_POS,
 				QueryUtil.ALL_POS, null)) {
@@ -542,6 +555,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the number of matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByUuid(String uuid) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID;
 
@@ -624,6 +638,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a matching message boards category could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory findByUUID_G(String uuid, long groupId)
 		throws NoSuchCategoryException, SystemException {
 		MBCategory mbCategory = fetchByUUID_G(uuid, groupId);
@@ -659,6 +674,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the matching message boards category, or <code>null</code> if a matching message boards category could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory fetchByUUID_G(String uuid, long groupId)
 		throws SystemException {
 		return fetchByUUID_G(uuid, groupId, true);
@@ -673,6 +689,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the matching message boards category, or <code>null</code> if a matching message boards category could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory fetchByUUID_G(String uuid, long groupId,
 		boolean retrieveFromCache) throws SystemException {
 		Object[] finderArgs = new Object[] { uuid, groupId };
@@ -779,6 +796,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the message boards category that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory removeByUUID_G(String uuid, long groupId)
 		throws NoSuchCategoryException, SystemException {
 		MBCategory mbCategory = findByUUID_G(uuid, groupId);
@@ -794,6 +812,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the number of matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByUUID_G(String uuid, long groupId)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_G;
@@ -893,6 +912,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> findByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		return findByUuid_C(uuid, companyId, QueryUtil.ALL_POS,
@@ -913,6 +933,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the range of matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> findByUuid_C(String uuid, long companyId,
 		int start, int end) throws SystemException {
 		return findByUuid_C(uuid, companyId, start, end, null);
@@ -933,6 +954,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the ordered range of matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> findByUuid_C(String uuid, long companyId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -1064,6 +1086,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a matching message boards category could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory findByUuid_C_First(String uuid, long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchCategoryException, SystemException {
@@ -1098,6 +1121,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the first matching message boards category, or <code>null</code> if a matching message boards category could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory fetchByUuid_C_First(String uuid, long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<MBCategory> list = findByUuid_C(uuid, companyId, 0, 1,
@@ -1120,6 +1144,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a matching message boards category could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory findByUuid_C_Last(String uuid, long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchCategoryException, SystemException {
@@ -1154,9 +1179,14 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the last matching message boards category, or <code>null</code> if a matching message boards category could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory fetchByUuid_C_Last(String uuid, long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByUuid_C(uuid, companyId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<MBCategory> list = findByUuid_C(uuid, companyId, count - 1, count,
 				orderByComparator);
@@ -1179,6 +1209,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a message boards category with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory[] findByUuid_C_PrevAndNext(long categoryId, String uuid,
 		long companyId, OrderByComparator orderByComparator)
 		throws NoSuchCategoryException, SystemException {
@@ -1339,6 +1370,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @param companyId the company ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		for (MBCategory mbCategory : findByUuid_C(uuid, companyId,
@@ -1355,6 +1387,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the number of matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_C;
@@ -1452,6 +1485,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> findByGroupId(long groupId)
 		throws SystemException {
 		return findByGroupId(groupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
@@ -1470,6 +1504,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the range of matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> findByGroupId(long groupId, int start, int end)
 		throws SystemException {
 		return findByGroupId(groupId, start, end, null);
@@ -1489,6 +1524,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the ordered range of matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> findByGroupId(long groupId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -1595,6 +1631,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a matching message boards category could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory findByGroupId_First(long groupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchCategoryException, SystemException {
@@ -1624,6 +1661,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the first matching message boards category, or <code>null</code> if a matching message boards category could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory fetchByGroupId_First(long groupId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<MBCategory> list = findByGroupId(groupId, 0, 1, orderByComparator);
@@ -1644,6 +1682,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a matching message boards category could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory findByGroupId_Last(long groupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchCategoryException, SystemException {
@@ -1673,9 +1712,14 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the last matching message boards category, or <code>null</code> if a matching message boards category could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory fetchByGroupId_Last(long groupId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByGroupId(groupId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<MBCategory> list = findByGroupId(groupId, count - 1, count,
 				orderByComparator);
@@ -1697,6 +1741,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a message boards category with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory[] findByGroupId_PrevAndNext(long categoryId,
 		long groupId, OrderByComparator orderByComparator)
 		throws NoSuchCategoryException, SystemException {
@@ -1839,6 +1884,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the matching message boards categories that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> filterFindByGroupId(long groupId)
 		throws SystemException {
 		return filterFindByGroupId(groupId, QueryUtil.ALL_POS,
@@ -1858,6 +1904,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the range of matching message boards categories that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> filterFindByGroupId(long groupId, int start, int end)
 		throws SystemException {
 		return filterFindByGroupId(groupId, start, end, null);
@@ -1877,6 +1924,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the ordered range of matching message boards categories that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> filterFindByGroupId(long groupId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
@@ -1967,6 +2015,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a message boards category with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory[] filterFindByGroupId_PrevAndNext(long categoryId,
 		long groupId, OrderByComparator orderByComparator)
 		throws NoSuchCategoryException, SystemException {
@@ -2148,6 +2197,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @param groupId the group ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByGroupId(long groupId) throws SystemException {
 		for (MBCategory mbCategory : findByGroupId(groupId, QueryUtil.ALL_POS,
 				QueryUtil.ALL_POS, null)) {
@@ -2162,6 +2212,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the number of matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByGroupId(long groupId) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_GROUPID;
 
@@ -2214,6 +2265,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the number of matching message boards categories that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int filterCountByGroupId(long groupId) throws SystemException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return countByGroupId(groupId);
@@ -2286,6 +2338,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> findByCompanyId(long companyId)
 		throws SystemException {
 		return findByCompanyId(companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
@@ -2305,6 +2358,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the range of matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> findByCompanyId(long companyId, int start, int end)
 		throws SystemException {
 		return findByCompanyId(companyId, start, end, null);
@@ -2324,6 +2378,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the ordered range of matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> findByCompanyId(long companyId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -2430,6 +2485,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a matching message boards category could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory findByCompanyId_First(long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchCategoryException, SystemException {
@@ -2460,6 +2516,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the first matching message boards category, or <code>null</code> if a matching message boards category could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory fetchByCompanyId_First(long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<MBCategory> list = findByCompanyId(companyId, 0, 1,
@@ -2481,6 +2538,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a matching message boards category could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory findByCompanyId_Last(long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchCategoryException, SystemException {
@@ -2511,9 +2569,14 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the last matching message boards category, or <code>null</code> if a matching message boards category could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory fetchByCompanyId_Last(long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByCompanyId(companyId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<MBCategory> list = findByCompanyId(companyId, count - 1, count,
 				orderByComparator);
@@ -2535,6 +2598,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a message boards category with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory[] findByCompanyId_PrevAndNext(long categoryId,
 		long companyId, OrderByComparator orderByComparator)
 		throws NoSuchCategoryException, SystemException {
@@ -2676,6 +2740,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @param companyId the company ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByCompanyId(long companyId) throws SystemException {
 		for (MBCategory mbCategory : findByCompanyId(companyId,
 				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
@@ -2690,6 +2755,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the number of matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByCompanyId(long companyId) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_COMPANYID;
 
@@ -2769,6 +2835,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> findByG_P(long groupId, long parentCategoryId)
 		throws SystemException {
 		return findByG_P(groupId, parentCategoryId, QueryUtil.ALL_POS,
@@ -2789,6 +2856,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the range of matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> findByG_P(long groupId, long parentCategoryId,
 		int start, int end) throws SystemException {
 		return findByG_P(groupId, parentCategoryId, start, end, null);
@@ -2809,6 +2877,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the ordered range of matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> findByG_P(long groupId, long parentCategoryId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -2926,6 +2995,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a matching message boards category could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory findByG_P_First(long groupId, long parentCategoryId,
 		OrderByComparator orderByComparator)
 		throws NoSuchCategoryException, SystemException {
@@ -2960,6 +3030,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the first matching message boards category, or <code>null</code> if a matching message boards category could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory fetchByG_P_First(long groupId, long parentCategoryId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<MBCategory> list = findByG_P(groupId, parentCategoryId, 0, 1,
@@ -2982,6 +3053,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a matching message boards category could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory findByG_P_Last(long groupId, long parentCategoryId,
 		OrderByComparator orderByComparator)
 		throws NoSuchCategoryException, SystemException {
@@ -3016,9 +3088,14 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the last matching message boards category, or <code>null</code> if a matching message boards category could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory fetchByG_P_Last(long groupId, long parentCategoryId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByG_P(groupId, parentCategoryId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<MBCategory> list = findByG_P(groupId, parentCategoryId, count - 1,
 				count, orderByComparator);
@@ -3041,6 +3118,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a message boards category with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory[] findByG_P_PrevAndNext(long categoryId, long groupId,
 		long parentCategoryId, OrderByComparator orderByComparator)
 		throws NoSuchCategoryException, SystemException {
@@ -3188,6 +3266,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the matching message boards categories that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> filterFindByG_P(long groupId, long parentCategoryId)
 		throws SystemException {
 		return filterFindByG_P(groupId, parentCategoryId, QueryUtil.ALL_POS,
@@ -3208,6 +3287,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the range of matching message boards categories that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> filterFindByG_P(long groupId,
 		long parentCategoryId, int start, int end) throws SystemException {
 		return filterFindByG_P(groupId, parentCategoryId, start, end, null);
@@ -3228,6 +3308,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the ordered range of matching message boards categories that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> filterFindByG_P(long groupId,
 		long parentCategoryId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
@@ -3325,6 +3406,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a message boards category with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory[] filterFindByG_P_PrevAndNext(long categoryId,
 		long groupId, long parentCategoryId, OrderByComparator orderByComparator)
 		throws NoSuchCategoryException, SystemException {
@@ -3512,6 +3594,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the matching message boards categories that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> filterFindByG_P(long groupId,
 		long[] parentCategoryIds) throws SystemException {
 		return filterFindByG_P(groupId, parentCategoryIds, QueryUtil.ALL_POS,
@@ -3532,6 +3615,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the range of matching message boards categories that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> filterFindByG_P(long groupId,
 		long[] parentCategoryIds, int start, int end) throws SystemException {
 		return filterFindByG_P(groupId, parentCategoryIds, start, end, null);
@@ -3552,6 +3636,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the ordered range of matching message boards categories that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> filterFindByG_P(long groupId,
 		long[] parentCategoryIds, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
@@ -3670,6 +3755,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> findByG_P(long groupId, long[] parentCategoryIds)
 		throws SystemException {
 		return findByG_P(groupId, parentCategoryIds, QueryUtil.ALL_POS,
@@ -3690,6 +3776,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the range of matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> findByG_P(long groupId, long[] parentCategoryIds,
 		int start, int end) throws SystemException {
 		return findByG_P(groupId, parentCategoryIds, start, end, null);
@@ -3710,6 +3797,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the ordered range of matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> findByG_P(long groupId, long[] parentCategoryIds,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -3851,6 +3939,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @param parentCategoryId the parent category ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByG_P(long groupId, long parentCategoryId)
 		throws SystemException {
 		for (MBCategory mbCategory : findByG_P(groupId, parentCategoryId,
@@ -3867,6 +3956,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the number of matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByG_P(long groupId, long parentCategoryId)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_P;
@@ -3925,6 +4015,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the number of matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByG_P(long groupId, long[] parentCategoryIds)
 		throws SystemException {
 		Object[] finderArgs = new Object[] {
@@ -4013,6 +4104,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the number of matching message boards categories that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int filterCountByG_P(long groupId, long parentCategoryId)
 		throws SystemException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
@@ -4067,6 +4159,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the number of matching message boards categories that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int filterCountByG_P(long groupId, long[] parentCategoryIds)
 		throws SystemException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
@@ -4177,6 +4270,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> findByG_S(long groupId, int status)
 		throws SystemException {
 		return findByG_S(groupId, status, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
@@ -4197,6 +4291,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the range of matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> findByG_S(long groupId, int status, int start,
 		int end) throws SystemException {
 		return findByG_S(groupId, status, start, end, null);
@@ -4217,6 +4312,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the ordered range of matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> findByG_S(long groupId, int status, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -4333,6 +4429,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a matching message boards category could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory findByG_S_First(long groupId, int status,
 		OrderByComparator orderByComparator)
 		throws NoSuchCategoryException, SystemException {
@@ -4367,6 +4464,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the first matching message boards category, or <code>null</code> if a matching message boards category could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory fetchByG_S_First(long groupId, int status,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<MBCategory> list = findByG_S(groupId, status, 0, 1,
@@ -4389,6 +4487,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a matching message boards category could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory findByG_S_Last(long groupId, int status,
 		OrderByComparator orderByComparator)
 		throws NoSuchCategoryException, SystemException {
@@ -4423,9 +4522,14 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the last matching message boards category, or <code>null</code> if a matching message boards category could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory fetchByG_S_Last(long groupId, int status,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByG_S(groupId, status);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<MBCategory> list = findByG_S(groupId, status, count - 1, count,
 				orderByComparator);
@@ -4448,6 +4552,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a message boards category with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory[] findByG_S_PrevAndNext(long categoryId, long groupId,
 		int status, OrderByComparator orderByComparator)
 		throws NoSuchCategoryException, SystemException {
@@ -4595,6 +4700,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the matching message boards categories that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> filterFindByG_S(long groupId, int status)
 		throws SystemException {
 		return filterFindByG_S(groupId, status, QueryUtil.ALL_POS,
@@ -4615,6 +4721,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the range of matching message boards categories that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> filterFindByG_S(long groupId, int status,
 		int start, int end) throws SystemException {
 		return filterFindByG_S(groupId, status, start, end, null);
@@ -4635,6 +4742,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the ordered range of matching message boards categories that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> filterFindByG_S(long groupId, int status,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -4731,6 +4839,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a message boards category with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory[] filterFindByG_S_PrevAndNext(long categoryId,
 		long groupId, int status, OrderByComparator orderByComparator)
 		throws NoSuchCategoryException, SystemException {
@@ -4917,6 +5026,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @param status the status
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByG_S(long groupId, int status) throws SystemException {
 		for (MBCategory mbCategory : findByG_S(groupId, status,
 				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
@@ -4932,6 +5042,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the number of matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByG_S(long groupId, int status) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_S;
 
@@ -4989,6 +5100,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the number of matching message boards categories that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int filterCountByG_S(long groupId, int status)
 		throws SystemException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
@@ -5067,6 +5179,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> findByC_S(long companyId, int status)
 		throws SystemException {
 		return findByC_S(companyId, status, QueryUtil.ALL_POS,
@@ -5087,6 +5200,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the range of matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> findByC_S(long companyId, int status, int start,
 		int end) throws SystemException {
 		return findByC_S(companyId, status, start, end, null);
@@ -5107,6 +5221,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the ordered range of matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> findByC_S(long companyId, int status, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -5223,6 +5338,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a matching message boards category could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory findByC_S_First(long companyId, int status,
 		OrderByComparator orderByComparator)
 		throws NoSuchCategoryException, SystemException {
@@ -5257,6 +5373,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the first matching message boards category, or <code>null</code> if a matching message boards category could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory fetchByC_S_First(long companyId, int status,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<MBCategory> list = findByC_S(companyId, status, 0, 1,
@@ -5279,6 +5396,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a matching message boards category could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory findByC_S_Last(long companyId, int status,
 		OrderByComparator orderByComparator)
 		throws NoSuchCategoryException, SystemException {
@@ -5313,9 +5431,14 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the last matching message boards category, or <code>null</code> if a matching message boards category could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory fetchByC_S_Last(long companyId, int status,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByC_S(companyId, status);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<MBCategory> list = findByC_S(companyId, status, count - 1, count,
 				orderByComparator);
@@ -5338,6 +5461,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a message boards category with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory[] findByC_S_PrevAndNext(long categoryId, long companyId,
 		int status, OrderByComparator orderByComparator)
 		throws NoSuchCategoryException, SystemException {
@@ -5484,6 +5608,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @param status the status
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByC_S(long companyId, int status)
 		throws SystemException {
 		for (MBCategory mbCategory : findByC_S(companyId, status,
@@ -5500,6 +5625,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the number of matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByC_S(long companyId, int status) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_S;
 
@@ -5596,6 +5722,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> findByG_P_S(long groupId, long parentCategoryId,
 		int status) throws SystemException {
 		return findByG_P_S(groupId, parentCategoryId, status,
@@ -5617,6 +5744,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the range of matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> findByG_P_S(long groupId, long parentCategoryId,
 		int status, int start, int end) throws SystemException {
 		return findByG_P_S(groupId, parentCategoryId, status, start, end, null);
@@ -5638,6 +5766,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the ordered range of matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> findByG_P_S(long groupId, long parentCategoryId,
 		int status, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -5761,6 +5890,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a matching message boards category could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory findByG_P_S_First(long groupId, long parentCategoryId,
 		int status, OrderByComparator orderByComparator)
 		throws NoSuchCategoryException, SystemException {
@@ -5799,6 +5929,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the first matching message boards category, or <code>null</code> if a matching message boards category could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory fetchByG_P_S_First(long groupId, long parentCategoryId,
 		int status, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -5823,6 +5954,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a matching message boards category could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory findByG_P_S_Last(long groupId, long parentCategoryId,
 		int status, OrderByComparator orderByComparator)
 		throws NoSuchCategoryException, SystemException {
@@ -5861,10 +5993,15 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the last matching message boards category, or <code>null</code> if a matching message boards category could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory fetchByG_P_S_Last(long groupId, long parentCategoryId,
 		int status, OrderByComparator orderByComparator)
 		throws SystemException {
 		int count = countByG_P_S(groupId, parentCategoryId, status);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<MBCategory> list = findByG_P_S(groupId, parentCategoryId, status,
 				count - 1, count, orderByComparator);
@@ -5888,6 +6025,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a message boards category with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory[] findByG_P_S_PrevAndNext(long categoryId, long groupId,
 		long parentCategoryId, int status, OrderByComparator orderByComparator)
 		throws NoSuchCategoryException, SystemException {
@@ -6040,6 +6178,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the matching message boards categories that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> filterFindByG_P_S(long groupId,
 		long parentCategoryId, int status) throws SystemException {
 		return filterFindByG_P_S(groupId, parentCategoryId, status,
@@ -6061,6 +6200,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the range of matching message boards categories that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> filterFindByG_P_S(long groupId,
 		long parentCategoryId, int status, int start, int end)
 		throws SystemException {
@@ -6084,6 +6224,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the ordered range of matching message boards categories that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> filterFindByG_P_S(long groupId,
 		long parentCategoryId, int status, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
@@ -6186,6 +6327,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a message boards category with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory[] filterFindByG_P_S_PrevAndNext(long categoryId,
 		long groupId, long parentCategoryId, int status,
 		OrderByComparator orderByComparator)
@@ -6379,6 +6521,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the matching message boards categories that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> filterFindByG_P_S(long groupId,
 		long[] parentCategoryIds, int status) throws SystemException {
 		return filterFindByG_P_S(groupId, parentCategoryIds, status,
@@ -6400,6 +6543,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the range of matching message boards categories that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> filterFindByG_P_S(long groupId,
 		long[] parentCategoryIds, int status, int start, int end)
 		throws SystemException {
@@ -6423,6 +6567,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the ordered range of matching message boards categories that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> filterFindByG_P_S(long groupId,
 		long[] parentCategoryIds, int status, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
@@ -6552,6 +6697,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> findByG_P_S(long groupId, long[] parentCategoryIds,
 		int status) throws SystemException {
 		return findByG_P_S(groupId, parentCategoryIds, status,
@@ -6573,6 +6719,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the range of matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> findByG_P_S(long groupId, long[] parentCategoryIds,
 		int status, int start, int end) throws SystemException {
 		return findByG_P_S(groupId, parentCategoryIds, status, start, end, null);
@@ -6594,6 +6741,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the ordered range of matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> findByG_P_S(long groupId, long[] parentCategoryIds,
 		int status, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -6747,6 +6895,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @param status the status
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByG_P_S(long groupId, long parentCategoryId, int status)
 		throws SystemException {
 		for (MBCategory mbCategory : findByG_P_S(groupId, parentCategoryId,
@@ -6764,6 +6913,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the number of matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByG_P_S(long groupId, long parentCategoryId, int status)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_P_S;
@@ -6827,6 +6977,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the number of matching message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByG_P_S(long groupId, long[] parentCategoryIds, int status)
 		throws SystemException {
 		Object[] finderArgs = new Object[] {
@@ -6926,6 +7077,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the number of matching message boards categories that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int filterCountByG_P_S(long groupId, long parentCategoryId,
 		int status) throws SystemException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
@@ -6985,6 +7137,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the number of matching message boards categories that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int filterCountByG_P_S(long groupId, long[] parentCategoryIds,
 		int status) throws SystemException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
@@ -7079,11 +7232,16 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	private static final String _FINDER_COLUMN_G_P_S_STATUS_5 = "(" +
 		removeConjunction(_FINDER_COLUMN_G_P_S_STATUS_2) + ")";
 
+	public MBCategoryPersistenceImpl() {
+		setModelClass(MBCategory.class);
+	}
+
 	/**
 	 * Caches the message boards category in the entity cache if it is enabled.
 	 *
 	 * @param mbCategory the message boards category
 	 */
+	@Override
 	public void cacheResult(MBCategory mbCategory) {
 		EntityCacheUtil.putResult(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			MBCategoryImpl.class, mbCategory.getPrimaryKey(), mbCategory);
@@ -7100,6 +7258,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 *
 	 * @param mbCategories the message boards categories
 	 */
+	@Override
 	public void cacheResult(List<MBCategory> mbCategories) {
 		for (MBCategory mbCategory : mbCategories) {
 			if (EntityCacheUtil.getResult(
@@ -7220,6 +7379,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @param categoryId the primary key for the new message boards category
 	 * @return the new message boards category
 	 */
+	@Override
 	public MBCategory create(long categoryId) {
 		MBCategory mbCategory = new MBCategoryImpl();
 
@@ -7241,6 +7401,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a message boards category with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory remove(long categoryId)
 		throws NoSuchCategoryException, SystemException {
 		return remove((Serializable)categoryId);
@@ -7531,6 +7692,8 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 		clearUniqueFindersCache(mbCategory);
 		cacheUniqueFindersCache(mbCategory);
 
+		mbCategory.resetOriginalValues();
+
 		return mbCategory;
 	}
 
@@ -7600,6 +7763,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a message boards category with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory findByPrimaryKey(long categoryId)
 		throws NoSuchCategoryException, SystemException {
 		return findByPrimaryKey((Serializable)categoryId);
@@ -7660,6 +7824,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the message boards category, or <code>null</code> if a message boards category with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBCategory fetchByPrimaryKey(long categoryId)
 		throws SystemException {
 		return fetchByPrimaryKey((Serializable)categoryId);
@@ -7671,6 +7836,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> findAll() throws SystemException {
 		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
@@ -7687,6 +7853,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the range of message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> findAll(int start, int end)
 		throws SystemException {
 		return findAll(start, end, null);
@@ -7705,6 +7872,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the ordered range of message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBCategory> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -7790,6 +7958,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 *
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeAll() throws SystemException {
 		for (MBCategory mbCategory : findAll()) {
 			remove(mbCategory);
@@ -7802,6 +7971,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 * @return the number of message boards categories
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countAll() throws SystemException {
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
 				FINDER_ARGS_EMPTY, this);
@@ -7905,6 +8075,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 		};
 
 	private static CacheModel<MBCategory> _nullMBCategoryCacheModel = new CacheModel<MBCategory>() {
+			@Override
 			public MBCategory toEntityModel() {
 				return _nullMBCategory;
 			}

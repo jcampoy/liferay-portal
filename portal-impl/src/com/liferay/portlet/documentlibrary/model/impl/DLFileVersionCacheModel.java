@@ -38,7 +38,7 @@ public class DLFileVersionCacheModel implements CacheModel<DLFileVersion>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(51);
+		StringBundler sb = new StringBundler(53);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -62,6 +62,8 @@ public class DLFileVersionCacheModel implements CacheModel<DLFileVersion>,
 		sb.append(folderId);
 		sb.append(", fileEntryId=");
 		sb.append(fileEntryId);
+		sb.append(", treePath=");
+		sb.append(treePath);
 		sb.append(", extension=");
 		sb.append(extension);
 		sb.append(", mimeType=");
@@ -95,6 +97,7 @@ public class DLFileVersionCacheModel implements CacheModel<DLFileVersion>,
 		return sb.toString();
 	}
 
+	@Override
 	public DLFileVersion toEntityModel() {
 		DLFileVersionImpl dlFileVersionImpl = new DLFileVersionImpl();
 
@@ -134,6 +137,13 @@ public class DLFileVersionCacheModel implements CacheModel<DLFileVersion>,
 		dlFileVersionImpl.setRepositoryId(repositoryId);
 		dlFileVersionImpl.setFolderId(folderId);
 		dlFileVersionImpl.setFileEntryId(fileEntryId);
+
+		if (treePath == null) {
+			dlFileVersionImpl.setTreePath(StringPool.BLANK);
+		}
+		else {
+			dlFileVersionImpl.setTreePath(treePath);
+		}
 
 		if (extension == null) {
 			dlFileVersionImpl.setExtension(StringPool.BLANK);
@@ -217,6 +227,7 @@ public class DLFileVersionCacheModel implements CacheModel<DLFileVersion>,
 		return dlFileVersionImpl;
 	}
 
+	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
 		uuid = objectInput.readUTF();
 		fileVersionId = objectInput.readLong();
@@ -229,6 +240,7 @@ public class DLFileVersionCacheModel implements CacheModel<DLFileVersion>,
 		repositoryId = objectInput.readLong();
 		folderId = objectInput.readLong();
 		fileEntryId = objectInput.readLong();
+		treePath = objectInput.readUTF();
 		extension = objectInput.readUTF();
 		mimeType = objectInput.readUTF();
 		title = objectInput.readUTF();
@@ -245,6 +257,7 @@ public class DLFileVersionCacheModel implements CacheModel<DLFileVersion>,
 		statusDate = objectInput.readLong();
 	}
 
+	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
 		if (uuid == null) {
@@ -271,6 +284,13 @@ public class DLFileVersionCacheModel implements CacheModel<DLFileVersion>,
 		objectOutput.writeLong(repositoryId);
 		objectOutput.writeLong(folderId);
 		objectOutput.writeLong(fileEntryId);
+
+		if (treePath == null) {
+			objectOutput.writeUTF(StringPool.BLANK);
+		}
+		else {
+			objectOutput.writeUTF(treePath);
+		}
 
 		if (extension == null) {
 			objectOutput.writeUTF(StringPool.BLANK);
@@ -356,6 +376,7 @@ public class DLFileVersionCacheModel implements CacheModel<DLFileVersion>,
 	public long repositoryId;
 	public long folderId;
 	public long fileEntryId;
+	public String treePath;
 	public String extension;
 	public String mimeType;
 	public String title;

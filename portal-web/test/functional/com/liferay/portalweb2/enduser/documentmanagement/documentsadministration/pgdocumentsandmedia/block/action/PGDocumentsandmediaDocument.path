@@ -18,35 +18,60 @@
 	<td></td>
 	<td></td>
 </tr>
+<tr>
+	<td>SUCCESS_MESSAGE</td>
+	<td>//div[contains(@class,'alert-success')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>BACK_BUTTON</td>
+	<td>//a[@id='_20_TabsBack']/span[contains(.,'Back')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
 <!--TOOLBAR-->
 <tr>
 	<td>TOOLBAR_DOWNLOAD_BUTTON</td>
-	<td>//span[@class='aui-toolbar-content']/button[.='Download']</td>
+	<td>//div[@id='_20_fileEntryToolbar']/div/button[1][contains(.,'Download')]</td>
 	<td>Download</td>
 </tr>
 <tr>
 	<td>TOOLBAR_EDIT_BUTTON</td>
-	<td>//span[@class='aui-toolbar-content']/button[.='Edit']</td>
+	<td>//div[@id='_20_fileEntryToolbar']/div/button[2][contains(.,'Edit')]</td>
 	<td>Edit</td>
 </tr>
 <tr>
 	<td>TOOLBAR_MOVE_BUTTON</td>
-	<td>//span[@class='aui-toolbar-content']/button[.='Move']</td>
+	<td>//div[@id='_20_fileEntryToolbar']/div/button[3][contains(.,'Move')]</td>
 	<td>Move</td>
 </tr>
 <tr>
 	<td>TOOLBAR_CHECKOUT_BUTTON</td>
-	<td>//span[@class='aui-toolbar-content']/button[.='Checkout']</td>
+	<td>//div[@id='_20_fileEntryToolbar']/div/button[4][contains(.,'Checkout')]</td>
 	<td>Checkout</td>
 </tr>
 <tr>
+	<td>TOOLBAR_CANCEL_CHECKOUT_BUTTON</td>
+	<td>//div[@id='_20_fileEntryToolbar']/div/button[4][contains(.,'Cancel Checkout')]</td>
+	<td>Cancel Checkout</td>
+</tr>
+<tr>
 	<td>TOOLBAR_PERMISSIONS_BUTTON</td>
-	<td>//span[@class='aui-toolbar-content']/button[.='Permissions']</td>
+	<td>//div[@id='_20_fileEntryToolbar']/div/button[5][contains(.,'Permissions')]</td>
 	<td>Permissions</td>
 </tr>
 <tr>
-	<td>TOOLBAR_RECYCLE_BIN_BUTTON</td>
-	<td>//span[@class='aui-toolbar-content']/button[.='Move to the Recycle Bin']</td>
+	<td>TOOLBAR_CHECKIN_BUTTON</td>
+	<td>//div[@id='_20_fileEntryToolbar']/div/button[5][contains(.,'Checkin')]</td>
+	<td>Checkin</td>
+</tr>
+<tr>
+	<td>TOOLBAR_MOVE_TO_RECYCLE_BIN_BUTTON</td>
+	<td>//div[@id='_20_fileEntryToolbar']/div/button[6][contains(.,'Move to the Recycle Bin')]</td>
 	<td>Move to the Recycle Bin</td>
 </tr>
 <tr>
@@ -57,7 +82,7 @@
 <!--DOCUMENT_INFO-->
 <tr>
 	<td>DOCUMENT_INFO_TITLE</td>
-	<td>//div[@class='document-info']/h2[@class='document-title']</td>
+	<td>//div[@class='document-info']/h2[@class='document-title' and contains(.,'${key_dmDocumentTitle}')]</td>
 	<td>Title</td>
 </tr>
 <tr>
@@ -72,7 +97,7 @@
 </tr>
 <tr>
 	<td>DOCUMENT_INFO_DESCRIPTION</td>
-	<td>//div[@class='document-info']/span[@class='document-description']</td>
+	<td>//div[@class='document-info']/span[@class='document-description' and contains(.,'${key_dmDocumentDescription}')]</td>
 	<td>Description</td>
 </tr>
 <tr>
@@ -84,6 +109,11 @@
 	<td>DOCUMENT_INFO_TAGS</td>
 	<td>//div[@class='document-info']/div[@class='lfr-asset-tags']</td>
 	<td>Tags</td>
+</tr>
+<tr>
+	<td>DOCUMENT_INFO_VERSION_NUMBER</td>
+	<td>//h3[contains(.,'${key_versionNumber}')]</td>
+	<td></td>
 </tr>
 <tr>
 	<td></td>
@@ -113,23 +143,65 @@
 </tr>
 <tr>
 	<td>COMMENTS_POST_REPLY_BODY</td>
-	<td>//div[@class='taglib-discussion']/form/fieldset/div/div/span/span/span/textarea</td>
+	<td>//div[@class='taglib-discussion']/form/div/div/div[3]/div</td>
 	<td>Post Reply Body</td>
 </tr>
 <tr>
 	<td>COMMENTS_REPLY</td>
-	<td>//div[@class='taglib-discussion']/form/fieldset/div/div/div/span/span/input</td>
+	<td>//div[@class='taglib-discussion']/form/fieldset/div/div[2]/div[2]/button[1]</td>
 	<td>Reply</td>
 </tr>
 <tr>
 	<td>COMMENTS_REPLY</td>
-	<td>//div[@class='taglib-discussion']/form/fieldset/div/div/div/span[2]/span/input</td>
+	<td>//div[@class='taglib-discussion']/form/fieldset/div/div[2]/div[2]/button[2]</td>
 	<td>Cancel</td>
 </tr>
 <tr>
-	<td>COMMENTS_REPLY_BODY</td>
-	<td>//div[@class='taglib-discussion']/form/div/div/div/div[3]/div/div</td>
-	<td>Reply Body</td>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+<!--VERSION_HISTORY-->
+<tr>
+	<td>VERSION_HISTORY_VERSION</td>
+	<td>//tr[contains(.,'${key_versionHistoryNumber}')]/td[1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>VERSION_HISTORY_DROPDOWN</td>
+	<td>//tr[contains(.,'${key_versionHistoryNumber}')]/td[5]/div/a/i[@class='caret']</td>
+	<td></td>
+</tr>
+<tr>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+<!--VERSION_HISTORY_MENULIST-->
+<tr>
+	<td>VERSION_HISTORY_MENULIST_DOWNLOAD</td>
+	<td>//ul[contains(@class,'dropdown-menu') and contains(@class,'lfr-menu-list') and contains(@class,'direction-down')]/li/a[contains(.,'Download')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>VERSION_HISTORY_MENULIST_VIEW</td>
+	<td>//ul[contains(@class,'dropdown-menu') and contains(@class,'lfr-menu-list') and contains(@class,'direction-down')]/li/a[contains(.,'View')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>VERSION_HISTORY_MENULIST_REVERT</td>
+	<td>//ul[contains(@class,'dropdown-menu') and contains(@class,'lfr-menu-list') and contains(@class,'direction-down')]/li/a[contains(.,'Revert')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>VERSION_HISTORY_MENULIST_DELETE_VERSION</td>
+	<td>//ul[contains(@class,'dropdown-menu') and contains(@class,'lfr-menu-list') and contains(@class,'direction-down')]/li/a[contains(.,'Delete Version')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td></td>
+	<td></td>
+	<td></td>
 </tr>
 </tbody>
 </table>

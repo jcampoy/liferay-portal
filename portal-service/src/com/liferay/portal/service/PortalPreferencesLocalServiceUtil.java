@@ -14,15 +14,18 @@
 
 package com.liferay.portal.service;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
 
 /**
- * The utility for the portal preferences local service. This utility wraps {@link com.liferay.portal.service.impl.PortalPreferencesLocalServiceImpl} and is the primary access point for service operations in application layer code running on the local server.
- *
- * <p>
- * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
- * </p>
+ * Provides the local service utility for PortalPreferences. This utility wraps
+ * {@link com.liferay.portal.service.impl.PortalPreferencesLocalServiceImpl} and is the
+ * primary access point for service operations in application layer code running
+ * on the local server. Methods of this service will not have security checks
+ * based on the propagated JAAS credentials because this service can only be
+ * accessed from within the same VM.
  *
  * @author Brian Wing Shun Chan
  * @see PortalPreferencesLocalService
@@ -30,6 +33,7 @@ import com.liferay.portal.kernel.util.ReferenceRegistry;
  * @see com.liferay.portal.service.impl.PortalPreferencesLocalServiceImpl
  * @generated
  */
+@ProviderType
 public class PortalPreferencesLocalServiceUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -164,6 +168,21 @@ public class PortalPreferencesLocalServiceUtil {
 		return getService().dynamicQueryCount(dynamicQuery);
 	}
 
+	/**
+	* Returns the number of rows that match the dynamic query.
+	*
+	* @param dynamicQuery the dynamic query
+	* @param projection the projection to apply to the query
+	* @return the number of rows that match the dynamic query
+	* @throws SystemException if a system exception occurred
+	*/
+	public static long dynamicQueryCount(
+		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery,
+		com.liferay.portal.kernel.dao.orm.Projection projection)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().dynamicQueryCount(dynamicQuery, projection);
+	}
+
 	public static com.liferay.portal.model.PortalPreferences fetchPortalPreferences(
 		long portalPreferencesId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -253,6 +272,17 @@ public class PortalPreferencesLocalServiceUtil {
 	}
 
 	public static com.liferay.portal.model.PortalPreferences addPortalPreferences(
+		long ownerId, int ownerType, java.lang.String defaultPreferences)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .addPortalPreferences(ownerId, ownerType, defaultPreferences);
+	}
+
+	/**
+	* @deprecated As of 6.2.0, replaced by {@link #addPortalPreferences(long,
+	int, String)}
+	*/
+	public static com.liferay.portal.model.PortalPreferences addPortalPreferences(
 		long companyId, long ownerId, int ownerType,
 		java.lang.String defaultPreferences)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -262,11 +292,31 @@ public class PortalPreferencesLocalServiceUtil {
 	}
 
 	public static javax.portlet.PortletPreferences getPreferences(
+		long ownerId, int ownerType)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getPreferences(ownerId, ownerType);
+	}
+
+	public static javax.portlet.PortletPreferences getPreferences(
+		long ownerId, int ownerType, java.lang.String defaultPreferences)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getPreferences(ownerId, ownerType, defaultPreferences);
+	}
+
+	/**
+	* @deprecated As of 6.2.0, replaced by {@link #getPreferences(long, int)}
+	*/
+	public static javax.portlet.PortletPreferences getPreferences(
 		long companyId, long ownerId, int ownerType)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService().getPreferences(companyId, ownerId, ownerType);
 	}
 
+	/**
+	* @deprecated As of 6.2.0, replaced by {@link #getPreferences(long, int,
+	String)}
+	*/
 	public static javax.portlet.PortletPreferences getPreferences(
 		long companyId, long ownerId, int ownerType,
 		java.lang.String defaultPreferences)

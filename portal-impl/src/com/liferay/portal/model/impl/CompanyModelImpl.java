@@ -147,26 +147,32 @@ public class CompanyModelImpl extends BaseModelImpl<Company>
 	public CompanyModelImpl() {
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _companyId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setCompanyId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
 		return _companyId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return Company.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return Company.class.getName();
 	}
@@ -253,24 +259,29 @@ public class CompanyModelImpl extends BaseModelImpl<Company>
 	}
 
 	@JSON
+	@Override
 	public long getCompanyId() {
 		return _companyId;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
 		_companyId = companyId;
 	}
 
 	@JSON
+	@Override
 	public long getAccountId() {
 		return _accountId;
 	}
 
+	@Override
 	public void setAccountId(long accountId) {
 		_accountId = accountId;
 	}
 
 	@JSON
+	@Override
 	public String getWebId() {
 		if (_webId == null) {
 			return StringPool.BLANK;
@@ -280,6 +291,7 @@ public class CompanyModelImpl extends BaseModelImpl<Company>
 		}
 	}
 
+	@Override
 	public void setWebId(String webId) {
 		_columnBitmask |= WEBID_COLUMN_BITMASK;
 
@@ -295,6 +307,7 @@ public class CompanyModelImpl extends BaseModelImpl<Company>
 	}
 
 	@JSON
+	@Override
 	public String getKey() {
 		if (_key == null) {
 			return StringPool.BLANK;
@@ -304,11 +317,13 @@ public class CompanyModelImpl extends BaseModelImpl<Company>
 		}
 	}
 
+	@Override
 	public void setKey(String key) {
 		_key = key;
 	}
 
 	@JSON
+	@Override
 	public String getMx() {
 		if (_mx == null) {
 			return StringPool.BLANK;
@@ -318,6 +333,7 @@ public class CompanyModelImpl extends BaseModelImpl<Company>
 		}
 	}
 
+	@Override
 	public void setMx(String mx) {
 		_columnBitmask |= MX_COLUMN_BITMASK;
 
@@ -333,6 +349,7 @@ public class CompanyModelImpl extends BaseModelImpl<Company>
 	}
 
 	@JSON
+	@Override
 	public String getHomeURL() {
 		if (_homeURL == null) {
 			return StringPool.BLANK;
@@ -342,15 +359,18 @@ public class CompanyModelImpl extends BaseModelImpl<Company>
 		}
 	}
 
+	@Override
 	public void setHomeURL(String homeURL) {
 		_homeURL = homeURL;
 	}
 
 	@JSON
+	@Override
 	public long getLogoId() {
 		return _logoId;
 	}
 
+	@Override
 	public void setLogoId(long logoId) {
 		_columnBitmask |= LOGOID_COLUMN_BITMASK;
 
@@ -368,14 +388,17 @@ public class CompanyModelImpl extends BaseModelImpl<Company>
 	}
 
 	@JSON
+	@Override
 	public boolean getSystem() {
 		return _system;
 	}
 
+	@Override
 	public boolean isSystem() {
 		return _system;
 	}
 
+	@Override
 	public void setSystem(boolean system) {
 		_columnBitmask |= SYSTEM_COLUMN_BITMASK;
 
@@ -393,23 +416,28 @@ public class CompanyModelImpl extends BaseModelImpl<Company>
 	}
 
 	@JSON
+	@Override
 	public int getMaxUsers() {
 		return _maxUsers;
 	}
 
+	@Override
 	public void setMaxUsers(int maxUsers) {
 		_maxUsers = maxUsers;
 	}
 
 	@JSON
+	@Override
 	public boolean getActive() {
 		return _active;
 	}
 
+	@Override
 	public boolean isActive() {
 		return _active;
 	}
 
+	@Override
 	public void setActive(boolean active) {
 		_active = active;
 	}
@@ -475,6 +503,7 @@ public class CompanyModelImpl extends BaseModelImpl<Company>
 		return companyImpl;
 	}
 
+	@Override
 	public int compareTo(Company company) {
 		long primaryKey = company.getPrimaryKey();
 
@@ -491,18 +520,15 @@ public class CompanyModelImpl extends BaseModelImpl<Company>
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof Company)) {
 			return false;
 		}
 
-		Company company = null;
-
-		try {
-			company = (Company)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		Company company = (Company)obj;
 
 		long primaryKey = company.getPrimaryKey();
 
@@ -534,6 +560,10 @@ public class CompanyModelImpl extends BaseModelImpl<Company>
 		companyModelImpl._originalSystem = companyModelImpl._system;
 
 		companyModelImpl._setOriginalSystem = false;
+
+		setKeyObj(null);
+
+		setVirtualHostname(null);
 
 		companyModelImpl._columnBitmask = 0;
 	}
@@ -622,6 +652,7 @@ public class CompanyModelImpl extends BaseModelImpl<Company>
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(34);
 

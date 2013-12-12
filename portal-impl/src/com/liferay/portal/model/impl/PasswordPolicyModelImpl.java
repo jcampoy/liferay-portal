@@ -17,6 +17,7 @@ package com.liferay.portal.model.impl;
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSON;
+import com.liferay.portal.kernel.lar.StagedModelType;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -198,26 +199,32 @@ public class PasswordPolicyModelImpl extends BaseModelImpl<PasswordPolicy>
 	public PasswordPolicyModelImpl() {
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _passwordPolicyId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setPasswordPolicyId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
 		return _passwordPolicyId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return PasswordPolicy.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return PasswordPolicy.class.getName();
 	}
@@ -473,6 +480,7 @@ public class PasswordPolicyModelImpl extends BaseModelImpl<PasswordPolicy>
 	}
 
 	@JSON
+	@Override
 	public String getUuid() {
 		if (_uuid == null) {
 			return StringPool.BLANK;
@@ -482,6 +490,7 @@ public class PasswordPolicyModelImpl extends BaseModelImpl<PasswordPolicy>
 		}
 	}
 
+	@Override
 	public void setUuid(String uuid) {
 		if (_originalUuid == null) {
 			_originalUuid = _uuid;
@@ -495,19 +504,23 @@ public class PasswordPolicyModelImpl extends BaseModelImpl<PasswordPolicy>
 	}
 
 	@JSON
+	@Override
 	public long getPasswordPolicyId() {
 		return _passwordPolicyId;
 	}
 
+	@Override
 	public void setPasswordPolicyId(long passwordPolicyId) {
 		_passwordPolicyId = passwordPolicyId;
 	}
 
 	@JSON
+	@Override
 	public long getCompanyId() {
 		return _companyId;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
 		_columnBitmask |= COMPANYID_COLUMN_BITMASK;
 
@@ -525,23 +538,28 @@ public class PasswordPolicyModelImpl extends BaseModelImpl<PasswordPolicy>
 	}
 
 	@JSON
+	@Override
 	public long getUserId() {
 		return _userId;
 	}
 
+	@Override
 	public void setUserId(long userId) {
 		_userId = userId;
 	}
 
+	@Override
 	public String getUserUuid() throws SystemException {
 		return PortalUtil.getUserValue(getUserId(), "uuid", _userUuid);
 	}
 
+	@Override
 	public void setUserUuid(String userUuid) {
 		_userUuid = userUuid;
 	}
 
 	@JSON
+	@Override
 	public String getUserName() {
 		if (_userName == null) {
 			return StringPool.BLANK;
@@ -551,37 +569,45 @@ public class PasswordPolicyModelImpl extends BaseModelImpl<PasswordPolicy>
 		}
 	}
 
+	@Override
 	public void setUserName(String userName) {
 		_userName = userName;
 	}
 
 	@JSON
+	@Override
 	public Date getCreateDate() {
 		return _createDate;
 	}
 
+	@Override
 	public void setCreateDate(Date createDate) {
 		_createDate = createDate;
 	}
 
 	@JSON
+	@Override
 	public Date getModifiedDate() {
 		return _modifiedDate;
 	}
 
+	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		_modifiedDate = modifiedDate;
 	}
 
 	@JSON
+	@Override
 	public boolean getDefaultPolicy() {
 		return _defaultPolicy;
 	}
 
+	@Override
 	public boolean isDefaultPolicy() {
 		return _defaultPolicy;
 	}
 
+	@Override
 	public void setDefaultPolicy(boolean defaultPolicy) {
 		_columnBitmask |= DEFAULTPOLICY_COLUMN_BITMASK;
 
@@ -599,6 +625,7 @@ public class PasswordPolicyModelImpl extends BaseModelImpl<PasswordPolicy>
 	}
 
 	@JSON
+	@Override
 	public String getName() {
 		if (_name == null) {
 			return StringPool.BLANK;
@@ -608,6 +635,7 @@ public class PasswordPolicyModelImpl extends BaseModelImpl<PasswordPolicy>
 		}
 	}
 
+	@Override
 	public void setName(String name) {
 		_columnBitmask |= NAME_COLUMN_BITMASK;
 
@@ -623,6 +651,7 @@ public class PasswordPolicyModelImpl extends BaseModelImpl<PasswordPolicy>
 	}
 
 	@JSON
+	@Override
 	public String getDescription() {
 		if (_description == null) {
 			return StringPool.BLANK;
@@ -632,126 +661,154 @@ public class PasswordPolicyModelImpl extends BaseModelImpl<PasswordPolicy>
 		}
 	}
 
+	@Override
 	public void setDescription(String description) {
 		_description = description;
 	}
 
 	@JSON
+	@Override
 	public boolean getChangeable() {
 		return _changeable;
 	}
 
+	@Override
 	public boolean isChangeable() {
 		return _changeable;
 	}
 
+	@Override
 	public void setChangeable(boolean changeable) {
 		_changeable = changeable;
 	}
 
 	@JSON
+	@Override
 	public boolean getChangeRequired() {
 		return _changeRequired;
 	}
 
+	@Override
 	public boolean isChangeRequired() {
 		return _changeRequired;
 	}
 
+	@Override
 	public void setChangeRequired(boolean changeRequired) {
 		_changeRequired = changeRequired;
 	}
 
 	@JSON
+	@Override
 	public long getMinAge() {
 		return _minAge;
 	}
 
+	@Override
 	public void setMinAge(long minAge) {
 		_minAge = minAge;
 	}
 
 	@JSON
+	@Override
 	public boolean getCheckSyntax() {
 		return _checkSyntax;
 	}
 
+	@Override
 	public boolean isCheckSyntax() {
 		return _checkSyntax;
 	}
 
+	@Override
 	public void setCheckSyntax(boolean checkSyntax) {
 		_checkSyntax = checkSyntax;
 	}
 
 	@JSON
+	@Override
 	public boolean getAllowDictionaryWords() {
 		return _allowDictionaryWords;
 	}
 
+	@Override
 	public boolean isAllowDictionaryWords() {
 		return _allowDictionaryWords;
 	}
 
+	@Override
 	public void setAllowDictionaryWords(boolean allowDictionaryWords) {
 		_allowDictionaryWords = allowDictionaryWords;
 	}
 
 	@JSON
+	@Override
 	public int getMinAlphanumeric() {
 		return _minAlphanumeric;
 	}
 
+	@Override
 	public void setMinAlphanumeric(int minAlphanumeric) {
 		_minAlphanumeric = minAlphanumeric;
 	}
 
 	@JSON
+	@Override
 	public int getMinLength() {
 		return _minLength;
 	}
 
+	@Override
 	public void setMinLength(int minLength) {
 		_minLength = minLength;
 	}
 
 	@JSON
+	@Override
 	public int getMinLowerCase() {
 		return _minLowerCase;
 	}
 
+	@Override
 	public void setMinLowerCase(int minLowerCase) {
 		_minLowerCase = minLowerCase;
 	}
 
 	@JSON
+	@Override
 	public int getMinNumbers() {
 		return _minNumbers;
 	}
 
+	@Override
 	public void setMinNumbers(int minNumbers) {
 		_minNumbers = minNumbers;
 	}
 
 	@JSON
+	@Override
 	public int getMinSymbols() {
 		return _minSymbols;
 	}
 
+	@Override
 	public void setMinSymbols(int minSymbols) {
 		_minSymbols = minSymbols;
 	}
 
 	@JSON
+	@Override
 	public int getMinUpperCase() {
 		return _minUpperCase;
 	}
 
+	@Override
 	public void setMinUpperCase(int minUpperCase) {
 		_minUpperCase = minUpperCase;
 	}
 
 	@JSON
+	@Override
 	public String getRegex() {
 		if (_regex == null) {
 			return StringPool.BLANK;
@@ -761,132 +818,167 @@ public class PasswordPolicyModelImpl extends BaseModelImpl<PasswordPolicy>
 		}
 	}
 
+	@Override
 	public void setRegex(String regex) {
 		_regex = regex;
 	}
 
 	@JSON
+	@Override
 	public boolean getHistory() {
 		return _history;
 	}
 
+	@Override
 	public boolean isHistory() {
 		return _history;
 	}
 
+	@Override
 	public void setHistory(boolean history) {
 		_history = history;
 	}
 
 	@JSON
+	@Override
 	public int getHistoryCount() {
 		return _historyCount;
 	}
 
+	@Override
 	public void setHistoryCount(int historyCount) {
 		_historyCount = historyCount;
 	}
 
 	@JSON
+	@Override
 	public boolean getExpireable() {
 		return _expireable;
 	}
 
+	@Override
 	public boolean isExpireable() {
 		return _expireable;
 	}
 
+	@Override
 	public void setExpireable(boolean expireable) {
 		_expireable = expireable;
 	}
 
 	@JSON
+	@Override
 	public long getMaxAge() {
 		return _maxAge;
 	}
 
+	@Override
 	public void setMaxAge(long maxAge) {
 		_maxAge = maxAge;
 	}
 
 	@JSON
+	@Override
 	public long getWarningTime() {
 		return _warningTime;
 	}
 
+	@Override
 	public void setWarningTime(long warningTime) {
 		_warningTime = warningTime;
 	}
 
 	@JSON
+	@Override
 	public int getGraceLimit() {
 		return _graceLimit;
 	}
 
+	@Override
 	public void setGraceLimit(int graceLimit) {
 		_graceLimit = graceLimit;
 	}
 
 	@JSON
+	@Override
 	public boolean getLockout() {
 		return _lockout;
 	}
 
+	@Override
 	public boolean isLockout() {
 		return _lockout;
 	}
 
+	@Override
 	public void setLockout(boolean lockout) {
 		_lockout = lockout;
 	}
 
 	@JSON
+	@Override
 	public int getMaxFailure() {
 		return _maxFailure;
 	}
 
+	@Override
 	public void setMaxFailure(int maxFailure) {
 		_maxFailure = maxFailure;
 	}
 
 	@JSON
+	@Override
 	public long getLockoutDuration() {
 		return _lockoutDuration;
 	}
 
+	@Override
 	public void setLockoutDuration(long lockoutDuration) {
 		_lockoutDuration = lockoutDuration;
 	}
 
 	@JSON
+	@Override
 	public boolean getRequireUnlock() {
 		return _requireUnlock;
 	}
 
+	@Override
 	public boolean isRequireUnlock() {
 		return _requireUnlock;
 	}
 
+	@Override
 	public void setRequireUnlock(boolean requireUnlock) {
 		_requireUnlock = requireUnlock;
 	}
 
 	@JSON
+	@Override
 	public long getResetFailureCount() {
 		return _resetFailureCount;
 	}
 
+	@Override
 	public void setResetFailureCount(long resetFailureCount) {
 		_resetFailureCount = resetFailureCount;
 	}
 
 	@JSON
+	@Override
 	public long getResetTicketMaxAge() {
 		return _resetTicketMaxAge;
 	}
 
+	@Override
 	public void setResetTicketMaxAge(long resetTicketMaxAge) {
 		_resetTicketMaxAge = resetTicketMaxAge;
+	}
+
+	@Override
+	public StagedModelType getStagedModelType() {
+		return new StagedModelType(PortalUtil.getClassNameId(
+				PasswordPolicy.class.getName()));
 	}
 
 	public long getColumnBitmask() {
@@ -960,6 +1052,7 @@ public class PasswordPolicyModelImpl extends BaseModelImpl<PasswordPolicy>
 		return passwordPolicyImpl;
 	}
 
+	@Override
 	public int compareTo(PasswordPolicy passwordPolicy) {
 		long primaryKey = passwordPolicy.getPrimaryKey();
 
@@ -976,18 +1069,15 @@ public class PasswordPolicyModelImpl extends BaseModelImpl<PasswordPolicy>
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof PasswordPolicy)) {
 			return false;
 		}
 
-		PasswordPolicy passwordPolicy = null;
-
-		try {
-			passwordPolicy = (PasswordPolicy)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		PasswordPolicy passwordPolicy = (PasswordPolicy)obj;
 
 		long primaryKey = passwordPolicy.getPrimaryKey();
 
@@ -1219,6 +1309,7 @@ public class PasswordPolicyModelImpl extends BaseModelImpl<PasswordPolicy>
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(106);
 

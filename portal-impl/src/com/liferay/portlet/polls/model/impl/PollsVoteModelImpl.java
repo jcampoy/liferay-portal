@@ -17,6 +17,7 @@ package com.liferay.portlet.polls.model.impl;
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSON;
+import com.liferay.portal.kernel.lar.StagedModelType;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -155,26 +156,32 @@ public class PollsVoteModelImpl extends BaseModelImpl<PollsVote>
 	public PollsVoteModelImpl() {
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _voteId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setVoteId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
 		return _voteId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return PollsVote.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return PollsVote.class.getName();
 	}
@@ -268,6 +275,7 @@ public class PollsVoteModelImpl extends BaseModelImpl<PollsVote>
 	}
 
 	@JSON
+	@Override
 	public String getUuid() {
 		if (_uuid == null) {
 			return StringPool.BLANK;
@@ -277,6 +285,7 @@ public class PollsVoteModelImpl extends BaseModelImpl<PollsVote>
 		}
 	}
 
+	@Override
 	public void setUuid(String uuid) {
 		if (_originalUuid == null) {
 			_originalUuid = _uuid;
@@ -290,19 +299,23 @@ public class PollsVoteModelImpl extends BaseModelImpl<PollsVote>
 	}
 
 	@JSON
+	@Override
 	public long getVoteId() {
 		return _voteId;
 	}
 
+	@Override
 	public void setVoteId(long voteId) {
 		_voteId = voteId;
 	}
 
 	@JSON
+	@Override
 	public long getGroupId() {
 		return _groupId;
 	}
 
+	@Override
 	public void setGroupId(long groupId) {
 		_columnBitmask |= GROUPID_COLUMN_BITMASK;
 
@@ -320,10 +333,12 @@ public class PollsVoteModelImpl extends BaseModelImpl<PollsVote>
 	}
 
 	@JSON
+	@Override
 	public long getCompanyId() {
 		return _companyId;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
 		_columnBitmask |= COMPANYID_COLUMN_BITMASK;
 
@@ -341,10 +356,12 @@ public class PollsVoteModelImpl extends BaseModelImpl<PollsVote>
 	}
 
 	@JSON
+	@Override
 	public long getUserId() {
 		return _userId;
 	}
 
+	@Override
 	public void setUserId(long userId) {
 		_columnBitmask |= USERID_COLUMN_BITMASK;
 
@@ -357,10 +374,12 @@ public class PollsVoteModelImpl extends BaseModelImpl<PollsVote>
 		_userId = userId;
 	}
 
+	@Override
 	public String getUserUuid() throws SystemException {
 		return PortalUtil.getUserValue(getUserId(), "uuid", _userUuid);
 	}
 
+	@Override
 	public void setUserUuid(String userUuid) {
 		_userUuid = userUuid;
 	}
@@ -370,6 +389,7 @@ public class PollsVoteModelImpl extends BaseModelImpl<PollsVote>
 	}
 
 	@JSON
+	@Override
 	public String getUserName() {
 		if (_userName == null) {
 			return StringPool.BLANK;
@@ -379,33 +399,40 @@ public class PollsVoteModelImpl extends BaseModelImpl<PollsVote>
 		}
 	}
 
+	@Override
 	public void setUserName(String userName) {
 		_userName = userName;
 	}
 
 	@JSON
+	@Override
 	public Date getCreateDate() {
 		return _createDate;
 	}
 
+	@Override
 	public void setCreateDate(Date createDate) {
 		_createDate = createDate;
 	}
 
 	@JSON
+	@Override
 	public Date getModifiedDate() {
 		return _modifiedDate;
 	}
 
+	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		_modifiedDate = modifiedDate;
 	}
 
 	@JSON
+	@Override
 	public long getQuestionId() {
 		return _questionId;
 	}
 
+	@Override
 	public void setQuestionId(long questionId) {
 		_columnBitmask |= QUESTIONID_COLUMN_BITMASK;
 
@@ -423,10 +450,12 @@ public class PollsVoteModelImpl extends BaseModelImpl<PollsVote>
 	}
 
 	@JSON
+	@Override
 	public long getChoiceId() {
 		return _choiceId;
 	}
 
+	@Override
 	public void setChoiceId(long choiceId) {
 		_columnBitmask |= CHOICEID_COLUMN_BITMASK;
 
@@ -444,12 +473,20 @@ public class PollsVoteModelImpl extends BaseModelImpl<PollsVote>
 	}
 
 	@JSON
+	@Override
 	public Date getVoteDate() {
 		return _voteDate;
 	}
 
+	@Override
 	public void setVoteDate(Date voteDate) {
 		_voteDate = voteDate;
+	}
+
+	@Override
+	public StagedModelType getStagedModelType() {
+		return new StagedModelType(PortalUtil.getClassNameId(
+				PollsVote.class.getName()));
 	}
 
 	public long getColumnBitmask() {
@@ -500,6 +537,7 @@ public class PollsVoteModelImpl extends BaseModelImpl<PollsVote>
 		return pollsVoteImpl;
 	}
 
+	@Override
 	public int compareTo(PollsVote pollsVote) {
 		long primaryKey = pollsVote.getPrimaryKey();
 
@@ -516,18 +554,15 @@ public class PollsVoteModelImpl extends BaseModelImpl<PollsVote>
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof PollsVote)) {
 			return false;
 		}
 
-		PollsVote pollsVote = null;
-
-		try {
-			pollsVote = (PollsVote)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		PollsVote pollsVote = (PollsVote)obj;
 
 		long primaryKey = pollsVote.getPrimaryKey();
 
@@ -666,6 +701,7 @@ public class PollsVoteModelImpl extends BaseModelImpl<PollsVote>
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(37);
 

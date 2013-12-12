@@ -140,26 +140,32 @@ public class PortletPreferencesModelImpl extends BaseModelImpl<PortletPreference
 	public PortletPreferencesModelImpl() {
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _portletPreferencesId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setPortletPreferencesId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
 		return _portletPreferencesId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return PortletPreferences.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return PortletPreferences.class.getName();
 	}
@@ -218,19 +224,23 @@ public class PortletPreferencesModelImpl extends BaseModelImpl<PortletPreference
 	}
 
 	@JSON
+	@Override
 	public long getPortletPreferencesId() {
 		return _portletPreferencesId;
 	}
 
+	@Override
 	public void setPortletPreferencesId(long portletPreferencesId) {
 		_portletPreferencesId = portletPreferencesId;
 	}
 
 	@JSON
+	@Override
 	public long getOwnerId() {
 		return _ownerId;
 	}
 
+	@Override
 	public void setOwnerId(long ownerId) {
 		_columnBitmask |= OWNERID_COLUMN_BITMASK;
 
@@ -248,10 +258,12 @@ public class PortletPreferencesModelImpl extends BaseModelImpl<PortletPreference
 	}
 
 	@JSON
+	@Override
 	public int getOwnerType() {
 		return _ownerType;
 	}
 
+	@Override
 	public void setOwnerType(int ownerType) {
 		_columnBitmask |= OWNERTYPE_COLUMN_BITMASK;
 
@@ -269,10 +281,12 @@ public class PortletPreferencesModelImpl extends BaseModelImpl<PortletPreference
 	}
 
 	@JSON
+	@Override
 	public long getPlid() {
 		return _plid;
 	}
 
+	@Override
 	public void setPlid(long plid) {
 		_columnBitmask |= PLID_COLUMN_BITMASK;
 
@@ -290,6 +304,7 @@ public class PortletPreferencesModelImpl extends BaseModelImpl<PortletPreference
 	}
 
 	@JSON
+	@Override
 	public String getPortletId() {
 		if (_portletId == null) {
 			return StringPool.BLANK;
@@ -299,6 +314,7 @@ public class PortletPreferencesModelImpl extends BaseModelImpl<PortletPreference
 		}
 	}
 
+	@Override
 	public void setPortletId(String portletId) {
 		_columnBitmask |= PORTLETID_COLUMN_BITMASK;
 
@@ -314,6 +330,7 @@ public class PortletPreferencesModelImpl extends BaseModelImpl<PortletPreference
 	}
 
 	@JSON
+	@Override
 	public String getPreferences() {
 		if (_preferences == null) {
 			return StringPool.BLANK;
@@ -323,6 +340,7 @@ public class PortletPreferencesModelImpl extends BaseModelImpl<PortletPreference
 		}
 	}
 
+	@Override
 	public void setPreferences(String preferences) {
 		_preferences = preferences;
 	}
@@ -370,6 +388,7 @@ public class PortletPreferencesModelImpl extends BaseModelImpl<PortletPreference
 		return portletPreferencesImpl;
 	}
 
+	@Override
 	public int compareTo(PortletPreferences portletPreferences) {
 		long primaryKey = portletPreferences.getPrimaryKey();
 
@@ -386,18 +405,15 @@ public class PortletPreferencesModelImpl extends BaseModelImpl<PortletPreference
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof PortletPreferences)) {
 			return false;
 		}
 
-		PortletPreferences portletPreferences = null;
-
-		try {
-			portletPreferences = (PortletPreferences)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		PortletPreferences portletPreferences = (PortletPreferences)obj;
 
 		long primaryKey = portletPreferences.getPrimaryKey();
 
@@ -487,6 +503,7 @@ public class PortletPreferencesModelImpl extends BaseModelImpl<PortletPreference
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(22);
 

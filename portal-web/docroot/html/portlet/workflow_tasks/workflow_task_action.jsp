@@ -26,9 +26,7 @@ ResultRow row = (ResultRow)request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_
 WorkflowTask workflowTask = null;
 
 if (row != null) {
-	randomId = PwdGenerator.getPassword(PwdGenerator.KEY3, 4);
-
-	Object result = row.getObject();
+	randomId = StringUtil.randomId();
 
 	workflowTask = (WorkflowTask)row.getParameter("workflowTask");
 }
@@ -69,7 +67,7 @@ long[] pooledActorsIds = WorkflowTaskManagerUtil.getPooledActorsIds(company.getC
 			<liferay-ui:icon
 				cssClass='<%= "workflow-task-" + randomId + " task-change-status-link" %>'
 				id='<%= randomId + transitionName + "taskChangeStatusLink" %>'
-				image="../aui/shuffle"
+				image="../aui/random"
 				message="<%= message %>"
 				method="get"
 				url="<%= editURL %>"
@@ -139,7 +137,7 @@ long[] pooledActorsIds = WorkflowTaskManagerUtil.getPooledActorsIds(company.getC
 	</c:if>
 </liferay-ui:icon-menu>
 
-<div class="aui-helper-hidden" id="<%= randomId %>updateAsignee">
+<div class="hide" id="<%= randomId %>updateAsignee">
 	<c:if test="<%= _hasOtherAssignees(pooledActorsIds, workflowTask, user) %>">
 		<aui:select label="assign-to" name="assigneeUserId">
 
@@ -160,15 +158,15 @@ long[] pooledActorsIds = WorkflowTaskManagerUtil.getPooledActorsIds(company.getC
 	</c:if>
 </div>
 
-<div class="aui-helper-hidden" id="<%= randomId %>updateAsigneeToMe">
+<div class="hide" id="<%= randomId %>updateAsigneeToMe">
 	<aui:input name="asigneeUserId" type="hidden" value="<%= user.getUserId() %>" />
 </div>
 
-<div class="aui-helper-hidden" id="<%= randomId %>updateDueDate">
+<div class="hide" id="<%= randomId %>updateDueDate">
 	<aui:input bean="<%= workflowTask %>" model="<%= WorkflowTask.class %>" name="dueDate" />
 </div>
 
-<div class="aui-helper-hidden" id="<%= randomId %>updateComments">
+<div class="hide" id="<%= randomId %>updateComments">
 	<aui:input cols="55" name="comment" rows="10" type="textarea" />
 </div>
 

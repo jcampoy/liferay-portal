@@ -16,6 +16,7 @@ package com.liferay.portal.sharepoint;
 
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.DateUtil;
+import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.xml.Element;
@@ -25,22 +26,24 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * @author Bruno Farache
  */
 public abstract class BaseSharepointStorageImpl implements SharepointStorage {
 
+	@Override
 	public void addDocumentElements(
 			SharepointRequest sharepointRequest, Element element)
 		throws Exception {
 	}
 
+	@Override
 	public void createFolder(SharepointRequest sharepointRequest)
 		throws Exception {
 	}
 
+	@Override
 	public InputStream getDocumentInputStream(
 			SharepointRequest sharepointRequest)
 		throws Exception {
@@ -48,45 +51,53 @@ public abstract class BaseSharepointStorageImpl implements SharepointStorage {
 		return null;
 	}
 
+	@Override
 	public Tree getDocumentsTree(SharepointRequest sharepointRequest)
 		throws Exception {
 
 		return new Tree();
 	}
 
+	@Override
 	public Tree getDocumentTree(SharepointRequest sharepointRequest)
 		throws Exception {
 
 		return new Tree();
 	}
 
+	@Override
 	public Tree getFoldersTree(SharepointRequest sharepointRequest)
 		throws Exception {
 
 		return new Tree();
 	}
 
+	@Override
 	public Tree getFolderTree(SharepointRequest sharepointRequest)
 		throws Exception {
 
 		return new Tree();
 	}
 
+	@Override
 	public void getParentFolderIds(
 			long groupId, String path, List<Long> folderIds)
 		throws Exception {
 	}
 
+	@Override
 	public Tree[] moveDocument(SharepointRequest sharepointRequest)
 		throws Exception {
 
 		return null;
 	}
 
+	@Override
 	public void putDocument(SharepointRequest sharepointRequest)
 		throws Exception {
 	}
 
+	@Override
 	public Tree[] removeDocument(SharepointRequest sharepointRequest)
 		throws Exception {
 
@@ -119,12 +130,13 @@ public abstract class BaseSharepointStorageImpl implements SharepointStorage {
 
 		if (xml) {
 			sb.append(
-				DateUtil.getDate(date, "yyyy-mm-dd HH:mm:ss Z", Locale.US));
+				DateUtil.getDate(date, "yyyy-mm-dd HH:mm:ss Z", LocaleUtil.US));
 		}
 		else {
 			sb.append("TR|");
 			sb.append(
-				DateUtil.getDate(date, "dd MMM yyyy HH:mm:ss Z", Locale.US));
+				DateUtil.getDate(
+					date, "dd MMM yyyy HH:mm:ss Z", LocaleUtil.US));
 		}
 
 		return sb.toString();

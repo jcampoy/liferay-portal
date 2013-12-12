@@ -14,6 +14,7 @@
 
 package com.liferay.portal.deploy.hot;
 
+import com.liferay.portal.deploy.RequiredPluginsUtil;
 import com.liferay.portal.kernel.deploy.hot.HotDeploy;
 import com.liferay.portal.kernel.deploy.hot.HotDeployEvent;
 import com.liferay.portal.kernel.deploy.hot.HotDeployException;
@@ -39,7 +40,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.servlet.ServletContext;
 
@@ -58,9 +58,10 @@ public class HotDeployImpl implements HotDeploy {
 
 		_dependentHotDeployEvents = new ArrayList<HotDeployEvent>();
 		_deployedServletContextNames = new HashSet<String>();
-		_hotDeployListeners = new CopyOnWriteArrayList<HotDeployListener>();
+		_hotDeployListeners = new ArrayList<HotDeployListener>();
 	}
 
+	@Override
 	public synchronized void fireDeployEvent(
 		final HotDeployEvent hotDeployEvent) {
 
@@ -96,21 +97,21 @@ public class HotDeployImpl implements HotDeploy {
 		}
 	}
 
+	@Override
 	public synchronized void fireUndeployEvent(HotDeployEvent hotDeployEvent) {
-		for (HotDeployListener hotDeployListener : _hotDeployListeners) {
-			try {
-				PortletClassLoaderUtil.setClassLoader(
-					hotDeployEvent.getContextClassLoader());
-				PortletClassLoaderUtil.setServletContextName(
-					hotDeployEvent.getServletContextName());
+		for (int i = _hotDeployListeners.size() - 1; i >= 0; i--) {
+			HotDeployListener hotDeployListener = _hotDeployListeners.get(i);
 
+			PortletClassLoaderUtil.setServletContextName(
+				hotDeployEvent.getServletContextName());
+
+			try {
 				hotDeployListener.invokeUndeploy(hotDeployEvent);
 			}
 			catch (HotDeployException hde) {
 				_log.error(hde, hde);
 			}
 			finally {
-				PortletClassLoaderUtil.setClassLoader(null);
 				PortletClassLoaderUtil.setServletContextName(null);
 			}
 		}
@@ -123,12 +124,18 @@ public class HotDeployImpl implements HotDeploy {
 		TemplateManagerUtil.destroy(classLoader);
 
 		_pacl.unregister(classLoader);
+
+		RequiredPluginsUtil.startCheckingRequiredPlugins();
 	}
 
-	public void registerListener(HotDeployListener hotDeployListener) {
+	@Override
+	public synchronized void registerListener(
+		HotDeployListener hotDeployListener) {
+
 		_hotDeployListeners.add(hotDeployListener);
 	}
 
+	@Override
 	public synchronized void reset() {
 		_capturePrematureEvents = true;
 		_dependentHotDeployEvents.clear();
@@ -136,18 +143,33 @@ public class HotDeployImpl implements HotDeploy {
 		_hotDeployListeners.clear();
 	}
 
+	@Override
 	public synchronized void setCapturePrematureEvents(
 		boolean capturePrematureEvents) {
 
 		_capturePrematureEvents = capturePrematureEvents;
 	}
 
-	public void unregisterListener(HotDeployListener hotDeployListener) {
+	@Override
+	public synchronized void unregisterListener(
+		HotDeployListener hotDeployListener) {
+
 		_hotDeployListeners.remove(hotDeployListener);
 	}
 
-	public void unregisterListeners() {
+	@Override
+	public synchronized void unregisterListeners() {
 		_hotDeployListeners.clear();
+	}
+
+	public static interface PACL {
+
+		public void initPolicy(
+			String servletContextName, ClassLoader classLoader,
+			Properties properties);
+
+		public void unregister(ClassLoader classLoader);
+
 	}
 
 	protected void doFireDeployEvent(HotDeployEvent hotDeployEvent) {
@@ -177,19 +199,16 @@ public class HotDeployImpl implements HotDeploy {
 			}
 
 			for (HotDeployListener hotDeployListener : _hotDeployListeners) {
-				try {
-					PortletClassLoaderUtil.setClassLoader(
-						hotDeployEvent.getContextClassLoader());
-					PortletClassLoaderUtil.setServletContextName(
-						hotDeployEvent.getServletContextName());
+				PortletClassLoaderUtil.setServletContextName(
+					hotDeployEvent.getServletContextName());
 
+				try {
 					hotDeployListener.invokeDeploy(hotDeployEvent);
 				}
 				catch (HotDeployException hde) {
 					_log.error(hde, hde);
 				}
 				finally {
-					PortletClassLoaderUtil.setClassLoader(null);
 					PortletClassLoaderUtil.setServletContextName(null);
 				}
 			}
@@ -285,29 +304,21 @@ public class HotDeployImpl implements HotDeploy {
 	private static PACL _pacl = new NoPACL();
 
 	private boolean _capturePrematureEvents = true;
-	private List<HotDeployEvent> _dependentHotDeployEvents;
-	private Set<String> _deployedServletContextNames;
-	private List<HotDeployListener> _hotDeployListeners;
+	private final List<HotDeployEvent> _dependentHotDeployEvents;
+	private final Set<String> _deployedServletContextNames;
+	private final List<HotDeployListener> _hotDeployListeners;
 
 	private static class NoPACL implements PACL {
 
+		@Override
 		public void initPolicy(
 			String servletContextName, ClassLoader classLoader,
 			Properties properties) {
 		}
 
+		@Override
 		public void unregister(ClassLoader classLoader) {
 		}
-
-	}
-
-	public static interface PACL {
-
-		public void initPolicy(
-			String servletContextName, ClassLoader classLoader,
-			Properties properties);
-
-		public void unregister(ClassLoader classLoader);
 
 	}
 

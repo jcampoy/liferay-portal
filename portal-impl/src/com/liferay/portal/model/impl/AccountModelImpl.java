@@ -155,26 +155,32 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 	public AccountModelImpl() {
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _accountId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setAccountId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
 		return _accountId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return Account.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return Account.class.getName();
 	}
@@ -303,41 +309,50 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 	}
 
 	@JSON
+	@Override
 	public long getAccountId() {
 		return _accountId;
 	}
 
+	@Override
 	public void setAccountId(long accountId) {
 		_accountId = accountId;
 	}
 
 	@JSON
+	@Override
 	public long getCompanyId() {
 		return _companyId;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
 		_companyId = companyId;
 	}
 
 	@JSON
+	@Override
 	public long getUserId() {
 		return _userId;
 	}
 
+	@Override
 	public void setUserId(long userId) {
 		_userId = userId;
 	}
 
+	@Override
 	public String getUserUuid() throws SystemException {
 		return PortalUtil.getUserValue(getUserId(), "uuid", _userUuid);
 	}
 
+	@Override
 	public void setUserUuid(String userUuid) {
 		_userUuid = userUuid;
 	}
 
 	@JSON
+	@Override
 	public String getUserName() {
 		if (_userName == null) {
 			return StringPool.BLANK;
@@ -347,38 +362,46 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 		}
 	}
 
+	@Override
 	public void setUserName(String userName) {
 		_userName = userName;
 	}
 
 	@JSON
+	@Override
 	public Date getCreateDate() {
 		return _createDate;
 	}
 
+	@Override
 	public void setCreateDate(Date createDate) {
 		_createDate = createDate;
 	}
 
 	@JSON
+	@Override
 	public Date getModifiedDate() {
 		return _modifiedDate;
 	}
 
+	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		_modifiedDate = modifiedDate;
 	}
 
 	@JSON
+	@Override
 	public long getParentAccountId() {
 		return _parentAccountId;
 	}
 
+	@Override
 	public void setParentAccountId(long parentAccountId) {
 		_parentAccountId = parentAccountId;
 	}
 
 	@JSON
+	@Override
 	public String getName() {
 		if (_name == null) {
 			return StringPool.BLANK;
@@ -388,11 +411,13 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 		}
 	}
 
+	@Override
 	public void setName(String name) {
 		_name = name;
 	}
 
 	@JSON
+	@Override
 	public String getLegalName() {
 		if (_legalName == null) {
 			return StringPool.BLANK;
@@ -402,11 +427,13 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 		}
 	}
 
+	@Override
 	public void setLegalName(String legalName) {
 		_legalName = legalName;
 	}
 
 	@JSON
+	@Override
 	public String getLegalId() {
 		if (_legalId == null) {
 			return StringPool.BLANK;
@@ -416,11 +443,13 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 		}
 	}
 
+	@Override
 	public void setLegalId(String legalId) {
 		_legalId = legalId;
 	}
 
 	@JSON
+	@Override
 	public String getLegalType() {
 		if (_legalType == null) {
 			return StringPool.BLANK;
@@ -430,11 +459,13 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 		}
 	}
 
+	@Override
 	public void setLegalType(String legalType) {
 		_legalType = legalType;
 	}
 
 	@JSON
+	@Override
 	public String getSicCode() {
 		if (_sicCode == null) {
 			return StringPool.BLANK;
@@ -444,11 +475,13 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 		}
 	}
 
+	@Override
 	public void setSicCode(String sicCode) {
 		_sicCode = sicCode;
 	}
 
 	@JSON
+	@Override
 	public String getTickerSymbol() {
 		if (_tickerSymbol == null) {
 			return StringPool.BLANK;
@@ -458,11 +491,13 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 		}
 	}
 
+	@Override
 	public void setTickerSymbol(String tickerSymbol) {
 		_tickerSymbol = tickerSymbol;
 	}
 
 	@JSON
+	@Override
 	public String getIndustry() {
 		if (_industry == null) {
 			return StringPool.BLANK;
@@ -472,11 +507,13 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 		}
 	}
 
+	@Override
 	public void setIndustry(String industry) {
 		_industry = industry;
 	}
 
 	@JSON
+	@Override
 	public String getType() {
 		if (_type == null) {
 			return StringPool.BLANK;
@@ -486,11 +523,13 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 		}
 	}
 
+	@Override
 	public void setType(String type) {
 		_type = type;
 	}
 
 	@JSON
+	@Override
 	public String getSize() {
 		if (_size == null) {
 			return StringPool.BLANK;
@@ -500,6 +539,7 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 		}
 	}
 
+	@Override
 	public void setSize(String size) {
 		_size = size;
 	}
@@ -553,6 +593,7 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 		return accountImpl;
 	}
 
+	@Override
 	public int compareTo(Account account) {
 		long primaryKey = account.getPrimaryKey();
 
@@ -569,18 +610,15 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof Account)) {
 			return false;
 		}
 
-		Account account = null;
-
-		try {
-			account = (Account)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		Account account = (Account)obj;
 
 		long primaryKey = account.getPrimaryKey();
 
@@ -755,6 +793,7 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(52);
 

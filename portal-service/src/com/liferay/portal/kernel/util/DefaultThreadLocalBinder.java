@@ -38,6 +38,7 @@ public class DefaultThreadLocalBinder implements ThreadLocalBinder {
 		init(getClassLoader());
 	}
 
+	@Override
 	public void bind() {
 		Map<ThreadLocal<?>, ?> threadLocalValues = _threadLocalValues.get();
 
@@ -52,6 +53,7 @@ public class DefaultThreadLocalBinder implements ThreadLocalBinder {
 		}
 	}
 
+	@Override
 	public void cleanUp() {
 		for (ThreadLocal<?> threadLocal : _threadLocals) {
 			threadLocal.remove();
@@ -109,9 +111,9 @@ public class DefaultThreadLocalBinder implements ThreadLocalBinder {
 
 			_threadLocals.add(threadLocal);
 		}
-
 	}
 
+	@Override
 	public void record() {
 		Map<ThreadLocal<?>, Object> threadLocalValues =
 			new HashMap<ThreadLocal<?>, Object>();

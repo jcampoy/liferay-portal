@@ -14,6 +14,8 @@
 
 package com.liferay.portal.kernel.search;
 
+import com.liferay.portal.kernel.util.ArrayUtil;
+
 import java.io.Serializable;
 
 import java.util.Locale;
@@ -80,6 +82,8 @@ public class Field implements Serializable {
 		Field.URL, Field.USER_NAME
 	};
 
+	public static final String LANGUAGE_ID = "languageId";
+
 	public static final String LAYOUT_UUID = "layoutUuid";
 
 	/**
@@ -121,11 +125,15 @@ public class Field implements Serializable {
 
 	public static final String SNIPPET = "snippet";
 
+	public static final String SPELL_CHECK_WORD = "spellCheckWord";
+
 	public static final String STAGING_GROUP = "stagingGroup";
 
 	public static final String STATUS = "status";
 
 	public static final String TITLE = "title";
+
+	public static final String TREE_PATH = "treePath";
 
 	public static final String TYPE = "type";
 
@@ -209,7 +217,7 @@ public class Field implements Serializable {
 	}
 
 	public String getValue() {
-		if ((_values != null) && (_values.length > 0)) {
+		if (ArrayUtil.isNotEmpty(_values)) {
 			return _values[0];
 		}
 		else {

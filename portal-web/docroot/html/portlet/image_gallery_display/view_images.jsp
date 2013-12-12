@@ -19,13 +19,14 @@
 <%
 Long folderId = GetterUtil.getLong((String)request.getAttribute("view.jsp-folderId"));
 String[] mediaGalleryMimeTypes = (String[])request.getAttribute("view.jsp-mediaGalleryMimeTypes");
-List results = (List)request.getAttribute("view.jsp-results");
 SearchContainer searchContainer = (SearchContainer)request.getAttribute("view.jsp-searchContainer");
+
+List results = searchContainer.getResults();
 %>
 
 <c:choose>
 	<c:when test="<%= results.isEmpty() %>">
-		<div class="portlet-msg-info">
+		<div class="alert alert-info">
 			<%= LanguageUtil.get(pageContext, "there-are-no-media-files-in-this-folder") %>
 		</div>
 	</c:when>
@@ -121,7 +122,7 @@ SearchContainer searchContainer = (SearchContainer)request.getAttribute("view.js
 					</div>
 
 					<c:if test="<%= showActions %>">
-						<div class="aui-helper-hidden" id="<portlet:namespace />buttonsContainer_<%= thumbnailId %>">
+						<div class="hide" id="<portlet:namespace />buttonsContainer_<%= thumbnailId %>">
 							<div class="buttons-container float-container" id="<portlet:namespace />buttons_<%= thumbnailId %>">
 								<%@ include file="/html/portlet/image_gallery_display/image_action.jspf" %>
 							</div>
@@ -253,7 +254,7 @@ embeddedPlayerURL.setParameter("struts_action", "/image_gallery_display/embedded
 embeddedPlayerURL.setWindowState(LiferayWindowState.POP_UP);
 %>
 
-<aui:script use="aui-image-viewer-gallery,aui-media-viewer-plugin">
+<aui:script use="aui-image-viewer-gallery,aui-image-viewer-media">
 	var viewportRegion = A.getDoc().get('viewportRegion');
 
 	var maxHeight = (viewportRegion.height / 2);
@@ -297,6 +298,7 @@ embeddedPlayerURL.setWindowState(LiferayWindowState.POP_UP);
 				</c:if>
 			},
 			delay: 5000,
+			infoTemplate: '<%= LanguageUtil.format(pageContext, "image-x-of-x", new String[] {"{current}", "{total}"}) %>',
 			links: '#<portlet:namespace />imageGalleryAssetInfo .image-link.preview',
 			maxHeight: maxHeight,
 			maxWidth: maxWidth,
@@ -322,7 +324,8 @@ embeddedPlayerURL.setWindowState(LiferayWindowState.POP_UP);
 					},
 					fn: A.MediaViewerPlugin
 				}
-			]
+			],
+			zIndex: ++Liferay.zIndex.WINDOW
 		}
 	).render();
 </aui:script>

@@ -14,17 +14,18 @@
 
 package com.liferay.portlet.shopping.service;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.service.ServiceWrapper;
 
 /**
- * <p>
- * This class is a wrapper for {@link ShoppingCartLocalService}.
- * </p>
+ * Provides a wrapper for {@link ShoppingCartLocalService}.
  *
- * @author    Brian Wing Shun Chan
- * @see       ShoppingCartLocalService
+ * @author Brian Wing Shun Chan
+ * @see ShoppingCartLocalService
  * @generated
  */
+@ProviderType
 public class ShoppingCartLocalServiceWrapper implements ShoppingCartLocalService,
 	ServiceWrapper<ShoppingCartLocalService> {
 	public ShoppingCartLocalServiceWrapper(
@@ -39,6 +40,7 @@ public class ShoppingCartLocalServiceWrapper implements ShoppingCartLocalService
 	* @return the shopping cart that was added
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.shopping.model.ShoppingCart addShoppingCart(
 		com.liferay.portlet.shopping.model.ShoppingCart shoppingCart)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -51,6 +53,7 @@ public class ShoppingCartLocalServiceWrapper implements ShoppingCartLocalService
 	* @param cartId the primary key for the new shopping cart
 	* @return the new shopping cart
 	*/
+	@Override
 	public com.liferay.portlet.shopping.model.ShoppingCart createShoppingCart(
 		long cartId) {
 		return _shoppingCartLocalService.createShoppingCart(cartId);
@@ -64,6 +67,7 @@ public class ShoppingCartLocalServiceWrapper implements ShoppingCartLocalService
 	* @throws PortalException if a shopping cart with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.shopping.model.ShoppingCart deleteShoppingCart(
 		long cartId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -78,12 +82,14 @@ public class ShoppingCartLocalServiceWrapper implements ShoppingCartLocalService
 	* @return the shopping cart that was removed
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.shopping.model.ShoppingCart deleteShoppingCart(
 		com.liferay.portlet.shopping.model.ShoppingCart shoppingCart)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _shoppingCartLocalService.deleteShoppingCart(shoppingCart);
 	}
 
+	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		return _shoppingCartLocalService.dynamicQuery();
 	}
@@ -95,6 +101,7 @@ public class ShoppingCartLocalServiceWrapper implements ShoppingCartLocalService
 	* @return the matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
@@ -115,6 +122,7 @@ public class ShoppingCartLocalServiceWrapper implements ShoppingCartLocalService
 	* @return the range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -136,6 +144,7 @@ public class ShoppingCartLocalServiceWrapper implements ShoppingCartLocalService
 	* @return the ordered range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -153,12 +162,31 @@ public class ShoppingCartLocalServiceWrapper implements ShoppingCartLocalService
 	* @return the number of rows that match the dynamic query
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _shoppingCartLocalService.dynamicQueryCount(dynamicQuery);
 	}
 
+	/**
+	* Returns the number of rows that match the dynamic query.
+	*
+	* @param dynamicQuery the dynamic query
+	* @param projection the projection to apply to the query
+	* @return the number of rows that match the dynamic query
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public long dynamicQueryCount(
+		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery,
+		com.liferay.portal.kernel.dao.orm.Projection projection)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _shoppingCartLocalService.dynamicQueryCount(dynamicQuery,
+			projection);
+	}
+
+	@Override
 	public com.liferay.portlet.shopping.model.ShoppingCart fetchShoppingCart(
 		long cartId) throws com.liferay.portal.kernel.exception.SystemException {
 		return _shoppingCartLocalService.fetchShoppingCart(cartId);
@@ -172,6 +200,7 @@ public class ShoppingCartLocalServiceWrapper implements ShoppingCartLocalService
 	* @throws PortalException if a shopping cart with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.shopping.model.ShoppingCart getShoppingCart(
 		long cartId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -179,6 +208,7 @@ public class ShoppingCartLocalServiceWrapper implements ShoppingCartLocalService
 		return _shoppingCartLocalService.getShoppingCart(cartId);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -198,6 +228,7 @@ public class ShoppingCartLocalServiceWrapper implements ShoppingCartLocalService
 	* @return the range of shopping carts
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.shopping.model.ShoppingCart> getShoppingCarts(
 		int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -210,6 +241,7 @@ public class ShoppingCartLocalServiceWrapper implements ShoppingCartLocalService
 	* @return the number of shopping carts
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getShoppingCartsCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _shoppingCartLocalService.getShoppingCartsCount();
@@ -222,6 +254,7 @@ public class ShoppingCartLocalServiceWrapper implements ShoppingCartLocalService
 	* @return the shopping cart that was updated
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.shopping.model.ShoppingCart updateShoppingCart(
 		com.liferay.portlet.shopping.model.ShoppingCart shoppingCart)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -233,6 +266,7 @@ public class ShoppingCartLocalServiceWrapper implements ShoppingCartLocalService
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _shoppingCartLocalService.getBeanIdentifier();
 	}
@@ -242,20 +276,24 @@ public class ShoppingCartLocalServiceWrapper implements ShoppingCartLocalService
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_shoppingCartLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
+	@Override
 	public void deleteGroupCarts(long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_shoppingCartLocalService.deleteGroupCarts(groupId);
 	}
 
+	@Override
 	public void deleteUserCarts(long userId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_shoppingCartLocalService.deleteUserCarts(userId);
 	}
 
+	@Override
 	public com.liferay.portlet.shopping.model.ShoppingCart getCart(
 		long userId, long groupId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -263,12 +301,14 @@ public class ShoppingCartLocalServiceWrapper implements ShoppingCartLocalService
 		return _shoppingCartLocalService.getCart(userId, groupId);
 	}
 
+	@Override
 	public java.util.Map<com.liferay.portlet.shopping.model.ShoppingCartItem, java.lang.Integer> getItems(
 		long groupId, java.lang.String itemIds)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _shoppingCartLocalService.getItems(groupId, itemIds);
 	}
 
+	@Override
 	public com.liferay.portlet.shopping.model.ShoppingCart updateCart(
 		long userId, long groupId, java.lang.String itemIds,
 		java.lang.String couponCodes, int altShipping, boolean insure)
@@ -293,10 +333,12 @@ public class ShoppingCartLocalServiceWrapper implements ShoppingCartLocalService
 		_shoppingCartLocalService = shoppingCartLocalService;
 	}
 
+	@Override
 	public ShoppingCartLocalService getWrappedService() {
 		return _shoppingCartLocalService;
 	}
 
+	@Override
 	public void setWrappedService(
 		ShoppingCartLocalService shoppingCartLocalService) {
 		_shoppingCartLocalService = shoppingCartLocalService;

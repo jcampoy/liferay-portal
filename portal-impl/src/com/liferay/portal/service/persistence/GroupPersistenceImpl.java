@@ -17,18 +17,12 @@ package com.liferay.portal.service.persistence;
 import com.liferay.portal.NoSuchGroupException;
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
-import com.liferay.portal.kernel.dao.jdbc.MappingSqlQuery;
-import com.liferay.portal.kernel.dao.jdbc.MappingSqlQueryFactoryUtil;
-import com.liferay.portal.kernel.dao.jdbc.RowMapper;
-import com.liferay.portal.kernel.dao.jdbc.SqlUpdate;
-import com.liferay.portal.kernel.dao.jdbc.SqlUpdateFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.dao.orm.Query;
 import com.liferay.portal.kernel.dao.orm.QueryPos;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
-import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
@@ -49,11 +43,14 @@ import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.impl.GroupImpl;
 import com.liferay.portal.model.impl.GroupModelImpl;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
+import com.liferay.portal.service.persistence.impl.TableMapper;
+import com.liferay.portal.service.persistence.impl.TableMapperFactory;
 
 import java.io.Serializable;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -117,6 +114,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Group> findByUuid(String uuid) throws SystemException {
 		return findByUuid(uuid, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
@@ -134,6 +132,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the range of matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Group> findByUuid(String uuid, int start, int end)
 		throws SystemException {
 		return findByUuid(uuid, start, end, null);
@@ -153,6 +152,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the ordered range of matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Group> findByUuid(String uuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -273,6 +273,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @throws com.liferay.portal.NoSuchGroupException if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group findByUuid_First(String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchGroupException, SystemException {
@@ -302,6 +303,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the first matching group, or <code>null</code> if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group fetchByUuid_First(String uuid,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<Group> list = findByUuid(uuid, 0, 1, orderByComparator);
@@ -322,6 +324,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @throws com.liferay.portal.NoSuchGroupException if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group findByUuid_Last(String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchGroupException, SystemException {
@@ -351,9 +354,14 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the last matching group, or <code>null</code> if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group fetchByUuid_Last(String uuid,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByUuid(uuid);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<Group> list = findByUuid(uuid, count - 1, count, orderByComparator);
 
@@ -374,6 +382,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @throws com.liferay.portal.NoSuchGroupException if a group with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group[] findByUuid_PrevAndNext(long groupId, String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchGroupException, SystemException {
@@ -528,6 +537,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param uuid the uuid
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByUuid(String uuid) throws SystemException {
 		for (Group group : findByUuid(uuid, QueryUtil.ALL_POS,
 				QueryUtil.ALL_POS, null)) {
@@ -542,6 +552,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the number of matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByUuid(String uuid) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID;
 
@@ -624,6 +635,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @throws com.liferay.portal.NoSuchGroupException if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group findByUUID_G(String uuid, long groupId)
 		throws NoSuchGroupException, SystemException {
 		Group group = fetchByUUID_G(uuid, groupId);
@@ -659,6 +671,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the matching group, or <code>null</code> if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group fetchByUUID_G(String uuid, long groupId)
 		throws SystemException {
 		return fetchByUUID_G(uuid, groupId, true);
@@ -673,6 +686,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the matching group, or <code>null</code> if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group fetchByUUID_G(String uuid, long groupId,
 		boolean retrieveFromCache) throws SystemException {
 		Object[] finderArgs = new Object[] { uuid, groupId };
@@ -779,6 +793,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the group that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group removeByUUID_G(String uuid, long groupId)
 		throws NoSuchGroupException, SystemException {
 		Group group = findByUUID_G(uuid, groupId);
@@ -794,6 +809,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the number of matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByUUID_G(String uuid, long groupId)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_G;
@@ -892,6 +908,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Group> findByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		return findByUuid_C(uuid, companyId, QueryUtil.ALL_POS,
@@ -912,6 +929,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the range of matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Group> findByUuid_C(String uuid, long companyId, int start,
 		int end) throws SystemException {
 		return findByUuid_C(uuid, companyId, start, end, null);
@@ -932,6 +950,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the ordered range of matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Group> findByUuid_C(String uuid, long companyId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -1062,6 +1081,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @throws com.liferay.portal.NoSuchGroupException if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group findByUuid_C_First(String uuid, long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchGroupException, SystemException {
@@ -1095,6 +1115,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the first matching group, or <code>null</code> if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group fetchByUuid_C_First(String uuid, long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<Group> list = findByUuid_C(uuid, companyId, 0, 1, orderByComparator);
@@ -1116,6 +1137,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @throws com.liferay.portal.NoSuchGroupException if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group findByUuid_C_Last(String uuid, long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchGroupException, SystemException {
@@ -1149,9 +1171,14 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the last matching group, or <code>null</code> if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group fetchByUuid_C_Last(String uuid, long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByUuid_C(uuid, companyId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<Group> list = findByUuid_C(uuid, companyId, count - 1, count,
 				orderByComparator);
@@ -1174,6 +1201,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @throws com.liferay.portal.NoSuchGroupException if a group with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group[] findByUuid_C_PrevAndNext(long groupId, String uuid,
 		long companyId, OrderByComparator orderByComparator)
 		throws NoSuchGroupException, SystemException {
@@ -1334,6 +1362,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param companyId the company ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		for (Group group : findByUuid_C(uuid, companyId, QueryUtil.ALL_POS,
@@ -1350,6 +1379,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the number of matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_C;
@@ -1447,6 +1477,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Group> findByCompanyId(long companyId)
 		throws SystemException {
 		return findByCompanyId(companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
@@ -1466,6 +1497,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the range of matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Group> findByCompanyId(long companyId, int start, int end)
 		throws SystemException {
 		return findByCompanyId(companyId, start, end, null);
@@ -1485,6 +1517,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the ordered range of matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Group> findByCompanyId(long companyId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -1591,6 +1624,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @throws com.liferay.portal.NoSuchGroupException if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group findByCompanyId_First(long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchGroupException, SystemException {
@@ -1620,6 +1654,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the first matching group, or <code>null</code> if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group fetchByCompanyId_First(long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<Group> list = findByCompanyId(companyId, 0, 1, orderByComparator);
@@ -1640,6 +1675,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @throws com.liferay.portal.NoSuchGroupException if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group findByCompanyId_Last(long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchGroupException, SystemException {
@@ -1669,9 +1705,14 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the last matching group, or <code>null</code> if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group fetchByCompanyId_Last(long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByCompanyId(companyId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<Group> list = findByCompanyId(companyId, count - 1, count,
 				orderByComparator);
@@ -1693,6 +1734,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @throws com.liferay.portal.NoSuchGroupException if a group with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group[] findByCompanyId_PrevAndNext(long groupId, long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchGroupException, SystemException {
@@ -1833,6 +1875,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param companyId the company ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByCompanyId(long companyId) throws SystemException {
 		for (Group group : findByCompanyId(companyId, QueryUtil.ALL_POS,
 				QueryUtil.ALL_POS, null)) {
@@ -1847,6 +1890,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the number of matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByCompanyId(long companyId) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_COMPANYID;
 
@@ -1911,6 +1955,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @throws com.liferay.portal.NoSuchGroupException if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group findByLiveGroupId(long liveGroupId)
 		throws NoSuchGroupException, SystemException {
 		Group group = fetchByLiveGroupId(liveGroupId);
@@ -1942,6 +1987,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the matching group, or <code>null</code> if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group fetchByLiveGroupId(long liveGroupId) throws SystemException {
 		return fetchByLiveGroupId(liveGroupId, true);
 	}
@@ -1954,6 +2000,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the matching group, or <code>null</code> if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group fetchByLiveGroupId(long liveGroupId, boolean retrieveFromCache)
 		throws SystemException {
 		Object[] finderArgs = new Object[] { liveGroupId };
@@ -2045,6 +2092,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the group that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group removeByLiveGroupId(long liveGroupId)
 		throws NoSuchGroupException, SystemException {
 		Group group = findByLiveGroupId(liveGroupId);
@@ -2059,6 +2107,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the number of matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByLiveGroupId(long liveGroupId) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_LIVEGROUPID;
 
@@ -2105,6 +2154,532 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	}
 
 	private static final String _FINDER_COLUMN_LIVEGROUPID_LIVEGROUPID_2 = "group_.liveGroupId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C = new FinderPath(GroupModelImpl.ENTITY_CACHE_ENABLED,
+			GroupModelImpl.FINDER_CACHE_ENABLED, GroupImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_C",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C = new FinderPath(GroupModelImpl.ENTITY_CACHE_ENABLED,
+			GroupModelImpl.FINDER_CACHE_ENABLED, GroupImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_C",
+			new String[] { Long.class.getName(), Long.class.getName() },
+			GroupModelImpl.COMPANYID_COLUMN_BITMASK |
+			GroupModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			GroupModelImpl.NAME_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(GroupModelImpl.ENTITY_CACHE_ENABLED,
+			GroupModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C",
+			new String[] { Long.class.getName(), Long.class.getName() });
+
+	/**
+	 * Returns all the groups where companyId = &#63; and classNameId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @return the matching groups
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<Group> findByC_C(long companyId, long classNameId)
+		throws SystemException {
+		return findByC_C(companyId, classNameId, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the groups where companyId = &#63; and classNameId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portal.model.impl.GroupModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param start the lower bound of the range of groups
+	 * @param end the upper bound of the range of groups (not inclusive)
+	 * @return the range of matching groups
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<Group> findByC_C(long companyId, long classNameId, int start,
+		int end) throws SystemException {
+		return findByC_C(companyId, classNameId, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the groups where companyId = &#63; and classNameId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portal.model.impl.GroupModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param start the lower bound of the range of groups
+	 * @param end the upper bound of the range of groups (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching groups
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<Group> findByC_C(long companyId, long classNameId, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			pagination = false;
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C;
+			finderArgs = new Object[] { companyId, classNameId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C;
+			finderArgs = new Object[] {
+					companyId, classNameId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<Group> list = (List<Group>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Group group : list) {
+				if ((companyId != group.getCompanyId()) ||
+						(classNameId != group.getClassNameId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_GROUP__WHERE);
+
+			query.append(_FINDER_COLUMN_C_C_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_C_CLASSNAMEID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(GroupModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(classNameId);
+
+				if (!pagination) {
+					list = (List<Group>)QueryUtil.list(q, getDialect(), start,
+							end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<Group>(list);
+				}
+				else {
+					list = (List<Group>)QueryUtil.list(q, getDialect(), start,
+							end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first group in the ordered set where companyId = &#63; and classNameId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching group
+	 * @throws com.liferay.portal.NoSuchGroupException if a matching group could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Group findByC_C_First(long companyId, long classNameId,
+		OrderByComparator orderByComparator)
+		throws NoSuchGroupException, SystemException {
+		Group group = fetchByC_C_First(companyId, classNameId, orderByComparator);
+
+		if (group != null) {
+			return group;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", classNameId=");
+		msg.append(classNameId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchGroupException(msg.toString());
+	}
+
+	/**
+	 * Returns the first group in the ordered set where companyId = &#63; and classNameId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching group, or <code>null</code> if a matching group could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Group fetchByC_C_First(long companyId, long classNameId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<Group> list = findByC_C(companyId, classNameId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last group in the ordered set where companyId = &#63; and classNameId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching group
+	 * @throws com.liferay.portal.NoSuchGroupException if a matching group could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Group findByC_C_Last(long companyId, long classNameId,
+		OrderByComparator orderByComparator)
+		throws NoSuchGroupException, SystemException {
+		Group group = fetchByC_C_Last(companyId, classNameId, orderByComparator);
+
+		if (group != null) {
+			return group;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", classNameId=");
+		msg.append(classNameId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchGroupException(msg.toString());
+	}
+
+	/**
+	 * Returns the last group in the ordered set where companyId = &#63; and classNameId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching group, or <code>null</code> if a matching group could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Group fetchByC_C_Last(long companyId, long classNameId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByC_C(companyId, classNameId);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<Group> list = findByC_C(companyId, classNameId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the groups before and after the current group in the ordered set where companyId = &#63; and classNameId = &#63;.
+	 *
+	 * @param groupId the primary key of the current group
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next group
+	 * @throws com.liferay.portal.NoSuchGroupException if a group with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Group[] findByC_C_PrevAndNext(long groupId, long companyId,
+		long classNameId, OrderByComparator orderByComparator)
+		throws NoSuchGroupException, SystemException {
+		Group group = findByPrimaryKey(groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			Group[] array = new GroupImpl[3];
+
+			array[0] = getByC_C_PrevAndNext(session, group, companyId,
+					classNameId, orderByComparator, true);
+
+			array[1] = group;
+
+			array[2] = getByC_C_PrevAndNext(session, group, companyId,
+					classNameId, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected Group getByC_C_PrevAndNext(Session session, Group group,
+		long companyId, long classNameId, OrderByComparator orderByComparator,
+		boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_GROUP__WHERE);
+
+		query.append(_FINDER_COLUMN_C_C_COMPANYID_2);
+
+		query.append(_FINDER_COLUMN_C_C_CLASSNAMEID_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			query.append(GroupModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(companyId);
+
+		qPos.add(classNameId);
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(group);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<Group> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the groups where companyId = &#63; and classNameId = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public void removeByC_C(long companyId, long classNameId)
+		throws SystemException {
+		for (Group group : findByC_C(companyId, classNameId, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
+			remove(group);
+		}
+	}
+
+	/**
+	 * Returns the number of groups where companyId = &#63; and classNameId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @return the number of matching groups
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public int countByC_C(long companyId, long classNameId)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_C;
+
+		Object[] finderArgs = new Object[] { companyId, classNameId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_GROUP__WHERE);
+
+			query.append(_FINDER_COLUMN_C_C_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_C_CLASSNAMEID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(classNameId);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_C_C_COMPANYID_2 = "group_.companyId = ? AND ";
+	private static final String _FINDER_COLUMN_C_C_CLASSNAMEID_2 = "group_.classNameId = ?";
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_P = new FinderPath(GroupModelImpl.ENTITY_CACHE_ENABLED,
 			GroupModelImpl.FINDER_CACHE_ENABLED, GroupImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_P",
@@ -2134,6 +2709,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Group> findByC_P(long companyId, long parentGroupId)
 		throws SystemException {
 		return findByC_P(companyId, parentGroupId, QueryUtil.ALL_POS,
@@ -2154,6 +2730,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the range of matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Group> findByC_P(long companyId, long parentGroupId, int start,
 		int end) throws SystemException {
 		return findByC_P(companyId, parentGroupId, start, end, null);
@@ -2174,6 +2751,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the ordered range of matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Group> findByC_P(long companyId, long parentGroupId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -2290,6 +2868,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @throws com.liferay.portal.NoSuchGroupException if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group findByC_P_First(long companyId, long parentGroupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchGroupException, SystemException {
@@ -2324,6 +2903,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the first matching group, or <code>null</code> if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group fetchByC_P_First(long companyId, long parentGroupId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<Group> list = findByC_P(companyId, parentGroupId, 0, 1,
@@ -2346,6 +2926,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @throws com.liferay.portal.NoSuchGroupException if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group findByC_P_Last(long companyId, long parentGroupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchGroupException, SystemException {
@@ -2380,9 +2961,14 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the last matching group, or <code>null</code> if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group fetchByC_P_Last(long companyId, long parentGroupId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByC_P(companyId, parentGroupId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<Group> list = findByC_P(companyId, parentGroupId, count - 1,
 				count, orderByComparator);
@@ -2405,6 +2991,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @throws com.liferay.portal.NoSuchGroupException if a group with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group[] findByC_P_PrevAndNext(long groupId, long companyId,
 		long parentGroupId, OrderByComparator orderByComparator)
 		throws NoSuchGroupException, SystemException {
@@ -2551,6 +3138,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param parentGroupId the parent group ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByC_P(long companyId, long parentGroupId)
 		throws SystemException {
 		for (Group group : findByC_P(companyId, parentGroupId,
@@ -2567,6 +3155,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the number of matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByC_P(long companyId, long parentGroupId)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_P;
@@ -2639,6 +3228,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @throws com.liferay.portal.NoSuchGroupException if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group findByC_N(long companyId, String name)
 		throws NoSuchGroupException, SystemException {
 		Group group = fetchByC_N(companyId, name);
@@ -2674,6 +3264,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the matching group, or <code>null</code> if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group fetchByC_N(long companyId, String name)
 		throws SystemException {
 		return fetchByC_N(companyId, name, true);
@@ -2688,6 +3279,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the matching group, or <code>null</code> if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group fetchByC_N(long companyId, String name,
 		boolean retrieveFromCache) throws SystemException {
 		Object[] finderArgs = new Object[] { companyId, name };
@@ -2794,6 +3386,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the group that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group removeByC_N(long companyId, String name)
 		throws NoSuchGroupException, SystemException {
 		Group group = findByC_N(companyId, name);
@@ -2809,6 +3402,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the number of matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByC_N(long companyId, String name)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_N;
@@ -2897,6 +3491,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @throws com.liferay.portal.NoSuchGroupException if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group findByC_F(long companyId, String friendlyURL)
 		throws NoSuchGroupException, SystemException {
 		Group group = fetchByC_F(companyId, friendlyURL);
@@ -2932,6 +3527,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the matching group, or <code>null</code> if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group fetchByC_F(long companyId, String friendlyURL)
 		throws SystemException {
 		return fetchByC_F(companyId, friendlyURL, true);
@@ -2946,6 +3542,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the matching group, or <code>null</code> if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group fetchByC_F(long companyId, String friendlyURL,
 		boolean retrieveFromCache) throws SystemException {
 		Object[] finderArgs = new Object[] { companyId, friendlyURL };
@@ -3052,6 +3649,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the group that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group removeByC_F(long companyId, String friendlyURL)
 		throws NoSuchGroupException, SystemException {
 		Group group = findByC_F(companyId, friendlyURL);
@@ -3067,6 +3665,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the number of matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByC_F(long companyId, String friendlyURL)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_F;
@@ -3164,6 +3763,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Group> findByC_S(long companyId, boolean site)
 		throws SystemException {
 		return findByC_S(companyId, site, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
@@ -3184,6 +3784,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the range of matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Group> findByC_S(long companyId, boolean site, int start,
 		int end) throws SystemException {
 		return findByC_S(companyId, site, start, end, null);
@@ -3204,6 +3805,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the ordered range of matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Group> findByC_S(long companyId, boolean site, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -3320,6 +3922,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @throws com.liferay.portal.NoSuchGroupException if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group findByC_S_First(long companyId, boolean site,
 		OrderByComparator orderByComparator)
 		throws NoSuchGroupException, SystemException {
@@ -3353,6 +3956,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the first matching group, or <code>null</code> if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group fetchByC_S_First(long companyId, boolean site,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<Group> list = findByC_S(companyId, site, 0, 1, orderByComparator);
@@ -3374,6 +3978,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @throws com.liferay.portal.NoSuchGroupException if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group findByC_S_Last(long companyId, boolean site,
 		OrderByComparator orderByComparator)
 		throws NoSuchGroupException, SystemException {
@@ -3407,9 +4012,14 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the last matching group, or <code>null</code> if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group fetchByC_S_Last(long companyId, boolean site,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByC_S(companyId, site);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<Group> list = findByC_S(companyId, site, count - 1, count,
 				orderByComparator);
@@ -3432,6 +4042,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @throws com.liferay.portal.NoSuchGroupException if a group with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group[] findByC_S_PrevAndNext(long groupId, long companyId,
 		boolean site, OrderByComparator orderByComparator)
 		throws NoSuchGroupException, SystemException {
@@ -3578,6 +4189,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param site the site
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByC_S(long companyId, boolean site)
 		throws SystemException {
 		for (Group group : findByC_S(companyId, site, QueryUtil.ALL_POS,
@@ -3594,6 +4206,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the number of matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByC_S(long companyId, boolean site)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_S;
@@ -3675,6 +4288,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Group> findByT_A(int type, boolean active)
 		throws SystemException {
 		return findByT_A(type, active, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
@@ -3695,6 +4309,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the range of matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Group> findByT_A(int type, boolean active, int start, int end)
 		throws SystemException {
 		return findByT_A(type, active, start, end, null);
@@ -3715,6 +4330,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the ordered range of matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Group> findByT_A(int type, boolean active, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -3830,6 +4446,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @throws com.liferay.portal.NoSuchGroupException if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group findByT_A_First(int type, boolean active,
 		OrderByComparator orderByComparator)
 		throws NoSuchGroupException, SystemException {
@@ -3863,6 +4480,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the first matching group, or <code>null</code> if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group fetchByT_A_First(int type, boolean active,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<Group> list = findByT_A(type, active, 0, 1, orderByComparator);
@@ -3884,6 +4502,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @throws com.liferay.portal.NoSuchGroupException if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group findByT_A_Last(int type, boolean active,
 		OrderByComparator orderByComparator)
 		throws NoSuchGroupException, SystemException {
@@ -3917,9 +4536,14 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the last matching group, or <code>null</code> if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group fetchByT_A_Last(int type, boolean active,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByT_A(type, active);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<Group> list = findByT_A(type, active, count - 1, count,
 				orderByComparator);
@@ -3942,6 +4566,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @throws com.liferay.portal.NoSuchGroupException if a group with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group[] findByT_A_PrevAndNext(long groupId, int type,
 		boolean active, OrderByComparator orderByComparator)
 		throws NoSuchGroupException, SystemException {
@@ -4088,6 +4713,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param active the active
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByT_A(int type, boolean active) throws SystemException {
 		for (Group group : findByT_A(type, active, QueryUtil.ALL_POS,
 				QueryUtil.ALL_POS, null)) {
@@ -4103,6 +4729,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the number of matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByT_A(int type, boolean active) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_T_A;
 
@@ -4154,6 +4781,398 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 
 	private static final String _FINDER_COLUMN_T_A_TYPE_2 = "group_.type = ? AND ";
 	private static final String _FINDER_COLUMN_T_A_ACTIVE_2 = "group_.active = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_C_P = new FinderPath(GroupModelImpl.ENTITY_CACHE_ENABLED,
+			GroupModelImpl.FINDER_CACHE_ENABLED, GroupImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_C_P",
+			new String[] {
+				Long.class.getName(), Long.class.getName(), Long.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_C_P = new FinderPath(GroupModelImpl.ENTITY_CACHE_ENABLED,
+			GroupModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByG_C_P",
+			new String[] {
+				Long.class.getName(), Long.class.getName(), Long.class.getName()
+			});
+
+	/**
+	 * Returns all the groups where groupId &gt; &#63; and companyId = &#63; and parentGroupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param companyId the company ID
+	 * @param parentGroupId the parent group ID
+	 * @return the matching groups
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<Group> findByG_C_P(long groupId, long companyId,
+		long parentGroupId) throws SystemException {
+		return findByG_C_P(groupId, companyId, parentGroupId,
+			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the groups where groupId &gt; &#63; and companyId = &#63; and parentGroupId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portal.model.impl.GroupModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param companyId the company ID
+	 * @param parentGroupId the parent group ID
+	 * @param start the lower bound of the range of groups
+	 * @param end the upper bound of the range of groups (not inclusive)
+	 * @return the range of matching groups
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<Group> findByG_C_P(long groupId, long companyId,
+		long parentGroupId, int start, int end) throws SystemException {
+		return findByG_C_P(groupId, companyId, parentGroupId, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the groups where groupId &gt; &#63; and companyId = &#63; and parentGroupId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portal.model.impl.GroupModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param companyId the company ID
+	 * @param parentGroupId the parent group ID
+	 * @param start the lower bound of the range of groups
+	 * @param end the upper bound of the range of groups (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching groups
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<Group> findByG_C_P(long groupId, long companyId,
+		long parentGroupId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_C_P;
+		finderArgs = new Object[] {
+				groupId, companyId, parentGroupId,
+				
+				start, end, orderByComparator
+			};
+
+		List<Group> list = (List<Group>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Group group : list) {
+				if ((groupId >= group.getGroupId()) ||
+						(companyId != group.getCompanyId()) ||
+						(parentGroupId != group.getParentGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(5 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(5);
+			}
+
+			query.append(_SQL_SELECT_GROUP__WHERE);
+
+			query.append(_FINDER_COLUMN_G_C_P_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_C_P_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_G_C_P_PARENTGROUPID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(GroupModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(companyId);
+
+				qPos.add(parentGroupId);
+
+				if (!pagination) {
+					list = (List<Group>)QueryUtil.list(q, getDialect(), start,
+							end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<Group>(list);
+				}
+				else {
+					list = (List<Group>)QueryUtil.list(q, getDialect(), start,
+							end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first group in the ordered set where groupId &gt; &#63; and companyId = &#63; and parentGroupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param companyId the company ID
+	 * @param parentGroupId the parent group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching group
+	 * @throws com.liferay.portal.NoSuchGroupException if a matching group could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Group findByG_C_P_First(long groupId, long companyId,
+		long parentGroupId, OrderByComparator orderByComparator)
+		throws NoSuchGroupException, SystemException {
+		Group group = fetchByG_C_P_First(groupId, companyId, parentGroupId,
+				orderByComparator);
+
+		if (group != null) {
+			return group;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", companyId=");
+		msg.append(companyId);
+
+		msg.append(", parentGroupId=");
+		msg.append(parentGroupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchGroupException(msg.toString());
+	}
+
+	/**
+	 * Returns the first group in the ordered set where groupId &gt; &#63; and companyId = &#63; and parentGroupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param companyId the company ID
+	 * @param parentGroupId the parent group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching group, or <code>null</code> if a matching group could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Group fetchByG_C_P_First(long groupId, long companyId,
+		long parentGroupId, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<Group> list = findByG_C_P(groupId, companyId, parentGroupId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last group in the ordered set where groupId &gt; &#63; and companyId = &#63; and parentGroupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param companyId the company ID
+	 * @param parentGroupId the parent group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching group
+	 * @throws com.liferay.portal.NoSuchGroupException if a matching group could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Group findByG_C_P_Last(long groupId, long companyId,
+		long parentGroupId, OrderByComparator orderByComparator)
+		throws NoSuchGroupException, SystemException {
+		Group group = fetchByG_C_P_Last(groupId, companyId, parentGroupId,
+				orderByComparator);
+
+		if (group != null) {
+			return group;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", companyId=");
+		msg.append(companyId);
+
+		msg.append(", parentGroupId=");
+		msg.append(parentGroupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchGroupException(msg.toString());
+	}
+
+	/**
+	 * Returns the last group in the ordered set where groupId &gt; &#63; and companyId = &#63; and parentGroupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param companyId the company ID
+	 * @param parentGroupId the parent group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching group, or <code>null</code> if a matching group could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Group fetchByG_C_P_Last(long groupId, long companyId,
+		long parentGroupId, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByG_C_P(groupId, companyId, parentGroupId);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<Group> list = findByG_C_P(groupId, companyId, parentGroupId,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Removes all the groups where groupId &gt; &#63; and companyId = &#63; and parentGroupId = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param companyId the company ID
+	 * @param parentGroupId the parent group ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public void removeByG_C_P(long groupId, long companyId, long parentGroupId)
+		throws SystemException {
+		for (Group group : findByG_C_P(groupId, companyId, parentGroupId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(group);
+		}
+	}
+
+	/**
+	 * Returns the number of groups where groupId &gt; &#63; and companyId = &#63; and parentGroupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param companyId the company ID
+	 * @param parentGroupId the parent group ID
+	 * @return the number of matching groups
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public int countByG_C_P(long groupId, long companyId, long parentGroupId)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_C_P;
+
+		Object[] finderArgs = new Object[] { groupId, companyId, parentGroupId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(4);
+
+			query.append(_SQL_COUNT_GROUP__WHERE);
+
+			query.append(_FINDER_COLUMN_G_C_P_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_C_P_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_G_C_P_PARENTGROUPID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(companyId);
+
+				qPos.add(parentGroupId);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_G_C_P_GROUPID_2 = "group_.groupId > ? AND ";
+	private static final String _FINDER_COLUMN_G_C_P_COMPANYID_2 = "group_.companyId = ? AND ";
+	private static final String _FINDER_COLUMN_G_C_P_PARENTGROUPID_2 = "group_.parentGroupId = ?";
 	public static final FinderPath FINDER_PATH_FETCH_BY_C_C_C = new FinderPath(GroupModelImpl.ENTITY_CACHE_ENABLED,
 			GroupModelImpl.FINDER_CACHE_ENABLED, GroupImpl.class,
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_C_C",
@@ -4180,6 +5199,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @throws com.liferay.portal.NoSuchGroupException if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group findByC_C_C(long companyId, long classNameId, long classPK)
 		throws NoSuchGroupException, SystemException {
 		Group group = fetchByC_C_C(companyId, classNameId, classPK);
@@ -4219,6 +5239,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the matching group, or <code>null</code> if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group fetchByC_C_C(long companyId, long classNameId, long classPK)
 		throws SystemException {
 		return fetchByC_C_C(companyId, classNameId, classPK, true);
@@ -4234,6 +5255,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the matching group, or <code>null</code> if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group fetchByC_C_C(long companyId, long classNameId, long classPK,
 		boolean retrieveFromCache) throws SystemException {
 		Object[] finderArgs = new Object[] { companyId, classNameId, classPK };
@@ -4332,6 +5354,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the group that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group removeByC_C_C(long companyId, long classNameId, long classPK)
 		throws NoSuchGroupException, SystemException {
 		Group group = findByC_C_C(companyId, classNameId, classPK);
@@ -4348,6 +5371,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the number of matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByC_C_C(long companyId, long classNameId, long classPK)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_C_C;
@@ -4440,6 +5464,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Group> findByC_C_P(long companyId, long classNameId,
 		long parentGroupId) throws SystemException {
 		return findByC_C_P(companyId, classNameId, parentGroupId,
@@ -4461,6 +5486,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the range of matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Group> findByC_C_P(long companyId, long classNameId,
 		long parentGroupId, int start, int end) throws SystemException {
 		return findByC_C_P(companyId, classNameId, parentGroupId, start, end,
@@ -4483,6 +5509,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the ordered range of matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Group> findByC_C_P(long companyId, long classNameId,
 		long parentGroupId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
@@ -4606,6 +5633,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @throws com.liferay.portal.NoSuchGroupException if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group findByC_C_P_First(long companyId, long classNameId,
 		long parentGroupId, OrderByComparator orderByComparator)
 		throws NoSuchGroupException, SystemException {
@@ -4644,6 +5672,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the first matching group, or <code>null</code> if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group fetchByC_C_P_First(long companyId, long classNameId,
 		long parentGroupId, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -4668,6 +5697,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @throws com.liferay.portal.NoSuchGroupException if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group findByC_C_P_Last(long companyId, long classNameId,
 		long parentGroupId, OrderByComparator orderByComparator)
 		throws NoSuchGroupException, SystemException {
@@ -4706,10 +5736,15 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the last matching group, or <code>null</code> if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group fetchByC_C_P_Last(long companyId, long classNameId,
 		long parentGroupId, OrderByComparator orderByComparator)
 		throws SystemException {
 		int count = countByC_C_P(companyId, classNameId, parentGroupId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<Group> list = findByC_C_P(companyId, classNameId, parentGroupId,
 				count - 1, count, orderByComparator);
@@ -4733,6 +5768,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @throws com.liferay.portal.NoSuchGroupException if a group with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group[] findByC_C_P_PrevAndNext(long groupId, long companyId,
 		long classNameId, long parentGroupId,
 		OrderByComparator orderByComparator)
@@ -4885,6 +5921,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param parentGroupId the parent group ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByC_C_P(long companyId, long classNameId,
 		long parentGroupId) throws SystemException {
 		for (Group group : findByC_C_P(companyId, classNameId, parentGroupId,
@@ -4902,6 +5939,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the number of matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByC_C_P(long companyId, long classNameId, long parentGroupId)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_C_P;
@@ -4997,6 +6035,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Group> findByC_P_S(long companyId, long parentGroupId,
 		boolean site) throws SystemException {
 		return findByC_P_S(companyId, parentGroupId, site, QueryUtil.ALL_POS,
@@ -5018,6 +6057,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the range of matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Group> findByC_P_S(long companyId, long parentGroupId,
 		boolean site, int start, int end) throws SystemException {
 		return findByC_P_S(companyId, parentGroupId, site, start, end, null);
@@ -5039,6 +6079,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the ordered range of matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Group> findByC_P_S(long companyId, long parentGroupId,
 		boolean site, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -5162,6 +6203,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @throws com.liferay.portal.NoSuchGroupException if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group findByC_P_S_First(long companyId, long parentGroupId,
 		boolean site, OrderByComparator orderByComparator)
 		throws NoSuchGroupException, SystemException {
@@ -5200,6 +6242,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the first matching group, or <code>null</code> if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group fetchByC_P_S_First(long companyId, long parentGroupId,
 		boolean site, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -5224,6 +6267,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @throws com.liferay.portal.NoSuchGroupException if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group findByC_P_S_Last(long companyId, long parentGroupId,
 		boolean site, OrderByComparator orderByComparator)
 		throws NoSuchGroupException, SystemException {
@@ -5262,10 +6306,15 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the last matching group, or <code>null</code> if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group fetchByC_P_S_Last(long companyId, long parentGroupId,
 		boolean site, OrderByComparator orderByComparator)
 		throws SystemException {
 		int count = countByC_P_S(companyId, parentGroupId, site);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<Group> list = findByC_P_S(companyId, parentGroupId, site,
 				count - 1, count, orderByComparator);
@@ -5289,6 +6338,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @throws com.liferay.portal.NoSuchGroupException if a group with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group[] findByC_P_S_PrevAndNext(long groupId, long companyId,
 		long parentGroupId, boolean site, OrderByComparator orderByComparator)
 		throws NoSuchGroupException, SystemException {
@@ -5440,6 +6490,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param site the site
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByC_P_S(long companyId, long parentGroupId, boolean site)
 		throws SystemException {
 		for (Group group : findByC_P_S(companyId, parentGroupId, site,
@@ -5457,6 +6508,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the number of matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByC_P_S(long companyId, long parentGroupId, boolean site)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_P_S;
@@ -5542,6 +6594,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @throws com.liferay.portal.NoSuchGroupException if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group findByC_L_N(long companyId, long liveGroupId, String name)
 		throws NoSuchGroupException, SystemException {
 		Group group = fetchByC_L_N(companyId, liveGroupId, name);
@@ -5581,6 +6634,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the matching group, or <code>null</code> if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group fetchByC_L_N(long companyId, long liveGroupId, String name)
 		throws SystemException {
 		return fetchByC_L_N(companyId, liveGroupId, name, true);
@@ -5596,6 +6650,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the matching group, or <code>null</code> if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group fetchByC_L_N(long companyId, long liveGroupId, String name,
 		boolean retrieveFromCache) throws SystemException {
 		Object[] finderArgs = new Object[] { companyId, liveGroupId, name };
@@ -5709,6 +6764,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the group that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group removeByC_L_N(long companyId, long liveGroupId, String name)
 		throws NoSuchGroupException, SystemException {
 		Group group = findByC_L_N(companyId, liveGroupId, name);
@@ -5725,6 +6781,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the number of matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByC_L_N(long companyId, long liveGroupId, String name)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_L_N;
@@ -5828,6 +6885,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @throws com.liferay.portal.NoSuchGroupException if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group findByC_C_L_N(long companyId, long classNameId,
 		long liveGroupId, String name)
 		throws NoSuchGroupException, SystemException {
@@ -5872,6 +6930,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the matching group, or <code>null</code> if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group fetchByC_C_L_N(long companyId, long classNameId,
 		long liveGroupId, String name) throws SystemException {
 		return fetchByC_C_L_N(companyId, classNameId, liveGroupId, name, true);
@@ -5888,6 +6947,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the matching group, or <code>null</code> if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group fetchByC_C_L_N(long companyId, long classNameId,
 		long liveGroupId, String name, boolean retrieveFromCache)
 		throws SystemException {
@@ -6011,6 +7071,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the group that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group removeByC_C_L_N(long companyId, long classNameId,
 		long liveGroupId, String name)
 		throws NoSuchGroupException, SystemException {
@@ -6029,6 +7090,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the number of matching groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByC_C_L_N(long companyId, long classNameId,
 		long liveGroupId, String name) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_C_L_N;
@@ -6110,11 +7172,16 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	private static final String _FINDER_COLUMN_C_C_L_N_NAME_2 = "group_.name = ?";
 	private static final String _FINDER_COLUMN_C_C_L_N_NAME_3 = "(group_.name IS NULL OR group_.name = '')";
 
+	public GroupPersistenceImpl() {
+		setModelClass(Group.class);
+	}
+
 	/**
 	 * Caches the group in the entity cache if it is enabled.
 	 *
 	 * @param group the group
 	 */
+	@Override
 	public void cacheResult(Group group) {
 		EntityCacheUtil.putResult(GroupModelImpl.ENTITY_CACHE_ENABLED,
 			GroupImpl.class, group.getPrimaryKey(), group);
@@ -6155,6 +7222,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 *
 	 * @param groups the groups
 	 */
+	@Override
 	public void cacheResult(List<Group> groups) {
 		for (Group group : groups) {
 			if (EntityCacheUtil.getResult(GroupModelImpl.ENTITY_CACHE_ENABLED,
@@ -6488,6 +7556,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param groupId the primary key for the new group
 	 * @return the new group
 	 */
+	@Override
 	public Group create(long groupId) {
 		Group group = new GroupImpl();
 
@@ -6509,6 +7578,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @throws com.liferay.portal.NoSuchGroupException if a group with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group remove(long groupId)
 		throws NoSuchGroupException, SystemException {
 		return remove((Serializable)groupId);
@@ -6558,45 +7628,13 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	protected Group removeImpl(Group group) throws SystemException {
 		group = toUnwrappedModel(group);
 
-		try {
-			clearOrganizations.clear(group.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_GROUPS_ORGS_NAME);
-		}
+		groupToOrganizationTableMapper.deleteLeftPrimaryKeyTableMappings(group.getPrimaryKey());
 
-		try {
-			clearRoles.clear(group.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_GROUPS_ROLES_NAME);
-		}
+		groupToRoleTableMapper.deleteLeftPrimaryKeyTableMappings(group.getPrimaryKey());
 
-		try {
-			clearUserGroups.clear(group.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_GROUPS_USERGROUPS_NAME);
-		}
+		groupToUserGroupTableMapper.deleteLeftPrimaryKeyTableMappings(group.getPrimaryKey());
 
-		try {
-			clearUsers.clear(group.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_USERS_GROUPS_NAME);
-		}
+		groupToUserTableMapper.deleteLeftPrimaryKeyTableMappings(group.getPrimaryKey());
 
 		Session session = null;
 
@@ -6724,6 +7762,27 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 			}
 
 			if ((groupModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						groupModelImpl.getOriginalCompanyId(),
+						groupModelImpl.getOriginalClassNameId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C,
+					args);
+
+				args = new Object[] {
+						groupModelImpl.getCompanyId(),
+						groupModelImpl.getClassNameId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C,
+					args);
+			}
+
+			if ((groupModelImpl.getColumnBitmask() &
 					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_P.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						groupModelImpl.getOriginalCompanyId(),
@@ -6837,6 +7896,8 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 		clearUniqueFindersCache(group);
 		cacheUniqueFindersCache(group);
 
+		group.resetOriginalValues();
+
 		return group;
 	}
 
@@ -6863,8 +7924,11 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 		groupImpl.setDescription(group.getDescription());
 		groupImpl.setType(group.getType());
 		groupImpl.setTypeSettings(group.getTypeSettings());
+		groupImpl.setManualMembership(group.isManualMembership());
+		groupImpl.setMembershipRestriction(group.getMembershipRestriction());
 		groupImpl.setFriendlyURL(group.getFriendlyURL());
 		groupImpl.setSite(group.isSite());
+		groupImpl.setRemoteStagingGroupCount(group.getRemoteStagingGroupCount());
 		groupImpl.setActive(group.isActive());
 
 		return groupImpl;
@@ -6903,6 +7967,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @throws com.liferay.portal.NoSuchGroupException if a group with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group findByPrimaryKey(long groupId)
 		throws NoSuchGroupException, SystemException {
 		return findByPrimaryKey((Serializable)groupId);
@@ -6962,6 +8027,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the group, or <code>null</code> if a group with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public Group fetchByPrimaryKey(long groupId) throws SystemException {
 		return fetchByPrimaryKey((Serializable)groupId);
 	}
@@ -6972,6 +8038,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Group> findAll() throws SystemException {
 		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
@@ -6988,6 +8055,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the range of groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Group> findAll(int start, int end) throws SystemException {
 		return findAll(start, end, null);
 	}
@@ -7005,6 +8073,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the ordered range of groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<Group> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -7090,6 +8159,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 *
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeAll() throws SystemException {
 		for (Group group : findAll()) {
 			remove(group);
@@ -7102,6 +8172,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the number of groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countAll() throws SystemException {
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
 				FINDER_ARGS_EMPTY, this);
@@ -7140,6 +8211,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the organizations associated with the group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<com.liferay.portal.model.Organization> getOrganizations(long pk)
 		throws SystemException {
 		return getOrganizations(pk, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
@@ -7158,22 +8230,10 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the range of organizations associated with the group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<com.liferay.portal.model.Organization> getOrganizations(
 		long pk, int start, int end) throws SystemException {
 		return getOrganizations(pk, start, end, null);
-	}
-
-	public static final FinderPath FINDER_PATH_GET_ORGANIZATIONS = new FinderPath(com.liferay.portal.model.impl.OrganizationModelImpl.ENTITY_CACHE_ENABLED,
-			GroupModelImpl.FINDER_CACHE_ENABLED_GROUPS_ORGS,
-			com.liferay.portal.model.impl.OrganizationImpl.class,
-			GroupModelImpl.MAPPING_TABLE_GROUPS_ORGS_NAME, "getOrganizations",
-			new String[] {
-				Long.class.getName(), Integer.class.getName(),
-				Integer.class.getName(), OrderByComparator.class.getName()
-			});
-
-	static {
-		FINDER_PATH_GET_ORGANIZATIONS.setCacheKeyGeneratorCacheName(null);
 	}
 
 	/**
@@ -7190,92 +8250,12 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the ordered range of organizations associated with the group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<com.liferay.portal.model.Organization> getOrganizations(
 		long pk, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		boolean pagination = true;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			pagination = false;
-			finderArgs = new Object[] { pk };
-		}
-		else {
-			finderArgs = new Object[] { pk, start, end, orderByComparator };
-		}
-
-		List<com.liferay.portal.model.Organization> list = (List<com.liferay.portal.model.Organization>)FinderCacheUtil.getResult(FINDER_PATH_GET_ORGANIZATIONS,
-				finderArgs, this);
-
-		if (list == null) {
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				String sql = null;
-
-				if (orderByComparator != null) {
-					sql = _SQL_GETORGANIZATIONS.concat(ORDER_BY_CLAUSE)
-											   .concat(orderByComparator.getOrderBy());
-				}
-				else {
-					sql = _SQL_GETORGANIZATIONS;
-
-					if (pagination) {
-						sql = sql.concat(com.liferay.portal.model.impl.OrganizationModelImpl.ORDER_BY_SQL);
-					}
-				}
-
-				SQLQuery q = session.createSQLQuery(sql);
-
-				q.addEntity("Organization_",
-					com.liferay.portal.model.impl.OrganizationImpl.class);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(pk);
-
-				if (!pagination) {
-					list = (List<com.liferay.portal.model.Organization>)QueryUtil.list(q,
-							getDialect(), start, end, false);
-
-					Collections.sort(list);
-
-					list = new UnmodifiableList<com.liferay.portal.model.Organization>(list);
-				}
-				else {
-					list = (List<com.liferay.portal.model.Organization>)QueryUtil.list(q,
-							getDialect(), start, end);
-				}
-
-				organizationPersistence.cacheResult(list);
-
-				FinderCacheUtil.putResult(FINDER_PATH_GET_ORGANIZATIONS,
-					finderArgs, list);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_GET_ORGANIZATIONS,
-					finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	public static final FinderPath FINDER_PATH_GET_ORGANIZATIONS_SIZE = new FinderPath(com.liferay.portal.model.impl.OrganizationModelImpl.ENTITY_CACHE_ENABLED,
-			GroupModelImpl.FINDER_CACHE_ENABLED_GROUPS_ORGS, Long.class,
-			GroupModelImpl.MAPPING_TABLE_GROUPS_ORGS_NAME,
-			"getOrganizationsSize", new String[] { Long.class.getName() });
-
-	static {
-		FINDER_PATH_GET_ORGANIZATIONS_SIZE.setCacheKeyGeneratorCacheName(null);
+		return groupToOrganizationTableMapper.getRightBaseModels(pk, start,
+			end, orderByComparator);
 	}
 
 	/**
@@ -7285,51 +8265,12 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the number of organizations associated with the group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int getOrganizationsSize(long pk) throws SystemException {
-		Object[] finderArgs = new Object[] { pk };
+		long[] pks = groupToOrganizationTableMapper.getRightPrimaryKeys(pk);
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_GET_ORGANIZATIONS_SIZE,
-				finderArgs, this);
-
-		if (count == null) {
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				SQLQuery q = session.createSQLQuery(_SQL_GETORGANIZATIONSSIZE);
-
-				q.addScalar(COUNT_COLUMN_NAME,
-					com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(pk);
-
-				count = (Long)q.uniqueResult();
-
-				FinderCacheUtil.putResult(FINDER_PATH_GET_ORGANIZATIONS_SIZE,
-					finderArgs, count);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_GET_ORGANIZATIONS_SIZE,
-					finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
+		return pks.length;
 	}
-
-	public static final FinderPath FINDER_PATH_CONTAINS_ORGANIZATION = new FinderPath(com.liferay.portal.model.impl.OrganizationModelImpl.ENTITY_CACHE_ENABLED,
-			GroupModelImpl.FINDER_CACHE_ENABLED_GROUPS_ORGS, Boolean.class,
-			GroupModelImpl.MAPPING_TABLE_GROUPS_ORGS_NAME,
-			"containsOrganization",
-			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns <code>true</code> if the organization is associated with the group.
@@ -7339,30 +8280,11 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return <code>true</code> if the organization is associated with the group; <code>false</code> otherwise
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public boolean containsOrganization(long pk, long organizationPK)
 		throws SystemException {
-		Object[] finderArgs = new Object[] { pk, organizationPK };
-
-		Boolean value = (Boolean)FinderCacheUtil.getResult(FINDER_PATH_CONTAINS_ORGANIZATION,
-				finderArgs, this);
-
-		if (value == null) {
-			try {
-				value = Boolean.valueOf(containsOrganization.contains(pk,
-							organizationPK));
-
-				FinderCacheUtil.putResult(FINDER_PATH_CONTAINS_ORGANIZATION,
-					finderArgs, value);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_CONTAINS_ORGANIZATION,
-					finderArgs);
-
-				throw processException(e);
-			}
-		}
-
-		return value.booleanValue();
+		return groupToOrganizationTableMapper.containsTableMapping(pk,
+			organizationPK);
 	}
 
 	/**
@@ -7372,6 +8294,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return <code>true</code> if the group has any organizations associated with it; <code>false</code> otherwise
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public boolean containsOrganizations(long pk) throws SystemException {
 		if (getOrganizationsSize(pk) > 0) {
 			return true;
@@ -7388,17 +8311,10 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param organizationPK the primary key of the organization
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addOrganization(long pk, long organizationPK)
 		throws SystemException {
-		try {
-			addOrganization.add(pk, organizationPK);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_GROUPS_ORGS_NAME);
-		}
+		groupToOrganizationTableMapper.addTableMapping(pk, organizationPK);
 	}
 
 	/**
@@ -7408,18 +8324,12 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param organization the organization
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addOrganization(long pk,
 		com.liferay.portal.model.Organization organization)
 		throws SystemException {
-		try {
-			addOrganization.add(pk, organization.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_GROUPS_ORGS_NAME);
-		}
+		groupToOrganizationTableMapper.addTableMapping(pk,
+			organization.getPrimaryKey());
 	}
 
 	/**
@@ -7429,18 +8339,11 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param organizationPKs the primary keys of the organizations
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addOrganizations(long pk, long[] organizationPKs)
 		throws SystemException {
-		try {
-			for (long organizationPK : organizationPKs) {
-				addOrganization.add(pk, organizationPK);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_GROUPS_ORGS_NAME);
+		for (long organizationPK : organizationPKs) {
+			groupToOrganizationTableMapper.addTableMapping(pk, organizationPK);
 		}
 	}
 
@@ -7451,19 +8354,13 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param organizations the organizations
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addOrganizations(long pk,
 		List<com.liferay.portal.model.Organization> organizations)
 		throws SystemException {
-		try {
-			for (com.liferay.portal.model.Organization organization : organizations) {
-				addOrganization.add(pk, organization.getPrimaryKey());
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_GROUPS_ORGS_NAME);
+		for (com.liferay.portal.model.Organization organization : organizations) {
+			groupToOrganizationTableMapper.addTableMapping(pk,
+				organization.getPrimaryKey());
 		}
 	}
 
@@ -7473,16 +8370,9 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param pk the primary key of the group to clear the associated organizations from
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void clearOrganizations(long pk) throws SystemException {
-		try {
-			clearOrganizations.clear(pk);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_GROUPS_ORGS_NAME);
-		}
+		groupToOrganizationTableMapper.deleteLeftPrimaryKeyTableMappings(pk);
 	}
 
 	/**
@@ -7492,17 +8382,10 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param organizationPK the primary key of the organization
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeOrganization(long pk, long organizationPK)
 		throws SystemException {
-		try {
-			removeOrganization.remove(pk, organizationPK);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_GROUPS_ORGS_NAME);
-		}
+		groupToOrganizationTableMapper.deleteTableMapping(pk, organizationPK);
 	}
 
 	/**
@@ -7512,18 +8395,12 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param organization the organization
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeOrganization(long pk,
 		com.liferay.portal.model.Organization organization)
 		throws SystemException {
-		try {
-			removeOrganization.remove(pk, organization.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_GROUPS_ORGS_NAME);
-		}
+		groupToOrganizationTableMapper.deleteTableMapping(pk,
+			organization.getPrimaryKey());
 	}
 
 	/**
@@ -7533,18 +8410,11 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param organizationPKs the primary keys of the organizations
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeOrganizations(long pk, long[] organizationPKs)
 		throws SystemException {
-		try {
-			for (long organizationPK : organizationPKs) {
-				removeOrganization.remove(pk, organizationPK);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_GROUPS_ORGS_NAME);
+		for (long organizationPK : organizationPKs) {
+			groupToOrganizationTableMapper.deleteTableMapping(pk, organizationPK);
 		}
 	}
 
@@ -7555,19 +8425,13 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param organizations the organizations
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeOrganizations(long pk,
 		List<com.liferay.portal.model.Organization> organizations)
 		throws SystemException {
-		try {
-			for (com.liferay.portal.model.Organization organization : organizations) {
-				removeOrganization.remove(pk, organization.getPrimaryKey());
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_GROUPS_ORGS_NAME);
+		for (com.liferay.portal.model.Organization organization : organizations) {
+			groupToOrganizationTableMapper.deleteTableMapping(pk,
+				organization.getPrimaryKey());
 		}
 	}
 
@@ -7578,28 +8442,26 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param organizationPKs the primary keys of the organizations to be associated with the group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void setOrganizations(long pk, long[] organizationPKs)
 		throws SystemException {
-		try {
-			Set<Long> organizationPKSet = SetUtil.fromArray(organizationPKs);
+		Set<Long> newOrganizationPKsSet = SetUtil.fromArray(organizationPKs);
+		Set<Long> oldOrganizationPKsSet = SetUtil.fromArray(groupToOrganizationTableMapper.getRightPrimaryKeys(
+					pk));
 
-			List<com.liferay.portal.model.Organization> organizations = getOrganizations(pk);
+		Set<Long> removeOrganizationPKsSet = new HashSet<Long>(oldOrganizationPKsSet);
 
-			for (com.liferay.portal.model.Organization organization : organizations) {
-				if (!organizationPKSet.remove(organization.getPrimaryKey())) {
-					removeOrganization.remove(pk, organization.getPrimaryKey());
-				}
-			}
+		removeOrganizationPKsSet.removeAll(newOrganizationPKsSet);
 
-			for (Long organizationPK : organizationPKSet) {
-				addOrganization.add(pk, organizationPK);
-			}
+		for (long removeOrganizationPK : removeOrganizationPKsSet) {
+			groupToOrganizationTableMapper.deleteTableMapping(pk,
+				removeOrganizationPK);
 		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_GROUPS_ORGS_NAME);
+
+		newOrganizationPKsSet.removeAll(oldOrganizationPKsSet);
+
+		for (long newOrganizationPK : newOrganizationPKsSet) {
+			groupToOrganizationTableMapper.addTableMapping(pk, newOrganizationPK);
 		}
 	}
 
@@ -7610,6 +8472,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param organizations the organizations to be associated with the group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void setOrganizations(long pk,
 		List<com.liferay.portal.model.Organization> organizations)
 		throws SystemException {
@@ -7639,6 +8502,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the roles associated with the group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<com.liferay.portal.model.Role> getRoles(long pk)
 		throws SystemException {
 		return getRoles(pk, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
@@ -7657,22 +8521,10 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the range of roles associated with the group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<com.liferay.portal.model.Role> getRoles(long pk, int start,
 		int end) throws SystemException {
 		return getRoles(pk, start, end, null);
-	}
-
-	public static final FinderPath FINDER_PATH_GET_ROLES = new FinderPath(com.liferay.portal.model.impl.RoleModelImpl.ENTITY_CACHE_ENABLED,
-			GroupModelImpl.FINDER_CACHE_ENABLED_GROUPS_ROLES,
-			com.liferay.portal.model.impl.RoleImpl.class,
-			GroupModelImpl.MAPPING_TABLE_GROUPS_ROLES_NAME, "getRoles",
-			new String[] {
-				Long.class.getName(), Integer.class.getName(),
-				Integer.class.getName(), OrderByComparator.class.getName()
-			});
-
-	static {
-		FINDER_PATH_GET_ROLES.setCacheKeyGeneratorCacheName(null);
 	}
 
 	/**
@@ -7689,90 +8541,11 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the ordered range of roles associated with the group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<com.liferay.portal.model.Role> getRoles(long pk, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
-		boolean pagination = true;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			pagination = false;
-			finderArgs = new Object[] { pk };
-		}
-		else {
-			finderArgs = new Object[] { pk, start, end, orderByComparator };
-		}
-
-		List<com.liferay.portal.model.Role> list = (List<com.liferay.portal.model.Role>)FinderCacheUtil.getResult(FINDER_PATH_GET_ROLES,
-				finderArgs, this);
-
-		if (list == null) {
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				String sql = null;
-
-				if (orderByComparator != null) {
-					sql = _SQL_GETROLES.concat(ORDER_BY_CLAUSE)
-									   .concat(orderByComparator.getOrderBy());
-				}
-				else {
-					sql = _SQL_GETROLES;
-
-					if (pagination) {
-						sql = sql.concat(com.liferay.portal.model.impl.RoleModelImpl.ORDER_BY_SQL);
-					}
-				}
-
-				SQLQuery q = session.createSQLQuery(sql);
-
-				q.addEntity("Role_",
-					com.liferay.portal.model.impl.RoleImpl.class);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(pk);
-
-				if (!pagination) {
-					list = (List<com.liferay.portal.model.Role>)QueryUtil.list(q,
-							getDialect(), start, end, false);
-
-					Collections.sort(list);
-
-					list = new UnmodifiableList<com.liferay.portal.model.Role>(list);
-				}
-				else {
-					list = (List<com.liferay.portal.model.Role>)QueryUtil.list(q,
-							getDialect(), start, end);
-				}
-
-				rolePersistence.cacheResult(list);
-
-				FinderCacheUtil.putResult(FINDER_PATH_GET_ROLES, finderArgs,
-					list);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_GET_ROLES, finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	public static final FinderPath FINDER_PATH_GET_ROLES_SIZE = new FinderPath(com.liferay.portal.model.impl.RoleModelImpl.ENTITY_CACHE_ENABLED,
-			GroupModelImpl.FINDER_CACHE_ENABLED_GROUPS_ROLES, Long.class,
-			GroupModelImpl.MAPPING_TABLE_GROUPS_ROLES_NAME, "getRolesSize",
-			new String[] { Long.class.getName() });
-
-	static {
-		FINDER_PATH_GET_ROLES_SIZE.setCacheKeyGeneratorCacheName(null);
+		return groupToRoleTableMapper.getRightBaseModels(pk, start, end,
+			orderByComparator);
 	}
 
 	/**
@@ -7782,50 +8555,12 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the number of roles associated with the group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int getRolesSize(long pk) throws SystemException {
-		Object[] finderArgs = new Object[] { pk };
+		long[] pks = groupToRoleTableMapper.getRightPrimaryKeys(pk);
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_GET_ROLES_SIZE,
-				finderArgs, this);
-
-		if (count == null) {
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				SQLQuery q = session.createSQLQuery(_SQL_GETROLESSIZE);
-
-				q.addScalar(COUNT_COLUMN_NAME,
-					com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(pk);
-
-				count = (Long)q.uniqueResult();
-
-				FinderCacheUtil.putResult(FINDER_PATH_GET_ROLES_SIZE,
-					finderArgs, count);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_GET_ROLES_SIZE,
-					finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
+		return pks.length;
 	}
-
-	public static final FinderPath FINDER_PATH_CONTAINS_ROLE = new FinderPath(com.liferay.portal.model.impl.RoleModelImpl.ENTITY_CACHE_ENABLED,
-			GroupModelImpl.FINDER_CACHE_ENABLED_GROUPS_ROLES, Boolean.class,
-			GroupModelImpl.MAPPING_TABLE_GROUPS_ROLES_NAME, "containsRole",
-			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns <code>true</code> if the role is associated with the group.
@@ -7835,28 +8570,9 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return <code>true</code> if the role is associated with the group; <code>false</code> otherwise
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public boolean containsRole(long pk, long rolePK) throws SystemException {
-		Object[] finderArgs = new Object[] { pk, rolePK };
-
-		Boolean value = (Boolean)FinderCacheUtil.getResult(FINDER_PATH_CONTAINS_ROLE,
-				finderArgs, this);
-
-		if (value == null) {
-			try {
-				value = Boolean.valueOf(containsRole.contains(pk, rolePK));
-
-				FinderCacheUtil.putResult(FINDER_PATH_CONTAINS_ROLE,
-					finderArgs, value);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_CONTAINS_ROLE,
-					finderArgs);
-
-				throw processException(e);
-			}
-		}
-
-		return value.booleanValue();
+		return groupToRoleTableMapper.containsTableMapping(pk, rolePK);
 	}
 
 	/**
@@ -7866,6 +8582,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return <code>true</code> if the group has any roles associated with it; <code>false</code> otherwise
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public boolean containsRoles(long pk) throws SystemException {
 		if (getRolesSize(pk) > 0) {
 			return true;
@@ -7882,16 +8599,9 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param rolePK the primary key of the role
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addRole(long pk, long rolePK) throws SystemException {
-		try {
-			addRole.add(pk, rolePK);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_GROUPS_ROLES_NAME);
-		}
+		groupToRoleTableMapper.addTableMapping(pk, rolePK);
 	}
 
 	/**
@@ -7901,17 +8611,10 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param role the role
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addRole(long pk, com.liferay.portal.model.Role role)
 		throws SystemException {
-		try {
-			addRole.add(pk, role.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_GROUPS_ROLES_NAME);
-		}
+		groupToRoleTableMapper.addTableMapping(pk, role.getPrimaryKey());
 	}
 
 	/**
@@ -7921,17 +8624,10 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param rolePKs the primary keys of the roles
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addRoles(long pk, long[] rolePKs) throws SystemException {
-		try {
-			for (long rolePK : rolePKs) {
-				addRole.add(pk, rolePK);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_GROUPS_ROLES_NAME);
+		for (long rolePK : rolePKs) {
+			groupToRoleTableMapper.addTableMapping(pk, rolePK);
 		}
 	}
 
@@ -7942,18 +8638,11 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param roles the roles
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addRoles(long pk, List<com.liferay.portal.model.Role> roles)
 		throws SystemException {
-		try {
-			for (com.liferay.portal.model.Role role : roles) {
-				addRole.add(pk, role.getPrimaryKey());
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_GROUPS_ROLES_NAME);
+		for (com.liferay.portal.model.Role role : roles) {
+			groupToRoleTableMapper.addTableMapping(pk, role.getPrimaryKey());
 		}
 	}
 
@@ -7963,16 +8652,9 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param pk the primary key of the group to clear the associated roles from
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void clearRoles(long pk) throws SystemException {
-		try {
-			clearRoles.clear(pk);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_GROUPS_ROLES_NAME);
-		}
+		groupToRoleTableMapper.deleteLeftPrimaryKeyTableMappings(pk);
 	}
 
 	/**
@@ -7982,16 +8664,9 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param rolePK the primary key of the role
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeRole(long pk, long rolePK) throws SystemException {
-		try {
-			removeRole.remove(pk, rolePK);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_GROUPS_ROLES_NAME);
-		}
+		groupToRoleTableMapper.deleteTableMapping(pk, rolePK);
 	}
 
 	/**
@@ -8001,17 +8676,10 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param role the role
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeRole(long pk, com.liferay.portal.model.Role role)
 		throws SystemException {
-		try {
-			removeRole.remove(pk, role.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_GROUPS_ROLES_NAME);
-		}
+		groupToRoleTableMapper.deleteTableMapping(pk, role.getPrimaryKey());
 	}
 
 	/**
@@ -8021,17 +8689,10 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param rolePKs the primary keys of the roles
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeRoles(long pk, long[] rolePKs) throws SystemException {
-		try {
-			for (long rolePK : rolePKs) {
-				removeRole.remove(pk, rolePK);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_GROUPS_ROLES_NAME);
+		for (long rolePK : rolePKs) {
+			groupToRoleTableMapper.deleteTableMapping(pk, rolePK);
 		}
 	}
 
@@ -8042,18 +8703,11 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param roles the roles
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeRoles(long pk, List<com.liferay.portal.model.Role> roles)
 		throws SystemException {
-		try {
-			for (com.liferay.portal.model.Role role : roles) {
-				removeRole.remove(pk, role.getPrimaryKey());
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_GROUPS_ROLES_NAME);
+		for (com.liferay.portal.model.Role role : roles) {
+			groupToRoleTableMapper.deleteTableMapping(pk, role.getPrimaryKey());
 		}
 	}
 
@@ -8064,27 +8718,24 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param rolePKs the primary keys of the roles to be associated with the group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void setRoles(long pk, long[] rolePKs) throws SystemException {
-		try {
-			Set<Long> rolePKSet = SetUtil.fromArray(rolePKs);
+		Set<Long> newRolePKsSet = SetUtil.fromArray(rolePKs);
+		Set<Long> oldRolePKsSet = SetUtil.fromArray(groupToRoleTableMapper.getRightPrimaryKeys(
+					pk));
 
-			List<com.liferay.portal.model.Role> roles = getRoles(pk);
+		Set<Long> removeRolePKsSet = new HashSet<Long>(oldRolePKsSet);
 
-			for (com.liferay.portal.model.Role role : roles) {
-				if (!rolePKSet.remove(role.getPrimaryKey())) {
-					removeRole.remove(pk, role.getPrimaryKey());
-				}
-			}
+		removeRolePKsSet.removeAll(newRolePKsSet);
 
-			for (Long rolePK : rolePKSet) {
-				addRole.add(pk, rolePK);
-			}
+		for (long removeRolePK : removeRolePKsSet) {
+			groupToRoleTableMapper.deleteTableMapping(pk, removeRolePK);
 		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_GROUPS_ROLES_NAME);
+
+		newRolePKsSet.removeAll(oldRolePKsSet);
+
+		for (long newRolePK : newRolePKsSet) {
+			groupToRoleTableMapper.addTableMapping(pk, newRolePK);
 		}
 	}
 
@@ -8095,6 +8746,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param roles the roles to be associated with the group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void setRoles(long pk, List<com.liferay.portal.model.Role> roles)
 		throws SystemException {
 		try {
@@ -8123,6 +8775,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the user groups associated with the group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<com.liferay.portal.model.UserGroup> getUserGroups(long pk)
 		throws SystemException {
 		return getUserGroups(pk, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
@@ -8141,23 +8794,10 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the range of user groups associated with the group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<com.liferay.portal.model.UserGroup> getUserGroups(long pk,
 		int start, int end) throws SystemException {
 		return getUserGroups(pk, start, end, null);
-	}
-
-	public static final FinderPath FINDER_PATH_GET_USERGROUPS = new FinderPath(com.liferay.portal.model.impl.UserGroupModelImpl.ENTITY_CACHE_ENABLED,
-			GroupModelImpl.FINDER_CACHE_ENABLED_GROUPS_USERGROUPS,
-			com.liferay.portal.model.impl.UserGroupImpl.class,
-			GroupModelImpl.MAPPING_TABLE_GROUPS_USERGROUPS_NAME,
-			"getUserGroups",
-			new String[] {
-				Long.class.getName(), Integer.class.getName(),
-				Integer.class.getName(), OrderByComparator.class.getName()
-			});
-
-	static {
-		FINDER_PATH_GET_USERGROUPS.setCacheKeyGeneratorCacheName(null);
 	}
 
 	/**
@@ -8174,92 +8814,12 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the ordered range of user groups associated with the group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<com.liferay.portal.model.UserGroup> getUserGroups(long pk,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		boolean pagination = true;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			pagination = false;
-			finderArgs = new Object[] { pk };
-		}
-		else {
-			finderArgs = new Object[] { pk, start, end, orderByComparator };
-		}
-
-		List<com.liferay.portal.model.UserGroup> list = (List<com.liferay.portal.model.UserGroup>)FinderCacheUtil.getResult(FINDER_PATH_GET_USERGROUPS,
-				finderArgs, this);
-
-		if (list == null) {
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				String sql = null;
-
-				if (orderByComparator != null) {
-					sql = _SQL_GETUSERGROUPS.concat(ORDER_BY_CLAUSE)
-											.concat(orderByComparator.getOrderBy());
-				}
-				else {
-					sql = _SQL_GETUSERGROUPS;
-
-					if (pagination) {
-						sql = sql.concat(com.liferay.portal.model.impl.UserGroupModelImpl.ORDER_BY_SQL);
-					}
-				}
-
-				SQLQuery q = session.createSQLQuery(sql);
-
-				q.addEntity("UserGroup",
-					com.liferay.portal.model.impl.UserGroupImpl.class);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(pk);
-
-				if (!pagination) {
-					list = (List<com.liferay.portal.model.UserGroup>)QueryUtil.list(q,
-							getDialect(), start, end, false);
-
-					Collections.sort(list);
-
-					list = new UnmodifiableList<com.liferay.portal.model.UserGroup>(list);
-				}
-				else {
-					list = (List<com.liferay.portal.model.UserGroup>)QueryUtil.list(q,
-							getDialect(), start, end);
-				}
-
-				userGroupPersistence.cacheResult(list);
-
-				FinderCacheUtil.putResult(FINDER_PATH_GET_USERGROUPS,
-					finderArgs, list);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_GET_USERGROUPS,
-					finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	public static final FinderPath FINDER_PATH_GET_USERGROUPS_SIZE = new FinderPath(com.liferay.portal.model.impl.UserGroupModelImpl.ENTITY_CACHE_ENABLED,
-			GroupModelImpl.FINDER_CACHE_ENABLED_GROUPS_USERGROUPS, Long.class,
-			GroupModelImpl.MAPPING_TABLE_GROUPS_USERGROUPS_NAME,
-			"getUserGroupsSize", new String[] { Long.class.getName() });
-
-	static {
-		FINDER_PATH_GET_USERGROUPS_SIZE.setCacheKeyGeneratorCacheName(null);
+		return groupToUserGroupTableMapper.getRightBaseModels(pk, start, end,
+			orderByComparator);
 	}
 
 	/**
@@ -8269,51 +8829,12 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the number of user groups associated with the group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int getUserGroupsSize(long pk) throws SystemException {
-		Object[] finderArgs = new Object[] { pk };
+		long[] pks = groupToUserGroupTableMapper.getRightPrimaryKeys(pk);
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_GET_USERGROUPS_SIZE,
-				finderArgs, this);
-
-		if (count == null) {
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				SQLQuery q = session.createSQLQuery(_SQL_GETUSERGROUPSSIZE);
-
-				q.addScalar(COUNT_COLUMN_NAME,
-					com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(pk);
-
-				count = (Long)q.uniqueResult();
-
-				FinderCacheUtil.putResult(FINDER_PATH_GET_USERGROUPS_SIZE,
-					finderArgs, count);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_GET_USERGROUPS_SIZE,
-					finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
+		return pks.length;
 	}
-
-	public static final FinderPath FINDER_PATH_CONTAINS_USERGROUP = new FinderPath(com.liferay.portal.model.impl.UserGroupModelImpl.ENTITY_CACHE_ENABLED,
-			GroupModelImpl.FINDER_CACHE_ENABLED_GROUPS_USERGROUPS,
-			Boolean.class, GroupModelImpl.MAPPING_TABLE_GROUPS_USERGROUPS_NAME,
-			"containsUserGroup",
-			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns <code>true</code> if the user group is associated with the group.
@@ -8323,30 +8844,10 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return <code>true</code> if the user group is associated with the group; <code>false</code> otherwise
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public boolean containsUserGroup(long pk, long userGroupPK)
 		throws SystemException {
-		Object[] finderArgs = new Object[] { pk, userGroupPK };
-
-		Boolean value = (Boolean)FinderCacheUtil.getResult(FINDER_PATH_CONTAINS_USERGROUP,
-				finderArgs, this);
-
-		if (value == null) {
-			try {
-				value = Boolean.valueOf(containsUserGroup.contains(pk,
-							userGroupPK));
-
-				FinderCacheUtil.putResult(FINDER_PATH_CONTAINS_USERGROUP,
-					finderArgs, value);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_CONTAINS_USERGROUP,
-					finderArgs);
-
-				throw processException(e);
-			}
-		}
-
-		return value.booleanValue();
+		return groupToUserGroupTableMapper.containsTableMapping(pk, userGroupPK);
 	}
 
 	/**
@@ -8356,6 +8857,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return <code>true</code> if the group has any user groups associated with it; <code>false</code> otherwise
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public boolean containsUserGroups(long pk) throws SystemException {
 		if (getUserGroupsSize(pk) > 0) {
 			return true;
@@ -8372,17 +8874,10 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param userGroupPK the primary key of the user group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addUserGroup(long pk, long userGroupPK)
 		throws SystemException {
-		try {
-			addUserGroup.add(pk, userGroupPK);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_GROUPS_USERGROUPS_NAME);
-		}
+		groupToUserGroupTableMapper.addTableMapping(pk, userGroupPK);
 	}
 
 	/**
@@ -8392,17 +8887,11 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param userGroup the user group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addUserGroup(long pk,
 		com.liferay.portal.model.UserGroup userGroup) throws SystemException {
-		try {
-			addUserGroup.add(pk, userGroup.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_GROUPS_USERGROUPS_NAME);
-		}
+		groupToUserGroupTableMapper.addTableMapping(pk,
+			userGroup.getPrimaryKey());
 	}
 
 	/**
@@ -8412,18 +8901,11 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param userGroupPKs the primary keys of the user groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addUserGroups(long pk, long[] userGroupPKs)
 		throws SystemException {
-		try {
-			for (long userGroupPK : userGroupPKs) {
-				addUserGroup.add(pk, userGroupPK);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_GROUPS_USERGROUPS_NAME);
+		for (long userGroupPK : userGroupPKs) {
+			groupToUserGroupTableMapper.addTableMapping(pk, userGroupPK);
 		}
 	}
 
@@ -8434,19 +8916,13 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param userGroups the user groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addUserGroups(long pk,
 		List<com.liferay.portal.model.UserGroup> userGroups)
 		throws SystemException {
-		try {
-			for (com.liferay.portal.model.UserGroup userGroup : userGroups) {
-				addUserGroup.add(pk, userGroup.getPrimaryKey());
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_GROUPS_USERGROUPS_NAME);
+		for (com.liferay.portal.model.UserGroup userGroup : userGroups) {
+			groupToUserGroupTableMapper.addTableMapping(pk,
+				userGroup.getPrimaryKey());
 		}
 	}
 
@@ -8456,16 +8932,9 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param pk the primary key of the group to clear the associated user groups from
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void clearUserGroups(long pk) throws SystemException {
-		try {
-			clearUserGroups.clear(pk);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_GROUPS_USERGROUPS_NAME);
-		}
+		groupToUserGroupTableMapper.deleteLeftPrimaryKeyTableMappings(pk);
 	}
 
 	/**
@@ -8475,17 +8944,10 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param userGroupPK the primary key of the user group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeUserGroup(long pk, long userGroupPK)
 		throws SystemException {
-		try {
-			removeUserGroup.remove(pk, userGroupPK);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_GROUPS_USERGROUPS_NAME);
-		}
+		groupToUserGroupTableMapper.deleteTableMapping(pk, userGroupPK);
 	}
 
 	/**
@@ -8495,17 +8957,11 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param userGroup the user group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeUserGroup(long pk,
 		com.liferay.portal.model.UserGroup userGroup) throws SystemException {
-		try {
-			removeUserGroup.remove(pk, userGroup.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_GROUPS_USERGROUPS_NAME);
-		}
+		groupToUserGroupTableMapper.deleteTableMapping(pk,
+			userGroup.getPrimaryKey());
 	}
 
 	/**
@@ -8515,18 +8971,11 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param userGroupPKs the primary keys of the user groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeUserGroups(long pk, long[] userGroupPKs)
 		throws SystemException {
-		try {
-			for (long userGroupPK : userGroupPKs) {
-				removeUserGroup.remove(pk, userGroupPK);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_GROUPS_USERGROUPS_NAME);
+		for (long userGroupPK : userGroupPKs) {
+			groupToUserGroupTableMapper.deleteTableMapping(pk, userGroupPK);
 		}
 	}
 
@@ -8537,19 +8986,13 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param userGroups the user groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeUserGroups(long pk,
 		List<com.liferay.portal.model.UserGroup> userGroups)
 		throws SystemException {
-		try {
-			for (com.liferay.portal.model.UserGroup userGroup : userGroups) {
-				removeUserGroup.remove(pk, userGroup.getPrimaryKey());
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_GROUPS_USERGROUPS_NAME);
+		for (com.liferay.portal.model.UserGroup userGroup : userGroups) {
+			groupToUserGroupTableMapper.deleteTableMapping(pk,
+				userGroup.getPrimaryKey());
 		}
 	}
 
@@ -8560,28 +9003,25 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param userGroupPKs the primary keys of the user groups to be associated with the group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void setUserGroups(long pk, long[] userGroupPKs)
 		throws SystemException {
-		try {
-			Set<Long> userGroupPKSet = SetUtil.fromArray(userGroupPKs);
+		Set<Long> newUserGroupPKsSet = SetUtil.fromArray(userGroupPKs);
+		Set<Long> oldUserGroupPKsSet = SetUtil.fromArray(groupToUserGroupTableMapper.getRightPrimaryKeys(
+					pk));
 
-			List<com.liferay.portal.model.UserGroup> userGroups = getUserGroups(pk);
+		Set<Long> removeUserGroupPKsSet = new HashSet<Long>(oldUserGroupPKsSet);
 
-			for (com.liferay.portal.model.UserGroup userGroup : userGroups) {
-				if (!userGroupPKSet.remove(userGroup.getPrimaryKey())) {
-					removeUserGroup.remove(pk, userGroup.getPrimaryKey());
-				}
-			}
+		removeUserGroupPKsSet.removeAll(newUserGroupPKsSet);
 
-			for (Long userGroupPK : userGroupPKSet) {
-				addUserGroup.add(pk, userGroupPK);
-			}
+		for (long removeUserGroupPK : removeUserGroupPKsSet) {
+			groupToUserGroupTableMapper.deleteTableMapping(pk, removeUserGroupPK);
 		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_GROUPS_USERGROUPS_NAME);
+
+		newUserGroupPKsSet.removeAll(oldUserGroupPKsSet);
+
+		for (long newUserGroupPK : newUserGroupPKsSet) {
+			groupToUserGroupTableMapper.addTableMapping(pk, newUserGroupPK);
 		}
 	}
 
@@ -8592,6 +9032,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param userGroups the user groups to be associated with the group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void setUserGroups(long pk,
 		List<com.liferay.portal.model.UserGroup> userGroups)
 		throws SystemException {
@@ -8621,6 +9062,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the users associated with the group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<com.liferay.portal.model.User> getUsers(long pk)
 		throws SystemException {
 		return getUsers(pk, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
@@ -8639,22 +9081,10 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the range of users associated with the group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<com.liferay.portal.model.User> getUsers(long pk, int start,
 		int end) throws SystemException {
 		return getUsers(pk, start, end, null);
-	}
-
-	public static final FinderPath FINDER_PATH_GET_USERS = new FinderPath(com.liferay.portal.model.impl.UserModelImpl.ENTITY_CACHE_ENABLED,
-			GroupModelImpl.FINDER_CACHE_ENABLED_USERS_GROUPS,
-			com.liferay.portal.model.impl.UserImpl.class,
-			GroupModelImpl.MAPPING_TABLE_USERS_GROUPS_NAME, "getUsers",
-			new String[] {
-				Long.class.getName(), Integer.class.getName(),
-				Integer.class.getName(), OrderByComparator.class.getName()
-			});
-
-	static {
-		FINDER_PATH_GET_USERS.setCacheKeyGeneratorCacheName(null);
 	}
 
 	/**
@@ -8671,90 +9101,11 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the ordered range of users associated with the group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<com.liferay.portal.model.User> getUsers(long pk, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
-		boolean pagination = true;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			pagination = false;
-			finderArgs = new Object[] { pk };
-		}
-		else {
-			finderArgs = new Object[] { pk, start, end, orderByComparator };
-		}
-
-		List<com.liferay.portal.model.User> list = (List<com.liferay.portal.model.User>)FinderCacheUtil.getResult(FINDER_PATH_GET_USERS,
-				finderArgs, this);
-
-		if (list == null) {
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				String sql = null;
-
-				if (orderByComparator != null) {
-					sql = _SQL_GETUSERS.concat(ORDER_BY_CLAUSE)
-									   .concat(orderByComparator.getOrderBy());
-				}
-				else {
-					sql = _SQL_GETUSERS;
-
-					if (pagination) {
-						sql = sql.concat(com.liferay.portal.model.impl.UserModelImpl.ORDER_BY_SQL);
-					}
-				}
-
-				SQLQuery q = session.createSQLQuery(sql);
-
-				q.addEntity("User_",
-					com.liferay.portal.model.impl.UserImpl.class);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(pk);
-
-				if (!pagination) {
-					list = (List<com.liferay.portal.model.User>)QueryUtil.list(q,
-							getDialect(), start, end, false);
-
-					Collections.sort(list);
-
-					list = new UnmodifiableList<com.liferay.portal.model.User>(list);
-				}
-				else {
-					list = (List<com.liferay.portal.model.User>)QueryUtil.list(q,
-							getDialect(), start, end);
-				}
-
-				userPersistence.cacheResult(list);
-
-				FinderCacheUtil.putResult(FINDER_PATH_GET_USERS, finderArgs,
-					list);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_GET_USERS, finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	public static final FinderPath FINDER_PATH_GET_USERS_SIZE = new FinderPath(com.liferay.portal.model.impl.UserModelImpl.ENTITY_CACHE_ENABLED,
-			GroupModelImpl.FINDER_CACHE_ENABLED_USERS_GROUPS, Long.class,
-			GroupModelImpl.MAPPING_TABLE_USERS_GROUPS_NAME, "getUsersSize",
-			new String[] { Long.class.getName() });
-
-	static {
-		FINDER_PATH_GET_USERS_SIZE.setCacheKeyGeneratorCacheName(null);
+		return groupToUserTableMapper.getRightBaseModels(pk, start, end,
+			orderByComparator);
 	}
 
 	/**
@@ -8764,50 +9115,12 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return the number of users associated with the group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int getUsersSize(long pk) throws SystemException {
-		Object[] finderArgs = new Object[] { pk };
+		long[] pks = groupToUserTableMapper.getRightPrimaryKeys(pk);
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_GET_USERS_SIZE,
-				finderArgs, this);
-
-		if (count == null) {
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				SQLQuery q = session.createSQLQuery(_SQL_GETUSERSSIZE);
-
-				q.addScalar(COUNT_COLUMN_NAME,
-					com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(pk);
-
-				count = (Long)q.uniqueResult();
-
-				FinderCacheUtil.putResult(FINDER_PATH_GET_USERS_SIZE,
-					finderArgs, count);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_GET_USERS_SIZE,
-					finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
+		return pks.length;
 	}
-
-	public static final FinderPath FINDER_PATH_CONTAINS_USER = new FinderPath(com.liferay.portal.model.impl.UserModelImpl.ENTITY_CACHE_ENABLED,
-			GroupModelImpl.FINDER_CACHE_ENABLED_USERS_GROUPS, Boolean.class,
-			GroupModelImpl.MAPPING_TABLE_USERS_GROUPS_NAME, "containsUser",
-			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns <code>true</code> if the user is associated with the group.
@@ -8817,28 +9130,9 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return <code>true</code> if the user is associated with the group; <code>false</code> otherwise
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public boolean containsUser(long pk, long userPK) throws SystemException {
-		Object[] finderArgs = new Object[] { pk, userPK };
-
-		Boolean value = (Boolean)FinderCacheUtil.getResult(FINDER_PATH_CONTAINS_USER,
-				finderArgs, this);
-
-		if (value == null) {
-			try {
-				value = Boolean.valueOf(containsUser.contains(pk, userPK));
-
-				FinderCacheUtil.putResult(FINDER_PATH_CONTAINS_USER,
-					finderArgs, value);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_CONTAINS_USER,
-					finderArgs);
-
-				throw processException(e);
-			}
-		}
-
-		return value.booleanValue();
+		return groupToUserTableMapper.containsTableMapping(pk, userPK);
 	}
 
 	/**
@@ -8848,6 +9142,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @return <code>true</code> if the group has any users associated with it; <code>false</code> otherwise
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public boolean containsUsers(long pk) throws SystemException {
 		if (getUsersSize(pk) > 0) {
 			return true;
@@ -8864,16 +9159,9 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param userPK the primary key of the user
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addUser(long pk, long userPK) throws SystemException {
-		try {
-			addUser.add(pk, userPK);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_USERS_GROUPS_NAME);
-		}
+		groupToUserTableMapper.addTableMapping(pk, userPK);
 	}
 
 	/**
@@ -8883,17 +9171,10 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param user the user
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addUser(long pk, com.liferay.portal.model.User user)
 		throws SystemException {
-		try {
-			addUser.add(pk, user.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_USERS_GROUPS_NAME);
-		}
+		groupToUserTableMapper.addTableMapping(pk, user.getPrimaryKey());
 	}
 
 	/**
@@ -8903,17 +9184,10 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param userPKs the primary keys of the users
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addUsers(long pk, long[] userPKs) throws SystemException {
-		try {
-			for (long userPK : userPKs) {
-				addUser.add(pk, userPK);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_USERS_GROUPS_NAME);
+		for (long userPK : userPKs) {
+			groupToUserTableMapper.addTableMapping(pk, userPK);
 		}
 	}
 
@@ -8924,18 +9198,11 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param users the users
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addUsers(long pk, List<com.liferay.portal.model.User> users)
 		throws SystemException {
-		try {
-			for (com.liferay.portal.model.User user : users) {
-				addUser.add(pk, user.getPrimaryKey());
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_USERS_GROUPS_NAME);
+		for (com.liferay.portal.model.User user : users) {
+			groupToUserTableMapper.addTableMapping(pk, user.getPrimaryKey());
 		}
 	}
 
@@ -8945,16 +9212,9 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param pk the primary key of the group to clear the associated users from
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void clearUsers(long pk) throws SystemException {
-		try {
-			clearUsers.clear(pk);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_USERS_GROUPS_NAME);
-		}
+		groupToUserTableMapper.deleteLeftPrimaryKeyTableMappings(pk);
 	}
 
 	/**
@@ -8964,16 +9224,9 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param userPK the primary key of the user
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeUser(long pk, long userPK) throws SystemException {
-		try {
-			removeUser.remove(pk, userPK);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_USERS_GROUPS_NAME);
-		}
+		groupToUserTableMapper.deleteTableMapping(pk, userPK);
 	}
 
 	/**
@@ -8983,17 +9236,10 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param user the user
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeUser(long pk, com.liferay.portal.model.User user)
 		throws SystemException {
-		try {
-			removeUser.remove(pk, user.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_USERS_GROUPS_NAME);
-		}
+		groupToUserTableMapper.deleteTableMapping(pk, user.getPrimaryKey());
 	}
 
 	/**
@@ -9003,17 +9249,10 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param userPKs the primary keys of the users
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeUsers(long pk, long[] userPKs) throws SystemException {
-		try {
-			for (long userPK : userPKs) {
-				removeUser.remove(pk, userPK);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_USERS_GROUPS_NAME);
+		for (long userPK : userPKs) {
+			groupToUserTableMapper.deleteTableMapping(pk, userPK);
 		}
 	}
 
@@ -9024,18 +9263,11 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param users the users
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeUsers(long pk, List<com.liferay.portal.model.User> users)
 		throws SystemException {
-		try {
-			for (com.liferay.portal.model.User user : users) {
-				removeUser.remove(pk, user.getPrimaryKey());
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_USERS_GROUPS_NAME);
+		for (com.liferay.portal.model.User user : users) {
+			groupToUserTableMapper.deleteTableMapping(pk, user.getPrimaryKey());
 		}
 	}
 
@@ -9046,27 +9278,24 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param userPKs the primary keys of the users to be associated with the group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void setUsers(long pk, long[] userPKs) throws SystemException {
-		try {
-			Set<Long> userPKSet = SetUtil.fromArray(userPKs);
+		Set<Long> newUserPKsSet = SetUtil.fromArray(userPKs);
+		Set<Long> oldUserPKsSet = SetUtil.fromArray(groupToUserTableMapper.getRightPrimaryKeys(
+					pk));
 
-			List<com.liferay.portal.model.User> users = getUsers(pk);
+		Set<Long> removeUserPKsSet = new HashSet<Long>(oldUserPKsSet);
 
-			for (com.liferay.portal.model.User user : users) {
-				if (!userPKSet.remove(user.getPrimaryKey())) {
-					removeUser.remove(pk, user.getPrimaryKey());
-				}
-			}
+		removeUserPKsSet.removeAll(newUserPKsSet);
 
-			for (Long userPK : userPKSet) {
-				addUser.add(pk, userPK);
-			}
+		for (long removeUserPK : removeUserPKsSet) {
+			groupToUserTableMapper.deleteTableMapping(pk, removeUserPK);
 		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(GroupModelImpl.MAPPING_TABLE_USERS_GROUPS_NAME);
+
+		newUserPKsSet.removeAll(oldUserPKsSet);
+
+		for (long newUserPK : newUserPKsSet) {
+			groupToUserTableMapper.addTableMapping(pk, newUserPK);
 		}
 	}
 
@@ -9077,6 +9306,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @param users the users to be associated with the group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void setUsers(long pk, List<com.liferay.portal.model.User> users)
 		throws SystemException {
 		try {
@@ -9127,29 +9357,17 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 			}
 		}
 
-		containsOrganization = new ContainsOrganization();
+		groupToOrganizationTableMapper = TableMapperFactory.getTableMapper("Groups_Orgs",
+				"groupId", "organizationId", this, organizationPersistence);
 
-		addOrganization = new AddOrganization();
-		clearOrganizations = new ClearOrganizations();
-		removeOrganization = new RemoveOrganization();
+		groupToRoleTableMapper = TableMapperFactory.getTableMapper("Groups_Roles",
+				"groupId", "roleId", this, rolePersistence);
 
-		containsRole = new ContainsRole();
+		groupToUserGroupTableMapper = TableMapperFactory.getTableMapper("Groups_UserGroups",
+				"groupId", "userGroupId", this, userGroupPersistence);
 
-		addRole = new AddRole();
-		clearRoles = new ClearRoles();
-		removeRole = new RemoveRole();
-
-		containsUserGroup = new ContainsUserGroup();
-
-		addUserGroup = new AddUserGroup();
-		clearUserGroups = new ClearUserGroups();
-		removeUserGroup = new RemoveUserGroup();
-
-		containsUser = new ContainsUser();
-
-		addUser = new AddUser();
-		clearUsers = new ClearUsers();
-		removeUser = new RemoveUser();
+		groupToUserTableMapper = TableMapperFactory.getTableMapper("Users_Groups",
+				"groupId", "userId", this, userPersistence);
 	}
 
 	public void destroy() {
@@ -9161,689 +9379,20 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 
 	@BeanReference(type = OrganizationPersistence.class)
 	protected OrganizationPersistence organizationPersistence;
-	protected ContainsOrganization containsOrganization;
-	protected AddOrganization addOrganization;
-	protected ClearOrganizations clearOrganizations;
-	protected RemoveOrganization removeOrganization;
+	protected TableMapper<Group, com.liferay.portal.model.Organization> groupToOrganizationTableMapper;
 	@BeanReference(type = RolePersistence.class)
 	protected RolePersistence rolePersistence;
-	protected ContainsRole containsRole;
-	protected AddRole addRole;
-	protected ClearRoles clearRoles;
-	protected RemoveRole removeRole;
+	protected TableMapper<Group, com.liferay.portal.model.Role> groupToRoleTableMapper;
 	@BeanReference(type = UserGroupPersistence.class)
 	protected UserGroupPersistence userGroupPersistence;
-	protected ContainsUserGroup containsUserGroup;
-	protected AddUserGroup addUserGroup;
-	protected ClearUserGroups clearUserGroups;
-	protected RemoveUserGroup removeUserGroup;
+	protected TableMapper<Group, com.liferay.portal.model.UserGroup> groupToUserGroupTableMapper;
 	@BeanReference(type = UserPersistence.class)
 	protected UserPersistence userPersistence;
-	protected ContainsUser containsUser;
-	protected AddUser addUser;
-	protected ClearUsers clearUsers;
-	protected RemoveUser removeUser;
-
-	protected class ContainsOrganization {
-		protected ContainsOrganization() {
-			_mappingSqlQuery = MappingSqlQueryFactoryUtil.getMappingSqlQuery(getDataSource(),
-					"SELECT COUNT(*) AS COUNT_VALUE FROM Groups_Orgs WHERE groupId = ? AND organizationId = ?",
-					new int[] { java.sql.Types.BIGINT, java.sql.Types.BIGINT },
-					RowMapper.COUNT);
-		}
-
-		protected boolean contains(long groupId, long organizationId) {
-			List<Integer> results = _mappingSqlQuery.execute(new Object[] {
-						new Long(groupId), new Long(organizationId)
-					});
-
-			if (results.size() > 0) {
-				Integer count = results.get(0);
-
-				if (count.intValue() > 0) {
-					return true;
-				}
-			}
-
-			return false;
-		}
-
-		private MappingSqlQuery<Integer> _mappingSqlQuery;
-	}
-
-	protected class AddOrganization {
-		protected AddOrganization() {
-			_sqlUpdate = SqlUpdateFactoryUtil.getSqlUpdate(getDataSource(),
-					"INSERT INTO Groups_Orgs (groupId, organizationId) VALUES (?, ?)",
-					new int[] { java.sql.Types.BIGINT, java.sql.Types.BIGINT });
-		}
-
-		protected void add(long groupId, long organizationId)
-			throws SystemException {
-			if (!containsOrganization.contains(groupId, organizationId)) {
-				ModelListener<com.liferay.portal.model.Organization>[] organizationListeners =
-					organizationPersistence.getListeners();
-
-				for (ModelListener<Group> listener : listeners) {
-					listener.onBeforeAddAssociation(groupId,
-						com.liferay.portal.model.Organization.class.getName(),
-						organizationId);
-				}
-
-				for (ModelListener<com.liferay.portal.model.Organization> listener : organizationListeners) {
-					listener.onBeforeAddAssociation(organizationId,
-						Group.class.getName(), groupId);
-				}
-
-				_sqlUpdate.update(new Object[] {
-						new Long(groupId), new Long(organizationId)
-					});
-
-				for (ModelListener<Group> listener : listeners) {
-					listener.onAfterAddAssociation(groupId,
-						com.liferay.portal.model.Organization.class.getName(),
-						organizationId);
-				}
-
-				for (ModelListener<com.liferay.portal.model.Organization> listener : organizationListeners) {
-					listener.onAfterAddAssociation(organizationId,
-						Group.class.getName(), groupId);
-				}
-			}
-		}
-
-		private SqlUpdate _sqlUpdate;
-	}
-
-	protected class ClearOrganizations {
-		protected ClearOrganizations() {
-			_sqlUpdate = SqlUpdateFactoryUtil.getSqlUpdate(getDataSource(),
-					"DELETE FROM Groups_Orgs WHERE groupId = ?",
-					new int[] { java.sql.Types.BIGINT });
-		}
-
-		protected void clear(long groupId) throws SystemException {
-			ModelListener<com.liferay.portal.model.Organization>[] organizationListeners =
-				organizationPersistence.getListeners();
-
-			List<com.liferay.portal.model.Organization> organizations = null;
-
-			if ((listeners.length > 0) || (organizationListeners.length > 0)) {
-				organizations = getOrganizations(groupId);
-
-				for (com.liferay.portal.model.Organization organization : organizations) {
-					for (ModelListener<Group> listener : listeners) {
-						listener.onBeforeRemoveAssociation(groupId,
-							com.liferay.portal.model.Organization.class.getName(),
-							organization.getPrimaryKey());
-					}
-
-					for (ModelListener<com.liferay.portal.model.Organization> listener : organizationListeners) {
-						listener.onBeforeRemoveAssociation(organization.getPrimaryKey(),
-							Group.class.getName(), groupId);
-					}
-				}
-			}
-
-			_sqlUpdate.update(new Object[] { new Long(groupId) });
-
-			if ((listeners.length > 0) || (organizationListeners.length > 0)) {
-				for (com.liferay.portal.model.Organization organization : organizations) {
-					for (ModelListener<Group> listener : listeners) {
-						listener.onAfterRemoveAssociation(groupId,
-							com.liferay.portal.model.Organization.class.getName(),
-							organization.getPrimaryKey());
-					}
-
-					for (ModelListener<com.liferay.portal.model.Organization> listener : organizationListeners) {
-						listener.onAfterRemoveAssociation(organization.getPrimaryKey(),
-							Group.class.getName(), groupId);
-					}
-				}
-			}
-		}
-
-		private SqlUpdate _sqlUpdate;
-	}
-
-	protected class RemoveOrganization {
-		protected RemoveOrganization() {
-			_sqlUpdate = SqlUpdateFactoryUtil.getSqlUpdate(getDataSource(),
-					"DELETE FROM Groups_Orgs WHERE groupId = ? AND organizationId = ?",
-					new int[] { java.sql.Types.BIGINT, java.sql.Types.BIGINT });
-		}
-
-		protected void remove(long groupId, long organizationId)
-			throws SystemException {
-			if (containsOrganization.contains(groupId, organizationId)) {
-				ModelListener<com.liferay.portal.model.Organization>[] organizationListeners =
-					organizationPersistence.getListeners();
-
-				for (ModelListener<Group> listener : listeners) {
-					listener.onBeforeRemoveAssociation(groupId,
-						com.liferay.portal.model.Organization.class.getName(),
-						organizationId);
-				}
-
-				for (ModelListener<com.liferay.portal.model.Organization> listener : organizationListeners) {
-					listener.onBeforeRemoveAssociation(organizationId,
-						Group.class.getName(), groupId);
-				}
-
-				_sqlUpdate.update(new Object[] {
-						new Long(groupId), new Long(organizationId)
-					});
-
-				for (ModelListener<Group> listener : listeners) {
-					listener.onAfterRemoveAssociation(groupId,
-						com.liferay.portal.model.Organization.class.getName(),
-						organizationId);
-				}
-
-				for (ModelListener<com.liferay.portal.model.Organization> listener : organizationListeners) {
-					listener.onAfterRemoveAssociation(organizationId,
-						Group.class.getName(), groupId);
-				}
-			}
-		}
-
-		private SqlUpdate _sqlUpdate;
-	}
-
-	protected class ContainsRole {
-		protected ContainsRole() {
-			_mappingSqlQuery = MappingSqlQueryFactoryUtil.getMappingSqlQuery(getDataSource(),
-					"SELECT COUNT(*) AS COUNT_VALUE FROM Groups_Roles WHERE groupId = ? AND roleId = ?",
-					new int[] { java.sql.Types.BIGINT, java.sql.Types.BIGINT },
-					RowMapper.COUNT);
-		}
-
-		protected boolean contains(long groupId, long roleId) {
-			List<Integer> results = _mappingSqlQuery.execute(new Object[] {
-						new Long(groupId), new Long(roleId)
-					});
-
-			if (results.size() > 0) {
-				Integer count = results.get(0);
-
-				if (count.intValue() > 0) {
-					return true;
-				}
-			}
-
-			return false;
-		}
-
-		private MappingSqlQuery<Integer> _mappingSqlQuery;
-	}
-
-	protected class AddRole {
-		protected AddRole() {
-			_sqlUpdate = SqlUpdateFactoryUtil.getSqlUpdate(getDataSource(),
-					"INSERT INTO Groups_Roles (groupId, roleId) VALUES (?, ?)",
-					new int[] { java.sql.Types.BIGINT, java.sql.Types.BIGINT });
-		}
-
-		protected void add(long groupId, long roleId) throws SystemException {
-			if (!containsRole.contains(groupId, roleId)) {
-				ModelListener<com.liferay.portal.model.Role>[] roleListeners = rolePersistence.getListeners();
-
-				for (ModelListener<Group> listener : listeners) {
-					listener.onBeforeAddAssociation(groupId,
-						com.liferay.portal.model.Role.class.getName(), roleId);
-				}
-
-				for (ModelListener<com.liferay.portal.model.Role> listener : roleListeners) {
-					listener.onBeforeAddAssociation(roleId,
-						Group.class.getName(), groupId);
-				}
-
-				_sqlUpdate.update(new Object[] {
-						new Long(groupId), new Long(roleId)
-					});
-
-				for (ModelListener<Group> listener : listeners) {
-					listener.onAfterAddAssociation(groupId,
-						com.liferay.portal.model.Role.class.getName(), roleId);
-				}
-
-				for (ModelListener<com.liferay.portal.model.Role> listener : roleListeners) {
-					listener.onAfterAddAssociation(roleId,
-						Group.class.getName(), groupId);
-				}
-			}
-		}
-
-		private SqlUpdate _sqlUpdate;
-	}
-
-	protected class ClearRoles {
-		protected ClearRoles() {
-			_sqlUpdate = SqlUpdateFactoryUtil.getSqlUpdate(getDataSource(),
-					"DELETE FROM Groups_Roles WHERE groupId = ?",
-					new int[] { java.sql.Types.BIGINT });
-		}
-
-		protected void clear(long groupId) throws SystemException {
-			ModelListener<com.liferay.portal.model.Role>[] roleListeners = rolePersistence.getListeners();
-
-			List<com.liferay.portal.model.Role> roles = null;
-
-			if ((listeners.length > 0) || (roleListeners.length > 0)) {
-				roles = getRoles(groupId);
-
-				for (com.liferay.portal.model.Role role : roles) {
-					for (ModelListener<Group> listener : listeners) {
-						listener.onBeforeRemoveAssociation(groupId,
-							com.liferay.portal.model.Role.class.getName(),
-							role.getPrimaryKey());
-					}
-
-					for (ModelListener<com.liferay.portal.model.Role> listener : roleListeners) {
-						listener.onBeforeRemoveAssociation(role.getPrimaryKey(),
-							Group.class.getName(), groupId);
-					}
-				}
-			}
-
-			_sqlUpdate.update(new Object[] { new Long(groupId) });
-
-			if ((listeners.length > 0) || (roleListeners.length > 0)) {
-				for (com.liferay.portal.model.Role role : roles) {
-					for (ModelListener<Group> listener : listeners) {
-						listener.onAfterRemoveAssociation(groupId,
-							com.liferay.portal.model.Role.class.getName(),
-							role.getPrimaryKey());
-					}
-
-					for (ModelListener<com.liferay.portal.model.Role> listener : roleListeners) {
-						listener.onAfterRemoveAssociation(role.getPrimaryKey(),
-							Group.class.getName(), groupId);
-					}
-				}
-			}
-		}
-
-		private SqlUpdate _sqlUpdate;
-	}
-
-	protected class RemoveRole {
-		protected RemoveRole() {
-			_sqlUpdate = SqlUpdateFactoryUtil.getSqlUpdate(getDataSource(),
-					"DELETE FROM Groups_Roles WHERE groupId = ? AND roleId = ?",
-					new int[] { java.sql.Types.BIGINT, java.sql.Types.BIGINT });
-		}
-
-		protected void remove(long groupId, long roleId)
-			throws SystemException {
-			if (containsRole.contains(groupId, roleId)) {
-				ModelListener<com.liferay.portal.model.Role>[] roleListeners = rolePersistence.getListeners();
-
-				for (ModelListener<Group> listener : listeners) {
-					listener.onBeforeRemoveAssociation(groupId,
-						com.liferay.portal.model.Role.class.getName(), roleId);
-				}
-
-				for (ModelListener<com.liferay.portal.model.Role> listener : roleListeners) {
-					listener.onBeforeRemoveAssociation(roleId,
-						Group.class.getName(), groupId);
-				}
-
-				_sqlUpdate.update(new Object[] {
-						new Long(groupId), new Long(roleId)
-					});
-
-				for (ModelListener<Group> listener : listeners) {
-					listener.onAfterRemoveAssociation(groupId,
-						com.liferay.portal.model.Role.class.getName(), roleId);
-				}
-
-				for (ModelListener<com.liferay.portal.model.Role> listener : roleListeners) {
-					listener.onAfterRemoveAssociation(roleId,
-						Group.class.getName(), groupId);
-				}
-			}
-		}
-
-		private SqlUpdate _sqlUpdate;
-	}
-
-	protected class ContainsUserGroup {
-		protected ContainsUserGroup() {
-			_mappingSqlQuery = MappingSqlQueryFactoryUtil.getMappingSqlQuery(getDataSource(),
-					"SELECT COUNT(*) AS COUNT_VALUE FROM Groups_UserGroups WHERE groupId = ? AND userGroupId = ?",
-					new int[] { java.sql.Types.BIGINT, java.sql.Types.BIGINT },
-					RowMapper.COUNT);
-		}
-
-		protected boolean contains(long groupId, long userGroupId) {
-			List<Integer> results = _mappingSqlQuery.execute(new Object[] {
-						new Long(groupId), new Long(userGroupId)
-					});
-
-			if (results.size() > 0) {
-				Integer count = results.get(0);
-
-				if (count.intValue() > 0) {
-					return true;
-				}
-			}
-
-			return false;
-		}
-
-		private MappingSqlQuery<Integer> _mappingSqlQuery;
-	}
-
-	protected class AddUserGroup {
-		protected AddUserGroup() {
-			_sqlUpdate = SqlUpdateFactoryUtil.getSqlUpdate(getDataSource(),
-					"INSERT INTO Groups_UserGroups (groupId, userGroupId) VALUES (?, ?)",
-					new int[] { java.sql.Types.BIGINT, java.sql.Types.BIGINT });
-		}
-
-		protected void add(long groupId, long userGroupId)
-			throws SystemException {
-			if (!containsUserGroup.contains(groupId, userGroupId)) {
-				ModelListener<com.liferay.portal.model.UserGroup>[] userGroupListeners =
-					userGroupPersistence.getListeners();
-
-				for (ModelListener<Group> listener : listeners) {
-					listener.onBeforeAddAssociation(groupId,
-						com.liferay.portal.model.UserGroup.class.getName(),
-						userGroupId);
-				}
-
-				for (ModelListener<com.liferay.portal.model.UserGroup> listener : userGroupListeners) {
-					listener.onBeforeAddAssociation(userGroupId,
-						Group.class.getName(), groupId);
-				}
-
-				_sqlUpdate.update(new Object[] {
-						new Long(groupId), new Long(userGroupId)
-					});
-
-				for (ModelListener<Group> listener : listeners) {
-					listener.onAfterAddAssociation(groupId,
-						com.liferay.portal.model.UserGroup.class.getName(),
-						userGroupId);
-				}
-
-				for (ModelListener<com.liferay.portal.model.UserGroup> listener : userGroupListeners) {
-					listener.onAfterAddAssociation(userGroupId,
-						Group.class.getName(), groupId);
-				}
-			}
-		}
-
-		private SqlUpdate _sqlUpdate;
-	}
-
-	protected class ClearUserGroups {
-		protected ClearUserGroups() {
-			_sqlUpdate = SqlUpdateFactoryUtil.getSqlUpdate(getDataSource(),
-					"DELETE FROM Groups_UserGroups WHERE groupId = ?",
-					new int[] { java.sql.Types.BIGINT });
-		}
-
-		protected void clear(long groupId) throws SystemException {
-			ModelListener<com.liferay.portal.model.UserGroup>[] userGroupListeners =
-				userGroupPersistence.getListeners();
-
-			List<com.liferay.portal.model.UserGroup> userGroups = null;
-
-			if ((listeners.length > 0) || (userGroupListeners.length > 0)) {
-				userGroups = getUserGroups(groupId);
-
-				for (com.liferay.portal.model.UserGroup userGroup : userGroups) {
-					for (ModelListener<Group> listener : listeners) {
-						listener.onBeforeRemoveAssociation(groupId,
-							com.liferay.portal.model.UserGroup.class.getName(),
-							userGroup.getPrimaryKey());
-					}
-
-					for (ModelListener<com.liferay.portal.model.UserGroup> listener : userGroupListeners) {
-						listener.onBeforeRemoveAssociation(userGroup.getPrimaryKey(),
-							Group.class.getName(), groupId);
-					}
-				}
-			}
-
-			_sqlUpdate.update(new Object[] { new Long(groupId) });
-
-			if ((listeners.length > 0) || (userGroupListeners.length > 0)) {
-				for (com.liferay.portal.model.UserGroup userGroup : userGroups) {
-					for (ModelListener<Group> listener : listeners) {
-						listener.onAfterRemoveAssociation(groupId,
-							com.liferay.portal.model.UserGroup.class.getName(),
-							userGroup.getPrimaryKey());
-					}
-
-					for (ModelListener<com.liferay.portal.model.UserGroup> listener : userGroupListeners) {
-						listener.onAfterRemoveAssociation(userGroup.getPrimaryKey(),
-							Group.class.getName(), groupId);
-					}
-				}
-			}
-		}
-
-		private SqlUpdate _sqlUpdate;
-	}
-
-	protected class RemoveUserGroup {
-		protected RemoveUserGroup() {
-			_sqlUpdate = SqlUpdateFactoryUtil.getSqlUpdate(getDataSource(),
-					"DELETE FROM Groups_UserGroups WHERE groupId = ? AND userGroupId = ?",
-					new int[] { java.sql.Types.BIGINT, java.sql.Types.BIGINT });
-		}
-
-		protected void remove(long groupId, long userGroupId)
-			throws SystemException {
-			if (containsUserGroup.contains(groupId, userGroupId)) {
-				ModelListener<com.liferay.portal.model.UserGroup>[] userGroupListeners =
-					userGroupPersistence.getListeners();
-
-				for (ModelListener<Group> listener : listeners) {
-					listener.onBeforeRemoveAssociation(groupId,
-						com.liferay.portal.model.UserGroup.class.getName(),
-						userGroupId);
-				}
-
-				for (ModelListener<com.liferay.portal.model.UserGroup> listener : userGroupListeners) {
-					listener.onBeforeRemoveAssociation(userGroupId,
-						Group.class.getName(), groupId);
-				}
-
-				_sqlUpdate.update(new Object[] {
-						new Long(groupId), new Long(userGroupId)
-					});
-
-				for (ModelListener<Group> listener : listeners) {
-					listener.onAfterRemoveAssociation(groupId,
-						com.liferay.portal.model.UserGroup.class.getName(),
-						userGroupId);
-				}
-
-				for (ModelListener<com.liferay.portal.model.UserGroup> listener : userGroupListeners) {
-					listener.onAfterRemoveAssociation(userGroupId,
-						Group.class.getName(), groupId);
-				}
-			}
-		}
-
-		private SqlUpdate _sqlUpdate;
-	}
-
-	protected class ContainsUser {
-		protected ContainsUser() {
-			_mappingSqlQuery = MappingSqlQueryFactoryUtil.getMappingSqlQuery(getDataSource(),
-					"SELECT COUNT(*) AS COUNT_VALUE FROM Users_Groups WHERE groupId = ? AND userId = ?",
-					new int[] { java.sql.Types.BIGINT, java.sql.Types.BIGINT },
-					RowMapper.COUNT);
-		}
-
-		protected boolean contains(long groupId, long userId) {
-			List<Integer> results = _mappingSqlQuery.execute(new Object[] {
-						new Long(groupId), new Long(userId)
-					});
-
-			if (results.size() > 0) {
-				Integer count = results.get(0);
-
-				if (count.intValue() > 0) {
-					return true;
-				}
-			}
-
-			return false;
-		}
-
-		private MappingSqlQuery<Integer> _mappingSqlQuery;
-	}
-
-	protected class AddUser {
-		protected AddUser() {
-			_sqlUpdate = SqlUpdateFactoryUtil.getSqlUpdate(getDataSource(),
-					"INSERT INTO Users_Groups (groupId, userId) VALUES (?, ?)",
-					new int[] { java.sql.Types.BIGINT, java.sql.Types.BIGINT });
-		}
-
-		protected void add(long groupId, long userId) throws SystemException {
-			if (!containsUser.contains(groupId, userId)) {
-				ModelListener<com.liferay.portal.model.User>[] userListeners = userPersistence.getListeners();
-
-				for (ModelListener<Group> listener : listeners) {
-					listener.onBeforeAddAssociation(groupId,
-						com.liferay.portal.model.User.class.getName(), userId);
-				}
-
-				for (ModelListener<com.liferay.portal.model.User> listener : userListeners) {
-					listener.onBeforeAddAssociation(userId,
-						Group.class.getName(), groupId);
-				}
-
-				_sqlUpdate.update(new Object[] {
-						new Long(groupId), new Long(userId)
-					});
-
-				for (ModelListener<Group> listener : listeners) {
-					listener.onAfterAddAssociation(groupId,
-						com.liferay.portal.model.User.class.getName(), userId);
-				}
-
-				for (ModelListener<com.liferay.portal.model.User> listener : userListeners) {
-					listener.onAfterAddAssociation(userId,
-						Group.class.getName(), groupId);
-				}
-			}
-		}
-
-		private SqlUpdate _sqlUpdate;
-	}
-
-	protected class ClearUsers {
-		protected ClearUsers() {
-			_sqlUpdate = SqlUpdateFactoryUtil.getSqlUpdate(getDataSource(),
-					"DELETE FROM Users_Groups WHERE groupId = ?",
-					new int[] { java.sql.Types.BIGINT });
-		}
-
-		protected void clear(long groupId) throws SystemException {
-			ModelListener<com.liferay.portal.model.User>[] userListeners = userPersistence.getListeners();
-
-			List<com.liferay.portal.model.User> users = null;
-
-			if ((listeners.length > 0) || (userListeners.length > 0)) {
-				users = getUsers(groupId);
-
-				for (com.liferay.portal.model.User user : users) {
-					for (ModelListener<Group> listener : listeners) {
-						listener.onBeforeRemoveAssociation(groupId,
-							com.liferay.portal.model.User.class.getName(),
-							user.getPrimaryKey());
-					}
-
-					for (ModelListener<com.liferay.portal.model.User> listener : userListeners) {
-						listener.onBeforeRemoveAssociation(user.getPrimaryKey(),
-							Group.class.getName(), groupId);
-					}
-				}
-			}
-
-			_sqlUpdate.update(new Object[] { new Long(groupId) });
-
-			if ((listeners.length > 0) || (userListeners.length > 0)) {
-				for (com.liferay.portal.model.User user : users) {
-					for (ModelListener<Group> listener : listeners) {
-						listener.onAfterRemoveAssociation(groupId,
-							com.liferay.portal.model.User.class.getName(),
-							user.getPrimaryKey());
-					}
-
-					for (ModelListener<com.liferay.portal.model.User> listener : userListeners) {
-						listener.onAfterRemoveAssociation(user.getPrimaryKey(),
-							Group.class.getName(), groupId);
-					}
-				}
-			}
-		}
-
-		private SqlUpdate _sqlUpdate;
-	}
-
-	protected class RemoveUser {
-		protected RemoveUser() {
-			_sqlUpdate = SqlUpdateFactoryUtil.getSqlUpdate(getDataSource(),
-					"DELETE FROM Users_Groups WHERE groupId = ? AND userId = ?",
-					new int[] { java.sql.Types.BIGINT, java.sql.Types.BIGINT });
-		}
-
-		protected void remove(long groupId, long userId)
-			throws SystemException {
-			if (containsUser.contains(groupId, userId)) {
-				ModelListener<com.liferay.portal.model.User>[] userListeners = userPersistence.getListeners();
-
-				for (ModelListener<Group> listener : listeners) {
-					listener.onBeforeRemoveAssociation(groupId,
-						com.liferay.portal.model.User.class.getName(), userId);
-				}
-
-				for (ModelListener<com.liferay.portal.model.User> listener : userListeners) {
-					listener.onBeforeRemoveAssociation(userId,
-						Group.class.getName(), groupId);
-				}
-
-				_sqlUpdate.update(new Object[] {
-						new Long(groupId), new Long(userId)
-					});
-
-				for (ModelListener<Group> listener : listeners) {
-					listener.onAfterRemoveAssociation(groupId,
-						com.liferay.portal.model.User.class.getName(), userId);
-				}
-
-				for (ModelListener<com.liferay.portal.model.User> listener : userListeners) {
-					listener.onAfterRemoveAssociation(userId,
-						Group.class.getName(), groupId);
-				}
-			}
-		}
-
-		private SqlUpdate _sqlUpdate;
-	}
-
+	protected TableMapper<Group, com.liferay.portal.model.User> groupToUserTableMapper;
 	private static final String _SQL_SELECT_GROUP_ = "SELECT group_ FROM Group group_";
 	private static final String _SQL_SELECT_GROUP__WHERE = "SELECT group_ FROM Group group_ WHERE ";
 	private static final String _SQL_COUNT_GROUP_ = "SELECT COUNT(group_) FROM Group group_";
 	private static final String _SQL_COUNT_GROUP__WHERE = "SELECT COUNT(group_) FROM Group group_ WHERE ";
-	private static final String _SQL_GETORGANIZATIONS = "SELECT {Organization_.*} FROM Organization_ INNER JOIN Groups_Orgs ON (Groups_Orgs.organizationId = Organization_.organizationId) WHERE (Groups_Orgs.groupId = ?)";
-	private static final String _SQL_GETORGANIZATIONSSIZE = "SELECT COUNT(*) AS COUNT_VALUE FROM Groups_Orgs WHERE groupId = ?";
-	private static final String _SQL_GETROLES = "SELECT {Role_.*} FROM Role_ INNER JOIN Groups_Roles ON (Groups_Roles.roleId = Role_.roleId) WHERE (Groups_Roles.groupId = ?)";
-	private static final String _SQL_GETROLESSIZE = "SELECT COUNT(*) AS COUNT_VALUE FROM Groups_Roles WHERE groupId = ?";
-	private static final String _SQL_GETUSERGROUPS = "SELECT {UserGroup.*} FROM UserGroup INNER JOIN Groups_UserGroups ON (Groups_UserGroups.userGroupId = UserGroup.userGroupId) WHERE (Groups_UserGroups.groupId = ?)";
-	private static final String _SQL_GETUSERGROUPSSIZE = "SELECT COUNT(*) AS COUNT_VALUE FROM Groups_UserGroups WHERE groupId = ?";
-	private static final String _SQL_GETUSERS = "SELECT {User_.*} FROM User_ INNER JOIN Users_Groups ON (Users_Groups.userId = User_.userId) WHERE (Users_Groups.groupId = ?)";
-	private static final String _SQL_GETUSERSSIZE = "SELECT COUNT(*) AS COUNT_VALUE FROM Users_Groups WHERE groupId = ?";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "group_.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No Group exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No Group exists with the key {";
@@ -9865,6 +9414,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 		};
 
 	private static CacheModel<Group> _nullGroupCacheModel = new CacheModel<Group>() {
+			@Override
 			public Group toEntityModel() {
 				return _nullGroup;
 			}

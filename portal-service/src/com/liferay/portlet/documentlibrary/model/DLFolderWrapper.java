@@ -14,6 +14,10 @@
 
 package com.liferay.portlet.documentlibrary.model;
 
+import aQute.bnd.annotation.ProviderType;
+
+import com.liferay.portal.kernel.lar.StagedModelType;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.ModelWrapper;
 
 import java.util.Date;
@@ -25,23 +29,27 @@ import java.util.Map;
  * This class is a wrapper for {@link DLFolder}.
  * </p>
  *
- * @author    Brian Wing Shun Chan
- * @see       DLFolder
+ * @author Brian Wing Shun Chan
+ * @see DLFolder
  * @generated
  */
+@ProviderType
 public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	public DLFolderWrapper(DLFolder dlFolder) {
 		_dlFolder = dlFolder;
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return DLFolder.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return DLFolder.class.getName();
 	}
 
+	@Override
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
@@ -56,6 +64,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 		attributes.put("repositoryId", getRepositoryId());
 		attributes.put("mountPoint", getMountPoint());
 		attributes.put("parentFolderId", getParentFolderId());
+		attributes.put("treePath", getTreePath());
 		attributes.put("name", getName());
 		attributes.put("description", getDescription());
 		attributes.put("lastPostDate", getLastPostDate());
@@ -70,6 +79,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 		return attributes;
 	}
 
+	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
 		String uuid = (String)attributes.get("uuid");
 
@@ -135,6 +145,12 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 
 		if (parentFolderId != null) {
 			setParentFolderId(parentFolderId);
+		}
+
+		String treePath = (String)attributes.get("treePath");
+
+		if (treePath != null) {
+			setTreePath(treePath);
 		}
 
 		String name = (String)attributes.get("name");
@@ -205,6 +221,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return the primary key of this document library folder
 	*/
+	@Override
 	public long getPrimaryKey() {
 		return _dlFolder.getPrimaryKey();
 	}
@@ -214,6 +231,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @param primaryKey the primary key of this document library folder
 	*/
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_dlFolder.setPrimaryKey(primaryKey);
 	}
@@ -223,6 +241,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return the uuid of this document library folder
 	*/
+	@Override
 	public java.lang.String getUuid() {
 		return _dlFolder.getUuid();
 	}
@@ -232,6 +251,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @param uuid the uuid of this document library folder
 	*/
+	@Override
 	public void setUuid(java.lang.String uuid) {
 		_dlFolder.setUuid(uuid);
 	}
@@ -241,6 +261,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return the folder ID of this document library folder
 	*/
+	@Override
 	public long getFolderId() {
 		return _dlFolder.getFolderId();
 	}
@@ -250,6 +271,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @param folderId the folder ID of this document library folder
 	*/
+	@Override
 	public void setFolderId(long folderId) {
 		_dlFolder.setFolderId(folderId);
 	}
@@ -259,6 +281,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return the group ID of this document library folder
 	*/
+	@Override
 	public long getGroupId() {
 		return _dlFolder.getGroupId();
 	}
@@ -268,6 +291,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @param groupId the group ID of this document library folder
 	*/
+	@Override
 	public void setGroupId(long groupId) {
 		_dlFolder.setGroupId(groupId);
 	}
@@ -277,6 +301,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return the company ID of this document library folder
 	*/
+	@Override
 	public long getCompanyId() {
 		return _dlFolder.getCompanyId();
 	}
@@ -286,6 +311,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @param companyId the company ID of this document library folder
 	*/
+	@Override
 	public void setCompanyId(long companyId) {
 		_dlFolder.setCompanyId(companyId);
 	}
@@ -295,6 +321,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return the user ID of this document library folder
 	*/
+	@Override
 	public long getUserId() {
 		return _dlFolder.getUserId();
 	}
@@ -304,6 +331,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @param userId the user ID of this document library folder
 	*/
+	@Override
 	public void setUserId(long userId) {
 		_dlFolder.setUserId(userId);
 	}
@@ -314,6 +342,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	* @return the user uuid of this document library folder
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.lang.String getUserUuid()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _dlFolder.getUserUuid();
@@ -324,6 +353,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @param userUuid the user uuid of this document library folder
 	*/
+	@Override
 	public void setUserUuid(java.lang.String userUuid) {
 		_dlFolder.setUserUuid(userUuid);
 	}
@@ -333,6 +363,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return the user name of this document library folder
 	*/
+	@Override
 	public java.lang.String getUserName() {
 		return _dlFolder.getUserName();
 	}
@@ -342,6 +373,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @param userName the user name of this document library folder
 	*/
+	@Override
 	public void setUserName(java.lang.String userName) {
 		_dlFolder.setUserName(userName);
 	}
@@ -351,6 +383,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return the create date of this document library folder
 	*/
+	@Override
 	public java.util.Date getCreateDate() {
 		return _dlFolder.getCreateDate();
 	}
@@ -360,6 +393,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @param createDate the create date of this document library folder
 	*/
+	@Override
 	public void setCreateDate(java.util.Date createDate) {
 		_dlFolder.setCreateDate(createDate);
 	}
@@ -369,6 +403,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return the modified date of this document library folder
 	*/
+	@Override
 	public java.util.Date getModifiedDate() {
 		return _dlFolder.getModifiedDate();
 	}
@@ -378,6 +413,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @param modifiedDate the modified date of this document library folder
 	*/
+	@Override
 	public void setModifiedDate(java.util.Date modifiedDate) {
 		_dlFolder.setModifiedDate(modifiedDate);
 	}
@@ -387,6 +423,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return the repository ID of this document library folder
 	*/
+	@Override
 	public long getRepositoryId() {
 		return _dlFolder.getRepositoryId();
 	}
@@ -396,6 +433,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @param repositoryId the repository ID of this document library folder
 	*/
+	@Override
 	public void setRepositoryId(long repositoryId) {
 		_dlFolder.setRepositoryId(repositoryId);
 	}
@@ -405,6 +443,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return the mount point of this document library folder
 	*/
+	@Override
 	public boolean getMountPoint() {
 		return _dlFolder.getMountPoint();
 	}
@@ -414,6 +453,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return <code>true</code> if this document library folder is mount point; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isMountPoint() {
 		return _dlFolder.isMountPoint();
 	}
@@ -423,6 +463,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @param mountPoint the mount point of this document library folder
 	*/
+	@Override
 	public void setMountPoint(boolean mountPoint) {
 		_dlFolder.setMountPoint(mountPoint);
 	}
@@ -432,6 +473,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return the parent folder ID of this document library folder
 	*/
+	@Override
 	public long getParentFolderId() {
 		return _dlFolder.getParentFolderId();
 	}
@@ -441,8 +483,29 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @param parentFolderId the parent folder ID of this document library folder
 	*/
+	@Override
 	public void setParentFolderId(long parentFolderId) {
 		_dlFolder.setParentFolderId(parentFolderId);
+	}
+
+	/**
+	* Returns the tree path of this document library folder.
+	*
+	* @return the tree path of this document library folder
+	*/
+	@Override
+	public java.lang.String getTreePath() {
+		return _dlFolder.getTreePath();
+	}
+
+	/**
+	* Sets the tree path of this document library folder.
+	*
+	* @param treePath the tree path of this document library folder
+	*/
+	@Override
+	public void setTreePath(java.lang.String treePath) {
+		_dlFolder.setTreePath(treePath);
 	}
 
 	/**
@@ -450,6 +513,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return the name of this document library folder
 	*/
+	@Override
 	public java.lang.String getName() {
 		return _dlFolder.getName();
 	}
@@ -459,6 +523,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @param name the name of this document library folder
 	*/
+	@Override
 	public void setName(java.lang.String name) {
 		_dlFolder.setName(name);
 	}
@@ -468,6 +533,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return the description of this document library folder
 	*/
+	@Override
 	public java.lang.String getDescription() {
 		return _dlFolder.getDescription();
 	}
@@ -477,6 +543,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @param description the description of this document library folder
 	*/
+	@Override
 	public void setDescription(java.lang.String description) {
 		_dlFolder.setDescription(description);
 	}
@@ -486,6 +553,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return the last post date of this document library folder
 	*/
+	@Override
 	public java.util.Date getLastPostDate() {
 		return _dlFolder.getLastPostDate();
 	}
@@ -495,6 +563,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @param lastPostDate the last post date of this document library folder
 	*/
+	@Override
 	public void setLastPostDate(java.util.Date lastPostDate) {
 		_dlFolder.setLastPostDate(lastPostDate);
 	}
@@ -504,6 +573,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return the default file entry type ID of this document library folder
 	*/
+	@Override
 	public long getDefaultFileEntryTypeId() {
 		return _dlFolder.getDefaultFileEntryTypeId();
 	}
@@ -513,6 +583,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @param defaultFileEntryTypeId the default file entry type ID of this document library folder
 	*/
+	@Override
 	public void setDefaultFileEntryTypeId(long defaultFileEntryTypeId) {
 		_dlFolder.setDefaultFileEntryTypeId(defaultFileEntryTypeId);
 	}
@@ -522,6 +593,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return the hidden of this document library folder
 	*/
+	@Override
 	public boolean getHidden() {
 		return _dlFolder.getHidden();
 	}
@@ -531,6 +603,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return <code>true</code> if this document library folder is hidden; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isHidden() {
 		return _dlFolder.isHidden();
 	}
@@ -540,6 +613,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @param hidden the hidden of this document library folder
 	*/
+	@Override
 	public void setHidden(boolean hidden) {
 		_dlFolder.setHidden(hidden);
 	}
@@ -549,6 +623,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return the override file entry types of this document library folder
 	*/
+	@Override
 	public boolean getOverrideFileEntryTypes() {
 		return _dlFolder.getOverrideFileEntryTypes();
 	}
@@ -558,6 +633,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return <code>true</code> if this document library folder is override file entry types; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isOverrideFileEntryTypes() {
 		return _dlFolder.isOverrideFileEntryTypes();
 	}
@@ -567,6 +643,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @param overrideFileEntryTypes the override file entry types of this document library folder
 	*/
+	@Override
 	public void setOverrideFileEntryTypes(boolean overrideFileEntryTypes) {
 		_dlFolder.setOverrideFileEntryTypes(overrideFileEntryTypes);
 	}
@@ -576,6 +653,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return the status of this document library folder
 	*/
+	@Override
 	public int getStatus() {
 		return _dlFolder.getStatus();
 	}
@@ -585,6 +663,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @param status the status of this document library folder
 	*/
+	@Override
 	public void setStatus(int status) {
 		_dlFolder.setStatus(status);
 	}
@@ -594,6 +673,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return the status by user ID of this document library folder
 	*/
+	@Override
 	public long getStatusByUserId() {
 		return _dlFolder.getStatusByUserId();
 	}
@@ -603,6 +683,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @param statusByUserId the status by user ID of this document library folder
 	*/
+	@Override
 	public void setStatusByUserId(long statusByUserId) {
 		_dlFolder.setStatusByUserId(statusByUserId);
 	}
@@ -613,6 +694,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	* @return the status by user uuid of this document library folder
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.lang.String getStatusByUserUuid()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _dlFolder.getStatusByUserUuid();
@@ -623,6 +705,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @param statusByUserUuid the status by user uuid of this document library folder
 	*/
+	@Override
 	public void setStatusByUserUuid(java.lang.String statusByUserUuid) {
 		_dlFolder.setStatusByUserUuid(statusByUserUuid);
 	}
@@ -632,6 +715,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return the status by user name of this document library folder
 	*/
+	@Override
 	public java.lang.String getStatusByUserName() {
 		return _dlFolder.getStatusByUserName();
 	}
@@ -641,6 +725,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @param statusByUserName the status by user name of this document library folder
 	*/
+	@Override
 	public void setStatusByUserName(java.lang.String statusByUserName) {
 		_dlFolder.setStatusByUserName(statusByUserName);
 	}
@@ -650,6 +735,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return the status date of this document library folder
 	*/
+	@Override
 	public java.util.Date getStatusDate() {
 		return _dlFolder.getStatusDate();
 	}
@@ -659,13 +745,75 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @param statusDate the status date of this document library folder
 	*/
+	@Override
 	public void setStatusDate(java.util.Date statusDate) {
 		_dlFolder.setStatusDate(statusDate);
 	}
 
 	/**
+	* Returns the trash entry created when this document library folder was moved to the Recycle Bin. The trash entry may belong to one of the ancestors of this document library folder.
+	*
+	* @return the trash entry created when this document library folder was moved to the Recycle Bin
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public com.liferay.portlet.trash.model.TrashEntry getTrashEntry()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _dlFolder.getTrashEntry();
+	}
+
+	/**
+	* Returns the class primary key of the trash entry for this document library folder.
+	*
+	* @return the class primary key of the trash entry for this document library folder
+	*/
+	@Override
+	public long getTrashEntryClassPK() {
+		return _dlFolder.getTrashEntryClassPK();
+	}
+
+	/**
+	* Returns the trash handler for this document library folder.
+	*
+	* @return the trash handler for this document library folder
+	*/
+	@Override
+	public com.liferay.portal.kernel.trash.TrashHandler getTrashHandler() {
+		return _dlFolder.getTrashHandler();
+	}
+
+	/**
+	* Returns <code>true</code> if this document library folder is in the Recycle Bin.
+	*
+	* @return <code>true</code> if this document library folder is in the Recycle Bin; <code>false</code> otherwise
+	*/
+	@Override
+	public boolean isInTrash() {
+		return _dlFolder.isInTrash();
+	}
+
+	/**
+	* Returns <code>true</code> if the parent of this document library folder is in the Recycle Bin.
+	*
+	* @return <code>true</code> if the parent of this document library folder is in the Recycle Bin; <code>false</code> otherwise
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public boolean isInTrashContainer() {
+		return _dlFolder.isInTrashContainer();
+	}
+
+	@Override
+	public boolean isInTrashExplicitly()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _dlFolder.isInTrashExplicitly();
+	}
+
+	/**
 	* @deprecated As of 6.1.0, replaced by {@link #isApproved()}
 	*/
+	@Override
 	public boolean getApproved() {
 		return _dlFolder.getApproved();
 	}
@@ -675,6 +823,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return <code>true</code> if this document library folder is approved; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isApproved() {
 		return _dlFolder.isApproved();
 	}
@@ -684,6 +833,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return <code>true</code> if this document library folder is denied; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isDenied() {
 		return _dlFolder.isDenied();
 	}
@@ -693,6 +843,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return <code>true</code> if this document library folder is a draft; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isDraft() {
 		return _dlFolder.isDraft();
 	}
@@ -702,6 +853,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return <code>true</code> if this document library folder is expired; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isExpired() {
 		return _dlFolder.isExpired();
 	}
@@ -711,6 +863,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return <code>true</code> if this document library folder is inactive; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isInactive() {
 		return _dlFolder.isInactive();
 	}
@@ -720,17 +873,9 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return <code>true</code> if this document library folder is incomplete; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isIncomplete() {
 		return _dlFolder.isIncomplete();
-	}
-
-	/**
-	* Returns <code>true</code> if this document library folder is in the Recycle Bin.
-	*
-	* @return <code>true</code> if this document library folder is in the Recycle Bin; <code>false</code> otherwise
-	*/
-	public boolean isInTrash() {
-		return _dlFolder.isInTrash();
 	}
 
 	/**
@@ -738,6 +883,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return <code>true</code> if this document library folder is pending; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isPending() {
 		return _dlFolder.isPending();
 	}
@@ -747,6 +893,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return <code>true</code> if this document library folder is scheduled; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isScheduled() {
 		return _dlFolder.isScheduled();
 	}
@@ -756,6 +903,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return the container model ID of this document library folder
 	*/
+	@Override
 	public long getContainerModelId() {
 		return _dlFolder.getContainerModelId();
 	}
@@ -763,8 +911,9 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	/**
 	* Sets the container model ID of this document library folder.
 	*
-	* @param container model ID of this document library folder
+	* @param containerModelId the container model ID of this document library folder
 	*/
+	@Override
 	public void setContainerModelId(long containerModelId) {
 		_dlFolder.setContainerModelId(containerModelId);
 	}
@@ -774,6 +923,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return the container name of this document library folder
 	*/
+	@Override
 	public java.lang.String getContainerModelName() {
 		return _dlFolder.getContainerModelName();
 	}
@@ -783,6 +933,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	*
 	* @return the parent container model ID of this document library folder
 	*/
+	@Override
 	public long getParentContainerModelId() {
 		return _dlFolder.getParentContainerModelId();
 	}
@@ -790,54 +941,66 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 	/**
 	* Sets the parent container model ID of this document library folder.
 	*
-	* @param parent container model ID of this document library folder
+	* @param parentContainerModelId the parent container model ID of this document library folder
 	*/
+	@Override
 	public void setParentContainerModelId(long parentContainerModelId) {
 		_dlFolder.setParentContainerModelId(parentContainerModelId);
 	}
 
+	@Override
 	public boolean isNew() {
 		return _dlFolder.isNew();
 	}
 
+	@Override
 	public void setNew(boolean n) {
 		_dlFolder.setNew(n);
 	}
 
+	@Override
 	public boolean isCachedModel() {
 		return _dlFolder.isCachedModel();
 	}
 
+	@Override
 	public void setCachedModel(boolean cachedModel) {
 		_dlFolder.setCachedModel(cachedModel);
 	}
 
+	@Override
 	public boolean isEscapedModel() {
 		return _dlFolder.isEscapedModel();
 	}
 
+	@Override
 	public java.io.Serializable getPrimaryKeyObj() {
 		return _dlFolder.getPrimaryKeyObj();
 	}
 
+	@Override
 	public void setPrimaryKeyObj(java.io.Serializable primaryKeyObj) {
 		_dlFolder.setPrimaryKeyObj(primaryKeyObj);
 	}
 
+	@Override
 	public com.liferay.portlet.expando.model.ExpandoBridge getExpandoBridge() {
 		return _dlFolder.getExpandoBridge();
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.model.BaseModel<?> baseModel) {
 		_dlFolder.setExpandoBridgeAttributes(baseModel);
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
 		_dlFolder.setExpandoBridgeAttributes(expandoBridge);
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_dlFolder.setExpandoBridgeAttributes(serviceContext);
@@ -848,6 +1011,7 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 		return new DLFolderWrapper((DLFolder)_dlFolder.clone());
 	}
 
+	@Override
 	public int compareTo(
 		com.liferay.portlet.documentlibrary.model.DLFolder dlFolder) {
 		return _dlFolder.compareTo(dlFolder);
@@ -858,14 +1022,17 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 		return _dlFolder.hashCode();
 	}
 
+	@Override
 	public com.liferay.portal.model.CacheModel<com.liferay.portlet.documentlibrary.model.DLFolder> toCacheModel() {
 		return _dlFolder.toCacheModel();
 	}
 
+	@Override
 	public com.liferay.portlet.documentlibrary.model.DLFolder toEscapedModel() {
 		return new DLFolderWrapper(_dlFolder.toEscapedModel());
 	}
 
+	@Override
 	public com.liferay.portlet.documentlibrary.model.DLFolder toUnescapedModel() {
 		return new DLFolderWrapper(_dlFolder.toUnescapedModel());
 	}
@@ -875,71 +1042,112 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 		return _dlFolder.toString();
 	}
 
+	@Override
 	public java.lang.String toXmlString() {
 		return _dlFolder.toXmlString();
 	}
 
+	@Override
 	public void persist()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_dlFolder.persist();
 	}
 
+	@Override
+	public java.lang.String buildTreePath()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _dlFolder.buildTreePath();
+	}
+
+	@Override
+	public void updateTreePath(java.lang.String treePath)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_dlFolder.updateTreePath(treePath);
+	}
+
+	@Override
 	public java.util.List<java.lang.Long> getAncestorFolderIds()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _dlFolder.getAncestorFolderIds();
 	}
 
+	@Override
 	public java.util.List<com.liferay.portlet.documentlibrary.model.DLFolder> getAncestors()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _dlFolder.getAncestors();
 	}
 
+	@Override
 	public com.liferay.portlet.documentlibrary.model.DLFolder getParentFolder()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _dlFolder.getParentFolder();
 	}
 
+	@Override
 	public java.lang.String getPath()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _dlFolder.getPath();
 	}
 
+	@Override
 	public java.lang.String[] getPathArray()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _dlFolder.getPathArray();
 	}
 
-	public com.liferay.portlet.documentlibrary.model.DLFolder getTrashContainer() {
-		return _dlFolder.getTrashContainer();
-	}
-
+	@Override
 	public boolean hasInheritableLock() {
 		return _dlFolder.hasInheritableLock();
 	}
 
+	@Override
 	public boolean hasLock() {
 		return _dlFolder.hasLock();
 	}
 
+	@Override
 	public boolean isInHiddenFolder() {
 		return _dlFolder.isInHiddenFolder();
 	}
 
-	public boolean isInTrashContainer() {
-		return _dlFolder.isInTrashContainer();
-	}
-
+	@Override
 	public boolean isLocked() {
 		return _dlFolder.isLocked();
 	}
 
+	@Override
 	public boolean isRoot() {
 		return _dlFolder.isRoot();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof DLFolderWrapper)) {
+			return false;
+		}
+
+		DLFolderWrapper dlFolderWrapper = (DLFolderWrapper)obj;
+
+		if (Validator.equals(_dlFolder, dlFolderWrapper._dlFolder)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	@Override
+	public StagedModelType getStagedModelType() {
+		return _dlFolder.getStagedModelType();
 	}
 
 	/**
@@ -949,10 +1157,12 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 		return _dlFolder;
 	}
 
+	@Override
 	public DLFolder getWrappedModel() {
 		return _dlFolder;
 	}
 
+	@Override
 	public void resetOriginalValues() {
 		_dlFolder.resetOriginalValues();
 	}

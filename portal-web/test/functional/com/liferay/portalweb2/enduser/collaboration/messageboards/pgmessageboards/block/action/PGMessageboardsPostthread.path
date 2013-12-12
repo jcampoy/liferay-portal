@@ -29,8 +29,23 @@
 	<td></td>
 </tr>
 <tr>
+	<td>BODY_FIELD_SOURCE_ON</td>
+	<td>//div[@id='cke_1_contents']/textarea</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SOURCE_BUTTON</td>
+	<td>//a[contains(@class,'cke_button__source')]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>PUBLISH_BUTTON</td>
-	<td>//input[@value='Publish']</td>
+	<td>//button[@id='_19_publishButton' and contains(.,'Publish')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SUBMIT_FOR_PUBLICATION_BUTTON</td>
+	<td>//button[@id='_19_publishButton' and contains(.,'Submit for Publication')]</td>
 	<td></td>
 </tr>
 </tbody>

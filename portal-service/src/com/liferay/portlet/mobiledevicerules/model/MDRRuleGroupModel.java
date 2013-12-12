@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.mobiledevicerules.model;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.LocaleException;
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -43,6 +45,7 @@ import java.util.Map;
  * @see com.liferay.portlet.mobiledevicerules.model.impl.MDRRuleGroupModelImpl
  * @generated
  */
+@ProviderType
 public interface MDRRuleGroupModel extends BaseModel<MDRRuleGroup>,
 	StagedGroupedModel {
 	/*
@@ -71,6 +74,7 @@ public interface MDRRuleGroupModel extends BaseModel<MDRRuleGroup>,
 	 * @return the uuid of this m d r rule group
 	 */
 	@AutoEscape
+	@Override
 	public String getUuid();
 
 	/**
@@ -78,6 +82,7 @@ public interface MDRRuleGroupModel extends BaseModel<MDRRuleGroup>,
 	 *
 	 * @param uuid the uuid of this m d r rule group
 	 */
+	@Override
 	public void setUuid(String uuid);
 
 	/**
@@ -99,6 +104,7 @@ public interface MDRRuleGroupModel extends BaseModel<MDRRuleGroup>,
 	 *
 	 * @return the group ID of this m d r rule group
 	 */
+	@Override
 	public long getGroupId();
 
 	/**
@@ -106,6 +112,7 @@ public interface MDRRuleGroupModel extends BaseModel<MDRRuleGroup>,
 	 *
 	 * @param groupId the group ID of this m d r rule group
 	 */
+	@Override
 	public void setGroupId(long groupId);
 
 	/**
@@ -113,6 +120,7 @@ public interface MDRRuleGroupModel extends BaseModel<MDRRuleGroup>,
 	 *
 	 * @return the company ID of this m d r rule group
 	 */
+	@Override
 	public long getCompanyId();
 
 	/**
@@ -120,6 +128,7 @@ public interface MDRRuleGroupModel extends BaseModel<MDRRuleGroup>,
 	 *
 	 * @param companyId the company ID of this m d r rule group
 	 */
+	@Override
 	public void setCompanyId(long companyId);
 
 	/**
@@ -127,6 +136,7 @@ public interface MDRRuleGroupModel extends BaseModel<MDRRuleGroup>,
 	 *
 	 * @return the user ID of this m d r rule group
 	 */
+	@Override
 	public long getUserId();
 
 	/**
@@ -134,6 +144,7 @@ public interface MDRRuleGroupModel extends BaseModel<MDRRuleGroup>,
 	 *
 	 * @param userId the user ID of this m d r rule group
 	 */
+	@Override
 	public void setUserId(long userId);
 
 	/**
@@ -142,6 +153,7 @@ public interface MDRRuleGroupModel extends BaseModel<MDRRuleGroup>,
 	 * @return the user uuid of this m d r rule group
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public String getUserUuid() throws SystemException;
 
 	/**
@@ -149,6 +161,7 @@ public interface MDRRuleGroupModel extends BaseModel<MDRRuleGroup>,
 	 *
 	 * @param userUuid the user uuid of this m d r rule group
 	 */
+	@Override
 	public void setUserUuid(String userUuid);
 
 	/**
@@ -157,6 +170,7 @@ public interface MDRRuleGroupModel extends BaseModel<MDRRuleGroup>,
 	 * @return the user name of this m d r rule group
 	 */
 	@AutoEscape
+	@Override
 	public String getUserName();
 
 	/**
@@ -164,6 +178,7 @@ public interface MDRRuleGroupModel extends BaseModel<MDRRuleGroup>,
 	 *
 	 * @param userName the user name of this m d r rule group
 	 */
+	@Override
 	public void setUserName(String userName);
 
 	/**
@@ -171,6 +186,7 @@ public interface MDRRuleGroupModel extends BaseModel<MDRRuleGroup>,
 	 *
 	 * @return the create date of this m d r rule group
 	 */
+	@Override
 	public Date getCreateDate();
 
 	/**
@@ -178,6 +194,7 @@ public interface MDRRuleGroupModel extends BaseModel<MDRRuleGroup>,
 	 *
 	 * @param createDate the create date of this m d r rule group
 	 */
+	@Override
 	public void setCreateDate(Date createDate);
 
 	/**
@@ -185,6 +202,7 @@ public interface MDRRuleGroupModel extends BaseModel<MDRRuleGroup>,
 	 *
 	 * @return the modified date of this m d r rule group
 	 */
+	@Override
 	public Date getModifiedDate();
 
 	/**
@@ -192,6 +210,7 @@ public interface MDRRuleGroupModel extends BaseModel<MDRRuleGroup>,
 	 *
 	 * @param modifiedDate the modified date of this m d r rule group
 	 */
+	@Override
 	public void setModifiedDate(Date modifiedDate);
 
 	/**
@@ -394,44 +413,69 @@ public interface MDRRuleGroupModel extends BaseModel<MDRRuleGroup>,
 	public void setDescriptionMap(Map<Locale, String> descriptionMap,
 		Locale defaultLocale);
 
+	@Override
 	public boolean isNew();
 
+	@Override
 	public void setNew(boolean n);
 
+	@Override
 	public boolean isCachedModel();
 
+	@Override
 	public void setCachedModel(boolean cachedModel);
 
+	@Override
 	public boolean isEscapedModel();
 
+	@Override
 	public Serializable getPrimaryKeyObj();
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj);
 
+	@Override
 	public ExpandoBridge getExpandoBridge();
 
+	@Override
 	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
 
+	@Override
 	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
 
+	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
+
+	public String[] getAvailableLanguageIds();
+
+	public String getDefaultLanguageId();
+
+	public void prepareLocalizedFieldsForImport() throws LocaleException;
 
 	public void prepareLocalizedFieldsForImport(Locale defaultImportLocale)
 		throws LocaleException;
 
+	@Override
 	public Object clone();
 
+	@Override
 	public int compareTo(MDRRuleGroup mdrRuleGroup);
 
+	@Override
 	public int hashCode();
 
+	@Override
 	public CacheModel<MDRRuleGroup> toCacheModel();
 
+	@Override
 	public MDRRuleGroup toEscapedModel();
 
+	@Override
 	public MDRRuleGroup toUnescapedModel();
 
+	@Override
 	public String toString();
 
+	@Override
 	public String toXmlString();
 }

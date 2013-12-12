@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.asset.model;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.util.Accessor;
 import com.liferay.portal.model.PersistedModel;
 
@@ -26,6 +28,7 @@ import com.liferay.portal.model.PersistedModel;
  * @see com.liferay.portlet.asset.model.impl.AssetEntryModelImpl
  * @generated
  */
+@ProviderType
 public interface AssetEntry extends AssetEntryModel, PersistedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -33,6 +36,7 @@ public interface AssetEntry extends AssetEntryModel, PersistedModel {
 	 * Never modify this interface directly. Add methods to {@link com.liferay.portlet.asset.model.impl.AssetEntryImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
 	public static final Accessor<AssetEntry, Long> ENTRY_ID_ACCESSOR = new Accessor<AssetEntry, Long>() {
+			@Override
 			public Long get(AssetEntry assetEntry) {
 				return assetEntry.getEntryId();
 			}

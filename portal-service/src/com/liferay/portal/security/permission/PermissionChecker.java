@@ -14,6 +14,8 @@
 
 package com.liferay.portal.security.permission;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.model.User;
 
 import java.util.List;
@@ -23,6 +25,7 @@ import javax.portlet.PortletRequest;
 /**
  * @author Brian Wing Shun Chan
  */
+@ProviderType
 public interface PermissionChecker extends Cloneable {
 
 	public static final long[] DEFAULT_ROLE_IDS = {};
@@ -174,12 +177,12 @@ public interface PermissionChecker extends Cloneable {
 	public boolean isCheckGuest();
 
 	/**
-	 * @deprecated As of 6.1, renamed to {@link #isGroupAdmin(long)}
+	 * @deprecated As of 6.1.0, renamed to {@link #isGroupAdmin(long)}
 	 */
 	public boolean isCommunityAdmin(long groupId);
 
 	/**
-	 * @deprecated As of 6.1, renamed to {@link #isGroupOwner(long)}
+	 * @deprecated As of 6.1.0, renamed to {@link #isGroupOwner(long)}
 	 */
 	public boolean isCommunityOwner(long groupId);
 
@@ -200,6 +203,18 @@ public interface PermissionChecker extends Cloneable {
 	 *         <code>false</code> otherwise
 	 */
 	public boolean isCompanyAdmin(long companyId);
+
+	/**
+	 * Returns <code>true</code> if the user is a content reviewer or has
+	 * sufficient permissions to review content (i.e. the user is a company or
+	 * group administrator).
+	 *
+	 * @param  companyId the primary key of the company
+	 * @param  groupId the primary key of the group
+	 * @return <code>true</code> if the user is a reviewer or has sufficient
+	 *         permissions to review content; <code>false</code> otherwise
+	 */
+	public boolean isContentReviewer(long companyId, long groupId);
 
 	/**
 	 * Returns <code>true</code> if the user is an administrator of the group.

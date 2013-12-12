@@ -19,13 +19,18 @@ import com.liferay.portal.util.ClassLoaderUtil;
 
 import java.io.InputStream;
 
+import java.net.URL;
+
+import java.util.List;
+import java.util.Map;
+
 /**
  * This class is a simple wrapper in order to make the framework module running
  * under its own class loader.
  *
  * @author Miguel Pastor
  * @author Raymond Augé
- * @see    {@link ModuleFrameworkClassloader}
+ * @see    ModuleFrameworkClassLoader
  */
 public class ModuleFrameworkUtilAdapter {
 
@@ -37,6 +42,10 @@ public class ModuleFrameworkUtilAdapter {
 		throws PortalException {
 
 		return _moduleFramework.addBundle(location, inputStream);
+	}
+
+	public static Map<String, List<URL>> getExtraPackageMap() {
+		return _moduleFramework.getExtraPackageMap();
 	}
 
 	public static Object getFramework() {
@@ -55,6 +64,14 @@ public class ModuleFrameworkUtilAdapter {
 		throws PortalException {
 
 		_moduleFramework.setBundleStartLevel(bundleId, startLevel);
+	}
+
+	public static void setModuleFramework(ModuleFramework moduleFramework) {
+		_moduleFramework = moduleFramework;
+
+		_moduleFrameworkAdapterHelper.exec(
+			"setModuleFramework", new Class[] {ModuleFramework.class},
+			_moduleFramework);
 	}
 
 	public static void startBundle(long bundleId) throws PortalException {

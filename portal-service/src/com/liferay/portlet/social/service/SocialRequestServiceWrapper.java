@@ -14,17 +14,18 @@
 
 package com.liferay.portlet.social.service;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.service.ServiceWrapper;
 
 /**
- * <p>
- * This class is a wrapper for {@link SocialRequestService}.
- * </p>
+ * Provides a wrapper for {@link SocialRequestService}.
  *
- * @author    Brian Wing Shun Chan
- * @see       SocialRequestService
+ * @author Brian Wing Shun Chan
+ * @see SocialRequestService
  * @generated
  */
+@ProviderType
 public class SocialRequestServiceWrapper implements SocialRequestService,
 	ServiceWrapper<SocialRequestService> {
 	public SocialRequestServiceWrapper(
@@ -37,6 +38,7 @@ public class SocialRequestServiceWrapper implements SocialRequestService,
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _socialRequestService.getBeanIdentifier();
 	}
@@ -46,10 +48,12 @@ public class SocialRequestServiceWrapper implements SocialRequestService,
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_socialRequestService.setBeanIdentifier(beanIdentifier);
 	}
 
+	@Override
 	public com.liferay.portlet.social.model.SocialRequest updateRequest(
 		long requestId, int status,
 		com.liferay.portal.theme.ThemeDisplay themeDisplay)
@@ -74,10 +78,12 @@ public class SocialRequestServiceWrapper implements SocialRequestService,
 		_socialRequestService = socialRequestService;
 	}
 
+	@Override
 	public SocialRequestService getWrappedService() {
 		return _socialRequestService;
 	}
 
+	@Override
 	public void setWrappedService(SocialRequestService socialRequestService) {
 		_socialRequestService = socialRequestService;
 	}

@@ -20,20 +20,22 @@ import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.social.model.SocialRequest;
 import com.liferay.portlet.social.service.base.SocialRequestServiceBaseImpl;
-import com.liferay.portlet.social.service.permission.SocialRequestPermission;
+import com.liferay.portlet.social.service.permission.SocialRequestPermissionUtil;
 
 /**
- * The implementation of the social request remote service.
+ * Provides the remote service for updating social requests. Its methods include
+ * permission checks.
  *
  * @author Brian Wing Shun Chan
  */
 public class SocialRequestServiceImpl extends SocialRequestServiceBaseImpl {
 
+	@Override
 	public SocialRequest updateRequest(
 			long requestId, int status, ThemeDisplay themeDisplay)
 		throws PortalException, SystemException {
 
-		SocialRequestPermission.check(
+		SocialRequestPermissionUtil.check(
 			getPermissionChecker(), requestId, ActionKeys.UPDATE);
 
 		return socialRequestLocalService.updateRequest(

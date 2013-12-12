@@ -113,6 +113,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the matching journal content searchs
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalContentSearch> findByPortletId(String portletId)
 		throws SystemException {
 		return findByPortletId(portletId, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
@@ -132,6 +133,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the range of matching journal content searchs
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalContentSearch> findByPortletId(String portletId,
 		int start, int end) throws SystemException {
 		return findByPortletId(portletId, start, end, null);
@@ -151,6 +153,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the ordered range of matching journal content searchs
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalContentSearch> findByPortletId(String portletId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -273,6 +276,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @throws com.liferay.portlet.journal.NoSuchContentSearchException if a matching journal content search could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch findByPortletId_First(String portletId,
 		OrderByComparator orderByComparator)
 		throws NoSuchContentSearchException, SystemException {
@@ -303,6 +307,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the first matching journal content search, or <code>null</code> if a matching journal content search could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch fetchByPortletId_First(String portletId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<JournalContentSearch> list = findByPortletId(portletId, 0, 1,
@@ -324,6 +329,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @throws com.liferay.portlet.journal.NoSuchContentSearchException if a matching journal content search could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch findByPortletId_Last(String portletId,
 		OrderByComparator orderByComparator)
 		throws NoSuchContentSearchException, SystemException {
@@ -354,9 +360,14 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the last matching journal content search, or <code>null</code> if a matching journal content search could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch fetchByPortletId_Last(String portletId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByPortletId(portletId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<JournalContentSearch> list = findByPortletId(portletId, count - 1,
 				count, orderByComparator);
@@ -378,6 +389,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @throws com.liferay.portlet.journal.NoSuchContentSearchException if a journal content search with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch[] findByPortletId_PrevAndNext(
 		long contentSearchId, String portletId,
 		OrderByComparator orderByComparator)
@@ -534,6 +546,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @param portletId the portlet ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByPortletId(String portletId) throws SystemException {
 		for (JournalContentSearch journalContentSearch : findByPortletId(
 				portletId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
@@ -548,6 +561,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the number of matching journal content searchs
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByPortletId(String portletId) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_PORTLETID;
 
@@ -640,6 +654,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the matching journal content searchs
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalContentSearch> findByArticleId(String articleId)
 		throws SystemException {
 		return findByArticleId(articleId, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
@@ -659,6 +674,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the range of matching journal content searchs
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalContentSearch> findByArticleId(String articleId,
 		int start, int end) throws SystemException {
 		return findByArticleId(articleId, start, end, null);
@@ -678,6 +694,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the ordered range of matching journal content searchs
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalContentSearch> findByArticleId(String articleId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -800,6 +817,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @throws com.liferay.portlet.journal.NoSuchContentSearchException if a matching journal content search could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch findByArticleId_First(String articleId,
 		OrderByComparator orderByComparator)
 		throws NoSuchContentSearchException, SystemException {
@@ -830,6 +848,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the first matching journal content search, or <code>null</code> if a matching journal content search could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch fetchByArticleId_First(String articleId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<JournalContentSearch> list = findByArticleId(articleId, 0, 1,
@@ -851,6 +870,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @throws com.liferay.portlet.journal.NoSuchContentSearchException if a matching journal content search could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch findByArticleId_Last(String articleId,
 		OrderByComparator orderByComparator)
 		throws NoSuchContentSearchException, SystemException {
@@ -881,9 +901,14 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the last matching journal content search, or <code>null</code> if a matching journal content search could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch fetchByArticleId_Last(String articleId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByArticleId(articleId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<JournalContentSearch> list = findByArticleId(articleId, count - 1,
 				count, orderByComparator);
@@ -905,6 +930,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @throws com.liferay.portlet.journal.NoSuchContentSearchException if a journal content search with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch[] findByArticleId_PrevAndNext(
 		long contentSearchId, String articleId,
 		OrderByComparator orderByComparator)
@@ -1061,6 +1087,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @param articleId the article ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByArticleId(String articleId) throws SystemException {
 		for (JournalContentSearch journalContentSearch : findByArticleId(
 				articleId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
@@ -1075,6 +1102,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the number of matching journal content searchs
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByArticleId(String articleId) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_ARTICLEID;
 
@@ -1167,6 +1195,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the matching journal content searchs
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalContentSearch> findByG_P(long groupId,
 		boolean privateLayout) throws SystemException {
 		return findByG_P(groupId, privateLayout, QueryUtil.ALL_POS,
@@ -1187,6 +1216,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the range of matching journal content searchs
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalContentSearch> findByG_P(long groupId,
 		boolean privateLayout, int start, int end) throws SystemException {
 		return findByG_P(groupId, privateLayout, start, end, null);
@@ -1207,6 +1237,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the ordered range of matching journal content searchs
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalContentSearch> findByG_P(long groupId,
 		boolean privateLayout, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
@@ -1324,6 +1355,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @throws com.liferay.portlet.journal.NoSuchContentSearchException if a matching journal content search could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch findByG_P_First(long groupId,
 		boolean privateLayout, OrderByComparator orderByComparator)
 		throws NoSuchContentSearchException, SystemException {
@@ -1358,6 +1390,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the first matching journal content search, or <code>null</code> if a matching journal content search could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch fetchByG_P_First(long groupId,
 		boolean privateLayout, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -1381,6 +1414,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @throws com.liferay.portlet.journal.NoSuchContentSearchException if a matching journal content search could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch findByG_P_Last(long groupId,
 		boolean privateLayout, OrderByComparator orderByComparator)
 		throws NoSuchContentSearchException, SystemException {
@@ -1415,10 +1449,15 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the last matching journal content search, or <code>null</code> if a matching journal content search could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch fetchByG_P_Last(long groupId,
 		boolean privateLayout, OrderByComparator orderByComparator)
 		throws SystemException {
 		int count = countByG_P(groupId, privateLayout);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<JournalContentSearch> list = findByG_P(groupId, privateLayout,
 				count - 1, count, orderByComparator);
@@ -1441,6 +1480,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @throws com.liferay.portlet.journal.NoSuchContentSearchException if a journal content search with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch[] findByG_P_PrevAndNext(long contentSearchId,
 		long groupId, boolean privateLayout, OrderByComparator orderByComparator)
 		throws NoSuchContentSearchException, SystemException {
@@ -1588,6 +1628,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @param privateLayout the private layout
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByG_P(long groupId, boolean privateLayout)
 		throws SystemException {
 		for (JournalContentSearch journalContentSearch : findByG_P(groupId,
@@ -1604,6 +1645,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the number of matching journal content searchs
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByG_P(long groupId, boolean privateLayout)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_P;
@@ -1686,6 +1728,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the matching journal content searchs
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalContentSearch> findByG_A(long groupId, String articleId)
 		throws SystemException {
 		return findByG_A(groupId, articleId, QueryUtil.ALL_POS,
@@ -1706,6 +1749,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the range of matching journal content searchs
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalContentSearch> findByG_A(long groupId, String articleId,
 		int start, int end) throws SystemException {
 		return findByG_A(groupId, articleId, start, end, null);
@@ -1726,6 +1770,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the ordered range of matching journal content searchs
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalContentSearch> findByG_A(long groupId, String articleId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -1858,6 +1903,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @throws com.liferay.portlet.journal.NoSuchContentSearchException if a matching journal content search could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch findByG_A_First(long groupId, String articleId,
 		OrderByComparator orderByComparator)
 		throws NoSuchContentSearchException, SystemException {
@@ -1892,6 +1938,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the first matching journal content search, or <code>null</code> if a matching journal content search could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch fetchByG_A_First(long groupId,
 		String articleId, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -1915,6 +1962,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @throws com.liferay.portlet.journal.NoSuchContentSearchException if a matching journal content search could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch findByG_A_Last(long groupId, String articleId,
 		OrderByComparator orderByComparator)
 		throws NoSuchContentSearchException, SystemException {
@@ -1949,9 +1997,14 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the last matching journal content search, or <code>null</code> if a matching journal content search could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch fetchByG_A_Last(long groupId, String articleId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByG_A(groupId, articleId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<JournalContentSearch> list = findByG_A(groupId, articleId,
 				count - 1, count, orderByComparator);
@@ -1974,6 +2027,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @throws com.liferay.portlet.journal.NoSuchContentSearchException if a journal content search with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch[] findByG_A_PrevAndNext(long contentSearchId,
 		long groupId, String articleId, OrderByComparator orderByComparator)
 		throws NoSuchContentSearchException, SystemException {
@@ -2134,6 +2188,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @param articleId the article ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByG_A(long groupId, String articleId)
 		throws SystemException {
 		for (JournalContentSearch journalContentSearch : findByG_A(groupId,
@@ -2150,6 +2205,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the number of matching journal content searchs
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByG_A(long groupId, String articleId)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_A;
@@ -2257,6 +2313,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the matching journal content searchs
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalContentSearch> findByG_P_L(long groupId,
 		boolean privateLayout, long layoutId) throws SystemException {
 		return findByG_P_L(groupId, privateLayout, layoutId, QueryUtil.ALL_POS,
@@ -2278,6 +2335,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the range of matching journal content searchs
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalContentSearch> findByG_P_L(long groupId,
 		boolean privateLayout, long layoutId, int start, int end)
 		throws SystemException {
@@ -2300,6 +2358,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the ordered range of matching journal content searchs
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalContentSearch> findByG_P_L(long groupId,
 		boolean privateLayout, long layoutId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
@@ -2423,6 +2482,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @throws com.liferay.portlet.journal.NoSuchContentSearchException if a matching journal content search could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch findByG_P_L_First(long groupId,
 		boolean privateLayout, long layoutId,
 		OrderByComparator orderByComparator)
@@ -2462,6 +2522,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the first matching journal content search, or <code>null</code> if a matching journal content search could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch fetchByG_P_L_First(long groupId,
 		boolean privateLayout, long layoutId,
 		OrderByComparator orderByComparator) throws SystemException {
@@ -2486,6 +2547,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @throws com.liferay.portlet.journal.NoSuchContentSearchException if a matching journal content search could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch findByG_P_L_Last(long groupId,
 		boolean privateLayout, long layoutId,
 		OrderByComparator orderByComparator)
@@ -2525,10 +2587,15 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the last matching journal content search, or <code>null</code> if a matching journal content search could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch fetchByG_P_L_Last(long groupId,
 		boolean privateLayout, long layoutId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByG_P_L(groupId, privateLayout, layoutId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<JournalContentSearch> list = findByG_P_L(groupId, privateLayout,
 				layoutId, count - 1, count, orderByComparator);
@@ -2552,6 +2619,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @throws com.liferay.portlet.journal.NoSuchContentSearchException if a journal content search with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch[] findByG_P_L_PrevAndNext(
 		long contentSearchId, long groupId, boolean privateLayout,
 		long layoutId, OrderByComparator orderByComparator)
@@ -2705,6 +2773,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @param layoutId the layout ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByG_P_L(long groupId, boolean privateLayout, long layoutId)
 		throws SystemException {
 		for (JournalContentSearch journalContentSearch : findByG_P_L(groupId,
@@ -2723,6 +2792,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the number of matching journal content searchs
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByG_P_L(long groupId, boolean privateLayout, long layoutId)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_P_L;
@@ -2819,6 +2889,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the matching journal content searchs
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalContentSearch> findByG_P_A(long groupId,
 		boolean privateLayout, String articleId) throws SystemException {
 		return findByG_P_A(groupId, privateLayout, articleId,
@@ -2840,6 +2911,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the range of matching journal content searchs
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalContentSearch> findByG_P_A(long groupId,
 		boolean privateLayout, String articleId, int start, int end)
 		throws SystemException {
@@ -2862,6 +2934,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the ordered range of matching journal content searchs
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalContentSearch> findByG_P_A(long groupId,
 		boolean privateLayout, String articleId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
@@ -3000,6 +3073,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @throws com.liferay.portlet.journal.NoSuchContentSearchException if a matching journal content search could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch findByG_P_A_First(long groupId,
 		boolean privateLayout, String articleId,
 		OrderByComparator orderByComparator)
@@ -3039,6 +3113,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the first matching journal content search, or <code>null</code> if a matching journal content search could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch fetchByG_P_A_First(long groupId,
 		boolean privateLayout, String articleId,
 		OrderByComparator orderByComparator) throws SystemException {
@@ -3063,6 +3138,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @throws com.liferay.portlet.journal.NoSuchContentSearchException if a matching journal content search could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch findByG_P_A_Last(long groupId,
 		boolean privateLayout, String articleId,
 		OrderByComparator orderByComparator)
@@ -3102,10 +3178,15 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the last matching journal content search, or <code>null</code> if a matching journal content search could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch fetchByG_P_A_Last(long groupId,
 		boolean privateLayout, String articleId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByG_P_A(groupId, privateLayout, articleId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<JournalContentSearch> list = findByG_P_A(groupId, privateLayout,
 				articleId, count - 1, count, orderByComparator);
@@ -3129,6 +3210,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @throws com.liferay.portlet.journal.NoSuchContentSearchException if a journal content search with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch[] findByG_P_A_PrevAndNext(
 		long contentSearchId, long groupId, boolean privateLayout,
 		String articleId, OrderByComparator orderByComparator)
@@ -3296,6 +3378,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @param articleId the article ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByG_P_A(long groupId, boolean privateLayout,
 		String articleId) throws SystemException {
 		for (JournalContentSearch journalContentSearch : findByG_P_A(groupId,
@@ -3314,6 +3397,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the number of matching journal content searchs
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByG_P_A(long groupId, boolean privateLayout,
 		String articleId) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_P_A;
@@ -3429,6 +3513,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the matching journal content searchs
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalContentSearch> findByG_P_L_P(long groupId,
 		boolean privateLayout, long layoutId, String portletId)
 		throws SystemException {
@@ -3452,6 +3537,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the range of matching journal content searchs
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalContentSearch> findByG_P_L_P(long groupId,
 		boolean privateLayout, long layoutId, String portletId, int start,
 		int end) throws SystemException {
@@ -3476,6 +3562,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the ordered range of matching journal content searchs
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalContentSearch> findByG_P_L_P(long groupId,
 		boolean privateLayout, long layoutId, String portletId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
@@ -3622,6 +3709,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @throws com.liferay.portlet.journal.NoSuchContentSearchException if a matching journal content search could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch findByG_P_L_P_First(long groupId,
 		boolean privateLayout, long layoutId, String portletId,
 		OrderByComparator orderByComparator)
@@ -3665,6 +3753,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the first matching journal content search, or <code>null</code> if a matching journal content search could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch fetchByG_P_L_P_First(long groupId,
 		boolean privateLayout, long layoutId, String portletId,
 		OrderByComparator orderByComparator) throws SystemException {
@@ -3690,6 +3779,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @throws com.liferay.portlet.journal.NoSuchContentSearchException if a matching journal content search could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch findByG_P_L_P_Last(long groupId,
 		boolean privateLayout, long layoutId, String portletId,
 		OrderByComparator orderByComparator)
@@ -3733,10 +3823,15 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the last matching journal content search, or <code>null</code> if a matching journal content search could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch fetchByG_P_L_P_Last(long groupId,
 		boolean privateLayout, long layoutId, String portletId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByG_P_L_P(groupId, privateLayout, layoutId, portletId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<JournalContentSearch> list = findByG_P_L_P(groupId, privateLayout,
 				layoutId, portletId, count - 1, count, orderByComparator);
@@ -3761,6 +3856,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @throws com.liferay.portlet.journal.NoSuchContentSearchException if a journal content search with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch[] findByG_P_L_P_PrevAndNext(
 		long contentSearchId, long groupId, boolean privateLayout,
 		long layoutId, String portletId, OrderByComparator orderByComparator)
@@ -3935,6 +4031,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @param portletId the portlet ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByG_P_L_P(long groupId, boolean privateLayout,
 		long layoutId, String portletId) throws SystemException {
 		for (JournalContentSearch journalContentSearch : findByG_P_L_P(
@@ -3954,6 +4051,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the number of matching journal content searchs
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByG_P_L_P(long groupId, boolean privateLayout,
 		long layoutId, String portletId) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_P_L_P;
@@ -4069,6 +4167,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @throws com.liferay.portlet.journal.NoSuchContentSearchException if a matching journal content search could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch findByG_P_L_P_A(long groupId,
 		boolean privateLayout, long layoutId, String portletId, String articleId)
 		throws NoSuchContentSearchException, SystemException {
@@ -4118,6 +4217,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the matching journal content search, or <code>null</code> if a matching journal content search could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch fetchByG_P_L_P_A(long groupId,
 		boolean privateLayout, long layoutId, String portletId, String articleId)
 		throws SystemException {
@@ -4137,6 +4237,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the matching journal content search, or <code>null</code> if a matching journal content search could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch fetchByG_P_L_P_A(long groupId,
 		boolean privateLayout, long layoutId, String portletId,
 		String articleId, boolean retrieveFromCache) throws SystemException {
@@ -4286,6 +4387,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the journal content search that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch removeByG_P_L_P_A(long groupId,
 		boolean privateLayout, long layoutId, String portletId, String articleId)
 		throws NoSuchContentSearchException, SystemException {
@@ -4306,6 +4408,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the number of matching journal content searchs
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByG_P_L_P_A(long groupId, boolean privateLayout,
 		long layoutId, String portletId, String articleId)
 		throws SystemException {
@@ -4409,11 +4512,16 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	private static final String _FINDER_COLUMN_G_P_L_P_A_ARTICLEID_2 = "journalContentSearch.articleId = ?";
 	private static final String _FINDER_COLUMN_G_P_L_P_A_ARTICLEID_3 = "(journalContentSearch.articleId IS NULL OR journalContentSearch.articleId = '')";
 
+	public JournalContentSearchPersistenceImpl() {
+		setModelClass(JournalContentSearch.class);
+	}
+
 	/**
 	 * Caches the journal content search in the entity cache if it is enabled.
 	 *
 	 * @param journalContentSearch the journal content search
 	 */
+	@Override
 	public void cacheResult(JournalContentSearch journalContentSearch) {
 		EntityCacheUtil.putResult(JournalContentSearchModelImpl.ENTITY_CACHE_ENABLED,
 			JournalContentSearchImpl.class,
@@ -4436,6 +4544,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 *
 	 * @param journalContentSearchs the journal content searchs
 	 */
+	@Override
 	public void cacheResult(List<JournalContentSearch> journalContentSearchs) {
 		for (JournalContentSearch journalContentSearch : journalContentSearchs) {
 			if (EntityCacheUtil.getResult(
@@ -4575,6 +4684,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @param contentSearchId the primary key for the new journal content search
 	 * @return the new journal content search
 	 */
+	@Override
 	public JournalContentSearch create(long contentSearchId) {
 		JournalContentSearch journalContentSearch = new JournalContentSearchImpl();
 
@@ -4592,6 +4702,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @throws com.liferay.portlet.journal.NoSuchContentSearchException if a journal content search with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch remove(long contentSearchId)
 		throws NoSuchContentSearchException, SystemException {
 		return remove((Serializable)contentSearchId);
@@ -4868,6 +4979,8 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 		clearUniqueFindersCache(journalContentSearch);
 		cacheUniqueFindersCache(journalContentSearch);
 
+		journalContentSearch.resetOriginalValues();
+
 		return journalContentSearch;
 	}
 
@@ -4926,6 +5039,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @throws com.liferay.portlet.journal.NoSuchContentSearchException if a journal content search with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch findByPrimaryKey(long contentSearchId)
 		throws NoSuchContentSearchException, SystemException {
 		return findByPrimaryKey((Serializable)contentSearchId);
@@ -4987,6 +5101,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the journal content search, or <code>null</code> if a journal content search with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public JournalContentSearch fetchByPrimaryKey(long contentSearchId)
 		throws SystemException {
 		return fetchByPrimaryKey((Serializable)contentSearchId);
@@ -4998,6 +5113,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the journal content searchs
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalContentSearch> findAll() throws SystemException {
 		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
@@ -5014,6 +5130,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the range of journal content searchs
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalContentSearch> findAll(int start, int end)
 		throws SystemException {
 		return findAll(start, end, null);
@@ -5032,6 +5149,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the ordered range of journal content searchs
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<JournalContentSearch> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -5117,6 +5235,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 *
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeAll() throws SystemException {
 		for (JournalContentSearch journalContentSearch : findAll()) {
 			remove(journalContentSearch);
@@ -5129,6 +5248,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * @return the number of journal content searchs
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countAll() throws SystemException {
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
 				FINDER_ARGS_EMPTY, this);
@@ -5215,6 +5335,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 
 	private static CacheModel<JournalContentSearch> _nullJournalContentSearchCacheModel =
 		new CacheModel<JournalContentSearch>() {
+			@Override
 			public JournalContentSearch toEntityModel() {
 				return _nullJournalContentSearch;
 			}

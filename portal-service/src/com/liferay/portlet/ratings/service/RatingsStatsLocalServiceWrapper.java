@@ -14,17 +14,18 @@
 
 package com.liferay.portlet.ratings.service;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.service.ServiceWrapper;
 
 /**
- * <p>
- * This class is a wrapper for {@link RatingsStatsLocalService}.
- * </p>
+ * Provides a wrapper for {@link RatingsStatsLocalService}.
  *
- * @author    Brian Wing Shun Chan
- * @see       RatingsStatsLocalService
+ * @author Brian Wing Shun Chan
+ * @see RatingsStatsLocalService
  * @generated
  */
+@ProviderType
 public class RatingsStatsLocalServiceWrapper implements RatingsStatsLocalService,
 	ServiceWrapper<RatingsStatsLocalService> {
 	public RatingsStatsLocalServiceWrapper(
@@ -39,6 +40,7 @@ public class RatingsStatsLocalServiceWrapper implements RatingsStatsLocalService
 	* @return the ratings stats that was added
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.ratings.model.RatingsStats addRatingsStats(
 		com.liferay.portlet.ratings.model.RatingsStats ratingsStats)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -51,6 +53,7 @@ public class RatingsStatsLocalServiceWrapper implements RatingsStatsLocalService
 	* @param statsId the primary key for the new ratings stats
 	* @return the new ratings stats
 	*/
+	@Override
 	public com.liferay.portlet.ratings.model.RatingsStats createRatingsStats(
 		long statsId) {
 		return _ratingsStatsLocalService.createRatingsStats(statsId);
@@ -64,6 +67,7 @@ public class RatingsStatsLocalServiceWrapper implements RatingsStatsLocalService
 	* @throws PortalException if a ratings stats with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.ratings.model.RatingsStats deleteRatingsStats(
 		long statsId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -78,12 +82,14 @@ public class RatingsStatsLocalServiceWrapper implements RatingsStatsLocalService
 	* @return the ratings stats that was removed
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.ratings.model.RatingsStats deleteRatingsStats(
 		com.liferay.portlet.ratings.model.RatingsStats ratingsStats)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _ratingsStatsLocalService.deleteRatingsStats(ratingsStats);
 	}
 
+	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		return _ratingsStatsLocalService.dynamicQuery();
 	}
@@ -95,6 +101,7 @@ public class RatingsStatsLocalServiceWrapper implements RatingsStatsLocalService
 	* @return the matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
@@ -115,6 +122,7 @@ public class RatingsStatsLocalServiceWrapper implements RatingsStatsLocalService
 	* @return the range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -136,6 +144,7 @@ public class RatingsStatsLocalServiceWrapper implements RatingsStatsLocalService
 	* @return the ordered range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -153,12 +162,31 @@ public class RatingsStatsLocalServiceWrapper implements RatingsStatsLocalService
 	* @return the number of rows that match the dynamic query
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _ratingsStatsLocalService.dynamicQueryCount(dynamicQuery);
 	}
 
+	/**
+	* Returns the number of rows that match the dynamic query.
+	*
+	* @param dynamicQuery the dynamic query
+	* @param projection the projection to apply to the query
+	* @return the number of rows that match the dynamic query
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public long dynamicQueryCount(
+		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery,
+		com.liferay.portal.kernel.dao.orm.Projection projection)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _ratingsStatsLocalService.dynamicQueryCount(dynamicQuery,
+			projection);
+	}
+
+	@Override
 	public com.liferay.portlet.ratings.model.RatingsStats fetchRatingsStats(
 		long statsId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -173,6 +201,7 @@ public class RatingsStatsLocalServiceWrapper implements RatingsStatsLocalService
 	* @throws PortalException if a ratings stats with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.ratings.model.RatingsStats getRatingsStats(
 		long statsId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -180,6 +209,7 @@ public class RatingsStatsLocalServiceWrapper implements RatingsStatsLocalService
 		return _ratingsStatsLocalService.getRatingsStats(statsId);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -199,6 +229,7 @@ public class RatingsStatsLocalServiceWrapper implements RatingsStatsLocalService
 	* @return the range of ratings statses
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.ratings.model.RatingsStats> getRatingsStatses(
 		int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -211,6 +242,7 @@ public class RatingsStatsLocalServiceWrapper implements RatingsStatsLocalService
 	* @return the number of ratings statses
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getRatingsStatsesCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _ratingsStatsLocalService.getRatingsStatsesCount();
@@ -223,6 +255,7 @@ public class RatingsStatsLocalServiceWrapper implements RatingsStatsLocalService
 	* @return the ratings stats that was updated
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.ratings.model.RatingsStats updateRatingsStats(
 		com.liferay.portlet.ratings.model.RatingsStats ratingsStats)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -234,6 +267,7 @@ public class RatingsStatsLocalServiceWrapper implements RatingsStatsLocalService
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _ratingsStatsLocalService.getBeanIdentifier();
 	}
@@ -243,33 +277,39 @@ public class RatingsStatsLocalServiceWrapper implements RatingsStatsLocalService
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_ratingsStatsLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
+	@Override
 	public com.liferay.portlet.ratings.model.RatingsStats addStats(
 		long classNameId, long classPK)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _ratingsStatsLocalService.addStats(classNameId, classPK);
 	}
 
+	@Override
 	public void deleteStats(java.lang.String className, long classPK)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_ratingsStatsLocalService.deleteStats(className, classPK);
 	}
 
+	@Override
 	public com.liferay.portlet.ratings.model.RatingsStats getStats(long statsId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _ratingsStatsLocalService.getStats(statsId);
 	}
 
+	@Override
 	public java.util.List<com.liferay.portlet.ratings.model.RatingsStats> getStats(
 		java.lang.String className, java.util.List<java.lang.Long> classPKs)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _ratingsStatsLocalService.getStats(className, classPKs);
 	}
 
+	@Override
 	public com.liferay.portlet.ratings.model.RatingsStats getStats(
 		java.lang.String className, long classPK)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -291,10 +331,12 @@ public class RatingsStatsLocalServiceWrapper implements RatingsStatsLocalService
 		_ratingsStatsLocalService = ratingsStatsLocalService;
 	}
 
+	@Override
 	public RatingsStatsLocalService getWrappedService() {
 		return _ratingsStatsLocalService;
 	}
 
+	@Override
 	public void setWrappedService(
 		RatingsStatsLocalService ratingsStatsLocalService) {
 		_ratingsStatsLocalService = ratingsStatsLocalService;

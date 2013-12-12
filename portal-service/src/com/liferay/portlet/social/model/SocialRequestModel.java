@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.social.model;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.AttachedModel;
@@ -38,6 +40,7 @@ import java.io.Serializable;
  * @see com.liferay.portlet.social.model.impl.SocialRequestModelImpl
  * @generated
  */
+@ProviderType
 public interface SocialRequestModel extends AttachedModel,
 	BaseModel<SocialRequest> {
 	/*
@@ -179,6 +182,7 @@ public interface SocialRequestModel extends AttachedModel,
 	 *
 	 * @return the fully qualified class name of this social request
 	 */
+	@Override
 	public String getClassName();
 
 	public void setClassName(String className);
@@ -188,6 +192,7 @@ public interface SocialRequestModel extends AttachedModel,
 	 *
 	 * @return the class name ID of this social request
 	 */
+	@Override
 	public long getClassNameId();
 
 	/**
@@ -195,6 +200,7 @@ public interface SocialRequestModel extends AttachedModel,
 	 *
 	 * @param classNameId the class name ID of this social request
 	 */
+	@Override
 	public void setClassNameId(long classNameId);
 
 	/**
@@ -202,6 +208,7 @@ public interface SocialRequestModel extends AttachedModel,
 	 *
 	 * @return the class p k of this social request
 	 */
+	@Override
 	public long getClassPK();
 
 	/**
@@ -209,6 +216,7 @@ public interface SocialRequestModel extends AttachedModel,
 	 *
 	 * @param classPK the class p k of this social request
 	 */
+	@Override
 	public void setClassPK(long classPK);
 
 	/**
@@ -283,41 +291,60 @@ public interface SocialRequestModel extends AttachedModel,
 	 */
 	public void setStatus(int status);
 
+	@Override
 	public boolean isNew();
 
+	@Override
 	public void setNew(boolean n);
 
+	@Override
 	public boolean isCachedModel();
 
+	@Override
 	public void setCachedModel(boolean cachedModel);
 
+	@Override
 	public boolean isEscapedModel();
 
+	@Override
 	public Serializable getPrimaryKeyObj();
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj);
 
+	@Override
 	public ExpandoBridge getExpandoBridge();
 
+	@Override
 	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
 
+	@Override
 	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
 
+	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
+	@Override
 	public Object clone();
 
+	@Override
 	public int compareTo(SocialRequest socialRequest);
 
+	@Override
 	public int hashCode();
 
+	@Override
 	public CacheModel<SocialRequest> toCacheModel();
 
+	@Override
 	public SocialRequest toEscapedModel();
 
+	@Override
 	public SocialRequest toUnescapedModel();
 
+	@Override
 	public String toString();
 
+	@Override
 	public String toXmlString();
 }

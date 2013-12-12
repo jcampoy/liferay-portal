@@ -38,6 +38,7 @@ public class LiferayLoggerFactory implements ILoggerFactory {
 		_writeLock = readWriteLock.writeLock();
 	}
 
+	@Override
 	public Logger getLogger(String name) {
 		Logger logger = null;
 
@@ -63,7 +64,6 @@ public class LiferayLoggerFactory implements ILoggerFactory {
 			finally {
 				_writeLock.unlock();
 			}
-
 		}
 
 		return logger;

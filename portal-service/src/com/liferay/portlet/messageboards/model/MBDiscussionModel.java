@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.messageboards.model;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.AttachedModel;
@@ -41,6 +43,7 @@ import java.util.Date;
  * @see com.liferay.portlet.messageboards.model.impl.MBDiscussionModelImpl
  * @generated
  */
+@ProviderType
 public interface MBDiscussionModel extends AttachedModel, BaseModel<MBDiscussion>,
 	StagedGroupedModel {
 	/*
@@ -69,6 +72,7 @@ public interface MBDiscussionModel extends AttachedModel, BaseModel<MBDiscussion
 	 * @return the uuid of this message boards discussion
 	 */
 	@AutoEscape
+	@Override
 	public String getUuid();
 
 	/**
@@ -76,6 +80,7 @@ public interface MBDiscussionModel extends AttachedModel, BaseModel<MBDiscussion
 	 *
 	 * @param uuid the uuid of this message boards discussion
 	 */
+	@Override
 	public void setUuid(String uuid);
 
 	/**
@@ -97,6 +102,7 @@ public interface MBDiscussionModel extends AttachedModel, BaseModel<MBDiscussion
 	 *
 	 * @return the group ID of this message boards discussion
 	 */
+	@Override
 	public long getGroupId();
 
 	/**
@@ -104,6 +110,7 @@ public interface MBDiscussionModel extends AttachedModel, BaseModel<MBDiscussion
 	 *
 	 * @param groupId the group ID of this message boards discussion
 	 */
+	@Override
 	public void setGroupId(long groupId);
 
 	/**
@@ -111,6 +118,7 @@ public interface MBDiscussionModel extends AttachedModel, BaseModel<MBDiscussion
 	 *
 	 * @return the company ID of this message boards discussion
 	 */
+	@Override
 	public long getCompanyId();
 
 	/**
@@ -118,6 +126,7 @@ public interface MBDiscussionModel extends AttachedModel, BaseModel<MBDiscussion
 	 *
 	 * @param companyId the company ID of this message boards discussion
 	 */
+	@Override
 	public void setCompanyId(long companyId);
 
 	/**
@@ -125,6 +134,7 @@ public interface MBDiscussionModel extends AttachedModel, BaseModel<MBDiscussion
 	 *
 	 * @return the user ID of this message boards discussion
 	 */
+	@Override
 	public long getUserId();
 
 	/**
@@ -132,6 +142,7 @@ public interface MBDiscussionModel extends AttachedModel, BaseModel<MBDiscussion
 	 *
 	 * @param userId the user ID of this message boards discussion
 	 */
+	@Override
 	public void setUserId(long userId);
 
 	/**
@@ -140,6 +151,7 @@ public interface MBDiscussionModel extends AttachedModel, BaseModel<MBDiscussion
 	 * @return the user uuid of this message boards discussion
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public String getUserUuid() throws SystemException;
 
 	/**
@@ -147,6 +159,7 @@ public interface MBDiscussionModel extends AttachedModel, BaseModel<MBDiscussion
 	 *
 	 * @param userUuid the user uuid of this message boards discussion
 	 */
+	@Override
 	public void setUserUuid(String userUuid);
 
 	/**
@@ -155,6 +168,7 @@ public interface MBDiscussionModel extends AttachedModel, BaseModel<MBDiscussion
 	 * @return the user name of this message boards discussion
 	 */
 	@AutoEscape
+	@Override
 	public String getUserName();
 
 	/**
@@ -162,6 +176,7 @@ public interface MBDiscussionModel extends AttachedModel, BaseModel<MBDiscussion
 	 *
 	 * @param userName the user name of this message boards discussion
 	 */
+	@Override
 	public void setUserName(String userName);
 
 	/**
@@ -169,6 +184,7 @@ public interface MBDiscussionModel extends AttachedModel, BaseModel<MBDiscussion
 	 *
 	 * @return the create date of this message boards discussion
 	 */
+	@Override
 	public Date getCreateDate();
 
 	/**
@@ -176,6 +192,7 @@ public interface MBDiscussionModel extends AttachedModel, BaseModel<MBDiscussion
 	 *
 	 * @param createDate the create date of this message boards discussion
 	 */
+	@Override
 	public void setCreateDate(Date createDate);
 
 	/**
@@ -183,6 +200,7 @@ public interface MBDiscussionModel extends AttachedModel, BaseModel<MBDiscussion
 	 *
 	 * @return the modified date of this message boards discussion
 	 */
+	@Override
 	public Date getModifiedDate();
 
 	/**
@@ -190,6 +208,7 @@ public interface MBDiscussionModel extends AttachedModel, BaseModel<MBDiscussion
 	 *
 	 * @param modifiedDate the modified date of this message boards discussion
 	 */
+	@Override
 	public void setModifiedDate(Date modifiedDate);
 
 	/**
@@ -197,6 +216,7 @@ public interface MBDiscussionModel extends AttachedModel, BaseModel<MBDiscussion
 	 *
 	 * @return the fully qualified class name of this message boards discussion
 	 */
+	@Override
 	public String getClassName();
 
 	public void setClassName(String className);
@@ -206,6 +226,7 @@ public interface MBDiscussionModel extends AttachedModel, BaseModel<MBDiscussion
 	 *
 	 * @return the class name ID of this message boards discussion
 	 */
+	@Override
 	public long getClassNameId();
 
 	/**
@@ -213,6 +234,7 @@ public interface MBDiscussionModel extends AttachedModel, BaseModel<MBDiscussion
 	 *
 	 * @param classNameId the class name ID of this message boards discussion
 	 */
+	@Override
 	public void setClassNameId(long classNameId);
 
 	/**
@@ -220,6 +242,7 @@ public interface MBDiscussionModel extends AttachedModel, BaseModel<MBDiscussion
 	 *
 	 * @return the class p k of this message boards discussion
 	 */
+	@Override
 	public long getClassPK();
 
 	/**
@@ -227,6 +250,7 @@ public interface MBDiscussionModel extends AttachedModel, BaseModel<MBDiscussion
 	 *
 	 * @param classPK the class p k of this message boards discussion
 	 */
+	@Override
 	public void setClassPK(long classPK);
 
 	/**
@@ -243,41 +267,60 @@ public interface MBDiscussionModel extends AttachedModel, BaseModel<MBDiscussion
 	 */
 	public void setThreadId(long threadId);
 
+	@Override
 	public boolean isNew();
 
+	@Override
 	public void setNew(boolean n);
 
+	@Override
 	public boolean isCachedModel();
 
+	@Override
 	public void setCachedModel(boolean cachedModel);
 
+	@Override
 	public boolean isEscapedModel();
 
+	@Override
 	public Serializable getPrimaryKeyObj();
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj);
 
+	@Override
 	public ExpandoBridge getExpandoBridge();
 
+	@Override
 	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
 
+	@Override
 	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
 
+	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
+	@Override
 	public Object clone();
 
+	@Override
 	public int compareTo(MBDiscussion mbDiscussion);
 
+	@Override
 	public int hashCode();
 
+	@Override
 	public CacheModel<MBDiscussion> toCacheModel();
 
+	@Override
 	public MBDiscussion toEscapedModel();
 
+	@Override
 	public MBDiscussion toUnescapedModel();
 
+	@Override
 	public String toString();
 
+	@Override
 	public String toXmlString();
 }

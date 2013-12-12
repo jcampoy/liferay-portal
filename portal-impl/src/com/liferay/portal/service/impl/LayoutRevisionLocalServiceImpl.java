@@ -45,6 +45,7 @@ import java.util.List;
 public class LayoutRevisionLocalServiceImpl
 	extends LayoutRevisionLocalServiceBaseImpl {
 
+	@Override
 	public LayoutRevision addLayoutRevision(
 			long userId, long layoutSetBranchId, long layoutBranchId,
 			long parentLayoutRevisionId, boolean head, long plid,
@@ -122,9 +123,14 @@ public class LayoutRevisionLocalServiceImpl
 			layoutRevision.getLayoutRevisionId(), layoutRevision,
 			serviceContext);
 
+		StagingUtil.setRecentLayoutRevisionId(
+			user, layoutSetBranchId, plid,
+			layoutRevision.getLayoutRevisionId());
+
 		return layoutRevision;
 	}
 
+	@Override
 	public void deleteLayoutLayoutRevisions(long plid)
 		throws PortalException, SystemException {
 
@@ -161,6 +167,20 @@ public class LayoutRevisionLocalServiceImpl
 			}
 		}
 
+		User user = userPersistence.findByPrimaryKey(
+			layoutRevision.getUserId());
+
+		StagingUtil.deleteRecentLayoutRevisionId(
+			user, layoutRevision.getLayoutSetBranchId(),
+			layoutRevision.getPlid());
+
+		if (layoutRevision.isPending()) {
+			workflowInstanceLinkLocalService.deleteWorkflowInstanceLink(
+				layoutRevision.getCompanyId(), layoutRevision.getGroupId(),
+				LayoutRevision.class.getName(),
+				layoutRevision.getLayoutRevisionId());
+		}
+
 		return layoutRevisionPersistence.remove(layoutRevision);
 	}
 
@@ -174,6 +194,7 @@ public class LayoutRevisionLocalServiceImpl
 		return deleteLayoutRevision(layoutRevision);
 	}
 
+	@Override
 	public void deleteLayoutRevisions(long layoutSetBranchId, long plid)
 		throws PortalException, SystemException {
 
@@ -184,6 +205,7 @@ public class LayoutRevisionLocalServiceImpl
 		}
 	}
 
+	@Override
 	public void deleteLayoutRevisions(
 			long layoutSetBranchId, long layoutBranchId, long plid)
 		throws PortalException, SystemException {
@@ -197,6 +219,7 @@ public class LayoutRevisionLocalServiceImpl
 		}
 	}
 
+	@Override
 	public void deleteLayoutSetBranchLayoutRevisions(long layoutSetBranchId)
 		throws PortalException, SystemException {
 
@@ -209,6 +232,7 @@ public class LayoutRevisionLocalServiceImpl
 		}
 	}
 
+	@Override
 	public LayoutRevision fetchLastLayoutRevision(long plid, boolean head)
 		throws SystemException {
 
@@ -221,6 +245,16 @@ public class LayoutRevisionLocalServiceImpl
 		}
 	}
 
+	@Override
+	public LayoutRevision fetchLayoutRevision(
+			long layoutSetBranchId, boolean head, long plid)
+		throws SystemException {
+
+		return layoutRevisionPersistence.fetchByL_H_P(
+			layoutSetBranchId, head, plid);
+	}
+
+	@Override
 	public List<LayoutRevision> getChildLayoutRevisions(
 			long layoutSetBranchId, long parentLayoutRevisionId, long plid)
 		throws SystemException {
@@ -229,6 +263,7 @@ public class LayoutRevisionLocalServiceImpl
 			layoutSetBranchId, parentLayoutRevisionId, plid);
 	}
 
+	@Override
 	public List<LayoutRevision> getChildLayoutRevisions(
 			long layoutSetBranchId, long parentLayoutRevision, long plid,
 			int start, int end, OrderByComparator orderByComparator)
@@ -239,6 +274,7 @@ public class LayoutRevisionLocalServiceImpl
 			orderByComparator);
 	}
 
+	@Override
 	public int getChildLayoutRevisionsCount(
 			long layoutSetBranchId, long parentLayoutRevision, long plid)
 		throws SystemException {
@@ -247,6 +283,7 @@ public class LayoutRevisionLocalServiceImpl
 			layoutSetBranchId, parentLayoutRevision, plid);
 	}
 
+	@Override
 	public LayoutRevision getLayoutRevision(
 			long layoutSetBranchId, long plid, boolean head)
 		throws PortalException, SystemException {
@@ -255,6 +292,7 @@ public class LayoutRevisionLocalServiceImpl
 			layoutSetBranchId, head, plid);
 	}
 
+	@Override
 	public LayoutRevision getLayoutRevision(
 			long layoutSetBranchId, long layoutBranchId, long plid)
 		throws PortalException, SystemException {
@@ -271,12 +309,14 @@ public class LayoutRevisionLocalServiceImpl
 		throw new NoSuchLayoutRevisionException();
 	}
 
+	@Override
 	public List<LayoutRevision> getLayoutRevisions(long plid)
 		throws SystemException {
 
 		return layoutRevisionPersistence.findByPlid(plid);
 	}
 
+	@Override
 	public List<LayoutRevision> getLayoutRevisions(
 			long layoutSetBranchId, boolean head)
 		throws SystemException {
@@ -284,6 +324,7 @@ public class LayoutRevisionLocalServiceImpl
 		return layoutRevisionPersistence.findByL_H(layoutSetBranchId, head);
 	}
 
+	@Override
 	public List<LayoutRevision> getLayoutRevisions(
 			long layoutSetBranchId, int status)
 		throws SystemException {
@@ -291,6 +332,7 @@ public class LayoutRevisionLocalServiceImpl
 		return layoutRevisionPersistence.findByL_S(layoutSetBranchId, status);
 	}
 
+	@Override
 	public List<LayoutRevision> getLayoutRevisions(
 			long layoutSetBranchId, long plid)
 		throws SystemException {
@@ -298,6 +340,7 @@ public class LayoutRevisionLocalServiceImpl
 		return layoutRevisionPersistence.findByL_P(layoutSetBranchId, plid);
 	}
 
+	@Override
 	public List<LayoutRevision> getLayoutRevisions(
 			long layoutSetBranchId, long plid, int status)
 		throws SystemException {
@@ -306,6 +349,17 @@ public class LayoutRevisionLocalServiceImpl
 			layoutSetBranchId, plid, status);
 	}
 
+	@Override
+	public List<LayoutRevision> getLayoutRevisions(
+			long layoutSetBranchId, long plid, int start, int end,
+			OrderByComparator orderByComparator)
+		throws SystemException {
+
+		return layoutRevisionPersistence.findByL_P(
+			layoutSetBranchId, plid, start, end, orderByComparator);
+	}
+
+	@Override
 	public List<LayoutRevision> getLayoutRevisions(
 			long layoutSetBranchId, long layoutBranchId, long plid, int start,
 			int end, OrderByComparator orderByComparator)
@@ -316,6 +370,7 @@ public class LayoutRevisionLocalServiceImpl
 			orderByComparator);
 	}
 
+	@Override
 	public int getLayoutRevisionsCount(
 			long layoutSetBranchId, long layoutBranchId, long plid)
 		throws SystemException {
@@ -324,6 +379,7 @@ public class LayoutRevisionLocalServiceImpl
 			layoutSetBranchId, layoutBranchId, plid);
 	}
 
+	@Override
 	public LayoutRevision updateLayoutRevision(
 			long userId, long layoutRevisionId, long layoutBranchId,
 			String name, String title, String description, String keywords,
@@ -401,16 +457,18 @@ public class LayoutRevisionLocalServiceImpl
 				layoutRevision, layoutRevision.getParentLayoutRevisionId(),
 				serviceContext);
 
-			StagingUtil.deleteRecentLayoutRevisionId(
-				user, layoutRevision.getLayoutSetBranchId(),
-				layoutRevision.getPlid());
-
 			StagingUtil.setRecentLayoutBranchId(
 				user, layoutRevision.getLayoutSetBranchId(),
 				layoutRevision.getPlid(), layoutRevision.getLayoutBranchId());
 		}
 		else {
-			layoutRevision = oldLayoutRevision;
+			if (_layoutRevisionId.get() > 0) {
+				layoutRevision = layoutRevisionPersistence.findByPrimaryKey(
+					_layoutRevisionId.get());
+			}
+			else {
+				layoutRevision = oldLayoutRevision;
+			}
 
 			layoutRevision.setName(name);
 			layoutRevision.setTitle(title);
@@ -452,6 +510,7 @@ public class LayoutRevisionLocalServiceImpl
 		return layoutRevision;
 	}
 
+	@Override
 	public LayoutRevision updateStatus(
 			long userId, long layoutRevisionId, int status,
 			ServiceContext serviceContext)

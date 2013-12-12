@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.security.pacl.Reflection;
 
 import java.security.Permission;
 
@@ -29,14 +30,13 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import sun.reflect.Reflection;
-
 /**
  * @author Brian Wing Shun Chan
  * @author Raymond Augé
  */
 public class PortalServiceChecker extends BaseChecker {
 
+	@Override
 	public void afterPropertiesSet() {
 		initServices();
 	}
@@ -75,6 +75,7 @@ public class PortalServiceChecker extends BaseChecker {
 		return authorizationProperty;
 	}
 
+	@Override
 	public boolean implies(Permission permission) {
 		PortalServicePermission portalServicePermission =
 			(PortalServicePermission)permission;
@@ -115,7 +116,7 @@ public class PortalServiceChecker extends BaseChecker {
 		String servletContextName, String className, String methodName,
 		Permission permission) {
 
-		int stackIndex = getStackIndex(15, 14);
+		int stackIndex = Reflection.getStackIndex(15, 14);
 
 		Class<?> callerClass = Reflection.getCallerClass(stackIndex);
 

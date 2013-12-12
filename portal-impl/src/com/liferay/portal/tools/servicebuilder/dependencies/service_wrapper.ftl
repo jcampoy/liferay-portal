@@ -1,16 +1,24 @@
 package ${packagePath}.service;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.service.ServiceWrapper;
 
 /**
- * <p>
- * This class is a wrapper for {@link ${entity.name}${sessionTypeName}Service}.
- * </p>
+ * Provides a wrapper for {@link ${entity.name}${sessionTypeName}Service}.
  *
- * @author    ${author}
- * @see       ${entity.name}${sessionTypeName}Service
+ * @author ${author}
+ * @see ${entity.name}${sessionTypeName}Service
+<#if classDeprecated>
+ * @deprecated ${classDeprecatedComment}
+</#if>
  * @generated
  */
+
+<#if pluginName == "">
+	@ProviderType
+</#if>
+
 public class ${entity.name}${sessionTypeName}ServiceWrapper implements ${entity.name}${sessionTypeName}Service, ServiceWrapper<${entity.name}${sessionTypeName}Service> {
 
 	public ${entity.name}${sessionTypeName}ServiceWrapper(${entity.name}${sessionTypeName}Service ${entity.varName}${sessionTypeName}Service) {
@@ -20,6 +28,8 @@ public class ${entity.name}${sessionTypeName}ServiceWrapper implements ${entity.
 	<#list methods as method>
 		<#if !method.isConstructor() && method.isPublic() && serviceBuilder.isCustomMethod(method)>
 			${serviceBuilder.getJavadocComment(method)}
+
+			@Override
 
 			<#if method.name = "dynamicQuery" && (method.parameters?size != 0)>
 				@SuppressWarnings("rawtypes")
@@ -83,10 +93,12 @@ public class ${entity.name}${sessionTypeName}ServiceWrapper implements ${entity.
 		_${entity.varName}${sessionTypeName}Service = ${entity.varName}${sessionTypeName}Service;
 	}
 
+	@Override
 	public ${entity.name}${sessionTypeName}Service getWrappedService() {
 		return _${entity.varName}${sessionTypeName}Service;
 	}
 
+	@Override
 	public void setWrappedService(${entity.name}${sessionTypeName}Service ${entity.varName}${sessionTypeName}Service) {
 		_${entity.varName}${sessionTypeName}Service = ${entity.varName}${sessionTypeName}Service;
 	}

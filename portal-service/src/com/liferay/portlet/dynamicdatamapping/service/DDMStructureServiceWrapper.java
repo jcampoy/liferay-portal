@@ -14,17 +14,18 @@
 
 package com.liferay.portlet.dynamicdatamapping.service;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.service.ServiceWrapper;
 
 /**
- * <p>
- * This class is a wrapper for {@link DDMStructureService}.
- * </p>
+ * Provides a wrapper for {@link DDMStructureService}.
  *
- * @author    Brian Wing Shun Chan
- * @see       DDMStructureService
+ * @author Brian Wing Shun Chan
+ * @see DDMStructureService
  * @generated
  */
+@ProviderType
 public class DDMStructureServiceWrapper implements DDMStructureService,
 	ServiceWrapper<DDMStructureService> {
 	public DDMStructureServiceWrapper(DDMStructureService ddmStructureService) {
@@ -36,6 +37,7 @@ public class DDMStructureServiceWrapper implements DDMStructureService,
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _ddmStructureService.getBeanIdentifier();
 	}
@@ -45,6 +47,7 @@ public class DDMStructureServiceWrapper implements DDMStructureService,
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_ddmStructureService.setBeanIdentifier(beanIdentifier);
 	}
@@ -70,6 +73,7 @@ public class DDMStructureServiceWrapper implements DDMStructureService,
 	if the XSD was not well-formed, or if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.dynamicdatamapping.model.DDMStructure addStructure(
 		long userId, long groupId, long classNameId,
 		java.util.Map<java.util.Locale, java.lang.String> nameMap,
@@ -110,6 +114,7 @@ public class DDMStructureServiceWrapper implements DDMStructureService,
 	exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.dynamicdatamapping.model.DDMStructure addStructure(
 		long groupId, long parentStructureId, long classNameId,
 		java.lang.String structureKey,
@@ -154,6 +159,7 @@ public class DDMStructureServiceWrapper implements DDMStructureService,
 	if the XSD was not well-formed, or if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.dynamicdatamapping.model.DDMStructure addStructure(
 		long userId, long groupId, java.lang.String parentStructureKey,
 		long classNameId, java.lang.String structureKey,
@@ -185,6 +191,7 @@ public class DDMStructureServiceWrapper implements DDMStructureService,
 	structure or if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.dynamicdatamapping.model.DDMStructure copyStructure(
 		long structureId,
 		java.util.Map<java.util.Locale, java.lang.String> nameMap,
@@ -196,6 +203,7 @@ public class DDMStructureServiceWrapper implements DDMStructureService,
 			descriptionMap, serviceContext);
 	}
 
+	@Override
 	public com.liferay.portlet.dynamicdatamapping.model.DDMStructure copyStructure(
 		long structureId,
 		com.liferay.portal.service.ServiceContext serviceContext)
@@ -217,6 +225,7 @@ public class DDMStructureServiceWrapper implements DDMStructureService,
 	structure or if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void deleteStructure(long structureId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -237,6 +246,7 @@ public class DDMStructureServiceWrapper implements DDMStructureService,
 	structure or if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.dynamicdatamapping.model.DDMStructure fetchStructure(
 		long groupId, long classNameId, java.lang.String structureKey)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -254,6 +264,7 @@ public class DDMStructureServiceWrapper implements DDMStructureService,
 	structure or if a structure with the ID could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.dynamicdatamapping.model.DDMStructure getStructure(
 		long structureId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -274,6 +285,7 @@ public class DDMStructureServiceWrapper implements DDMStructureService,
 	structure or if a matching structure could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.dynamicdatamapping.model.DDMStructure getStructure(
 		long groupId, long classNameId, java.lang.String structureKey)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -303,6 +315,7 @@ public class DDMStructureServiceWrapper implements DDMStructureService,
 	structure or if a matching structure could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.dynamicdatamapping.model.DDMStructure getStructure(
 		long groupId, long classNameId, java.lang.String structureKey,
 		boolean includeGlobalStructures)
@@ -320,6 +333,7 @@ public class DDMStructureServiceWrapper implements DDMStructureService,
 	* @return the structures in the group that the user has permission to view
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMStructure> getStructures(
 		long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -334,6 +348,7 @@ public class DDMStructureServiceWrapper implements DDMStructureService,
 	* @return the structures in the groups that the user has permission to view
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMStructure> getStructures(
 		long[] groupIds)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -369,6 +384,7 @@ public class DDMStructureServiceWrapper implements DDMStructureService,
 	* @return the range of matching structures ordered by the comparator
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMStructure> search(
 		long companyId, long[] groupIds, long[] classNameIds,
 		java.lang.String keywords, int start, int end,
@@ -413,6 +429,7 @@ public class DDMStructureServiceWrapper implements DDMStructureService,
 	* @return the range of matching structures ordered by the comparator
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMStructure> search(
 		long companyId, long[] groupIds, long[] classNameIds,
 		java.lang.String name, java.lang.String description,
@@ -438,6 +455,7 @@ public class DDMStructureServiceWrapper implements DDMStructureService,
 	* @return the number of matching structures
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int searchCount(long companyId, long[] groupIds,
 		long[] classNameIds, java.lang.String keywords)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -465,6 +483,7 @@ public class DDMStructureServiceWrapper implements DDMStructureService,
 	* @return the number of matching structures
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int searchCount(long companyId, long[] groupIds,
 		long[] classNameIds, java.lang.String name,
 		java.lang.String description, java.lang.String storageType, int type,
@@ -495,6 +514,7 @@ public class DDMStructureServiceWrapper implements DDMStructureService,
 	structure or if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.dynamicdatamapping.model.DDMStructure updateStructure(
 		long groupId, long parentStructureId, long classNameId,
 		java.lang.String structureKey,
@@ -526,6 +546,7 @@ public class DDMStructureServiceWrapper implements DDMStructureService,
 	structure or if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portlet.dynamicdatamapping.model.DDMStructure updateStructure(
 		long structureId, long parentStructureId,
 		java.util.Map<java.util.Locale, java.lang.String> nameMap,
@@ -553,10 +574,12 @@ public class DDMStructureServiceWrapper implements DDMStructureService,
 		_ddmStructureService = ddmStructureService;
 	}
 
+	@Override
 	public DDMStructureService getWrappedService() {
 		return _ddmStructureService;
 	}
 
+	@Override
 	public void setWrappedService(DDMStructureService ddmStructureService) {
 		_ddmStructureService = ddmStructureService;
 	}

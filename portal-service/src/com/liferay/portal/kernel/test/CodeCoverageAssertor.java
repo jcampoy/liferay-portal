@@ -51,6 +51,7 @@ public class CodeCoverageAssertor implements TestRule {
 	public void appendAssertClasses(List<Class<?>> assertClasses) {
 	}
 
+	@Override
 	public Statement apply(
 		final Statement statement, final Description description) {
 
@@ -172,7 +173,6 @@ public class CodeCoverageAssertor implements TestRule {
 		catch (Exception e) {
 			throw new ExceptionInInitializerError(e);
 		}
-
 	}
 
 }

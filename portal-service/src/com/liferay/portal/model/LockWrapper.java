@@ -14,6 +14,10 @@
 
 package com.liferay.portal.model;
 
+import aQute.bnd.annotation.ProviderType;
+
+import com.liferay.portal.kernel.util.Validator;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,23 +27,27 @@ import java.util.Map;
  * This class is a wrapper for {@link Lock}.
  * </p>
  *
- * @author    Brian Wing Shun Chan
- * @see       Lock
+ * @author Brian Wing Shun Chan
+ * @see Lock
  * @generated
  */
+@ProviderType
 public class LockWrapper implements Lock, ModelWrapper<Lock> {
 	public LockWrapper(Lock lock) {
 		_lock = lock;
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return Lock.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return Lock.class.getName();
 	}
 
+	@Override
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
@@ -58,6 +66,7 @@ public class LockWrapper implements Lock, ModelWrapper<Lock> {
 		return attributes;
 	}
 
+	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
 		String uuid = (String)attributes.get("uuid");
 
@@ -131,6 +140,7 @@ public class LockWrapper implements Lock, ModelWrapper<Lock> {
 	*
 	* @return the primary key of this lock
 	*/
+	@Override
 	public long getPrimaryKey() {
 		return _lock.getPrimaryKey();
 	}
@@ -140,6 +150,7 @@ public class LockWrapper implements Lock, ModelWrapper<Lock> {
 	*
 	* @param primaryKey the primary key of this lock
 	*/
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_lock.setPrimaryKey(primaryKey);
 	}
@@ -149,6 +160,7 @@ public class LockWrapper implements Lock, ModelWrapper<Lock> {
 	*
 	* @return the uuid of this lock
 	*/
+	@Override
 	public java.lang.String getUuid() {
 		return _lock.getUuid();
 	}
@@ -158,6 +170,7 @@ public class LockWrapper implements Lock, ModelWrapper<Lock> {
 	*
 	* @param uuid the uuid of this lock
 	*/
+	@Override
 	public void setUuid(java.lang.String uuid) {
 		_lock.setUuid(uuid);
 	}
@@ -167,6 +180,7 @@ public class LockWrapper implements Lock, ModelWrapper<Lock> {
 	*
 	* @return the lock ID of this lock
 	*/
+	@Override
 	public long getLockId() {
 		return _lock.getLockId();
 	}
@@ -176,6 +190,7 @@ public class LockWrapper implements Lock, ModelWrapper<Lock> {
 	*
 	* @param lockId the lock ID of this lock
 	*/
+	@Override
 	public void setLockId(long lockId) {
 		_lock.setLockId(lockId);
 	}
@@ -185,6 +200,7 @@ public class LockWrapper implements Lock, ModelWrapper<Lock> {
 	*
 	* @return the company ID of this lock
 	*/
+	@Override
 	public long getCompanyId() {
 		return _lock.getCompanyId();
 	}
@@ -194,6 +210,7 @@ public class LockWrapper implements Lock, ModelWrapper<Lock> {
 	*
 	* @param companyId the company ID of this lock
 	*/
+	@Override
 	public void setCompanyId(long companyId) {
 		_lock.setCompanyId(companyId);
 	}
@@ -203,6 +220,7 @@ public class LockWrapper implements Lock, ModelWrapper<Lock> {
 	*
 	* @return the user ID of this lock
 	*/
+	@Override
 	public long getUserId() {
 		return _lock.getUserId();
 	}
@@ -212,6 +230,7 @@ public class LockWrapper implements Lock, ModelWrapper<Lock> {
 	*
 	* @param userId the user ID of this lock
 	*/
+	@Override
 	public void setUserId(long userId) {
 		_lock.setUserId(userId);
 	}
@@ -222,6 +241,7 @@ public class LockWrapper implements Lock, ModelWrapper<Lock> {
 	* @return the user uuid of this lock
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.lang.String getUserUuid()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _lock.getUserUuid();
@@ -232,6 +252,7 @@ public class LockWrapper implements Lock, ModelWrapper<Lock> {
 	*
 	* @param userUuid the user uuid of this lock
 	*/
+	@Override
 	public void setUserUuid(java.lang.String userUuid) {
 		_lock.setUserUuid(userUuid);
 	}
@@ -241,6 +262,7 @@ public class LockWrapper implements Lock, ModelWrapper<Lock> {
 	*
 	* @return the user name of this lock
 	*/
+	@Override
 	public java.lang.String getUserName() {
 		return _lock.getUserName();
 	}
@@ -250,6 +272,7 @@ public class LockWrapper implements Lock, ModelWrapper<Lock> {
 	*
 	* @param userName the user name of this lock
 	*/
+	@Override
 	public void setUserName(java.lang.String userName) {
 		_lock.setUserName(userName);
 	}
@@ -259,6 +282,7 @@ public class LockWrapper implements Lock, ModelWrapper<Lock> {
 	*
 	* @return the create date of this lock
 	*/
+	@Override
 	public java.util.Date getCreateDate() {
 		return _lock.getCreateDate();
 	}
@@ -268,6 +292,7 @@ public class LockWrapper implements Lock, ModelWrapper<Lock> {
 	*
 	* @param createDate the create date of this lock
 	*/
+	@Override
 	public void setCreateDate(java.util.Date createDate) {
 		_lock.setCreateDate(createDate);
 	}
@@ -277,6 +302,7 @@ public class LockWrapper implements Lock, ModelWrapper<Lock> {
 	*
 	* @return the class name of this lock
 	*/
+	@Override
 	public java.lang.String getClassName() {
 		return _lock.getClassName();
 	}
@@ -286,6 +312,7 @@ public class LockWrapper implements Lock, ModelWrapper<Lock> {
 	*
 	* @param className the class name of this lock
 	*/
+	@Override
 	public void setClassName(java.lang.String className) {
 		_lock.setClassName(className);
 	}
@@ -295,6 +322,7 @@ public class LockWrapper implements Lock, ModelWrapper<Lock> {
 	*
 	* @return the key of this lock
 	*/
+	@Override
 	public java.lang.String getKey() {
 		return _lock.getKey();
 	}
@@ -304,6 +332,7 @@ public class LockWrapper implements Lock, ModelWrapper<Lock> {
 	*
 	* @param key the key of this lock
 	*/
+	@Override
 	public void setKey(java.lang.String key) {
 		_lock.setKey(key);
 	}
@@ -313,6 +342,7 @@ public class LockWrapper implements Lock, ModelWrapper<Lock> {
 	*
 	* @return the owner of this lock
 	*/
+	@Override
 	public java.lang.String getOwner() {
 		return _lock.getOwner();
 	}
@@ -322,6 +352,7 @@ public class LockWrapper implements Lock, ModelWrapper<Lock> {
 	*
 	* @param owner the owner of this lock
 	*/
+	@Override
 	public void setOwner(java.lang.String owner) {
 		_lock.setOwner(owner);
 	}
@@ -331,6 +362,7 @@ public class LockWrapper implements Lock, ModelWrapper<Lock> {
 	*
 	* @return the inheritable of this lock
 	*/
+	@Override
 	public boolean getInheritable() {
 		return _lock.getInheritable();
 	}
@@ -340,6 +372,7 @@ public class LockWrapper implements Lock, ModelWrapper<Lock> {
 	*
 	* @return <code>true</code> if this lock is inheritable; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isInheritable() {
 		return _lock.isInheritable();
 	}
@@ -349,6 +382,7 @@ public class LockWrapper implements Lock, ModelWrapper<Lock> {
 	*
 	* @param inheritable the inheritable of this lock
 	*/
+	@Override
 	public void setInheritable(boolean inheritable) {
 		_lock.setInheritable(inheritable);
 	}
@@ -358,6 +392,7 @@ public class LockWrapper implements Lock, ModelWrapper<Lock> {
 	*
 	* @return the expiration date of this lock
 	*/
+	@Override
 	public java.util.Date getExpirationDate() {
 		return _lock.getExpirationDate();
 	}
@@ -367,52 +402,64 @@ public class LockWrapper implements Lock, ModelWrapper<Lock> {
 	*
 	* @param expirationDate the expiration date of this lock
 	*/
+	@Override
 	public void setExpirationDate(java.util.Date expirationDate) {
 		_lock.setExpirationDate(expirationDate);
 	}
 
+	@Override
 	public boolean isNew() {
 		return _lock.isNew();
 	}
 
+	@Override
 	public void setNew(boolean n) {
 		_lock.setNew(n);
 	}
 
+	@Override
 	public boolean isCachedModel() {
 		return _lock.isCachedModel();
 	}
 
+	@Override
 	public void setCachedModel(boolean cachedModel) {
 		_lock.setCachedModel(cachedModel);
 	}
 
+	@Override
 	public boolean isEscapedModel() {
 		return _lock.isEscapedModel();
 	}
 
+	@Override
 	public java.io.Serializable getPrimaryKeyObj() {
 		return _lock.getPrimaryKeyObj();
 	}
 
+	@Override
 	public void setPrimaryKeyObj(java.io.Serializable primaryKeyObj) {
 		_lock.setPrimaryKeyObj(primaryKeyObj);
 	}
 
+	@Override
 	public com.liferay.portlet.expando.model.ExpandoBridge getExpandoBridge() {
 		return _lock.getExpandoBridge();
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.model.BaseModel<?> baseModel) {
 		_lock.setExpandoBridgeAttributes(baseModel);
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
 		_lock.setExpandoBridgeAttributes(expandoBridge);
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_lock.setExpandoBridgeAttributes(serviceContext);
@@ -423,6 +470,7 @@ public class LockWrapper implements Lock, ModelWrapper<Lock> {
 		return new LockWrapper((Lock)_lock.clone());
 	}
 
+	@Override
 	public int compareTo(com.liferay.portal.model.Lock lock) {
 		return _lock.compareTo(lock);
 	}
@@ -432,14 +480,17 @@ public class LockWrapper implements Lock, ModelWrapper<Lock> {
 		return _lock.hashCode();
 	}
 
+	@Override
 	public com.liferay.portal.model.CacheModel<com.liferay.portal.model.Lock> toCacheModel() {
 		return _lock.toCacheModel();
 	}
 
+	@Override
 	public com.liferay.portal.model.Lock toEscapedModel() {
 		return new LockWrapper(_lock.toEscapedModel());
 	}
 
+	@Override
 	public com.liferay.portal.model.Lock toUnescapedModel() {
 		return new LockWrapper(_lock.toUnescapedModel());
 	}
@@ -449,25 +500,49 @@ public class LockWrapper implements Lock, ModelWrapper<Lock> {
 		return _lock.toString();
 	}
 
+	@Override
 	public java.lang.String toXmlString() {
 		return _lock.toXmlString();
 	}
 
+	@Override
 	public void persist()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_lock.persist();
 	}
 
+	@Override
 	public long getExpirationTime() {
 		return _lock.getExpirationTime();
 	}
 
+	@Override
 	public boolean isExpired() {
 		return _lock.isExpired();
 	}
 
+	@Override
 	public boolean isNeverExpires() {
 		return _lock.isNeverExpires();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof LockWrapper)) {
+			return false;
+		}
+
+		LockWrapper lockWrapper = (LockWrapper)obj;
+
+		if (Validator.equals(_lock, lockWrapper._lock)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -477,10 +552,12 @@ public class LockWrapper implements Lock, ModelWrapper<Lock> {
 		return _lock;
 	}
 
+	@Override
 	public Lock getWrappedModel() {
 		return _lock;
 	}
 
+	@Override
 	public void resetOriginalValues() {
 		_lock.resetOriginalValues();
 	}

@@ -14,17 +14,18 @@
 
 package com.liferay.portlet.flags.service;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.service.ServiceWrapper;
 
 /**
- * <p>
- * This class is a wrapper for {@link FlagsEntryService}.
- * </p>
+ * Provides a wrapper for {@link FlagsEntryService}.
  *
- * @author    Brian Wing Shun Chan
- * @see       FlagsEntryService
+ * @author Brian Wing Shun Chan
+ * @see FlagsEntryService
  * @generated
  */
+@ProviderType
 public class FlagsEntryServiceWrapper implements FlagsEntryService,
 	ServiceWrapper<FlagsEntryService> {
 	public FlagsEntryServiceWrapper(FlagsEntryService flagsEntryService) {
@@ -36,6 +37,7 @@ public class FlagsEntryServiceWrapper implements FlagsEntryService,
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _flagsEntryService.getBeanIdentifier();
 	}
@@ -45,10 +47,12 @@ public class FlagsEntryServiceWrapper implements FlagsEntryService,
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_flagsEntryService.setBeanIdentifier(beanIdentifier);
 	}
 
+	@Override
 	public void addEntry(java.lang.String className, long classPK,
 		java.lang.String reporterEmailAddress, long reportedUserId,
 		java.lang.String contentTitle, java.lang.String contentURL,
@@ -72,10 +76,12 @@ public class FlagsEntryServiceWrapper implements FlagsEntryService,
 		_flagsEntryService = flagsEntryService;
 	}
 
+	@Override
 	public FlagsEntryService getWrappedService() {
 		return _flagsEntryService;
 	}
 
+	@Override
 	public void setWrappedService(FlagsEntryService flagsEntryService) {
 		_flagsEntryService = flagsEntryService;
 	}

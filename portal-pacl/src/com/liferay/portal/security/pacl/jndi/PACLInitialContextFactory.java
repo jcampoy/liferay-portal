@@ -25,6 +25,7 @@ import java.util.Hashtable;
 
 import javax.naming.Context;
 import javax.naming.NamingException;
+import javax.naming.ldap.LdapContext;
 import javax.naming.spi.InitialContextFactory;
 import javax.naming.spi.InitialContextFactoryBuilder;
 
@@ -44,6 +45,7 @@ public class PACLInitialContextFactory implements InitialContextFactory {
 		}
 	}
 
+	@Override
 	public Context getInitialContext(Hashtable<?, ?> environment)
 		throws NamingException {
 
@@ -117,6 +119,28 @@ public class PACLInitialContextFactory implements InitialContextFactory {
 		}
 
 		Context context = initialContextFactory.getInitialContext(environment);
+
+		// In Websphere the javax.naming.ldap.LdapContext interface on the
+		// instance comes from a different class loader, and so the instanceof
+		// check fails. To wokaround this, we check by the class name.
+
+		Class<? extends Context> clazz = context.getClass();
+
+		Class<?>[] interfaces = clazz.getInterfaces();
+
+		boolean ldapContext = false;
+
+		for (Class<?> interfaceClass : interfaces) {
+			String interfaceClassName = interfaceClass.getName();
+
+			if (interfaceClassName.equals(LdapContext.class.getName())) {
+				ldapContext = true;
+			}
+		}
+
+		if ((context instanceof LdapContext) && !ldapContext) {
+			return context;
+		}
 
 		context = new SchemeAwareContextWrapper(context);
 

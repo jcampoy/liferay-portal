@@ -136,26 +136,32 @@ public class RegionModelImpl extends BaseModelImpl<Region>
 	public RegionModelImpl() {
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _regionId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setRegionId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
 		return _regionId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return Region.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return Region.class.getName();
 	}
@@ -207,19 +213,23 @@ public class RegionModelImpl extends BaseModelImpl<Region>
 	}
 
 	@JSON
+	@Override
 	public long getRegionId() {
 		return _regionId;
 	}
 
+	@Override
 	public void setRegionId(long regionId) {
 		_regionId = regionId;
 	}
 
 	@JSON
+	@Override
 	public long getCountryId() {
 		return _countryId;
 	}
 
+	@Override
 	public void setCountryId(long countryId) {
 		_columnBitmask |= COUNTRYID_COLUMN_BITMASK;
 
@@ -237,6 +247,7 @@ public class RegionModelImpl extends BaseModelImpl<Region>
 	}
 
 	@JSON
+	@Override
 	public String getRegionCode() {
 		if (_regionCode == null) {
 			return StringPool.BLANK;
@@ -246,6 +257,7 @@ public class RegionModelImpl extends BaseModelImpl<Region>
 		}
 	}
 
+	@Override
 	public void setRegionCode(String regionCode) {
 		_columnBitmask |= REGIONCODE_COLUMN_BITMASK;
 
@@ -261,6 +273,7 @@ public class RegionModelImpl extends BaseModelImpl<Region>
 	}
 
 	@JSON
+	@Override
 	public String getName() {
 		if (_name == null) {
 			return StringPool.BLANK;
@@ -270,6 +283,7 @@ public class RegionModelImpl extends BaseModelImpl<Region>
 		}
 	}
 
+	@Override
 	public void setName(String name) {
 		_columnBitmask = -1L;
 
@@ -277,14 +291,17 @@ public class RegionModelImpl extends BaseModelImpl<Region>
 	}
 
 	@JSON
+	@Override
 	public boolean getActive() {
 		return _active;
 	}
 
+	@Override
 	public boolean isActive() {
 		return _active;
 	}
 
+	@Override
 	public void setActive(boolean active) {
 		_columnBitmask |= ACTIVE_COLUMN_BITMASK;
 
@@ -343,6 +360,7 @@ public class RegionModelImpl extends BaseModelImpl<Region>
 		return regionImpl;
 	}
 
+	@Override
 	public int compareTo(Region region) {
 		int value = 0;
 
@@ -357,18 +375,15 @@ public class RegionModelImpl extends BaseModelImpl<Region>
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof Region)) {
 			return false;
 		}
 
-		Region region = null;
-
-		try {
-			region = (Region)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		Region region = (Region)obj;
 
 		long primaryKey = region.getPrimaryKey();
 
@@ -450,6 +465,7 @@ public class RegionModelImpl extends BaseModelImpl<Region>
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(19);
 

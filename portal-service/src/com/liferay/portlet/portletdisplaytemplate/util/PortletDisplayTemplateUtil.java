@@ -15,8 +15,8 @@
 package com.liferay.portlet.portletdisplaytemplate.util;
 
 import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
+import com.liferay.portal.kernel.template.TemplateHandler;
 import com.liferay.portal.kernel.template.TemplateVariableGroup;
-import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.dynamicdatamapping.model.DDMTemplate;
 
 import java.util.List;
@@ -36,8 +36,12 @@ public class PortletDisplayTemplateUtil {
 			groupId, displayStyle);
 	}
 
-	public static long getDDMTemplateGroupId(ThemeDisplay themeDisplay) {
-		return getPortletDisplayTemplate().getDDMTemplateGroupId(themeDisplay);
+	public static long getDDMTemplateGroupId(long groupId) {
+		return getPortletDisplayTemplate().getDDMTemplateGroupId(groupId);
+	}
+
+	public static String getDDMTemplateUuid(String displayStyle) {
+		return getPortletDisplayTemplate().getDDMTemplateUuid(displayStyle);
 	}
 
 	public static PortletDisplayTemplate getPortletDisplayTemplate() {
@@ -48,17 +52,21 @@ public class PortletDisplayTemplateUtil {
 	}
 
 	public static long getPortletDisplayTemplateDDMTemplateId(
-		ThemeDisplay themeDisplay, String displayStyle) {
+		long groupId, String displayStyle) {
 
 		return
 			getPortletDisplayTemplate().getPortletDisplayTemplateDDMTemplateId(
-				themeDisplay, displayStyle);
+				groupId, displayStyle);
+	}
+
+	public static List<TemplateHandler> getPortletDisplayTemplateHandlers() {
+		return getPortletDisplayTemplate().getPortletDisplayTemplateHandlers();
 	}
 
 	public static Map<String, TemplateVariableGroup>
-		getTemplateVariableGroups() {
+		getTemplateVariableGroups(String language) {
 
-		return getPortletDisplayTemplate().getTemplateVariableGroups();
+		return getPortletDisplayTemplate().getTemplateVariableGroups(language);
 	}
 
 	public static String renderDDMTemplate(

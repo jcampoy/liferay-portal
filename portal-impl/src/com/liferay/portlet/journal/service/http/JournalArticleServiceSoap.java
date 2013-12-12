@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.journal.service.http;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ListUtil;
@@ -27,13 +29,11 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * <p>
- * This class provides a SOAP utility for the
+ * Provides the SOAP utility for the
  * {@link com.liferay.portlet.journal.service.JournalArticleServiceUtil} service utility. The
  * static methods of this class calls the same methods of the service utility.
  * However, the signatures are different because it is difficult for SOAP to
  * support certain types.
- * </p>
  *
  * <p>
  * ServiceBuilder follows certain rules in translating the methods. For example,
@@ -62,12 +62,13 @@ import java.util.Map;
  * The SOAP utility is only generated for remote services.
  * </p>
  *
- * @author    Brian Wing Shun Chan
- * @see       JournalArticleServiceHttp
- * @see       com.liferay.portlet.journal.model.JournalArticleSoap
- * @see       com.liferay.portlet.journal.service.JournalArticleServiceUtil
+ * @author Brian Wing Shun Chan
+ * @see JournalArticleServiceHttp
+ * @see com.liferay.portlet.journal.model.JournalArticleSoap
+ * @see com.liferay.portlet.journal.service.JournalArticleServiceUtil
  * @generated
  */
+@ProviderType
 public class JournalArticleServiceSoap {
 	/**
 	* Adds a web content article without any images.
@@ -759,6 +760,21 @@ public class JournalArticleServiceSoap {
 		}
 	}
 
+	public static int getArticlesCount(long groupId, long folderId, int status)
+		throws RemoteException {
+		try {
+			int returnValue = JournalArticleServiceUtil.getArticlesCount(groupId,
+					folderId, status);
+
+			return returnValue;
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
 	/**
 	* Returns the number of web content articles matching the group and article
 	* ID.
@@ -895,6 +911,25 @@ public class JournalArticleServiceSoap {
 		}
 	}
 
+	public static com.liferay.portlet.journal.model.JournalArticleSoap[] getGroupArticles(
+		long groupId, long userId, long rootFolderId, int status, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws RemoteException {
+		try {
+			java.util.List<com.liferay.portlet.journal.model.JournalArticle> returnValue =
+				JournalArticleServiceUtil.getGroupArticles(groupId, userId,
+					rootFolderId, status, start, end, orderByComparator);
+
+			return com.liferay.portlet.journal.model.JournalArticleSoap.toSoapModels(returnValue);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
 	/**
 	* Returns an ordered range of all the web content articles matching the
 	* group, user, the root folder or any of its subfolders.
@@ -953,6 +988,21 @@ public class JournalArticleServiceSoap {
 		try {
 			int returnValue = JournalArticleServiceUtil.getGroupArticlesCount(groupId,
 					userId, rootFolderId);
+
+			return returnValue;
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	public static int getGroupArticlesCount(long groupId, long userId,
+		long rootFolderId, int status) throws RemoteException {
+		try {
+			int returnValue = JournalArticleServiceUtil.getGroupArticlesCount(groupId,
+					userId, rootFolderId, status);
 
 			return returnValue;
 		}

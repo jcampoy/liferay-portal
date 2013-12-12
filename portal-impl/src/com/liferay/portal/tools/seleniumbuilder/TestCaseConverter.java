@@ -28,13 +28,25 @@ public class TestCaseConverter extends BaseConverter {
 	public void convert(String testCaseName) throws Exception {
 		Map<String, Object> context = getContext();
 
+		context.put("blockLevelStack", new FreeMarkerStack());
+		context.put("elementsStack", new FreeMarkerStack());
+		context.put("ifTypeStack", new FreeMarkerStack());
+		context.put("logicalOperatorElementStack", new FreeMarkerStack());
+		context.put("macroNameStack", new FreeMarkerStack());
+		context.put("testCaseNameStack", new FreeMarkerStack());
 		context.put("testCaseName", testCaseName);
 
-		String content = processTemplate("test_case.ftl", context);
+		String javaContent = processTemplate("test_case.ftl", context);
 
 		seleniumBuilderFileUtil.writeFile(
 			seleniumBuilderContext.getTestCaseJavaFileName(testCaseName),
-			content, true);
+			javaContent, true);
+
+		String htmlContent = processTemplate("test_case_html.ftl", context);
+
+		seleniumBuilderFileUtil.writeFile(
+			seleniumBuilderContext.getTestCaseHTMLFileName(testCaseName),
+			htmlContent, false);
 	}
 
 }

@@ -14,6 +14,10 @@
 
 package com.liferay.portal.model;
 
+import aQute.bnd.annotation.ProviderType;
+
+import com.liferay.portal.kernel.util.Validator;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,24 +26,28 @@ import java.util.Map;
  * This class is a wrapper for {@link PortalPreferences}.
  * </p>
  *
- * @author    Brian Wing Shun Chan
- * @see       PortalPreferences
+ * @author Brian Wing Shun Chan
+ * @see PortalPreferences
  * @generated
  */
+@ProviderType
 public class PortalPreferencesWrapper implements PortalPreferences,
 	ModelWrapper<PortalPreferences> {
 	public PortalPreferencesWrapper(PortalPreferences portalPreferences) {
 		_portalPreferences = portalPreferences;
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return PortalPreferences.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return PortalPreferences.class.getName();
 	}
 
+	@Override
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
@@ -51,6 +59,7 @@ public class PortalPreferencesWrapper implements PortalPreferences,
 		return attributes;
 	}
 
+	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
 		Long portalPreferencesId = (Long)attributes.get("portalPreferencesId");
 
@@ -82,6 +91,7 @@ public class PortalPreferencesWrapper implements PortalPreferences,
 	*
 	* @return the primary key of this portal preferences
 	*/
+	@Override
 	public long getPrimaryKey() {
 		return _portalPreferences.getPrimaryKey();
 	}
@@ -91,6 +101,7 @@ public class PortalPreferencesWrapper implements PortalPreferences,
 	*
 	* @param primaryKey the primary key of this portal preferences
 	*/
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_portalPreferences.setPrimaryKey(primaryKey);
 	}
@@ -100,6 +111,7 @@ public class PortalPreferencesWrapper implements PortalPreferences,
 	*
 	* @return the portal preferences ID of this portal preferences
 	*/
+	@Override
 	public long getPortalPreferencesId() {
 		return _portalPreferences.getPortalPreferencesId();
 	}
@@ -109,6 +121,7 @@ public class PortalPreferencesWrapper implements PortalPreferences,
 	*
 	* @param portalPreferencesId the portal preferences ID of this portal preferences
 	*/
+	@Override
 	public void setPortalPreferencesId(long portalPreferencesId) {
 		_portalPreferences.setPortalPreferencesId(portalPreferencesId);
 	}
@@ -118,6 +131,7 @@ public class PortalPreferencesWrapper implements PortalPreferences,
 	*
 	* @return the owner ID of this portal preferences
 	*/
+	@Override
 	public long getOwnerId() {
 		return _portalPreferences.getOwnerId();
 	}
@@ -127,6 +141,7 @@ public class PortalPreferencesWrapper implements PortalPreferences,
 	*
 	* @param ownerId the owner ID of this portal preferences
 	*/
+	@Override
 	public void setOwnerId(long ownerId) {
 		_portalPreferences.setOwnerId(ownerId);
 	}
@@ -136,6 +151,7 @@ public class PortalPreferencesWrapper implements PortalPreferences,
 	*
 	* @return the owner type of this portal preferences
 	*/
+	@Override
 	public int getOwnerType() {
 		return _portalPreferences.getOwnerType();
 	}
@@ -145,6 +161,7 @@ public class PortalPreferencesWrapper implements PortalPreferences,
 	*
 	* @param ownerType the owner type of this portal preferences
 	*/
+	@Override
 	public void setOwnerType(int ownerType) {
 		_portalPreferences.setOwnerType(ownerType);
 	}
@@ -154,6 +171,7 @@ public class PortalPreferencesWrapper implements PortalPreferences,
 	*
 	* @return the preferences of this portal preferences
 	*/
+	@Override
 	public java.lang.String getPreferences() {
 		return _portalPreferences.getPreferences();
 	}
@@ -163,52 +181,64 @@ public class PortalPreferencesWrapper implements PortalPreferences,
 	*
 	* @param preferences the preferences of this portal preferences
 	*/
+	@Override
 	public void setPreferences(java.lang.String preferences) {
 		_portalPreferences.setPreferences(preferences);
 	}
 
+	@Override
 	public boolean isNew() {
 		return _portalPreferences.isNew();
 	}
 
+	@Override
 	public void setNew(boolean n) {
 		_portalPreferences.setNew(n);
 	}
 
+	@Override
 	public boolean isCachedModel() {
 		return _portalPreferences.isCachedModel();
 	}
 
+	@Override
 	public void setCachedModel(boolean cachedModel) {
 		_portalPreferences.setCachedModel(cachedModel);
 	}
 
+	@Override
 	public boolean isEscapedModel() {
 		return _portalPreferences.isEscapedModel();
 	}
 
+	@Override
 	public java.io.Serializable getPrimaryKeyObj() {
 		return _portalPreferences.getPrimaryKeyObj();
 	}
 
+	@Override
 	public void setPrimaryKeyObj(java.io.Serializable primaryKeyObj) {
 		_portalPreferences.setPrimaryKeyObj(primaryKeyObj);
 	}
 
+	@Override
 	public com.liferay.portlet.expando.model.ExpandoBridge getExpandoBridge() {
 		return _portalPreferences.getExpandoBridge();
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.model.BaseModel<?> baseModel) {
 		_portalPreferences.setExpandoBridgeAttributes(baseModel);
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
 		_portalPreferences.setExpandoBridgeAttributes(expandoBridge);
 	}
 
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_portalPreferences.setExpandoBridgeAttributes(serviceContext);
@@ -219,6 +249,7 @@ public class PortalPreferencesWrapper implements PortalPreferences,
 		return new PortalPreferencesWrapper((PortalPreferences)_portalPreferences.clone());
 	}
 
+	@Override
 	public int compareTo(
 		com.liferay.portal.model.PortalPreferences portalPreferences) {
 		return _portalPreferences.compareTo(portalPreferences);
@@ -229,14 +260,17 @@ public class PortalPreferencesWrapper implements PortalPreferences,
 		return _portalPreferences.hashCode();
 	}
 
+	@Override
 	public com.liferay.portal.model.CacheModel<com.liferay.portal.model.PortalPreferences> toCacheModel() {
 		return _portalPreferences.toCacheModel();
 	}
 
+	@Override
 	public com.liferay.portal.model.PortalPreferences toEscapedModel() {
 		return new PortalPreferencesWrapper(_portalPreferences.toEscapedModel());
 	}
 
+	@Override
 	public com.liferay.portal.model.PortalPreferences toUnescapedModel() {
 		return new PortalPreferencesWrapper(_portalPreferences.toUnescapedModel());
 	}
@@ -246,13 +280,35 @@ public class PortalPreferencesWrapper implements PortalPreferences,
 		return _portalPreferences.toString();
 	}
 
+	@Override
 	public java.lang.String toXmlString() {
 		return _portalPreferences.toXmlString();
 	}
 
+	@Override
 	public void persist()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_portalPreferences.persist();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof PortalPreferencesWrapper)) {
+			return false;
+		}
+
+		PortalPreferencesWrapper portalPreferencesWrapper = (PortalPreferencesWrapper)obj;
+
+		if (Validator.equals(_portalPreferences,
+					portalPreferencesWrapper._portalPreferences)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -262,10 +318,12 @@ public class PortalPreferencesWrapper implements PortalPreferences,
 		return _portalPreferences;
 	}
 
+	@Override
 	public PortalPreferences getWrappedModel() {
 		return _portalPreferences;
 	}
 
+	@Override
 	public void resetOriginalValues() {
 		_portalPreferences.resetOriginalValues();
 	}

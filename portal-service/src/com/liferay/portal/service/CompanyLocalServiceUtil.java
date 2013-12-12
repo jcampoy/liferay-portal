@@ -14,15 +14,18 @@
 
 package com.liferay.portal.service;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
 
 /**
- * The utility for the company local service. This utility wraps {@link com.liferay.portal.service.impl.CompanyLocalServiceImpl} and is the primary access point for service operations in application layer code running on the local server.
- *
- * <p>
- * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
- * </p>
+ * Provides the local service utility for Company. This utility wraps
+ * {@link com.liferay.portal.service.impl.CompanyLocalServiceImpl} and is the
+ * primary access point for service operations in application layer code running
+ * on the local server. Methods of this service will not have security checks
+ * based on the propagated JAAS credentials because this service can only be
+ * accessed from within the same VM.
  *
  * @author Brian Wing Shun Chan
  * @see CompanyLocalService
@@ -30,6 +33,7 @@ import com.liferay.portal.kernel.util.ReferenceRegistry;
  * @see com.liferay.portal.service.impl.CompanyLocalServiceImpl
  * @generated
  */
+@ProviderType
 public class CompanyLocalServiceUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -160,6 +164,21 @@ public class CompanyLocalServiceUtil {
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService().dynamicQueryCount(dynamicQuery);
+	}
+
+	/**
+	* Returns the number of rows that match the dynamic query.
+	*
+	* @param dynamicQuery the dynamic query
+	* @param projection the projection to apply to the query
+	* @return the number of rows that match the dynamic query
+	* @throws SystemException if a system exception occurred
+	*/
+	public static long dynamicQueryCount(
+		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery,
+		com.liferay.portal.kernel.dao.orm.Projection projection)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().dynamicQueryCount(dynamicQuery, projection);
 	}
 
 	public static com.liferay.portal.model.Company fetchCompany(long companyId)
@@ -338,10 +357,10 @@ public class CompanyLocalServiceUtil {
 	found or if the company's logo could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static void deleteLogo(long companyId)
+	public static com.liferay.portal.model.Company deleteLogo(long companyId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		getService().deleteLogo(companyId);
+		return getService().deleteLogo(companyId);
 	}
 
 	/**
@@ -603,6 +622,8 @@ public class CompanyLocalServiceUtil {
 	* @param virtualHostname the company's virtual host name
 	* @param mx the company's mail domain
 	* @param homeURL the company's home URL (optionally <code>null</code>)
+	* @param logo whether to update the company's logo
+	* @param logoBytes the new logo image data
 	* @param name the company's account name(optionally <code>null</code>)
 	* @param legalName the company's account legal name (optionally
 	<code>null</code>)
@@ -622,6 +643,53 @@ public class CompanyLocalServiceUtil {
 	* @throws PortalException if a company with the primary key could not be
 	found or if the new information was invalid
 	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Company updateCompany(
+		long companyId, java.lang.String virtualHostname, java.lang.String mx,
+		java.lang.String homeURL, boolean logo, byte[] logoBytes,
+		java.lang.String name, java.lang.String legalName,
+		java.lang.String legalId, java.lang.String legalType,
+		java.lang.String sicCode, java.lang.String tickerSymbol,
+		java.lang.String industry, java.lang.String type, java.lang.String size)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .updateCompany(companyId, virtualHostname, mx, homeURL,
+			logo, logoBytes, name, legalName, legalId, legalType, sicCode,
+			tickerSymbol, industry, type, size);
+	}
+
+	/**
+	* Update the company with additional account information.
+	*
+	* @param companyId the primary key of the company
+	* @param virtualHostname the company's virtual host name
+	* @param mx the company's mail domain
+	* @param homeURL the company's home URL (optionally <code>null</code>)
+	* @param name the company's account name(optionally <code>null</code>)
+	* @param legalName the company's account legal name (optionally
+	<code>null</code>)
+	* @param legalId the company's account legal ID (optionally
+	<code>null</code>)
+	* @param legalType the company's account legal type (optionally
+	<code>null</code>)
+	* @param sicCode the company's account SIC code (optionally
+	<code>null</code>)
+	* @param tickerSymbol the company's account ticker symbol (optionally
+	<code>null</code>)
+	* @param industry the company's account industry (optionally
+	<code>null</code>)
+	* @param type the company's account type (optionally
+	<code>null</code>)
+	* @param size the company's account size (optionally
+	<code>null</code>)
+	* @return the company with the primary key
+	* @throws PortalException if a company with the primary key could not
+	be found or if the new information was invalid
+	* @throws SystemException if a system exception occurred
+	* @deprecated As of 7.0.0, replaced by {@link #updateCompany(long, String,
+	String, String, boolean, byte[], String, String, String,
+	String, String, String, String, String, String)}
 	*/
 	public static com.liferay.portal.model.Company updateCompany(
 		long companyId, java.lang.String virtualHostname, java.lang.String mx,

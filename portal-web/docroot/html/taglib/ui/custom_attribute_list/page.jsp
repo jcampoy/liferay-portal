@@ -14,10 +14,7 @@
  */
 --%>
 
-<%@ include file="/html/taglib/init.jsp" %>
-
-<%@ page import="com.liferay.portlet.expando.model.ExpandoBridge" %>
-<%@ page import="com.liferay.portlet.expando.util.ExpandoBridgeFactoryUtil" %>
+<%@ include file="/html/taglib/ui/custom_attribute_list/init.jsp" %>
 
 <%
 String className = (String)request.getAttribute("liferay-ui:custom-attribute-list:className");
@@ -52,8 +49,8 @@ List<String> attributeNames = ListUtil.remove(Collections.list(expandoBridge.get
 	%>
 
 	<c:if test="<%= attributeNames.isEmpty() %>">
-		<span class="aui-field">
-			<span class="aui-field-content">
+		<span class="field">
+			<span class="field-content">
 				<label><%= LanguageUtil.format(pageContext, "no-custom-fields-are-defined-for-x", modelResourceName) %></label>
 			</span>
 		</span>

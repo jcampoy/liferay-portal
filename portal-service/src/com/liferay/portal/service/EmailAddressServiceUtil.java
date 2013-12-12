@@ -14,15 +14,18 @@
 
 package com.liferay.portal.service;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
 
 /**
- * The utility for the email address remote service. This utility wraps {@link com.liferay.portal.service.impl.EmailAddressServiceImpl} and is the primary access point for service operations in application layer code running on a remote server.
- *
- * <p>
- * This is a remote service. Methods of this service are expected to have security checks based on the propagated JAAS credentials because this service can be accessed remotely.
- * </p>
+ * Provides the remote service utility for EmailAddress. This utility wraps
+ * {@link com.liferay.portal.service.impl.EmailAddressServiceImpl} and is the
+ * primary access point for service operations in application layer code running
+ * on a remote server. Methods of this service are expected to have security
+ * checks based on the propagated JAAS credentials because this service can be
+ * accessed remotely.
  *
  * @author Brian Wing Shun Chan
  * @see EmailAddressService
@@ -30,6 +33,7 @@ import com.liferay.portal.kernel.util.ReferenceRegistry;
  * @see com.liferay.portal.service.impl.EmailAddressServiceImpl
  * @generated
  */
+@ProviderType
 public class EmailAddressServiceUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -55,6 +59,10 @@ public class EmailAddressServiceUtil {
 		getService().setBeanIdentifier(beanIdentifier);
 	}
 
+	/**
+	* @deprecated As of 6.2.0, replaced by {@link #addEmailAddress( String,
+	long, String, int, boolean, ServiceContext)}
+	*/
 	public static com.liferay.portal.model.EmailAddress addEmailAddress(
 		java.lang.String className, long classPK, java.lang.String address,
 		int typeId, boolean primary)
@@ -62,6 +70,17 @@ public class EmailAddressServiceUtil {
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService()
 				   .addEmailAddress(className, classPK, address, typeId, primary);
+	}
+
+	public static com.liferay.portal.model.EmailAddress addEmailAddress(
+		java.lang.String className, long classPK, java.lang.String address,
+		int typeId, boolean primary,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .addEmailAddress(className, classPK, address, typeId,
+			primary, serviceContext);
 	}
 
 	public static void deleteEmailAddress(long emailAddressId)

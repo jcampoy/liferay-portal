@@ -14,13 +14,23 @@
 
 package com.liferay.portal.kernel.lar;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.model.StagedModel;
+
+import java.util.Map;
 
 /**
  * @author Mate Thurzo
  * @author Daniel Kocsis
+ * @author Zsolt Berentey
  */
 public interface StagedModelDataHandler<T extends StagedModel> {
+
+	public void deleteStagedModel(
+			String uuid, long groupId, String className, String extraData)
+		throws PortalException, SystemException;
 
 	public void exportStagedModel(
 			PortletDataContext portletDataContext, T stagedModel)
@@ -28,8 +38,30 @@ public interface StagedModelDataHandler<T extends StagedModel> {
 
 	public String[] getClassNames();
 
+	public String getDisplayName(T StagedModel);
+
+	public int[] getExportableStatuses();
+
+	public Map<String, String> getReferenceAttributes(
+		PortletDataContext portletDataContext, T stagedModel);
+
+	public void importCompanyStagedModel(
+			PortletDataContext portletDataContext, Element element)
+		throws PortletDataException;
+
+	public void importCompanyStagedModel(
+			PortletDataContext portletDataContext, String uuid, long classPK)
+		throws PortletDataException;
+
 	public void importStagedModel(
 			PortletDataContext portletDataContext, T stagedModel)
 		throws PortletDataException;
+
+	public void restoreStagedModel(
+			PortletDataContext portletDataContext, T stagedModel)
+		throws PortletDataException;
+
+	public boolean validateReference(
+		PortletDataContext portletDataContext, Element referenceElement);
 
 }

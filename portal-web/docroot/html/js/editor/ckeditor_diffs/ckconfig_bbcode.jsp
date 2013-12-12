@@ -16,19 +16,27 @@
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+<%@ page import="com.liferay.portal.kernel.language.LanguageUtil" %>
 <%@ page import="com.liferay.portal.kernel.parsers.bbcode.BBCodeTranslatorUtil" %>
+<%@ page import="com.liferay.portal.kernel.util.ContentTypes" %>
 <%@ page import="com.liferay.portal.kernel.util.HtmlUtil" %>
+<%@ page import="com.liferay.portal.kernel.util.LocaleUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.ParamUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.StringUtil" %>
 <%@ page import="com.liferay.portlet.messageboards.model.MBThreadConstants" %>
 
+<%@ page import="java.util.Locale" %>
+
 <%
+String contentsLanguageId = ParamUtil.getString(request, "contentsLanguageId");
 String cssPath = ParamUtil.getString(request, "cssPath");
 String cssClasses = ParamUtil.getString(request, "cssClasses");
 String imagesPath = ParamUtil.getString(request, "imagesPath");
 String languageId = ParamUtil.getString(request, "languageId");
 String emoticonsPath = ParamUtil.getString(request, "emoticonsPath");
 boolean resizable = ParamUtil.getBoolean(request, "resizable");
+
+response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
 %>
 
 CKEDITOR.config.height = 265;
@@ -49,7 +57,8 @@ CKEDITOR.config.removePlugins = [
 	'print',
 	'save',
 	'showblocks',
-	'templates'
+	'templates',
+	'video'
 ].join(',');
 
 CKEDITOR.config.toolbar_bbcode = [
@@ -60,9 +69,33 @@ CKEDITOR.config.toolbar_bbcode = [
 	['Font', 'FontSize', '-', 'Format', '-', 'Undo', 'Redo', '-', 'Source']
 ];
 
+CKEDITOR.config.toolbar_phone = [
+	['Bold', 'Italic', 'Underline'],
+	['NumberedList', 'BulletedList'],
+	['Image', 'Link', 'Unlink']
+];
+
+CKEDITOR.config.toolbar_tablet = [
+	['Bold', 'Italic', 'Underline', 'Strike'],
+	['NumberedList', 'BulletedList'],
+	['Image', 'Link', 'Unlink'],
+	['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+	['Styles', 'FontSize']
+];
+
 CKEDITOR.config.bodyClass = 'html-editor <%= HtmlUtil.escapeJS(cssClasses) %>';
 
 CKEDITOR.config.contentsCss = '<%= HtmlUtil.escapeJS(cssPath) %>/main.css';
+
+<%
+Locale contentsLocale = LocaleUtil.fromLanguageId(contentsLanguageId);
+
+String contentsLanguageDir = LanguageUtil.get(contentsLocale, "lang.dir");
+%>
+
+CKEDITOR.config.contentsLangDirection = '<%= HtmlUtil.escapeJS(contentsLanguageDir) %>';
+
+CKEDITOR.config.contentsLanguage = '<%= HtmlUtil.escapeJS(contentsLanguageId.replace("iw_", "he_")) %>';
 
 CKEDITOR.config.enterMode = CKEDITOR.ENTER_BR;
 
@@ -84,7 +117,7 @@ CKEDITOR.config.format_tags = 'p;pre';
 
 CKEDITOR.config.imagesPath = '<%= HtmlUtil.escapeJS(imagesPath) %>/message_boards/';
 
-CKEDITOR.config.language = '<%= HtmlUtil.escapeJS(languageId) %>';
+CKEDITOR.config.language = '<%= HtmlUtil.escapeJS(languageId.replace("iw_", "he_")) %>';
 
 CKEDITOR.config.newThreadURL = '<%= MBThreadConstants.NEW_THREAD_URL %>';
 

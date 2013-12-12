@@ -14,6 +14,8 @@
 
 package com.liferay.portal.model;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.LocaleException;
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -40,6 +42,7 @@ import java.util.Map;
  * @see com.liferay.portal.model.impl.LayoutRevisionModelImpl
  * @generated
  */
+@ProviderType
 public interface LayoutRevisionModel extends BaseModel<LayoutRevision>,
 	GroupedModel, WorkflowedModel {
 	/*
@@ -81,6 +84,7 @@ public interface LayoutRevisionModel extends BaseModel<LayoutRevision>,
 	 *
 	 * @return the group ID of this layout revision
 	 */
+	@Override
 	public long getGroupId();
 
 	/**
@@ -88,6 +92,7 @@ public interface LayoutRevisionModel extends BaseModel<LayoutRevision>,
 	 *
 	 * @param groupId the group ID of this layout revision
 	 */
+	@Override
 	public void setGroupId(long groupId);
 
 	/**
@@ -95,6 +100,7 @@ public interface LayoutRevisionModel extends BaseModel<LayoutRevision>,
 	 *
 	 * @return the company ID of this layout revision
 	 */
+	@Override
 	public long getCompanyId();
 
 	/**
@@ -102,6 +108,7 @@ public interface LayoutRevisionModel extends BaseModel<LayoutRevision>,
 	 *
 	 * @param companyId the company ID of this layout revision
 	 */
+	@Override
 	public void setCompanyId(long companyId);
 
 	/**
@@ -109,6 +116,7 @@ public interface LayoutRevisionModel extends BaseModel<LayoutRevision>,
 	 *
 	 * @return the user ID of this layout revision
 	 */
+	@Override
 	public long getUserId();
 
 	/**
@@ -116,6 +124,7 @@ public interface LayoutRevisionModel extends BaseModel<LayoutRevision>,
 	 *
 	 * @param userId the user ID of this layout revision
 	 */
+	@Override
 	public void setUserId(long userId);
 
 	/**
@@ -124,6 +133,7 @@ public interface LayoutRevisionModel extends BaseModel<LayoutRevision>,
 	 * @return the user uuid of this layout revision
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public String getUserUuid() throws SystemException;
 
 	/**
@@ -131,6 +141,7 @@ public interface LayoutRevisionModel extends BaseModel<LayoutRevision>,
 	 *
 	 * @param userUuid the user uuid of this layout revision
 	 */
+	@Override
 	public void setUserUuid(String userUuid);
 
 	/**
@@ -139,6 +150,7 @@ public interface LayoutRevisionModel extends BaseModel<LayoutRevision>,
 	 * @return the user name of this layout revision
 	 */
 	@AutoEscape
+	@Override
 	public String getUserName();
 
 	/**
@@ -146,6 +158,7 @@ public interface LayoutRevisionModel extends BaseModel<LayoutRevision>,
 	 *
 	 * @param userName the user name of this layout revision
 	 */
+	@Override
 	public void setUserName(String userName);
 
 	/**
@@ -153,6 +166,7 @@ public interface LayoutRevisionModel extends BaseModel<LayoutRevision>,
 	 *
 	 * @return the create date of this layout revision
 	 */
+	@Override
 	public Date getCreateDate();
 
 	/**
@@ -160,6 +174,7 @@ public interface LayoutRevisionModel extends BaseModel<LayoutRevision>,
 	 *
 	 * @param createDate the create date of this layout revision
 	 */
+	@Override
 	public void setCreateDate(Date createDate);
 
 	/**
@@ -167,6 +182,7 @@ public interface LayoutRevisionModel extends BaseModel<LayoutRevision>,
 	 *
 	 * @return the modified date of this layout revision
 	 */
+	@Override
 	public Date getModifiedDate();
 
 	/**
@@ -174,6 +190,7 @@ public interface LayoutRevisionModel extends BaseModel<LayoutRevision>,
 	 *
 	 * @param modifiedDate the modified date of this layout revision
 	 */
+	@Override
 	public void setModifiedDate(Date modifiedDate);
 
 	/**
@@ -923,6 +940,7 @@ public interface LayoutRevisionModel extends BaseModel<LayoutRevision>,
 	 *
 	 * @return the status of this layout revision
 	 */
+	@Override
 	public int getStatus();
 
 	/**
@@ -930,6 +948,7 @@ public interface LayoutRevisionModel extends BaseModel<LayoutRevision>,
 	 *
 	 * @param status the status of this layout revision
 	 */
+	@Override
 	public void setStatus(int status);
 
 	/**
@@ -937,6 +956,7 @@ public interface LayoutRevisionModel extends BaseModel<LayoutRevision>,
 	 *
 	 * @return the status by user ID of this layout revision
 	 */
+	@Override
 	public long getStatusByUserId();
 
 	/**
@@ -944,6 +964,7 @@ public interface LayoutRevisionModel extends BaseModel<LayoutRevision>,
 	 *
 	 * @param statusByUserId the status by user ID of this layout revision
 	 */
+	@Override
 	public void setStatusByUserId(long statusByUserId);
 
 	/**
@@ -952,6 +973,7 @@ public interface LayoutRevisionModel extends BaseModel<LayoutRevision>,
 	 * @return the status by user uuid of this layout revision
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public String getStatusByUserUuid() throws SystemException;
 
 	/**
@@ -959,6 +981,7 @@ public interface LayoutRevisionModel extends BaseModel<LayoutRevision>,
 	 *
 	 * @param statusByUserUuid the status by user uuid of this layout revision
 	 */
+	@Override
 	public void setStatusByUserUuid(String statusByUserUuid);
 
 	/**
@@ -967,6 +990,7 @@ public interface LayoutRevisionModel extends BaseModel<LayoutRevision>,
 	 * @return the status by user name of this layout revision
 	 */
 	@AutoEscape
+	@Override
 	public String getStatusByUserName();
 
 	/**
@@ -974,6 +998,7 @@ public interface LayoutRevisionModel extends BaseModel<LayoutRevision>,
 	 *
 	 * @param statusByUserName the status by user name of this layout revision
 	 */
+	@Override
 	public void setStatusByUserName(String statusByUserName);
 
 	/**
@@ -981,6 +1006,7 @@ public interface LayoutRevisionModel extends BaseModel<LayoutRevision>,
 	 *
 	 * @return the status date of this layout revision
 	 */
+	@Override
 	public Date getStatusDate();
 
 	/**
@@ -988,11 +1014,13 @@ public interface LayoutRevisionModel extends BaseModel<LayoutRevision>,
 	 *
 	 * @param statusDate the status date of this layout revision
 	 */
+	@Override
 	public void setStatusDate(Date statusDate);
 
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #isApproved()}
 	 */
+	@Override
 	public boolean getApproved();
 
 	/**
@@ -1000,6 +1028,7 @@ public interface LayoutRevisionModel extends BaseModel<LayoutRevision>,
 	 *
 	 * @return <code>true</code> if this layout revision is approved; <code>false</code> otherwise
 	 */
+	@Override
 	public boolean isApproved();
 
 	/**
@@ -1007,6 +1036,7 @@ public interface LayoutRevisionModel extends BaseModel<LayoutRevision>,
 	 *
 	 * @return <code>true</code> if this layout revision is denied; <code>false</code> otherwise
 	 */
+	@Override
 	public boolean isDenied();
 
 	/**
@@ -1014,6 +1044,7 @@ public interface LayoutRevisionModel extends BaseModel<LayoutRevision>,
 	 *
 	 * @return <code>true</code> if this layout revision is a draft; <code>false</code> otherwise
 	 */
+	@Override
 	public boolean isDraft();
 
 	/**
@@ -1021,6 +1052,7 @@ public interface LayoutRevisionModel extends BaseModel<LayoutRevision>,
 	 *
 	 * @return <code>true</code> if this layout revision is expired; <code>false</code> otherwise
 	 */
+	@Override
 	public boolean isExpired();
 
 	/**
@@ -1028,6 +1060,7 @@ public interface LayoutRevisionModel extends BaseModel<LayoutRevision>,
 	 *
 	 * @return <code>true</code> if this layout revision is inactive; <code>false</code> otherwise
 	 */
+	@Override
 	public boolean isInactive();
 
 	/**
@@ -1035,20 +1068,15 @@ public interface LayoutRevisionModel extends BaseModel<LayoutRevision>,
 	 *
 	 * @return <code>true</code> if this layout revision is incomplete; <code>false</code> otherwise
 	 */
+	@Override
 	public boolean isIncomplete();
-
-	/**
-	 * Returns <code>true</code> if this layout revision is in the Recycle Bin.
-	 *
-	 * @return <code>true</code> if this layout revision is in the Recycle Bin; <code>false</code> otherwise
-	 */
-	public boolean isInTrash();
 
 	/**
 	 * Returns <code>true</code> if this layout revision is pending.
 	 *
 	 * @return <code>true</code> if this layout revision is pending; <code>false</code> otherwise
 	 */
+	@Override
 	public boolean isPending();
 
 	/**
@@ -1056,46 +1084,72 @@ public interface LayoutRevisionModel extends BaseModel<LayoutRevision>,
 	 *
 	 * @return <code>true</code> if this layout revision is scheduled; <code>false</code> otherwise
 	 */
+	@Override
 	public boolean isScheduled();
 
+	@Override
 	public boolean isNew();
 
+	@Override
 	public void setNew(boolean n);
 
+	@Override
 	public boolean isCachedModel();
 
+	@Override
 	public void setCachedModel(boolean cachedModel);
 
+	@Override
 	public boolean isEscapedModel();
 
+	@Override
 	public Serializable getPrimaryKeyObj();
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj);
 
+	@Override
 	public ExpandoBridge getExpandoBridge();
 
+	@Override
 	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
 
+	@Override
 	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
 
+	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
+
+	public String[] getAvailableLanguageIds();
+
+	public String getDefaultLanguageId();
+
+	public void prepareLocalizedFieldsForImport() throws LocaleException;
 
 	public void prepareLocalizedFieldsForImport(Locale defaultImportLocale)
 		throws LocaleException;
 
+	@Override
 	public Object clone();
 
+	@Override
 	public int compareTo(LayoutRevision layoutRevision);
 
+	@Override
 	public int hashCode();
 
+	@Override
 	public CacheModel<LayoutRevision> toCacheModel();
 
+	@Override
 	public LayoutRevision toEscapedModel();
 
+	@Override
 	public LayoutRevision toUnescapedModel();
 
+	@Override
 	public String toString();
 
+	@Override
 	public String toXmlString();
 }

@@ -14,17 +14,18 @@
 
 package com.liferay.portlet.softwarecatalog.service;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.service.ServiceWrapper;
 
 /**
- * <p>
- * This class is a wrapper for {@link SCLicenseService}.
- * </p>
+ * Provides a wrapper for {@link SCLicenseService}.
  *
- * @author    Brian Wing Shun Chan
- * @see       SCLicenseService
+ * @author Brian Wing Shun Chan
+ * @see SCLicenseService
  * @generated
  */
+@ProviderType
 public class SCLicenseServiceWrapper implements SCLicenseService,
 	ServiceWrapper<SCLicenseService> {
 	public SCLicenseServiceWrapper(SCLicenseService scLicenseService) {
@@ -36,6 +37,7 @@ public class SCLicenseServiceWrapper implements SCLicenseService,
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _scLicenseService.getBeanIdentifier();
 	}
@@ -45,10 +47,12 @@ public class SCLicenseServiceWrapper implements SCLicenseService,
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_scLicenseService.setBeanIdentifier(beanIdentifier);
 	}
 
+	@Override
 	public com.liferay.portlet.softwarecatalog.model.SCLicense addLicense(
 		java.lang.String name, java.lang.String url, boolean openSource,
 		boolean active, boolean recommended)
@@ -58,12 +62,14 @@ public class SCLicenseServiceWrapper implements SCLicenseService,
 			recommended);
 	}
 
+	@Override
 	public void deleteLicense(long licenseId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		_scLicenseService.deleteLicense(licenseId);
 	}
 
+	@Override
 	public com.liferay.portlet.softwarecatalog.model.SCLicense getLicense(
 		long licenseId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -71,6 +77,7 @@ public class SCLicenseServiceWrapper implements SCLicenseService,
 		return _scLicenseService.getLicense(licenseId);
 	}
 
+	@Override
 	public com.liferay.portlet.softwarecatalog.model.SCLicense updateLicense(
 		long licenseId, java.lang.String name, java.lang.String url,
 		boolean openSource, boolean active, boolean recommended)
@@ -94,10 +101,12 @@ public class SCLicenseServiceWrapper implements SCLicenseService,
 		_scLicenseService = scLicenseService;
 	}
 
+	@Override
 	public SCLicenseService getWrappedService() {
 		return _scLicenseService;
 	}
 
+	@Override
 	public void setWrappedService(SCLicenseService scLicenseService) {
 		_scLicenseService = scLicenseService;
 	}

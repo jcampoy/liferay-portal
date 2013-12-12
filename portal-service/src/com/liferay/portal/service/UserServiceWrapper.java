@@ -14,15 +14,16 @@
 
 package com.liferay.portal.service;
 
+import aQute.bnd.annotation.ProviderType;
+
 /**
- * <p>
- * This class is a wrapper for {@link UserService}.
- * </p>
+ * Provides a wrapper for {@link UserService}.
  *
- * @author    Brian Wing Shun Chan
- * @see       UserService
+ * @author Brian Wing Shun Chan
+ * @see UserService
  * @generated
  */
+@ProviderType
 public class UserServiceWrapper implements UserService,
 	ServiceWrapper<UserService> {
 	public UserServiceWrapper(UserService userService) {
@@ -34,6 +35,7 @@ public class UserServiceWrapper implements UserService,
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _userService.getBeanIdentifier();
 	}
@@ -43,6 +45,7 @@ public class UserServiceWrapper implements UserService,
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_userService.setBeanIdentifier(beanIdentifier);
 	}
@@ -60,6 +63,7 @@ public class UserServiceWrapper implements UserService,
 	policy
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void addGroupUsers(long groupId, long[] userIds,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -79,6 +83,7 @@ public class UserServiceWrapper implements UserService,
 	not allowed by the membership policy
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void addOrganizationUsers(long organizationId, long[] userIds)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -95,6 +100,7 @@ public class UserServiceWrapper implements UserService,
 	policy members
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void addPasswordPolicyUsers(long passwordPolicyId, long[] userIds)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -112,6 +118,7 @@ public class UserServiceWrapper implements UserService,
 	policy
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void addRoleUsers(long roleId, long[] userIds)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -128,6 +135,7 @@ public class UserServiceWrapper implements UserService,
 	members
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void addTeamUsers(long teamId, long[] userIds)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -184,6 +192,7 @@ public class UserServiceWrapper implements UserService,
 	address was reserved
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.User addUser(long companyId,
 		boolean autoPassword, java.lang.String password1,
 		java.lang.String password2, boolean autoScreenName,
@@ -260,6 +269,7 @@ public class UserServiceWrapper implements UserService,
 	membership policy, or if some other portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.User addUser(long companyId,
 		boolean autoPassword, java.lang.String password1,
 		java.lang.String password2, boolean autoScreenName,
@@ -299,6 +309,7 @@ public class UserServiceWrapper implements UserService,
 	the membership policy
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void addUserGroupUsers(long userGroupId, long[] userIds)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -355,6 +366,7 @@ public class UserServiceWrapper implements UserService,
 	address was reserved
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.User addUserWithWorkflow(long companyId,
 		boolean autoPassword, java.lang.String password1,
 		java.lang.String password2, boolean autoScreenName,
@@ -431,6 +443,7 @@ public class UserServiceWrapper implements UserService,
 	address was reserved, or if some other portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.User addUserWithWorkflow(long companyId,
 		boolean autoPassword, java.lang.String password1,
 		java.lang.String password2, boolean autoScreenName,
@@ -468,6 +481,7 @@ public class UserServiceWrapper implements UserService,
 	current user did not have permission to update the user
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void deletePortrait(long userId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -484,6 +498,7 @@ public class UserServiceWrapper implements UserService,
 	assign role members
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void deleteRoleUser(long roleId, long userId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -498,12 +513,14 @@ public class UserServiceWrapper implements UserService,
 	or if the current user did not have permission to delete the user
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void deleteUser(long userId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		_userService.deleteUser(userId);
 	}
 
+	@Override
 	public java.util.List<com.liferay.portal.model.User> getCompanyUsers(
 		long companyId, int start, int end)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -511,6 +528,7 @@ public class UserServiceWrapper implements UserService,
 		return _userService.getCompanyUsers(companyId, start, end);
 	}
 
+	@Override
 	public int getCompanyUsersCount(long companyId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -526,6 +544,7 @@ public class UserServiceWrapper implements UserService,
 	view group assignments
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public long[] getGroupUserIds(long groupId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -541,6 +560,7 @@ public class UserServiceWrapper implements UserService,
 	view group assignments
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portal.model.User> getGroupUsers(
 		long groupId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -557,6 +577,7 @@ public class UserServiceWrapper implements UserService,
 	view organization assignments
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public long[] getOrganizationUserIds(long organizationId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -572,6 +593,7 @@ public class UserServiceWrapper implements UserService,
 	view organization assignments
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.portal.model.User> getOrganizationUsers(
 		long organizationId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -588,6 +610,7 @@ public class UserServiceWrapper implements UserService,
 	view role members
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public long[] getRoleUserIds(long roleId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -605,6 +628,7 @@ public class UserServiceWrapper implements UserService,
 	user
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.User getUserByEmailAddress(long companyId,
 		java.lang.String emailAddress)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -621,6 +645,7 @@ public class UserServiceWrapper implements UserService,
 	or if the current user did not have permission to view the user
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.User getUserById(long userId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -637,6 +662,7 @@ public class UserServiceWrapper implements UserService,
 	or if the current user did not have permission to view the user
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.User getUserByScreenName(long companyId,
 		java.lang.String screenName)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -644,6 +670,7 @@ public class UserServiceWrapper implements UserService,
 		return _userService.getUserByScreenName(companyId, screenName);
 	}
 
+	@Override
 	public java.util.List<com.liferay.portal.model.User> getUserGroupUsers(
 		long userGroupId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -661,6 +688,7 @@ public class UserServiceWrapper implements UserService,
 	found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public long getUserIdByEmailAddress(long companyId,
 		java.lang.String emailAddress)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -677,6 +705,7 @@ public class UserServiceWrapper implements UserService,
 	* @throws PortalException if a user with the screen name could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public long getUserIdByScreenName(long companyId,
 		java.lang.String screenName)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -695,6 +724,7 @@ public class UserServiceWrapper implements UserService,
 	view the user or group members
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public boolean hasGroupUser(long groupId, long userId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -712,6 +742,7 @@ public class UserServiceWrapper implements UserService,
 	view the user or role members
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public boolean hasRoleUser(long roleId, long userId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -733,6 +764,7 @@ public class UserServiceWrapper implements UserService,
 	* @throws PortalException if a role with the name could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public boolean hasRoleUser(long companyId, java.lang.String name,
 		long userId, boolean inherited)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -751,6 +783,7 @@ public class UserServiceWrapper implements UserService,
 	membership policy
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void setRoleUsers(long roleId, long[] userIds)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -767,6 +800,7 @@ public class UserServiceWrapper implements UserService,
 	assign group members
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void setUserGroupUsers(long userGroupId, long[] userIds)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -782,6 +816,7 @@ public class UserServiceWrapper implements UserService,
 	modify user group assignments
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void unsetGroupTeamsUsers(long groupId, long[] userIds)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -800,6 +835,7 @@ public class UserServiceWrapper implements UserService,
 	the membership policy
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void unsetGroupUsers(long groupId, long[] userIds,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -817,6 +853,7 @@ public class UserServiceWrapper implements UserService,
 	allowed by the membership policy
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void unsetOrganizationUsers(long organizationId, long[] userIds)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -832,6 +869,7 @@ public class UserServiceWrapper implements UserService,
 	modify policy assignments
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void unsetPasswordPolicyUsers(long passwordPolicyId, long[] userIds)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -848,6 +886,7 @@ public class UserServiceWrapper implements UserService,
 	the membership policy
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void unsetRoleUsers(long roleId, long[] userIds)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -863,6 +902,7 @@ public class UserServiceWrapper implements UserService,
 	modify team assignments
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void unsetTeamUsers(long teamId, long[] userIds)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -879,6 +919,7 @@ public class UserServiceWrapper implements UserService,
 	by the membership policy
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void unsetUserGroupUsers(long userGroupId, long[] userIds)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -895,6 +936,7 @@ public class UserServiceWrapper implements UserService,
 	update the user's agreement to terms-of-use
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.User updateAgreedToTermsOfUse(long userId,
 		boolean agreedToTermsOfUse)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -917,6 +959,7 @@ public class UserServiceWrapper implements UserService,
 	or if the current user did not have permission to update the user
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.User updateEmailAddress(long userId,
 		java.lang.String password, java.lang.String emailAddress1,
 		java.lang.String emailAddress2,
@@ -966,6 +1009,7 @@ public class UserServiceWrapper implements UserService,
 	email address was reserved
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.User updateIncompleteUser(long companyId,
 		boolean autoPassword, java.lang.String password1,
 		java.lang.String password2, boolean autoScreenName,
@@ -996,6 +1040,7 @@ public class UserServiceWrapper implements UserService,
 	the user
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.User updateLockoutById(long userId,
 		boolean lockout)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -1013,6 +1058,7 @@ public class UserServiceWrapper implements UserService,
 	or if the current user did not have permission to update the user
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.User updateOpenId(long userId,
 		java.lang.String openId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -1032,6 +1078,7 @@ public class UserServiceWrapper implements UserService,
 	or if the current user did not have permission to update the user
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public void updateOrganizations(long userId, long[] organizationIds,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -1052,6 +1099,7 @@ public class UserServiceWrapper implements UserService,
 	or if the current user did not have permission to update the user
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.User updatePassword(long userId,
 		java.lang.String password1, java.lang.String password2,
 		boolean passwordReset)
@@ -1072,6 +1120,7 @@ public class UserServiceWrapper implements UserService,
 	did not have permission to update the user
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.User updatePortrait(long userId,
 		byte[] bytes)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -1091,6 +1140,7 @@ public class UserServiceWrapper implements UserService,
 	current user did not have permission to update the user
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.User updateReminderQuery(long userId,
 		java.lang.String question, java.lang.String answer)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -1109,6 +1159,7 @@ public class UserServiceWrapper implements UserService,
 	did not have permission to update the user
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.User updateScreenName(long userId,
 		java.lang.String screenName)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -1130,6 +1181,7 @@ public class UserServiceWrapper implements UserService,
 	user's workflow status.
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.User updateStatus(long userId, int status)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -1153,6 +1205,8 @@ public class UserServiceWrapper implements UserService,
 	* @param emailAddress the user's new email address
 	* @param facebookId the user's new Facebook ID
 	* @param openId the user's new OpenID
+	* @param portrait whether to update the user's portrait image
+	* @param portraitBytes the new portrait image data
 	* @param languageId the user's new language ID
 	* @param timeZoneId the user's new time zone ID
 	* @param greeting the user's new greeting
@@ -1199,6 +1253,121 @@ public class UserServiceWrapper implements UserService,
 	was not allowed by the membership policy
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
+	public com.liferay.portal.model.User updateUser(long userId,
+		java.lang.String oldPassword, java.lang.String newPassword1,
+		java.lang.String newPassword2, boolean passwordReset,
+		java.lang.String reminderQueryQuestion,
+		java.lang.String reminderQueryAnswer, java.lang.String screenName,
+		java.lang.String emailAddress, long facebookId,
+		java.lang.String openId, boolean portrait, byte[] portraitBytes,
+		java.lang.String languageId, java.lang.String timeZoneId,
+		java.lang.String greeting, java.lang.String comments,
+		java.lang.String firstName, java.lang.String middleName,
+		java.lang.String lastName, int prefixId, int suffixId, boolean male,
+		int birthdayMonth, int birthdayDay, int birthdayYear,
+		java.lang.String smsSn, java.lang.String aimSn,
+		java.lang.String facebookSn, java.lang.String icqSn,
+		java.lang.String jabberSn, java.lang.String msnSn,
+		java.lang.String mySpaceSn, java.lang.String skypeSn,
+		java.lang.String twitterSn, java.lang.String ymSn,
+		java.lang.String jobTitle, long[] groupIds, long[] organizationIds,
+		long[] roleIds,
+		java.util.List<com.liferay.portal.model.UserGroupRole> userGroupRoles,
+		long[] userGroupIds,
+		java.util.List<com.liferay.portal.model.Address> addresses,
+		java.util.List<com.liferay.portal.model.EmailAddress> emailAddresses,
+		java.util.List<com.liferay.portal.model.Phone> phones,
+		java.util.List<com.liferay.portal.model.Website> websites,
+		java.util.List<com.liferay.portlet.announcements.model.AnnouncementsDelivery> announcementsDelivers,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _userService.updateUser(userId, oldPassword, newPassword1,
+			newPassword2, passwordReset, reminderQueryQuestion,
+			reminderQueryAnswer, screenName, emailAddress, facebookId, openId,
+			portrait, portraitBytes, languageId, timeZoneId, greeting,
+			comments, firstName, middleName, lastName, prefixId, suffixId,
+			male, birthdayMonth, birthdayDay, birthdayYear, smsSn, aimSn,
+			facebookSn, icqSn, jabberSn, msnSn, mySpaceSn, skypeSn, twitterSn,
+			ymSn, jobTitle, groupIds, organizationIds, roleIds, userGroupRoles,
+			userGroupIds, addresses, emailAddresses, phones, websites,
+			announcementsDelivers, serviceContext);
+	}
+
+	/**
+	* Updates the user with additional parameters.
+	*
+	* @param userId the primary key of the user
+	* @param oldPassword the user's old password
+	* @param newPassword1 the user's new password (optionally
+	<code>null</code>)
+	* @param newPassword2 the user's new password confirmation (optionally
+	<code>null</code>)
+	* @param passwordReset whether the user should be asked to reset their
+	password the next time they login
+	* @param reminderQueryQuestion the user's new password reset question
+	* @param reminderQueryAnswer the user's new password reset answer
+	* @param screenName the user's new screen name
+	* @param emailAddress the user's new email address
+	* @param facebookId the user's new Facebook ID
+	* @param openId the user's new OpenID
+	* @param languageId the user's new language ID
+	* @param timeZoneId the user's new time zone ID
+	* @param greeting the user's new greeting
+	* @param comments the user's new comments
+	* @param firstName the user's new first name
+	* @param middleName the user's new middle name
+	* @param lastName the user's new last name
+	* @param prefixId the user's new name prefix ID
+	* @param suffixId the user's new name suffix ID
+	* @param male whether user is male
+	* @param birthdayMonth the user's new birthday month (0-based, meaning
+	0 for January)
+	* @param birthdayDay the user's new birthday day
+	* @param birthdayYear the user's birthday year
+	* @param smsSn the user's new SMS screen name
+	* @param aimSn the user's new AIM screen name
+	* @param facebookSn the user's new Facebook screen name
+	* @param icqSn the user's new ICQ screen name
+	* @param jabberSn the user's new Jabber screen name
+	* @param msnSn the user's new MSN screen name
+	* @param mySpaceSn the user's new MySpace screen name
+	* @param skypeSn the user's new Skype screen name
+	* @param twitterSn the user's new Twitter screen name
+	* @param ymSn the user's new Yahoo! Messenger screen name
+	* @param jobTitle the user's new job title
+	* @param groupIds the primary keys of the user's groups
+	* @param organizationIds the primary keys of the user's organizations
+	* @param roleIds the primary keys of the user's roles
+	* @param userGroupRoles the user user's group roles
+	* @param userGroupIds the primary keys of the user's user groups
+	* @param addresses the user's addresses
+	* @param emailAddresses the user's email addresses
+	* @param phones the user's phone numbers
+	* @param websites the user's websites
+	* @param announcementsDelivers the announcements deliveries
+	* @param serviceContext the service context to be applied (optionally
+	<code>null</code>). Can set the UUID (with the
+	<code>uuid</code> attribute), asset category IDs, asset tag
+	names, and expando bridge attributes for the user.
+	* @return the user
+	* @throws PortalException if a user with the primary key could not be
+	found, if the new information was invalid, if the current
+	user did not have permission to update the user, or if the
+	operation was not allowed by the membership policy
+	* @throws SystemException if a system exception occurred
+	* @deprecated As of 7.0.0, replaced by {@link #updateUser(long, String,
+	String, String, boolean, String, String, String, String,
+	long, String, String, String, String, String, String, String,
+	String, int, int, boolean, int, int, int, String, String,
+	String, String, String, String, String, String, String,
+	String, String, long[], long[], long[], java.util.List,
+	long[], java.util.List, java.util.List, java.util.List,
+	java.util.List, java.util.List, boolean, byte[],
+	com.liferay.portal.service.ServiceContext)}
+	*/
+	@Override
 	public com.liferay.portal.model.User updateUser(long userId,
 		java.lang.String oldPassword, java.lang.String newPassword1,
 		java.lang.String newPassword2, boolean passwordReset,
@@ -1297,6 +1466,7 @@ public class UserServiceWrapper implements UserService,
 	was not allowed by the membership policy
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.portal.model.User updateUser(long userId,
 		java.lang.String oldPassword, java.lang.String newPassword1,
 		java.lang.String newPassword2, boolean passwordReset,
@@ -1345,10 +1515,12 @@ public class UserServiceWrapper implements UserService,
 		_userService = userService;
 	}
 
+	@Override
 	public UserService getWrappedService() {
 		return _userService;
 	}
 
+	@Override
 	public void setWrappedService(UserService userService) {
 		_userService = userService;
 	}

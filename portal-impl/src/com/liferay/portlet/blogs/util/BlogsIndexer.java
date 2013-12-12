@@ -38,8 +38,6 @@ import com.liferay.portlet.blogs.service.BlogsEntryLocalServiceUtil;
 import com.liferay.portlet.blogs.service.permission.BlogsEntryPermission;
 import com.liferay.portlet.blogs.service.persistence.BlogsEntryActionableDynamicQuery;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Locale;
 
@@ -62,14 +60,11 @@ public class BlogsIndexer extends BaseIndexer {
 	}
 
 	@Override
-	public void addRelatedEntryFields(Document document, Object obj) {
-		document.addKeyword(Field.RELATED_ENTRY, true);
-	}
-
 	public String[] getClassNames() {
 		return CLASS_NAMES;
 	}
 
+	@Override
 	public String getPortletId() {
 		return PORTLET_ID;
 	}
@@ -89,13 +84,7 @@ public class BlogsIndexer extends BaseIndexer {
 			BooleanQuery contextQuery, SearchContext searchContext)
 		throws Exception {
 
-		int status = GetterUtil.getInteger(
-			searchContext.getAttribute(Field.STATUS),
-			WorkflowConstants.STATUS_APPROVED);
-
-		if (status != WorkflowConstants.STATUS_ANY) {
-			contextQuery.addRequiredTerm(Field.STATUS, status);
-		}
+		addStatus(contextQuery, searchContext);
 	}
 
 	@Override
@@ -114,7 +103,7 @@ public class BlogsIndexer extends BaseIndexer {
 		document.addText(
 			Field.CONTENT, HtmlUtil.extractText(entry.getContent()));
 		document.addText(Field.DESCRIPTION, entry.getDescription());
-		document.addDate(Field.MODIFIED_DATE, entry.getDisplayDate());
+		document.addDate(Field.MODIFIED_DATE, entry.getModifiedDate());
 		document.addText(Field.TITLE, entry.getTitle());
 
 		return document;
@@ -174,8 +163,6 @@ public class BlogsIndexer extends BaseIndexer {
 	protected void reindexEntries(long companyId)
 		throws PortalException, SystemException {
 
-		final Collection<Document> documents = new ArrayList<Document>();
-
 		ActionableDynamicQuery actionableDynamicQuery =
 			new BlogsEntryActionableDynamicQuery() {
 
@@ -202,17 +189,15 @@ public class BlogsIndexer extends BaseIndexer {
 
 				Document document = getDocument(entry);
 
-				documents.add(document);
+				addDocument(document);
 			}
 
 		};
 
 		actionableDynamicQuery.setCompanyId(companyId);
+		actionableDynamicQuery.setSearchEngineId(getSearchEngineId());
 
 		actionableDynamicQuery.performActions();
-
-		SearchEngineUtil.updateDocuments(
-			getSearchEngineId(), companyId, documents);
 	}
 
 }

@@ -17,36 +17,34 @@
 <%@ include file="/html/portlet/workflow_definitions/init.jsp" %>
 
 <%
-String toolbarItem = ParamUtil.getString(request, "toolbarItem", "view-all");
+String toolbarItem = ParamUtil.getString(request, "toolbarItem");
 %>
 
-<div class="lfr-portlet-toolbar">
-	<portlet:renderURL var="viewDefinitionsURL">
-		<portlet:param name="struts_action" value="/workflow_definitions/view" />
-		<portlet:param name="tabs1" value="workflow-definitions" />
-	</portlet:renderURL>
+<aui:nav-bar>
+	<aui:nav>
+		<portlet:renderURL var="viewDefinitionsURL">
+			<portlet:param name="struts_action" value="/workflow_definitions/view" />
+			<portlet:param name="tabs1" value="workflow-definitions" />
+		</portlet:renderURL>
 
-	<span class="lfr-toolbar-button view-button <%= toolbarItem.equals("view-all") ? "current" : StringPool.BLANK %>">
-		<a href="<%= viewDefinitionsURL %>"><liferay-ui:message key="view-all" /></a>
-	</span>
+		<portlet:renderURL var="addWorkflowDefinitionURL">
+			<portlet:param name="struts_action" value="/workflow_definitions/edit_workflow_definition" />
+			<portlet:param name="tabs1" value="workflow-definitions" />
+			<portlet:param name="redirect" value="<%= viewDefinitionsURL %>" />
+			<portlet:param name="backURL" value="<%= viewDefinitionsURL %>" />
+		</portlet:renderURL>
 
-	<portlet:renderURL var="addWorkflowDefinitionURL">
-		<portlet:param name="struts_action" value="/workflow_definitions/edit_workflow_definition" />
-		<portlet:param name="tabs1" value="workflow-definitions" />
-		<portlet:param name="redirect" value="<%= viewDefinitionsURL %>" />
-		<portlet:param name="backURL" value="<%= viewDefinitionsURL %>" />
-	</portlet:renderURL>
+		<c:if test='<%= DeployManagerUtil.isDeployed("kaleo-designer-portlet") %>'>
 
-	<c:if test='<%= DeployManagerUtil.isDeployed("kaleo-designer-portlet") %>'>
-		<span class="lfr-toolbar-button add-button">
-			<a href="javascript:Liferay.Util.getOpener().<%= renderResponse.getNamespace() %>openKaleoDesigner('', '0', '', Liferay.Util.getWindowName());"><liferay-ui:message arguments="definition" key="add-new-x" /></a>
-		</span>
-	</c:if>
+			<%
+			String taglibHREF = "javascript:Liferay.Util.getOpener()." + renderResponse.getNamespace() + "openKaleoDesigner('', '0', '', Liferay.Util.getWindowName());";
+			%>
 
-	<span class="lfr-toolbar-button upload-button <%= toolbarItem.equals("add") ? "current" : StringPool.BLANK %>">
-		<a href="<%= addWorkflowDefinitionURL %>"><liferay-ui:message key="file-upload" /></a>
-	</span>
-</div>
+			<aui:nav-item href="<%= taglibHREF %>" iconCssClass="icon-plus" label='<%= LanguageUtil.format(pageContext, "add-new-x", "definition") %>' />
+		</c:if>
+		<aui:nav-item href="<%= addWorkflowDefinitionURL %>" iconCssClass="icon-upload" label="upload-definition" selected='<%= toolbarItem.equals("add") %>' />
+	</aui:nav>
+</aui:nav-bar>
 
 <c:if test='<%= DeployManagerUtil.isDeployed("kaleo-designer-portlet") %>'>
 	<aui:script>

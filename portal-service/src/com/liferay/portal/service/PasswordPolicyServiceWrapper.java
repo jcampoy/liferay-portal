@@ -14,15 +14,16 @@
 
 package com.liferay.portal.service;
 
+import aQute.bnd.annotation.ProviderType;
+
 /**
- * <p>
- * This class is a wrapper for {@link PasswordPolicyService}.
- * </p>
+ * Provides a wrapper for {@link PasswordPolicyService}.
  *
- * @author    Brian Wing Shun Chan
- * @see       PasswordPolicyService
+ * @author Brian Wing Shun Chan
+ * @see PasswordPolicyService
  * @generated
  */
+@ProviderType
 public class PasswordPolicyServiceWrapper implements PasswordPolicyService,
 	ServiceWrapper<PasswordPolicyService> {
 	public PasswordPolicyServiceWrapper(
@@ -35,6 +36,7 @@ public class PasswordPolicyServiceWrapper implements PasswordPolicyService,
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _passwordPolicyService.getBeanIdentifier();
 	}
@@ -44,6 +46,7 @@ public class PasswordPolicyServiceWrapper implements PasswordPolicyService,
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_passwordPolicyService.setBeanIdentifier(beanIdentifier);
 	}
@@ -54,6 +57,7 @@ public class PasswordPolicyServiceWrapper implements PasswordPolicyService,
 	int, int, int, int, String, boolean, int, boolean, long,
 	long, int, boolean, int, long, long, long, ServiceContext)}
 	*/
+	@Override
 	public com.liferay.portal.model.PasswordPolicy addPasswordPolicy(
 		java.lang.String name, java.lang.String description,
 		boolean changeable, boolean changeRequired, long minAge,
@@ -73,6 +77,7 @@ public class PasswordPolicyServiceWrapper implements PasswordPolicyService,
 			lockoutDuration, resetFailureCount, resetTicketMaxAge);
 	}
 
+	@Override
 	public com.liferay.portal.model.PasswordPolicy addPasswordPolicy(
 		java.lang.String name, java.lang.String description,
 		boolean changeable, boolean changeRequired, long minAge,
@@ -94,6 +99,7 @@ public class PasswordPolicyServiceWrapper implements PasswordPolicyService,
 			serviceContext);
 	}
 
+	@Override
 	public void deletePasswordPolicy(long passwordPolicyId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -107,6 +113,7 @@ public class PasswordPolicyServiceWrapper implements PasswordPolicyService,
 	long, long, int, boolean, int, long, long, long,
 	ServiceContext)}
 	*/
+	@Override
 	public com.liferay.portal.model.PasswordPolicy updatePasswordPolicy(
 		long passwordPolicyId, java.lang.String name,
 		java.lang.String description, boolean changeable,
@@ -126,6 +133,7 @@ public class PasswordPolicyServiceWrapper implements PasswordPolicyService,
 			lockoutDuration, resetFailureCount, resetTicketMaxAge);
 	}
 
+	@Override
 	public com.liferay.portal.model.PasswordPolicy updatePasswordPolicy(
 		long passwordPolicyId, java.lang.String name,
 		java.lang.String description, boolean changeable,
@@ -163,10 +171,12 @@ public class PasswordPolicyServiceWrapper implements PasswordPolicyService,
 		_passwordPolicyService = passwordPolicyService;
 	}
 
+	@Override
 	public PasswordPolicyService getWrappedService() {
 		return _passwordPolicyService;
 	}
 
+	@Override
 	public void setWrappedService(PasswordPolicyService passwordPolicyService) {
 		_passwordPolicyService = passwordPolicyService;
 	}

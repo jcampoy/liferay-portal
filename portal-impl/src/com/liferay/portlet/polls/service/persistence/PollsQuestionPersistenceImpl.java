@@ -116,6 +116,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @return the matching polls questions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<PollsQuestion> findByUuid(String uuid)
 		throws SystemException {
 		return findByUuid(uuid, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
@@ -134,6 +135,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @return the range of matching polls questions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<PollsQuestion> findByUuid(String uuid, int start, int end)
 		throws SystemException {
 		return findByUuid(uuid, start, end, null);
@@ -153,6 +155,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @return the ordered range of matching polls questions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<PollsQuestion> findByUuid(String uuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -273,6 +276,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @throws com.liferay.portlet.polls.NoSuchQuestionException if a matching polls question could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public PollsQuestion findByUuid_First(String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchQuestionException, SystemException {
@@ -302,6 +306,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @return the first matching polls question, or <code>null</code> if a matching polls question could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public PollsQuestion fetchByUuid_First(String uuid,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<PollsQuestion> list = findByUuid(uuid, 0, 1, orderByComparator);
@@ -322,6 +327,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @throws com.liferay.portlet.polls.NoSuchQuestionException if a matching polls question could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public PollsQuestion findByUuid_Last(String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchQuestionException, SystemException {
@@ -351,9 +357,14 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @return the last matching polls question, or <code>null</code> if a matching polls question could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public PollsQuestion fetchByUuid_Last(String uuid,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByUuid(uuid);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<PollsQuestion> list = findByUuid(uuid, count - 1, count,
 				orderByComparator);
@@ -375,6 +386,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @throws com.liferay.portlet.polls.NoSuchQuestionException if a polls question with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public PollsQuestion[] findByUuid_PrevAndNext(long questionId, String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchQuestionException, SystemException {
@@ -530,6 +542,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @param uuid the uuid
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByUuid(String uuid) throws SystemException {
 		for (PollsQuestion pollsQuestion : findByUuid(uuid, QueryUtil.ALL_POS,
 				QueryUtil.ALL_POS, null)) {
@@ -544,6 +557,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @return the number of matching polls questions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByUuid(String uuid) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID;
 
@@ -626,6 +640,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @throws com.liferay.portlet.polls.NoSuchQuestionException if a matching polls question could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public PollsQuestion findByUUID_G(String uuid, long groupId)
 		throws NoSuchQuestionException, SystemException {
 		PollsQuestion pollsQuestion = fetchByUUID_G(uuid, groupId);
@@ -661,6 +676,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @return the matching polls question, or <code>null</code> if a matching polls question could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public PollsQuestion fetchByUUID_G(String uuid, long groupId)
 		throws SystemException {
 		return fetchByUUID_G(uuid, groupId, true);
@@ -675,6 +691,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @return the matching polls question, or <code>null</code> if a matching polls question could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public PollsQuestion fetchByUUID_G(String uuid, long groupId,
 		boolean retrieveFromCache) throws SystemException {
 		Object[] finderArgs = new Object[] { uuid, groupId };
@@ -781,6 +798,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @return the polls question that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public PollsQuestion removeByUUID_G(String uuid, long groupId)
 		throws NoSuchQuestionException, SystemException {
 		PollsQuestion pollsQuestion = findByUUID_G(uuid, groupId);
@@ -796,6 +814,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @return the number of matching polls questions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByUUID_G(String uuid, long groupId)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_G;
@@ -896,6 +915,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @return the matching polls questions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<PollsQuestion> findByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		return findByUuid_C(uuid, companyId, QueryUtil.ALL_POS,
@@ -916,6 +936,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @return the range of matching polls questions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<PollsQuestion> findByUuid_C(String uuid, long companyId,
 		int start, int end) throws SystemException {
 		return findByUuid_C(uuid, companyId, start, end, null);
@@ -936,6 +957,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @return the ordered range of matching polls questions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<PollsQuestion> findByUuid_C(String uuid, long companyId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -1067,6 +1089,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @throws com.liferay.portlet.polls.NoSuchQuestionException if a matching polls question could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public PollsQuestion findByUuid_C_First(String uuid, long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchQuestionException, SystemException {
@@ -1101,6 +1124,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @return the first matching polls question, or <code>null</code> if a matching polls question could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public PollsQuestion fetchByUuid_C_First(String uuid, long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<PollsQuestion> list = findByUuid_C(uuid, companyId, 0, 1,
@@ -1123,6 +1147,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @throws com.liferay.portlet.polls.NoSuchQuestionException if a matching polls question could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public PollsQuestion findByUuid_C_Last(String uuid, long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchQuestionException, SystemException {
@@ -1157,9 +1182,14 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @return the last matching polls question, or <code>null</code> if a matching polls question could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public PollsQuestion fetchByUuid_C_Last(String uuid, long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByUuid_C(uuid, companyId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<PollsQuestion> list = findByUuid_C(uuid, companyId, count - 1,
 				count, orderByComparator);
@@ -1182,6 +1212,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @throws com.liferay.portlet.polls.NoSuchQuestionException if a polls question with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public PollsQuestion[] findByUuid_C_PrevAndNext(long questionId,
 		String uuid, long companyId, OrderByComparator orderByComparator)
 		throws NoSuchQuestionException, SystemException {
@@ -1342,6 +1373,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @param companyId the company ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		for (PollsQuestion pollsQuestion : findByUuid_C(uuid, companyId,
@@ -1358,6 +1390,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @return the number of matching polls questions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_C;
@@ -1455,6 +1488,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @return the matching polls questions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<PollsQuestion> findByGroupId(long groupId)
 		throws SystemException {
 		return findByGroupId(groupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
@@ -1473,6 +1507,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @return the range of matching polls questions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<PollsQuestion> findByGroupId(long groupId, int start, int end)
 		throws SystemException {
 		return findByGroupId(groupId, start, end, null);
@@ -1492,6 +1527,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @return the ordered range of matching polls questions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<PollsQuestion> findByGroupId(long groupId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -1598,6 +1634,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @throws com.liferay.portlet.polls.NoSuchQuestionException if a matching polls question could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public PollsQuestion findByGroupId_First(long groupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchQuestionException, SystemException {
@@ -1628,6 +1665,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @return the first matching polls question, or <code>null</code> if a matching polls question could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public PollsQuestion fetchByGroupId_First(long groupId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<PollsQuestion> list = findByGroupId(groupId, 0, 1,
@@ -1649,6 +1687,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @throws com.liferay.portlet.polls.NoSuchQuestionException if a matching polls question could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public PollsQuestion findByGroupId_Last(long groupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchQuestionException, SystemException {
@@ -1679,9 +1718,14 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @return the last matching polls question, or <code>null</code> if a matching polls question could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public PollsQuestion fetchByGroupId_Last(long groupId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByGroupId(groupId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<PollsQuestion> list = findByGroupId(groupId, count - 1, count,
 				orderByComparator);
@@ -1703,6 +1747,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @throws com.liferay.portlet.polls.NoSuchQuestionException if a polls question with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public PollsQuestion[] findByGroupId_PrevAndNext(long questionId,
 		long groupId, OrderByComparator orderByComparator)
 		throws NoSuchQuestionException, SystemException {
@@ -1845,6 +1890,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @return the matching polls questions that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<PollsQuestion> filterFindByGroupId(long groupId)
 		throws SystemException {
 		return filterFindByGroupId(groupId, QueryUtil.ALL_POS,
@@ -1864,6 +1910,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @return the range of matching polls questions that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<PollsQuestion> filterFindByGroupId(long groupId, int start,
 		int end) throws SystemException {
 		return filterFindByGroupId(groupId, start, end, null);
@@ -1883,6 +1930,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @return the ordered range of matching polls questions that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<PollsQuestion> filterFindByGroupId(long groupId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
@@ -1974,6 +2022,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @throws com.liferay.portlet.polls.NoSuchQuestionException if a polls question with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public PollsQuestion[] filterFindByGroupId_PrevAndNext(long questionId,
 		long groupId, OrderByComparator orderByComparator)
 		throws NoSuchQuestionException, SystemException {
@@ -2155,6 +2204,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @param groupId the group ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByGroupId(long groupId) throws SystemException {
 		for (PollsQuestion pollsQuestion : findByGroupId(groupId,
 				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
@@ -2169,6 +2219,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @return the number of matching polls questions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByGroupId(long groupId) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_GROUPID;
 
@@ -2221,6 +2272,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @return the number of matching polls questions that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int filterCountByGroupId(long groupId) throws SystemException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return countByGroupId(groupId);
@@ -2264,11 +2316,16 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 
 	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "pollsQuestion.groupId = ?";
 
+	public PollsQuestionPersistenceImpl() {
+		setModelClass(PollsQuestion.class);
+	}
+
 	/**
 	 * Caches the polls question in the entity cache if it is enabled.
 	 *
 	 * @param pollsQuestion the polls question
 	 */
+	@Override
 	public void cacheResult(PollsQuestion pollsQuestion) {
 		EntityCacheUtil.putResult(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
 			PollsQuestionImpl.class, pollsQuestion.getPrimaryKey(),
@@ -2286,6 +2343,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 *
 	 * @param pollsQuestions the polls questions
 	 */
+	@Override
 	public void cacheResult(List<PollsQuestion> pollsQuestions) {
 		for (PollsQuestion pollsQuestion : pollsQuestions) {
 			if (EntityCacheUtil.getResult(
@@ -2406,6 +2464,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @param questionId the primary key for the new polls question
 	 * @return the new polls question
 	 */
+	@Override
 	public PollsQuestion create(long questionId) {
 		PollsQuestion pollsQuestion = new PollsQuestionImpl();
 
@@ -2427,6 +2486,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @throws com.liferay.portlet.polls.NoSuchQuestionException if a polls question with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public PollsQuestion remove(long questionId)
 		throws NoSuchQuestionException, SystemException {
 		return remove((Serializable)questionId);
@@ -2613,6 +2673,8 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 		clearUniqueFindersCache(pollsQuestion);
 		cacheUniqueFindersCache(pollsQuestion);
 
+		pollsQuestion.resetOriginalValues();
+
 		return pollsQuestion;
 	}
 
@@ -2675,6 +2737,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @throws com.liferay.portlet.polls.NoSuchQuestionException if a polls question with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public PollsQuestion findByPrimaryKey(long questionId)
 		throws NoSuchQuestionException, SystemException {
 		return findByPrimaryKey((Serializable)questionId);
@@ -2735,6 +2798,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @return the polls question, or <code>null</code> if a polls question with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public PollsQuestion fetchByPrimaryKey(long questionId)
 		throws SystemException {
 		return fetchByPrimaryKey((Serializable)questionId);
@@ -2746,6 +2810,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @return the polls questions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<PollsQuestion> findAll() throws SystemException {
 		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
@@ -2762,6 +2827,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @return the range of polls questions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<PollsQuestion> findAll(int start, int end)
 		throws SystemException {
 		return findAll(start, end, null);
@@ -2780,6 +2846,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @return the ordered range of polls questions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<PollsQuestion> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -2865,6 +2932,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 *
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeAll() throws SystemException {
 		for (PollsQuestion pollsQuestion : findAll()) {
 			remove(pollsQuestion);
@@ -2877,6 +2945,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 * @return the number of polls questions
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countAll() throws SystemException {
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
 				FINDER_ARGS_EMPTY, this);
@@ -2980,6 +3049,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 		};
 
 	private static CacheModel<PollsQuestion> _nullPollsQuestionCacheModel = new CacheModel<PollsQuestion>() {
+			@Override
 			public PollsQuestion toEntityModel() {
 				return _nullPollsQuestion;
 			}

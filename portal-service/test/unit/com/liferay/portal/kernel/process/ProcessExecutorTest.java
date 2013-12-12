@@ -24,10 +24,11 @@ import com.liferay.portal.kernel.test.CodeCoverageAssertor;
 import com.liferay.portal.kernel.test.JDKLoggerTestUtil;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.ReflectionUtil;
-import com.liferay.portal.kernel.util.SocketUtil.ServerSocketConfigurator;
 import com.liferay.portal.kernel.util.SocketUtil;
+import com.liferay.portal.kernel.util.SocketUtil.ServerSocketConfigurator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.io.ByteArrayOutputStream;
@@ -244,7 +245,9 @@ public class ProcessExecutorTest {
 
 			ServerThread.exit(parentSocket);
 
-			_log.info("Waiting subprocess to exit...");
+			if (_log.isInfoEnabled()) {
+				_log.info("Waiting subprocess to exit...");
+			}
 
 			long startTime = System.currentTimeMillis();
 
@@ -252,9 +255,12 @@ public class ProcessExecutorTest {
 				Thread.sleep(10);
 
 				if (!ServerThread.isAlive(childSocket)) {
-					_log.info(
-						"Subprocess exited. Waited " +
-							(System.currentTimeMillis() - startTime) + " ms");
+					if (_log.isInfoEnabled()) {
+						_log.info(
+							"Subprocess exited. Waited " +
+								(System.currentTimeMillis() - startTime) +
+									" ms");
+					}
 
 					return;
 				}
@@ -876,7 +882,7 @@ public class ProcessExecutorTest {
 		signalFile.delete();
 
 		try {
-			String logMessage= "Log Message";
+			String logMessage = "Log Message";
 
 			final LoggingProcessCallable loggingProcessCallable =
 				new LoggingProcessCallable(logMessage, signalFile);
@@ -910,6 +916,16 @@ public class ProcessExecutorTest {
 
 			_waitForSignalFile(signalFile, false);
 
+			Assert.assertTrue(signalFile.createNewFile());
+
+			thread.join();
+
+			Exception e = exceptionAtomicReference.get();
+
+			if (e != null) {
+				throw e;
+			}
+
 			String outByteArrayOutputStreamString =
 				outByteArrayOutputStream.toString();
 
@@ -921,15 +937,6 @@ public class ProcessExecutorTest {
 
 			Assert.assertTrue(
 				errByteArrayOutputStreamString.contains(logMessage));
-			Assert.assertTrue(signalFile.createNewFile());
-
-			thread.join();
-
-			Exception e = exceptionAtomicReference.get();
-
-			if (e != null) {
-				throw e;
-			}
 		}
 		finally {
 			System.setOut(oldOutPrintStream);
@@ -1052,6 +1059,9 @@ public class ProcessExecutorTest {
 
 	private static List<String> _createArguments(String jpdaOptions) {
 		List<String> arguments = new ArrayList<String>();
+
+		arguments.add(
+			"-D" + SystemProperties.SYSTEM_PROPERTIES_QUIET + "=true");
 
 		boolean coberturaParentDynamicallyInstrumented = Boolean.getBoolean(
 			"cobertura.parent.dynamically.instrumented");
@@ -1180,6 +1190,7 @@ public class ProcessExecutorTest {
 	private static ServerSocketConfigurator _serverSocketConfigurator =
 		new ServerSocketConfigurator() {
 
+		@Override
 		public void configure(ServerSocket serverSocket)
 			throws SocketException {
 
@@ -1195,6 +1206,7 @@ public class ProcessExecutorTest {
 			_serverPort = serverPort;
 		}
 
+		@Override
 		public Serializable call() throws ProcessException {
 			try {
 				ServerThread serverThread = new ServerThread(
@@ -1391,6 +1403,7 @@ public class ProcessExecutorTest {
 				heartbeatThread.setUncaughtExceptionHandler(
 					new UncaughtExceptionHandler() {
 
+						@Override
 						public void uncaughtException(Thread t, Throwable e) {
 
 							// Swallow unconcerned uncaught exception
@@ -1457,6 +1470,7 @@ public class ProcessExecutorTest {
 				className);
 		}
 
+		@Override
 		public Serializable call() throws ProcessException {
 			Class<?> clazz = getClass();
 
@@ -1542,6 +1556,7 @@ public class ProcessExecutorTest {
 			_brokenPipingData = serializedData;
 		}
 
+		@Override
 		public Serializable call() throws ProcessException {
 			try {
 				FileOutputStream fileOutputStream = new FileOutputStream(
@@ -1574,6 +1589,7 @@ public class ProcessExecutorTest {
 	private static class DummyExceptionProcessCallable
 		implements ProcessCallable<Serializable> {
 
+		@Override
 		public Serializable call() throws ProcessException {
 			throw new ProcessException(
 				DummyExceptionProcessCallable.class.getName());
@@ -1596,6 +1612,7 @@ public class ProcessExecutorTest {
 			_countDownLatch = new CountDownLatch(1);
 		}
 
+		@Override
 		public Void call() throws Exception {
 			_countDownLatch.countDown();
 
@@ -1615,6 +1632,7 @@ public class ProcessExecutorTest {
 	private static class DummyReturnProcessCallable
 		implements ProcessCallable<String> {
 
+		@Override
 		public String call() {
 			return DummyReturnProcessCallable.class.getName();
 		}
@@ -1637,6 +1655,7 @@ public class ProcessExecutorTest {
 			_exitCode = exitCode;
 		}
 
+		@Override
 		public Serializable call() {
 			System.exit(_exitCode);
 
@@ -1673,6 +1692,7 @@ public class ProcessExecutorTest {
 			_bodyLog = bodyLog;
 		}
 
+		@Override
 		public Serializable call() throws ProcessException {
 			try {
 				FileOutputStream fileOutputStream = new FileOutputStream(
@@ -1734,6 +1754,7 @@ public class ProcessExecutorTest {
 			_signalFile = signalFile;
 		}
 
+		@Override
 		public Serializable call() throws ProcessException {
 			try {
 				_waitForSignalFile(_signalFile, true);
@@ -1796,6 +1817,7 @@ public class ProcessExecutorTest {
 			_thread = Thread.currentThread();
 		}
 
+		@Override
 		public boolean shutdown(int shutdownCode, Throwable shutdownError) {
 			try {
 				ProcessOutputStream processOutputStream =
@@ -1827,6 +1849,7 @@ public class ProcessExecutorTest {
 			_propertyKey = propertyKey;
 		}
 
+		@Override
 		public String call() {
 			return System.getProperty(_propertyKey);
 		}
@@ -1860,6 +1883,7 @@ public class ProcessExecutorTest {
 			_returnValue = returnValue;
 		}
 
+		@Override
 		public String call() throws ProcessException {
 			try {
 				ProcessOutputStream processOutputStream =
@@ -2066,6 +2090,7 @@ public class ProcessExecutorTest {
 			_thread = Thread.currentThread();
 		}
 
+		@Override
 		public boolean shutdown(int shutdownCode, Throwable shutdownThrowable) {
 			_thread.interrupt();
 
@@ -2084,6 +2109,7 @@ public class ProcessExecutorTest {
 	private static class UnserializableProcessCallable
 		implements ProcessCallable<Serializable> {
 
+		@Override
 		public Serializable call() {
 			return UnserializableProcessCallable.class.getName();
 		}

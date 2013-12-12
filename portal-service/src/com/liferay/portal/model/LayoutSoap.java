@@ -23,8 +23,8 @@ import java.util.List;
 /**
  * This class is used by SOAP remote services, specifically {@link com.liferay.portal.service.http.LayoutServiceSoap}.
  *
- * @author    Brian Wing Shun Chan
- * @see       com.liferay.portal.service.http.LayoutServiceSoap
+ * @author Brian Wing Shun Chan
+ * @see com.liferay.portal.service.http.LayoutServiceSoap
  * @generated
  */
 public class LayoutSoap implements Serializable {
@@ -35,6 +35,8 @@ public class LayoutSoap implements Serializable {
 		soapModel.setPlid(model.getPlid());
 		soapModel.setGroupId(model.getGroupId());
 		soapModel.setCompanyId(model.getCompanyId());
+		soapModel.setUserId(model.getUserId());
+		soapModel.setUserName(model.getUserName());
 		soapModel.setCreateDate(model.getCreateDate());
 		soapModel.setModifiedDate(model.getModifiedDate());
 		soapModel.setPrivateLayout(model.getPrivateLayout());
@@ -49,7 +51,6 @@ public class LayoutSoap implements Serializable {
 		soapModel.setTypeSettings(model.getTypeSettings());
 		soapModel.setHidden(model.getHidden());
 		soapModel.setFriendlyURL(model.getFriendlyURL());
-		soapModel.setIconImage(model.getIconImage());
 		soapModel.setIconImageId(model.getIconImageId());
 		soapModel.setThemeId(model.getThemeId());
 		soapModel.setColorSchemeId(model.getColorSchemeId());
@@ -142,6 +143,22 @@ public class LayoutSoap implements Serializable {
 
 	public void setCompanyId(long companyId) {
 		_companyId = companyId;
+	}
+
+	public long getUserId() {
+		return _userId;
+	}
+
+	public void setUserId(long userId) {
+		_userId = userId;
+	}
+
+	public String getUserName() {
+		return _userName;
+	}
+
+	public void setUserName(String userName) {
+		_userName = userName;
 	}
 
 	public Date getCreateDate() {
@@ -264,18 +281,6 @@ public class LayoutSoap implements Serializable {
 		_friendlyURL = friendlyURL;
 	}
 
-	public boolean getIconImage() {
-		return _iconImage;
-	}
-
-	public boolean isIconImage() {
-		return _iconImage;
-	}
-
-	public void setIconImage(boolean iconImage) {
-		_iconImage = iconImage;
-	}
-
 	public long getIconImageId() {
 		return _iconImageId;
 	}
@@ -365,6 +370,8 @@ public class LayoutSoap implements Serializable {
 	private long _plid;
 	private long _groupId;
 	private long _companyId;
+	private long _userId;
+	private String _userName;
 	private Date _createDate;
 	private Date _modifiedDate;
 	private boolean _privateLayout;
@@ -379,7 +386,6 @@ public class LayoutSoap implements Serializable {
 	private String _typeSettings;
 	private boolean _hidden;
 	private String _friendlyURL;
-	private boolean _iconImage;
 	private long _iconImageId;
 	private String _themeId;
 	private String _colorSchemeId;

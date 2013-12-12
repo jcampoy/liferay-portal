@@ -43,7 +43,9 @@ import java.security.Security;
 import java.security.URIParameter;
 import java.security.cert.Certificate;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -74,38 +76,52 @@ public abstract class BasePACLPolicy implements PACLPolicy {
 		}
 	}
 
+	@Override
 	public ClassLoader getClassLoader() {
 		return _classLoader;
 	}
 
+	@Override
 	public Policy getPolicy() {
 		return _policy;
 	}
 
+	@Override
 	public Properties getProperties() {
 		return _properties;
 	}
 
+	@Override
 	public String getProperty(String key) {
 		return _properties.getProperty(key);
 	}
 
+	@Override
 	public String[] getPropertyArray(String key) {
 		return StringUtil.split(getProperty(key));
 	}
 
+	@Override
 	public boolean getPropertyBoolean(String key) {
 		return GetterUtil.getBoolean(getProperty(key));
 	}
 
+	@Override
 	public Set<String> getPropertySet(String key) {
 		return new TreeSet<String>(SetUtil.fromArray(getPropertyArray(key)));
 	}
 
+	@Override
 	public String getServletContextName() {
 		return _servletContextName;
 	}
 
+	@Override
+	public List<URL> getURLs() {
+		return _urls;
+	}
+
+	@Override
 	public boolean isCheckablePermission(Permission permission) {
 		Class<?> clazz = permission.getClass();
 
@@ -256,10 +272,10 @@ public abstract class BasePACLPolicy implements PACLPolicy {
 	private static Log _log = LogFactoryUtil.getLog(BasePACLPolicy.class);
 
 	private Map<String, Checker> _checkers = new HashMap<String, Checker>();
-
 	private ClassLoader _classLoader;
 	private Policy _policy;
 	private Properties _properties;
 	private String _servletContextName;
+	private List<URL> _urls = new ArrayList<URL>();
 
 }

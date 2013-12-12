@@ -31,6 +31,7 @@ public class MBCategoryImpl extends MBCategoryBaseImpl {
 	public MBCategoryImpl() {
 	}
 
+	@Override
 	public List<Long> getAncestorCategoryIds()
 		throws PortalException, SystemException {
 
@@ -48,6 +49,7 @@ public class MBCategoryImpl extends MBCategoryBaseImpl {
 		return ancestorCategoryIds;
 	}
 
+	@Override
 	public List<MBCategory> getAncestors()
 		throws PortalException, SystemException {
 
@@ -64,6 +66,7 @@ public class MBCategoryImpl extends MBCategoryBaseImpl {
 		return ancestors;
 	}
 
+	@Override
 	public MBCategory getParentCategory()
 		throws PortalException, SystemException {
 
@@ -79,41 +82,7 @@ public class MBCategoryImpl extends MBCategoryBaseImpl {
 		return MBCategoryLocalServiceUtil.getCategory(getParentCategoryId());
 	}
 
-	public MBCategory getTrashContainer() {
-		MBCategory category = null;
-
-		try {
-			category = getParentCategory();
-		}
-		catch (Exception e) {
-			return null;
-		}
-
-		while (category != null) {
-			if (category.isInTrash()) {
-				return category;
-			}
-
-			try {
-				category = category.getParentCategory();
-			}
-			catch (Exception e) {
-				return null;
-			}
-		}
-
-		return null;
-	}
-
-	public boolean isInTrashContainer() {
-		if (getTrashContainer() != null) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-
+	@Override
 	public boolean isRoot() {
 		if (getParentCategoryId() ==
 				MBCategoryConstants.DEFAULT_PARENT_CATEGORY_ID) {

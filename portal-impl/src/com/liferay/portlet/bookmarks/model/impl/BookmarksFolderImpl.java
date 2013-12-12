@@ -16,6 +16,7 @@ package com.liferay.portlet.bookmarks.model.impl;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portlet.bookmarks.NoSuchFolderException;
 import com.liferay.portlet.bookmarks.model.BookmarksFolder;
 import com.liferay.portlet.bookmarks.model.BookmarksFolderConstants;
 import com.liferay.portlet.bookmarks.service.BookmarksFolderLocalServiceUtil;
@@ -31,6 +32,33 @@ public class BookmarksFolderImpl extends BookmarksFolderBaseImpl {
 	public BookmarksFolderImpl() {
 	}
 
+	@Override
+	public List<Long> getAncestorFolderIds()
+		throws PortalException, SystemException {
+
+		List<Long> ancestorFolderIds = new ArrayList<Long>();
+
+		BookmarksFolder folder = this;
+
+		while (!folder.isRoot()) {
+			try {
+				folder = folder.getParentFolder();
+
+				ancestorFolderIds.add(folder.getFolderId());
+			}
+			catch (NoSuchFolderException nsfe) {
+				if (folder.isInTrash()) {
+					break;
+				}
+
+				throw nsfe;
+			}
+		}
+
+		return ancestorFolderIds;
+	}
+
+	@Override
 	public List<BookmarksFolder> getAncestors()
 		throws PortalException, SystemException {
 
@@ -39,14 +67,24 @@ public class BookmarksFolderImpl extends BookmarksFolderBaseImpl {
 		BookmarksFolder folder = this;
 
 		while (!folder.isRoot()) {
-			folder = folder.getParentFolder();
+			try {
+				folder = folder.getParentFolder();
 
-			ancestors.add(folder);
+				ancestors.add(folder);
+			}
+			catch (NoSuchFolderException nsfe) {
+				if (folder.isInTrash()) {
+					break;
+				}
+
+				throw nsfe;
+			}
 		}
 
 		return ancestors;
 	}
 
+	@Override
 	public BookmarksFolder getParentFolder()
 		throws PortalException, SystemException {
 
@@ -59,41 +97,7 @@ public class BookmarksFolderImpl extends BookmarksFolderBaseImpl {
 		return BookmarksFolderLocalServiceUtil.getFolder(getParentFolderId());
 	}
 
-	public BookmarksFolder getTrashContainer() {
-		BookmarksFolder folder = null;
-
-		try {
-			folder = getParentFolder();
-		}
-		catch (Exception e) {
-			return null;
-		}
-
-		while (folder != null) {
-			if (folder.isInTrash()) {
-				return folder;
-			}
-
-			try {
-				folder = folder.getParentFolder();
-			}
-			catch (Exception e) {
-				return null;
-			}
-		}
-
-		return null;
-	}
-
-	public boolean isInTrashContainer() {
-		if (getTrashContainer() != null) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-
+	@Override
 	public boolean isRoot() {
 		if (getParentFolderId() ==
 				BookmarksFolderConstants.DEFAULT_PARENT_FOLDER_ID) {

@@ -17,6 +17,7 @@ package com.liferay.portalweb.portal.util.liferayselenium;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portalweb.portal.BaseTestCase;
+import com.liferay.portalweb.portal.util.EmailCommands;
 import com.liferay.portalweb.portal.util.RuntimeVariables;
 import com.liferay.portalweb.portal.util.TestPropsValues;
 
@@ -26,46 +27,69 @@ import com.liferay.portalweb.portal.util.TestPropsValues;
 public class LiferaySeleniumHelper {
 
 	public static void assertAlert(
-		LiferaySelenium liferaySelenium, String pattern) {
+			LiferaySelenium liferaySelenium, String pattern)
+		throws Exception {
 
 		BaseTestCase.assertEquals(pattern, liferaySelenium.getAlert());
 	}
 
 	public static void assertChecked(
-		LiferaySelenium liferaySelenium, String locator) {
+			LiferaySelenium liferaySelenium, String locator)
+		throws Exception {
 
 		liferaySelenium.assertElementPresent(locator);
 
 		if (liferaySelenium.isNotChecked(locator)) {
-			BaseTestCase.fail("Element is not checked at " + locator);
+			throw new Exception(
+				"Element is not checked at \"" + locator + "\"");
 		}
 	}
 
 	public static void assertConfirmation(
-		LiferaySelenium liferaySelenium, String pattern) {
+			LiferaySelenium liferaySelenium, String pattern)
+		throws Exception {
 
 		String confirmation = liferaySelenium.getConfirmation();
 
 		if (!pattern.equals(confirmation)) {
-			BaseTestCase.fail(
-				"Pattern " + pattern + " does not match " + confirmation);
+			throw new Exception(
+				"Pattern \"" + pattern + "\" does not match \"" + confirmation +
+					"\"");
 		}
 	}
 
 	public static void assertElementNotPresent(
-		LiferaySelenium liferaySelenium, String locator) {
+			LiferaySelenium liferaySelenium, String locator)
+		throws Exception {
 
 		if (liferaySelenium.isElementPresent(locator)) {
-			BaseTestCase.fail("Element is present at " + locator);
+			throw new Exception("Element is present at \"" + locator + "\"");
 		}
 	}
 
 	public static void assertElementPresent(
-		LiferaySelenium liferaySelenium, String locator) {
+			LiferaySelenium liferaySelenium, String locator)
+		throws Exception {
 
 		if (liferaySelenium.isElementNotPresent(locator)) {
-			BaseTestCase.fail("Element is not present at " + locator);
+			throw new Exception(
+				"Element is not present at \"" + locator + "\"");
 		}
+	}
+
+	public static void assertEmailBody(
+			LiferaySelenium liferaySelenium, String index, String body)
+		throws Exception {
+
+		BaseTestCase.assertEquals(body, liferaySelenium.getEmailBody(index));
+	}
+
+	public static void assertEmailSubject(
+			LiferaySelenium liferaySelenium, String index, String subject)
+		throws Exception {
+
+		BaseTestCase.assertEquals(
+			subject, liferaySelenium.getEmailSubject(index));
 	}
 
 	public static void assertLocation(
@@ -81,12 +105,13 @@ public class LiferaySeleniumHelper {
 	}
 
 	public static void assertNotChecked(
-		LiferaySelenium liferaySelenium, String locator) {
+			LiferaySelenium liferaySelenium, String locator)
+		throws Exception {
 
 		liferaySelenium.assertElementPresent(locator);
 
 		if (liferaySelenium.isChecked(locator)) {
-			BaseTestCase.fail("Element is checked at " + locator);
+			throw new Exception("Element is checked at \"" + locator + "\"");
 		}
 	}
 
@@ -97,146 +122,177 @@ public class LiferaySeleniumHelper {
 	}
 
 	public static void assertNotPartialText(
-		LiferaySelenium liferaySelenium, String locator, String pattern) {
+			LiferaySelenium liferaySelenium, String locator, String pattern)
+		throws Exception {
 
 		liferaySelenium.assertElementPresent(locator);
 
 		if (liferaySelenium.isPartialText(locator, pattern)) {
 			String text = liferaySelenium.getText(locator);
 
-			BaseTestCase.fail(text + " contains " + pattern + " at " + locator);
+			throw new Exception(
+				"\"" + text + "\" contains \"" + pattern + "\" at \"" +
+					locator + "\"");
 		}
 	}
 
 	public static void assertNotSelectedLabel(
-		LiferaySelenium liferaySelenium, String selectLocator, String pattern) {
+			LiferaySelenium liferaySelenium, String selectLocator,
+			String pattern)
+		throws Exception {
 
 		liferaySelenium.assertElementPresent(selectLocator);
 
 		if (liferaySelenium.isSelectedLabel(selectLocator, pattern)) {
 			String text = liferaySelenium.getSelectedLabel(selectLocator);
 
-			BaseTestCase.fail(
-				"Pattern " + pattern + " matches " + text + " at " +
-					selectLocator);
+			throw new Exception(
+				"Pattern \"" + pattern + "\" matches \"" + text + "\" at \"" +
+					selectLocator + "\"");
 		}
 	}
 
 	public static void assertNotText(
-		LiferaySelenium liferaySelenium, String locator, String pattern) {
+			LiferaySelenium liferaySelenium, String locator, String pattern)
+		throws Exception {
 
 		liferaySelenium.assertElementPresent(locator);
 
 		if (liferaySelenium.isText(locator, pattern)) {
 			String text = liferaySelenium.getText(locator);
 
-			BaseTestCase.fail(
-				"Pattern " + pattern + " matches " + text + " at " + locator);
+			throw new Exception(
+				"Pattern \"" + pattern + "\" matches \"" + text + "\" at \"" +
+					locator + "\"");
 		}
 	}
 
 	public static void assertNotValue(
-		LiferaySelenium liferaySelenium, String locator, String pattern) {
+			LiferaySelenium liferaySelenium, String locator, String pattern)
+		throws Exception {
 
 		liferaySelenium.assertElementPresent(locator);
 
 		if (liferaySelenium.isValue(locator, pattern)) {
 			String value = liferaySelenium.getValue(locator);
 
-			BaseTestCase.fail(
-				"Pattern " + pattern + " matches " + value + " at " + locator);
+			throw new Exception(
+				"Pattern \"" + pattern + "\" matches \"" + value + "\" at \"" +
+					locator + "\"");
 		}
 	}
 
 	public static void assertNotVisible(
-		LiferaySelenium liferaySelenium, String locator) {
+			LiferaySelenium liferaySelenium, String locator)
+		throws Exception {
 
 		liferaySelenium.assertElementPresent(locator);
 
 		if (liferaySelenium.isVisible(locator)) {
-			BaseTestCase.fail("Element is visible at " + locator);
+			throw new Exception("Element is visible at \"" + locator + "\"");
 		}
 	}
 
 	public static void assertPartialText(
-		LiferaySelenium liferaySelenium, String locator, String pattern) {
+			LiferaySelenium liferaySelenium, String locator, String pattern)
+		throws Exception {
 
 		liferaySelenium.assertElementPresent(locator);
 
 		if (liferaySelenium.isNotPartialText(locator, pattern)) {
 			String text = liferaySelenium.getText(locator);
 
-			BaseTestCase.fail(
-				text + " does not contain " + pattern + " at " + locator);
+			throw new Exception(
+				"\"" + text + "\" does not contain \"" + pattern + "\" at \"" +
+					locator + "\"");
 		}
 	}
 
 	public static void assertSelectedLabel(
-		LiferaySelenium liferaySelenium, String selectLocator, String pattern) {
+			LiferaySelenium liferaySelenium, String selectLocator,
+			String pattern)
+		throws Exception {
 
 		liferaySelenium.assertElementPresent(selectLocator);
 
 		if (liferaySelenium.isNotSelectedLabel(selectLocator, pattern)) {
 			String text = liferaySelenium.getSelectedLabel(selectLocator);
 
-			BaseTestCase.fail(
-				"Pattern " + pattern + " does not match " + text + " at " +
-					selectLocator);
+			throw new Exception(
+				"Pattern \"" + pattern + "\" does not match \"" + text +
+					"\" at \"" + selectLocator + "\"");
 		}
 	}
 
 	public static void assertText(
-		LiferaySelenium liferaySelenium, String locator, String pattern) {
+			LiferaySelenium liferaySelenium, String locator, String pattern)
+		throws Exception {
 
 		liferaySelenium.assertElementPresent(locator);
 
 		if (liferaySelenium.isNotText(locator, pattern)) {
 			String text = liferaySelenium.getText(locator);
 
-			BaseTestCase.fail(
-				"Pattern " + pattern + " does not match " + text + " at " +
-					locator);
+			throw new Exception(
+				"Pattern \"" + pattern + "\" does not match \"" + text +
+					"\" at \"" + locator + "\"");
 		}
 	}
 
 	public static void assertTextNotPresent(
-		LiferaySelenium liferaySelenium, String pattern) {
+			LiferaySelenium liferaySelenium, String pattern)
+		throws Exception {
 
 		if (liferaySelenium.isTextPresent(pattern)) {
-			BaseTestCase.fail(pattern + " is present");
+			throw new Exception("\"" + pattern + "\" is present");
 		}
 	}
 
 	public static void assertTextPresent(
-		LiferaySelenium liferaySelenium, String pattern) {
+			LiferaySelenium liferaySelenium, String pattern)
+		throws Exception {
 
 		if (liferaySelenium.isTextNotPresent(pattern)) {
-			BaseTestCase.fail(pattern + " is not present");
+			throw new Exception("\"" + pattern + "\" is not present");
 		}
 	}
 
 	public static void assertValue(
-		LiferaySelenium liferaySelenium, String locator, String pattern) {
+			LiferaySelenium liferaySelenium, String locator, String pattern)
+		throws Exception {
 
 		liferaySelenium.assertElementPresent(locator);
 
 		if (liferaySelenium.isNotValue(locator, pattern)) {
 			String value = liferaySelenium.getValue(locator);
 
-			BaseTestCase.fail(
-				"Pattern " + pattern + " does not match " + value + " at " +
-					locator);
+			throw new Exception(
+				"Pattern \"" + pattern + "\" does not match \"" + value +
+					"\" at \"" + locator + "\"");
 		}
 	}
 
 	public static void assertVisible(
-		LiferaySelenium liferaySelenium, String locator) {
+			LiferaySelenium liferaySelenium, String locator)
+		throws Exception {
 
 		liferaySelenium.assertElementPresent(locator);
 
 		if (liferaySelenium.isNotVisible(locator)) {
-			BaseTestCase.fail("Element is not visible at " + locator);
+			throw new Exception(
+				"Element is not visible at \"" + locator + "\"");
 		}
+	}
+
+	public static void connectToEmailAccount(
+			String emailAddress, String emailPassword)
+		throws Exception {
+
+		EmailCommands.connectToEmailAccount(emailAddress, emailPassword);
+	}
+
+	public static void deleteAllEmails() throws Exception {
+		EmailCommands.deleteAllEmails();
 	}
 
 	public static void echo(String message) {
@@ -245,6 +301,14 @@ public class LiferaySeleniumHelper {
 
 	public static void fail(String message) {
 		BaseTestCase.fail(message);
+	}
+
+	public static String getEmailBody(String index) throws Exception {
+		return EmailCommands.getEmailBody(GetterUtil.getInteger(index));
+	}
+
+	public static String getEmailSubject(String index) throws Exception {
+		return EmailCommands.getEmailSubject(GetterUtil.getInteger(index));
 	}
 
 	public static String getNumberDecrement(String value) {
@@ -309,6 +373,25 @@ public class LiferaySeleniumHelper {
 		Thread.sleep(GetterUtil.getInteger(waitTime));
 	}
 
+	public static void replyToEmail(
+			LiferaySelenium liferaySelenium, String to, String body)
+		throws Exception {
+
+		EmailCommands.replyToEmail(to, body);
+
+		liferaySelenium.pause("3000");
+	}
+
+	public static void sendEmail(
+			LiferaySelenium liferaySelenium, String to, String subject,
+			String body)
+		throws Exception {
+
+		EmailCommands.sendEmail(to, subject, body);
+
+		liferaySelenium.pause("3000");
+	}
+
 	public static void typeFrame(
 		LiferaySelenium liferaySelenium, String locator, String value) {
 
@@ -316,9 +399,10 @@ public class LiferaySeleniumHelper {
 
 		value = value.replace("\\", "\\\\");
 
-		liferaySelenium.runScript("document.body.innerHTML = '" + value + "'");
+		liferaySelenium.runScript(
+			"document.body.innerHTML = \"" + value + "\"");
 
-		liferaySelenium.selectFrame("relative=top");
+		liferaySelenium.selectFrame("relative=parent");
 	}
 
 	public static void waitForElementNotPresent(

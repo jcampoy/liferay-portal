@@ -112,6 +112,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @return the matching d d l record sets
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DDLRecordSet> findByUuid(String uuid) throws SystemException {
 		return findByUuid(uuid, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
@@ -129,6 +130,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @return the range of matching d d l record sets
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DDLRecordSet> findByUuid(String uuid, int start, int end)
 		throws SystemException {
 		return findByUuid(uuid, start, end, null);
@@ -148,6 +150,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @return the ordered range of matching d d l record sets
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DDLRecordSet> findByUuid(String uuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -268,6 +271,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordSetException if a matching d d l record set could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDLRecordSet findByUuid_First(String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchRecordSetException, SystemException {
@@ -297,6 +301,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @return the first matching d d l record set, or <code>null</code> if a matching d d l record set could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDLRecordSet fetchByUuid_First(String uuid,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<DDLRecordSet> list = findByUuid(uuid, 0, 1, orderByComparator);
@@ -317,6 +322,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordSetException if a matching d d l record set could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDLRecordSet findByUuid_Last(String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchRecordSetException, SystemException {
@@ -346,9 +352,14 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @return the last matching d d l record set, or <code>null</code> if a matching d d l record set could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDLRecordSet fetchByUuid_Last(String uuid,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByUuid(uuid);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<DDLRecordSet> list = findByUuid(uuid, count - 1, count,
 				orderByComparator);
@@ -370,6 +381,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordSetException if a d d l record set with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDLRecordSet[] findByUuid_PrevAndNext(long recordSetId, String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchRecordSetException, SystemException {
@@ -525,6 +537,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @param uuid the uuid
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByUuid(String uuid) throws SystemException {
 		for (DDLRecordSet ddlRecordSet : findByUuid(uuid, QueryUtil.ALL_POS,
 				QueryUtil.ALL_POS, null)) {
@@ -539,6 +552,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @return the number of matching d d l record sets
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByUuid(String uuid) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID;
 
@@ -621,6 +635,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordSetException if a matching d d l record set could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDLRecordSet findByUUID_G(String uuid, long groupId)
 		throws NoSuchRecordSetException, SystemException {
 		DDLRecordSet ddlRecordSet = fetchByUUID_G(uuid, groupId);
@@ -656,6 +671,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @return the matching d d l record set, or <code>null</code> if a matching d d l record set could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDLRecordSet fetchByUUID_G(String uuid, long groupId)
 		throws SystemException {
 		return fetchByUUID_G(uuid, groupId, true);
@@ -670,6 +686,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @return the matching d d l record set, or <code>null</code> if a matching d d l record set could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDLRecordSet fetchByUUID_G(String uuid, long groupId,
 		boolean retrieveFromCache) throws SystemException {
 		Object[] finderArgs = new Object[] { uuid, groupId };
@@ -776,6 +793,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @return the d d l record set that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDLRecordSet removeByUUID_G(String uuid, long groupId)
 		throws NoSuchRecordSetException, SystemException {
 		DDLRecordSet ddlRecordSet = findByUUID_G(uuid, groupId);
@@ -791,6 +809,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @return the number of matching d d l record sets
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByUUID_G(String uuid, long groupId)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_G;
@@ -888,6 +907,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @return the matching d d l record sets
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DDLRecordSet> findByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		return findByUuid_C(uuid, companyId, QueryUtil.ALL_POS,
@@ -908,6 +928,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @return the range of matching d d l record sets
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DDLRecordSet> findByUuid_C(String uuid, long companyId,
 		int start, int end) throws SystemException {
 		return findByUuid_C(uuid, companyId, start, end, null);
@@ -928,6 +949,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @return the ordered range of matching d d l record sets
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DDLRecordSet> findByUuid_C(String uuid, long companyId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -1059,6 +1081,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordSetException if a matching d d l record set could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDLRecordSet findByUuid_C_First(String uuid, long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchRecordSetException, SystemException {
@@ -1093,6 +1116,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @return the first matching d d l record set, or <code>null</code> if a matching d d l record set could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDLRecordSet fetchByUuid_C_First(String uuid, long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<DDLRecordSet> list = findByUuid_C(uuid, companyId, 0, 1,
@@ -1115,6 +1139,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordSetException if a matching d d l record set could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDLRecordSet findByUuid_C_Last(String uuid, long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchRecordSetException, SystemException {
@@ -1149,9 +1174,14 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @return the last matching d d l record set, or <code>null</code> if a matching d d l record set could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDLRecordSet fetchByUuid_C_Last(String uuid, long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByUuid_C(uuid, companyId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<DDLRecordSet> list = findByUuid_C(uuid, companyId, count - 1,
 				count, orderByComparator);
@@ -1174,6 +1204,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordSetException if a d d l record set with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDLRecordSet[] findByUuid_C_PrevAndNext(long recordSetId,
 		String uuid, long companyId, OrderByComparator orderByComparator)
 		throws NoSuchRecordSetException, SystemException {
@@ -1334,6 +1365,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @param companyId the company ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		for (DDLRecordSet ddlRecordSet : findByUuid_C(uuid, companyId,
@@ -1350,6 +1382,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @return the number of matching d d l record sets
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_C;
@@ -1445,6 +1478,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @return the matching d d l record sets
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DDLRecordSet> findByGroupId(long groupId)
 		throws SystemException {
 		return findByGroupId(groupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
@@ -1463,6 +1497,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @return the range of matching d d l record sets
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DDLRecordSet> findByGroupId(long groupId, int start, int end)
 		throws SystemException {
 		return findByGroupId(groupId, start, end, null);
@@ -1482,6 +1517,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @return the ordered range of matching d d l record sets
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DDLRecordSet> findByGroupId(long groupId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -1588,6 +1624,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordSetException if a matching d d l record set could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDLRecordSet findByGroupId_First(long groupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchRecordSetException, SystemException {
@@ -1618,6 +1655,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @return the first matching d d l record set, or <code>null</code> if a matching d d l record set could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDLRecordSet fetchByGroupId_First(long groupId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<DDLRecordSet> list = findByGroupId(groupId, 0, 1, orderByComparator);
@@ -1638,6 +1676,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordSetException if a matching d d l record set could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDLRecordSet findByGroupId_Last(long groupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchRecordSetException, SystemException {
@@ -1668,9 +1707,14 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @return the last matching d d l record set, or <code>null</code> if a matching d d l record set could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDLRecordSet fetchByGroupId_Last(long groupId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByGroupId(groupId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<DDLRecordSet> list = findByGroupId(groupId, count - 1, count,
 				orderByComparator);
@@ -1692,6 +1736,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordSetException if a d d l record set with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDLRecordSet[] findByGroupId_PrevAndNext(long recordSetId,
 		long groupId, OrderByComparator orderByComparator)
 		throws NoSuchRecordSetException, SystemException {
@@ -1834,6 +1879,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @return the matching d d l record sets that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DDLRecordSet> filterFindByGroupId(long groupId)
 		throws SystemException {
 		return filterFindByGroupId(groupId, QueryUtil.ALL_POS,
@@ -1853,6 +1899,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @return the range of matching d d l record sets that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DDLRecordSet> filterFindByGroupId(long groupId, int start,
 		int end) throws SystemException {
 		return filterFindByGroupId(groupId, start, end, null);
@@ -1872,6 +1919,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @return the ordered range of matching d d l record sets that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DDLRecordSet> filterFindByGroupId(long groupId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
@@ -1963,6 +2011,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordSetException if a d d l record set with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDLRecordSet[] filterFindByGroupId_PrevAndNext(long recordSetId,
 		long groupId, OrderByComparator orderByComparator)
 		throws NoSuchRecordSetException, SystemException {
@@ -2144,6 +2193,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @param groupId the group ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByGroupId(long groupId) throws SystemException {
 		for (DDLRecordSet ddlRecordSet : findByGroupId(groupId,
 				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
@@ -2158,6 +2208,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @return the number of matching d d l record sets
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByGroupId(long groupId) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_GROUPID;
 
@@ -2210,6 +2261,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @return the number of matching d d l record sets that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int filterCountByGroupId(long groupId) throws SystemException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return countByGroupId(groupId);
@@ -2272,6 +2324,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordSetException if a matching d d l record set could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDLRecordSet findByG_R(long groupId, String recordSetKey)
 		throws NoSuchRecordSetException, SystemException {
 		DDLRecordSet ddlRecordSet = fetchByG_R(groupId, recordSetKey);
@@ -2307,6 +2360,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @return the matching d d l record set, or <code>null</code> if a matching d d l record set could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDLRecordSet fetchByG_R(long groupId, String recordSetKey)
 		throws SystemException {
 		return fetchByG_R(groupId, recordSetKey, true);
@@ -2321,6 +2375,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @return the matching d d l record set, or <code>null</code> if a matching d d l record set could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDLRecordSet fetchByG_R(long groupId, String recordSetKey,
 		boolean retrieveFromCache) throws SystemException {
 		Object[] finderArgs = new Object[] { groupId, recordSetKey };
@@ -2428,6 +2483,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @return the d d l record set that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDLRecordSet removeByG_R(long groupId, String recordSetKey)
 		throws NoSuchRecordSetException, SystemException {
 		DDLRecordSet ddlRecordSet = findByG_R(groupId, recordSetKey);
@@ -2443,6 +2499,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @return the number of matching d d l record sets
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByG_R(long groupId, String recordSetKey)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_R;
@@ -2512,11 +2569,16 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	private static final String _FINDER_COLUMN_G_R_RECORDSETKEY_2 = "ddlRecordSet.recordSetKey = ?";
 	private static final String _FINDER_COLUMN_G_R_RECORDSETKEY_3 = "(ddlRecordSet.recordSetKey IS NULL OR ddlRecordSet.recordSetKey = '')";
 
+	public DDLRecordSetPersistenceImpl() {
+		setModelClass(DDLRecordSet.class);
+	}
+
 	/**
 	 * Caches the d d l record set in the entity cache if it is enabled.
 	 *
 	 * @param ddlRecordSet the d d l record set
 	 */
+	@Override
 	public void cacheResult(DDLRecordSet ddlRecordSet) {
 		EntityCacheUtil.putResult(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
 			DDLRecordSetImpl.class, ddlRecordSet.getPrimaryKey(), ddlRecordSet);
@@ -2538,6 +2600,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 *
 	 * @param ddlRecordSets the d d l record sets
 	 */
+	@Override
 	public void cacheResult(List<DDLRecordSet> ddlRecordSets) {
 		for (DDLRecordSet ddlRecordSet : ddlRecordSets) {
 			if (EntityCacheUtil.getResult(
@@ -2698,6 +2761,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @param recordSetId the primary key for the new d d l record set
 	 * @return the new d d l record set
 	 */
+	@Override
 	public DDLRecordSet create(long recordSetId) {
 		DDLRecordSet ddlRecordSet = new DDLRecordSetImpl();
 
@@ -2719,6 +2783,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordSetException if a d d l record set with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDLRecordSet remove(long recordSetId)
 		throws NoSuchRecordSetException, SystemException {
 		return remove((Serializable)recordSetId);
@@ -2904,6 +2969,8 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 		clearUniqueFindersCache(ddlRecordSet);
 		cacheUniqueFindersCache(ddlRecordSet);
 
+		ddlRecordSet.resetOriginalValues();
+
 		return ddlRecordSet;
 	}
 
@@ -2968,6 +3035,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordSetException if a d d l record set with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDLRecordSet findByPrimaryKey(long recordSetId)
 		throws NoSuchRecordSetException, SystemException {
 		return findByPrimaryKey((Serializable)recordSetId);
@@ -3028,6 +3096,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @return the d d l record set, or <code>null</code> if a d d l record set with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public DDLRecordSet fetchByPrimaryKey(long recordSetId)
 		throws SystemException {
 		return fetchByPrimaryKey((Serializable)recordSetId);
@@ -3039,6 +3108,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @return the d d l record sets
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DDLRecordSet> findAll() throws SystemException {
 		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
@@ -3055,6 +3125,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @return the range of d d l record sets
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DDLRecordSet> findAll(int start, int end)
 		throws SystemException {
 		return findAll(start, end, null);
@@ -3073,6 +3144,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @return the ordered range of d d l record sets
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<DDLRecordSet> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -3158,6 +3230,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 *
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeAll() throws SystemException {
 		for (DDLRecordSet ddlRecordSet : findAll()) {
 			remove(ddlRecordSet);
@@ -3170,6 +3243,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	 * @return the number of d d l record sets
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countAll() throws SystemException {
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
 				FINDER_ARGS_EMPTY, this);
@@ -3273,6 +3347,7 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 		};
 
 	private static CacheModel<DDLRecordSet> _nullDDLRecordSetCacheModel = new CacheModel<DDLRecordSet>() {
+			@Override
 			public DDLRecordSet toEntityModel() {
 				return _nullDDLRecordSet;
 			}

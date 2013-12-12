@@ -33,12 +33,14 @@ import com.liferay.portal.test.AspectJMockingNewClassLoaderJUnitTestRunner;
 
 import java.io.IOException;
 
+import java.net.Socket;
+
 import java.nio.ByteBuffer;
 import java.nio.channels.Channel;
 import java.nio.channels.GatheringByteChannel;
+import java.nio.channels.Pipe;
 import java.nio.channels.Pipe.SinkChannel;
 import java.nio.channels.Pipe.SourceChannel;
-import java.nio.channels.Pipe;
 import java.nio.channels.ScatteringByteChannel;
 import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;
@@ -133,7 +135,7 @@ public class SelectorIntrabandTest {
 
 		// Close selector, without log
 
-		_selectorIntraband = new SelectorIntraband(1000);
+		_selectorIntraband = new SelectorIntraband(_DEFAULT_TIMEOUT);
 
 		logRecords = JDKLoggerTestUtil.configureJDKLogger(
 			SelectorIntraband.class.getName(), Level.OFF);
@@ -196,7 +198,7 @@ public class SelectorIntrabandTest {
 
 		Assert.assertEquals(1, logRecords.size());
 
-		assertMessageStartWith(
+		IntrabandTestUtil.assertMessageStartWith(
 			logRecords.get(0), "Dropped ownerless ACK response ");
 
 		// Receive ACK response, no ACK request, without log
@@ -263,7 +265,7 @@ public class SelectorIntrabandTest {
 
 		Assert.assertEquals(1, logRecords.size());
 
-		assertMessageStartWith(
+		IntrabandTestUtil.assertMessageStartWith(
 			logRecords.get(0), "Dropped ownerless response ");
 
 		// Receive response, no request, without log
@@ -352,7 +354,7 @@ public class SelectorIntrabandTest {
 
 		Assert.assertEquals(1, logRecords.size());
 
-		assertMessageStartWith(
+		IntrabandTestUtil.assertMessageStartWith(
 			logRecords.get(0), "Dropped unconcerned response ");
 
 		// Receive response, with request, without replied completion handler,
@@ -409,7 +411,8 @@ public class SelectorIntrabandTest {
 			Jdk14LogImplAdvice.waitUntilWarnCalled();
 		}
 
-		Datagram ackResponseDatagram = readDatagramFully(scatteringByteChannel);
+		Datagram ackResponseDatagram = IntrabandTestUtil.readDatagramFully(
+			scatteringByteChannel);
 
 		Assert.assertEquals(
 			sequenceId, DatagramHelper.getSequenceId(ackResponseDatagram));
@@ -421,7 +424,8 @@ public class SelectorIntrabandTest {
 
 		Assert.assertEquals(1, logRecords.size());
 
-		assertMessageStartWith(logRecords.get(0), "Dropped ownerless request ");
+		IntrabandTestUtil.assertMessageStartWith(
+			logRecords.get(0), "Dropped ownerless request ");
 
 		// Receive request, no datagram receive handler, without log
 
@@ -479,7 +483,8 @@ public class SelectorIntrabandTest {
 		Assert.assertArrayEquals(_data, dataByteBuffer.array());
 		Assert.assertEquals(1, logRecords.size());
 
-		assertMessageStartWith(logRecords.get(0), "Unable to dispatch");
+		IntrabandTestUtil.assertMessageStartWith(
+			logRecords.get(0), "Unable to dispatch");
 
 		unregisterChannels(registrationReference);
 
@@ -618,6 +623,10 @@ public class SelectorIntrabandTest {
 				interruptThread.join();
 			}
 
+			_selectorIntraband.close();
+
+			_selectorIntraband = new SelectorIntraband(_DEFAULT_TIMEOUT);
+
 			// Normal register
 
 			SelectionKeyRegistrationReference
@@ -635,9 +644,41 @@ public class SelectorIntrabandTest {
 
 			Assert.assertTrue(selectionKey.isValid());
 			Assert.assertEquals(
-				SelectionKey.OP_READ | SelectionKey.OP_WRITE,
-				selectionKey.interestOps());
+				SelectionKey.OP_READ, selectionKey.interestOps());
 			Assert.assertNotNull(selectionKey.attachment());
+
+			selectionKey.interestOps(
+				SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+
+			selector = _selectorIntraband.selector;
+
+			selector.wakeup();
+
+			while (selectionKey.interestOps() != SelectionKey.OP_READ);
+
+			// Concurrent cancelling
+
+			wakeUpThread = new Thread(new WakeUpRunnable(_selectorIntraband));
+
+			wakeUpThread.start();
+
+			synchronized (selector) {
+				wakeUpThread.interrupt();
+				wakeUpThread.join();
+
+				selectionKey.interestOps(
+					SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+
+				SocketChannel peerSocketChannel = peerSocketChannels[1];
+
+				peerSocketChannel.write(ByteBuffer.allocate(1));
+
+				Socket socket = peerSocketChannel.socket();
+
+				socket.shutdownOutput();
+			}
+
+			while (selectionKey.isValid());
 
 			// Register after close
 
@@ -796,7 +837,11 @@ public class SelectorIntrabandTest {
 			interruptThread.join();
 		}
 
+		_selectorIntraband.close();
+
 		// Normal register
+
+		_selectorIntraband = new SelectorIntraband(_DEFAULT_TIMEOUT);
 
 		SelectionKeyRegistrationReference selectionKeyRegistrationReference =
 			(SelectionKeyRegistrationReference)
@@ -816,11 +861,18 @@ public class SelectorIntrabandTest {
 			selectionKeyRegistrationReference.writeSelectionKey;
 
 		Assert.assertTrue(writeSelectionKey.isValid());
-		Assert.assertEquals(
-			SelectionKey.OP_WRITE, writeSelectionKey.interestOps());
+		Assert.assertEquals(0, writeSelectionKey.interestOps());
 		Assert.assertNotNull(writeSelectionKey.attachment());
 		Assert.assertSame(
 			readSelectionKey.attachment(), writeSelectionKey.attachment());
+
+		writeSelectionKey.interestOps(SelectionKey.OP_WRITE);
+
+		selector = _selectorIntraband.selector;
+
+		selector.wakeup();
+
+		while (writeSelectionKey.interestOps() != 0);
 
 		unregisterChannels(selectionKeyRegistrationReference);
 
@@ -866,7 +918,8 @@ public class SelectorIntrabandTest {
 			attachment, EnumSet.of(CompletionType.SUBMITTED),
 			recordCompletionHandler);
 
-		Datagram receiveDatagram = readDatagramFully(scatteringByteChannel);
+		Datagram receiveDatagram = IntrabandTestUtil.readDatagramFully(
+			scatteringByteChannel);
 
 		recordCompletionHandler.waitUntilSubmitted();
 
@@ -896,7 +949,7 @@ public class SelectorIntrabandTest {
 		Assert.assertSame(attachment, recordCompletionHandler.getAttachment());
 		Assert.assertEquals(1, logRecords.size());
 
-		assertMessageStartWith(
+		IntrabandTestUtil.assertMessageStartWith(
 			logRecords.get(0), "Removed timeout response waiting datagram");
 
 		// Callback timeout, without log
@@ -924,8 +977,8 @@ public class SelectorIntrabandTest {
 		recordCompletionHandler = new RecordCompletionHandler<Object>() {
 
 			@Override
-			public void timeouted(Object attachment) {
-				super.timeouted(attachment);
+			public void timedOut(Object attachment) {
+				super.timedOut(attachment);
 
 				throw new NullPointerException();
 			}
@@ -950,7 +1003,7 @@ public class SelectorIntrabandTest {
 		Assert.assertFalse(selector.isOpen());
 		Assert.assertEquals(1, logRecords.size());
 
-		assertMessageStartWith(
+		IntrabandTestUtil.assertMessageStartWith(
 			logRecords.get(0),
 			SelectorIntraband.class + ".threadFactory-1 exiting exceptionally");
 
@@ -1003,7 +1056,8 @@ public class SelectorIntrabandTest {
 			Assert.assertSame(requestDatagram, sendingQueue.peek());
 		}
 
-		Datagram receiveDatagram = readDatagramFully(scatteringByteChannel);
+		Datagram receiveDatagram = IntrabandTestUtil.readDatagramFully(
+			scatteringByteChannel);
 
 		Assert.assertEquals(_type, receiveDatagram.getType());
 
@@ -1047,15 +1101,17 @@ public class SelectorIntrabandTest {
 			Assert.assertSame(requestDatagram2, datagrams[1]);
 		}
 
-		Datagram receiveDatagram1 = readDatagramFully(scatteringByteChannel);
+		Datagram receiveDatagram1 = IntrabandTestUtil.readDatagramFully(
+			scatteringByteChannel);
 
 		Assert.assertEquals(_type, receiveDatagram1.getType());
 
-		dataByteBuffer= receiveDatagram1.getDataByteBuffer();
+		dataByteBuffer = receiveDatagram1.getDataByteBuffer();
 
 		Assert.assertArrayEquals(_data, dataByteBuffer.array());
 
-		Datagram receiveDatagram2 = readDatagramFully(scatteringByteChannel);
+		Datagram receiveDatagram2 = IntrabandTestUtil.readDatagramFully(
+			scatteringByteChannel);
 
 		Assert.assertEquals(_type, receiveDatagram2.getType());
 
@@ -1092,7 +1148,8 @@ public class SelectorIntrabandTest {
 				Assert.assertSame(requestDatagram1, sendingQueue.peek());
 			}
 
-			receiveDatagram1 = readDatagramFully(scatteringByteChannel);
+			receiveDatagram1 = IntrabandTestUtil.readDatagramFully(
+				scatteringByteChannel);
 
 			Assert.assertEquals(_type, receiveDatagram1.getType());
 
@@ -1111,7 +1168,8 @@ public class SelectorIntrabandTest {
 			Assert.assertSame(requestDatagram2, sendingQueue.peek());
 		}
 
-		receiveDatagram2 = readDatagramFully(scatteringByteChannel);
+		receiveDatagram2 = IntrabandTestUtil.readDatagramFully(
+			scatteringByteChannel);
 
 		Assert.assertEquals(_type, receiveDatagram2.getType());
 
@@ -1221,25 +1279,6 @@ public class SelectorIntrabandTest {
 
 	}
 
-	protected void assertMessageStartWith(
-		LogRecord logRecord, String messagePrefix) {
-
-		String message = logRecord.getMessage();
-
-		Assert.assertTrue(message.startsWith(messagePrefix));
-	}
-
-	protected Datagram readDatagramFully(
-			ScatteringByteChannel scatteringByteChannel)
-		throws IOException {
-
-		Datagram datagram = DatagramHelper.createReceiveDatagram();
-
-		while (!DatagramHelper.readFrom(datagram, scatteringByteChannel));
-
-		return datagram;
-	}
-
 	void unregisterChannels(
 			SelectionKeyRegistrationReference registrationReference)
 		throws Exception {
@@ -1277,9 +1316,7 @@ public class SelectorIntrabandTest {
 	private static final long _DEFAULT_TIMEOUT = Time.SECOND;
 
 	private byte[] _data = _DATA_STRING.getBytes(Charset.defaultCharset());
-
 	private SelectorIntraband _selectorIntraband;
-
 	private byte _type = 1;
 
 	private static class MockDuplexSelectableChannel
@@ -1348,26 +1385,32 @@ public class SelectorIntrabandTest {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public long read(ByteBuffer[] byteBuffers, int offset, int length) {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public long read(ByteBuffer[] byteBuffers) {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public int read(ByteBuffer byteBuffer) {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public long write(ByteBuffer[] byteBuffers, int offset, int length) {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public long write(ByteBuffer[] byteBuffers) {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public int write(ByteBuffer byteBuffer) {
 			throw new UnsupportedOperationException();
 		}
@@ -1383,6 +1426,7 @@ public class SelectorIntrabandTest {
 			_selectorIntraband = selectorIntraband;
 		}
 
+		@Override
 		public void run() {
 			Thread currentThread = Thread.currentThread();
 

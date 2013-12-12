@@ -19,6 +19,8 @@ import com.liferay.portal.kernel.io.unsync.UnsyncPrintWriter;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.CharPool;
+import com.liferay.portal.kernel.util.ContextPathUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.SessionParamUtil;
@@ -171,13 +173,28 @@ public class DynamicCSSUtil {
 			return content;
 		}
 
+		String portalContextPath = PortalUtil.getPathContext();
+
+		String baseURL = portalContextPath;
+
+		String contextPath = ContextPathUtil.getContextPath(servletContext);
+
+		if (!contextPath.equals(portalContextPath)) {
+			baseURL = StringPool.SLASH.concat(
+				GetterUtil.getString(servletContext.getServletContextName()));
+		}
+
+		if (baseURL.endsWith(StringPool.SLASH)) {
+			baseURL = baseURL.substring(0, baseURL.length() - 1);
+		}
+
 		parsedContent = StringUtil.replace(
 			parsedContent,
 			new String[] {
-				"@portal_ctx@", "@theme_image_path@"
+				"@base_url@", "@portal_ctx@", "@theme_image_path@"
 			},
 			new String[] {
-				PortalUtil.getPathContext(),
+				baseURL, portalContextPath,
 				_getThemeImagesPath(request, themeDisplay, theme)
 			});
 
@@ -198,28 +215,24 @@ public class DynamicCSSUtil {
 	}
 
 	private static String _getCssThemePath(
-			HttpServletRequest request, ThemeDisplay themeDisplay, Theme theme)
+			ServletContext servletContext, HttpServletRequest request,
+			ThemeDisplay themeDisplay, Theme theme)
 		throws Exception {
 
-		String cssThemePath = null;
-
 		if (themeDisplay != null) {
-			cssThemePath = themeDisplay.getPathThemeCss();
+			return themeDisplay.getPathThemeCss();
 		}
-		else {
-			String cdnHost = StringPool.BLANK;
 
-			if (PortalUtil.isCDNDynamicResourcesEnabled(request)) {
-				cdnHost = PortalUtil.getCDNHost(request);
+		if (PortalUtil.isCDNDynamicResourcesEnabled(request)) {
+			String cdnHost = PortalUtil.getCDNHost(request);
+
+			if (Validator.isNotNull(cdnHost)) {
+				return cdnHost.concat(theme.getStaticResourcePath()).concat(
+					theme.getCssPath());
 			}
-
-			String themeStaticResourcePath = theme.getStaticResourcePath();
-
-			cssThemePath =
-				cdnHost + themeStaticResourcePath + theme.getCssPath();
 		}
 
-		return cssThemePath;
+		return servletContext.getRealPath(theme.getCssPath());
 	}
 
 	private static File _getSassTempDir(ServletContext servletContext) {
@@ -352,10 +365,16 @@ public class DynamicCSSUtil {
 
 		Map<String, Object> inputObjects = new HashMap<String, Object>();
 
+		String portalWebDir = PortalUtil.getPortalWebDir();
+
+		inputObjects.put(
+			"commonSassPath", portalWebDir.concat(_SASS_COMMON_DIR));
+
 		inputObjects.put("content", content);
 		inputObjects.put("cssRealPath", resourcePath);
 		inputObjects.put(
-			"cssThemePath", _getCssThemePath(request, themeDisplay, theme));
+			"cssThemePath",
+			_getCssThemePath(servletContext, request, themeDisplay, theme));
 
 		File sassTempDir = _getSassTempDir(servletContext);
 
@@ -377,7 +396,8 @@ public class DynamicCSSUtil {
 	}
 
 	/**
-	 * @see {@link AggregateFilter#aggregateCss(String, String)}
+	 * @see com.liferay.portal.servlet.filters.aggregate.AggregateFilter#aggregateCss(
+	 *      AggregateContext, String)
 	 */
 	private static String propagateQueryString(
 		String content, String queryString) {
@@ -411,6 +431,8 @@ public class DynamicCSSUtil {
 	private static final String _CSS_IMPORT_BEGIN = "@import url(";
 
 	private static final String _CSS_IMPORT_END = ");";
+
+	private static final String _SASS_COMMON_DIR = "/html/css/common";
 
 	private static final String _SASS_DIR = "sass";
 

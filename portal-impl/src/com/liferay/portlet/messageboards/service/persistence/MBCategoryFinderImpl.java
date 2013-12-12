@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dao.orm.Type;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -55,6 +56,7 @@ public class MBCategoryFinderImpl
 	public static final String FIND_BY_S_G_U_P =
 		MBCategoryFinder.class.getName() + ".findByS_G_U_P";
 
+	@Override
 	public int countByS_G_U_P(
 			long groupId, long userId, long[] parentCategoryIds,
 			QueryDefinition queryDefinition)
@@ -64,6 +66,7 @@ public class MBCategoryFinderImpl
 			groupId, userId, parentCategoryIds, queryDefinition, false);
 	}
 
+	@Override
 	public int filterCountByS_G_U_P(
 			long groupId, long userId, long[] parentCategoryIds,
 			QueryDefinition queryDefinition)
@@ -73,6 +76,7 @@ public class MBCategoryFinderImpl
 			groupId, userId, parentCategoryIds, queryDefinition, true);
 	}
 
+	@Override
 	public List<MBCategory> filterFindByS_G_U_P(
 			long groupId, long userId, long[] parentCategoryIds,
 			QueryDefinition queryDefinition)
@@ -82,6 +86,7 @@ public class MBCategoryFinderImpl
 			groupId, userId, parentCategoryIds, queryDefinition, true);
 	}
 
+	@Override
 	public List<MBCategory> findByS_G_U_P(
 			long groupId, long userId, long[] parentCategoryIds,
 			QueryDefinition queryDefinition)
@@ -103,9 +108,7 @@ public class MBCategoryFinderImpl
 
 			String sql = CustomSQLUtil.get(COUNT_BY_S_G_U_P);
 
-			if ((parentCategoryIds == null) ||
-				(parentCategoryIds.length == 0)) {
-
+			if (ArrayUtil.isEmpty(parentCategoryIds)) {
 				sql = StringUtil.replace(
 					sql, "(MBCategory.parentCategoryId = ?) AND",
 					StringPool.BLANK);
@@ -187,9 +190,7 @@ public class MBCategoryFinderImpl
 
 			String sql = CustomSQLUtil.get(FIND_BY_S_G_U_P);
 
-			if ((parentCategoryIds == null) ||
-				(parentCategoryIds.length == 0)) {
-
+			if (ArrayUtil.isEmpty(parentCategoryIds)) {
 				sql = StringUtil.replace(
 					sql, "(MBCategory.parentCategoryId = ?) AND",
 					StringPool.BLANK);
@@ -246,6 +247,7 @@ public class MBCategoryFinderImpl
 
 				MBCategory category = new MBCategoryImpl();
 
+				category.setGroupId(group.getGroupId());
 				category.setCompanyId(group.getCompanyId());
 				category.setName(group.getName());
 				category.setDescription(group.getDescription());

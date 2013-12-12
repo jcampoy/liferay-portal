@@ -14,6 +14,8 @@
 
 package com.liferay.portal.model;
 
+import aQute.bnd.annotation.ProviderType;
+
 /**
  * The extended model interface for the LayoutSet service. Represents a row in the &quot;LayoutSet&quot; database table, with each column mapped to a property of this class.
  *
@@ -23,6 +25,7 @@ package com.liferay.portal.model;
  * @see com.liferay.portal.model.impl.LayoutSetModelImpl
  * @generated
  */
+@ProviderType
 public interface LayoutSet extends LayoutSetModel, PersistedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -41,8 +44,6 @@ public interface LayoutSet extends LayoutSetModel, PersistedModel {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	public long getLiveLogoId();
-
-	public java.lang.String getSettings();
 
 	public com.liferay.portal.kernel.util.UnicodeProperties getSettingsProperties();
 
@@ -64,8 +65,6 @@ public interface LayoutSet extends LayoutSetModel, PersistedModel {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	public boolean isLayoutSetPrototypeLinkActive();
-
-	public void setSettings(java.lang.String settings);
 
 	public void setSettingsProperties(
 		com.liferay.portal.kernel.util.UnicodeProperties settingsProperties);

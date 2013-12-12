@@ -64,15 +64,7 @@ public class TemplateProcessor implements ColumnProcessor {
 			request.getAttribute(WebKeys.PORTLET_AJAX_RENDER));
 
 		_portletRenderers = new TreeMap<Integer, List<PortletRenderer>>(
-			new Comparator<Integer>() {
-
-				public int compare(
-					Integer renderWeight1, Integer renderWeight2) {
-
-					return renderWeight2.compareTo(renderWeight1);
-				}
-
-			});
+			_renderWeightComparator);
 	}
 
 	public Map<Integer, List<PortletRenderer>> getPortletRenderers() {
@@ -83,10 +75,12 @@ public class TemplateProcessor implements ColumnProcessor {
 		return _portletAjaxRender;
 	}
 
+	@Override
 	public String processColumn(String columnId) throws Exception {
 		return processColumn(columnId, StringPool.BLANK);
 	}
 
+	@Override
 	public String processColumn(String columnId, String classNames)
 		throws Exception {
 
@@ -166,6 +160,7 @@ public class TemplateProcessor implements ColumnProcessor {
 		return sb.toString();
 	}
 
+	@Override
 	public String processMax() throws Exception {
 		BufferCacheServletResponse bufferCacheServletResponse =
 			new BufferCacheServletResponse(_response);
@@ -176,6 +171,15 @@ public class TemplateProcessor implements ColumnProcessor {
 		return bufferCacheServletResponse.getString();
 	}
 
+	/**
+	 * @deprecated As of 6.2.0, replaced by {@link #processMax()}
+	 */
+	@Override
+	public String processMax(String classNames) throws Exception {
+		return processMax();
+	}
+
+	@Override
 	public String processPortlet(String portletId) throws Exception {
 		_request.setAttribute(WebKeys.RENDER_PORTLET_RESOURCE, Boolean.TRUE);
 
@@ -199,10 +203,22 @@ public class TemplateProcessor implements ColumnProcessor {
 		}
 	}
 
+	private static RenderWeightComparator _renderWeightComparator =
+		new RenderWeightComparator();
+
 	private Portlet _portlet;
 	private boolean _portletAjaxRender;
 	private Map<Integer, List<PortletRenderer>> _portletRenderers;
 	private HttpServletRequest _request;
 	private HttpServletResponse _response;
+
+	private static class RenderWeightComparator implements Comparator<Integer> {
+
+		@Override
+		public int compare(Integer renderWeight1, Integer renderWeight2) {
+			return renderWeight2.intValue() - renderWeight1.intValue();
+		}
+
+	}
 
 }

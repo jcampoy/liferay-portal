@@ -14,16 +14,22 @@
 
 package com.liferay.portlet.wiki.model;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.AutoEscape;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.trash.TrashHandler;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ContainerModel;
 import com.liferay.portal.model.StagedGroupedModel;
+import com.liferay.portal.model.TrashedModel;
 import com.liferay.portal.model.WorkflowedModel;
 import com.liferay.portal.service.ServiceContext;
 
 import com.liferay.portlet.expando.model.ExpandoBridge;
+import com.liferay.portlet.trash.model.TrashEntry;
 
 import java.io.Serializable;
 
@@ -42,8 +48,9 @@ import java.util.Date;
  * @see com.liferay.portlet.wiki.model.impl.WikiNodeModelImpl
  * @generated
  */
+@ProviderType
 public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
-	StagedGroupedModel, WorkflowedModel {
+	StagedGroupedModel, TrashedModel, WorkflowedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -70,6 +77,7 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 * @return the uuid of this wiki node
 	 */
 	@AutoEscape
+	@Override
 	public String getUuid();
 
 	/**
@@ -77,6 +85,7 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 *
 	 * @param uuid the uuid of this wiki node
 	 */
+	@Override
 	public void setUuid(String uuid);
 
 	/**
@@ -98,6 +107,7 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 *
 	 * @return the group ID of this wiki node
 	 */
+	@Override
 	public long getGroupId();
 
 	/**
@@ -105,6 +115,7 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 *
 	 * @param groupId the group ID of this wiki node
 	 */
+	@Override
 	public void setGroupId(long groupId);
 
 	/**
@@ -112,6 +123,7 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 *
 	 * @return the company ID of this wiki node
 	 */
+	@Override
 	public long getCompanyId();
 
 	/**
@@ -119,6 +131,7 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 *
 	 * @param companyId the company ID of this wiki node
 	 */
+	@Override
 	public void setCompanyId(long companyId);
 
 	/**
@@ -126,6 +139,7 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 *
 	 * @return the user ID of this wiki node
 	 */
+	@Override
 	public long getUserId();
 
 	/**
@@ -133,6 +147,7 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 *
 	 * @param userId the user ID of this wiki node
 	 */
+	@Override
 	public void setUserId(long userId);
 
 	/**
@@ -141,6 +156,7 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 * @return the user uuid of this wiki node
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public String getUserUuid() throws SystemException;
 
 	/**
@@ -148,6 +164,7 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 *
 	 * @param userUuid the user uuid of this wiki node
 	 */
+	@Override
 	public void setUserUuid(String userUuid);
 
 	/**
@@ -156,6 +173,7 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 * @return the user name of this wiki node
 	 */
 	@AutoEscape
+	@Override
 	public String getUserName();
 
 	/**
@@ -163,6 +181,7 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 *
 	 * @param userName the user name of this wiki node
 	 */
+	@Override
 	public void setUserName(String userName);
 
 	/**
@@ -170,6 +189,7 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 *
 	 * @return the create date of this wiki node
 	 */
+	@Override
 	public Date getCreateDate();
 
 	/**
@@ -177,6 +197,7 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 *
 	 * @param createDate the create date of this wiki node
 	 */
+	@Override
 	public void setCreateDate(Date createDate);
 
 	/**
@@ -184,6 +205,7 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 *
 	 * @return the modified date of this wiki node
 	 */
+	@Override
 	public Date getModifiedDate();
 
 	/**
@@ -191,6 +213,7 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 *
 	 * @param modifiedDate the modified date of this wiki node
 	 */
+	@Override
 	public void setModifiedDate(Date modifiedDate);
 
 	/**
@@ -242,6 +265,7 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 *
 	 * @return the status of this wiki node
 	 */
+	@Override
 	public int getStatus();
 
 	/**
@@ -249,6 +273,7 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 *
 	 * @param status the status of this wiki node
 	 */
+	@Override
 	public void setStatus(int status);
 
 	/**
@@ -256,6 +281,7 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 *
 	 * @return the status by user ID of this wiki node
 	 */
+	@Override
 	public long getStatusByUserId();
 
 	/**
@@ -263,6 +289,7 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 *
 	 * @param statusByUserId the status by user ID of this wiki node
 	 */
+	@Override
 	public void setStatusByUserId(long statusByUserId);
 
 	/**
@@ -271,6 +298,7 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 * @return the status by user uuid of this wiki node
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public String getStatusByUserUuid() throws SystemException;
 
 	/**
@@ -278,6 +306,7 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 *
 	 * @param statusByUserUuid the status by user uuid of this wiki node
 	 */
+	@Override
 	public void setStatusByUserUuid(String statusByUserUuid);
 
 	/**
@@ -286,6 +315,7 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 * @return the status by user name of this wiki node
 	 */
 	@AutoEscape
+	@Override
 	public String getStatusByUserName();
 
 	/**
@@ -293,6 +323,7 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 *
 	 * @param statusByUserName the status by user name of this wiki node
 	 */
+	@Override
 	public void setStatusByUserName(String statusByUserName);
 
 	/**
@@ -300,6 +331,7 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 *
 	 * @return the status date of this wiki node
 	 */
+	@Override
 	public Date getStatusDate();
 
 	/**
@@ -307,11 +339,58 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 *
 	 * @param statusDate the status date of this wiki node
 	 */
+	@Override
 	public void setStatusDate(Date statusDate);
+
+	/**
+	 * Returns the trash entry created when this wiki node was moved to the Recycle Bin. The trash entry may belong to one of the ancestors of this wiki node.
+	 *
+	 * @return the trash entry created when this wiki node was moved to the Recycle Bin
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public TrashEntry getTrashEntry() throws PortalException, SystemException;
+
+	/**
+	 * Returns the class primary key of the trash entry for this wiki node.
+	 *
+	 * @return the class primary key of the trash entry for this wiki node
+	 */
+	@Override
+	public long getTrashEntryClassPK();
+
+	/**
+	 * Returns the trash handler for this wiki node.
+	 *
+	 * @return the trash handler for this wiki node
+	 */
+	@Override
+	public TrashHandler getTrashHandler();
+
+	/**
+	 * Returns <code>true</code> if this wiki node is in the Recycle Bin.
+	 *
+	 * @return <code>true</code> if this wiki node is in the Recycle Bin; <code>false</code> otherwise
+	 */
+	@Override
+	public boolean isInTrash();
+
+	/**
+	 * Returns <code>true</code> if the parent of this wiki node is in the Recycle Bin.
+	 *
+	 * @return <code>true</code> if the parent of this wiki node is in the Recycle Bin; <code>false</code> otherwise
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public boolean isInTrashContainer();
+
+	@Override
+	public boolean isInTrashExplicitly() throws SystemException;
 
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #isApproved()}
 	 */
+	@Override
 	public boolean getApproved();
 
 	/**
@@ -319,6 +398,7 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 *
 	 * @return <code>true</code> if this wiki node is approved; <code>false</code> otherwise
 	 */
+	@Override
 	public boolean isApproved();
 
 	/**
@@ -326,6 +406,7 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 *
 	 * @return <code>true</code> if this wiki node is denied; <code>false</code> otherwise
 	 */
+	@Override
 	public boolean isDenied();
 
 	/**
@@ -333,6 +414,7 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 *
 	 * @return <code>true</code> if this wiki node is a draft; <code>false</code> otherwise
 	 */
+	@Override
 	public boolean isDraft();
 
 	/**
@@ -340,6 +422,7 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 *
 	 * @return <code>true</code> if this wiki node is expired; <code>false</code> otherwise
 	 */
+	@Override
 	public boolean isExpired();
 
 	/**
@@ -347,6 +430,7 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 *
 	 * @return <code>true</code> if this wiki node is inactive; <code>false</code> otherwise
 	 */
+	@Override
 	public boolean isInactive();
 
 	/**
@@ -354,20 +438,15 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 *
 	 * @return <code>true</code> if this wiki node is incomplete; <code>false</code> otherwise
 	 */
+	@Override
 	public boolean isIncomplete();
-
-	/**
-	 * Returns <code>true</code> if this wiki node is in the Recycle Bin.
-	 *
-	 * @return <code>true</code> if this wiki node is in the Recycle Bin; <code>false</code> otherwise
-	 */
-	public boolean isInTrash();
 
 	/**
 	 * Returns <code>true</code> if this wiki node is pending.
 	 *
 	 * @return <code>true</code> if this wiki node is pending; <code>false</code> otherwise
 	 */
+	@Override
 	public boolean isPending();
 
 	/**
@@ -375,6 +454,7 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 *
 	 * @return <code>true</code> if this wiki node is scheduled; <code>false</code> otherwise
 	 */
+	@Override
 	public boolean isScheduled();
 
 	/**
@@ -382,13 +462,15 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 *
 	 * @return the container model ID of this wiki node
 	 */
+	@Override
 	public long getContainerModelId();
 
 	/**
 	 * Sets the container model ID of this wiki node.
 	 *
-	 * @param container model ID of this wiki node
+	 * @param containerModelId the container model ID of this wiki node
 	 */
+	@Override
 	public void setContainerModelId(long containerModelId);
 
 	/**
@@ -396,6 +478,7 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 *
 	 * @return the container name of this wiki node
 	 */
+	@Override
 	public String getContainerModelName();
 
 	/**
@@ -403,50 +486,71 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
 	 *
 	 * @return the parent container model ID of this wiki node
 	 */
+	@Override
 	public long getParentContainerModelId();
 
 	/**
 	 * Sets the parent container model ID of this wiki node.
 	 *
-	 * @param parent container model ID of this wiki node
+	 * @param parentContainerModelId the parent container model ID of this wiki node
 	 */
+	@Override
 	public void setParentContainerModelId(long parentContainerModelId);
 
+	@Override
 	public boolean isNew();
 
+	@Override
 	public void setNew(boolean n);
 
+	@Override
 	public boolean isCachedModel();
 
+	@Override
 	public void setCachedModel(boolean cachedModel);
 
+	@Override
 	public boolean isEscapedModel();
 
+	@Override
 	public Serializable getPrimaryKeyObj();
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj);
 
+	@Override
 	public ExpandoBridge getExpandoBridge();
 
+	@Override
 	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
 
+	@Override
 	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
 
+	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
+	@Override
 	public Object clone();
 
+	@Override
 	public int compareTo(WikiNode wikiNode);
 
+	@Override
 	public int hashCode();
 
+	@Override
 	public CacheModel<WikiNode> toCacheModel();
 
+	@Override
 	public WikiNode toEscapedModel();
 
+	@Override
 	public WikiNode toUnescapedModel();
 
+	@Override
 	public String toString();
 
+	@Override
 	public String toXmlString();
 }

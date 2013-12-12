@@ -87,11 +87,11 @@ public class DocumentConversionUtil {
 	public static boolean isComparableVersion(String extension) {
 		boolean enabled = false;
 
-		String dotExtension = StringPool.PERIOD + extension;
+		String periodAndExtension = StringPool.PERIOD.concat(extension);
 
 		for (int i = 0; i < _COMPARABLE_FILE_EXTENSIONS.length; i++) {
 			if (StringPool.STAR.equals(_COMPARABLE_FILE_EXTENSIONS[i]) ||
-				dotExtension.equals(_COMPARABLE_FILE_EXTENSIONS[i])) {
+				periodAndExtension.equals(_COMPARABLE_FILE_EXTENSIONS[i])) {
 
 				enabled = true;
 
@@ -177,54 +177,52 @@ public class DocumentConversionUtil {
 
 		File file = new File(fileName);
 
-		if (!PropsValues.OPENOFFICE_CACHE_ENABLED || !file.exists()) {
-			DocumentFormatRegistry documentFormatRegistry =
-				new DefaultDocumentFormatRegistry();
-
-			DocumentFormat inputDocumentFormat =
-				documentFormatRegistry.getFormatByFileExtension(
-					sourceExtension);
-			DocumentFormat outputDocumentFormat =
-				documentFormatRegistry.getFormatByFileExtension(
-					targetExtension);
-
-			if (inputDocumentFormat == null) {
-				throw new SystemException(
-					"Conversion is not supported from ." + sourceExtension);
-			}
-			else if (!inputDocumentFormat.isImportable()) {
-				throw new SystemException(
-					"Conversion is not supported from " +
-						inputDocumentFormat.getName());
-			}
-			else if (outputDocumentFormat == null) {
-				throw new SystemException(
-					"Conversion is not supported from " +
-						inputDocumentFormat.getName() + " to ." +
-							targetExtension);
-			}
-			else if (!inputDocumentFormat.isExportableTo(
-						outputDocumentFormat)) {
-
-				throw new SystemException(
-					"Conversion is not supported from " +
-						inputDocumentFormat.getName() + " to " +
-							outputDocumentFormat.getName());
-			}
-
-			UnsyncByteArrayOutputStream unsyncByteArrayOutputStream =
-				new UnsyncByteArrayOutputStream();
-
-			DocumentConverter documentConverter = _getDocumentConverter();
-
-			documentConverter.convert(
-				inputStream, inputDocumentFormat, unsyncByteArrayOutputStream,
-				outputDocumentFormat);
-
-			FileUtil.write(
-				file, unsyncByteArrayOutputStream.unsafeGetByteArray(), 0,
-				unsyncByteArrayOutputStream.size());
+		if (PropsValues.OPENOFFICE_CACHE_ENABLED && file.exists()) {
+			return file;
 		}
+
+		DocumentFormatRegistry documentFormatRegistry =
+			new DefaultDocumentFormatRegistry();
+
+		DocumentFormat inputDocumentFormat =
+			documentFormatRegistry.getFormatByFileExtension(sourceExtension);
+		DocumentFormat outputDocumentFormat =
+			documentFormatRegistry.getFormatByFileExtension(targetExtension);
+
+		if (inputDocumentFormat == null) {
+			throw new SystemException(
+				"Conversion is not supported from ." + sourceExtension);
+		}
+		else if (!inputDocumentFormat.isImportable()) {
+			throw new SystemException(
+				"Conversion is not supported from " +
+					inputDocumentFormat.getName());
+		}
+		else if (outputDocumentFormat == null) {
+			throw new SystemException(
+				"Conversion is not supported from " +
+					inputDocumentFormat.getName() + " to ." +
+						targetExtension);
+		}
+		else if (!inputDocumentFormat.isExportableTo(outputDocumentFormat)) {
+			throw new SystemException(
+				"Conversion is not supported from " +
+					inputDocumentFormat.getName() + " to " +
+						outputDocumentFormat.getName());
+		}
+
+		UnsyncByteArrayOutputStream unsyncByteArrayOutputStream =
+			new UnsyncByteArrayOutputStream();
+
+		DocumentConverter documentConverter = _getDocumentConverter();
+
+		documentConverter.convert(
+			inputStream, inputDocumentFormat, unsyncByteArrayOutputStream,
+			outputDocumentFormat);
+
+		FileUtil.write(
+			file, unsyncByteArrayOutputStream.unsafeGetByteArray(), 0,
+			unsyncByteArrayOutputStream.size());
 
 		return file;
 	}

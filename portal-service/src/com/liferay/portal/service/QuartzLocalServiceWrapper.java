@@ -14,15 +14,16 @@
 
 package com.liferay.portal.service;
 
+import aQute.bnd.annotation.ProviderType;
+
 /**
- * <p>
- * This class is a wrapper for {@link QuartzLocalService}.
- * </p>
+ * Provides a wrapper for {@link QuartzLocalService}.
  *
- * @author    Brian Wing Shun Chan
- * @see       QuartzLocalService
+ * @author Brian Wing Shun Chan
+ * @see QuartzLocalService
  * @generated
  */
+@ProviderType
 public class QuartzLocalServiceWrapper implements QuartzLocalService,
 	ServiceWrapper<QuartzLocalService> {
 	public QuartzLocalServiceWrapper(QuartzLocalService quartzLocalService) {
@@ -34,6 +35,7 @@ public class QuartzLocalServiceWrapper implements QuartzLocalService,
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _quartzLocalService.getBeanIdentifier();
 	}
@@ -43,10 +45,12 @@ public class QuartzLocalServiceWrapper implements QuartzLocalService,
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_quartzLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
+	@Override
 	public void checkQuartzTables()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_quartzLocalService.checkQuartzTables();
@@ -67,10 +71,12 @@ public class QuartzLocalServiceWrapper implements QuartzLocalService,
 		_quartzLocalService = quartzLocalService;
 	}
 
+	@Override
 	public QuartzLocalService getWrappedService() {
 		return _quartzLocalService;
 	}
 
+	@Override
 	public void setWrappedService(QuartzLocalService quartzLocalService) {
 		_quartzLocalService = quartzLocalService;
 	}

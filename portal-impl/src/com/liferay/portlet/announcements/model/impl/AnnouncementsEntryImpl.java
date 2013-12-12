@@ -30,6 +30,7 @@ public class AnnouncementsEntryImpl extends AnnouncementsEntryBaseImpl {
 	public AnnouncementsEntryImpl() {
 	}
 
+	@Override
 	public long getGroupId() throws PortalException, SystemException {
 		long groupId = 0;
 
@@ -47,9 +48,7 @@ public class AnnouncementsEntryImpl extends AnnouncementsEntryBaseImpl {
 				Organization organization =
 					OrganizationLocalServiceUtil.getOrganization(classPK);
 
-				Group group = organization.getGroup();
-
-				groupId = group.getGroupId();
+				groupId = organization.getGroupId();
 			}
 		}
 

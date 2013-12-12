@@ -14,6 +14,8 @@
 
 package com.liferay.portal.model;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.LocaleException;
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -40,8 +42,9 @@ import java.util.Map;
  * @see com.liferay.portal.model.impl.LayoutPrototypeModelImpl
  * @generated
  */
+@ProviderType
 public interface LayoutPrototypeModel extends BaseModel<LayoutPrototype>,
-	StagedModel {
+	StagedAuditedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -68,6 +71,7 @@ public interface LayoutPrototypeModel extends BaseModel<LayoutPrototype>,
 	 * @return the uuid of this layout prototype
 	 */
 	@AutoEscape
+	@Override
 	public String getUuid();
 
 	/**
@@ -75,6 +79,7 @@ public interface LayoutPrototypeModel extends BaseModel<LayoutPrototype>,
 	 *
 	 * @param uuid the uuid of this layout prototype
 	 */
+	@Override
 	public void setUuid(String uuid);
 
 	/**
@@ -96,6 +101,7 @@ public interface LayoutPrototypeModel extends BaseModel<LayoutPrototype>,
 	 *
 	 * @return the company ID of this layout prototype
 	 */
+	@Override
 	public long getCompanyId();
 
 	/**
@@ -103,6 +109,7 @@ public interface LayoutPrototypeModel extends BaseModel<LayoutPrototype>,
 	 *
 	 * @param companyId the company ID of this layout prototype
 	 */
+	@Override
 	public void setCompanyId(long companyId);
 
 	/**
@@ -110,6 +117,7 @@ public interface LayoutPrototypeModel extends BaseModel<LayoutPrototype>,
 	 *
 	 * @return the user ID of this layout prototype
 	 */
+	@Override
 	public long getUserId();
 
 	/**
@@ -117,6 +125,7 @@ public interface LayoutPrototypeModel extends BaseModel<LayoutPrototype>,
 	 *
 	 * @param userId the user ID of this layout prototype
 	 */
+	@Override
 	public void setUserId(long userId);
 
 	/**
@@ -125,6 +134,7 @@ public interface LayoutPrototypeModel extends BaseModel<LayoutPrototype>,
 	 * @return the user uuid of this layout prototype
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public String getUserUuid() throws SystemException;
 
 	/**
@@ -132,6 +142,7 @@ public interface LayoutPrototypeModel extends BaseModel<LayoutPrototype>,
 	 *
 	 * @param userUuid the user uuid of this layout prototype
 	 */
+	@Override
 	public void setUserUuid(String userUuid);
 
 	/**
@@ -140,6 +151,7 @@ public interface LayoutPrototypeModel extends BaseModel<LayoutPrototype>,
 	 * @return the user name of this layout prototype
 	 */
 	@AutoEscape
+	@Override
 	public String getUserName();
 
 	/**
@@ -147,6 +159,7 @@ public interface LayoutPrototypeModel extends BaseModel<LayoutPrototype>,
 	 *
 	 * @param userName the user name of this layout prototype
 	 */
+	@Override
 	public void setUserName(String userName);
 
 	/**
@@ -154,6 +167,7 @@ public interface LayoutPrototypeModel extends BaseModel<LayoutPrototype>,
 	 *
 	 * @return the create date of this layout prototype
 	 */
+	@Override
 	public Date getCreateDate();
 
 	/**
@@ -161,6 +175,7 @@ public interface LayoutPrototypeModel extends BaseModel<LayoutPrototype>,
 	 *
 	 * @param createDate the create date of this layout prototype
 	 */
+	@Override
 	public void setCreateDate(Date createDate);
 
 	/**
@@ -168,6 +183,7 @@ public interface LayoutPrototypeModel extends BaseModel<LayoutPrototype>,
 	 *
 	 * @return the modified date of this layout prototype
 	 */
+	@Override
 	public Date getModifiedDate();
 
 	/**
@@ -175,6 +191,7 @@ public interface LayoutPrototypeModel extends BaseModel<LayoutPrototype>,
 	 *
 	 * @param modifiedDate the modified date of this layout prototype
 	 */
+	@Override
 	public void setModifiedDate(Date modifiedDate);
 
 	/**
@@ -327,44 +344,69 @@ public interface LayoutPrototypeModel extends BaseModel<LayoutPrototype>,
 	 */
 	public void setActive(boolean active);
 
+	@Override
 	public boolean isNew();
 
+	@Override
 	public void setNew(boolean n);
 
+	@Override
 	public boolean isCachedModel();
 
+	@Override
 	public void setCachedModel(boolean cachedModel);
 
+	@Override
 	public boolean isEscapedModel();
 
+	@Override
 	public Serializable getPrimaryKeyObj();
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj);
 
+	@Override
 	public ExpandoBridge getExpandoBridge();
 
+	@Override
 	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
 
+	@Override
 	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
 
+	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
+
+	public String[] getAvailableLanguageIds();
+
+	public String getDefaultLanguageId();
+
+	public void prepareLocalizedFieldsForImport() throws LocaleException;
 
 	public void prepareLocalizedFieldsForImport(Locale defaultImportLocale)
 		throws LocaleException;
 
+	@Override
 	public Object clone();
 
+	@Override
 	public int compareTo(LayoutPrototype layoutPrototype);
 
+	@Override
 	public int hashCode();
 
+	@Override
 	public CacheModel<LayoutPrototype> toCacheModel();
 
+	@Override
 	public LayoutPrototype toEscapedModel();
 
+	@Override
 	public LayoutPrototype toUnescapedModel();
 
+	@Override
 	public String toString();
 
+	@Override
 	public String toXmlString();
 }

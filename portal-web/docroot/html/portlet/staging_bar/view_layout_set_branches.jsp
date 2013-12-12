@@ -52,11 +52,11 @@ request.setAttribute("view_layout_set_branches.jsp-currentLayoutSetBranchId", St
 	</c:if>
 </liferay-ui:error>
 
-<div class="portlet-msg-info">
+<div class="alert alert-info">
 	<liferay-ui:message key="pages-variations-help" />
 </div>
 
-<c:if test="<%= GroupPermissionUtil.contains(permissionChecker, stagingGroup.getGroupId(), ActionKeys.ADD_LAYOUT_SET_BRANCH) %>">
+<c:if test="<%= GroupPermissionUtil.contains(permissionChecker, stagingGroup, ActionKeys.ADD_LAYOUT_SET_BRANCH) %>">
 	<liferay-util:html-top>
 		<liferay-util:include page="/html/portlet/staging_bar/edit_layout_set_branch.jsp">
 			<liferay-util:param name="redirect" value="<%= currentURL %>" />

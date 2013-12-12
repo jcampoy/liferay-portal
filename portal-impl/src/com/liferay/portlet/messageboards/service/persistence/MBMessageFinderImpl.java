@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dao.orm.Type;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CalendarUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -66,6 +67,7 @@ public class MBMessageFinderImpl
 	public static final String FIND_BY_G_U_C_A_S =
 		MBMessageFinder.class.getName() + ".findByG_U_C_A_S";
 
+	@Override
 	public int countByC_T(Date createDate, long threadId)
 		throws SystemException {
 
@@ -107,6 +109,7 @@ public class MBMessageFinderImpl
 		}
 	}
 
+	@Override
 	public int countByG_U_C_S(
 			long groupId, long userId, long[] categoryIds, int status)
 		throws SystemException {
@@ -114,6 +117,7 @@ public class MBMessageFinderImpl
 		return doCountByG_U_C_S(groupId, userId, categoryIds, status, false);
 	}
 
+	@Override
 	public int countByG_U_C_A_S(
 			long groupId, long userId, long[] categoryIds, boolean anonymous,
 			int status)
@@ -123,6 +127,7 @@ public class MBMessageFinderImpl
 			groupId, userId, categoryIds, anonymous, status, false);
 	}
 
+	@Override
 	public int filterCountByG_U_C_S(
 			long groupId, long userId, long[] categoryIds, int status)
 		throws SystemException {
@@ -130,6 +135,7 @@ public class MBMessageFinderImpl
 		return doCountByG_U_C_S(groupId, userId, categoryIds, status, true);
 	}
 
+	@Override
 	public int filterCountByG_U_MD_C_S(
 			long groupId, long userId, Date modifiedDate, long[] categoryIds,
 			int status)
@@ -139,6 +145,7 @@ public class MBMessageFinderImpl
 			groupId, userId, modifiedDate, categoryIds, status, true);
 	}
 
+	@Override
 	public int filterCountByG_U_C_A_S(
 			long groupId, long userId, long[] categoryIds, boolean anonymous,
 			int status)
@@ -148,6 +155,7 @@ public class MBMessageFinderImpl
 			groupId, userId, categoryIds, anonymous, status, true);
 	}
 
+	@Override
 	public List<Long> filterFindByG_U_C_S(
 			long groupId, long userId, long[] categoryIds, int status,
 			int start, int end)
@@ -157,6 +165,7 @@ public class MBMessageFinderImpl
 			groupId, userId, categoryIds, status, start, end, true);
 	}
 
+	@Override
 	public List<Long> filterFindByG_U_MD_C_S(
 			long groupId, long userId, Date modifiedDate, long[] categoryIds,
 			int status, int start, int end)
@@ -167,6 +176,7 @@ public class MBMessageFinderImpl
 			true);
 	}
 
+	@Override
 	public List<Long> filterFindByG_U_C_A_S(
 			long groupId, long userId, long[] categoryIds, boolean anonymous,
 			int status, int start, int end)
@@ -176,6 +186,7 @@ public class MBMessageFinderImpl
 			groupId, userId, categoryIds, anonymous, status, start, end, true);
 	}
 
+	@Override
 	public List<MBMessage> findByNoAssets() throws SystemException {
 		Session session = null;
 
@@ -198,6 +209,7 @@ public class MBMessageFinderImpl
 		}
 	}
 
+	@Override
 	public List<Long> findByG_U_C_S(
 			long groupId, long userId, long[] categoryIds, int status,
 			int start, int end)
@@ -207,6 +219,7 @@ public class MBMessageFinderImpl
 			groupId, userId, categoryIds, status, start, end, false);
 	}
 
+	@Override
 	public List<Long> findByG_U_C_A_S(
 			long groupId, long userId, long[] categoryIds, boolean anonymous,
 			int status, int start, int end)
@@ -232,7 +245,7 @@ public class MBMessageFinderImpl
 				sql = StringUtil.replace(sql, _USER_ID_SQL, StringPool.BLANK);
 			}
 
-			if ((categoryIds == null) || (categoryIds.length == 0)) {
+			if (ArrayUtil.isEmpty(categoryIds)) {
 				sql = StringUtil.replace(
 					sql, "(currentMessage.categoryId = ?) AND",
 					StringPool.BLANK);
@@ -308,7 +321,7 @@ public class MBMessageFinderImpl
 				sql = StringUtil.replace(sql, _USER_ID_SQL, StringPool.BLANK);
 			}
 
-			if ((categoryIds == null) || (categoryIds.length == 0)) {
+			if (ArrayUtil.isEmpty(categoryIds)) {
 				sql = StringUtil.replace(
 					sql, "(currentMessage.categoryId = ?) AND",
 					StringPool.BLANK);
@@ -382,7 +395,7 @@ public class MBMessageFinderImpl
 
 			String sql = CustomSQLUtil.get(COUNT_BY_G_U_C_A_S);
 
-			if ((categoryIds == null) || (categoryIds.length == 0)) {
+			if (ArrayUtil.isEmpty(categoryIds)) {
 				sql = StringUtil.replace(
 					sql, "(currentMessage.categoryId = ?) AND",
 					StringPool.BLANK);
@@ -456,7 +469,7 @@ public class MBMessageFinderImpl
 				sql = StringUtil.replace(sql, _USER_ID_SQL, StringPool.BLANK);
 			}
 
-			if ((categoryIds == null) || (categoryIds.length == 0)) {
+			if (ArrayUtil.isEmpty(categoryIds)) {
 				sql = StringUtil.replace(
 					sql, "(currentMessage.categoryId = ?) AND",
 					StringPool.BLANK);
@@ -522,7 +535,7 @@ public class MBMessageFinderImpl
 				sql = StringUtil.replace(sql, _USER_ID_SQL, StringPool.BLANK);
 			}
 
-			if ((categoryIds == null) || (categoryIds.length == 0)) {
+			if (ArrayUtil.isEmpty(categoryIds)) {
 				sql = StringUtil.replace(
 					sql, "(currentMessage.categoryId = ?) AND",
 					StringPool.BLANK);
@@ -586,7 +599,7 @@ public class MBMessageFinderImpl
 
 			String sql = CustomSQLUtil.get(FIND_BY_G_U_C_A_S);
 
-			if ((categoryIds == null) || (categoryIds.length == 0)) {
+			if (ArrayUtil.isEmpty(categoryIds)) {
 				sql = StringUtil.replace(
 					sql, "(currentMessage.categoryId = ?) AND",
 					StringPool.BLANK);

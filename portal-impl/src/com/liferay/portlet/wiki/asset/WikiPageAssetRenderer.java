@@ -24,6 +24,7 @@ import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.util.WebKeys;
+import com.liferay.portlet.asset.model.AssetRendererFactory;
 import com.liferay.portlet.asset.model.BaseAssetRenderer;
 import com.liferay.portlet.trash.util.TrashUtil;
 import com.liferay.portlet.wiki.model.WikiPage;
@@ -51,7 +52,7 @@ public class WikiPageAssetRenderer
 
 	public static long getClassPK(WikiPage page) {
 		if (!page.isApproved() && !page.isDraft() && !page.isPending() &&
-			!page.isInTrash() && !page.isInTrashContainer() &&
+			!page.isInTrash() &&
 			(page.getVersion() != WikiPageConstants.VERSION_DEFAULT)) {
 
 			return page.getPageId();
@@ -65,10 +66,12 @@ public class WikiPageAssetRenderer
 		_page = page;
 	}
 
+	@Override
 	public String getClassName() {
 		return WikiPage.class.getName();
 	}
 
+	@Override
 	public long getClassPK() {
 		return getClassPK(_page);
 	}
@@ -88,14 +91,17 @@ public class WikiPageAssetRenderer
 		return _page.getModifiedDate();
 	}
 
+	@Override
 	public long getGroupId() {
 		return _page.getGroupId();
 	}
 
+	@Override
 	public String getPortletId() {
 		return PortletKeys.WIKI;
 	}
 
+	@Override
 	public String getSummary(Locale locale) {
 		String content = _page.getContent();
 
@@ -120,6 +126,7 @@ public class WikiPageAssetRenderer
 			"/file_system/large/wiki_page.png";
 	}
 
+	@Override
 	public String getTitle(Locale locale) {
 		if (!_page.isInTrash()) {
 			return _page.getTitle();
@@ -128,6 +135,7 @@ public class WikiPageAssetRenderer
 		return TrashUtil.getOriginalTitle(_page.getTitle());
 	}
 
+	@Override
 	public String getType() {
 		return TYPE;
 	}
@@ -171,8 +179,10 @@ public class WikiPageAssetRenderer
 			WindowState windowState)
 		throws Exception {
 
-		PortletURL portletURL = liferayPortletResponse.createLiferayPortletURL(
-			PortletKeys.WIKI, PortletRequest.RENDER_PHASE);
+		AssetRendererFactory assetRendererFactory = getAssetRendererFactory();
+
+		PortletURL portletURL = assetRendererFactory.getURLView(
+			liferayPortletResponse, windowState);
 
 		portletURL.setParameter("struts_action", "/wiki/view");
 		portletURL.setParameter("nodeId", String.valueOf(_page.getNodeId()));
@@ -193,14 +203,17 @@ public class WikiPageAssetRenderer
 			"pageResourcePrimKey", _page.getResourcePrimKey());
 	}
 
+	@Override
 	public long getUserId() {
 		return _page.getUserId();
 	}
 
+	@Override
 	public String getUserName() {
 		return _page.getUserName();
 	}
 
+	@Override
 	public String getUuid() {
 		return _page.getUuid();
 	}
@@ -232,6 +245,7 @@ public class WikiPageAssetRenderer
 		return true;
 	}
 
+	@Override
 	public String render(
 			RenderRequest renderRequest, RenderResponse renderResponse,
 			String template)

@@ -117,6 +117,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 * @return the matching expando columns
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<ExpandoColumn> findByTableId(long tableId)
 		throws SystemException {
 		return findByTableId(tableId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
@@ -135,6 +136,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 * @return the range of matching expando columns
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<ExpandoColumn> findByTableId(long tableId, int start, int end)
 		throws SystemException {
 		return findByTableId(tableId, start, end, null);
@@ -154,6 +156,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 * @return the ordered range of matching expando columns
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<ExpandoColumn> findByTableId(long tableId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -260,6 +263,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 * @throws com.liferay.portlet.expando.NoSuchColumnException if a matching expando column could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public ExpandoColumn findByTableId_First(long tableId,
 		OrderByComparator orderByComparator)
 		throws NoSuchColumnException, SystemException {
@@ -290,6 +294,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 * @return the first matching expando column, or <code>null</code> if a matching expando column could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public ExpandoColumn fetchByTableId_First(long tableId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<ExpandoColumn> list = findByTableId(tableId, 0, 1,
@@ -311,6 +316,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 * @throws com.liferay.portlet.expando.NoSuchColumnException if a matching expando column could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public ExpandoColumn findByTableId_Last(long tableId,
 		OrderByComparator orderByComparator)
 		throws NoSuchColumnException, SystemException {
@@ -341,9 +347,14 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 * @return the last matching expando column, or <code>null</code> if a matching expando column could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public ExpandoColumn fetchByTableId_Last(long tableId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByTableId(tableId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<ExpandoColumn> list = findByTableId(tableId, count - 1, count,
 				orderByComparator);
@@ -365,6 +376,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 * @throws com.liferay.portlet.expando.NoSuchColumnException if a expando column with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public ExpandoColumn[] findByTableId_PrevAndNext(long columnId,
 		long tableId, OrderByComparator orderByComparator)
 		throws NoSuchColumnException, SystemException {
@@ -507,6 +519,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 * @return the matching expando columns that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<ExpandoColumn> filterFindByTableId(long tableId)
 		throws SystemException {
 		return filterFindByTableId(tableId, QueryUtil.ALL_POS,
@@ -526,6 +539,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 * @return the range of matching expando columns that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<ExpandoColumn> filterFindByTableId(long tableId, int start,
 		int end) throws SystemException {
 		return filterFindByTableId(tableId, start, end, null);
@@ -545,6 +559,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 * @return the ordered range of matching expando columns that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<ExpandoColumn> filterFindByTableId(long tableId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
 		if (!InlineSQLHelperUtil.isEnabled()) {
@@ -636,6 +651,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 * @throws com.liferay.portlet.expando.NoSuchColumnException if a expando column with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public ExpandoColumn[] filterFindByTableId_PrevAndNext(long columnId,
 		long tableId, OrderByComparator orderByComparator)
 		throws NoSuchColumnException, SystemException {
@@ -817,6 +833,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 * @param tableId the table ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByTableId(long tableId) throws SystemException {
 		for (ExpandoColumn expandoColumn : findByTableId(tableId,
 				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
@@ -831,6 +848,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 * @return the number of matching expando columns
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByTableId(long tableId) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_TABLEID;
 
@@ -883,6 +901,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 * @return the number of matching expando columns that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int filterCountByTableId(long tableId) throws SystemException {
 		if (!InlineSQLHelperUtil.isEnabled()) {
 			return countByTableId(tableId);
@@ -969,6 +988,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 * @return the matching expando columns
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<ExpandoColumn> findByT_N(long tableId, String[] names)
 		throws SystemException {
 		return findByT_N(tableId, names, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
@@ -989,6 +1009,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 * @return the range of matching expando columns
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<ExpandoColumn> findByT_N(long tableId, String[] names,
 		int start, int end) throws SystemException {
 		return findByT_N(tableId, names, start, end, null);
@@ -1009,6 +1030,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 * @return the ordered range of matching expando columns
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<ExpandoColumn> findByT_N(long tableId, String[] names,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -1169,6 +1191,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 * @throws com.liferay.portlet.expando.NoSuchColumnException if a matching expando column could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public ExpandoColumn findByT_N(long tableId, String name)
 		throws NoSuchColumnException, SystemException {
 		ExpandoColumn expandoColumn = fetchByT_N(tableId, name);
@@ -1204,6 +1227,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 * @return the matching expando column, or <code>null</code> if a matching expando column could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public ExpandoColumn fetchByT_N(long tableId, String name)
 		throws SystemException {
 		return fetchByT_N(tableId, name, true);
@@ -1218,6 +1242,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 * @return the matching expando column, or <code>null</code> if a matching expando column could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public ExpandoColumn fetchByT_N(long tableId, String name,
 		boolean retrieveFromCache) throws SystemException {
 		Object[] finderArgs = new Object[] { tableId, name };
@@ -1324,6 +1349,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 * @return the expando column that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public ExpandoColumn removeByT_N(long tableId, String name)
 		throws NoSuchColumnException, SystemException {
 		ExpandoColumn expandoColumn = findByT_N(tableId, name);
@@ -1339,6 +1365,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 * @return the number of matching expando columns
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByT_N(long tableId, String name) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_T_N;
 
@@ -1410,6 +1437,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 * @return the number of matching expando columns
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByT_N(long tableId, String[] names)
 		throws SystemException {
 		Object[] finderArgs = new Object[] { tableId, StringUtil.merge(names) };
@@ -1506,6 +1534,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 * @return the number of matching expando columns that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int filterCountByT_N(long tableId, String name)
 		throws SystemException {
 		if (!InlineSQLHelperUtil.isEnabled()) {
@@ -1574,6 +1603,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 * @return the number of matching expando columns that the user has permission to view
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int filterCountByT_N(long tableId, String[] names)
 		throws SystemException {
 		if (!InlineSQLHelperUtil.isEnabled()) {
@@ -1671,11 +1701,16 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	private static final String _FINDER_COLUMN_T_N_NAME_6 = "(" +
 		removeConjunction(_FINDER_COLUMN_T_N_NAME_3) + ")";
 
+	public ExpandoColumnPersistenceImpl() {
+		setModelClass(ExpandoColumn.class);
+	}
+
 	/**
 	 * Caches the expando column in the entity cache if it is enabled.
 	 *
 	 * @param expandoColumn the expando column
 	 */
+	@Override
 	public void cacheResult(ExpandoColumn expandoColumn) {
 		EntityCacheUtil.putResult(ExpandoColumnModelImpl.ENTITY_CACHE_ENABLED,
 			ExpandoColumnImpl.class, expandoColumn.getPrimaryKey(),
@@ -1693,6 +1728,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 *
 	 * @param expandoColumns the expando columns
 	 */
+	@Override
 	public void cacheResult(List<ExpandoColumn> expandoColumns) {
 		for (ExpandoColumn expandoColumn : expandoColumns) {
 			if (EntityCacheUtil.getResult(
@@ -1813,6 +1849,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 * @param columnId the primary key for the new expando column
 	 * @return the new expando column
 	 */
+	@Override
 	public ExpandoColumn create(long columnId) {
 		ExpandoColumn expandoColumn = new ExpandoColumnImpl();
 
@@ -1830,6 +1867,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 * @throws com.liferay.portlet.expando.NoSuchColumnException if a expando column with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public ExpandoColumn remove(long columnId)
 		throws NoSuchColumnException, SystemException {
 		return remove((Serializable)columnId);
@@ -1993,6 +2031,8 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 		clearUniqueFindersCache(expandoColumn);
 		cacheUniqueFindersCache(expandoColumn);
 
+		expandoColumn.resetOriginalValues();
+
 		return expandoColumn;
 	}
 
@@ -2050,6 +2090,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 * @throws com.liferay.portlet.expando.NoSuchColumnException if a expando column with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public ExpandoColumn findByPrimaryKey(long columnId)
 		throws NoSuchColumnException, SystemException {
 		return findByPrimaryKey((Serializable)columnId);
@@ -2110,6 +2151,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 * @return the expando column, or <code>null</code> if a expando column with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public ExpandoColumn fetchByPrimaryKey(long columnId)
 		throws SystemException {
 		return fetchByPrimaryKey((Serializable)columnId);
@@ -2121,6 +2163,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 * @return the expando columns
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<ExpandoColumn> findAll() throws SystemException {
 		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
@@ -2137,6 +2180,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 * @return the range of expando columns
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<ExpandoColumn> findAll(int start, int end)
 		throws SystemException {
 		return findAll(start, end, null);
@@ -2155,6 +2199,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 * @return the ordered range of expando columns
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<ExpandoColumn> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -2240,6 +2285,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 *
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeAll() throws SystemException {
 		for (ExpandoColumn expandoColumn : findAll()) {
 			remove(expandoColumn);
@@ -2252,6 +2298,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 * @return the number of expando columns
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countAll() throws SystemException {
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
 				FINDER_ARGS_EMPTY, this);
@@ -2355,6 +2402,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 		};
 
 	private static CacheModel<ExpandoColumn> _nullExpandoColumnCacheModel = new CacheModel<ExpandoColumn>() {
+			@Override
 			public ExpandoColumn toEntityModel() {
 				return _nullExpandoColumn;
 			}

@@ -14,15 +14,18 @@
 
 package com.liferay.portlet.documentlibrary.service;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
 
 /**
- * The utility for the document library file version local service. This utility wraps {@link com.liferay.portlet.documentlibrary.service.impl.DLFileVersionLocalServiceImpl} and is the primary access point for service operations in application layer code running on the local server.
- *
- * <p>
- * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
- * </p>
+ * Provides the local service utility for DLFileVersion. This utility wraps
+ * {@link com.liferay.portlet.documentlibrary.service.impl.DLFileVersionLocalServiceImpl} and is the
+ * primary access point for service operations in application layer code running
+ * on the local server. Methods of this service will not have security checks
+ * based on the propagated JAAS credentials because this service can only be
+ * accessed from within the same VM.
  *
  * @author Brian Wing Shun Chan
  * @see DLFileVersionLocalService
@@ -30,6 +33,7 @@ import com.liferay.portal.kernel.util.ReferenceRegistry;
  * @see com.liferay.portlet.documentlibrary.service.impl.DLFileVersionLocalServiceImpl
  * @generated
  */
+@ProviderType
 public class DLFileVersionLocalServiceUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -164,10 +168,53 @@ public class DLFileVersionLocalServiceUtil {
 		return getService().dynamicQueryCount(dynamicQuery);
 	}
 
+	/**
+	* Returns the number of rows that match the dynamic query.
+	*
+	* @param dynamicQuery the dynamic query
+	* @param projection the projection to apply to the query
+	* @return the number of rows that match the dynamic query
+	* @throws SystemException if a system exception occurred
+	*/
+	public static long dynamicQueryCount(
+		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery,
+		com.liferay.portal.kernel.dao.orm.Projection projection)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().dynamicQueryCount(dynamicQuery, projection);
+	}
+
 	public static com.liferay.portlet.documentlibrary.model.DLFileVersion fetchDLFileVersion(
 		long fileVersionId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService().fetchDLFileVersion(fileVersionId);
+	}
+
+	/**
+	* Returns the document library file version with the matching UUID and company.
+	*
+	* @param uuid the document library file version's UUID
+	* @param companyId the primary key of the company
+	* @return the matching document library file version, or <code>null</code> if a matching document library file version could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileVersion fetchDLFileVersionByUuidAndCompanyId(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().fetchDLFileVersionByUuidAndCompanyId(uuid, companyId);
+	}
+
+	/**
+	* Returns the document library file version matching the UUID and group.
+	*
+	* @param uuid the document library file version's UUID
+	* @param groupId the primary key of the group
+	* @return the matching document library file version, or <code>null</code> if a matching document library file version could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileVersion fetchDLFileVersionByUuidAndGroupId(
+		java.lang.String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().fetchDLFileVersionByUuidAndGroupId(uuid, groupId);
 	}
 
 	/**
@@ -190,6 +237,22 @@ public class DLFileVersionLocalServiceUtil {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService().getPersistedModel(primaryKeyObj);
+	}
+
+	/**
+	* Returns the document library file version with the matching UUID and company.
+	*
+	* @param uuid the document library file version's UUID
+	* @param companyId the primary key of the company
+	* @return the matching document library file version
+	* @throws PortalException if a matching document library file version could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileVersion getDLFileVersionByUuidAndCompanyId(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().getDLFileVersionByUuidAndCompanyId(uuid, companyId);
 	}
 
 	/**
@@ -311,6 +374,11 @@ public class DLFileVersionLocalServiceUtil {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService().getLatestFileVersion(userId, fileEntryId);
+	}
+
+	public static void rebuildTree(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getService().rebuildTree(companyId);
 	}
 
 	public static DLFileVersionLocalService getService() {

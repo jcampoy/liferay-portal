@@ -25,6 +25,8 @@ import com.liferay.portal.kernel.security.pacl.DoPrivileged;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.util.PropsUtil;
 
+import java.net.InetAddress;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -49,6 +51,12 @@ public class ClusterLinkImpl extends ClusterBase implements ClusterLink {
 		}
 	}
 
+	@Override
+	public InetAddress getBindInetAddress() {
+		return bindInetAddress;
+	}
+
+	@Override
 	public List<Address> getLocalTransportAddresses() {
 		if (!isEnabled()) {
 			return Collections.emptyList();
@@ -64,6 +72,7 @@ public class ClusterLinkImpl extends ClusterBase implements ClusterLink {
 		return addresses;
 	}
 
+	@Override
 	public List<Address> getTransportAddresses(Priority priority) {
 		if (!isEnabled()) {
 			return Collections.emptyList();
@@ -74,6 +83,7 @@ public class ClusterLinkImpl extends ClusterBase implements ClusterLink {
 		return getAddresses(jChannel);
 	}
 
+	@Override
 	public void sendMulticastMessage(Message message, Priority priority) {
 		if (!isEnabled()) {
 			return;
@@ -89,6 +99,7 @@ public class ClusterLinkImpl extends ClusterBase implements ClusterLink {
 		}
 	}
 
+	@Override
 	public void sendUnicastMessage(
 		Address address, Message message, Priority priority) {
 

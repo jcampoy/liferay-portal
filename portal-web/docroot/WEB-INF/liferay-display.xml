@@ -22,9 +22,10 @@
 		<portlet id="141" />
 		<portlet id="148" />
 		<portlet id="175" />
+		<portlet id="193" />
+		<portlet id="194" />
 	</category>
 	<category name="category.collaboration">
-		<portlet id="8" />
 		<portlet id="19" />
 		<portlet id="33" />
 		<portlet id="36" />
@@ -86,12 +87,12 @@
 		<portlet id="173" />
 		<portlet id="174" />
 		<portlet id="176" />
-		<portlet id="177" />
 		<portlet id="178" />
 		<portlet id="179" />
 		<portlet id="182" />
 		<portlet id="183" />
 		<portlet id="185" />
+		<portlet id="195" />
 	</category>
 	<category name="category.news">
 		<portlet id="39" />

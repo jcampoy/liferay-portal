@@ -43,6 +43,7 @@ public class PACLInvocationHandler implements InvocationHandler {
 		_advisedSupport = advisedSupport;
 	}
 
+	@Override
 	public Object invoke(Object proxy, Method method, Object[] arguments)
 		throws Throwable {
 
@@ -56,10 +57,6 @@ public class PACLInvocationHandler implements InvocationHandler {
 
 	protected Object doInvoke(Object proxy, Method method, Object[] arguments)
 		throws Throwable {
-
-		if (!PACLPolicyManager.isActive()) {
-			return _invocationHandler.invoke(proxy, method, arguments);
-		}
 
 		if (method.getDeclaringClass() == Object.class) {
 			String methodName = method.getName();
@@ -106,6 +103,7 @@ public class PACLInvocationHandler implements InvocationHandler {
 			_arguments = arguments;
 		}
 
+		@Override
 		public Object run() throws Exception {
 			try {
 				return _invocationHandler.invoke(_proxy, _method, _arguments);

@@ -35,7 +35,17 @@
 </tr>
 <tr>
 	<td>SIGN_IN_BUTTON</td>
-	<td>//input[@value='Sign In']</td>
+	<td>//button[contains(.,'Sign In')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>ERROR_MESSAGE_1</td>
+	<td>xpath=(//div[contains(@class,'alert') and contains(@class,'alert-error')])[1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>ERROR_MESSAGE_2</td>
+	<td>xpath=(//div[contains(@class,'alert') and contains(@class,'alert-error')])[2]</td>
 	<td></td>
 </tr>
 </tbody>

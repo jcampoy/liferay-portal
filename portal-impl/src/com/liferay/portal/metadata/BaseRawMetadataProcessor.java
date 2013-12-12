@@ -51,10 +51,12 @@ import org.apache.tika.metadata.TikaMimeKeys;
  */
 public abstract class BaseRawMetadataProcessor implements RawMetadataProcessor {
 
+	@Override
 	public Map<String, Field[]> getFields() {
 		return _fields;
 	}
 
+	@Override
 	public Map<String, Fields> getRawMetadataMap(
 			String extension, String mimeType, File file)
 		throws PortalException, SystemException {
@@ -64,6 +66,7 @@ public abstract class BaseRawMetadataProcessor implements RawMetadataProcessor {
 		return createDDMFieldsMap(metadata, getFields());
 	}
 
+	@Override
 	public Map<String, Fields> getRawMetadataMap(
 			String extension, String mimeType, InputStream inputStream)
 		throws PortalException, SystemException {
@@ -157,11 +160,10 @@ public abstract class BaseRawMetadataProcessor implements RawMetadataProcessor {
 		if (fieldValue instanceof String) {
 			return metadata.get((String)fieldValue);
 		}
-		else {
-			Property property = (Property)fieldValue;
 
-			return metadata.get(property.getName());
-		}
+		Property property = (Property)fieldValue;
+
+		return metadata.get(property.getName());
 	}
 
 	private static void _addFields(Class<?> clazz, List<Field> fields) {
@@ -192,7 +194,7 @@ public abstract class BaseRawMetadataProcessor implements RawMetadataProcessor {
 		_addFields(XMPDM.class, fields);
 
 		_fields.put(
-			"TIKARAWMETADATA", fields.toArray(new Field[fields.size()]));
+			TIKA_RAW_METADATA, fields.toArray(new Field[fields.size()]));
 	}
 
 }

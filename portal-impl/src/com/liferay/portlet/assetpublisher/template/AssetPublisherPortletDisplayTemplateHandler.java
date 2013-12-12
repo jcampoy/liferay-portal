@@ -44,10 +44,12 @@ import java.util.Map;
 public class AssetPublisherPortletDisplayTemplateHandler
 	extends BasePortletDisplayTemplateHandler {
 
+	@Override
 	public String getClassName() {
 		return AssetEntry.class.getName();
 	}
 
+	@Override
 	public String getName(Locale locale) {
 		String portletTitle = PortalUtil.getPortletTitle(
 			PortletKeys.ASSET_PUBLISHER, locale);
@@ -56,20 +58,24 @@ public class AssetPublisherPortletDisplayTemplateHandler
 			LanguageUtil.get(locale, "template"));
 	}
 
+	@Override
 	public String getResourceName() {
-		return "com.liferay.portlet.assetpublisher";
+		return PortletKeys.ASSET_PUBLISHER;
 	}
 
 	@Override
 	public Map<String, TemplateVariableGroup> getTemplateVariableGroups(
-			long classPK, Locale locale)
+			long classPK, String language, Locale locale)
 		throws Exception {
 
 		Map<String, TemplateVariableGroup> templateVariableGroups =
-			super.getTemplateVariableGroups(classPK, locale);
+			super.getTemplateVariableGroups(classPK, language, locale);
+
+		String[] restrictedVariables = getRestrictedVariables(language);
 
 		TemplateVariableGroup assetPublisherUtilTemplateVariableGroup =
-			new TemplateVariableGroup("asset-publisher-util");
+			new TemplateVariableGroup(
+				"asset-publisher-util", restrictedVariables);
 
 		assetPublisherUtilTemplateVariableGroup.addVariable(
 			"asset-publisher-helper", AssetPublisherHelper.class,
@@ -86,13 +92,13 @@ public class AssetPublisherPortletDisplayTemplateHandler
 		fieldsTemplateVariableGroup.addCollectionVariable(
 			"asset-entries", List.class,
 			PortletDisplayTemplateConstants.ENTRIES, "asset-entry",
-			AssetEntry.class, "curEntry");
+			AssetEntry.class, "curEntry", "getTitle(locale)");
 		fieldsTemplateVariableGroup.addVariable(
 			"asset-entry", AssetEntry.class,
-			PortletDisplayTemplateConstants.ENTRY);
+			PortletDisplayTemplateConstants.ENTRY, "getTitle(locale)");
 
 		TemplateVariableGroup assetServicesTemplateVariableGroup =
-			new TemplateVariableGroup("asset-services");
+			new TemplateVariableGroup("asset-services", restrictedVariables);
 
 		assetServicesTemplateVariableGroup.setAutocompleteEnabled(false);
 

@@ -14,7 +14,6 @@
 
 package com.liferay.portlet.messageboards.model.impl;
 
-import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ListTree;
@@ -44,18 +43,22 @@ public class MBCategoryDisplayImpl implements MBCategoryDisplay {
 		}
 	}
 
+	@Override
 	public List<MBCategory> getAllCategories() {
 		return _allCategories;
 	}
 
+	@Override
 	public int getAllCategoriesCount() {
 		return _allCategories.size();
 	}
 
+	@Override
 	public List<MBCategory> getCategories() {
 		return _categoryTree.getRootNode().getChildValues();
 	}
 
+	@Override
 	public List<MBCategory> getCategories(MBCategory category) {
 		TreeNode<MBCategory> node = _categoryNodesMap.get(
 			category.getCategoryId());
@@ -63,10 +66,12 @@ public class MBCategoryDisplayImpl implements MBCategoryDisplay {
 		return node.getChildValues();
 	}
 
+	@Override
 	public MBCategory getRootCategory() {
 		return _categoryTree.getRootNode().getValue();
 	}
 
+	@Override
 	public int getSubcategoriesCount(MBCategory category) {
 		TreeNode<MBCategory> node = _categoryNodesMap.get(
 			category.getCategoryId());
@@ -74,6 +79,7 @@ public class MBCategoryDisplayImpl implements MBCategoryDisplay {
 		return _categoryTree.getChildNodes(node).size();
 	}
 
+	@Override
 	public int getSubcategoriesMessagesCount(MBCategory category) {
 		int count = category.getMessageCount();
 
@@ -92,6 +98,7 @@ public class MBCategoryDisplayImpl implements MBCategoryDisplay {
 		return count;
 	}
 
+	@Override
 	public int getSubcategoriesThreadsCount(MBCategory category) {
 		int count = category.getThreadCount();
 
@@ -110,6 +117,7 @@ public class MBCategoryDisplayImpl implements MBCategoryDisplay {
 		return count;
 	}
 
+	@Override
 	public void getSubcategoryIds(MBCategory category, List<Long> categoryIds) {
 		List<MBCategory> categories = getCategories(category);
 
@@ -121,12 +129,8 @@ public class MBCategoryDisplayImpl implements MBCategoryDisplay {
 	}
 
 	protected void init(long scopeGroupId, long categoryId) throws Exception {
-		long[] categoryIds = MBCategoryServiceUtil.getCategoryIds(
-			scopeGroupId, categoryId);
-
 		_allCategories = MBCategoryServiceUtil.getCategories(
-			scopeGroupId, categoryIds, WorkflowConstants.STATUS_APPROVED,
-			QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+			scopeGroupId, WorkflowConstants.STATUS_APPROVED);
 
 		_rootCategory = new MBCategoryImpl();
 

@@ -56,6 +56,10 @@ public class BrowserSnifferUtil {
 		return getBrowserSniffer().isAir(request);
 	}
 
+	public static boolean isAndroid(HttpServletRequest request) {
+		return getBrowserSniffer().isAndroid(request);
+	}
+
 	public static boolean isChrome(HttpServletRequest request) {
 		return getBrowserSniffer().isChrome(request);
 	}
@@ -70,6 +74,14 @@ public class BrowserSnifferUtil {
 
 	public static boolean isIe(HttpServletRequest request) {
 		return getBrowserSniffer().isIe(request);
+	}
+
+	public static boolean isIeOnWin32(HttpServletRequest request) {
+		return getBrowserSniffer().isIeOnWin32(request);
+	}
+
+	public static boolean isIeOnWin64(HttpServletRequest request) {
+		return getBrowserSniffer().isIeOnWin64(request);
 	}
 
 	public static boolean isIphone(HttpServletRequest request) {

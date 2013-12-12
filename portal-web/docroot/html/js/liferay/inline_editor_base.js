@@ -7,9 +7,9 @@ AUI.add(
 
 		var BODY_CONTENT = 'bodyContent';
 
-		var CSS_SUCCESS = 'portlet-msg-success';
+		var CSS_SUCCESS = 'alert alert-success';
 
-		var CSS_ERROR = 'portlet-msg-error';
+		var CSS_ERROR = 'alert alert-error';
 
 		var EDITOR = 'editor';
 
@@ -24,7 +24,7 @@ AUI.add(
 		var RESPONSE_DATA = 'responseData';
 
 		var TPL_NOTICE =
-			'<div class="lfr-editable-notice portlet-msg-success">' +
+			'<div class="alert alert-success lfr-editable-notice">' +
 				'<span class="lfr-editable-notice-text yui3-widget-bd"></span>' +
 				'<a class="lfr-editable-notice-close yui3-widget-ft" href="javascript:;" tabindex="0"></a>' +
 			'</div>';
@@ -75,6 +75,10 @@ AUI.add(
 			},
 
 			editorName: {
+				validator: isString
+			},
+
+			namespace: {
 				validator: isString
 			},
 
@@ -175,9 +179,12 @@ AUI.add(
 								}
 							}
 						},
-						data: {
-							content: instance.get(EDITOR).getData()
-						},
+						data: Liferay.Util.ns(
+							instance.get('namespace'),
+							{
+								content: instance.get(EDITOR).getData()
+							}
+						),
 						dataType: 'json'
 					}
 				);
@@ -278,6 +285,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-base', 'aui-overlay-base']
+		requires: ['aui-base', 'aui-overlay-base-deprecated']
 	}
 );

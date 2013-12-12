@@ -345,7 +345,7 @@ AUI.add(
 				var emoticonOverlay = new A.OverlayContext(
 					{
 						align: {
-							 points: ['tr', 'br']
+							points: ['tr', 'br']
 						},
 						contentBox: instance._emoticons,
 						hideDelay: 500,
@@ -581,6 +581,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-color-picker', 'aui-io-request', 'aui-overlay-context']
+		requires: ['aui-color-picker-deprecated', 'aui-io-request', 'aui-overlay-context-deprecated']
 	}
 );

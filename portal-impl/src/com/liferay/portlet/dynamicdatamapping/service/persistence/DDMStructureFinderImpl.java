@@ -50,6 +50,7 @@ public class DDMStructureFinderImpl
 	public static final String FIND_BY_C_G_C_N_D_S_T =
 		DDMStructureFinder.class.getName() + ".findByC_G_C_N_D_S_T";
 
+	@Override
 	public int countByKeywords(
 			long companyId, long[] groupIds, long[] classNameIds,
 			String keywords)
@@ -72,6 +73,7 @@ public class DDMStructureFinderImpl
 			DDMStructureConstants.TYPE_DEFAULT, andOperator);
 	}
 
+	@Override
 	public int countByC_G_C_N_D_S_T(
 			long companyId, long[] groupIds, long[] classNameIds, String name,
 			String description, String storageType, int type,
@@ -87,6 +89,7 @@ public class DDMStructureFinderImpl
 			storageTypes, type, andOperator);
 	}
 
+	@Override
 	public int countByC_G_C_N_D_S_T(
 			long companyId, long[] groupIds, long[] classNameIds,
 			String[] names, String[] descriptions, String[] storageTypes,
@@ -98,6 +101,7 @@ public class DDMStructureFinderImpl
 			storageTypes, type, andOperator, false);
 	}
 
+	@Override
 	public int filterCountByKeywords(
 			long companyId, long[] groupIds, long[] classNameIds,
 			String keywords)
@@ -120,6 +124,7 @@ public class DDMStructureFinderImpl
 			DDMStructureConstants.TYPE_DEFAULT, andOperator);
 	}
 
+	@Override
 	public int filterCountByC_G_C_N_D_S_T(
 			long companyId, long[] groupIds, long[] classNameIds, String name,
 			String description, String storageType, int type,
@@ -135,6 +140,7 @@ public class DDMStructureFinderImpl
 			storageTypes, type, andOperator);
 	}
 
+	@Override
 	public int filterCountByC_G_C_N_D_S_T(
 			long companyId, long[] groupIds, long[] classNameIds,
 			String[] names, String[] descriptions, String[] storageTypes,
@@ -146,6 +152,7 @@ public class DDMStructureFinderImpl
 			storageTypes, type, andOperator, true);
 	}
 
+	@Override
 	public List<DDMStructure> filterFindByKeywords(
 			long companyId, long[] groupIds, long[] classNameIds,
 			String keywords, int start, int end,
@@ -170,6 +177,7 @@ public class DDMStructureFinderImpl
 			orderByComparator);
 	}
 
+	@Override
 	public List<DDMStructure> filterFindByC_G_C_N_D_S_T(
 			long companyId, long[] groupIds, long[] classNameIds, String name,
 			String description, String storageType, int type,
@@ -186,6 +194,7 @@ public class DDMStructureFinderImpl
 			storageTypes, type, andOperator, start, end, orderByComparator);
 	}
 
+	@Override
 	public List<DDMStructure> filterFindByC_G_C_N_D_S_T(
 			long companyId, long[] groupIds, long[] classNameIds,
 			String[] names, String[] descriptions, String[] storageTypes,
@@ -199,6 +208,7 @@ public class DDMStructureFinderImpl
 			true);
 	}
 
+	@Override
 	public List<DDMStructure> findByKeywords(
 			long companyId, long[] groupIds, long[] classNameIds,
 			String keywords, int start, int end,
@@ -223,6 +233,7 @@ public class DDMStructureFinderImpl
 			orderByComparator);
 	}
 
+	@Override
 	public List<DDMStructure> findByC_G_C_N_D_S_T(
 			long companyId, long[] groupIds, long[] classNameIds, String name,
 			String description, String storageType, int type,
@@ -239,6 +250,7 @@ public class DDMStructureFinderImpl
 			storageTypes, type, andOperator, start, end, orderByComparator);
 	}
 
+	@Override
 	public List<DDMStructure> findByC_G_C_N_D_S_T(
 			long companyId, long[] groupIds, long[] classNameIds,
 			String[] names, String[] descriptions, String[] storageTypes,
@@ -304,7 +316,11 @@ public class DDMStructureFinderImpl
 			QueryPos qPos = QueryPos.getInstance(q);
 
 			qPos.add(companyId);
-			qPos.add(groupIds);
+
+			if (groupIds != null) {
+				qPos.add(groupIds);
+			}
+
 			qPos.add(classNameIds, 2);
 			qPos.add(names, 2);
 			qPos.add(descriptions, 2);
@@ -388,7 +404,11 @@ public class DDMStructureFinderImpl
 			QueryPos qPos = QueryPos.getInstance(q);
 
 			qPos.add(companyId);
-			qPos.add(groupIds);
+
+			if (groupIds != null) {
+				qPos.add(groupIds);
+			}
+
 			qPos.add(classNameIds, 2);
 			qPos.add(names, 2);
 			qPos.add(descriptions, 2);
@@ -407,7 +427,7 @@ public class DDMStructureFinderImpl
 	}
 
 	protected String getGroupIds(long[] groupIds) {
-		if (groupIds.length == 0) {
+		if (ArrayUtil.isEmpty(groupIds)) {
 			return StringPool.BLANK;
 		}
 

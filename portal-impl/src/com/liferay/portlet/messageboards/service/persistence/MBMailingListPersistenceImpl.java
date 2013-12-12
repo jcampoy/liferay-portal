@@ -113,6 +113,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @return the matching message boards mailing lists
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBMailingList> findByUuid(String uuid)
 		throws SystemException {
 		return findByUuid(uuid, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
@@ -131,6 +132,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @return the range of matching message boards mailing lists
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBMailingList> findByUuid(String uuid, int start, int end)
 		throws SystemException {
 		return findByUuid(uuid, start, end, null);
@@ -150,6 +152,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @return the ordered range of matching message boards mailing lists
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBMailingList> findByUuid(String uuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -270,6 +273,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @throws com.liferay.portlet.messageboards.NoSuchMailingListException if a matching message boards mailing list could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBMailingList findByUuid_First(String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchMailingListException, SystemException {
@@ -299,6 +303,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @return the first matching message boards mailing list, or <code>null</code> if a matching message boards mailing list could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBMailingList fetchByUuid_First(String uuid,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<MBMailingList> list = findByUuid(uuid, 0, 1, orderByComparator);
@@ -319,6 +324,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @throws com.liferay.portlet.messageboards.NoSuchMailingListException if a matching message boards mailing list could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBMailingList findByUuid_Last(String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchMailingListException, SystemException {
@@ -348,9 +354,14 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @return the last matching message boards mailing list, or <code>null</code> if a matching message boards mailing list could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBMailingList fetchByUuid_Last(String uuid,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByUuid(uuid);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<MBMailingList> list = findByUuid(uuid, count - 1, count,
 				orderByComparator);
@@ -372,6 +383,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @throws com.liferay.portlet.messageboards.NoSuchMailingListException if a message boards mailing list with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBMailingList[] findByUuid_PrevAndNext(long mailingListId,
 		String uuid, OrderByComparator orderByComparator)
 		throws NoSuchMailingListException, SystemException {
@@ -527,6 +539,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @param uuid the uuid
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByUuid(String uuid) throws SystemException {
 		for (MBMailingList mbMailingList : findByUuid(uuid, QueryUtil.ALL_POS,
 				QueryUtil.ALL_POS, null)) {
@@ -541,6 +554,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @return the number of matching message boards mailing lists
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByUuid(String uuid) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID;
 
@@ -623,6 +637,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @throws com.liferay.portlet.messageboards.NoSuchMailingListException if a matching message boards mailing list could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBMailingList findByUUID_G(String uuid, long groupId)
 		throws NoSuchMailingListException, SystemException {
 		MBMailingList mbMailingList = fetchByUUID_G(uuid, groupId);
@@ -658,6 +673,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @return the matching message boards mailing list, or <code>null</code> if a matching message boards mailing list could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBMailingList fetchByUUID_G(String uuid, long groupId)
 		throws SystemException {
 		return fetchByUUID_G(uuid, groupId, true);
@@ -672,6 +688,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @return the matching message boards mailing list, or <code>null</code> if a matching message boards mailing list could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBMailingList fetchByUUID_G(String uuid, long groupId,
 		boolean retrieveFromCache) throws SystemException {
 		Object[] finderArgs = new Object[] { uuid, groupId };
@@ -778,6 +795,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @return the message boards mailing list that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBMailingList removeByUUID_G(String uuid, long groupId)
 		throws NoSuchMailingListException, SystemException {
 		MBMailingList mbMailingList = findByUUID_G(uuid, groupId);
@@ -793,6 +811,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @return the number of matching message boards mailing lists
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByUUID_G(String uuid, long groupId)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_G;
@@ -892,6 +911,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @return the matching message boards mailing lists
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBMailingList> findByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		return findByUuid_C(uuid, companyId, QueryUtil.ALL_POS,
@@ -912,6 +932,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @return the range of matching message boards mailing lists
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBMailingList> findByUuid_C(String uuid, long companyId,
 		int start, int end) throws SystemException {
 		return findByUuid_C(uuid, companyId, start, end, null);
@@ -932,6 +953,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @return the ordered range of matching message boards mailing lists
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBMailingList> findByUuid_C(String uuid, long companyId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -1063,6 +1085,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @throws com.liferay.portlet.messageboards.NoSuchMailingListException if a matching message boards mailing list could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBMailingList findByUuid_C_First(String uuid, long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchMailingListException, SystemException {
@@ -1097,6 +1120,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @return the first matching message boards mailing list, or <code>null</code> if a matching message boards mailing list could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBMailingList fetchByUuid_C_First(String uuid, long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<MBMailingList> list = findByUuid_C(uuid, companyId, 0, 1,
@@ -1119,6 +1143,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @throws com.liferay.portlet.messageboards.NoSuchMailingListException if a matching message boards mailing list could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBMailingList findByUuid_C_Last(String uuid, long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchMailingListException, SystemException {
@@ -1153,9 +1178,14 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @return the last matching message boards mailing list, or <code>null</code> if a matching message boards mailing list could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBMailingList fetchByUuid_C_Last(String uuid, long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByUuid_C(uuid, companyId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<MBMailingList> list = findByUuid_C(uuid, companyId, count - 1,
 				count, orderByComparator);
@@ -1178,6 +1208,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @throws com.liferay.portlet.messageboards.NoSuchMailingListException if a message boards mailing list with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBMailingList[] findByUuid_C_PrevAndNext(long mailingListId,
 		String uuid, long companyId, OrderByComparator orderByComparator)
 		throws NoSuchMailingListException, SystemException {
@@ -1338,6 +1369,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @param companyId the company ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		for (MBMailingList mbMailingList : findByUuid_C(uuid, companyId,
@@ -1354,6 +1386,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @return the number of matching message boards mailing lists
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_C;
@@ -1450,6 +1483,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @return the matching message boards mailing lists
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBMailingList> findByActive(boolean active)
 		throws SystemException {
 		return findByActive(active, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
@@ -1468,6 +1502,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @return the range of matching message boards mailing lists
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBMailingList> findByActive(boolean active, int start, int end)
 		throws SystemException {
 		return findByActive(active, start, end, null);
@@ -1487,6 +1522,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @return the ordered range of matching message boards mailing lists
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBMailingList> findByActive(boolean active, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -1593,6 +1629,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @throws com.liferay.portlet.messageboards.NoSuchMailingListException if a matching message boards mailing list could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBMailingList findByActive_First(boolean active,
 		OrderByComparator orderByComparator)
 		throws NoSuchMailingListException, SystemException {
@@ -1623,6 +1660,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @return the first matching message boards mailing list, or <code>null</code> if a matching message boards mailing list could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBMailingList fetchByActive_First(boolean active,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<MBMailingList> list = findByActive(active, 0, 1, orderByComparator);
@@ -1643,6 +1681,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @throws com.liferay.portlet.messageboards.NoSuchMailingListException if a matching message boards mailing list could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBMailingList findByActive_Last(boolean active,
 		OrderByComparator orderByComparator)
 		throws NoSuchMailingListException, SystemException {
@@ -1673,9 +1712,14 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @return the last matching message boards mailing list, or <code>null</code> if a matching message boards mailing list could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBMailingList fetchByActive_Last(boolean active,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByActive(active);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<MBMailingList> list = findByActive(active, count - 1, count,
 				orderByComparator);
@@ -1697,6 +1741,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @throws com.liferay.portlet.messageboards.NoSuchMailingListException if a message boards mailing list with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBMailingList[] findByActive_PrevAndNext(long mailingListId,
 		boolean active, OrderByComparator orderByComparator)
 		throws NoSuchMailingListException, SystemException {
@@ -1838,6 +1883,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @param active the active
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByActive(boolean active) throws SystemException {
 		for (MBMailingList mbMailingList : findByActive(active,
 				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
@@ -1852,6 +1898,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @return the number of matching message boards mailing lists
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByActive(boolean active) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_ACTIVE;
 
@@ -1918,6 +1965,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @throws com.liferay.portlet.messageboards.NoSuchMailingListException if a matching message boards mailing list could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBMailingList findByG_C(long groupId, long categoryId)
 		throws NoSuchMailingListException, SystemException {
 		MBMailingList mbMailingList = fetchByG_C(groupId, categoryId);
@@ -1953,6 +2001,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @return the matching message boards mailing list, or <code>null</code> if a matching message boards mailing list could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBMailingList fetchByG_C(long groupId, long categoryId)
 		throws SystemException {
 		return fetchByG_C(groupId, categoryId, true);
@@ -1967,6 +2016,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @return the matching message boards mailing list, or <code>null</code> if a matching message boards mailing list could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBMailingList fetchByG_C(long groupId, long categoryId,
 		boolean retrieveFromCache) throws SystemException {
 		Object[] finderArgs = new Object[] { groupId, categoryId };
@@ -2058,6 +2108,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @return the message boards mailing list that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBMailingList removeByG_C(long groupId, long categoryId)
 		throws NoSuchMailingListException, SystemException {
 		MBMailingList mbMailingList = findByG_C(groupId, categoryId);
@@ -2073,6 +2124,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @return the number of matching message boards mailing lists
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByG_C(long groupId, long categoryId)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_C;
@@ -2126,11 +2178,16 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	private static final String _FINDER_COLUMN_G_C_GROUPID_2 = "mbMailingList.groupId = ? AND ";
 	private static final String _FINDER_COLUMN_G_C_CATEGORYID_2 = "mbMailingList.categoryId = ?";
 
+	public MBMailingListPersistenceImpl() {
+		setModelClass(MBMailingList.class);
+	}
+
 	/**
 	 * Caches the message boards mailing list in the entity cache if it is enabled.
 	 *
 	 * @param mbMailingList the message boards mailing list
 	 */
+	@Override
 	public void cacheResult(MBMailingList mbMailingList) {
 		EntityCacheUtil.putResult(MBMailingListModelImpl.ENTITY_CACHE_ENABLED,
 			MBMailingListImpl.class, mbMailingList.getPrimaryKey(),
@@ -2153,6 +2210,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 *
 	 * @param mbMailingLists the message boards mailing lists
 	 */
+	@Override
 	public void cacheResult(List<MBMailingList> mbMailingLists) {
 		for (MBMailingList mbMailingList : mbMailingLists) {
 			if (EntityCacheUtil.getResult(
@@ -2313,6 +2371,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @param mailingListId the primary key for the new message boards mailing list
 	 * @return the new message boards mailing list
 	 */
+	@Override
 	public MBMailingList create(long mailingListId) {
 		MBMailingList mbMailingList = new MBMailingListImpl();
 
@@ -2334,6 +2393,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @throws com.liferay.portlet.messageboards.NoSuchMailingListException if a message boards mailing list with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBMailingList remove(long mailingListId)
 		throws NoSuchMailingListException, SystemException {
 		return remove((Serializable)mailingListId);
@@ -2520,6 +2580,8 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 		clearUniqueFindersCache(mbMailingList);
 		cacheUniqueFindersCache(mbMailingList);
 
+		mbMailingList.resetOriginalValues();
+
 		return mbMailingList;
 	}
 
@@ -2596,6 +2658,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @throws com.liferay.portlet.messageboards.NoSuchMailingListException if a message boards mailing list with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBMailingList findByPrimaryKey(long mailingListId)
 		throws NoSuchMailingListException, SystemException {
 		return findByPrimaryKey((Serializable)mailingListId);
@@ -2656,6 +2719,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @return the message boards mailing list, or <code>null</code> if a message boards mailing list with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public MBMailingList fetchByPrimaryKey(long mailingListId)
 		throws SystemException {
 		return fetchByPrimaryKey((Serializable)mailingListId);
@@ -2667,6 +2731,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @return the message boards mailing lists
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBMailingList> findAll() throws SystemException {
 		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
@@ -2683,6 +2748,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @return the range of message boards mailing lists
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBMailingList> findAll(int start, int end)
 		throws SystemException {
 		return findAll(start, end, null);
@@ -2701,6 +2767,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @return the ordered range of message boards mailing lists
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<MBMailingList> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -2786,6 +2853,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 *
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeAll() throws SystemException {
 		for (MBMailingList mbMailingList : findAll()) {
 			remove(mbMailingList);
@@ -2798,6 +2866,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @return the number of message boards mailing lists
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countAll() throws SystemException {
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
 				FINDER_ARGS_EMPTY, this);
@@ -2891,6 +2960,7 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 		};
 
 	private static CacheModel<MBMailingList> _nullMBMailingListCacheModel = new CacheModel<MBMailingList>() {
+			@Override
 			public MBMailingList toEntityModel() {
 				return _nullMBMailingList;
 			}

@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portlet.messageboards.model.MBCategory;
 import com.liferay.portlet.messageboards.model.MBMessage;
 import com.liferay.portlet.messageboards.model.MBThread;
 import com.liferay.portlet.messageboards.service.MBMessageLocalServiceUtil;
@@ -33,6 +34,7 @@ import com.liferay.portlet.social.model.SocialActivityConstants;
  */
 public class MBThreadActivityInterpreter extends BaseSocialActivityInterpreter {
 
+	@Override
 	public String[] getClassNames() {
 		return _CLASS_NAMES;
 	}
@@ -57,17 +59,11 @@ public class MBThreadActivityInterpreter extends BaseSocialActivityInterpreter {
 
 		String categoryLink = sb.toString();
 
+		categoryLink = addNoSuchEntryRedirect(
+			categoryLink, MBCategory.class.getName(), message.getCategoryId(),
+			serviceContext);
+
 		return wrapLink(categoryLink, "go-to-category", serviceContext);
-	}
-
-	@Override
-	protected String getEntryTitle(
-			SocialActivity activity, ServiceContext serviceContext)
-		throws Exception {
-
-		MBMessage message = getMessage(activity);
-
-		return message.getSubject();
 	}
 
 	protected MBMessage getMessage(SocialActivity activity) throws Exception {
@@ -115,20 +111,20 @@ public class MBThreadActivityInterpreter extends BaseSocialActivityInterpreter {
 
 		if (activityType == SocialActivityConstants.TYPE_MOVE_TO_TRASH) {
 			if (Validator.isNull(groupName)) {
-				return "activity-message-boards-move-to-trash";
+				return "activity-message-boards-thread-move-to-trash";
 			}
 			else {
-				return "activity-message-boards-move-to-trash-in";
+				return "activity-message-boards-thread-move-to-trash-in";
 			}
 		}
 		else if (activityType ==
 					SocialActivityConstants.TYPE_RESTORE_FROM_TRASH) {
 
 			if (Validator.isNull(groupName)) {
-				return "activity-message-boards-restore-from-trash";
+				return "activity-message-boards-thread-restore-from-trash";
 			}
 			else {
-				return "activity-message-boards-restore-from-trash-in";
+				return "activity-message-boards-thread-restore-from-trash-in";
 			}
 		}
 

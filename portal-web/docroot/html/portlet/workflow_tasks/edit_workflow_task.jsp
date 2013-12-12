@@ -17,7 +17,7 @@
 <%@ include file="/html/portlet/workflow_tasks/init.jsp" %>
 
 <%
-String randomId = PwdGenerator.getPassword(PwdGenerator.KEY3, 4);
+String randomId = StringUtil.randomId();
 
 String redirect = ParamUtil.getString(request, "redirect");
 
@@ -94,20 +94,20 @@ request.setAttribute(WebKeys.WORKFLOW_ASSET_PREVIEW, Boolean.TRUE);
 	title="<%= headerTitle %>"
 />
 
-<aui:layout>
-	<aui:column columnWidth="<%= 75 %>" cssClass="lfr-asset-column lfr-asset-column-details" first="<%= true %>">
+<aui:row>
+	<aui:col cssClass="lfr-asset-column lfr-asset-column-details" width="<%= 75 %>">
 		<liferay-ui:error exception="<%= WorkflowTaskDueDateException.class %>" message="please-enter-a-valid-due-date" />
 
-		<aui:layout>
-			<aui:column columnWidth="60">
+		<aui:row>
+			<aui:col width="<%= 60 %>">
 				<div class="lfr-asset-assigned">
 					<aui:field-wrapper label="assigned-to">
 						<c:choose>
 							<c:when test="<%= workflowTask.isAssignedToSingleUser() %>">
-								<%= HtmlUtil.escape(PortalUtil.getUserName(workflowTask.getAssigneeUserId(), StringPool.BLANK)) %>
+								<liferay-ui:input-resource url="<%= PortalUtil.getUserName(workflowTask.getAssigneeUserId(), StringPool.BLANK) %>" />
 							</c:when>
 							<c:otherwise>
-								<liferay-ui:message key="nobody" />
+								<liferay-ui:input-resource url='<%= LanguageUtil.get(pageContext, "nobody") %>' />
 							</c:otherwise>
 						</c:choose>
 
@@ -148,21 +148,21 @@ request.setAttribute(WebKeys.WORKFLOW_ASSET_PREVIEW, Boolean.TRUE);
 
 				<div class="lfr-asset-status">
 					<aui:field-wrapper label="state">
-						<%= LanguageUtil.get(pageContext, WorkflowInstanceLinkLocalServiceUtil.getState(companyId, groupId, className, classPK)) %>
+						<liferay-ui:input-resource url="<%= LanguageUtil.get(pageContext, WorkflowInstanceLinkLocalServiceUtil.getState(companyId, groupId, className, classPK)) %>" />
 					</aui:field-wrapper>
 				</div>
-			</aui:column>
+			</aui:col>
 
-			<aui:column>
+			<aui:col>
 				<div class="lfr-asset-date">
 					<aui:field-wrapper label="create-date">
-						<%= dateFormatDateTime.format(workflowTask.getCreateDate()) %>
+						<liferay-ui:input-resource url="<%= dateFormatDateTime.format(workflowTask.getCreateDate()) %>" />
 					</aui:field-wrapper>
 				</div>
 
 				<div class="lfr-asset-due-date">
 					<aui:field-wrapper label="due-date">
-						<%= (workflowTask.getDueDate() == null) ? LanguageUtil.get(pageContext, "never") : dateFormatDateTime.format(workflowTask.getDueDate()) %>
+						<liferay-ui:input-resource url='<%= (workflowTask.getDueDate() == null) ? LanguageUtil.get(pageContext, "never") : dateFormatDateTime.format(workflowTask.getDueDate()) %>' />
 
 						<c:if test="<%= !workflowTask.isCompleted() %>">
 							<portlet:actionURL var="updateDueDateURL">
@@ -176,8 +176,8 @@ request.setAttribute(WebKeys.WORKFLOW_ASSET_PREVIEW, Boolean.TRUE);
 						</c:if>
 					</aui:field-wrapper>
 				</div>
-			</aui:column>
-		</aui:layout>
+			</aui:col>
+		</aui:row>
 
 		<c:if test="<%= Validator.isNotNull(workflowTask.getDescription()) %>">
 			<div class="lfr-asset-field">
@@ -199,22 +199,20 @@ request.setAttribute(WebKeys.WORKFLOW_ASSET_PREVIEW, Boolean.TRUE);
 							<c:if test="<%= editPortletURL != null %>">
 
 								<%
-								editPortletURL.setPortletMode(PortletMode.VIEW);
 								editPortletURL.setWindowState(LiferayWindowState.POP_UP);
+								editPortletURL.setPortletMode(PortletMode.VIEW);
 
 								String editPortletURLString = editPortletURL.toString();
 
 								editPortletURLString = HttpUtil.addParameter(editPortletURLString, "doAsGroupId", assetRenderer.getGroupId());
 								editPortletURLString = HttpUtil.addParameter(editPortletURLString, "refererPlid", plid);
-
-								editPortletURL.setParameter("redirect", currentURL);
 								%>
 
 								<c:choose>
 									<c:when test="<%= assetRenderer.hasEditPermission(permissionChecker) && showEditURL %>">
 
 										<%
-										String taglibEditURL = "javascript:Liferay.Util.openWindow({dialog: {width: 960}, id: '" + renderResponse.getNamespace() + "editAsset', title: '" + LanguageUtil.format(pageContext, "edit-x", HtmlUtil.escape(assetRenderer.getTitle(locale))) + "', uri: '" + HtmlUtil.escapeURL(editPortletURLString) + "'});";
+										String taglibEditURL = "javascript:Liferay.Util.openWindow({id: '" + renderResponse.getNamespace() + "editAsset', title: '" + LanguageUtil.format(pageContext, "edit-x", HtmlUtil.escape(assetRenderer.getTitle(locale))) + "', uri:'" + HtmlUtil.escapeURL(editPortletURLString) + "'});";
 										%>
 
 										<liferay-ui:icon image="edit" url="<%= taglibEditURL %>" />
@@ -248,8 +246,6 @@ request.setAttribute(WebKeys.WORKFLOW_ASSET_PREVIEW, Boolean.TRUE);
 					</c:choose>
 
 					<%
-					String selectionStyle = "manual";
-
 					String[] metadataFields = new String[] {"author", "categories", "tags"};
 					%>
 
@@ -288,14 +284,13 @@ request.setAttribute(WebKeys.WORKFLOW_ASSET_PREVIEW, Boolean.TRUE);
 					formName="fm1"
 					ratingsEnabled="<%= false %>"
 					redirect="<%= currentURL %>"
-					subject="<%= LanguageUtil.get(pageContext, workflowTask.getName()) %>"
 					userId="<%= user.getUserId() %>"
 				/>
 			</liferay-ui:panel>
 		</liferay-ui:panel-container>
-	</aui:column>
+	</aui:col>
 
-	<aui:column columnWidth="<%= 25 %>" cssClass="lfr-asset-column lfr-asset-column-actions" last="<%= true %>">
+	<aui:col cssClass="lfr-asset-column lfr-asset-column-actions" last="<%= true %>" width="<%= 25 %>">
 		<div class="lfr-asset-summary">
 			<liferay-ui:icon
 				cssClass="lfr-asset-avatar"
@@ -313,8 +308,8 @@ request.setAttribute(WebKeys.WORKFLOW_ASSET_PREVIEW, Boolean.TRUE);
 		%>
 
 		<liferay-util:include page="/html/portlet/workflow_tasks/workflow_task_action.jsp" />
-	</aui:column>
-</aui:layout>
+	</aui:col>
+</aui:row>
 
 <aui:script use="liferay-workflow-tasks">
 	var onTaskClickFn = A.rbind('onTaskClick', Liferay.WorkflowTasks, '');

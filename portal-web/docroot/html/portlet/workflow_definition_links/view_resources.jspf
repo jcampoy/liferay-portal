@@ -60,10 +60,10 @@ portletURL.setParameter("tabs1", "default-configuration");
 
 	<liferay-ui:search-container
 		iteratorURL="<%= portletURL %>"
+		total="<%= workflowHandlers.size() %>"
 	>
 		<liferay-ui:search-container-results
 			results="<%= ListUtil.subList(workflowHandlers, searchContainer.getStart(), searchContainer.getEnd()) %>"
-			total="<%= workflowHandlers.size() %>"
 		/>
 
 		<liferay-ui:search-container-row
@@ -137,7 +137,7 @@ portletURL.setParameter("tabs1", "default-configuration");
 						}
 					%>
 
-						<aui:option label='<%= workflowDefinition.getName() + " (" + LanguageUtil.format(locale, "version-x", workflowDefinition.getVersion()) + ")" %>' selected="<%= selected %>" value="<%= workflowDefinition.getName() + StringPool.AT + workflowDefinition.getVersion() %>" />
+						<aui:option label='<%= workflowDefinition.getName() + " (" + LanguageUtil.format(locale, "version-x", workflowDefinition.getVersion()) + ")" %>' selected="<%= selected %>" value="<%= HtmlUtil.escapeAttribute(workflowDefinition.getName()) + StringPool.AT + workflowDefinition.getVersion() %>" />
 
 					<%
 					}
@@ -156,16 +156,16 @@ portletURL.setParameter("tabs1", "default-configuration");
 
 	<br />
 
-	<div class="portlet-msg-info">
+	<div class="alert alert-info">
 		<liferay-ui:message key="the-workflows-for-the-following-resources-can-be-configured-within-their-respective-portlets" />
 	</div>
 
 	<liferay-ui:search-container
 		iteratorURL="<%= portletURL %>"
+		total="<%= hiddenWorkflowHandlers.size() %>"
 	>
 		<liferay-ui:search-container-results
 			results="<%= ListUtil.subList(hiddenWorkflowHandlers, searchContainer.getStart(), searchContainer.getEnd()) %>"
-			total="<%= hiddenWorkflowHandlers.size() %>"
 		/>
 
 		<liferay-ui:search-container-row

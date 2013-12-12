@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.asset.model;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.model.PersistedModel;
 
 /**
@@ -25,6 +27,7 @@ import com.liferay.portal.model.PersistedModel;
  * @see com.liferay.portlet.asset.model.impl.AssetVocabularyModelImpl
  * @generated
  */
+@ProviderType
 public interface AssetVocabulary extends AssetVocabularyModel, PersistedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -34,20 +37,11 @@ public interface AssetVocabulary extends AssetVocabularyModel, PersistedModel {
 	public java.util.List<com.liferay.portlet.asset.model.AssetCategory> getCategories()
 		throws com.liferay.portal.kernel.exception.SystemException;
 
-	public java.lang.String getSettings();
-
 	public com.liferay.portal.kernel.util.UnicodeProperties getSettingsProperties();
-
-	public java.lang.String getTitle(java.lang.String languageId);
-
-	public java.lang.String getTitle(java.lang.String languageId,
-		boolean useDefault);
 
 	public boolean isMultiValued();
 
 	public boolean isRequired(long classNameId);
-
-	public void setSettings(java.lang.String settings);
 
 	public void setSettingsProperties(
 		com.liferay.portal.kernel.util.UnicodeProperties settingsProperties);

@@ -14,12 +14,16 @@
 
 package com.liferay.portlet.documentlibrary.asset;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.trash.TrashRenderer;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.security.permission.ActionKeys;
+import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.WebKeys;
@@ -27,6 +31,7 @@ import com.liferay.portlet.asset.model.AssetRendererFactory;
 import com.liferay.portlet.asset.model.BaseAssetRenderer;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
+import com.liferay.portlet.documentlibrary.service.permission.DLFolderPermission;
 import com.liferay.portlet.trash.util.TrashUtil;
 
 import java.util.Date;
@@ -50,10 +55,12 @@ public class DLFolderAssetRenderer
 		_folder = folder;
 	}
 
+	@Override
 	public String getClassName() {
 		return DLFolder.class.getName();
 	}
 
+	@Override
 	public long getClassPK() {
 		return _folder.getPrimaryKey();
 	}
@@ -63,6 +70,7 @@ public class DLFolderAssetRenderer
 		return _folder.getModifiedDate();
 	}
 
+	@Override
 	public long getGroupId() {
 		return _folder.getGroupId();
 	}
@@ -84,12 +92,14 @@ public class DLFolderAssetRenderer
 		return themeDisplay.getPathThemeImages() + "/common/folder_empty.png";
 	}
 
+	@Override
 	public String getPortletId() {
 		AssetRendererFactory assetRendererFactory = getAssetRendererFactory();
 
 		return assetRendererFactory.getPortletId();
 	}
 
+	@Override
 	public String getSummary(Locale locale) {
 		return HtmlUtil.stripHtml(_folder.getDescription());
 	}
@@ -117,10 +127,12 @@ public class DLFolderAssetRenderer
 			"/file_system/large/folder_empty_document.png";
 	}
 
+	@Override
 	public String getTitle(Locale locale) {
 		return TrashUtil.getOriginalTitle(_folder.getName());
 	}
 
+	@Override
 	public String getType() {
 		return TYPE;
 	}
@@ -149,10 +161,13 @@ public class DLFolderAssetRenderer
 			WindowState windowState)
 		throws Exception {
 
-		PortletURL portletURL = liferayPortletResponse.createLiferayPortletURL(
-			PortletKeys.DOCUMENT_LIBRARY, PortletRequest.RENDER_PHASE);
+		AssetRendererFactory assetRendererFactory = getAssetRendererFactory();
 
-		portletURL.setParameter("struts_action", "/document_library/view");
+		PortletURL portletURL = assetRendererFactory.getURLView(
+			liferayPortletResponse, windowState);
+
+		portletURL.setParameter(
+			"struts_action", "/document_library_display/view");
 		portletURL.setParameter(
 			"folderId", String.valueOf(_folder.getFolderId()));
 		portletURL.setWindowState(windowState);
@@ -171,16 +186,27 @@ public class DLFolderAssetRenderer
 			"/document_library/find_folder", "folderId", _folder.getFolderId());
 	}
 
+	@Override
 	public long getUserId() {
 		return _folder.getUserId();
 	}
 
+	@Override
 	public String getUserName() {
 		return _folder.getUserName();
 	}
 
+	@Override
 	public String getUuid() {
 		return _folder.getUuid();
+	}
+
+	@Override
+	public boolean hasViewPermission(PermissionChecker permissionChecker)
+		throws PortalException, SystemException {
+
+		return DLFolderPermission.contains(
+			permissionChecker, _folder, ActionKeys.VIEW);
 	}
 
 	@Override
@@ -192,6 +218,7 @@ public class DLFolderAssetRenderer
 		return true;
 	}
 
+	@Override
 	public String render(
 			RenderRequest renderRequest, RenderResponse renderResponse,
 			String template)

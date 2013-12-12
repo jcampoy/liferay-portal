@@ -113,6 +113,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @return the matching repository entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<RepositoryEntry> findByUuid(String uuid)
 		throws SystemException {
 		return findByUuid(uuid, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
@@ -131,6 +132,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @return the range of matching repository entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<RepositoryEntry> findByUuid(String uuid, int start, int end)
 		throws SystemException {
 		return findByUuid(uuid, start, end, null);
@@ -150,6 +152,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @return the ordered range of matching repository entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<RepositoryEntry> findByUuid(String uuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -270,6 +273,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @throws com.liferay.portal.NoSuchRepositoryEntryException if a matching repository entry could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RepositoryEntry findByUuid_First(String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchRepositoryEntryException, SystemException {
@@ -300,6 +304,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @return the first matching repository entry, or <code>null</code> if a matching repository entry could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RepositoryEntry fetchByUuid_First(String uuid,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<RepositoryEntry> list = findByUuid(uuid, 0, 1, orderByComparator);
@@ -320,6 +325,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @throws com.liferay.portal.NoSuchRepositoryEntryException if a matching repository entry could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RepositoryEntry findByUuid_Last(String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchRepositoryEntryException, SystemException {
@@ -350,9 +356,14 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @return the last matching repository entry, or <code>null</code> if a matching repository entry could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RepositoryEntry fetchByUuid_Last(String uuid,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByUuid(uuid);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<RepositoryEntry> list = findByUuid(uuid, count - 1, count,
 				orderByComparator);
@@ -374,6 +385,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @throws com.liferay.portal.NoSuchRepositoryEntryException if a repository entry with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RepositoryEntry[] findByUuid_PrevAndNext(long repositoryEntryId,
 		String uuid, OrderByComparator orderByComparator)
 		throws NoSuchRepositoryEntryException, SystemException {
@@ -529,6 +541,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @param uuid the uuid
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByUuid(String uuid) throws SystemException {
 		for (RepositoryEntry repositoryEntry : findByUuid(uuid,
 				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
@@ -543,6 +556,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @return the number of matching repository entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByUuid(String uuid) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID;
 
@@ -626,6 +640,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @throws com.liferay.portal.NoSuchRepositoryEntryException if a matching repository entry could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RepositoryEntry findByUUID_G(String uuid, long groupId)
 		throws NoSuchRepositoryEntryException, SystemException {
 		RepositoryEntry repositoryEntry = fetchByUUID_G(uuid, groupId);
@@ -661,6 +676,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @return the matching repository entry, or <code>null</code> if a matching repository entry could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RepositoryEntry fetchByUUID_G(String uuid, long groupId)
 		throws SystemException {
 		return fetchByUUID_G(uuid, groupId, true);
@@ -675,6 +691,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @return the matching repository entry, or <code>null</code> if a matching repository entry could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RepositoryEntry fetchByUUID_G(String uuid, long groupId,
 		boolean retrieveFromCache) throws SystemException {
 		Object[] finderArgs = new Object[] { uuid, groupId };
@@ -781,6 +798,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @return the repository entry that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RepositoryEntry removeByUUID_G(String uuid, long groupId)
 		throws NoSuchRepositoryEntryException, SystemException {
 		RepositoryEntry repositoryEntry = findByUUID_G(uuid, groupId);
@@ -796,6 +814,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @return the number of matching repository entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByUUID_G(String uuid, long groupId)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_G;
@@ -895,6 +914,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @return the matching repository entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<RepositoryEntry> findByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		return findByUuid_C(uuid, companyId, QueryUtil.ALL_POS,
@@ -915,6 +935,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @return the range of matching repository entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<RepositoryEntry> findByUuid_C(String uuid, long companyId,
 		int start, int end) throws SystemException {
 		return findByUuid_C(uuid, companyId, start, end, null);
@@ -935,6 +956,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @return the ordered range of matching repository entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<RepositoryEntry> findByUuid_C(String uuid, long companyId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -1066,6 +1088,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @throws com.liferay.portal.NoSuchRepositoryEntryException if a matching repository entry could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RepositoryEntry findByUuid_C_First(String uuid, long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchRepositoryEntryException, SystemException {
@@ -1100,6 +1123,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @return the first matching repository entry, or <code>null</code> if a matching repository entry could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RepositoryEntry fetchByUuid_C_First(String uuid, long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<RepositoryEntry> list = findByUuid_C(uuid, companyId, 0, 1,
@@ -1122,6 +1146,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @throws com.liferay.portal.NoSuchRepositoryEntryException if a matching repository entry could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RepositoryEntry findByUuid_C_Last(String uuid, long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchRepositoryEntryException, SystemException {
@@ -1156,9 +1181,14 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @return the last matching repository entry, or <code>null</code> if a matching repository entry could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RepositoryEntry fetchByUuid_C_Last(String uuid, long companyId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByUuid_C(uuid, companyId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<RepositoryEntry> list = findByUuid_C(uuid, companyId, count - 1,
 				count, orderByComparator);
@@ -1181,6 +1211,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @throws com.liferay.portal.NoSuchRepositoryEntryException if a repository entry with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RepositoryEntry[] findByUuid_C_PrevAndNext(long repositoryEntryId,
 		String uuid, long companyId, OrderByComparator orderByComparator)
 		throws NoSuchRepositoryEntryException, SystemException {
@@ -1341,6 +1372,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @param companyId the company ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		for (RepositoryEntry repositoryEntry : findByUuid_C(uuid, companyId,
@@ -1357,6 +1389,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @return the number of matching repository entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_C;
@@ -1455,6 +1488,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @return the matching repository entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<RepositoryEntry> findByRepositoryId(long repositoryId)
 		throws SystemException {
 		return findByRepositoryId(repositoryId, QueryUtil.ALL_POS,
@@ -1474,6 +1508,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @return the range of matching repository entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<RepositoryEntry> findByRepositoryId(long repositoryId,
 		int start, int end) throws SystemException {
 		return findByRepositoryId(repositoryId, start, end, null);
@@ -1493,6 +1528,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @return the ordered range of matching repository entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<RepositoryEntry> findByRepositoryId(long repositoryId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
@@ -1604,6 +1640,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @throws com.liferay.portal.NoSuchRepositoryEntryException if a matching repository entry could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RepositoryEntry findByRepositoryId_First(long repositoryId,
 		OrderByComparator orderByComparator)
 		throws NoSuchRepositoryEntryException, SystemException {
@@ -1634,6 +1671,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @return the first matching repository entry, or <code>null</code> if a matching repository entry could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RepositoryEntry fetchByRepositoryId_First(long repositoryId,
 		OrderByComparator orderByComparator) throws SystemException {
 		List<RepositoryEntry> list = findByRepositoryId(repositoryId, 0, 1,
@@ -1655,6 +1693,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @throws com.liferay.portal.NoSuchRepositoryEntryException if a matching repository entry could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RepositoryEntry findByRepositoryId_Last(long repositoryId,
 		OrderByComparator orderByComparator)
 		throws NoSuchRepositoryEntryException, SystemException {
@@ -1685,9 +1724,14 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @return the last matching repository entry, or <code>null</code> if a matching repository entry could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RepositoryEntry fetchByRepositoryId_Last(long repositoryId,
 		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByRepositoryId(repositoryId);
+
+		if (count == 0) {
+			return null;
+		}
 
 		List<RepositoryEntry> list = findByRepositoryId(repositoryId,
 				count - 1, count, orderByComparator);
@@ -1709,6 +1753,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @throws com.liferay.portal.NoSuchRepositoryEntryException if a repository entry with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RepositoryEntry[] findByRepositoryId_PrevAndNext(
 		long repositoryEntryId, long repositoryId,
 		OrderByComparator orderByComparator)
@@ -1851,6 +1896,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @param repositoryId the repository ID
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeByRepositoryId(long repositoryId)
 		throws SystemException {
 		for (RepositoryEntry repositoryEntry : findByRepositoryId(
@@ -1866,6 +1912,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @return the number of matching repository entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByRepositoryId(long repositoryId) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_REPOSITORYID;
 
@@ -1932,6 +1979,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @throws com.liferay.portal.NoSuchRepositoryEntryException if a matching repository entry could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RepositoryEntry findByR_M(long repositoryId, String mappedId)
 		throws NoSuchRepositoryEntryException, SystemException {
 		RepositoryEntry repositoryEntry = fetchByR_M(repositoryId, mappedId);
@@ -1967,6 +2015,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @return the matching repository entry, or <code>null</code> if a matching repository entry could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RepositoryEntry fetchByR_M(long repositoryId, String mappedId)
 		throws SystemException {
 		return fetchByR_M(repositoryId, mappedId, true);
@@ -1981,6 +2030,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @return the matching repository entry, or <code>null</code> if a matching repository entry could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RepositoryEntry fetchByR_M(long repositoryId, String mappedId,
 		boolean retrieveFromCache) throws SystemException {
 		Object[] finderArgs = new Object[] { repositoryId, mappedId };
@@ -2087,6 +2137,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @return the repository entry that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RepositoryEntry removeByR_M(long repositoryId, String mappedId)
 		throws NoSuchRepositoryEntryException, SystemException {
 		RepositoryEntry repositoryEntry = findByR_M(repositoryId, mappedId);
@@ -2102,6 +2153,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @return the number of matching repository entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countByR_M(long repositoryId, String mappedId)
 		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_R_M;
@@ -2171,11 +2223,16 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	private static final String _FINDER_COLUMN_R_M_MAPPEDID_2 = "repositoryEntry.mappedId = ?";
 	private static final String _FINDER_COLUMN_R_M_MAPPEDID_3 = "(repositoryEntry.mappedId IS NULL OR repositoryEntry.mappedId = '')";
 
+	public RepositoryEntryPersistenceImpl() {
+		setModelClass(RepositoryEntry.class);
+	}
+
 	/**
 	 * Caches the repository entry in the entity cache if it is enabled.
 	 *
 	 * @param repositoryEntry the repository entry
 	 */
+	@Override
 	public void cacheResult(RepositoryEntry repositoryEntry) {
 		EntityCacheUtil.putResult(RepositoryEntryModelImpl.ENTITY_CACHE_ENABLED,
 			RepositoryEntryImpl.class, repositoryEntry.getPrimaryKey(),
@@ -2198,6 +2255,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 *
 	 * @param repositoryEntries the repository entries
 	 */
+	@Override
 	public void cacheResult(List<RepositoryEntry> repositoryEntries) {
 		for (RepositoryEntry repositoryEntry : repositoryEntries) {
 			if (EntityCacheUtil.getResult(
@@ -2360,6 +2418,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @param repositoryEntryId the primary key for the new repository entry
 	 * @return the new repository entry
 	 */
+	@Override
 	public RepositoryEntry create(long repositoryEntryId) {
 		RepositoryEntry repositoryEntry = new RepositoryEntryImpl();
 
@@ -2381,6 +2440,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @throws com.liferay.portal.NoSuchRepositoryEntryException if a repository entry with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RepositoryEntry remove(long repositoryEntryId)
 		throws NoSuchRepositoryEntryException, SystemException {
 		return remove((Serializable)repositoryEntryId);
@@ -2569,6 +2629,8 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 		clearUniqueFindersCache(repositoryEntry);
 		cacheUniqueFindersCache(repositoryEntry);
 
+		repositoryEntry.resetOriginalValues();
+
 		return repositoryEntry;
 	}
 
@@ -2630,6 +2692,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @throws com.liferay.portal.NoSuchRepositoryEntryException if a repository entry with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RepositoryEntry findByPrimaryKey(long repositoryEntryId)
 		throws NoSuchRepositoryEntryException, SystemException {
 		return findByPrimaryKey((Serializable)repositoryEntryId);
@@ -2691,6 +2754,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @return the repository entry, or <code>null</code> if a repository entry with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public RepositoryEntry fetchByPrimaryKey(long repositoryEntryId)
 		throws SystemException {
 		return fetchByPrimaryKey((Serializable)repositoryEntryId);
@@ -2702,6 +2766,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @return the repository entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<RepositoryEntry> findAll() throws SystemException {
 		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
@@ -2718,6 +2783,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @return the range of repository entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<RepositoryEntry> findAll(int start, int end)
 		throws SystemException {
 		return findAll(start, end, null);
@@ -2736,6 +2802,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @return the ordered range of repository entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public List<RepositoryEntry> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
@@ -2821,6 +2888,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 *
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void removeAll() throws SystemException {
 		for (RepositoryEntry repositoryEntry : findAll()) {
 			remove(repositoryEntry);
@@ -2833,6 +2901,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @return the number of repository entries
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public int countAll() throws SystemException {
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
 				FINDER_ARGS_EMPTY, this);
@@ -2926,6 +2995,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 		};
 
 	private static CacheModel<RepositoryEntry> _nullRepositoryEntryCacheModel = new CacheModel<RepositoryEntry>() {
+			@Override
 			public RepositoryEntry toEntityModel() {
 				return _nullRepositoryEntry;
 			}

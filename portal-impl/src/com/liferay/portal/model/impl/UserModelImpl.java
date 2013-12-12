@@ -17,6 +17,7 @@ package com.liferay.portal.model.impl;
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSON;
+import com.liferay.portal.kernel.lar.StagedModelType;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -216,7 +217,7 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 			{ "userId", Types.BIGINT },
 			{ "groupId", Types.BIGINT }
 		};
-	public static final String MAPPING_TABLE_USERS_GROUPS_SQL_CREATE = "create table Users_Groups (userId LONG not null,groupId LONG not null,primary key (userId, groupId))";
+	public static final String MAPPING_TABLE_USERS_GROUPS_SQL_CREATE = "create table Users_Groups (groupId LONG not null,userId LONG not null,primary key (groupId, userId))";
 	public static final boolean FINDER_CACHE_ENABLED_USERS_GROUPS = GetterUtil.getBoolean(com.liferay.portal.util.PropsUtil.get(
 				"value.object.finder.cache.enabled.Users_Groups"), true);
 	public static final String MAPPING_TABLE_USERS_ORGS_NAME = "Users_Orgs";
@@ -224,7 +225,7 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 			{ "userId", Types.BIGINT },
 			{ "organizationId", Types.BIGINT }
 		};
-	public static final String MAPPING_TABLE_USERS_ORGS_SQL_CREATE = "create table Users_Orgs (userId LONG not null,organizationId LONG not null,primary key (userId, organizationId))";
+	public static final String MAPPING_TABLE_USERS_ORGS_SQL_CREATE = "create table Users_Orgs (organizationId LONG not null,userId LONG not null,primary key (organizationId, userId))";
 	public static final boolean FINDER_CACHE_ENABLED_USERS_ORGS = GetterUtil.getBoolean(com.liferay.portal.util.PropsUtil.get(
 				"value.object.finder.cache.enabled.Users_Orgs"), true);
 	public static final String MAPPING_TABLE_USERS_ROLES_NAME = "Users_Roles";
@@ -232,7 +233,7 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 			{ "userId", Types.BIGINT },
 			{ "roleId", Types.BIGINT }
 		};
-	public static final String MAPPING_TABLE_USERS_ROLES_SQL_CREATE = "create table Users_Roles (userId LONG not null,roleId LONG not null,primary key (userId, roleId))";
+	public static final String MAPPING_TABLE_USERS_ROLES_SQL_CREATE = "create table Users_Roles (roleId LONG not null,userId LONG not null,primary key (roleId, userId))";
 	public static final boolean FINDER_CACHE_ENABLED_USERS_ROLES = GetterUtil.getBoolean(com.liferay.portal.util.PropsUtil.get(
 				"value.object.finder.cache.enabled.Users_Roles"), true);
 	public static final String MAPPING_TABLE_USERS_TEAMS_NAME = "Users_Teams";
@@ -240,7 +241,7 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 			{ "userId", Types.BIGINT },
 			{ "teamId", Types.BIGINT }
 		};
-	public static final String MAPPING_TABLE_USERS_TEAMS_SQL_CREATE = "create table Users_Teams (userId LONG not null,teamId LONG not null,primary key (userId, teamId))";
+	public static final String MAPPING_TABLE_USERS_TEAMS_SQL_CREATE = "create table Users_Teams (teamId LONG not null,userId LONG not null,primary key (teamId, userId))";
 	public static final boolean FINDER_CACHE_ENABLED_USERS_TEAMS = GetterUtil.getBoolean(com.liferay.portal.util.PropsUtil.get(
 				"value.object.finder.cache.enabled.Users_Teams"), true);
 	public static final String MAPPING_TABLE_USERS_USERGROUPS_NAME = "Users_UserGroups";
@@ -248,7 +249,7 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 			{ "userGroupId", Types.BIGINT },
 			{ "userId", Types.BIGINT }
 		};
-	public static final String MAPPING_TABLE_USERS_USERGROUPS_SQL_CREATE = "create table Users_UserGroups (userGroupId LONG not null,userId LONG not null,primary key (userGroupId, userId))";
+	public static final String MAPPING_TABLE_USERS_USERGROUPS_SQL_CREATE = "create table Users_UserGroups (userId LONG not null,userGroupId LONG not null,primary key (userId, userGroupId))";
 	public static final boolean FINDER_CACHE_ENABLED_USERS_USERGROUPS = GetterUtil.getBoolean(com.liferay.portal.util.PropsUtil.get(
 				"value.object.finder.cache.enabled.Users_UserGroups"), true);
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
@@ -257,26 +258,32 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 	public UserModelImpl() {
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _userId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setUserId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
 		return _userId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return User.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return User.class.getName();
 	}
@@ -578,6 +585,7 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 	}
 
 	@JSON
+	@Override
 	public String getUuid() {
 		if (_uuid == null) {
 			return StringPool.BLANK;
@@ -587,6 +595,7 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 		}
 	}
 
+	@Override
 	public void setUuid(String uuid) {
 		if (_originalUuid == null) {
 			_originalUuid = _uuid;
@@ -600,10 +609,12 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 	}
 
 	@JSON
+	@Override
 	public long getUserId() {
 		return _userId;
 	}
 
+	@Override
 	public void setUserId(long userId) {
 		_columnBitmask |= USERID_COLUMN_BITMASK;
 
@@ -616,10 +627,12 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 		_userId = userId;
 	}
 
+	@Override
 	public String getUserUuid() throws SystemException {
 		return PortalUtil.getUserValue(getUserId(), "uuid", _userUuid);
 	}
 
+	@Override
 	public void setUserUuid(String userUuid) {
 		_userUuid = userUuid;
 	}
@@ -629,10 +642,12 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 	}
 
 	@JSON
+	@Override
 	public long getCompanyId() {
 		return _companyId;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
 		_columnBitmask |= COMPANYID_COLUMN_BITMASK;
 
@@ -650,10 +665,12 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 	}
 
 	@JSON
+	@Override
 	public Date getCreateDate() {
 		return _createDate;
 	}
 
+	@Override
 	public void setCreateDate(Date createDate) {
 		_columnBitmask |= CREATEDATE_COLUMN_BITMASK;
 
@@ -669,10 +686,12 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 	}
 
 	@JSON
+	@Override
 	public Date getModifiedDate() {
 		return _modifiedDate;
 	}
 
+	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		_columnBitmask |= MODIFIEDDATE_COLUMN_BITMASK;
 
@@ -688,14 +707,17 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 	}
 
 	@JSON
+	@Override
 	public boolean getDefaultUser() {
 		return _defaultUser;
 	}
 
+	@Override
 	public boolean isDefaultUser() {
 		return _defaultUser;
 	}
 
+	@Override
 	public void setDefaultUser(boolean defaultUser) {
 		_columnBitmask |= DEFAULTUSER_COLUMN_BITMASK;
 
@@ -713,10 +735,12 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 	}
 
 	@JSON
+	@Override
 	public long getContactId() {
 		return _contactId;
 	}
 
+	@Override
 	public void setContactId(long contactId) {
 		_columnBitmask |= CONTACTID_COLUMN_BITMASK;
 
@@ -734,6 +758,7 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 	}
 
 	@JSON(include = false)
+	@Override
 	public String getPassword() {
 		if (_password == null) {
 			return StringPool.BLANK;
@@ -743,46 +768,56 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 		}
 	}
 
+	@Override
 	public void setPassword(String password) {
 		_password = password;
 	}
 
 	@JSON(include = false)
+	@Override
 	public boolean getPasswordEncrypted() {
 		return _passwordEncrypted;
 	}
 
+	@Override
 	public boolean isPasswordEncrypted() {
 		return _passwordEncrypted;
 	}
 
+	@Override
 	public void setPasswordEncrypted(boolean passwordEncrypted) {
 		_passwordEncrypted = passwordEncrypted;
 	}
 
 	@JSON(include = false)
+	@Override
 	public boolean getPasswordReset() {
 		return _passwordReset;
 	}
 
+	@Override
 	public boolean isPasswordReset() {
 		return _passwordReset;
 	}
 
+	@Override
 	public void setPasswordReset(boolean passwordReset) {
 		_passwordReset = passwordReset;
 	}
 
 	@JSON(include = false)
+	@Override
 	public Date getPasswordModifiedDate() {
 		return _passwordModifiedDate;
 	}
 
+	@Override
 	public void setPasswordModifiedDate(Date passwordModifiedDate) {
 		_passwordModifiedDate = passwordModifiedDate;
 	}
 
 	@JSON(include = false)
+	@Override
 	public String getDigest() {
 		if (_digest == null) {
 			return StringPool.BLANK;
@@ -792,11 +827,13 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 		}
 	}
 
+	@Override
 	public void setDigest(String digest) {
 		_digest = digest;
 	}
 
 	@JSON
+	@Override
 	public String getReminderQueryQuestion() {
 		if (_reminderQueryQuestion == null) {
 			return StringPool.BLANK;
@@ -806,11 +843,13 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 		}
 	}
 
+	@Override
 	public void setReminderQueryQuestion(String reminderQueryQuestion) {
 		_reminderQueryQuestion = reminderQueryQuestion;
 	}
 
 	@JSON
+	@Override
 	public String getReminderQueryAnswer() {
 		if (_reminderQueryAnswer == null) {
 			return StringPool.BLANK;
@@ -820,20 +859,24 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 		}
 	}
 
+	@Override
 	public void setReminderQueryAnswer(String reminderQueryAnswer) {
 		_reminderQueryAnswer = reminderQueryAnswer;
 	}
 
 	@JSON
+	@Override
 	public int getGraceLoginCount() {
 		return _graceLoginCount;
 	}
 
+	@Override
 	public void setGraceLoginCount(int graceLoginCount) {
 		_graceLoginCount = graceLoginCount;
 	}
 
 	@JSON
+	@Override
 	public String getScreenName() {
 		if (_screenName == null) {
 			return StringPool.BLANK;
@@ -843,6 +886,7 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 		}
 	}
 
+	@Override
 	public void setScreenName(String screenName) {
 		_columnBitmask |= SCREENNAME_COLUMN_BITMASK;
 
@@ -858,6 +902,7 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 	}
 
 	@JSON
+	@Override
 	public String getEmailAddress() {
 		if (_emailAddress == null) {
 			return StringPool.BLANK;
@@ -867,6 +912,7 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 		}
 	}
 
+	@Override
 	public void setEmailAddress(String emailAddress) {
 		_columnBitmask |= EMAILADDRESS_COLUMN_BITMASK;
 
@@ -882,10 +928,12 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 	}
 
 	@JSON
+	@Override
 	public long getFacebookId() {
 		return _facebookId;
 	}
 
+	@Override
 	public void setFacebookId(long facebookId) {
 		_columnBitmask |= FACEBOOKID_COLUMN_BITMASK;
 
@@ -903,15 +951,18 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 	}
 
 	@JSON
+	@Override
 	public long getLdapServerId() {
 		return _ldapServerId;
 	}
 
+	@Override
 	public void setLdapServerId(long ldapServerId) {
 		_ldapServerId = ldapServerId;
 	}
 
 	@JSON
+	@Override
 	public String getOpenId() {
 		if (_openId == null) {
 			return StringPool.BLANK;
@@ -921,6 +972,7 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 		}
 	}
 
+	@Override
 	public void setOpenId(String openId) {
 		_columnBitmask |= OPENID_COLUMN_BITMASK;
 
@@ -936,10 +988,12 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 	}
 
 	@JSON
+	@Override
 	public long getPortraitId() {
 		return _portraitId;
 	}
 
+	@Override
 	public void setPortraitId(long portraitId) {
 		_columnBitmask |= PORTRAITID_COLUMN_BITMASK;
 
@@ -957,6 +1011,7 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 	}
 
 	@JSON
+	@Override
 	public String getLanguageId() {
 		if (_languageId == null) {
 			return StringPool.BLANK;
@@ -966,11 +1021,13 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 		}
 	}
 
+	@Override
 	public void setLanguageId(String languageId) {
 		_languageId = languageId;
 	}
 
 	@JSON
+	@Override
 	public String getTimeZoneId() {
 		if (_timeZoneId == null) {
 			return StringPool.BLANK;
@@ -980,11 +1037,13 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 		}
 	}
 
+	@Override
 	public void setTimeZoneId(String timeZoneId) {
 		_timeZoneId = timeZoneId;
 	}
 
 	@JSON
+	@Override
 	public String getGreeting() {
 		if (_greeting == null) {
 			return StringPool.BLANK;
@@ -994,11 +1053,13 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 		}
 	}
 
+	@Override
 	public void setGreeting(String greeting) {
 		_greeting = greeting;
 	}
 
 	@JSON
+	@Override
 	public String getComments() {
 		if (_comments == null) {
 			return StringPool.BLANK;
@@ -1008,11 +1069,13 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 		}
 	}
 
+	@Override
 	public void setComments(String comments) {
 		_comments = comments;
 	}
 
 	@JSON
+	@Override
 	public String getFirstName() {
 		if (_firstName == null) {
 			return StringPool.BLANK;
@@ -1022,11 +1085,13 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 		}
 	}
 
+	@Override
 	public void setFirstName(String firstName) {
 		_firstName = firstName;
 	}
 
 	@JSON
+	@Override
 	public String getMiddleName() {
 		if (_middleName == null) {
 			return StringPool.BLANK;
@@ -1036,11 +1101,13 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 		}
 	}
 
+	@Override
 	public void setMiddleName(String middleName) {
 		_middleName = middleName;
 	}
 
 	@JSON
+	@Override
 	public String getLastName() {
 		if (_lastName == null) {
 			return StringPool.BLANK;
@@ -1050,11 +1117,13 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 		}
 	}
 
+	@Override
 	public void setLastName(String lastName) {
 		_lastName = lastName;
 	}
 
 	@JSON
+	@Override
 	public String getJobTitle() {
 		if (_jobTitle == null) {
 			return StringPool.BLANK;
@@ -1064,20 +1133,24 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 		}
 	}
 
+	@Override
 	public void setJobTitle(String jobTitle) {
 		_jobTitle = jobTitle;
 	}
 
 	@JSON
+	@Override
 	public Date getLoginDate() {
 		return _loginDate;
 	}
 
+	@Override
 	public void setLoginDate(Date loginDate) {
 		_loginDate = loginDate;
 	}
 
 	@JSON
+	@Override
 	public String getLoginIP() {
 		if (_loginIP == null) {
 			return StringPool.BLANK;
@@ -1087,20 +1160,24 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 		}
 	}
 
+	@Override
 	public void setLoginIP(String loginIP) {
 		_loginIP = loginIP;
 	}
 
 	@JSON
+	@Override
 	public Date getLastLoginDate() {
 		return _lastLoginDate;
 	}
 
+	@Override
 	public void setLastLoginDate(Date lastLoginDate) {
 		_lastLoginDate = lastLoginDate;
 	}
 
 	@JSON
+	@Override
 	public String getLastLoginIP() {
 		if (_lastLoginIP == null) {
 			return StringPool.BLANK;
@@ -1110,81 +1187,99 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 		}
 	}
 
+	@Override
 	public void setLastLoginIP(String lastLoginIP) {
 		_lastLoginIP = lastLoginIP;
 	}
 
 	@JSON
+	@Override
 	public Date getLastFailedLoginDate() {
 		return _lastFailedLoginDate;
 	}
 
+	@Override
 	public void setLastFailedLoginDate(Date lastFailedLoginDate) {
 		_lastFailedLoginDate = lastFailedLoginDate;
 	}
 
 	@JSON
+	@Override
 	public int getFailedLoginAttempts() {
 		return _failedLoginAttempts;
 	}
 
+	@Override
 	public void setFailedLoginAttempts(int failedLoginAttempts) {
 		_failedLoginAttempts = failedLoginAttempts;
 	}
 
 	@JSON
+	@Override
 	public boolean getLockout() {
 		return _lockout;
 	}
 
+	@Override
 	public boolean isLockout() {
 		return _lockout;
 	}
 
+	@Override
 	public void setLockout(boolean lockout) {
 		_lockout = lockout;
 	}
 
 	@JSON
+	@Override
 	public Date getLockoutDate() {
 		return _lockoutDate;
 	}
 
+	@Override
 	public void setLockoutDate(Date lockoutDate) {
 		_lockoutDate = lockoutDate;
 	}
 
 	@JSON
+	@Override
 	public boolean getAgreedToTermsOfUse() {
 		return _agreedToTermsOfUse;
 	}
 
+	@Override
 	public boolean isAgreedToTermsOfUse() {
 		return _agreedToTermsOfUse;
 	}
 
+	@Override
 	public void setAgreedToTermsOfUse(boolean agreedToTermsOfUse) {
 		_agreedToTermsOfUse = agreedToTermsOfUse;
 	}
 
 	@JSON
+	@Override
 	public boolean getEmailAddressVerified() {
 		return _emailAddressVerified;
 	}
 
+	@Override
 	public boolean isEmailAddressVerified() {
 		return _emailAddressVerified;
 	}
 
+	@Override
 	public void setEmailAddressVerified(boolean emailAddressVerified) {
 		_emailAddressVerified = emailAddressVerified;
 	}
 
 	@JSON
+	@Override
 	public int getStatus() {
 		return _status;
 	}
 
+	@Override
 	public void setStatus(int status) {
 		_columnBitmask |= STATUS_COLUMN_BITMASK;
 
@@ -1199,6 +1294,12 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 
 	public int getOriginalStatus() {
 		return _originalStatus;
+	}
+
+	@Override
+	public StagedModelType getStagedModelType() {
+		return new StagedModelType(PortalUtil.getClassNameId(
+				User.class.getName()));
 	}
 
 	public long getColumnBitmask() {
@@ -1278,6 +1379,7 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 		return userImpl;
 	}
 
+	@Override
 	public int compareTo(User user) {
 		long primaryKey = user.getPrimaryKey();
 
@@ -1294,18 +1396,15 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof User)) {
 			return false;
 		}
 
-		User user = null;
-
-		try {
-			user = (User)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		User user = (User)obj;
 
 		long primaryKey = user.getPrimaryKey();
 
@@ -1704,6 +1803,7 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(124);
 

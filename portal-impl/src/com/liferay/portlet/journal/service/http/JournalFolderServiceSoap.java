@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.journal.service.http;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ListUtil;
@@ -23,13 +25,11 @@ import com.liferay.portlet.journal.service.JournalFolderServiceUtil;
 import java.rmi.RemoteException;
 
 /**
- * <p>
- * This class provides a SOAP utility for the
+ * Provides the SOAP utility for the
  * {@link com.liferay.portlet.journal.service.JournalFolderServiceUtil} service utility. The
  * static methods of this class calls the same methods of the service utility.
  * However, the signatures are different because it is difficult for SOAP to
  * support certain types.
- * </p>
  *
  * <p>
  * ServiceBuilder follows certain rules in translating the methods. For example,
@@ -58,12 +58,13 @@ import java.rmi.RemoteException;
  * The SOAP utility is only generated for remote services.
  * </p>
  *
- * @author    Brian Wing Shun Chan
- * @see       JournalFolderServiceHttp
- * @see       com.liferay.portlet.journal.model.JournalFolderSoap
- * @see       com.liferay.portlet.journal.service.JournalFolderServiceUtil
+ * @author Brian Wing Shun Chan
+ * @see JournalFolderServiceHttp
+ * @see com.liferay.portlet.journal.model.JournalFolderSoap
+ * @see com.liferay.portlet.journal.service.JournalFolderServiceUtil
  * @generated
  */
+@ProviderType
 public class JournalFolderServiceSoap {
 	public static com.liferay.portlet.journal.model.JournalFolderSoap addFolder(
 		long groupId, long parentFolderId, java.lang.String name,
@@ -277,6 +278,21 @@ public class JournalFolderServiceSoap {
 		}
 	}
 
+	public static int getFoldersCount(long groupId, long parentFolderId,
+		int status) throws RemoteException {
+		try {
+			int returnValue = JournalFolderServiceUtil.getFoldersCount(groupId,
+					parentFolderId, status);
+
+			return returnValue;
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
 	public static void getSubfolderIds(Long[] folderIds, long groupId,
 		long folderId) throws RemoteException {
 		try {
@@ -339,10 +355,12 @@ public class JournalFolderServiceSoap {
 		}
 	}
 
-	public static void moveFolderToTrash(long folderId)
-		throws RemoteException {
+	public static com.liferay.portlet.journal.model.JournalFolderSoap moveFolderToTrash(
+		long folderId) throws RemoteException {
 		try {
-			JournalFolderServiceUtil.moveFolderToTrash(folderId);
+			com.liferay.portlet.journal.model.JournalFolder returnValue = JournalFolderServiceUtil.moveFolderToTrash(folderId);
+
+			return com.liferay.portlet.journal.model.JournalFolderSoap.toSoapModel(returnValue);
 		}
 		catch (Exception e) {
 			_log.error(e, e);

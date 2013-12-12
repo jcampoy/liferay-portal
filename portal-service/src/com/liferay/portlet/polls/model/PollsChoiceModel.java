@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.polls.model;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.LocaleException;
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -43,6 +45,7 @@ import java.util.Map;
  * @see com.liferay.portlet.polls.model.impl.PollsChoiceModelImpl
  * @generated
  */
+@ProviderType
 public interface PollsChoiceModel extends BaseModel<PollsChoice>,
 	StagedGroupedModel {
 	/*
@@ -71,6 +74,7 @@ public interface PollsChoiceModel extends BaseModel<PollsChoice>,
 	 * @return the uuid of this polls choice
 	 */
 	@AutoEscape
+	@Override
 	public String getUuid();
 
 	/**
@@ -78,6 +82,7 @@ public interface PollsChoiceModel extends BaseModel<PollsChoice>,
 	 *
 	 * @param uuid the uuid of this polls choice
 	 */
+	@Override
 	public void setUuid(String uuid);
 
 	/**
@@ -99,6 +104,7 @@ public interface PollsChoiceModel extends BaseModel<PollsChoice>,
 	 *
 	 * @return the group ID of this polls choice
 	 */
+	@Override
 	public long getGroupId();
 
 	/**
@@ -106,6 +112,7 @@ public interface PollsChoiceModel extends BaseModel<PollsChoice>,
 	 *
 	 * @param groupId the group ID of this polls choice
 	 */
+	@Override
 	public void setGroupId(long groupId);
 
 	/**
@@ -113,6 +120,7 @@ public interface PollsChoiceModel extends BaseModel<PollsChoice>,
 	 *
 	 * @return the company ID of this polls choice
 	 */
+	@Override
 	public long getCompanyId();
 
 	/**
@@ -120,6 +128,7 @@ public interface PollsChoiceModel extends BaseModel<PollsChoice>,
 	 *
 	 * @param companyId the company ID of this polls choice
 	 */
+	@Override
 	public void setCompanyId(long companyId);
 
 	/**
@@ -127,6 +136,7 @@ public interface PollsChoiceModel extends BaseModel<PollsChoice>,
 	 *
 	 * @return the user ID of this polls choice
 	 */
+	@Override
 	public long getUserId();
 
 	/**
@@ -134,6 +144,7 @@ public interface PollsChoiceModel extends BaseModel<PollsChoice>,
 	 *
 	 * @param userId the user ID of this polls choice
 	 */
+	@Override
 	public void setUserId(long userId);
 
 	/**
@@ -142,6 +153,7 @@ public interface PollsChoiceModel extends BaseModel<PollsChoice>,
 	 * @return the user uuid of this polls choice
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public String getUserUuid() throws SystemException;
 
 	/**
@@ -149,6 +161,7 @@ public interface PollsChoiceModel extends BaseModel<PollsChoice>,
 	 *
 	 * @param userUuid the user uuid of this polls choice
 	 */
+	@Override
 	public void setUserUuid(String userUuid);
 
 	/**
@@ -157,6 +170,7 @@ public interface PollsChoiceModel extends BaseModel<PollsChoice>,
 	 * @return the user name of this polls choice
 	 */
 	@AutoEscape
+	@Override
 	public String getUserName();
 
 	/**
@@ -164,6 +178,7 @@ public interface PollsChoiceModel extends BaseModel<PollsChoice>,
 	 *
 	 * @param userName the user name of this polls choice
 	 */
+	@Override
 	public void setUserName(String userName);
 
 	/**
@@ -171,6 +186,7 @@ public interface PollsChoiceModel extends BaseModel<PollsChoice>,
 	 *
 	 * @return the create date of this polls choice
 	 */
+	@Override
 	public Date getCreateDate();
 
 	/**
@@ -178,6 +194,7 @@ public interface PollsChoiceModel extends BaseModel<PollsChoice>,
 	 *
 	 * @param createDate the create date of this polls choice
 	 */
+	@Override
 	public void setCreateDate(Date createDate);
 
 	/**
@@ -185,6 +202,7 @@ public interface PollsChoiceModel extends BaseModel<PollsChoice>,
 	 *
 	 * @return the modified date of this polls choice
 	 */
+	@Override
 	public Date getModifiedDate();
 
 	/**
@@ -192,6 +210,7 @@ public interface PollsChoiceModel extends BaseModel<PollsChoice>,
 	 *
 	 * @param modifiedDate the modified date of this polls choice
 	 */
+	@Override
 	public void setModifiedDate(Date modifiedDate);
 
 	/**
@@ -324,44 +343,69 @@ public interface PollsChoiceModel extends BaseModel<PollsChoice>,
 	public void setDescriptionMap(Map<Locale, String> descriptionMap,
 		Locale defaultLocale);
 
+	@Override
 	public boolean isNew();
 
+	@Override
 	public void setNew(boolean n);
 
+	@Override
 	public boolean isCachedModel();
 
+	@Override
 	public void setCachedModel(boolean cachedModel);
 
+	@Override
 	public boolean isEscapedModel();
 
+	@Override
 	public Serializable getPrimaryKeyObj();
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj);
 
+	@Override
 	public ExpandoBridge getExpandoBridge();
 
+	@Override
 	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
 
+	@Override
 	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
 
+	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
+
+	public String[] getAvailableLanguageIds();
+
+	public String getDefaultLanguageId();
+
+	public void prepareLocalizedFieldsForImport() throws LocaleException;
 
 	public void prepareLocalizedFieldsForImport(Locale defaultImportLocale)
 		throws LocaleException;
 
+	@Override
 	public Object clone();
 
+	@Override
 	public int compareTo(PollsChoice pollsChoice);
 
+	@Override
 	public int hashCode();
 
+	@Override
 	public CacheModel<PollsChoice> toCacheModel();
 
+	@Override
 	public PollsChoice toEscapedModel();
 
+	@Override
 	public PollsChoice toUnescapedModel();
 
+	@Override
 	public String toString();
 
+	@Override
 	public String toXmlString();
 }

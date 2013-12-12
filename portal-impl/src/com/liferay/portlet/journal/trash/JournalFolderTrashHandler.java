@@ -41,40 +41,34 @@ import javax.portlet.PortletRequest;
 public class JournalFolderTrashHandler extends JournalBaseTrashHandler {
 
 	@Override
+	public void checkDuplicateEntry(
+			long classPK, long containerModelId, String newName)
+		throws PortalException, SystemException {
+
+		JournalFolder folder = JournalFolderLocalServiceUtil.getFolder(classPK);
+
+		checkDuplicateEntry(
+			classPK, 0, containerModelId, folder.getName(), newName);
+	}
+
+	@Override
 	public void checkDuplicateTrashEntry(
 			TrashEntry trashEntry, long containerModelId, String newName)
 		throws PortalException, SystemException {
 
-		JournalFolder folder = JournalFolderLocalServiceUtil.getFolder(
-			trashEntry.getClassPK());
-
-		String originalTitle = trashEntry.getTypeSettingsProperty("title");
-
-		if (Validator.isNotNull(newName)) {
-			originalTitle = newName;
-		}
-
-		JournalFolder duplicateFolder =
-			JournalFolderLocalServiceUtil.fetchFolder(
-				folder.getGroupId(), folder.getParentFolderId(), originalTitle);
-
-		if (duplicateFolder != null) {
-			DuplicateEntryException dee = new DuplicateEntryException();
-
-			dee.setDuplicateEntryId(duplicateFolder.getFolderId());
-			dee.setOldName(duplicateFolder.getName());
-			dee.setTrashEntryId(trashEntry.getEntryId());
-
-			throw dee;
-		}
+		checkDuplicateEntry(
+			trashEntry.getClassPK(), trashEntry.getEntryId(), containerModelId,
+			trashEntry.getTypeSettingsProperty("title"), newName);
 	}
 
+	@Override
 	public void deleteTrashEntry(long classPK)
 		throws PortalException, SystemException {
 
 		JournalFolderLocalServiceUtil.deleteFolder(classPK, false);
 	}
 
+	@Override
 	public String getClassName() {
 		return JournalFolder.class.getName();
 	}
@@ -100,7 +94,19 @@ public class JournalFolderTrashHandler extends JournalBaseTrashHandler {
 	}
 
 	@Override
-	public String getRestoreLink(PortletRequest portletRequest, long classPK)
+	public String getRestoreContainedModelLink(
+			PortletRequest portletRequest, long classPK)
+		throws PortalException, SystemException {
+
+		JournalFolder folder = JournalFolderLocalServiceUtil.getFolder(classPK);
+
+		return JournalUtil.getJournalControlPanelLink(
+			portletRequest, folder.getFolderId());
+	}
+
+	@Override
+	public String getRestoreContainerModelLink(
+			PortletRequest portletRequest, long classPK)
 		throws PortalException, SystemException {
 
 		JournalFolder folder = JournalFolderLocalServiceUtil.getFolder(classPK);
@@ -120,12 +126,12 @@ public class JournalFolderTrashHandler extends JournalBaseTrashHandler {
 	}
 
 	@Override
-	public ContainerModel getTrashContainer(long classPK)
+	public TrashEntry getTrashEntry(long classPK)
 		throws PortalException, SystemException {
 
-		JournalFolder folder = getJournalFolder(classPK);
+		JournalFolder folder = JournalFolderLocalServiceUtil.getFolder(classPK);
 
-		return folder.getTrashContainer();
+		return folder.getTrashEntry();
 	}
 
 	@Override
@@ -157,6 +163,7 @@ public class JournalFolderTrashHandler extends JournalBaseTrashHandler {
 		return true;
 	}
 
+	@Override
 	public boolean isInTrash(long classPK)
 		throws PortalException, SystemException {
 
@@ -179,6 +186,13 @@ public class JournalFolderTrashHandler extends JournalBaseTrashHandler {
 		throws PortalException, SystemException {
 
 		JournalFolder folder = getJournalFolder(classPK);
+
+		if ((folder.getParentFolderId() > 0) &&
+			(JournalFolderLocalServiceUtil.fetchFolder(
+				folder.getParentFolderId()) == null)) {
+
+			return false;
+		}
 
 		return !folder.isInTrashContainer();
 	}
@@ -203,6 +217,7 @@ public class JournalFolderTrashHandler extends JournalBaseTrashHandler {
 			userId, classPK, containerModelId, serviceContext);
 	}
 
+	@Override
 	public void restoreTrashEntry(long userId, long classPK)
 		throws PortalException, SystemException {
 
@@ -220,7 +235,41 @@ public class JournalFolderTrashHandler extends JournalBaseTrashHandler {
 		JournalFolderLocalServiceUtil.updateJournalFolder(folder);
 	}
 
+	protected void checkDuplicateEntry(
+			long classPK, long trashEntryId, long containerModelId,
+			String originalTitle, String newName)
+		throws PortalException, SystemException {
+
+		JournalFolder folder = JournalFolderLocalServiceUtil.getFolder(classPK);
+
+		if (Validator.isNotNull(newName)) {
+			originalTitle = newName;
+		}
+
+		JournalFolder duplicateFolder =
+			JournalFolderLocalServiceUtil.fetchFolder(
+				folder.getGroupId(), containerModelId, originalTitle);
+
+		if (duplicateFolder != null) {
+			DuplicateEntryException dee = new DuplicateEntryException();
+
+			dee.setDuplicateEntryId(duplicateFolder.getFolderId());
+			dee.setOldName(duplicateFolder.getName());
+			dee.setTrashEntryId(trashEntryId);
+
+			throw dee;
+		}
+	}
+
 	@Override
+	protected long getGroupId(long classPK)
+		throws PortalException, SystemException {
+
+		JournalFolder folder = JournalFolderLocalServiceUtil.getFolder(classPK);
+
+		return folder.getGroupId();
+	}
+
 	protected JournalFolder getJournalFolder(long classPK)
 		throws PortalException, SystemException {
 

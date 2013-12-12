@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dao.orm.Type;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -74,6 +75,7 @@ public class DLFolderFinderImpl
 	public static final String JOIN_FS_BY_DL_FILE_ENTRY =
 		DLFolderFinder.class.getName() + ".joinFS_ByDLFileEntry";
 
+	@Override
 	public int countF_FE_FS_ByG_F_M_M(
 			long groupId, long folderId, String[] mimeTypes,
 			boolean includeMountFolders, QueryDefinition queryDefinition)
@@ -84,6 +86,7 @@ public class DLFolderFinderImpl
 			false);
 	}
 
+	@Override
 	public int countFE_ByG_F(
 			long groupId, long folderId, QueryDefinition queryDefinition)
 		throws SystemException {
@@ -91,6 +94,7 @@ public class DLFolderFinderImpl
 		return doCountFE_ByG_F(groupId, folderId, queryDefinition, false);
 	}
 
+	@Override
 	public int countFE_FS_ByG_F(
 			long groupId, long folderId, QueryDefinition queryDefinition)
 		throws SystemException {
@@ -99,6 +103,7 @@ public class DLFolderFinderImpl
 			groupId, folderId, null, queryDefinition, false);
 	}
 
+	@Override
 	public int filterCountF_FE_FS_ByG_F_M_M(
 			long groupId, long folderId, String[] mimeTypes,
 			boolean includeMountFolders, QueryDefinition queryDefinition)
@@ -109,6 +114,7 @@ public class DLFolderFinderImpl
 			true);
 	}
 
+	@Override
 	public int filterCountFE_ByG_F(
 			long groupId, long folderId, QueryDefinition queryDefinition)
 		throws SystemException {
@@ -116,6 +122,7 @@ public class DLFolderFinderImpl
 		return doCountFE_ByG_F(groupId, folderId, queryDefinition, true);
 	}
 
+	@Override
 	public int filterCountFE_FS_ByG_F(
 			long groupId, long folderId, QueryDefinition queryDefinition)
 		throws SystemException {
@@ -124,6 +131,7 @@ public class DLFolderFinderImpl
 			groupId, folderId, null, queryDefinition, true);
 	}
 
+	@Override
 	public int filterCountFE_FS_ByG_F_M(
 			long groupId, long folderId, String[] mimeTypes,
 			QueryDefinition queryDefinition)
@@ -133,6 +141,7 @@ public class DLFolderFinderImpl
 			groupId, folderId, mimeTypes, queryDefinition, true);
 	}
 
+	@Override
 	public List<Object> filterFindF_FE_FS_ByG_F_M_M(
 			long groupId, long folderId, String[] mimeTypes,
 			boolean includeMountFolders, QueryDefinition queryDefinition)
@@ -143,6 +152,7 @@ public class DLFolderFinderImpl
 			true);
 	}
 
+	@Override
 	public List<Object> filterFindFE_FS_ByG_F(
 			long groupId, long folderId, QueryDefinition queryDefinition)
 		throws SystemException {
@@ -150,6 +160,7 @@ public class DLFolderFinderImpl
 		return doFindFE_FS_ByG_F(groupId, folderId, queryDefinition, true);
 	}
 
+	@Override
 	public List<DLFolder> findF_ByNoAssets() throws SystemException {
 		Session session = null;
 
@@ -172,6 +183,7 @@ public class DLFolderFinderImpl
 		}
 	}
 
+	@Override
 	public List<Object> findF_FE_FS_ByG_F_M_M(
 			long groupId, long folderId, String[] mimeTypes,
 			boolean includeMountFolders, QueryDefinition queryDefinition)
@@ -182,6 +194,7 @@ public class DLFolderFinderImpl
 			false);
 	}
 
+	@Override
 	public List<Object> findFE_FS_ByG_F(
 			long groupId, long folderId, QueryDefinition queryDefinition)
 		throws SystemException {
@@ -635,7 +648,7 @@ public class DLFolderFinderImpl
 					DLFolderFinderImpl.JOIN_FE_BY_DL_FILE_VERSION));
 		}
 
-		if ((mimeTypes != null) && (mimeTypes.length > 0)) {
+		if (ArrayUtil.isNotEmpty(mimeTypes)) {
 			StringBundler sb = new StringBundler(5);
 
 			sb.append(sql);
@@ -663,7 +676,7 @@ public class DLFolderFinderImpl
 				"DLFileShortcut.fileShortcutId", groupId);
 		}
 
-		if ((mimeTypes != null) && (mimeTypes.length > 0)) {
+		if (ArrayUtil.isNotEmpty(mimeTypes)) {
 			StringBundler sb = new StringBundler(5);
 
 			sb.append(
@@ -698,7 +711,7 @@ public class DLFolderFinderImpl
 				groupId);
 		}
 
-		if ((mimeTypes != null) && (mimeTypes.length > 0)) {
+		if (ArrayUtil.isNotEmpty(mimeTypes)) {
 			StringBundler sb = new StringBundler(5);
 
 			sb.append(sql);

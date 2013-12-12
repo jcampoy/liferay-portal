@@ -14,6 +14,8 @@
 
 package com.liferay.portal.model;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.service.ServiceContext;
@@ -35,6 +37,7 @@ import java.io.Serializable;
  * @see com.liferay.portal.model.impl.GroupModelImpl
  * @generated
  */
+@ProviderType
 public interface GroupModel extends AttachedModel, BaseModel<Group> {
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -133,6 +136,7 @@ public interface GroupModel extends AttachedModel, BaseModel<Group> {
 	 *
 	 * @return the fully qualified class name of this group
 	 */
+	@Override
 	public String getClassName();
 
 	public void setClassName(String className);
@@ -142,6 +146,7 @@ public interface GroupModel extends AttachedModel, BaseModel<Group> {
 	 *
 	 * @return the class name ID of this group
 	 */
+	@Override
 	public long getClassNameId();
 
 	/**
@@ -149,6 +154,7 @@ public interface GroupModel extends AttachedModel, BaseModel<Group> {
 	 *
 	 * @param classNameId the class name ID of this group
 	 */
+	@Override
 	public void setClassNameId(long classNameId);
 
 	/**
@@ -156,6 +162,7 @@ public interface GroupModel extends AttachedModel, BaseModel<Group> {
 	 *
 	 * @return the class p k of this group
 	 */
+	@Override
 	public long getClassPK();
 
 	/**
@@ -163,6 +170,7 @@ public interface GroupModel extends AttachedModel, BaseModel<Group> {
 	 *
 	 * @param classPK the class p k of this group
 	 */
+	@Override
 	public void setClassPK(long classPK);
 
 	/**
@@ -268,6 +276,41 @@ public interface GroupModel extends AttachedModel, BaseModel<Group> {
 	public void setTypeSettings(String typeSettings);
 
 	/**
+	 * Returns the manual membership of this group.
+	 *
+	 * @return the manual membership of this group
+	 */
+	public boolean getManualMembership();
+
+	/**
+	 * Returns <code>true</code> if this group is manual membership.
+	 *
+	 * @return <code>true</code> if this group is manual membership; <code>false</code> otherwise
+	 */
+	public boolean isManualMembership();
+
+	/**
+	 * Sets whether this group is manual membership.
+	 *
+	 * @param manualMembership the manual membership of this group
+	 */
+	public void setManualMembership(boolean manualMembership);
+
+	/**
+	 * Returns the membership restriction of this group.
+	 *
+	 * @return the membership restriction of this group
+	 */
+	public int getMembershipRestriction();
+
+	/**
+	 * Sets the membership restriction of this group.
+	 *
+	 * @param membershipRestriction the membership restriction of this group
+	 */
+	public void setMembershipRestriction(int membershipRestriction);
+
+	/**
 	 * Returns the friendly u r l of this group.
 	 *
 	 * @return the friendly u r l of this group
@@ -304,6 +347,20 @@ public interface GroupModel extends AttachedModel, BaseModel<Group> {
 	public void setSite(boolean site);
 
 	/**
+	 * Returns the remote staging group count of this group.
+	 *
+	 * @return the remote staging group count of this group
+	 */
+	public int getRemoteStagingGroupCount();
+
+	/**
+	 * Sets the remote staging group count of this group.
+	 *
+	 * @param remoteStagingGroupCount the remote staging group count of this group
+	 */
+	public void setRemoteStagingGroupCount(int remoteStagingGroupCount);
+
+	/**
 	 * Returns the active of this group.
 	 *
 	 * @return the active of this group
@@ -324,41 +381,60 @@ public interface GroupModel extends AttachedModel, BaseModel<Group> {
 	 */
 	public void setActive(boolean active);
 
+	@Override
 	public boolean isNew();
 
+	@Override
 	public void setNew(boolean n);
 
+	@Override
 	public boolean isCachedModel();
 
+	@Override
 	public void setCachedModel(boolean cachedModel);
 
+	@Override
 	public boolean isEscapedModel();
 
+	@Override
 	public Serializable getPrimaryKeyObj();
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj);
 
+	@Override
 	public ExpandoBridge getExpandoBridge();
 
+	@Override
 	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
 
+	@Override
 	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
 
+	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
+	@Override
 	public Object clone();
 
+	@Override
 	public int compareTo(Group group);
 
+	@Override
 	public int hashCode();
 
+	@Override
 	public CacheModel<Group> toCacheModel();
 
+	@Override
 	public Group toEscapedModel();
 
+	@Override
 	public Group toUnescapedModel();
 
+	@Override
 	public String toString();
 
+	@Override
 	public String toXmlString();
 }

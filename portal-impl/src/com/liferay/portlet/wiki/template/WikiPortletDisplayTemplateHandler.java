@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.PropsValues;
+import com.liferay.portlet.asset.model.AssetEntry;
 import com.liferay.portlet.portletdisplaytemplate.util.PortletDisplayTemplateConstants;
 import com.liferay.portlet.wiki.model.WikiPage;
 import com.liferay.portlet.wiki.service.WikiNodeLocalService;
@@ -37,10 +38,12 @@ import java.util.Map;
 public class WikiPortletDisplayTemplateHandler
 	extends BasePortletDisplayTemplateHandler {
 
+	@Override
 	public String getClassName() {
 		return WikiPage.class.getName();
 	}
 
+	@Override
 	public String getName(Locale locale) {
 		String portletTitle = PortalUtil.getPortletTitle(
 			PortletKeys.WIKI, locale);
@@ -49,17 +52,18 @@ public class WikiPortletDisplayTemplateHandler
 			LanguageUtil.get(locale, "template"));
 	}
 
+	@Override
 	public String getResourceName() {
-		return "com.liferay.portlet.wiki";
+		return PortletKeys.WIKI;
 	}
 
 	@Override
 	public Map<String, TemplateVariableGroup> getTemplateVariableGroups(
-			long classPK, Locale locale)
+			long classPK, String language, Locale locale)
 		throws Exception {
 
 		Map<String, TemplateVariableGroup> templateVariableGroups =
-			super.getTemplateVariableGroups(classPK, locale);
+			super.getTemplateVariableGroups(classPK, language, locale);
 
 		TemplateVariableGroup fieldsTemplateVariableGroup =
 			templateVariableGroups.get("fields");
@@ -67,12 +71,16 @@ public class WikiPortletDisplayTemplateHandler
 		fieldsTemplateVariableGroup.empty();
 
 		fieldsTemplateVariableGroup.addVariable(
+			"asset-entry", AssetEntry.class, "assetEntry");
+		fieldsTemplateVariableGroup.addVariable(
 			"wiki-page", WikiPage.class, PortletDisplayTemplateConstants.ENTRY);
 		fieldsTemplateVariableGroup.addVariable(
 			"wiki-page-content", String.class, "formattedContent");
 
+		String[] restrictedVariables = getRestrictedVariables(language);
+
 		TemplateVariableGroup wikiServicesTemplateVariableGroup =
-			new TemplateVariableGroup("wiki-services");
+			new TemplateVariableGroup("wiki-services", restrictedVariables);
 
 		wikiServicesTemplateVariableGroup.setAutocompleteEnabled(false);
 

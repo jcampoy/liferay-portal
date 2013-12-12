@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.asset;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portlet.asset.model.AssetRendererFactory;
 
 import java.util.List;
@@ -22,16 +24,28 @@ import java.util.List;
  * @author Bruno Farache
  * @author Marcellus Tavares
  */
+@ProviderType
 public interface AssetRendererFactoryRegistry {
 
+	/**
+	 * @deprecated As of 6.2.0, replaced by {@link #getAssetRendererFactories(
+	 *             long)}
+	 */
 	public List<AssetRendererFactory> getAssetRendererFactories();
+
+	public List<AssetRendererFactory> getAssetRendererFactories(long companyId);
 
 	public AssetRendererFactory getAssetRendererFactoryByClassName(
 		String className);
 
 	public AssetRendererFactory getAssetRendererFactoryByType(String type);
 
+	/**
+	 * @deprecated As of 6.2.0, replaced by {@link #getClassNameIds( long)}
+	 */
 	public long[] getClassNameIds();
+
+	public long[] getClassNameIds(long companyId);
 
 	public void register(AssetRendererFactory assetRendererFactory);
 

@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.security.pacl.Reflection;
 import com.liferay.portal.service.BaseLocalServiceImpl;
 import com.liferay.portal.service.BaseServiceImpl;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
@@ -46,14 +47,13 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import sun.reflect.Reflection;
-
 /**
  * @author Brian Wing Shun Chan
  * @author Raymond Augé
  */
 public class PortalRuntimeChecker extends BaseChecker {
 
+	@Override
 	public void afterPropertiesSet() {
 		initClassLoaderReferenceIds();
 		initExpandoBridgeClassNames();
@@ -142,6 +142,7 @@ public class PortalRuntimeChecker extends BaseChecker {
 		return authorizationProperty;
 	}
 
+	@Override
 	public boolean implies(Permission permission) {
 		PortalRuntimePermission portalRuntimePermission =
 			(PortalRuntimePermission)permission;
@@ -244,7 +245,7 @@ public class PortalRuntimeChecker extends BaseChecker {
 			return true;
 		}
 
-		int stackIndex = getStackIndex(13, 12);
+		int stackIndex = Reflection.getStackIndex(13, 12);
 
 		Class<?> callerClass = Reflection.getCallerClass(stackIndex);
 
@@ -289,7 +290,7 @@ public class PortalRuntimeChecker extends BaseChecker {
 	protected boolean hasGetClassLoader(
 		String classLoaderReferenceId, Permission permission) {
 
-		int stackIndex = getStackIndex(12, 11);
+		int stackIndex = Reflection.getStackIndex(12, 11);
 
 		if (_classLoaderReferenceIds.contains(classLoaderReferenceId)) {
 			return true;

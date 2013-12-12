@@ -14,15 +14,18 @@
 
 package com.liferay.portlet.trash.service;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
 
 /**
- * The utility for the trash entry local service. This utility wraps {@link com.liferay.portlet.trash.service.impl.TrashEntryLocalServiceImpl} and is the primary access point for service operations in application layer code running on the local server.
- *
- * <p>
- * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
- * </p>
+ * Provides the local service utility for TrashEntry. This utility wraps
+ * {@link com.liferay.portlet.trash.service.impl.TrashEntryLocalServiceImpl} and is the
+ * primary access point for service operations in application layer code running
+ * on the local server. Methods of this service will not have security checks
+ * based on the propagated JAAS credentials because this service can only be
+ * accessed from within the same VM.
  *
  * @author Brian Wing Shun Chan
  * @see TrashEntryLocalService
@@ -30,6 +33,7 @@ import com.liferay.portal.kernel.util.ReferenceRegistry;
  * @see com.liferay.portlet.trash.service.impl.TrashEntryLocalServiceImpl
  * @generated
  */
+@ProviderType
 public class TrashEntryLocalServiceUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -164,6 +168,21 @@ public class TrashEntryLocalServiceUtil {
 		return getService().dynamicQueryCount(dynamicQuery);
 	}
 
+	/**
+	* Returns the number of rows that match the dynamic query.
+	*
+	* @param dynamicQuery the dynamic query
+	* @param projection the projection to apply to the query
+	* @return the number of rows that match the dynamic query
+	* @throws SystemException if a system exception occurred
+	*/
+	public static long dynamicQueryCount(
+		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery,
+		com.liferay.portal.kernel.dao.orm.Projection projection)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().dynamicQueryCount(dynamicQuery, projection);
+	}
+
 	public static com.liferay.portlet.trash.model.TrashEntry fetchTrashEntry(
 		long entryId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -270,14 +289,16 @@ public class TrashEntryLocalServiceUtil {
 	*/
 	public static com.liferay.portlet.trash.model.TrashEntry addTrashEntry(
 		long userId, long groupId, java.lang.String className, long classPK,
+		java.lang.String classUuid, java.lang.String referrerClassName,
 		int status,
 		java.util.List<com.liferay.portal.kernel.util.ObjectValuePair<java.lang.Long, java.lang.Integer>> statusOVPs,
 		com.liferay.portal.kernel.util.UnicodeProperties typeSettingsProperties)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService()
-				   .addTrashEntry(userId, groupId, className, classPK, status,
-			statusOVPs, typeSettingsProperties);
+				   .addTrashEntry(userId, groupId, className, classPK,
+			classUuid, referrerClassName, status, statusOVPs,
+			typeSettingsProperties);
 	}
 
 	public static void checkEntries()
@@ -290,6 +311,7 @@ public class TrashEntryLocalServiceUtil {
 	* Deletes the trash entry with the primary key.
 	*
 	* @param entryId the primary key of the trash entry
+	* @return the trash entry with the primary key
 	* @throws PortalException if a trash entry with the primary key could not
 	be found
 	* @throws SystemException if a system exception occurred
@@ -306,6 +328,7 @@ public class TrashEntryLocalServiceUtil {
 	*
 	* @param className the class name of entity
 	* @param classPK the primary key of the entry
+	* @return the trash entry with the entity class name and primary key
 	* @throws PortalException if a trash entry with the primary key could not
 	be found
 	* @throws SystemException if a system exception occurred
@@ -399,6 +422,12 @@ public class TrashEntryLocalServiceUtil {
 		return getService().getEntries(groupId, start, end, obc);
 	}
 
+	public static java.util.List<com.liferay.portlet.trash.model.TrashEntry> getEntries(
+		long groupId, java.lang.String className)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getEntries(groupId, className);
+	}
+
 	/**
 	* Returns the number of trash entries with the group ID.
 	*
@@ -442,33 +471,6 @@ public class TrashEntryLocalServiceUtil {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService().getEntry(className, classPK);
-	}
-
-	/**
-	* Returns all the trash versions associated with the trash entry.
-	*
-	* @param entryId the primary key of the trash entry
-	* @return all the trash versions associated with the trash entry
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.trash.model.TrashVersion> getVersions(
-		long entryId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getVersions(entryId);
-	}
-
-	/**
-	* Returns all the trash versions associated with the trash entry.
-	*
-	* @param className the class name of the trash entity
-	* @param classPK the primary key of the trash entity
-	* @return all the trash versions associated with the trash entry
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.trash.model.TrashVersion> getVersions(
-		java.lang.String className, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getVersions(className, classPK);
 	}
 
 	public static com.liferay.portal.kernel.search.Hits search(long companyId,

@@ -33,6 +33,7 @@ import org.springframework.web.context.ContextLoaderListener;
  */
 public class SpringHotDeployListener extends BaseHotDeployListener {
 
+	@Override
 	public void invokeDeploy(HotDeployEvent hotDeployEvent)
 		throws HotDeployException {
 
@@ -41,10 +42,14 @@ public class SpringHotDeployListener extends BaseHotDeployListener {
 		}
 		catch (Throwable t) {
 			throwHotDeployException(
-				hotDeployEvent, "Error initializing Spring for ", t);
+				hotDeployEvent,
+				"Error initializing Spring for " +
+					hotDeployEvent.getServletContextName(),
+				t);
 		}
 	}
 
+	@Override
 	public void invokeUndeploy(HotDeployEvent hotDeployEvent)
 		throws HotDeployException {
 
@@ -53,7 +58,10 @@ public class SpringHotDeployListener extends BaseHotDeployListener {
 		}
 		catch (Throwable t) {
 			throwHotDeployException(
-				hotDeployEvent, "Error uninitializing Spring for ", t);
+				hotDeployEvent,
+				"Error uninitializing Spring for " +
+					hotDeployEvent.getServletContextName(),
+				t);
 		}
 	}
 
