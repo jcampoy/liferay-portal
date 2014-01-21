@@ -51,7 +51,9 @@ public class AbsoluteRedirectsFilter
 			HttpServletRequest request, HttpServletResponse response)
 		throws Exception {
 
-		request.setCharacterEncoding(StringPool.UTF8);
+		if (request.getCharacterEncoding() == null) {
+			request.setCharacterEncoding(StringPool.ISO_8859_1);
+		}
 		//response.setContentType(ContentTypes.TEXT_HTML_UTF8);
 
 		// Company id needs to always be called here so that it's properly set
