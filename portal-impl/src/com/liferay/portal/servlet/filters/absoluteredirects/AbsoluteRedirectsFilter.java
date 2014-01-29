@@ -16,6 +16,8 @@ package com.liferay.portal.servlet.filters.absoluteredirects;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.servlet.BrowserSnifferUtil;
+import com.liferay.portal.kernel.servlet.HttpMethods;
 import com.liferay.portal.kernel.servlet.TryFilter;
 import com.liferay.portal.kernel.servlet.WrapHttpServletResponseFilter;
 import com.liferay.portal.kernel.util.StringPool;
@@ -51,9 +53,31 @@ public class AbsoluteRedirectsFilter
 			HttpServletRequest request, HttpServletResponse response)
 		throws Exception {
 
-		request.setCharacterEncoding(StringPool.UTF8);
-		//response.setContentType(ContentTypes.TEXT_HTML_UTF8);
+		final String requestCharacterEncoding = request.getCharacterEncoding();
 
+		if (requestCharacterEncoding == null) {
+			if (request.getMethod().equals(HttpMethods.POST)) {
+				final String referer = request.getHeader("Referer");
+
+				final String portalURL = PortalUtil.getPortalURL(request);
+				/*
+				 * This is necessary because most browsers don't seem to
+				 * send request encoding information. They simply send
+				 * the request in the same encoding in which they received
+				 * the form. This makes default encoding case indistinguishable
+				 * from a form POST.
+				 */
+				if (referer != null && referer.startsWith(portalURL)) {
+					request.setCharacterEncoding(StringPool.UTF8);
+				}
+				else {
+					request.setCharacterEncoding(StringPool.ISO_8859_1);
+				}
+			}
+			else {
+				request.setCharacterEncoding(StringPool.ISO_8859_1);
+			}
+		}
 		// Company id needs to always be called here so that it's properly set
 		// in subsequent calls
 
