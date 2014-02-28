@@ -586,12 +586,13 @@ public class SitesImpl implements Sites {
 
 	@Override
 	public Layout getLayoutSetPrototypeLayout(Layout layout) {
-		try {
-			LayoutSet layoutSet = layout.getLayoutSet();
 
-			if (!layoutSet.isLayoutSetPrototypeLinkActive()) {
+		try {
+			if (Validator.isNull(layout.getSourcePrototypeLayoutUuid())) {
 				return null;
 			}
+
+			LayoutSet layoutSet = layout.getLayoutSet();
 
 			LayoutSetPrototype layoutSetPrototype =
 				LayoutSetPrototypeLocalServiceUtil.
@@ -604,8 +605,10 @@ public class SitesImpl implements Sites {
 				layoutSetPrototype.getGroupId(), true);
 		}
 		catch (Exception e) {
-			_log.error(
-				"Unable to fetch the the layout set prototype's layout", e);
+			if (_log.isDebugEnabled()) {
+				_log.debug(
+					"Unable to fetch the the layout set prototype's layout", e);
+			}
 		}
 
 		return null;
@@ -849,27 +852,20 @@ public class SitesImpl implements Sites {
 				return true;
 			}
 
-			LayoutSet layoutSet = layout.getLayoutSet();
+			if (isLayoutUpdateable(layout)) {
+				LayoutSet layoutSet = layout.getLayoutSet();
 
-			if (!layoutSet.isLayoutSetPrototypeLinkActive()) {
-				return true;
+				if (!layoutSet.isLayoutSetPrototypeLinkActive()) {
+					return true;
+				}
 			}
-
-			if (LayoutLocalServiceUtil.hasLayoutSetPrototypeLayout(
-					layoutSet.getLayoutSetPrototypeUuid(),
-					layout.getCompanyId(),
-					layout.getSourcePrototypeLayoutUuid())) {
-
-				return false;
-			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			if (_log.isDebugEnabled()) {
 				_log.debug(e, e);
 			}
 		}
 
-		return true;
+		return false;
 	}
 
 	@Override
@@ -973,10 +969,6 @@ public class SitesImpl implements Sites {
 
 	@Override
 	public boolean isLayoutSetPrototypeUpdateable(LayoutSet layoutSet) {
-		if (!layoutSet.isLayoutSetPrototypeLinkActive()) {
-			return true;
-		}
-
 		try {
 			LayoutSetPrototype layoutSetPrototype =
 				LayoutSetPrototypeLocalServiceUtil.
@@ -1020,27 +1012,25 @@ public class SitesImpl implements Sites {
 
 			LayoutSet layoutSet = layout.getLayoutSet();
 
-			if (layoutSet.isLayoutSetPrototypeLinkActive()) {
-				boolean layoutSetPrototypeUpdateable =
-					isLayoutSetPrototypeUpdateable(layoutSet);
+			boolean layoutSetPrototypeUpdateable =
+				isLayoutSetPrototypeUpdateable(layoutSet);
 
-				if (!layoutSetPrototypeUpdateable) {
-					return false;
-				}
-
-				Layout layoutSetPrototypeLayout = getLayoutSetPrototypeLayout(
-					layout);
-
-				String layoutUpdateable =
-					layoutSetPrototypeLayout.getTypeSettingsProperty(
-						LAYOUT_UPDATEABLE);
-
-				if (Validator.isNull(layoutUpdateable)) {
-					return true;
-				}
-
-				return GetterUtil.getBoolean(layoutUpdateable);
+			if (!layoutSetPrototypeUpdateable) {
+				return false;
 			}
+
+			Layout layoutSetPrototypeLayout = getLayoutSetPrototypeLayout(
+				layout);
+
+			String layoutUpdateable =
+				layoutSetPrototypeLayout.getTypeSettingsProperty(
+					LAYOUT_UPDATEABLE);
+
+			if (Validator.isNull(layoutUpdateable)) {
+				return true;
+			}
+
+			return GetterUtil.getBoolean(layoutUpdateable);
 		}
 		catch (Exception e) {
 			if (_log.isDebugEnabled()) {
