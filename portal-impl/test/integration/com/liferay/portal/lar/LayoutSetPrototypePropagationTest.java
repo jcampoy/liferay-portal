@@ -71,12 +71,18 @@ public class LayoutSetPrototypePropagationTest
 
 	@Test
 	public void testAddChildLayoutWithLinkDisabled() throws Exception {
-		testAddChildLayout(false);
+
+		testAddChildLayout(false, true);
+
+		testAddChildLayout(false, false);
 	}
 
 	@Test
 	public void testAddChildLayoutWithLinkEnabled() throws Exception {
-		testAddChildLayout(true);
+
+		testAddChildLayout(true, false);
+
+		testAddChildLayout(true, true);
 	}
 
 	@Test
@@ -86,8 +92,23 @@ public class LayoutSetPrototypePropagationTest
 
 	@Test
 	public void testIsLayoutDeleteable() throws Exception {
+
+		setLayoutsUpdateable(false);
+		setLinkEnabled(false);
+
 		Assert.assertFalse(SitesUtil.isLayoutDeleteable(layout));
 
+		setLayoutsUpdateable(false);
+		setLinkEnabled(true);
+
+		Assert.assertFalse(SitesUtil.isLayoutDeleteable(layout));
+
+		setLayoutsUpdateable(true);
+		setLinkEnabled(true);
+
+		Assert.assertFalse(SitesUtil.isLayoutDeleteable(layout));
+
+		setLayoutsUpdateable(true);
 		setLinkEnabled(false);
 
 		Assert.assertTrue(SitesUtil.isLayoutDeleteable(layout));
@@ -95,8 +116,23 @@ public class LayoutSetPrototypePropagationTest
 
 	@Test
 	public void testIsLayoutSortable() throws Exception {
+
+		setLayoutsUpdateable(false);
+		setLinkEnabled(false);
+
 		Assert.assertFalse(SitesUtil.isLayoutSortable(layout));
 
+		setLayoutsUpdateable(false);
+		setLinkEnabled(true);
+
+		Assert.assertFalse(SitesUtil.isLayoutSortable(layout));
+
+		setLayoutsUpdateable(true);
+		setLinkEnabled(true);
+
+		Assert.assertFalse(SitesUtil.isLayoutSortable(layout));
+
+		setLayoutsUpdateable(true);
 		setLinkEnabled(false);
 
 		Assert.assertTrue(SitesUtil.isLayoutSortable(layout));
@@ -330,8 +366,8 @@ public class LayoutSetPrototypePropagationTest
 
 		setLinkEnabled(false);
 
-		Assert.assertTrue(SitesUtil.isLayoutUpdateable(layout));
-		Assert.assertTrue(SitesUtil.isLayoutUpdateable(_layout));
+		Assert.assertFalse(SitesUtil.isLayoutUpdateable(layout));
+		Assert.assertFalse(SitesUtil.isLayoutUpdateable(_layout));
 	}
 
 	protected void doTestLayoutPropagation(boolean linkEnabled)
@@ -507,27 +543,32 @@ public class LayoutSetPrototypePropagationTest
 		}
 	}
 
-	protected void testAddChildLayout(boolean layoutSetPrototypeLinkEnabled)
+	protected void testAddChildLayout(
+			boolean layoutSetPrototypeLinkEnabled,	boolean layoutsUpdateable)
 		throws Exception {
 
 		setLinkEnabled(layoutSetPrototypeLinkEnabled);
+
+		setLayoutsUpdateable(layoutsUpdateable);
 
 		try {
 			LayoutTestUtil.addLayout(
 				group.getGroupId(), ServiceTestUtil.randomString(),
 				layout.getPlid());
 
-			if (layoutSetPrototypeLinkEnabled) {
+			if (!layoutsUpdateable) {
 				Assert.fail(
 					"Able to add a child page to a page associated to a site " +
-						"template with link enabled");
+						"template that disallows to Site Admins the " +
+						"modifications of pages.");
 			}
 		}
 		catch (LayoutParentLayoutIdException lplie) {
-			if (!layoutSetPrototypeLinkEnabled) {
+			if (layoutsUpdateable && !layoutSetPrototypeLinkEnabled) {
 				Assert.fail(
 					"Unable to add a child page to a page associated to a " +
-						"template with link disabled");
+						"template that allows to Site Admins the " +
+							"modifications of pages.");
 			}
 		}
 	}
