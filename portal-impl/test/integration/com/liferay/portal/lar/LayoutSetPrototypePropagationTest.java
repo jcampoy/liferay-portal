@@ -192,7 +192,8 @@ public class LayoutSetPrototypePropagationTest
 	}
 
 	@Test
-	public void testPortletPreferencesPropagationWithPreferencesUniquePerLayoutEnabled()
+	public void
+	testPortletPreferencesPropagationWithPreferencesUniquePerLayoutEnabled()
 		throws Exception {
 
 		Portlet portlet = PortletLocalServiceUtil.getPortletById(
@@ -544,7 +545,7 @@ public class LayoutSetPrototypePropagationTest
 	}
 
 	protected void testAddChildLayout(
-			boolean layoutSetPrototypeLinkEnabled,	boolean layoutsUpdateable)
+			boolean layoutSetPrototypeLinkEnabled, boolean layoutsUpdateable)
 		throws Exception {
 
 		setLinkEnabled(layoutSetPrototypeLinkEnabled);

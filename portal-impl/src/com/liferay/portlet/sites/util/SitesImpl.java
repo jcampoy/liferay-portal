@@ -859,6 +859,7 @@ public class SitesImpl implements Sites {
 					return true;
 				}
 			}
+
 		} catch (Exception e) {
 			if (_log.isDebugEnabled()) {
 				_log.debug(e, e);
