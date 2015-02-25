@@ -53,8 +53,7 @@ String[] mimeTypes = DocumentSelectorUtil.getMimeTypes(request);
 	title='<%= LanguageUtil.get(request, "new-document") %>'
 />
 
-<portlet:actionURL var="editFileEntryURL">
-	<portlet:param name="struts_action" value="/document_selector/add_file_entry" />
+<portlet:actionURL var="editFileEntryURL" name="addFileEntryAction">
 	<portlet:param name="uploadExceptionRedirect" value="<%= currentURL %>" />
 	<portlet:param name="type" value="<%= DocumentSelectorUtil.getType(request) %>" />
 </portlet:actionURL>
@@ -173,7 +172,9 @@ String[] mimeTypes = DocumentSelectorUtil.getMimeTypes(request);
 					try {
 						DLFileEntryMetadata fileEntryMetadata = DLFileEntryMetadataLocalServiceUtil.getFileEntryMetadata(ddmStructure.getStructureId(), 0);
 
-						fields = StorageEngineUtil.getFields(fileEntryMetadata.getDDMStorageId());
+						DDMFormValues ddmFormValues = StorageEngineUtil.getDDMFormValues(fileEntryMetadata.getDDMStorageId());
+
+						fields = DDMFormValuesToFieldsConverterUtil.convert(ddmStructure, ddmFormValues);
 					}
 					catch (Exception e) {
 					}

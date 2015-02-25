@@ -27,9 +27,10 @@ Import-Package: \
 	com.liferay.portlet.documentlibrary.model,\
 	com.liferay.portlet.documentlibrary.service,\
 	com.liferay.portlet.documentlibrary.service.permission,\
-	com.liferay.portlet.documentlibrary.util.DLUtil,\
+	com.liferay.portlet.documentlibrary.util,\
 	com.liferay.portlet.dynamicdatamapping.model,\
 	com.liferay.portlet.dynamicdatamapping.storage,\
+	com.liferay.portlet.dynamicdatamapping.util,\
 	com.liferay.portlet.journal.search,\
 	com.liferay.portlet.layoutsadmin.context,\
 	com.liferay.wiki.model,\
