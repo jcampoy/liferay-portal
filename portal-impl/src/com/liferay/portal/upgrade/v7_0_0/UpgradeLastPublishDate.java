@@ -30,6 +30,7 @@ public class UpgradeLastPublishDate extends BaseUpgradeLastPublishDate {
 		upgradeLayoutsAdmin();
 		upgradeMessageBoards();
 		upgradeMobileDeviceRules();
+		upgradeOrganization();
 		upgradeRatings();
 		upgradeRolesAdmin();
 		upgradeSiteAdmin();
@@ -113,6 +114,10 @@ public class UpgradeLastPublishDate extends BaseUpgradeLastPublishDate {
 
 		updateLastPublishDates("19", "MBMessage");
 
+		runSQL("alter table MBThread add lastPublishDate DATE null");
+
+		updateLastPublishDates("19", "MBThread");
+
 		runSQL("alter table MBThreadFlag add lastPublishDate DATE null");
 
 		updateLastPublishDates("19", "MBThreadFlag");
@@ -135,6 +140,12 @@ public class UpgradeLastPublishDate extends BaseUpgradeLastPublishDate {
 			"alter table MDRRuleGroupInstance add lastPublishDate DATE null");
 
 		updateLastPublishDates("178", "MDRRuleGroupInstance");
+	}
+
+	protected void upgradeOrganization() throws Exception {
+		runSQL("alter table Organization_ add lastPublishDate DATE null");
+
+		updateLastPublishDates("125", "Organization_");
 	}
 
 	protected void upgradeRatings() throws Exception {
