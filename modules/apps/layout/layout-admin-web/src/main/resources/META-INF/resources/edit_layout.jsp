@@ -76,6 +76,18 @@ renderResponse.setTitle(selLayout.getName(locale));
 			<c:if test="<%= LayoutPermissionUtil.contains(permissionChecker, selLayout, ActionKeys.DELETE) %>">
 				<aui:nav-item cssClass="remove-layout" label="delete" />
 			</c:if>
+
+			<c:if test="<%= LayoutPermissionUtil.contains(permissionChecker, selLayout, ActionKeys.UPDATE) %>">
+				<portlet:renderURL var="embeddedPortletsURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
+					<portlet:param name="mvcPath" value="/layout/embedded_portlets.jsp" />
+					<portlet:param name="tabs1" value="<%= layoutsAdminDisplayContext.getTabs1() %>" />
+					<portlet:param name="groupId" value="<%= String.valueOf(selGroup.getGroupId()) %>" />
+					<portlet:param name="selPlid" value="<%= String.valueOf(selLayout.getPlid()) %>" />
+					<portlet:param name="privateLayout" value="<%= String.valueOf(selLayout.isPrivateLayout()) %>" />
+				</portlet:renderURL>
+
+				<aui:nav-item href="<%= embeddedPortletsURL %>" iconCssClass="icon-list" label="embedded-portlets" useDialog="<%= true %>" />
+			</c:if>
 		</aui:nav>
 	</aui:nav-bar>
 </c:if>
