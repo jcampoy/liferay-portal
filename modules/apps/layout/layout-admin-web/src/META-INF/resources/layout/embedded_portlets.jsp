@@ -45,7 +45,7 @@ rowChecker.setRowIds("removeEmbeddedPortletIds");
 	<portlet:param name="mvcPath" value="/layout/embedded_portlets.jsp" />
 </portlet:actionURL>
 
-<aui:form action='<%= deleteEmbeddedPortletsURL %>' method="post" name="fm">
+<aui:form action="<%= deleteEmbeddedPortletsURL %>" method="post" name="fm">
 	<aui:input name="groupId" type="hidden" value="<%= selGroup.getGroupId() %>" />
 	<aui:input name="selPlid" type="hidden" value="<%= layoutsAdminDisplayContext.getSelPlid() %>" />
 	<aui:input name="privateLayout" type="hidden" value="<%= layoutsAdminDisplayContext.isPrivateLayout() %>" />
