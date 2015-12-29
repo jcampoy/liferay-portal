@@ -80,7 +80,6 @@ renderResponse.setTitle(selLayout.getName(locale));
 			<c:if test="<%= LayoutPermissionUtil.contains(permissionChecker, selLayout, ActionKeys.UPDATE) || (selGroup.hasLocalOrRemoteStagingGroup() && GroupPermissionUtil.contains(permissionChecker, layoutsAdminDisplayContext.getStagingGroup(), ActionKeys.UPDATE)) %>">
 				<portlet:renderURL var="embeddedPortletsURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
 					<portlet:param name="mvcPath" value="/layout/embedded_portlets.jsp" />
-					<portlet:param name="tabs1" value="<%= layoutsAdminDisplayContext.getTabs1() %>" />
 					<portlet:param name="groupId" value="<%= String.valueOf(selGroup.getGroupId()) %>" />
 					<portlet:param name="selPlid" value="<%= String.valueOf(selLayout.getPlid()) %>" />
 					<portlet:param name="privateLayout" value="<%= String.valueOf(selLayout.isPrivateLayout()) %>" />
