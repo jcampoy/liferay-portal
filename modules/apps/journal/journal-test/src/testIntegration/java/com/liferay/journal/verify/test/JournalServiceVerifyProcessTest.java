@@ -15,18 +15,27 @@
 package com.liferay.journal.verify.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
+import com.liferay.dynamic.data.mapping.model.DDMForm;
+import com.liferay.dynamic.data.mapping.model.DDMStructure;
+import com.liferay.dynamic.data.mapping.model.DDMTemplate;
+import com.liferay.dynamic.data.mapping.test.util.DDMStructureTestUtil;
+import com.liferay.dynamic.data.mapping.test.util.DDMTemplateTestUtil;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.model.JournalFolder;
 import com.liferay.journal.service.JournalArticleLocalServiceUtil;
 import com.liferay.journal.service.JournalFolderLocalServiceUtil;
 import com.liferay.journal.test.util.JournalTestUtil;
+import com.liferay.journal.util.test.JournalConverterUtilTest;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.util.GroupTestUtil;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
+import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.Group;
+import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.verify.VerifyProcess;
 import com.liferay.portal.verify.test.BaseVerifyProcessTestCase;
 import com.liferay.registry.Filter;
@@ -35,6 +44,7 @@ import com.liferay.registry.RegistryUtil;
 import com.liferay.registry.ServiceTracker;
 
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -77,6 +87,43 @@ public class JournalServiceVerifyProcessTest extends BaseVerifyProcessTestCase {
 		super.setUp();
 
 		_group = GroupTestUtil.addGroup();
+	}
+
+	@Test
+	public void testJournalArticleContent()
+		throws Exception {
+
+		DDMForm ddmForm = DDMStructureTestUtil.getSampleDDMForm("name");
+
+		DDMStructure ddmStructure = DDMStructureTestUtil.addStructure(
+			_group.getGroupId(), JournalArticle.class.getName(),
+			ddmForm);
+
+		DDMTemplate ddmTemplate = DDMTemplateTestUtil.addTemplate(
+			_group.getGroupId() , ddmStructure.getStructureId(),
+			PortalUtil.getClassNameId(JournalArticle.class));
+
+		JournalArticle article = JournalTestUtil.addArticleWithXMLContent(
+			_group.getGroupId(),
+			DDMStructureTestUtil.getSampleStructuredContent("hello world"),
+			ddmStructure.getStructureKey(), ddmTemplate.getTemplateKey());
+
+		String content = article.getContent();
+
+		doVerify();
+
+		article = JournalArticleLocalServiceUtil.getArticle(article.getId());
+
+		System.out.println(content);
+		System.out.println(article.getContent());
+		if (content.equals(article.getContent())) {
+			System.out.println("equals");
+		}
+		else {
+			System.out.println("not equals");
+		}
+
+		Assert.assertEquals(content, article.getContent());
 	}
 
 	@Test
@@ -167,6 +214,7 @@ public class JournalServiceVerifyProcessTest extends BaseVerifyProcessTestCase {
 
 		doVerify();
 	}
+
 
 	@Override
 	protected VerifyProcess getVerifyProcess() {
