@@ -18,7 +18,10 @@ import org.osgi.service.component.annotations.Component;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
+
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -28,9 +31,14 @@ import java.util.Set;
 @ApplicationPath("/api/example")
 public class ExampleApplication extends Application {
 
+//	@Override
+//	public Set<Class<?>> getClasses() {
+//		return Collections.<Class<?>>singleton(ExampleResource.class);
+//	}
+
+	// la colección de recursos de tu app tiene que estar definida aquí.
 	@Override
 	public Set<Class<?>> getClasses() {
-		return Collections.<Class<?>>singleton(ExampleResource.class);
+		return new HashSet<>(Arrays.asList(ExampleResource.class, ExampleResource2.class, MyDataMessageBodyWriter.class));
 	}
-
 }
