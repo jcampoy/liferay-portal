@@ -16,12 +16,19 @@ package com.liferay.journal.web.internal.portlet.action;
 
 import com.liferay.journal.constants.JournalPortletKeys;
 import com.liferay.journal.web.util.ExportArticleUtil;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.PortletPreferencesIds;
+import com.liferay.portal.kernel.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCResourceCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
+import com.liferay.portal.kernel.service.PortletPreferencesLocalServiceUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
+
+import java.util.Arrays;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -57,11 +64,7 @@ public class ExportArticleMVCResourceCommand extends BaseMVCResourceCommand {
 
 			targetExtension = StringUtil.toUpperCase(targetExtension);
 
-			PortletPreferences portletPreferences =
-				resourceRequest.getPreferences();
-
-			String[] allowedExtensions = StringUtil.split(
-				portletPreferences.getValue("extensions", null));
+			String[] allowedExtensions = getAllowedExtensions(resourceRequest);
 
 			if (ArrayUtil.contains(
 					allowedExtensions,
@@ -76,6 +79,44 @@ public class ExportArticleMVCResourceCommand extends BaseMVCResourceCommand {
 				e, (ActionRequest)resourceRequest,
 				(ActionResponse)resourceResponse);
 		}
+	}
+
+	protected String[] getAllowedExtensions(ResourceRequest resourceRequest)
+			throws PortalException {
+
+		PortletPreferences portletPreferences =
+				resourceRequest.getPreferences();
+
+		String assetPublisherId =
+				ParamUtil.getString(resourceRequest, "assetPublisherId", null);
+
+		if (Validator.isNotNull(assetPublisherId)) {
+			PortletPreferencesIds portletPreferencesIds =
+				PortletPreferencesFactoryUtil.getPortletPreferencesIds(
+					PortalUtil.getHttpServletRequest(resourceRequest),
+					assetPublisherId);
+
+			long originalPlid =
+				ParamUtil.getLong(resourceRequest, "originalPlid", 0L);
+
+			if (originalPlid != 0l) {
+				portletPreferencesIds = new PortletPreferencesIds(
+					portletPreferencesIds.getCompanyId(),
+					portletPreferencesIds.getOwnerId(),
+					portletPreferencesIds.getOwnerType(),
+					originalPlid,
+					portletPreferencesIds.getPortletId());
+			}
+
+			portletPreferences =
+				PortletPreferencesLocalServiceUtil.getPreferences(
+					portletPreferencesIds);
+		}
+		String[] extensions = portletPreferences.getValues("extensions", null);
+		for (int i = 0; i < extensions.length; ++i) {
+			extensions[i] = StringUtil.toUpperCase(extensions[i]);
+		}
+		return extensions;
 	}
 
 	@Reference(unbind = "-")
