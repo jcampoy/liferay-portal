@@ -557,8 +557,8 @@ public class DDMFormFieldFreeMarkerRenderer implements DDMFormFieldRenderer {
 				request, themeDisplay.getPlid(), PortletKeys.ITEM_SELECTOR);
 		}
 
-		VirtualLayout virtualLayout =
-			new VirtualLayout(layout, themeDisplay.getScopeGroup());
+		VirtualLayout virtualLayout = new VirtualLayout(
+			layout, themeDisplay.getScopeGroup());
 
 		return AuthTokenUtil.getToken(
 			request, virtualLayout.getPlid(), PortletKeys.ITEM_SELECTOR);
