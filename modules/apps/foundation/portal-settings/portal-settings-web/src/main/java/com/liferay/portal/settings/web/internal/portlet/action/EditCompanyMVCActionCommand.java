@@ -84,7 +84,7 @@ public class EditCompanyMVCActionCommand extends BaseFormMVCActionCommand {
 					actionRequest, "redirect");
 
 				updateCompany(actionRequest);
-
+				redirect = redirect + "";
 				sendRedirect(actionRequest, actionResponse, redirect);
 			}
 		}
