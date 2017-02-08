@@ -40,7 +40,7 @@ String noSuchUserRedirectURL = casConfiguration.noSuchUserRedirectURL();
 
 	<aui:input name="<%= ActionRequest.ACTION_NAME %>" type="hidden" value="/portal_settings/cas" />
 
-	<aui:input label="enabled" name="cas--enabled" type="checkbox" value="<%= enabled %>" />
+	<aui:input label="enabled" name="cas--enabled" id="cas--enabled" type="checkbox" value="<%= enabled %>" />
 
 	<aui:input helpMessage="import-cas-users-from-ldap-help" label="import-cas-users-from-ldap" name="cas--importFromLDAP" type="checkbox" value="<%= importFromLDAP %>" />
 
