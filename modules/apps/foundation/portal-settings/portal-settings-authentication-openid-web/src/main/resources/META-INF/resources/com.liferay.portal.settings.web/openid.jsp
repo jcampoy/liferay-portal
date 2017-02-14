@@ -25,5 +25,5 @@ boolean enabled = openIdConfiguration.enabled();
 <aui:input name="<%= ActionRequest.ACTION_NAME %>" type="hidden" value="/portal_settings/openid" />
 
 <aui:fieldset>
-	<aui:input label="enabled" name="openid--enabled" type="checkbox" value="<%= enabled %>" />
+	<aui:input label="enabled" name="openid--enabled" id="openid--enabled" type="checkbox" value="<%= enabled %>" />
 </aui:fieldset>

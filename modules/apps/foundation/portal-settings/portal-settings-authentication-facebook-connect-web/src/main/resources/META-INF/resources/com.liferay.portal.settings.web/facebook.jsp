@@ -43,7 +43,7 @@ String oauthRedirectURL = facebookConnectConfiguration.oauthRedirectURL();
 <aui:fieldset>
 	<aui:input name="<%= ActionRequest.ACTION_NAME %>" type="hidden" value="/portal_settings/facebook_connect" />
 
-	<aui:input label="enabled" name="facebook--enabled" type="checkbox" value="<%= authEnabled %>" />
+	<aui:input label="enabled" name="facebook--enabled" id="facebook--enabled" type="checkbox" value="<%= authEnabled %>" />
 
 	<aui:input label="require-verified-account" name="facebook--verifiedAccountRequired" type="checkbox" value="<%= verifiedAccountRequired %>" />
 

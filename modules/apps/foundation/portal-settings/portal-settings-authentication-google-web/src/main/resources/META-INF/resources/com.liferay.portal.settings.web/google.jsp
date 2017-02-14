@@ -30,7 +30,7 @@ String googleClientSecret = googleAuthorizationConfiguration.clientSecret();
 <aui:fieldset>
 	<aui:input name="<%= ActionRequest.ACTION_NAME %>" type="hidden" value="/portal_settings/google" />
 
-	<aui:input label="enabled" name="google--enabled" type="checkbox" value="<%= googleAuthEnabled %>" />
+	<aui:input label="enabled" name="google--enabled" id="google--enabled" type="checkbox" value="<%= googleAuthEnabled %>" />
 
 	<aui:input label="google-client-id" name="google--clientId" type="text" value="<%= googleClientId %>" wrapperCssClass="lfr-input-text-container" />
 
