@@ -12,13 +12,13 @@
  * details.
  */
 
-package com.liferay.portal.settings.authentication.ntlm.web.internal.portlet.constants;
+package com.liferay.portal.settings.authentication.openid.web.internal.constants;
 
 /**
  * @author Jose A. Jimenez
  */
-public class PortalSettingsNtlmConstants {
+public class PortalSettingsOpenIdConstants {
 
-	public static final String PARAMETER_NAMESPACE = "ntlm_";
+	public static final String PARAMETER_NAMESPACE = "openid_";
 
 }

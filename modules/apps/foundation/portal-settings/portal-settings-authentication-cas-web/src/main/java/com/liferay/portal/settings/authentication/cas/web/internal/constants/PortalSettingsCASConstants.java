@@ -12,13 +12,13 @@
  * details.
  */
 
-package com.liferay.portal.settings.authentication.google.web.internal.portlet.constants;
+package com.liferay.portal.settings.authentication.cas.web.internal.constants;
 
 /**
  * @author Jose A. Jimenez
  */
-public class PortalSettingsGoogleConstants {
+public class PortalSettingsCASConstants {
 
-	public static final String FORM_PARAMETER_NAMESPACE = "google_";
+	public static final String FORM_PARAMETER_NAMESPACE = "cas_";
 
 }

@@ -12,13 +12,13 @@
  * details.
  */
 
-package com.liferay.portal.settings.authentication.opensso.web.internal.portlet.constants;
+package com.liferay.portal.settings.authentication.ntlm.web.internal.constants;
 
 /**
  * @author Jose A. Jimenez
  */
-public class PortalSettingsOpenSSOConstants {
+public class PortalSettingsNtlmConstants {
 
-	public static final String FORM_PARAMETER_NAMESPACE = "opensso_";
+	public static final String PARAMETER_NAMESPACE = "ntlm_";
 
 }

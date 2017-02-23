@@ -12,13 +12,13 @@
  * details.
  */
 
-package com.liferay.portal.settings.authentication.cas.web.internal.portlet.constants;
+package com.liferay.portal.settings.authentication.facebook.connect.web.internal.constants;
 
 /**
  * @author Jose A. Jimenez
  */
-public class PortalSettingsCASConstants {
+public class PortalSettingsFacebookConnectConstants {
 
-	public static final String FORM_PARAMETER_NAMESPACE = "cas_";
+	public static final String FORM_PARAMETER_NAMESPACE = "facebook_";
 
 }

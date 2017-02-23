@@ -12,13 +12,13 @@
  * details.
  */
 
-package com.liferay.portal.settings.authentication.openid.web.internal.portlet.constants;
+package com.liferay.portal.settings.authentication.google.web.internal.constants;
 
 /**
  * @author Jose A. Jimenez
  */
-public class PortalSettingsOpenIdConstants {
+public class PortalSettingsGoogleConstants {
 
-	public static final String PARAMETER_NAMESPACE = "openid_";
+	public static final String FORM_PARAMETER_NAMESPACE = "google_";
 
 }
