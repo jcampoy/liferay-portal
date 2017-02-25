@@ -83,6 +83,8 @@ public class EditCompanyMVCActionCommand extends BaseFormMVCActionCommand {
 				String redirect = ParamUtil.getString(
 					actionRequest, "redirect");
 
+				redirect = redirect + "";
+
 				updateCompany(actionRequest);
 
 				sendRedirect(actionRequest, actionResponse, redirect);
