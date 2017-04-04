@@ -80,18 +80,6 @@ public class DynamicCSSFilter extends IgnoreModuleRequestFilter {
 		cacheKeyGenerator.append(StringPool.UNDERLINE);
 		cacheKeyGenerator.append(request.getRequestURI());
 
-		String requestURL = String.valueOf(request.getRequestURL());
-
-		if (requestURL != null) {
-			requestURL = HttpUtil.removeParameter(requestURL, "zx");
-
-			String queryString = HttpUtil.getQueryString(requestURL);
-
-			if (queryString != null) {
-				cacheKeyGenerator.append(sterilizeQueryString(queryString));
-			}
-		}
-
 		if (PortalUtil.isRightToLeft(request)) {
 			cacheKeyGenerator.append("_rtl");
 		}
@@ -301,12 +289,6 @@ public class DynamicCSSFilter extends IgnoreModuleRequestFilter {
 				ServletResponseUtil.write(response, (String)parsedContent);
 			}
 		}
-	}
-
-	protected String sterilizeQueryString(String queryString) {
-		return StringUtil.replace(
-			queryString, new char[] {CharPool.SLASH, CharPool.BACK_SLASH},
-			new char[] {CharPool.UNDERLINE, CharPool.UNDERLINE});
 	}
 
 	private static final String _CSS_EXTENSION = ".css";

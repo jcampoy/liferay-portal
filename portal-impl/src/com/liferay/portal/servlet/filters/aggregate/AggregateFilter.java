@@ -323,18 +323,6 @@ public class AggregateFilter extends IgnoreModuleRequestFilter {
 		cacheKeyGenerator.append(StringPool.UNDERLINE);
 		cacheKeyGenerator.append(request.getRequestURI());
 
-		String requestURL = String.valueOf(request.getRequestURL());
-
-		if (requestURL != null) {
-			requestURL = HttpUtil.removeParameter(requestURL, "zx");
-
-			String queryString = HttpUtil.getQueryString(requestURL);
-
-			if (queryString != null) {
-				cacheKeyGenerator.append(sterilizeQueryString(queryString));
-			}
-		}
-
 		return String.valueOf(cacheKeyGenerator.finish());
 	}
 
@@ -587,12 +575,6 @@ public class AggregateFilter extends IgnoreModuleRequestFilter {
 				ServletResponseUtil.write(response, (String)minifiedContent);
 			}
 		}
-	}
-
-	protected String sterilizeQueryString(String queryString) {
-		return StringUtil.replace(
-			queryString, new char[] {CharPool.SLASH, CharPool.BACK_SLASH},
-			new char[] {CharPool.UNDERLINE, CharPool.UNDERLINE});
 	}
 
 	private static final String _BASE_URL = "@base_url@";
