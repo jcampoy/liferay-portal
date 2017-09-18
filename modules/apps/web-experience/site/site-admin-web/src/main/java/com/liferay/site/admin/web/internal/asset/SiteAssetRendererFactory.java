@@ -35,7 +35,7 @@ public class SiteAssetRendererFactory extends BaseAssetRendererFactory<Group> {
 	public static final String TYPE = "site";
 
 	public SiteAssetRendererFactory() {
-		setSearchable(true);
+		setSearchable(false);
 		setSelectable(false);
 	}
 
