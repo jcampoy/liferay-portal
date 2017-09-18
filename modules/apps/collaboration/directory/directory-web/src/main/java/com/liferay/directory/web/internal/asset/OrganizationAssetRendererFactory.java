@@ -17,15 +17,9 @@ package com.liferay.directory.web.internal.asset;
 import com.liferay.asset.kernel.model.AssetRenderer;
 import com.liferay.asset.kernel.model.AssetRendererFactory;
 import com.liferay.asset.kernel.model.BaseAssetRendererFactory;
-import com.liferay.directory.web.internal.constants.DirectoryPortletKeys;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Organization;
-import com.liferay.portal.kernel.model.User;
-import com.liferay.portal.kernel.security.permission.PermissionChecker;
-import com.liferay.portal.kernel.service.GroupLocalService;
-import com.liferay.portal.kernel.service.UserLocalService;
-import com.liferay.portal.kernel.service.permission.UserPermissionUtil;
+import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.util.PortletKeys;
 
 import javax.servlet.ServletContext;
@@ -34,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * @author Michael C. Han
+ * @author Ricardo Couso
  */
 @Component(
 	immediate = true,
@@ -47,9 +41,9 @@ import org.osgi.service.component.annotations.Reference;
 	service = AssetRendererFactory.class
 )
 public class OrganizationAssetRendererFactory
-		extends BaseAssetRendererFactory<Organization> {
+	extends BaseAssetRendererFactory<Organization> {
 
-	public static final String TYPE = "user";
+	public static final String TYPE = "organization";
 
 	public OrganizationAssetRendererFactory() {
 		setSearchable(true);
@@ -57,58 +51,34 @@ public class OrganizationAssetRendererFactory
 	}
 
 	@Override
-	public AssetRenderer<User> getAssetRenderer(long classPK, int type)
+	public AssetRenderer<Organization> getAssetRenderer(long classPK, int type)
 		throws PortalException {
 
-		User user = _userLocalService.getUserById(classPK);
+		Organization organization = _organizationLocalService.getOrganization(
+			classPK);
 
-		UserAssetRenderer userAssetRenderer = new UserAssetRenderer(user);
+		OrganizationAssetRenderer organizationAssetRenderer =
+			new OrganizationAssetRenderer(organization);
 
-		userAssetRenderer.setAssetRendererType(type);
-		userAssetRenderer.setServletContext(_servletContext);
+		organizationAssetRenderer.setAssetRendererType(type);
+		organizationAssetRenderer.setServletContext(_servletContext);
 
-		return userAssetRenderer;
-	}
-
-	@Override
-	public AssetRenderer<User> getAssetRenderer(long groupId, String urlTitle)
-		throws PortalException {
-
-		Group group = _groupLocalService.getGroup(groupId);
-
-		User user = _userLocalService.getUserByScreenName(
-			group.getCompanyId(), urlTitle);
-
-		return new UserAssetRenderer(user);
+		return organizationAssetRenderer;
 	}
 
 	@Override
 	public String getClassName() {
-		return User.class.getName();
+		return Organization.class.getName();
 	}
 
 	@Override
 	public String getIconCssClass() {
-		return "user";
-	}
-
-	@Override
-	public String getPortletId() {
-		return DirectoryPortletKeys.SITE_MEMBERS_DIRECTORY;
+		return "organization";
 	}
 
 	@Override
 	public String getType() {
 		return TYPE;
-	}
-
-	@Override
-	public boolean hasPermission(
-		PermissionChecker permissionChecker, long classPK, String actionId)
-		throws Exception {
-
-		return UserPermissionUtil.contains(
-			permissionChecker, classPK, actionId);
 	}
 
 	@Reference(
@@ -120,17 +90,13 @@ public class OrganizationAssetRendererFactory
 	}
 
 	@Reference(unbind = "-")
-	protected void setGroupLocalService(GroupLocalService groupLocalService) {
-		_groupLocalService = groupLocalService;
+	protected void setOrganizationLocalService(
+		OrganizationLocalService organizationLocalService) {
+
+		_organizationLocalService = organizationLocalService;
 	}
 
-	@Reference(unbind = "-")
-	protected void setUserLocalService(UserLocalService userLocalService) {
-		_userLocalService = userLocalService;
-	}
-
-	private GroupLocalService _groupLocalService;
+	private OrganizationLocalService _organizationLocalService;
 	private ServletContext _servletContext;
-	private UserLocalService _userLocalService;
 
 }
