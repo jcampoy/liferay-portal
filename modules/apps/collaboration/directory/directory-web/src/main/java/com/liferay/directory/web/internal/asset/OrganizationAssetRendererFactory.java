@@ -46,7 +46,7 @@ public class OrganizationAssetRendererFactory
 	public static final String TYPE = "organization";
 
 	public OrganizationAssetRendererFactory() {
-		setSearchable(true);
+		setSearchable(false);
 		setSelectable(false);
 	}
 
