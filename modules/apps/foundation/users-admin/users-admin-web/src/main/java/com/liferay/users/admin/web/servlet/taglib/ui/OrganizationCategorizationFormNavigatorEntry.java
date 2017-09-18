@@ -43,15 +43,6 @@ public class OrganizationCategorizationFormNavigatorEntry
 	}
 
 	@Override
-	public boolean isVisible(User user, Organization organization) {
-		if (organization != null) {
-			return true;
-		}
-
-		return false;
-	}
-
-	@Override
 	protected String getJspPath() {
 		return "/organization/categorization.jsp";
 	}
