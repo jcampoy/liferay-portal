@@ -29,10 +29,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Ricardo Couso
  */
-@Component(
-	immediate = true,
-	service = AssetRendererFactory.class
-)
+@Component(immediate = true, service = AssetRendererFactory.class)
 public class SiteAssetRendererFactory extends BaseAssetRendererFactory<Group> {
 
 	public static final String TYPE = "site";
@@ -46,14 +43,19 @@ public class SiteAssetRendererFactory extends BaseAssetRendererFactory<Group> {
 	public AssetRenderer<Group> getAssetRenderer(long classPK, int type)
 		throws PortalException {
 
-		Group site = _groupLocalService.getGroup(classPK);
+		Group group = _groupLocalService.getGroup(classPK);
 
-		SiteAssetRenderer siteAssetRenderer = new SiteAssetRenderer(site);
+		SiteAssetRenderer siteAssetRenderer = new SiteAssetRenderer(group);
 
-		siteAssetRenderer.setAssetRendererType(type);
-		siteAssetRenderer.setServletContext(_servletContext);
+		if (siteAssetRenderer != null) {
+			siteAssetRenderer.setAssetRendererType(type);
+			siteAssetRenderer.setServletContext(_servletContext);
 
-		return siteAssetRenderer;
+			return siteAssetRenderer;
+		}
+		else {
+			return null;
+		}
 	}
 
 	@Override

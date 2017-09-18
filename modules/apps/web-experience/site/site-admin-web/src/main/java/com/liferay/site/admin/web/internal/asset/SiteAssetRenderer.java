@@ -32,8 +32,13 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class SiteAssetRenderer extends BaseJSPAssetRenderer<Group> {
 
-	public SiteAssetRenderer(Group site) {
-		_site = site;
+	public SiteAssetRenderer(Group group) {
+		if (group.isSite()) {
+			_site = group;
+		}
+		else {
+			_site = null;
+		}
 	}
 
 	@Override
