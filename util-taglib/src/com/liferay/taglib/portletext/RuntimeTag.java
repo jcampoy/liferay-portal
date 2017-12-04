@@ -39,6 +39,7 @@ import com.liferay.portal.kernel.service.PortletLocalServiceUtil;
 import com.liferay.portal.kernel.service.PortletPreferencesLocalServiceUtil;
 import com.liferay.portal.kernel.service.permission.LayoutPermissionUtil;
 import com.liferay.portal.kernel.servlet.DynamicServletRequest;
+import com.liferay.portal.kernel.servlet.PersistentHttpServletRequestWrapper;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
@@ -54,7 +55,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Stack;
 
+import javax.servlet.DispatcherType;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
@@ -308,6 +311,10 @@ public class RuntimeTag extends TagSupport implements DirectTag {
 			HttpServletRequest request =
 				(HttpServletRequest)pageContext.getRequest();
 
+			if (_useLastForwardRequest) {
+				request = getLastForwardRequest(request);
+			}
+
 			Layout layout = (Layout)request.getAttribute(WebKeys.LAYOUT);
 
 			if (layout == null) {
@@ -375,6 +382,10 @@ public class RuntimeTag extends TagSupport implements DirectTag {
 		_settingsScope = settingsScope;
 	}
 
+	public void setUseLastForwardRequest(boolean useLastForwardRequest) {
+		_useLastForwardRequest = useLastForwardRequest;
+	}
+
 	/**
 	 * @see com.liferay.portal.model.impl.LayoutTypePortletImpl#getStaticPortlets(
 	 *      String)
@@ -416,6 +427,64 @@ public class RuntimeTag extends TagSupport implements DirectTag {
 		return portlet;
 	}
 
+	private HttpServletRequest getLastForwardRequest(
+		HttpServletRequest currentRequest) {
+
+		HttpServletRequestWrapper currentRequestWrapper = null;
+		HttpServletRequest originalRequest = null;
+		HttpServletRequest nextRequest = null;
+
+		while (currentRequest instanceof HttpServletRequestWrapper) {
+			if (currentRequest instanceof
+				PersistentHttpServletRequestWrapper) {
+
+				PersistentHttpServletRequestWrapper
+					persistentHttpServletRequestWrapper =
+					(PersistentHttpServletRequestWrapper)currentRequest;
+
+				persistentHttpServletRequestWrapper =
+					persistentHttpServletRequestWrapper.clone();
+
+				if (originalRequest == null) {
+					originalRequest =
+						persistentHttpServletRequestWrapper.clone();
+				}
+
+				if (currentRequestWrapper != null) {
+					currentRequestWrapper.setRequest(
+						persistentHttpServletRequestWrapper);
+				}
+
+				currentRequestWrapper = persistentHttpServletRequestWrapper;
+			}
+
+			HttpServletRequestWrapper httpServletRequestWrapper =
+				(HttpServletRequestWrapper)currentRequest;
+
+			nextRequest =
+				(HttpServletRequest)httpServletRequestWrapper.getRequest();
+
+			if ((currentRequest.getDispatcherType() ==
+				 DispatcherType.FORWARD) &&
+				(nextRequest.getDispatcherType() == DispatcherType.REQUEST)) {
+
+				break;
+			}
+
+			currentRequest = nextRequest;
+		}
+
+		if (currentRequestWrapper != null) {
+			currentRequestWrapper.setRequest(currentRequest);
+		}
+
+		if (originalRequest != null) {
+			return originalRequest;
+		}
+
+		return currentRequest;
+	}
+
 	private static final String _ERROR_PAGE =
 		"/html/taglib/portlet/runtime/error.jsp";
 
@@ -435,5 +504,6 @@ public class RuntimeTag extends TagSupport implements DirectTag {
 	private String _portletProviderClassName;
 	private String _queryString;
 	private String _settingsScope = _SETTINGS_SCOPE_DEFAULT;
+	private boolean _useLastForwardRequest = false;
 
 }
