@@ -16,6 +16,12 @@ package com.liferay.invitation.invite.members.internal.upgrade;
 
 import com.liferay.invitation.invite.members.internal.upgrade.v1_0_0.UpgradeNamespace;
 import com.liferay.invitation.invite.members.internal.upgrade.v1_0_0.UpgradePortletId;
+import com.liferay.invitation.invite.members.internal.upgrade.v2_0_0.util.MemberRequestTable;
+import com.liferay.portal.kernel.dao.db.DB;
+import com.liferay.portal.kernel.dao.db.DBManagerUtil;
+import com.liferay.portal.kernel.dao.db.DBType;
+import com.liferay.portal.kernel.upgrade.BaseUpgradeSQLServerDatetime;
+import com.liferay.portal.kernel.upgrade.DummyUpgradeStep;
 import com.liferay.portal.upgrade.registry.UpgradeStepRegistrator;
 
 import org.osgi.service.component.annotations.Component;
@@ -35,6 +41,19 @@ public class InviteMembersServiceUpgrade implements UpgradeStepRegistrator {
 
 		registry.register(
 			"1.0.0", "1.0.1", new UpgradeNamespace(), new UpgradePortletId());
+
+		DB db = DBManagerUtil.getDB();
+
+		if (db.getDBType() == DBType.SQLSERVER) {
+			Class<?>[] upgradeDatetimeTableClasses = {MemberRequestTable.class};
+
+			registry.register(
+				"1.0.0", "2.0.0",
+				new BaseUpgradeSQLServerDatetime(upgradeDatetimeTableClasses));
+		}
+		else {
+			registry.register("1.0.0", "2.0.0", new DummyUpgradeStep());
+		}
 	}
 
 }
