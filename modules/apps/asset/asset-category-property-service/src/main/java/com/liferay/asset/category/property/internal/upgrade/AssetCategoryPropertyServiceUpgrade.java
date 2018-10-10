@@ -15,6 +15,12 @@
 package com.liferay.asset.category.property.internal.upgrade;
 
 import com.liferay.asset.category.property.internal.upgrade.v1_0_0.UpgradeClassNames;
+import com.liferay.asset.category.property.internal.upgrade.v2_0_0.util.AssetCategoryPropertyTable;
+import com.liferay.portal.kernel.dao.db.DB;
+import com.liferay.portal.kernel.dao.db.DBManagerUtil;
+import com.liferay.portal.kernel.dao.db.DBType;
+import com.liferay.portal.kernel.upgrade.BaseUpgradeSQLServerDatetime;
+import com.liferay.portal.kernel.upgrade.DummyUpgradeStep;
 import com.liferay.portal.upgrade.registry.UpgradeStepRegistrator;
 
 import org.osgi.service.component.annotations.Component;
@@ -29,6 +35,20 @@ public class AssetCategoryPropertyServiceUpgrade
 	@Override
 	public void register(Registry registry) {
 		registry.register("0.0.1", "1.0.0", new UpgradeClassNames());
+
+		DB db = DBManagerUtil.getDB();
+
+		if (db.getDBType() == DBType.SQLSERVER) {
+			Class<?>[] upgradeDatetimeTableClasses =
+				{AssetCategoryPropertyTable.class};
+
+			registry.register(
+				"1.0.0", "2.0.0",
+				new BaseUpgradeSQLServerDatetime(upgradeDatetimeTableClasses));
+		}
+		else {
+			registry.register("1.0.0", "2.0.0", new DummyUpgradeStep());
+		}
 	}
 
 }
