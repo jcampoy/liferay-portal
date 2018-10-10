@@ -17,9 +17,15 @@ package com.liferay.layout.page.template.internal.upgrade;
 import com.liferay.fragment.service.FragmentEntryLinkLocalService;
 import com.liferay.layout.page.template.internal.upgrade.v1_1_0.UpgradeLayoutPrototype;
 import com.liferay.layout.page.template.internal.upgrade.v1_2_0.UpgradeLayoutPageTemplateStructure;
+import com.liferay.layout.page.template.internal.upgrade.v2_0_0.util.LayoutPageTemplateCollectionTable;
+import com.liferay.layout.page.template.internal.upgrade.v2_0_0.util.LayoutPageTemplateEntryTable;
+import com.liferay.portal.kernel.dao.db.DB;
+import com.liferay.portal.kernel.dao.db.DBManagerUtil;
+import com.liferay.portal.kernel.dao.db.DBType;
 import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.service.LayoutLocalService;
 import com.liferay.portal.kernel.service.LayoutPrototypeLocalService;
+import com.liferay.portal.kernel.upgrade.BaseUpgradeSQLServerDatetime;
 import com.liferay.portal.kernel.upgrade.DummyUpgradeStep;
 import com.liferay.portal.upgrade.registry.UpgradeStepRegistrator;
 
@@ -46,6 +52,22 @@ public class LayoutPageTemplateServiceUpgrade
 			"1.1.0", "1.2.0",
 			new UpgradeLayoutPageTemplateStructure(
 				_fragmentEntryLinkLocalService, _layoutLocalService));
+
+		DB db = DBManagerUtil.getDB();
+
+		if (db.getDBType() == DBType.SQLSERVER) {
+			Class<?>[] upgradeDatetimeTableClasses = {
+				LayoutPageTemplateCollectionTable.class,
+				LayoutPageTemplateEntryTable.class
+			};
+
+			registry.register(
+				"1.2.0", "2.0.0",
+				new BaseUpgradeSQLServerDatetime(upgradeDatetimeTableClasses));
+		}
+		else {
+			registry.register("1.2.0", "2.0.0", new DummyUpgradeStep());
+		}
 	}
 
 	@Reference
