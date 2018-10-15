@@ -102,7 +102,7 @@ public class BaseUpgradeSQLServerDatetime extends UpgradeProcess {
 							if (_log.isWarnEnabled()) {
 								_log.warn(
 									StringBundler.concat(
-										"Column ", columnName, " in table ",
+										"!! Column ", columnName, " in table ",
 										tableName, " already is ",
 										newTypeDefinition));
 							}
