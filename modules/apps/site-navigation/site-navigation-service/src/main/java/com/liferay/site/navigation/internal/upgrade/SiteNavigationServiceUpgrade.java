@@ -33,7 +33,8 @@ public class SiteNavigationServiceUpgrade implements UpgradeStepRegistrator {
 			"1.0.0", "2.0.0",
 			new BaseUpgradeSQLServerDatetime(
 				new Class<?>[] {
-					SiteNavigationMenuItemTable.class, SiteNavigationMenuTable.class
+					SiteNavigationMenuItemTable.class,
+					SiteNavigationMenuTable.class
 				}));
 	}
 
