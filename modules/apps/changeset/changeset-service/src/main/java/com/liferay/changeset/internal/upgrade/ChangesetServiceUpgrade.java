@@ -11,46 +11,30 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
+package com.liferay.changeset.internal.upgrade;
 
-package com.liferay.contacts.internal.upgrade;
-
-import com.liferay.contacts.internal.upgrade.v2_0_0.UpgradeEntry;
-import com.liferay.contacts.internal.upgrade.v2_0_2.UpgradeEmailAddress;
-import com.liferay.contacts.internal.upgrade.v3_0_0.util.EntryTable;
-import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.changeset.internal.upgrade.v2_0_0.util.ChangesetCollectionTable;
+import com.liferay.changeset.internal.upgrade.v2_0_0.util.ChangesetEntryTable;
 import com.liferay.portal.kernel.upgrade.BaseUpgradeSQLServerDatetime;
-import com.liferay.portal.kernel.upgrade.DummyUpgradeStep;
 import com.liferay.portal.upgrade.registry.UpgradeStepRegistrator;
 
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 /**
- * @author Jonathan Lee
+ * @author José Ángel Jiménez
  */
 @Component(immediate = true, service = UpgradeStepRegistrator.class)
-public class ContactsServiceUpgrade implements UpgradeStepRegistrator {
+public class ChangesetServiceUpgrade implements UpgradeStepRegistrator {
 
 	@Override
 	public void register(Registry registry) {
-		registry.register("0.0.1", "1.0.0", new DummyUpgradeStep());
-
-		// See LPS-65946
-
-		registry.register(
-			"1.0.0", "2.0.1", new UpgradeEntry(_userLocalService));
-
-		registry.register("2.0.0", "2.0.1", new DummyUpgradeStep());
-
-		registry.register("2.0.1", "2.0.2", new UpgradeEmailAddress());
-
 		registry.register(
 			"1.0.0", "2.0.0",
 			new BaseUpgradeSQLServerDatetime(
-				new Class<?>[] {EntryTable.class}));
+				new Class<?>[] {
+					ChangesetCollectionTable.class,
+					ChangesetEntryTable.class
+				}));
 	}
-
-	@Reference
-	private UserLocalService _userLocalService;
 
 }
