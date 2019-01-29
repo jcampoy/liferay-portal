@@ -65,6 +65,7 @@ DDMStructure ddmStructure = journalEditArticleDisplayContext.getDDMStructure();
 	<label for="<portlet:namespace />descriptionMapAsXML"><liferay-ui:message key="summary" /></label>
 
 	<liferay-ui:input-localized
+		availableLocales="<%= journalEditArticleDisplayContext.getAvailableLocales() %>"
 		cssClass="form-control"
 		defaultLanguageId="<%= journalEditArticleDisplayContext.getDefaultLanguageId() %>"
 		editorName="alloyeditor"
