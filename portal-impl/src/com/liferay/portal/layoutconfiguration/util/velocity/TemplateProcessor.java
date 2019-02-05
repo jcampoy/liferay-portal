@@ -276,7 +276,7 @@ public class TemplateProcessor implements ColumnProcessor {
 				}
 
 				if (!layoutTypePortlet.hasPortletId(portletId, true)) {
-					ModifiableSettings currentSettings =
+					ModifiableSettings oldModifiableSettings =
 						SettingsFactoryUtil.getSettings(
 							new PortletInstanceSettingsLocator(
 								layout, portletId)).getModifiableSettings();
@@ -287,19 +287,19 @@ public class TemplateProcessor implements ColumnProcessor {
 						PortletKeys.PREFS_PLID_SHARED, portletId,
 						defaultPreferences);
 
-					if (!(currentSettings.getModifiedKeys().isEmpty())) {
-						ModifiableSettings embeddedSettings =
+					if (!(oldModifiableSettings.getModifiedKeys().isEmpty())) {
+						ModifiableSettings currentEmbeddedSettings =
 							(SettingsFactoryUtil.getSettings(
 								new PortletInstanceSettingsLocator(
 									layout, portletId)))
 									.getModifiableSettings();
 
-						embeddedSettings.reset();
+						currentEmbeddedSettings.reset();
 
-						embeddedSettings.setValues(
-							currentSettings);
+						currentEmbeddedSettings.setValues(
+							oldModifiableSettings);
 
-						embeddedSettings.store();
+						currentEmbeddedSettings.store();
 					}
 				}
 			}
