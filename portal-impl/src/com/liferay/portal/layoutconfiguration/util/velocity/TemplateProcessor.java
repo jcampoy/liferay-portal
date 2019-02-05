@@ -43,6 +43,7 @@ import com.liferay.portal.layoutconfiguration.util.PortletRenderer;
 import com.liferay.portal.template.TemplatePortletPreferences;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -310,10 +311,11 @@ public class TemplateProcessor implements ColumnProcessor {
 					(LayoutTypePortlet)layout.getLayoutType();
 
 				if (!layoutTypePortlet.hasPortletId(portletId, true)) {
-					ModifiableSettings currentSettings =
-						SettingsFactoryUtil.getSettings(
-							new PortletInstanceSettingsLocator(
-								layout, portletId)).getModifiableSettings();
+					Settings oldSettings = SettingsFactoryUtil.getSettings(
+						new PortletInstanceSettingsLocator(layout, portletId));
+
+					ModifiableSettings oldModifiableSettings =
+						oldSettings.getModifiableSettings();
 
 					String defaultPreferences =
 						PortletConstants.DEFAULT_PREFERENCES;
@@ -332,19 +334,24 @@ public class TemplateProcessor implements ColumnProcessor {
 						PortletKeys.PREFS_PLID_SHARED, portletId,
 						defaultPreferences);
 
-					if (!(currentSettings.getModifiedKeys().isEmpty())) {
-						ModifiableSettings embeddedSettings =
-							(SettingsFactoryUtil.getSettings(
+					Collection<String> oldModifiedKeys =
+						oldModifiableSettings.getModifiedKeys();
+
+					if (!oldModifiedKeys.isEmpty()) {
+						Settings embeddedSettings =
+							SettingsFactoryUtil.getSettings(
 								new PortletInstanceSettingsLocator(
-									layout, portletId)))
-									.getModifiableSettings();
+									layout, portletId));
 
-						embeddedSettings.reset();
+						ModifiableSettings embeddedModifiableSettings =
+							embeddedSettings.getModifiableSettings();
 
-						embeddedSettings.setValues(
-							currentSettings);
+						embeddedModifiableSettings.reset();
 
-						embeddedSettings.store();
+						embeddedModifiableSettings.setValues(
+							oldModifiableSettings);
+
+						embeddedModifiableSettings.store();
 					}
 				}
 			}
