@@ -40,6 +40,7 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.layoutconfiguration.util.PortletRenderer;
+import com.liferay.portal.template.TemplatePortletPreferences;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -198,7 +199,8 @@ public class TemplateProcessor implements ColumnProcessor {
 		ThemeDisplay themeDisplay = (ThemeDisplay)_request.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
-		_initEmbeddedPortletPreferences(portletId, themeDisplay.getLayout());
+		_initEmbeddedPortletPreferences(
+			portletId, themeDisplay.getLayout(), null);
 
 		Portlet portlet = PortletLocalServiceUtil.getPortletById(
 			themeDisplay.getCompanyId(), portletId);
@@ -235,7 +237,8 @@ public class TemplateProcessor implements ColumnProcessor {
 		ThemeDisplay themeDisplay = (ThemeDisplay)_request.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
-		_initEmbeddedPortletPreferences(portletId, themeDisplay.getLayout());
+		_initEmbeddedPortletPreferences(
+			portletId, themeDisplay.getLayout(), defaultSettingsMap);
 
 		Settings settings = SettingsFactoryUtil.getSettings(
 			new PortletInstanceSettingsLocator(
@@ -296,7 +299,7 @@ public class TemplateProcessor implements ColumnProcessor {
 	}
 
 	private void _initEmbeddedPortletPreferences(
-			String portletId, Layout layout)
+			String portletId, Layout layout, Map<String, ?> defaultSettingsMap)
 		throws Exception {
 
 		if (layout.isSupportsEmbeddedPortlets() &&
@@ -306,12 +309,23 @@ public class TemplateProcessor implements ColumnProcessor {
 				LayoutTypePortlet layoutTypePortlet =
 					(LayoutTypePortlet)layout.getLayoutType();
 
+				String defaultPreferences =
+					PortletConstants.DEFAULT_PREFERENCES;
+
+				if ((defaultSettingsMap != null) &&
+					!defaultSettingsMap.isEmpty()) {
+
+					defaultPreferences =
+						new TemplatePortletPreferences().getPreferences(
+							defaultSettingsMap);
+				}
+
 				if (!layoutTypePortlet.hasPortletId(portletId, true)) {
 					PortletPreferencesFactoryUtil.getLayoutPortletSetup(
 						layout.getCompanyId(), layout.getGroupId(),
 						PortletKeys.PREFS_OWNER_TYPE_LAYOUT,
 						PortletKeys.PREFS_PLID_SHARED, portletId,
-						PortletConstants.DEFAULT_PREFERENCES);
+						defaultPreferences);
 				}
 			}
 		}
