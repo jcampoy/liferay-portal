@@ -34,14 +34,14 @@ import javax.portlet.ReadOnlyException;
  */
 public class TemplatePortletPreferences {
 
-	public String getPreferences(Map<String, Object> preferences)
+	public String getPreferences(Map<String, ?> preferences)
 		throws ReadOnlyException {
 
 		StringBundler sb = new StringBundler();
 
 		sb.append("<portlet-preferences>");
 
-		for (Map.Entry<String, Object> entry : preferences.entrySet()) {
+		for (Map.Entry<String, ?> entry : preferences.entrySet()) {
 			sb.append("<preference><name>");
 			sb.append(entry.getKey());
 			sb.append("</name>");
