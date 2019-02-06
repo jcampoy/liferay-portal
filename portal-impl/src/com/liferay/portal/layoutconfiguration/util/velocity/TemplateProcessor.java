@@ -30,6 +30,7 @@ import com.liferay.portal.kernel.service.PortletLocalServiceUtil;
 import com.liferay.portal.kernel.servlet.BufferCacheServletResponse;
 import com.liferay.portal.kernel.settings.ModifiableSettings;
 import com.liferay.portal.kernel.settings.PortletInstanceSettingsLocator;
+import com.liferay.portal.kernel.settings.Settings;
 import com.liferay.portal.kernel.settings.SettingsFactoryUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -41,6 +42,7 @@ import com.liferay.portal.layoutconfiguration.util.PortletRenderer;
 import com.liferay.portal.template.TemplatePortletPreferences;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -276,10 +278,11 @@ public class TemplateProcessor implements ColumnProcessor {
 				}
 
 				if (!layoutTypePortlet.hasPortletId(portletId, true)) {
+					Settings oldSettings = SettingsFactoryUtil.getSettings(
+						new PortletInstanceSettingsLocator(layout, portletId));
+
 					ModifiableSettings oldModifiableSettings =
-						SettingsFactoryUtil.getSettings(
-							new PortletInstanceSettingsLocator(
-								layout, portletId)).getModifiableSettings();
+						oldSettings.getModifiableSettings();
 
 					PortletPreferencesFactoryUtil.getLayoutPortletSetup(
 						layout.getCompanyId(), layout.getGroupId(),
@@ -287,19 +290,24 @@ public class TemplateProcessor implements ColumnProcessor {
 						PortletKeys.PREFS_PLID_SHARED, portletId,
 						defaultPreferences);
 
-					if (!(oldModifiableSettings.getModifiedKeys().isEmpty())) {
-						ModifiableSettings currentEmbeddedSettings =
-							(SettingsFactoryUtil.getSettings(
+					Collection<String> oldModifiedKeys =
+						oldModifiableSettings.getModifiedKeys();
+
+					if (!oldModifiedKeys.isEmpty()) {
+						Settings embeddedSettings =
+							SettingsFactoryUtil.getSettings(
 								new PortletInstanceSettingsLocator(
-									layout, portletId)))
-									.getModifiableSettings();
+									layout, portletId));
 
-						currentEmbeddedSettings.reset();
+						ModifiableSettings embeddedModifiableSettings =
+							embeddedSettings.getModifiableSettings();
 
-						currentEmbeddedSettings.setValues(
+						embeddedModifiableSettings.reset();
+
+						embeddedModifiableSettings.setValues(
 							oldModifiableSettings);
 
-						currentEmbeddedSettings.store();
+						embeddedModifiableSettings.store();
 					}
 				}
 			}
