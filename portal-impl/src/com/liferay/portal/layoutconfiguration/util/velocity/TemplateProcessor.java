@@ -235,6 +235,8 @@ public class TemplateProcessor implements ColumnProcessor {
 		ThemeDisplay themeDisplay = (ThemeDisplay)_request.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
+		_initEmbeddedPortletPreferences(portletId, themeDisplay.getLayout());
+
 		Settings settings = SettingsFactoryUtil.getSettings(
 			new PortletInstanceSettingsLocator(
 				themeDisplay.getLayout(), portletId));
