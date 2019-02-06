@@ -300,11 +300,18 @@ public class TemplateProcessor implements ColumnProcessor {
 		if (layout.isSupportsEmbeddedPortlets() &&
 			!layout.isPortletEmbedded(portletId, layout.getGroupId())) {
 
-			PortletPreferencesFactoryUtil.getLayoutPortletSetup(
-				layout.getCompanyId(), layout.getGroupId(),
-				PortletKeys.PREFS_OWNER_TYPE_LAYOUT,
-				PortletKeys.PREFS_PLID_SHARED, portletId,
-				PortletConstants.DEFAULT_PREFERENCES);
+			if (layout.isTypePortlet()) {
+				LayoutTypePortlet layoutTypePortlet =
+					(LayoutTypePortlet)layout.getLayoutType();
+
+				if (!layoutTypePortlet.hasPortletId(portletId, true)) {
+					PortletPreferencesFactoryUtil.getLayoutPortletSetup(
+						layout.getCompanyId(), layout.getGroupId(),
+						PortletKeys.PREFS_OWNER_TYPE_LAYOUT,
+						PortletKeys.PREFS_PLID_SHARED, portletId,
+						PortletConstants.DEFAULT_PREFERENCES);
+				}
+			}
 		}
 	}
 
