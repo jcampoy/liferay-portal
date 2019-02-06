@@ -30,10 +30,8 @@ import com.liferay.portal.kernel.service.PortletLocalServiceUtil;
 import com.liferay.portal.kernel.servlet.BufferCacheServletResponse;
 import com.liferay.portal.kernel.settings.ModifiableSettings;
 import com.liferay.portal.kernel.settings.PortletInstanceSettingsLocator;
-import com.liferay.portal.kernel.settings.Settings;
 import com.liferay.portal.kernel.settings.SettingsFactoryUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.ClassUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -239,49 +237,6 @@ public class TemplateProcessor implements ColumnProcessor {
 
 		_initEmbeddedPortletPreferences(
 			portletId, themeDisplay.getLayout(), defaultSettingsMap);
-
-		Settings settings = SettingsFactoryUtil.getSettings(
-			new PortletInstanceSettingsLocator(
-				themeDisplay.getLayout(), portletId));
-
-		ModifiableSettings modifiableSettings =
-			settings.getModifiableSettings();
-
-		boolean modified = false;
-
-		for (Map.Entry<String, ?> entry : defaultSettingsMap.entrySet()) {
-			String key = entry.getKey();
-			Object value = entry.getValue();
-
-			if (value instanceof String) {
-				Object storedValue = modifiableSettings.getValue(key, null);
-
-				if (storedValue == null) {
-					modifiableSettings.setValue(key, (String)value);
-
-					modified = true;
-				}
-			}
-			else if (value instanceof String[]) {
-				Object[] storedValues = modifiableSettings.getValues(key, null);
-
-				if (storedValues == null) {
-					modifiableSettings.setValues(key, (String[])value);
-
-					modified = true;
-				}
-			}
-			else {
-				throw new IllegalArgumentException(
-					StringBundler.concat(
-						"Key ", key, " has unsupported value of type ",
-						ClassUtil.getClassName(value.getClass())));
-			}
-		}
-
-		if (modified) {
-			modifiableSettings.store();
-		}
 
 		return processPortlet(portletId);
 	}
