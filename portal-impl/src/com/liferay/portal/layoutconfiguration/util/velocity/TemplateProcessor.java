@@ -238,50 +238,54 @@ public class TemplateProcessor implements ColumnProcessor {
 		ThemeDisplay themeDisplay = (ThemeDisplay)_request.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
-		_initEmbeddedPortletPreferences(
-			portletId, themeDisplay.getLayout(), defaultSettingsMap);
+		Layout layout = themeDisplay.getLayout();
 
-		Settings settings = SettingsFactoryUtil.getSettings(
-			new PortletInstanceSettingsLocator(
-				themeDisplay.getLayout(), portletId));
+		if (!_initEmbeddedPortletPreferences(
+				portletId, layout, defaultSettingsMap)) {
 
-		ModifiableSettings modifiableSettings =
-			settings.getModifiableSettings();
+			Settings settings = SettingsFactoryUtil.getSettings(
+				new PortletInstanceSettingsLocator(
+					layout, portletId));
 
-		boolean modified = false;
+			ModifiableSettings modifiableSettings =
+				settings.getModifiableSettings();
 
-		for (Map.Entry<String, ?> entry : defaultSettingsMap.entrySet()) {
-			String key = entry.getKey();
-			Object value = entry.getValue();
+			boolean modified = false;
 
-			if (value instanceof String) {
-				Object storedValue = modifiableSettings.getValue(key, null);
+			for (Map.Entry<String, ?> entry : defaultSettingsMap.entrySet()) {
+				String key = entry.getKey();
+				Object value = entry.getValue();
 
-				if (storedValue == null) {
-					modifiableSettings.setValue(key, (String)value);
+				if (value instanceof String) {
+					Object storedValue = modifiableSettings.getValue(key, null);
 
-					modified = true;
+					if (storedValue == null) {
+						modifiableSettings.setValue(key, (String) value);
+
+						modified = true;
+					}
+				}
+				else if (value instanceof String[]) {
+					Object[] storedValues =
+						modifiableSettings.getValues(key, null);
+
+					if (storedValues == null) {
+						modifiableSettings.setValues(key, (String[]) value);
+
+						modified = true;
+					}
+				}
+				else {
+					throw new IllegalArgumentException(
+						StringBundler.concat(
+							"Key ", key, " has unsupported value of type ",
+							ClassUtil.getClassName(value.getClass())));
 				}
 			}
-			else if (value instanceof String[]) {
-				Object[] storedValues = modifiableSettings.getValues(key, null);
 
-				if (storedValues == null) {
-					modifiableSettings.setValues(key, (String[])value);
-
-					modified = true;
-				}
+			if (modified) {
+				modifiableSettings.store();
 			}
-			else {
-				throw new IllegalArgumentException(
-					StringBundler.concat(
-						"Key ", key, " has unsupported value of type ",
-						ClassUtil.getClassName(value.getClass())));
-			}
-		}
-
-		if (modified) {
-			modifiableSettings.store();
 		}
 
 		return processPortlet(portletId);
@@ -299,7 +303,7 @@ public class TemplateProcessor implements ColumnProcessor {
 		return processPortlet(portletId);
 	}
 
-	private void _initEmbeddedPortletPreferences(
+	private boolean _initEmbeddedPortletPreferences(
 			String portletId, Layout layout, Map<String, ?> defaultSettingsMap)
 		throws Exception {
 
@@ -353,9 +357,13 @@ public class TemplateProcessor implements ColumnProcessor {
 
 						embeddedModifiableSettings.store();
 					}
+
+					return true;
 				}
 			}
 		}
+
+		return false;
 	}
 
 	private static final RenderWeightComparator _renderWeightComparator =
