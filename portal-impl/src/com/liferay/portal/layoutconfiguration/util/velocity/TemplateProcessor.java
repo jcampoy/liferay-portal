@@ -41,6 +41,7 @@ import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.layoutconfiguration.util.PortletRenderer;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -212,10 +213,14 @@ public class TemplateProcessor implements ColumnProcessor {
 			if (!layoutTypePortlet.hasPortletId(portletId, true) &&
 				!layout.isPortletEmbedded(portletId, layout.getGroupId())) {
 
-				ModifiableSettings currentSettings =
-					SettingsFactoryUtil.getSettings(
-						new PortletInstanceSettingsLocator(
-							layout, portletId)).getModifiableSettings();
+				Settings currentSettings = SettingsFactoryUtil.getSettings(
+					new PortletInstanceSettingsLocator(layout, portletId));
+
+				ModifiableSettings currentModifiableSettings =
+					currentSettings.getModifiableSettings();
+
+				Collection<String> currentModifiedKeys =
+					currentModifiableSettings.getModifiedKeys();
 
 				PortletPreferencesFactoryUtil.getLayoutPortletSetup(
 					layout.getCompanyId(), layout.getGroupId(),
@@ -223,17 +228,21 @@ public class TemplateProcessor implements ColumnProcessor {
 					PortletKeys.PREFS_PLID_SHARED, portletId,
 					portlet.getDefaultPreferences());
 
-				if (!(currentSettings.getModifiedKeys().isEmpty())) {
-					ModifiableSettings embeddedSettings =
-						(SettingsFactoryUtil.getSettings(
+				if (!currentModifiedKeys.isEmpty()) {
+					Settings newEmbeddedSettings =
+						SettingsFactoryUtil.getSettings(
 							new PortletInstanceSettingsLocator(
-								layout, portletId))).getModifiableSettings();
+								layout, portletId));
 
-					embeddedSettings.reset();
+					ModifiableSettings newEmbeddedModifiableSettings =
+						newEmbeddedSettings.getModifiableSettings();
 
-					embeddedSettings.setValues(currentSettings);
+					newEmbeddedModifiableSettings.reset();
 
-					embeddedSettings.store();
+					newEmbeddedModifiableSettings.setValues(
+						currentModifiableSettings);
+
+					newEmbeddedModifiableSettings.store();
 				}
 			}
 		}
