@@ -212,11 +212,29 @@ public class TemplateProcessor implements ColumnProcessor {
 			if (!layoutTypePortlet.hasPortletId(portletId, true) &&
 				!layout.isPortletEmbedded(portletId, layout.getGroupId())) {
 
+				ModifiableSettings currentSettings =
+					SettingsFactoryUtil.getSettings(
+						new PortletInstanceSettingsLocator(
+							layout, portletId)).getModifiableSettings();
+
 				PortletPreferencesFactoryUtil.getLayoutPortletSetup(
 					layout.getCompanyId(), layout.getGroupId(),
 					PortletKeys.PREFS_OWNER_TYPE_LAYOUT,
 					PortletKeys.PREFS_PLID_SHARED, portletId,
 					portlet.getDefaultPreferences());
+
+				if (!(currentSettings.getModifiedKeys().isEmpty())) {
+					ModifiableSettings embeddedSettings =
+						(SettingsFactoryUtil.getSettings(
+							new PortletInstanceSettingsLocator(
+								layout, portletId))).getModifiableSettings();
+
+					embeddedSettings.reset();
+
+					embeddedSettings.setValues(currentSettings);
+
+					embeddedSettings.store();
+				}
 			}
 		}
 
