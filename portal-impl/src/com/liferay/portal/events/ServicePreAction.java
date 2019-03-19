@@ -385,6 +385,17 @@ public class ServicePreAction extends Action {
 						sourceGroupId);
 
 					layout = new VirtualLayout(layout, sourceGroup);
+
+					long selPlid = ParamUtil.getLong(request, "selPlid");
+
+					if (selPlid > 0) {
+						Layout selLayout = LayoutLocalServiceUtil.fetchLayout(
+							selPlid);
+
+						if (selLayout != null) {
+							((VirtualLayout)layout).setTargetLayout(selLayout);
+						}
+					}
 				}
 				else {
 					viewableSourceGroup = false;
