@@ -528,9 +528,8 @@ public class JournalConverterImpl implements JournalConverter {
 					if (_log.isWarnEnabled()) {
 						_log.warn(
 							StringBundler.concat(
-								"Field ", name,
-								" references an unexistent document: ",
-								pe.getMessage()));
+								"The selected document for ", name,
+								" was deleted. ", pe.getMessage()));
 					}
 				}
 
