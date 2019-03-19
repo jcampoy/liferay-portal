@@ -170,6 +170,10 @@ public class VirtualLayout extends LayoutWrapper {
 		return _sourceLayout;
 	}
 
+	public Layout getTargetLayout() {
+		return _targetLayout;
+	}
+
 	public long getVirtualGroupId() {
 		return _targetGroup.getGroupId();
 	}
@@ -186,6 +190,10 @@ public class VirtualLayout extends LayoutWrapper {
 		super.setPrivateLayout(privateLayout);
 
 		_layoutSet = null;
+	}
+
+	public Layout setTargetLayout() {
+		return _targetLayout;
 	}
 
 	protected String injectVirtualGroupURL(String layoutURL, Locale locale) {
@@ -238,5 +246,6 @@ public class VirtualLayout extends LayoutWrapper {
 	private LayoutType _layoutType;
 	private final Layout _sourceLayout;
 	private final Group _targetGroup;
+	private Layout _targetLayout;
 
 }
