@@ -45,6 +45,7 @@ import com.liferay.portal.kernel.model.LayoutSet;
 import com.liferay.portal.kernel.model.LayoutSetBranch;
 import com.liferay.portal.kernel.model.LayoutType;
 import com.liferay.portal.kernel.model.LayoutTypeController;
+import com.liferay.portal.kernel.model.impl.VirtualLayout;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
@@ -1031,6 +1032,19 @@ public class LayoutsAdminDisplayContext {
 	public Long getSelPlid() {
 		if (_selPlid != null) {
 			return _selPlid;
+		}
+
+		if (_themeDisplay.getLayout() instanceof VirtualLayout) {
+			VirtualLayout virtualLayout =
+				(VirtualLayout) _themeDisplay.getLayout();
+
+			if (virtualLayout.getTargetLayout() != null) {
+				_selLayout = virtualLayout.getSourceLayout();
+
+				_selPlid = _selLayout.getPlid();
+
+				return _selPlid;
+			}
 		}
 
 		_selPlid = ParamUtil.getLong(
