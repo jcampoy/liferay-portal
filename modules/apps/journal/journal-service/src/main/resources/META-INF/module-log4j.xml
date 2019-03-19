@@ -22,6 +22,10 @@
 		<priority value="WARN" />
 	</category>
 
+	<category name="com.liferay.journal.internal.util.JournalConverterImpl">
+		<priority value="WARN" />
+	</category>
+
 	<category name="com.liferay.journal.lar">
 		<priority value="WARN" />
 	</category>
