@@ -14,6 +14,7 @@
 
 package com.liferay.journal.internal.util;
 
+import com.liferay.document.library.kernel.exception.NoSuchFileEntryException;
 import com.liferay.document.library.kernel.service.DLAppLocalService;
 import com.liferay.dynamic.data.mapping.model.DDMFormFieldType;
 import com.liferay.dynamic.data.mapping.model.DDMStructure;
@@ -516,8 +517,29 @@ public class JournalConverterImpl implements JournalConverter {
 				missingLanguageIds.remove(languageId);
 			}
 
-			Serializable serializable = getFieldValue(
-				dataType, type, dynamicContentElement, defaultLocale);
+			Serializable serializable = StringPool.BLANK;
+
+			try {
+				serializable = getFieldValue(
+					dataType, type, dynamicContentElement, defaultLocale);
+			}
+			catch (PortalException pe) {
+				if (pe instanceof NoSuchFileEntryException) {
+					if (_log.isWarnEnabled()) {
+						_log.warn(
+							StringBundler.concat(
+								"Field ", name,
+								" references an unexistent document: ",
+								pe.getMessage()));
+					}
+				}
+
+				if (_log.isDebugEnabled()) {
+					_log.debug("Unable to get the value for field " + name, pe);
+				}
+
+				serializable = StringPool.BLANK;
+			}
 
 			ddmField.addValue(locale, serializable);
 		}
@@ -552,29 +574,24 @@ public class JournalConverterImpl implements JournalConverter {
 	}
 
 	protected Serializable getFieldValue(
-		String dataType, String type, Element dynamicContentElement,
-		Locale defaultLocale) {
+			String dataType, String type, Element dynamicContentElement,
+			Locale defaultLocale)
+		throws PortalException {
 
 		Serializable serializable = null;
 
 		if (Objects.equals(DDMFormFieldType.DOCUMENT_LIBRARY, type)) {
-			try {
-				JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-					dynamicContentElement.getText());
+			JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
+				dynamicContentElement.getText());
 
-				if (!ExportImportThreadLocal.isImportInProcess()) {
-					String uuid = jsonObject.getString("uuid");
-					long groupId = jsonObject.getLong("groupId");
+			if (!ExportImportThreadLocal.isImportInProcess()) {
+				String uuid = jsonObject.getString("uuid");
+				long groupId = jsonObject.getLong("groupId");
 
-					_dlAppLocalService.getFileEntryByUuidAndGroupId(
-						uuid, groupId);
-				}
-
-				serializable = jsonObject.toString();
+				_dlAppLocalService.getFileEntryByUuidAndGroupId(uuid, groupId);
 			}
-			catch (Exception e) {
-				return StringPool.BLANK;
-			}
+
+			serializable = jsonObject.toString();
 		}
 		else if (Objects.equals(DDMFormFieldType.JOURNAL_ARTICLE, type)) {
 			try {
