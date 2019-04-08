@@ -190,6 +190,7 @@ else {
 										classPK="<%= ddmStructure.getPrimaryKey() %>"
 										ddmFormValues="<%= ddmFormValues %>"
 										fieldsNamespace="<%= String.valueOf(ddmStructure.getPrimaryKey()) %>"
+										groupId="<%= ddmStructure.getGroupId() %>"
 										localizable="<%= false %>"
 										requestedLocale="<%= locale %>"
 										synchronousFormSubmission="<%= false %>"
