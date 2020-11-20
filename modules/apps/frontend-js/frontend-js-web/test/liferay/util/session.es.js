@@ -16,7 +16,9 @@
 
 import {
 	getSessionValue,
+	getHttpSessionValue,
 	setSessionValue,
+	setHttpSessionValue,
 } from '../../../src/main/resources/META-INF/resources/liferay/util/session.es';
 
 describe('Session API', () => {
@@ -48,6 +50,30 @@ describe('Session API', () => {
 		});
 	});
 
+	describe('getHttpSessionValue', () => {
+		it('GETs the session_click endpoint for the http session', () => {
+			getHttpSessionValue('foo');
+
+			expect(fetch).toHaveBeenCalledTimes(1);
+
+			expect(fetch).toHaveBeenCalledWith(
+				'http://localhost:8080/c/portal/session_click',
+				expect.anything()
+			);
+		});
+
+		it('deserializes session serialized objects in the http session', () => {
+			fetch.mockResponse('serialize://{"key1":"value1","key2":"value2"}');
+
+			getHttpSessionValue('key').then((value) => {
+				expect(value).toEqual({
+					key1: 'value1',
+					key2: 'value2',
+				});
+			});
+		});
+	});
+
 	describe('setSessionValue', () => {
 		it('POSTs a simple key/value to the session_click endpoint for basic values', () => {
 			setSessionValue('key', 'value');
@@ -63,6 +89,37 @@ describe('Session API', () => {
 
 		it('POSTs a key/serializedValue to the session_click endpoint for object values', () => {
 			setSessionValue('key', {
+				key1: 'value1',
+				key2: 'value2',
+			});
+
+			expect(fetch).toHaveBeenCalledTimes(1);
+
+			expect(fetch.mock.calls[0][0]).toBe(
+				'http://localhost:8080/c/portal/session_click'
+			);
+
+			expect(fetch.mock.calls[0][1].body.get('key')).toBe(
+				'serialize://{"key1":"value1","key2":"value2"}'
+			);
+		});
+	});
+
+	describe('setHttpSessionValue', () => {
+		it('POSTs a simple key/value to the session_click endpoint for basic values in the http session', () => {
+			setHttpSessionValue('key', 'value');
+
+			expect(fetch).toHaveBeenCalledTimes(1);
+
+			expect(fetch.mock.calls[0][0]).toBe(
+				'http://localhost:8080/c/portal/session_click'
+			);
+
+			expect(fetch.mock.calls[0][1].body.get('key')).toBe('value');
+		});
+
+		it('POSTs a key/serializedValue to the session_click endpoint for object values in the http session', () => {
+			setHttpSessionValue('key', {
 				key1: 'value1',
 				key2: 'value2',
 			});
