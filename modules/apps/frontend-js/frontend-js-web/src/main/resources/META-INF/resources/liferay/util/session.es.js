@@ -28,7 +28,7 @@ function getSessionClickFormData(cmd, options) {
 		formData.append('doAsUserId', doAsUserIdEncoded);
 	}
 
-	if (options !== undefined) {
+	if (options && typeof options === 'object') {
 		Object.entries(options).forEach(([key, value]) => {
 			formData.append(key, value);
 		});
