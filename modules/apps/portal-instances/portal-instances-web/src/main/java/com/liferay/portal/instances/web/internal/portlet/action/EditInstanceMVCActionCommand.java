@@ -149,7 +149,7 @@ public class EditInstanceMVCActionCommand extends BaseMVCActionCommand {
 
 			String webId = ParamUtil.getString(actionRequest, "webId");
 
-			Company company = _companyService.addCompany(
+			_companyService.addCompany(
 				webId, virtualHostname, mx, false, maxUsers, active);
 
 			String siteInitializerKey = ParamUtil.getString(
@@ -169,7 +169,7 @@ public class EditInstanceMVCActionCommand extends BaseMVCActionCommand {
 			boolean active = ParamUtil.getBoolean(
 				actionRequest, "active", company.isActive());
 
-			company = _companyService.updateCompany(
+			_companyService.updateCompany(
 				companyId, virtualHostname, mx, maxUsers, active);
 		}
 
