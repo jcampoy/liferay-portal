@@ -43,6 +43,7 @@ renderResponse.setTitle((selCompany == null) ? LanguageUtil.get(request, "new-in
 	<aui:input name="<%= Constants.CMD %>" type="hidden" />
 	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
 	<aui:input name="companyId" type="hidden" value="<%= companyId %>" />
+	<aui:input name="active" type="hidden" value="<%= (selCompany != null) ? selCompany.isActive() : true %>" />
 
 	<liferay-ui:error exception="<%= CompanyMxException.class %>" message="please-enter-a-valid-mail-domain" />
 	<liferay-ui:error exception="<%= CompanyVirtualHostException.class %>" message="please-enter-a-valid-virtual-host" />
@@ -71,7 +72,7 @@ renderResponse.setTitle((selCompany == null) ? LanguageUtil.get(request, "new-in
 
 			<aui:input name="maxUsers" />
 
-			<aui:input disabled="<%= (selCompany != null) && (selCompany.getCompanyId() == PortalInstancesLocalServiceUtil.getDefaultCompanyId()) %>" inlineLabel="right" labelCssClass="simple-toggle-switch" name="active" type="toggle-switch" value="<%= (selCompany != null) ? selCompany.isActive() : true %>" />
+			<aui:input disabled="<%= (selCompany != null) && (selCompany.getCompanyId() == PortalInstancesLocalServiceUtil.getDefaultCompanyId()) %>" inlineLabel="right" label="active" labelCssClass="simple-toggle-switch" name="active_checkbox" type="toggle-switch" value="<%= (selCompany != null) ? selCompany.isActive() : true %>" />
 
 			<c:if test="<%= selCompany == null %>">
 
@@ -121,6 +122,14 @@ renderResponse.setTitle((selCompany == null) ? LanguageUtil.get(request, "new-in
 					'value',
 					'<%= (selCompany == null) ? Constants.ADD : Constants.UPDATE %>'
 				);
+			}
+
+			var activeCheckbox = form.querySelector('#<portlet:namespace />active_checkbox');
+
+			var activeHidden = form.querySelector('#<portlet:namespace />active');
+
+			if (activeCheckbox && activeHidden) {
+				activeHidden.setAttribute('value', activeCheckbox.checked);
 			}
 
 			submitForm(form);
