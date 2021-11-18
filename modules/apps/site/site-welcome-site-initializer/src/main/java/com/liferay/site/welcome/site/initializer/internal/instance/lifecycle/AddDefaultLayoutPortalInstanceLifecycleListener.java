@@ -44,8 +44,8 @@ public class AddDefaultLayoutPortalInstanceLifecycleListener
 			company.getCompanyId(), GroupConstants.GUEST);
 
 		Layout defaultLayout = _layoutLocalService.fetchFirstLayout(
-			group.getGroupId(), false, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
-			false);
+			group.getGroupId(), false,
+			LayoutConstants.DEFAULT_PARENT_LAYOUT_ID);
 
 		if (defaultLayout == null) {
 			_siteInitializer.initialize(group.getGroupId());
